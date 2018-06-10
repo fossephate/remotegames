@@ -1,0 +1,103 @@
+<html>
+
+<head>
+	<title>Lagless audio host</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+	<script src="js/simplepeer.min.js"></script>
+	<script src="js/peer.min.js"></script>
+
+</head>
+
+<body>
+	<style>
+		#outgoing {
+			width: 600px;
+			word-wrap: break-word;
+		}
+	</style>
+	<form>
+		<textarea id="incoming"></textarea>
+		<button type="submit">submit</button>
+	</form>
+	<pre id="outgoing"></pre>
+	
+	<script>
+		
+		let audio = new Audio();
+		
+		let socket = io("https://twitchplaysnintendoswitch.com", {
+			path: "/8110/socket.io",
+			transports: ["websocket"],
+		});
+		
+		var peer = new SimplePeer({
+			initiator: false,
+			trickle: false,
+		});
+		
+
+		peer.on("signal", function(data) {
+			// get this to the host:
+			socket.emit("client-signal", data);
+			console.log("SIGNAL", JSON.stringify(data));
+// 			document.querySelector("#outgoing").textContent = JSON.stringify(data);
+		});
+		
+		peer.on("stream", function (stream) {
+			// got remote video stream, now let's show it in a video tag
+// 			var audio = document.querySelector("video");
+			audio.src = window.URL.createObjectURL(stream);
+			audio.play();
+		});
+
+// 		document.querySelector("form").addEventListener("submit", function(ev) {
+// 			ev.preventDefault();
+// 			peer.signal(JSON.parse(document.querySelector("#incoming").value));
+// 		});
+		
+		socket.on("host-signal", function(data) {
+			peer.signal(data);
+		});
+
+		peer.on("connect", function() {
+			console.log("CONNECT");
+			peer.send("whatever" + Math.random());
+		});
+
+		peer.on("data", function(data) {
+			console.log("data: " + data);
+		});
+		
+		
+		peer.on("error", function(err) {
+			console.log("error", err)
+		});
+		
+
+		
+// 		var peer = new Peer("twitchplaysnintendoswitch-host", {host: "localhost", port: 80, path: "/8004/"});
+// 		var conn = peer.connect("twitchplaysnintendoswitch-host");
+		
+// 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+// 		peer.on("call", function(call) {
+			
+// 			call.answer(stream); // Answer the call with an A/V stream.
+// 			call.on("stream", function(remoteStream) {
+// 				// Show stream in some <video> element.
+// 				audio.stream = remoteStream;
+// 				audio.play();
+// 			});
+// // 			navigator.getUserMedia({video: false, audio: true}, function(stream) {
+// // 				call.answer(stream); // Answer the call with an A/V stream.
+// // 				call.on("stream", function(remoteStream) {
+// // 					// Show stream in some <video> element.
+					
+// // 				});
+// // 			}, function(err) {
+// // 				console.log('Failed to get local stream' ,err);
+// // 			});
+// 		});
+	</script>
+</body>
+
+</html>

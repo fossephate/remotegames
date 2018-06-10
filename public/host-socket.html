@@ -1,0 +1,46 @@
+<html>
+
+<head>
+
+	<title>Lagless audio host socket</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+</head>
+
+<body>
+	<script>
+		let socket = io("https://twitchplaysnintendoswitch.com", {
+			path: "/8110/socket.io",
+			transports: ["websocket"],
+		});
+
+		var constraints = {
+			audio: true
+		};
+		navigator.mediaDevices.getUserMedia(constraints).then(function(mediaStream) {
+			var mediaRecorder = new MediaRecorder(mediaStream);
+			mediaRecorder.onstart = function(e) {
+				this.chunks = [];
+			};
+			mediaRecorder.ondataavailable = function(e) {
+				this.chunks.push(e.data);
+			};
+			mediaRecorder.onstop = function(e) {
+				var blob = new Blob(this.chunks, {
+					'type': 'audio/ogg; codecs=opus'
+				});
+				socket.emit("receive-audio", blob);
+			};
+
+			// Start recording
+			mediaRecorder.start();
+
+			// Stop recording after interval and broadcast it to server
+			setInterval(function() {
+				mediaRecorder.stop()
+				mediaRecorder.start()
+			}, 500);
+		});
+	</script>
+</body>
+
+</html>
