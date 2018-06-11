@@ -84,11 +84,22 @@
 				<div id="lagless2" class="tab-pane">
 					<div id="lagless2Container">
 						<canvas id="videoCanvas2"></canvas>
+<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
+							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
+						</button> -->
+						<div id="lagless2VolumeSlider" class="volumeSlider">
+							<i class="fa fa-volume-down"></i>
+							<div id="lagless2Volume" class="volume"></div>
+							<i class="fa fa-volume-up"></i>
+						</div>
 					</div>
 				</div>
 				<div id="lagless3" class="tab-pane">
 					<div id="lagless3Container">
 						<canvas id="videoCanvas3"></canvas>
+						<button id="lagless3Refresh" type="button" class="btn btn-info btn-settings">
+							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
+						</button>
 					</div>
 				</div>
 				<div id="lagless4" class="tab-pane">
@@ -186,19 +197,25 @@
 						</div>
 						<div id="streamSettings" class="well">
 							<button type="button" data-toggle="modal" data-target="#settingsWindow" class="btn btn-info btn-settings">
-									<i class="fas fa-cogs"></i>
-								</button>
+								<i class="fas fa-cogs"></i>
+							</button>
 							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
-									<i class="fas fa-volume-up"></i>
-								</button>
+								<i class="fas fa-volume-up"></i>
+							</button>
 							<button id="toggleTheme" type="button" data-toggle="modal" class="btn btn-info btn-settings">
-									<i class="fas fa-moon"></i>
-								</button>
+								<i class="fas fa-moon"></i>
+							</button>
 							<button id="toggleChat" type="button" data-toggle="modal" class="btn btn-info btn-settings">
-									<i class="far fa-comment-alt"></i>
-								</button>
+								<i class="far fa-comment-alt"></i>
+							</button>
 							<a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
-
+							<div class="sliderContainer">
+								<div id="globalVolumeSlider" class="volumeSlider">
+									<i class="fa fa-volume-down"></i>
+									<div id="globalVolume" class="volume"></div>
+									<i class="fa fa-volume-up"></i>
+								</div>
+							</div>
 							<div class="sliderContainer">
 								Quality: <span id="quality">70</span>
 								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70">

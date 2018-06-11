@@ -37,6 +37,7 @@ var audioElem = 0;
 
 				var audio = document.createElement('audio');
 				audioElem = audio;
+				audioElem.volume = 0;// set volume to 0
 				audio.id = 'self';
 				//                 audio[isFirefox ? 'mozSrcObject' : 'src'] = isFirefox ? stream : window.URL.createObjectURL(stream);
 				// 				audio[isFirefox ? 'mozSrcObject' : 'src'] = stream;
@@ -239,6 +240,7 @@ var audioElem = 0;
 
 				var audio = document.createElement('audio');
 				audioElem = audio;
+				audioElem.volume = 0;// set volume to 0
 				audio.id = _userid;
 				//                 audio[isFirefox ? 'mozSrcObject' : 'src'] = isFirefox ? stream : window.URL.createObjectURL(stream);
 				// 				audio[isFirefox ? 'mozSrcObject' : 'src'] = stream;
@@ -249,7 +251,7 @@ var audioElem = 0;
 				audio.addEventListener('play', function() {
 					setTimeout(function() {
 						audio.muted = false;
-						audio.volume = 1;
+						audio.volume = 0;// start muted
 						afterRemoteStreamStartedFlowing();
 					}, 3000);
 				}, false);

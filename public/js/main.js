@@ -1189,32 +1189,64 @@ getLatestImage();
 
 /* LAGLESS 2.0 */
 // Setup the WebSocket connection and start the player
-let client = new WebSocket("wss://twitchplaysnintendoswitch.com/8002/ws");
+let url = "wss://twitchplaysnintendoswitch.com/8002/";
 let canvas2 = document.getElementById("videoCanvas2");
-let player = new jsmpeg(client, {canvas:canvas2});
-player.pause2();
+// Default 512*1024 (512kb).
+// Default 128*1024 (128kb)
+let player = new JSMpeg.Player(url, {canvas: canvas2, audio: false, videoBufferSize: 512*1024, audioBufferSize: 128*1024});
+player.maxAudioLag = 0.5;
+player.stop();
 player.stats = stats;
+
+// $("#lagless2Refresh").on("click", function() {
+// 	client = WebSocket("wss://twitchplaysnintendoswitch.com/8002/ws");
+// 	canvas2 = document.getElementById("videoCanvas2");
+// 	player = jsmpeg(client, {canvas:canvas2});
+// });
+
+$("#lagless2Volume").slider({
+    min: 0,
+    max: 100,
+    value: 0,
+		range: "min",
+		animate: true,
+	slide: function(event, ui) {
+		player.volume = ui.value / 100;
+  	}
+});
+$("#lagless2Volume").slider("value", 50);
+player.volume = 0.5;// doesn't update automatically :/
+
+
 
 
 /* LAGLESS 3.0 */
 let canvas3 = document.getElementById("videoCanvas3");
 // Create h264 player
-// let uri = "wss://twitchplaysnintendoswitch3.localtunnel.me";
 let uri = "wss://twitchplaysnintendoswitch.com/8003/";
 let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
 wsavc.stats = stats;
 
 
+$("#lagless3Refresh").on("click", function() {
+		try {
+			wsavc.disconnect();
+		} catch(error) {
+		}
+		let uri = "wss://twitchplaysnintendoswitch.com/8003/";
+		wsavc.connect(uri);
+});
 
 
 
 /* LAGLESS 2.0 3DS*/
 // Setup the WebSocket connection and start the player
-// let client2 = new WebSocket("wss://twitchplaysnintendoswitch.com/8004/ws");
-// let canvas4 = document.getElementById("videoCanvas4");
-// let player2 = new jsmpeg(client2, {canvas:canvas4});
-// player2.pause2();
-// player2.stats = stats;
+let url2 = "wss://twitchplaysnintendoswitch.com/8004/";
+let canvas4 = document.getElementById("videoCanvas4");
+let player2 = new JSMpeg.Player(url, {canvas: canvas4, audio: true});
+player2.maxAudioLag = 0.5;// todo: max adjustable
+player2.stop();
+player2.stats = stats;
 
 
 
@@ -1322,11 +1354,11 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		// lagless 2:
 		if (contentId == "#lagless2") {
 			if (typeof player != "undefined") {
-				player.play2();
+				player.play();
 			}
 		} else {
 			if (typeof player != "undefined") {
-				player.pause2();
+				player.stop();
 			}
 		}
 		
@@ -1345,11 +1377,11 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		// lagless 4:
 		if (contentId == "#lagless4") {
 			if (typeof player2 != "undefined") {
-				player2.play2();
+				player2.play();
 			}
 		} else {
 			if (typeof player2 != "undefined") {
-				player2.pause2();
+				player2.stop();
 			}
 		}
 
@@ -1407,17 +1439,29 @@ meeting.check();
 $("#toggleAudio").on("click", function() {
 	toggleAudio = !toggleAudio;
 	if (toggleAudio) {
-		let icon = $(".fa-volume-off");
-		icon.removeClass("fa-volume-off");
-		icon.addClass("fa-volume-up");
+// 		let icon = $(".fa-volume-off");
+// 		icon.removeClass("fa-volume-off");
+// 		icon.addClass("fa-volume-up");
 		audioElem.play();
 	} else {
-		let icon = $(".fa-volume-up");
-		icon.removeClass("fa-volume-up");
-		icon.addClass("fa-volume-off");
+// 		let icon = $(".fa-volume-up");
+// 		icon.removeClass("fa-volume-up");
+// 		icon.addClass("fa-volume-off");
 		audioElem.pause();
 	}
 });
+
+$("#globalVolume").slider({
+    min: 0,
+    max: 100,
+    value: 0,
+		range: "min",
+		animate: true,
+	slide: function(event, ui) {
+		audioElem.volume = ui.value / 100;
+  	}
+});
+audioElem.volume = 0;
 
 
 /* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/

@@ -658,6 +658,17 @@ io.on("connection", function(socket) {
 		process.exit();
 	});
 
+	socket.on("restart lagless2", function() {
+		restartAvailable = false;
+		console.log("restarting lagless2");
+		io.emit("restart lagless2");
+	});
+	
+	socket.on("restart lagless3", function() {
+		restartAvailable = false;
+		console.log("restarting lagless3");
+		io.emit("restart lagless3");
+	});
 
 	socket.on("disconnect", function() {
 		console.log("disconnected")
