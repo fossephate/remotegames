@@ -2,30 +2,32 @@
 <head>
 	<!-- CSS -->
 	<link rel="stylesheet" href="css/stylesheet.css">
-	
+
 	<!-- Font Awesome	 -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-	
+
 	<!-- socket.io -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
 	<!-- jquery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-	
+
 	<script src="js/keymaster.js"></script>
 	<script src="js/gamepad.js"></script>
 	<script src="js/localforage.min.js"></script>
 	<script src="js/tools.js"></script>
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
-	
+	<script src="js/chillout.min.js"></script>
+<!-- 	<script src="js/interact.min.js"></script> -->
+
 	<script src="js/jsmpg.js"></script>
 	<script src="js/http-live-player.js"></script>
 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	<script src="js/meeting-client.js"></script>
-	
+
 	<!-- TODO: use browserify -->
-	
+
 
 	<!-- BOOTSTRAP 3 -->
 <!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> -->
@@ -34,11 +36,8 @@
 
 	<!-- BOOTSTRAP 4 -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-<!-- 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
 <!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-
-	<script src="js/bootstrap-checkbox.min.js"></script>
 
 	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 	<script>
@@ -53,7 +52,7 @@
 
 	<div id="container" class="container2">
 
-		<div id="picture" class="one well">
+		<div id="picture" class="one card card-body bg-light">
 
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="nav-item active">
@@ -127,7 +126,7 @@
 
 			<div id="description">
 
-				<div id="barUnderTheStream" class="well">
+				<div id="barUnderTheStream" class="card card-body bg-light">
 
 					<div id="turnTimerBar" class="progress">
 						<div id="turnTimerBarChild" class="progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
@@ -152,37 +151,37 @@
 								</li>
 							</ul>
 
-							<div class="well">
+							<div class="card card-body bg-light">
 								<canvas id="controllerViewCanvas"></canvas>
 							</div>
 
 						</div>
 
 						<div class="six">
-							<div id="currentPlayer" class="well">
+							<div id="currentPlayer" class="card card-body bg-light">
 								Current Player:
 							</div>
-							<div class="well">
+							<div class="card card-body bg-light">
 								Control Queue:
 								<btn id="requestTurn" type="button" class="btn btn-primary">Request Turn</btn>
 								<btn id="cancelTurn" type="button" class="btn btn-primary">Cancel Turn</btn>
 								<ul id="controlQueue" class="list-group">
 								</ul>
 							</div>
-							<div class="well">
+							<div class="card card-body bg-light">
 								Ping: <span id="ping"></span>
 							</div>
 						</div>
 					</div>
 				</div>
 
-				<div class="container3 well">
+				<div class="container3 card card-body bg-light">
 
 					<div class="three">
-						<div id="settingsLabel" class="well">
+						<div id="settingsLabel" class="card card-body bg-light">
 							Settings:
 						</div>
-						<div id="streamSettings" class="well">
+						<div id="streamSettings" class="card card-body bg-light">
 							<button type="button" data-toggle="modal" data-target="#settingsWindow" class="btn btn-info btn-settings">
 									<i class="fas fa-cogs"></i>
 								</button>
@@ -217,10 +216,10 @@
 					</div>
 
 					<div class="four">
-						<div id="controlsLabel" class="well">
+						<div id="controlsLabel" class="card card-body bg-light">
 							Controls:
 						</div>
-						<div id="controls" class="well">
+						<div id="controls" class="card card-body bg-light">
 							<ul class="list-group">
 								<li class="list-group-item">Controller Support:</li>
 								<li class="list-group-item">If you have an XBOX or Playstation Controller, just plug it in!</li>
@@ -261,7 +260,7 @@
 
 				</div>
 
-				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true">
+				<iframe id="twitchvideo" class="card card-body bg-light" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true">
 					</iframe>
 
 			</div>

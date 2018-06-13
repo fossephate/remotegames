@@ -45,9 +45,9 @@ const NALseparator    = new Buffer([0,0,0,1]);//NAL break
 
 var streamSettings = {
 	x1: 319 - 1920,
-	y1: 61,
+	y1: 61 + 360,
 	x2: 319 + 1280 - 1920,
-	y2: 61 + 720,
+	y2: 61 + 720 + 360,
 	fps: 15,
 	quality: 60,
 	scale: 30,
@@ -198,9 +198,23 @@ app.get("/img/", function(req, res) {
 
 var currentPlayerSite = `
 <html>
+<style>
+	.custom {
+		font-family: comic sans ms;
+		font-size: 30px;
+		color: white;
+		text-align: center;
+		vertical-align: middle;
+		background-color: rgba(0, 0, 0, 0);
+		margin: 0px auto;
+		overflow: hidden;
+		/*text-shadow: 2px 2px #000000;*/
+		text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
+	}
+</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<div id="currentPlayer">Current Player: </div>
+<div id="currentPlayer" class="custom">Current Player: </div>
 <script>
 	var socket = io("https://twitchplaysnintendoswitch.com", {
 		path: "/8110/socket.io",
@@ -225,6 +239,10 @@ var helpSite = `
 			font-family: comic sans ms;
 			color: white;
 			font-size: 50px;
+			text-align: center;
+			vertical-align: middle;
+			/*text-shadow: 2px 2px #000000;*/
+			text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
 		}
 	</style>
 	<!--   <marquee scrolldelay="0" scrollamount="10"> -->
@@ -676,7 +694,7 @@ io.on("connection", function(socket) {
 		clients.splice(i, 1);
 	});
 
-	socket.on("setQuality", function(data) {co
+	socket.on("setQuality", function(data) {
 		
 		if(controlQueue.length == 0) {io.emit("setQuality", streamSettings.quality);return;}
 		currentTurnUsername = controlQueue[0];
@@ -700,12 +718,12 @@ io.on("connection", function(socket) {
 		//io.emit("setFPS", data);
 	});
 
-	// 	socket.on("setCoords", function(data) {
-	// 		streamSettings.x1 = data.x1 || streamSettings.x1;
-	//     streamSettings.x2 = data.x2 || streamSettings.x2;
-	// 		streamSettings.y1 = data.y1 || streamSettings.y1;
-	//     streamSettings.y2 = data.y2 || streamSettings.y2;
-	// 	});
+// 	socket.on("setCoords", function(data) {
+// 		streamSettings.x1 = data.x1 || streamSettings.x1;
+// 		streamSettings.x2 = data.x2 || streamSettings.x2;
+// 		streamSettings.y1 = data.y1 || streamSettings.y1;
+// 		streamSettings.y2 = data.y2 || streamSettings.y2;
+// 	});
 
 
 

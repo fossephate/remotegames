@@ -1193,7 +1193,7 @@ let url = "wss://twitchplaysnintendoswitch.com/8002/";
 let canvas2 = document.getElementById("videoCanvas2");
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-let player = new JSMpeg.Player(url, {canvas: canvas2, audio: false, videoBufferSize: 512*1024, audioBufferSize: 128*1024});
+let player = new JSMpeg.Player(url, {canvas: canvas2, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
 player.maxAudioLag = 0.5;
 player.stop();
 player.stats = stats;
@@ -1216,6 +1216,10 @@ $("#lagless2Volume").slider({
 });
 $("#lagless2Volume").slider("value", 50);
 player.volume = 0.5;// doesn't update automatically :/
+
+// var pixelValues = new Uint8Array(400);
+// var gl = player.renderer.gl;
+// gl.readPixels(0, 0, 10, 10, gl.RGB, gl.UNSIGNED_BYTE, pixelValues);
 
 
 
@@ -1241,12 +1245,12 @@ $("#lagless3Refresh").on("click", function() {
 
 /* LAGLESS 2.0 3DS*/
 // Setup the WebSocket connection and start the player
-let url2 = "wss://twitchplaysnintendoswitch.com/8004/";
-let canvas4 = document.getElementById("videoCanvas4");
-let player2 = new JSMpeg.Player(url, {canvas: canvas4, audio: true});
-player2.maxAudioLag = 0.5;// todo: max adjustable
-player2.stop();
-player2.stats = stats;
+// let url2 = "wss://twitchplaysnintendoswitch.com/8004/";
+// let canvas4 = document.getElementById("videoCanvas4");
+// let player2 = new JSMpeg.Player(url, {canvas: canvas4, audio: true});
+// player2.maxAudioLag = 0.5;// todo: max adjustable
+// player2.stop();
+// player2.stats = stats;
 
 
 

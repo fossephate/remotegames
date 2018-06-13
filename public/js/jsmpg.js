@@ -272,7 +272,16 @@ JSMpeg.Player = function() {
         this.seek(time)
     };
     Player.prototype.update = function() {
-        this.animationId = requestAnimationFrame(this.update.bind(this));
+		
+		var self = this;
+		//setTimeout(function() {
+        	self.animationId = requestAnimationFrame(self.update.bind(self));
+		//}, 1000 / 20);
+		// skip frames at random:
+		//if (Math.random() > 0.95) {return;}
+		if (typeof this.stats != "undefined") {
+			this.stats.begin();
+		}
         if (!this.source.established) {
             if (this.renderer) {
                 this.renderer.renderProgress(this.source.progress)
@@ -288,6 +297,9 @@ JSMpeg.Player = function() {
         } else {
             this.updateForStaticFile()
         }
+		if (typeof this.stats != "undefined") {
+			this.stats.end();
+		}
     };
     Player.prototype.updateForStreaming = function() {
         if (this.video) {
