@@ -41,8 +41,6 @@
 	<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
 	<!-- 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script> -->
 
-	<script src="js/bootstrap-checkbox.min.js"></script>
-
 	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 	<script>
 		(adsbygoogle = window.adsbygoogle || []).push({
@@ -88,10 +86,13 @@
 <!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
 							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
 						</button> -->
-						<div id="lagless2VolumeSlider" class="volumeSlider">
-							<i class="fa fa-volume-down"></i>
-							<div id="lagless2Volume" class="volume"></div>
-							<i class="fa fa-volume-up"></i>
+						<div id="lagless2Bar">
+							<div id="lagless2VolumeSlider" class="volumeSlider">
+								<i class="fa fa-volume-down"></i>
+								<div id="lagless2Volume" class="volume"></div>
+								<i class="fa fa-volume-up"></i>
+							</div>
+							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
 						</div>
 					</div>
 				</div>
@@ -265,6 +266,8 @@
 								<li class="list-group-item">botw (Breath of the Wild)</li>
 								<li class="list-group-item">smo (Super Mario Odyssey)</li>
 								<li class="list-group-item">celeste (Celeste)</li>
+								<li class="list-group-item">fortnite (Fortnite)</li>
+								<li class="list-group-item">fallout (Fallout Shelter)</li>
 								<li class="list-group-item">mk8 (Mario Kart 8 Deluxe)</li>
 								<li class="list-group-item">splatoon2 (Splatoon 2)</li>
 								<li class="list-group-item">wizard (Wizard of Legend)</li>
@@ -273,7 +276,7 @@
 								<li class="list-group-item">skyrim (Skyrim)</li>
 								<li class="list-group-item">pokemon quest (Pokemon Quest)</li>
 								<li class="list-group-item">torquel (TorqueL)</li>
-								<!-- 									<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
+<!-- 								<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
 								<li class="list-group-item">arms (Arms)</li>
 							</ul>
 						</div>
@@ -281,8 +284,7 @@
 
 				</div>
 
-				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true">
-					</iframe>
+				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>
 
 			</div>
 

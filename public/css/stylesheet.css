@@ -36,6 +36,13 @@ body {
 	overflow-y: scroll;
 }
 
+#timer {
+    padding: 0;
+    margin: 0;
+    height: 50px;
+    overflow: hidden;
+}
+
 /* tabs */
 .nav-tabs>li>a {
 /* 	background-color: #cccccc; */
@@ -176,6 +183,11 @@ body {
 #videoCanvas2 {
 	width: 75%;
 }
+#lagless2Bar {
+	display: flex;
+	justify-content: space-evenly;
+}
+
 /* LAGLESS3 */
 #lagless3Container {
 	text-align: center;
@@ -674,11 +686,18 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 .volumeSlider {
-	width: 350px;
+/* 	width: 350px;
 	height: 50px;
 	position: relative;
 	margin: 0 auto;
-	top: 20px;
+	top: 20px; */
+	
+    display: flex;
+    justify-content: space-evenly;
+    width: 350px;
+    height: 50px;
+    position: relative;
+    top: 20px;
 }
 .volumeSlider i {
 	position: absolute;
@@ -686,28 +705,24 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	color: #666;
 }
 .volumeSlider i.fa-volume-down {
-/* 	margin-left: -8px; */
-	margin-left: -50%;
-/* 	float: left; */
+	left: 0;
 }
 /* hack to add -50% + -8px */
 .volumeSlider i.fa-volume-down::before {
-	margin-left: -8px;
+	margin-left: -40px;
 }
 .volumeSlider i.fa-volume-up {
-	margin-right: -8px;
-	right: 0;
-/* 	float: left; */
+    margin-right: -30px;
+    right: 0;
 }
 
 .volume {
-	position: absolute;
-	left: 24px;
-	margin: 0 auto;
-	height: 5px;
-	width: 300px;
-	background: #555;
-	border-radius: 15px;
+    height: 5px;
+/*     margin-left: 20px;
+    margin-right: 20px; */
+    width: 100%;
+    background: #555;
+    border-radius: 15px;
 }
 
 .volume .ui-slider-range-min {

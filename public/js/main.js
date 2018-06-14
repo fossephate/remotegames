@@ -166,7 +166,7 @@ socket.on("chat message", function(msg) {
 	newMessage[0].scrollIntoView(false);
 });
 
-socket.on("current player", function(data) {
+socket.on("currentPlayer", function(data) {
 	$("#currentPlayer").text("Current Player: " + data);
 });
 
@@ -1145,7 +1145,7 @@ setInterval(function() {
 		socket.emit("registerUsername", authCookie);
 		$("#authenticateButton").remove();
 	}
-}, 1000 * 5);
+}, 2000);
 
 
 
@@ -1499,6 +1499,7 @@ socket.on("turnTimeLeft", function(data) {
 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
 	let progressBar = $(".progress-bar");
 	progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
+	$("#currentPlayer").text("Current Player: " + turnUsername);
 });
 
 
