@@ -282,6 +282,13 @@ function sendControllerState() {
 		return;
 	}
 	
+	// check to see if any of the controls checkboxes are enabled:
+	if (!document.getElementById("keyboardControllerCheckbox").checked &&
+		!document.getElementById("touchControlsCheckbox").checked &&
+		!document.getElementById("mouseControlsCheckbox").checked) {
+		return;
+	}
+	
 	console.log(newControllerState);
 	//if(controlQueue[0] == twitchUsername) {
 	socket.emit("sendControllerState", newControllerState);
@@ -292,7 +299,7 @@ function sendControllerState() {
 
 let wasPressedKeyCodes = [];
 
-function sendKeyboardInputs() {
+function getKeyboardInput() {
 
 	if (!document.getElementById("keyboardControllerCheckbox").checked) {
 		return;
@@ -352,7 +359,6 @@ function sendKeyboardInputs() {
 
 	if (key.isPressed(keyboardLayout.DUp)) {
 		controller.btns.up = 1;
-		console.log("dup");
 	} else if(key.wasPressed(keyboardLayout.DUp, wasPressedKeyCodes)) {
 		controller.btns.up = 0;
 	}
@@ -450,9 +456,8 @@ function sendKeyboardInputs() {
 	
 	wasPressedKeyCodes = key.getPressedKeyCodes();
 	
-	sendControllerState();
+	//sendControllerState();
 }
-
 
 
 /* prevent arrow key scrolling */
@@ -463,6 +468,14 @@ window.addEventListener("keydown", function(e) {
 	}
 }, false);
 
+function getMouseInput() {
+	if (!document.getElementById("mouseControlsCheckbox").checked) {
+		return;
+	}
+	
+	canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+}
+
 
 /* GAMEPAD API */
 
@@ -471,13 +484,11 @@ const gamepad = new Gamepad();
 gamepad.on("connect", e => {
 	console.log(`controller ${e.index} connected!`);
 	gamepadCounter += 1;
-	//window.clearInterval(keyboardTimer);
 });
 
 gamepad.on("disconnect", e => {
 	console.log(`controller ${e.index} disconnected!`);
 	gamepadCounter -= 1;
-	//keyboardTimer = setInterval(sendKeyboardInputs, 10);
 });
 
 gamepad.on("press", "button_1", e => {
@@ -697,7 +708,7 @@ gamepad.on("release", "stick_button_right", e => {
 });
 
 
-function sendGamePadInputs() {
+function getGamepadInput() {
 
 	if (!document.getElementById("keyboardControllerCheckbox").checked) {
 		return;
@@ -711,8 +722,9 @@ function sendGamePadInputs() {
 		return;
 	}
 	//controller.reset();
-	
-	sendControllerState();
+// 	if (gamepad._events.gamepad.length > 0) {
+// 		sendControllerState();
+// 	}
 }
 
 
@@ -836,159 +848,159 @@ $("#keyboardLayoutConfig").on("click", function(e) {
 
 
 
-let canvas = $("#buttonsCanvas")[0];
-let ctx = canvas.getContext("2d");
-canvas.style.width="100%";
-canvas.style.height="100%";
-canvas.width  = canvas.offsetWidth;
-canvas.height = canvas.offsetHeight;
-let realWidth = $("#buttonsCanvas")[0].width;
-let realHeight = $("#buttonsCanvas")[0].height;
-let halfWidth = $("#buttonsCanvas")[0].width/2;
-let halfHeight = $("#buttonsCanvas")[0].height/2;
-// ctx.fillStyle = "#FF0000";
-// ctx.fillRect(halfWidth+(halfWidth/2)-25,0,50,50);
+// let canvas = $("#buttonsCanvas")[0];
+// let ctx = canvas.getContext("2d");
+// canvas.style.width="100%";
+// canvas.style.height="100%";
+// canvas.width  = canvas.offsetWidth;
+// canvas.height = canvas.offsetHeight;
+// let realWidth = $("#buttonsCanvas")[0].width;
+// let realHeight = $("#buttonsCanvas")[0].height;
+// let halfWidth = $("#buttonsCanvas")[0].width/2;
+// let halfHeight = $("#buttonsCanvas")[0].height/2;
+// // ctx.fillStyle = "#FF0000";
+// // ctx.fillRect(halfWidth+(halfWidth/2)-25,0,50,50);
 
-function touchButton(x, y, width, height, color, button) {
-	this.x = x;
-	this.y = y;
-	this.width = width;
-	this.height = height;
-	this.color = color;
-	this.button = button;
+// function touchButton(x, y, width, height, color, button) {
+// 	this.x = x;
+// 	this.y = y;
+// 	this.width = width;
+// 	this.height = height;
+// 	this.color = color;
+// 	this.button = button;
 	
-	this.x2 = this.x + this.width;
-	this.y2 = this.y + this.height;
+// 	this.x2 = this.x + this.width;
+// 	this.y2 = this.y + this.height;
 
 	
 	
-	this.isPressed = function(X, Y) {
-// 		console.log(X + " " + Y);
-// 		console.log(this.x + "." + this.y);
-		if(X >= this.x && X <= this.x2) {
-			if(Y >= this.y && Y <= this.y2) {
-				console.log(this.button);
-				return true;
-			}
-		}
-		return false;
-	}
+// 	this.isPressed = function(X, Y) {
+// // 		console.log(X + " " + Y);
+// // 		console.log(this.x + "." + this.y);
+// 		if(X >= this.x && X <= this.x2) {
+// 			if(Y >= this.y && Y <= this.y2) {
+// 				console.log(this.button);
+// 				return true;
+// 			}
+// 		}
+// 		return false;
+// 	}
 	
-	this.draw = function() {
-		ctx.fillStyle = this.color;
-		ctx.fillRect(this.x, this.y, this.width, this.height);
-	}
+// 	this.draw = function() {
+// 		ctx.fillStyle = this.color;
+// 		ctx.fillRect(this.x, this.y, this.width, this.height);
+// 	}
 	
-	return this;
-}
+// 	return this;
+// }
 
 
 
 
-function touchStart(event) {
-	event.preventDefault();
-	if (event.touches) {
-		if (event.touches.length == 1) {
-			let touch = event.touches[0];
-			let touchX = touch.pageX - touch.target.offsetLeft;
-			let touchY = touch.pageY - touch.target.offsetTop;
+// function touchStart(event) {
+// 	event.preventDefault();
+// 	if (event.touches) {
+// 		if (event.touches.length == 1) {
+// 			let touch = event.touches[0];
+// 			let touchX = touch.pageX - touch.target.offsetLeft;
+// 			let touchY = touch.pageY - touch.target.offsetTop;
 			
-			controller.btns.x = buttons[0].isPressed(touchX, touchY);
-			controller.btns.b = buttons[1].isPressed(touchX, touchY);
-			controller.btns.y = buttons[2].isPressed(touchX, touchY);
-			controller.btns.a = buttons[3].isPressed(touchX, touchY);
+// 			controller.btns.x = buttons[0].isPressed(touchX, touchY);
+// 			controller.btns.b = buttons[1].isPressed(touchX, touchY);
+// 			controller.btns.y = buttons[2].isPressed(touchX, touchY);
+// 			controller.btns.a = buttons[3].isPressed(touchX, touchY);
 			
-		}
-	}
-}
+// 		}
+// 	}
+// }
 
-function touchMove(event) {
-	event.preventDefault();
-	if (event.touches) {
-		if (event.touches.length == 1) {
-			let touch = event.touches[0];
-			let touchX = touch.pageX - touch.target.offsetLeft;
-			let touchY = touch.pageY - touch.target.offsetTop;
+// function touchMove(event) {
+// 	event.preventDefault();
+// 	if (event.touches) {
+// 		if (event.touches.length == 1) {
+// 			let touch = event.touches[0];
+// 			let touchX = touch.pageX - touch.target.offsetLeft;
+// 			let touchY = touch.pageY - touch.target.offsetTop;
 			
-			controller.btns.x = buttons[0].isPressed(touchX, touchY);
-			controller.btns.b = buttons[1].isPressed(touchX, touchY);
-			controller.btns.y = buttons[2].isPressed(touchX, touchY);
-			controller.btns.a = buttons[3].isPressed(touchX, touchY);
+// 			controller.btns.x = buttons[0].isPressed(touchX, touchY);
+// 			controller.btns.b = buttons[1].isPressed(touchX, touchY);
+// 			controller.btns.y = buttons[2].isPressed(touchX, touchY);
+// 			controller.btns.a = buttons[3].isPressed(touchX, touchY);
 			
-		}
-	}
-}
+// 		}
+// 	}
+// }
 
-function touchEnd(event) {
-	event.preventDefault();
-}
+// function touchEnd(event) {
+// 	event.preventDefault();
+// }
 
-function mouseDown(event) {
-	let canvas = $("#buttonsCanvas")[0];
-	let x = event.pageX - canvas.offsetLeft;
-	let y = event.pageY - canvas.offsetTop;
+// function mouseDown(event) {
+// 	let canvas = $("#buttonsCanvas")[0];
+// 	let x = event.pageX - canvas.offsetLeft;
+// 	let y = event.pageY - canvas.offsetTop;
 	
-	//console.log(x + " " + y);
+// 	//console.log(x + " " + y);
 
-	controller.btns.x = buttons[0].isPressed(x, y);
-	controller.btns.b = buttons[1].isPressed(x, y);
-	controller.btns.y = buttons[2].isPressed(x, y);
-	controller.btns.a = buttons[3].isPressed(x, y);
-}
+// 	controller.btns.x = buttons[0].isPressed(x, y);
+// 	controller.btns.b = buttons[1].isPressed(x, y);
+// 	controller.btns.y = buttons[2].isPressed(x, y);
+// 	controller.btns.a = buttons[3].isPressed(x, y);
+// }
 
-function mouseMove(event) {
-	let canvas = $("#buttonsCanvas")[0];
-	let x = event.pageX - canvas.offsetLeft - 35;
-	let y = event.pageY - canvas.offsetTop - 640;
+// function mouseMove(event) {
+// 	let canvas = $("#buttonsCanvas")[0];
+// 	let x = event.pageX - canvas.offsetLeft - 35;
+// 	let y = event.pageY - canvas.offsetTop - 640;
 	
-	//console.log(x + " " + y);
+// 	//console.log(x + " " + y);
 
-	controller.btns.x = buttons[0].isPressed(x, y);
-	controller.btns.b = buttons[1].isPressed(x, y);
-	controller.btns.y = buttons[2].isPressed(x, y);
-	controller.btns.a = buttons[3].isPressed(x, y);
-}
+// 	controller.btns.x = buttons[0].isPressed(x, y);
+// 	controller.btns.b = buttons[1].isPressed(x, y);
+// 	controller.btns.y = buttons[2].isPressed(x, y);
+// 	controller.btns.a = buttons[3].isPressed(x, y);
+// }
 
-function mouseUp(event) {
-	let canvas = $("#buttonsCanvas")[0];
-	let x = event.pageX - canvas.offsetLeft;
-	let y = event.pageY - canvas.offsetTop - 581;
+// function mouseUp(event) {
+// 	let canvas = $("#buttonsCanvas")[0];
+// 	let x = event.pageX - canvas.offsetLeft;
+// 	let y = event.pageY - canvas.offsetTop - 581;
 
-	controller.btns.x = !buttons[0].isPressed(x, y);
-	controller.btns.b = !buttons[1].isPressed(x, y);
-	controller.btns.y = !buttons[2].isPressed(x, y);
-	controller.btns.a = !buttons[3].isPressed(x, y);
-}
+// 	controller.btns.x = !buttons[0].isPressed(x, y);
+// 	controller.btns.b = !buttons[1].isPressed(x, y);
+// 	controller.btns.y = !buttons[2].isPressed(x, y);
+// 	controller.btns.a = !buttons[3].isPressed(x, y);
+// }
 
 
-// canvas.addEventListener("touchstart", touchStart, false);
-// canvas.addEventListener("touchmove", touchMove, false);
-// canvas.addEventListener("touchend", touchEnd, false);
+// // canvas.addEventListener("touchstart", touchStart, false);
+// // canvas.addEventListener("touchmove", touchMove, false);
+// // canvas.addEventListener("touchend", touchEnd, false);
 
-// canvas.addEventListener("mousedown", mouseDown, false);
-// canvas.addEventListener("mousemove", mouseMove, false);
-// canvas.addEventListener("mouseup", mouseUp, false);
+// // canvas.addEventListener("mousedown", mouseDown, false);
+// // canvas.addEventListener("mousemove", mouseMove, false);
+// // canvas.addEventListener("mouseup", mouseUp, false);
 
-let buttons = [];
-// let XButton = touchButton(halfWidth+(halfWidth/2)-25, 0, 50, 50, "blue", "X");
-// let BButton = touchButton(halfWidth+(halfWidth/2)-25, 50, 50, 50, "yellow", "B");
-// let YButton = touchButton(halfWidth+(halfWidth/2)-75, 25, 50, 50, "green", "X");
-// let AButton = touchButton(halfWidth+(halfWidth/2)+25, 25, 50, 50, "red", "B");
+// let buttons = [];
+// // let XButton = touchButton(halfWidth+(halfWidth/2)-25, 0, 50, 50, "blue", "X");
+// // let BButton = touchButton(halfWidth+(halfWidth/2)-25, 50, 50, 50, "yellow", "B");
+// // let YButton = touchButton(halfWidth+(halfWidth/2)-75, 25, 50, 50, "green", "X");
+// // let AButton = touchButton(halfWidth+(halfWidth/2)+25, 25, 50, 50, "red", "B");
 
-let XButton = new touchButton(halfWidth-25, -25+(halfHeight/3), 50, 50, "blue", "X");
-let BButton = new touchButton(halfWidth-25, 75+(halfHeight/3), 50, 50, "yellow", "B");
-let YButton = new touchButton(halfWidth-75, 25+(halfHeight/3), 50, 50, "green", "Y");
-let AButton = new touchButton(halfWidth+25, 25+(halfHeight/3), 50, 50, "red", "A");
+// let XButton = new touchButton(halfWidth-25, -25+(halfHeight/3), 50, 50, "blue", "X");
+// let BButton = new touchButton(halfWidth-25, 75+(halfHeight/3), 50, 50, "yellow", "B");
+// let YButton = new touchButton(halfWidth-75, 25+(halfHeight/3), 50, 50, "green", "Y");
+// let AButton = new touchButton(halfWidth+25, 25+(halfHeight/3), 50, 50, "red", "A");
 
-buttons.push(XButton);
-buttons.push(BButton);
-buttons.push(YButton);
-buttons.push(AButton);
+// buttons.push(XButton);
+// buttons.push(BButton);
+// buttons.push(YButton);
+// buttons.push(AButton);
 
-ctx.clearRect(0, 0, canvas.width, canvas.height);
-for (let i = 0; i < 4; i++) {
-	buttons[i].draw();
-}
+// ctx.clearRect(0, 0, canvas.width, canvas.height);
+// for (let i = 0; i < 4; i++) {
+// 	buttons[i].draw();
+// }
 
 
 
@@ -1075,8 +1087,7 @@ function createJoysticks(evt) {
 }
 
 
-function sendTouchInputs() {
-
+function getTouchInput() {
 	if (!document.getElementById("touchControlsCheckbox").checked) {
 		return;
 	}
@@ -1089,34 +1100,34 @@ function sendTouchInputs() {
 		return;
 	}
 	//controller.reset();
-	
-	sendControllerState();
 }
 
-$("#touchControls")[0].style.display = "none";
+
+$("#leftJoyCon")[0].style.display = "none";
+$("#rightJoyCon")[0].style.display = "none";
+
+// $("#videoCanvas2")[0].style.width = "100%";
+// $("#videoCanvas2")[0].style["margin-left"] = "0";
 $("#touchControlsCheckbox").on("click", function() {
 	if ($(this).is(":checked")) {
-		$("#touchControls")[0].style.display = "";
+		$("#leftJoyCon")[0].style.display = "";
+		$("#rightJoyCon")[0].style.display = "";
+// 		$("#videoCanvas2")[0].style.width = "75%";
+// 		$("#videoCanvas2")[0].style["margin-left"] = "12.5%";
 	} else {
-		$("#touchControls")[0].style.display = "none";
+		$("#leftJoyCon")[0].style.display = "none";
+		$("#rightJoyCon")[0].style.display = "none";	
+// 		$("#videoCanvas2")[0].style.width = "100%";
+// 		$("#videoCanvas2")[0].style["margin-left"] = "0";
 	}
 });
 
-// 	$("#touchControlsCheckbox").checkboxpicker({
-// 		html: true,
-// 		offLabel: '<span class="glyphicon glyphicon-remove">',
-// 		onLabel: '<span class="glyphicon glyphicon-ok">'
-// 	});
-
 function sendInputs() {
-	sendKeyboardInputs();
-	sendGamePadInputs();
-	sendTouchInputs();
+	getKeyboardInput();
+	getGamepadInput();
+	getTouchInput();
+	sendControllerState();
 }
-
-// keyboardTimer = setInterval(sendKeyboardInputs, 10);
-// gamepadTimer = setInterval(sendGamePadInputs, 10);
-// touchTimer = setInterval(sendTouchInputs, 10);
 setInterval(sendInputs, 10);
 
 
@@ -1124,11 +1135,6 @@ setInterval(sendInputs, 10);
 
 
 /* AUTH  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-$("#authenticateButton").on("click", function(event) {
-	//setCookie("AttemptedAuth", 1, 60);
-});
-
-
 let authCookie = getCookie("TwitchPlaysNintendoSwitch");
 let attemptedAuth = getCookie("AttemptedAuth");
 
@@ -1208,14 +1214,25 @@ $("#lagless2Volume").slider({
     min: 0,
     max: 100,
     value: 0,
-		range: "min",
-		animate: true,
+	range: "min",
+	animate: true,
 	slide: function(event, ui) {
 		player.volume = ui.value / 100;
   	}
 });
 $("#lagless2Volume").slider("value", 50);
 player.volume = 0.5;// doesn't update automatically :/
+
+
+$("#lagless2VolumeSlider").children().on("click", function(){
+	$("#lagless2Volume").slider("value", 0);
+	player.volume = 0.0;// doesn't update automatically :/
+});
+
+$("#lagless2VolumeSlider").children().next().on("click", function(){
+	$("#lagless2Volume").slider("value", 100);
+	player.volume = 1;// doesn't update automatically :/
+});
 
 // var pixelValues = new Uint8Array(400);
 // var gl = player.renderer.gl;
@@ -1233,12 +1250,12 @@ wsavc.stats = stats;
 
 
 $("#lagless3Refresh").on("click", function() {
-		try {
-			wsavc.disconnect();
-		} catch(error) {
-		}
-		let uri = "wss://twitchplaysnintendoswitch.com/8003/";
-		wsavc.connect(uri);
+	try {
+		wsavc.disconnect();
+	} catch(error) {
+	}
+	let uri = "wss://twitchplaysnintendoswitch.com/8003/";
+	wsavc.connect(uri);
 });
 
 
@@ -1498,8 +1515,15 @@ socket.on("turnTimeLeft", function(data) {
 	let timeLeftSec = parseInt(timeLeft / 1000);
 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
 	let progressBar = $(".progress-bar");
-	progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
-	$("#currentPlayer").text("Current Player: " + turnUsername);
+	
+	if (turnUsername == null) {
+		percent = 100;
+		progressBar.css("width", percent + "%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		$("#currentPlayer").text("No one is playing right now.");
+	} else {
+		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
+		$("#currentPlayer").text("Current Player: " + turnUsername);
+	}
 });
 
 

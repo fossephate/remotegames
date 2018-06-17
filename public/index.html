@@ -76,13 +76,32 @@
 
 			<div class="tab-content">
 				<div id="lagless1" class="tab-pane active">
-					<div id="screen" oncontextmenu="return false">
-						<image id="screenshot"></image>
+					<div id="lagless1Container">
+						<div id="screen" oncontextmenu="return false">
+							<image id="screenshot"></image>
+						</div>
+						<div id="lagless1Bar">
+	<!-- 						<div id="lagless2VolumeSlider" class="volumeSlider">
+								<i class="fa fa-volume-down"></i>
+								<div id="lagless2Volume" class="volume"></div>
+								<i class="fa fa-volume-up"></i>
+							</div> -->
+							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe>
+							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
+						</div>
 					</div>
 				</div>
 				<div id="lagless2" class="tab-pane">
 					<div id="lagless2Container">
-						<canvas id="videoCanvas2"></canvas>
+						<div id="lagless2View">
+							<div id="leftJoyCon">
+								<div id="leftStick"></div>
+							</div>
+							<canvas id="videoCanvas2"></canvas>
+							<div id="rightJoyCon">
+								<div id="rightStick"></div>
+							</div>
+						</div>
 <!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
 							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
 						</button> -->
@@ -92,6 +111,7 @@
 								<div id="lagless2Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div>
+							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe>
 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
 						</div>
 					</div>
@@ -117,10 +137,7 @@
 			</div>
 
 
-			<div id="touchControls">
-				<!-- 					<div id="touchButtons">
-						<canvas id="buttonsCanvas" width="100%" height="100%"></canvas>
-					</div> -->
+<!-- 			<div id="touchControls">
 				<div class="container6">
 					<div id="touchSticks" class="container5 nine">
 						<div id="leftStick" class="zone semi seven">
@@ -131,11 +148,8 @@
 							<canvas id="buttonsCanvas" width="100%" height="100%"></canvas>
 						</div>
 					</div>
-					<!-- 						<div class="ten">
-							test
-						</div> -->
 				</div>
-			</div>
+			</div> -->
 
 
 
@@ -165,6 +179,13 @@
 											Enable Touch Controls
 										</label>
 								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="mouseControlsCheckbox" type="checkbox">
+											<span class="checkbox-placeholder"></span>
+											Enable Mouse Controls
+										</label>
+								</li>
 							</ul>
 
 							<div class="well">
@@ -188,6 +209,7 @@
 								Ping: <span id="ping"></span>
 							</div>
 						</div>
+						
 					</div>
 				</div>
 

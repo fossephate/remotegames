@@ -18,8 +18,11 @@ body {
 
 #turnTimerBar {
 	height: 30px;
+	width: 50%;
+    align-self: center;
 	line-height: 30px;
 	margin-bottom: 20px;
+	border: 2px solid #333;
 }
 #turnTimerBarChild {
 	height: 30px;
@@ -27,6 +30,8 @@ body {
 }
 
 #barUnderTheStream {
+	display: inline-flex;
+	flex-flow: column;
 	min-height: 125px;
 	padding: 20px;
 }
@@ -39,8 +44,19 @@ body {
 #timer {
     padding: 0;
     margin: 0;
+	width: 190px;
     height: 50px;
     overflow: hidden;
+	margin-left: auto;
+}
+
+#speedrunTimer {
+    padding: 0;
+    margin: 0;
+	width: 190px;
+    height: 50px;
+    overflow: hidden;
+	margin-left: auto;
 }
 
 /* tabs */
@@ -175,17 +191,34 @@ body {
 	width: 75%;
 /* 	height: auto; */
 }
+#lagless1Container {
+	text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+}
+
 
 /* LAGLESS2 */
 #lagless2Container {
 	text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
 }
 #videoCanvas2 {
 	width: 75%;
+	margin-left: 12.5%;
+	align-self: center;
 }
 #lagless2Bar {
 	display: flex;
 	justify-content: space-evenly;
+	align-self: center;
+	width: 75%;
+}
+#lagless2VolumeSlider {
+	margin-left: auto;
 }
 
 /* LAGLESS3 */
@@ -312,61 +345,38 @@ ul {
 
 .container3 {
 	width: 100%;
-	/*     height: 200px; */
-	/*     background: aqua; */
 	margin: auto;
 	padding: 2%;
 	overflow-y: scroll;
+	display: inline-flex;
+	justify-content: space-evenly;
 }
 
 .three {
 	width: 40%;
-	/* 	width: auto; */
-	/*     padding: 0; */
-	/*     margin: 0; */
-	margin-left: 5%;
-	/*     height: 200px; */
-	/*     background: red; */
-	float: left;
 }
 
 .four {
-	margin-left: 55%;
 	width: 40%;
 	height: 100%;
-	/*     background: black; */
-	/*     display: inline-block; */
-	width: 40%;
-	/*     float: right; */
 }
 
 .container4 {
 	width: 100%;
-	/*     height: 200px; */
-	/*     background: aqua; */
 	margin: auto;
 	padding: 0;
-	/* 	overflow-y: scroll; */
 	overflow-y: hidden;
+	display: inline-flex;
+	justify-content: space-evenly;
 }
 
 .five {
 	width: 40%;
-	/* 	width: auto; */
 	padding: 0;
-	/*     margin: 0; */
-	margin-left: 5%;
-	float: left;
 }
 
 .six {
-	margin-left: 55%;
 	width: 40%;
-	/*     height: 100%; */
-	/*     background: black; */
-	/*     display: inline-block; */
-	width: 40%;
-	/*     float: right; */
 }
 
 #controlsLabel {
@@ -476,9 +486,8 @@ ul {
 
 /* TOUCH CONTROLS */
 
-#touchControls {
+/* #touchControls {
 	position: relative;
-	/* 	top: -200px; */
 	height: 150px;
 	margin-bottom: 100px;
 }
@@ -495,6 +504,41 @@ ul {
 	width: 40%;
 	margin-left: 40%;
 	margin-bottom: 0;
+} */
+
+
+#lagless2View {
+	display: inline-flex;
+	flex-flow: row;
+	justify-content: start;
+	position: relative;
+}
+
+#leftJoyCon {
+	width: 12.5%;
+	height: 100%;
+	position: absolute;
+}
+
+#rightJoyCon {
+	width: 12.5%;
+	height: 100%;
+	position: absolute;
+	margin-left: 87.5%;
+}
+
+#leftStick {
+	position: relative;
+	background: rgba(0, 0, 255, 0.2);
+	width: 100%;
+	height: 100%;
+}
+
+#rightStick {
+	position: relative;
+	background: rgba(255, 0, 0, 0.2);
+	width: 100%;
+	height: 100%;
 }
 
 #touchSticks {
@@ -694,7 +738,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	
     display: flex;
     justify-content: space-evenly;
-    width: 350px;
+    width: 250px;
     height: 50px;
     position: relative;
     top: 20px;
