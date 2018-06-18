@@ -624,35 +624,36 @@ io.on("connection", function(socket) {
 			moveLineTimer = setTimeout(moveLine, turnDuration);
 		}
 		
-// 		// forfeit timer:
-// 		not needed here
-// 		clearTimeout(forfeitTimer);
-// 		forfeitTimer = setTimeout(function(id) {
-// 			// cancel turn:
-// 			let index = findClientByID(id);
-// 			if (index == -1) {return;}
-// 			client = clients[index];
-// 			if(client.username == null) {return;}
-// 			index = controlQueue.indexOf(client.username);
-// 			if(index > -1) {
-// 				controlQueue.splice(index, 1);
-// 				socket.emit("controlQueue", {queue: controlQueue});
-// 			}
-// 			if(controlQueue.length >= 1) {
-// 				//currentTurnUsername = controlQueue[0];
-// // 				clearTimeout(moveLineTimer);
-// // 				moveLine();
-// 				turnStartTime = Date.now();
+		if (controlQueue.length != 1) {return;}
+		
+		// forfeit timer:
+		clearTimeout(forfeitTimer);
+		forfeitTimer = setTimeout(function(id) {
+			// cancel turn:
+			let index = findClientByID(id);
+			if (index == -1) {return;}
+			client = clients[index];
+			if(client.username == null) {return;}
+			index = controlQueue.indexOf(client.username);
+			if(index > -1) {
+				controlQueue.splice(index, 1);
+				socket.emit("controlQueue", {queue: controlQueue});
+			}
+			if(controlQueue.length >= 1) {
+				//currentTurnUsername = controlQueue[0];
 // 				clearTimeout(moveLineTimer);
-// 				moveLineTimer = setTimeout(moveLine, turnDuration);
-// 			} else {
-// 				currentTurnUsername = null;
-// 			}
-// 			let currentTime = Date.now();
-// 			let elapsedTime = currentTime - turnStartTime;
-// 			let timeLeft = turnDuration - elapsedTime;
-// 			io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
-// 		}, timeTillForfeit, socket.id);
+// 				moveLine();
+				turnStartTime = Date.now();
+				clearTimeout(moveLineTimer);
+				moveLineTimer = setTimeout(moveLine, turnDuration);
+			} else {
+				currentTurnUsername = null;
+			}
+			let currentTime = Date.now();
+			let elapsedTime = currentTime - turnStartTime;
+			let timeLeft = turnDuration - elapsedTime;
+			io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
+		}, timeTillForfeit, socket.id);
 		
 	});
 	

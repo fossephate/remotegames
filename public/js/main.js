@@ -18,11 +18,13 @@ let controlQueue = [];
 let twitchUsername = null;
 let toggleDarkTheme = false;
 let toggleChat = false;
+let toggleFullscreen = false;
 let timeLeft = 30000;
 let turnLength = 30000;
 let turnUsername = null;
 let lastCurrentTime = 0;
 let pingTime = 0;
+let restPos = 128;
 let stats = new Stats();
 stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
 document.body.appendChild(stats.dom);
@@ -97,6 +99,12 @@ function updateImage() {
 	if (typeof $("#screen")[0].children[0] != "undefined") {
 		// fix for dom freaking out:
 		$("#screen")[0].style.height = "" + $("#screenshot")[0].height;
+		
+// 		if (toggleFullscreen) {
+// 			$("#screenshot")[0].style.width = "100%";
+// 		} else {
+// 			$("#screenshot")[0].style.width = "75%";
+// 		}
 		
 		let src = $("#screen")[0].children[0].src;
 		if(src == "data:image/jpeg;base64,") {
@@ -178,12 +186,12 @@ let gamepadCounter = 0;
 controller = {};
 controller.btns = {};
 controller.LStick = {
-	x: 127,
-	y: 127
+	x: restPos,
+	y: restPos
 };
 controller.RStick = {
-	x: 127,
-	y: 127
+	x: restPos,
+	y: restPos
 };
 
 controller.btns.up = false;
@@ -210,10 +218,10 @@ controller.reset = function() {
 	for (let prop in controller.btns) {
 		controller.btns[prop] = false;
 	}
-	controller.LStick.x = 127;
-	controller.LStick.y = 127;
-	controller.RStick.x = 127;
-	controller.RStick.y = 127;
+	controller.LStick.x = restPos;
+	controller.LStick.y = restPos;
+	controller.RStick.x = restPos;
+	controller.RStick.y = restPos;
 }
 
 let oldControllerState = "";
@@ -318,22 +326,22 @@ function getKeyboardInput() {
 	if (key.isPressed(keyboardLayout.LYU)) {
 		controller.LStick.y = 255;
 	} else if(key.wasPressed(keyboardLayout.LYU, wasPressedKeyCodes)) {
-		controller.LStick.y = 127;
+		controller.LStick.y = restPos;
 	}
 	if (key.isPressed(keyboardLayout.LYD)) {
 		controller.LStick.y = 0;
 	} else if(key.wasPressed(keyboardLayout.LYD, wasPressedKeyCodes)) {
-		controller.LStick.y = 127;
+		controller.LStick.y = restPos;
 	}
 	if (key.isPressed(keyboardLayout.LXL)) {
 		controller.LStick.x = 0;
 	} else if(key.wasPressed(keyboardLayout.LXL, wasPressedKeyCodes)) {
-		controller.LStick.x = 127;
+		controller.LStick.x = restPos;
 	}
 	if (key.isPressed(keyboardLayout.LXR)) {
 		controller.LStick.x = 255;
 	} else if(key.wasPressed(keyboardLayout.LXR, wasPressedKeyCodes)) {
-		controller.LStick.x = 127;
+		controller.LStick.x = restPos;
 	}
 
 	if (key.isPressed(keyboardLayout.X)) {
@@ -381,22 +389,22 @@ function getKeyboardInput() {
 	if (key.isPressed(keyboardLayout.RYU)) {
 		controller.RStick.y = 255;
 	} else if(key.wasPressed(keyboardLayout.RYU, wasPressedKeyCodes)) {
-		controller.RStick.y = 127;
+		controller.RStick.y = restPos;
 	}
 	if (key.isPressed(keyboardLayout.RYD)) {
 		controller.RStick.y = 0;
 	} else if(key.wasPressed(keyboardLayout.RYD, wasPressedKeyCodes)) {
-		controller.RStick.y = 127;
+		controller.RStick.y = restPos;
 	}
 	if (key.isPressed(keyboardLayout.RXL)) {
 		controller.RStick.x = 0;
 	} else if(key.wasPressed(keyboardLayout.RXL, wasPressedKeyCodes)) {
-		controller.RStick.x = 127;
+		controller.RStick.x = restPos;
 	}
 	if (key.isPressed(keyboardLayout.RXR)) {
 		controller.RStick.x = 255;
 	} else if(key.wasPressed(keyboardLayout.RXR, wasPressedKeyCodes)) {
-		controller.RStick.x = 127;
+		controller.RStick.x = restPos;
 	}
 
 	if (key.isPressed(keyboardLayout.Minus)) {
@@ -475,6 +483,46 @@ function getMouseInput() {
 	
 	canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
 }
+
+
+function getMouseInput2(e) {
+	console.log(e.movementX);
+	
+	var x = restPos + e.movementX*10;
+	var y = restPos - e.movementY*10;
+	
+	controller.RStick.x = x;
+	controller.RStick.y = y;
+	
+	// todo: min max this:
+	if (controller.RStick.x < 0) {
+		controller.RStick.x = 0;
+	}
+	if (controller.RStick.x > 255) {
+		controller.RStick.x = 255;
+	}
+	if (controller.RStick.y < 0) {
+		controller.RStick.y = 0;
+	}
+	if (controller.RStick.y > 255) {
+		controller.RStick.y = 255;
+	}
+}
+
+var c = $("#videoCanvas2")[0];
+
+c.requestPointerLock = c.requestPointerLock || c.mozRequestPointerLock;
+document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+
+$("#mouseControlsCheckbox").change(function(e) {
+	if (this.checked) {
+		c.requestPointerLock();
+		document.addEventListener("mousemove", getMouseInput2, false);
+	} else {
+		document.exitPointerLock();
+		document.removeEventListener("mousemove", getMouseInput2);
+	}
+});
 
 
 /* GAMEPAD API */
@@ -601,11 +649,11 @@ gamepad.on("hold", "stick_axis_left", e => {
 	controller.LStick.x = parseInt(x);
 	controller.LStick.y = parseInt(y);
 	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(127 - controller.LStick.x) < thresh) {
-		controller.LStick.x = 127;
+	if (Math.abs(restPos - controller.LStick.x) < thresh) {
+		controller.LStick.x = restPos;
 	}
-	if (Math.abs(127 - controller.LStick.y) < thresh) {
-		controller.LStick.y = 127;
+	if (Math.abs(restPos - controller.LStick.y) < thresh) {
+		controller.LStick.y = restPos;
 	}
 });
 gamepad.on("press", "stick_axis_left", e => {
@@ -618,11 +666,11 @@ gamepad.on("press", "stick_axis_left", e => {
 	controller.LStick.x = parseInt(x);
 	controller.LStick.y = parseInt(y);
 	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(127 - controller.LStick.x) < thresh) {
-		controller.LStick.x = 127;
+	if (Math.abs(restPos - controller.LStick.x) < thresh) {
+		controller.LStick.x = restPos;
 	}
-	if (Math.abs(127 - controller.LStick.y) < thresh) {
-		controller.LStick.y = 127;
+	if (Math.abs(restPos - controller.LStick.y) < thresh) {
+		controller.LStick.y = restPos;
 	}
 });
 gamepad.on("release", "stick_axis_left", e => {
@@ -635,11 +683,11 @@ gamepad.on("release", "stick_axis_left", e => {
 	controller.LStick.x = parseInt(x);
 	controller.LStick.y = parseInt(y);
 	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(127 - controller.LStick.x) < thresh) {
-		controller.LStick.x = 127;
+	if (Math.abs(restPos - controller.LStick.x) < thresh) {
+		controller.LStick.x = restPos;
 	}
-	if (Math.abs(127 - controller.LStick.y) < thresh) {
-		controller.LStick.y = 127;
+	if (Math.abs(restPos - controller.LStick.y) < thresh) {
+		controller.LStick.y = restPos;
 	}
 });
 gamepad.on("hold", "stick_axis_right", e => {
@@ -652,11 +700,11 @@ gamepad.on("hold", "stick_axis_right", e => {
 	controller.RStick.x = parseInt(x);
 	controller.RStick.y = parseInt(y);
 	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(127 - controller.RStick.x) < thresh) {
-		controller.RStick.x = 127;
+	if (Math.abs(restPos - controller.RStick.x) < thresh) {
+		controller.RStick.x = restPos;
 	}
-	if (Math.abs(127 - controller.RStick.y) < thresh) {
-		controller.RStick.y = 127;
+	if (Math.abs(restPos - controller.RStick.y) < thresh) {
+		controller.RStick.y = restPos;
 	}
 });
 gamepad.on("press", "stick_axis_right", e => {
@@ -669,11 +717,11 @@ gamepad.on("press", "stick_axis_right", e => {
 	controller.RStick.x = parseInt(x);
 	controller.RStick.y = parseInt(y);
 	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(127 - controller.RStick.x) < thresh) {
-		controller.RStick.x = 127;
+	if (Math.abs(restPos - controller.RStick.x) < thresh) {
+		controller.RStick.x = restPos;
 	}
-	if (Math.abs(127 - controller.RStick.y) < thresh) {
-		controller.RStick.y = 127;
+	if (Math.abs(restPos - controller.RStick.y) < thresh) {
+		controller.RStick.y = restPos;
 	}
 });
 gamepad.on("release", "stick_axis_right", e => {
@@ -686,11 +734,11 @@ gamepad.on("release", "stick_axis_right", e => {
 	controller.RStick.x = parseInt(x);
 	controller.RStick.y = parseInt(y);
 	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(127 - controller.RStick.x) < thresh) {
-		controller.RStick.x = 127;
+	if (Math.abs(restPos - controller.RStick.x) < thresh) {
+		controller.RStick.x = restPos;
 	}
-	if (Math.abs(127 - controller.RStick.y) < thresh) {
-		controller.RStick.y = 127;
+	if (Math.abs(restPos - controller.RStick.y) < thresh) {
+		controller.RStick.y = restPos;
 	}
 });
 
@@ -1049,8 +1097,8 @@ function bindJoysticks() {
 		controller.LStick.x = pos.x;
 		controller.LStick.y = pos.y;
 	}).on("end", function(evt, data) {
-		controller.LStick.x = 127;
-		controller.LStick.y = 127;
+		controller.LStick.x = restPos;
+		controller.LStick.y = restPos;
 	}).on("move", function(evt, data) {
 		let pos = data.instance.frontPosition;
 		pos.x = parseInt(((pos.x + 50) / 100) * 255);
@@ -1068,8 +1116,8 @@ function bindJoysticks() {
 		controller.RStick.x = pos.x;
 		controller.RStick.y = pos.y;
 	}).on("end", function(evt, data) {
-		controller.RStick.x = 127;
-		controller.RStick.y = 127;
+		controller.RStick.x = restPos;
+		controller.RStick.y = restPos;
 	}).on("move", function(evt, data) {
 		let pos = data.instance.frontPosition;
 		pos.x = parseInt(((pos.x + 50) / 100) * 255);
@@ -1608,6 +1656,25 @@ $("#toggleTheme").on("click", function() {
 		$("body").removeClass("dark");
 		
 		$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
+	}
+});
+
+
+/* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#toggleFullscreen").on("click", function() {
+	toggleFullscreen = !toggleFullscreen;
+	if (toggleFullscreen) {
+		$("#screen")[0].style.width = "100%";
+		$("#screen")[0].style["margin-left"] = "0";
+		$("#videoCanvas2")[0].style.width = "100%";
+		$("#videoCanvas2")[0].style["margin-left"] = "0";
+		$("#videoCanvas3")[0].style.width = "100%";
+	} else {
+		$("#screen")[0].style.width = "75%";
+		$("#screen")[0].style["margin-left"] = "12.5%";
+		$("#videoCanvas2")[0].style.width = "75%";
+		$("#videoCanvas2")[0].style["margin-left"] = "12.5%";
+		$("#videoCanvas3")[0].style.width = "75%";
 	}
 });
 

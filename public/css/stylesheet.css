@@ -182,13 +182,12 @@ body {
 
 /* LAGLESS1 */
 #screen {
-/* 	width: 100%; */
-/* 	overflow:auto;
-	height: 100px; */
-	text-align: center;
+	width: 75%;
+	margin-left: 12.5%;
 }
 #screenshot {
-	width: 75%;
+/* 	width: 75%; */
+	width: 100%;
 /* 	height: auto; */
 }
 #lagless1Container {
