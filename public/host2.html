@@ -1,0 +1,35 @@
+<html>
+
+<head>
+
+	<title>Restart Relay</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+</head>
+
+<body>
+
+	<script>
+		let socket = io("https://twitchplaysnintendoswitch.com", {
+			path: "/8110/socket.io",
+			transports: ["websocket"],
+		});
+		
+		let socket2 = io("http://localhost:8004");
+		let socket3 = io("http://localhost:8005");
+
+		socket.on("connection", function(socket) {
+			socket.join("relay");
+		});
+		
+		socket.on("restart lagless2", function(socket) {
+			console.log("Restarting Lagless2!");
+			socket2.emit("restart lagless2");
+		});
+		
+		socket.on("restart lagless3", function(socket) {
+			socket3.emit("restart lagless3");
+		});
+	</script>
+</body>
+
+</html>

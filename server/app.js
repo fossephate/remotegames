@@ -416,7 +416,7 @@ io.set("transports", [
 
 io.on("connection", function(socket) {
 
-	//console.log("USER CONNECTED");
+	console.log("USER CONNECTED");
 	//numClients += 1;
 
 	let client = new Client(socket);
@@ -667,24 +667,27 @@ io.on("connection", function(socket) {
 		if(index > -1) {
 			controlQueue.splice(index, 1);
 			socket.emit("controlQueue", {queue: controlQueue});
+			
+			
+			if(controlQueue.length > 1) {
+				//currentTurnUsername = controlQueue[0];
+				//clearTimeout(moveLineTimer);
+				//moveLine();
+				turnStartTime = Date.now();
+				clearTimeout(moveLineTimer);
+				moveLineTimer = setTimeout(moveLine, turnDuration);
+			} else {
+				currentTurnUsername = null;
+			}
+			
+			
+			
+			let currentTime = Date.now();
+			let elapsedTime = currentTime - turnStartTime;
+			let timeLeft = turnDuration - elapsedTime;
+			io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
+			//io.emit("currentPlayer", currentTurnUsername);// not needed
 		}
-		if(controlQueue.length >= 1) {
-			//currentTurnUsername = controlQueue[0];
-			//clearTimeout(moveLineTimer);
-			//moveLine();
-			turnStartTime = Date.now();
-			clearTimeout(moveLineTimer);
-			moveLineTimer = setTimeout(moveLine, turnDuration);
-		} else {
-			currentTurnUsername = null;
-		}
-		
-		
-		let currentTime = Date.now();
-		let elapsedTime = currentTime - turnStartTime;
-		let timeLeft = turnDuration - elapsedTime;
-		io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
-		//io.emit("currentPlayer", currentTurnUsername);// not needed
 	});
 	
 	
@@ -709,13 +712,13 @@ io.on("connection", function(socket) {
 	socket.on("restart lagless2", function() {
 		restartAvailable = false;
 		console.log("restarting lagless2");
-		io.emit("restart lagless2");
+		io.to("relay").emit("restart lagless2");
 	});
 	
 	socket.on("restart lagless3", function() {
 		restartAvailable = false;
 		console.log("restarting lagless3");
-		io.emit("restart lagless3");
+		io.to("relay").emit("restart lagless3");
 	});
 
 	socket.on("disconnect", function() {

@@ -86,7 +86,7 @@
 								<div id="lagless2Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div> -->
-							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe>
+<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
 						</div>
 					</div>
@@ -95,6 +95,7 @@
 					<div id="lagless2Container">
 						<div id="lagless2View">
 							<div id="leftJoyCon">
+								<canvas id="leftJoyConCanvas"></canvas>
 								<div id="leftStick"></div>
 							</div>
 							<canvas id="videoCanvas2"></canvas>
@@ -186,6 +187,34 @@
 											Enable Mouse Controls
 										</label>
 								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="audioCheckbox" type="checkbox">
+											<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+											Enable Audio 1.0
+										</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="darkThemeCheckbox" type="checkbox">
+											<span class="ifas ifa-moon checkbox-placeholder"></span>
+											Enable Dark Theme
+										</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="chatCheckbox" type="checkbox">
+											<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+											Enable Chat
+										</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="fullscreenCheckbox" type="checkbox">
+											<span class="ifas ifa-expand checkbox-placeholder"></span>
+											Enable Fullscreen Mode
+										</label>
+								</li>
 							</ul>
 
 							<div class="well">
@@ -223,7 +252,7 @@
 							<button type="button" data-toggle="modal" data-target="#settingsWindow" class="btn btn-info btn-settings">
 								<i class="fas fa-cogs"></i>
 							</button>
-							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
+<!-- 							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="fas fa-volume-up"></i>
 							</button>
 							<button id="toggleTheme" type="button" data-toggle="modal" class="btn btn-info btn-settings">
@@ -234,7 +263,7 @@
 							</button>
 							<button id="toggleFullscreen" type="button" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="fas fa-expand"></i>
-							</button>
+							</button> -->
 							<a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
 							<div class="sliderContainer">
 								<div id="globalVolumeSlider" class="volumeSlider">

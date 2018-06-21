@@ -227,6 +227,7 @@ controller.reset = function() {
 let oldControllerState = "";
 
 function sendControllerState() {
+	
 	let newControllerState = "";
 
 	if (controller.btns.up == 1 && controller.btns.left == 1) {
@@ -280,6 +281,13 @@ function sendControllerState() {
 		oldControllerState = newControllerState;
 	}
 	
+	// check to see if any of the controls checkboxes are enabled:
+	if (!document.getElementById("keyboardControllerCheckbox").checked &&
+		!document.getElementById("touchControlsCheckbox").checked &&
+		!document.getElementById("mouseControlsCheckbox").checked) {
+		return;
+	}
+	
 	if(controlQueue.indexOf(twitchUsername) == -1) {
 		socket.emit("requestTurn");
 	}
@@ -287,13 +295,6 @@ function sendControllerState() {
 	if(controlQueue[0] != twitchUsername && controlQueue.length > 0) {
 		//swal("It's not your turn yet!");
 		$("#turnTimerBar").effect("shake", {direction: "left", distance: 100, times: 3}, 500);
-		return;
-	}
-	
-	// check to see if any of the controls checkboxes are enabled:
-	if (!document.getElementById("keyboardControllerCheckbox").checked &&
-		!document.getElementById("touchControlsCheckbox").checked &&
-		!document.getElementById("mouseControlsCheckbox").checked) {
 		return;
 	}
 	
@@ -476,17 +477,17 @@ window.addEventListener("keydown", function(e) {
 	}
 }, false);
 
-function getMouseInput() {
-	if (!document.getElementById("mouseControlsCheckbox").checked) {
-		return;
-	}
+// function getMouseInput() {
+// 	if (!document.getElementById("mouseControlsCheckbox").checked) {
+// 		return;
+// 	}
 	
-	canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
-}
+// 	//canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+// }
 
 
 function getMouseInput2(e) {
-	console.log(e.movementX);
+	//console.log(e.movementX);
 	
 	var x = restPos + e.movementX*10;
 	var y = restPos - e.movementY*10;
@@ -893,6 +894,8 @@ $("#keyboardLayoutConfig").on("click", function(e) {
 
 
 /* TOUCH CONTROLS */
+
+
 
 
 
@@ -1505,17 +1508,20 @@ meeting.onuserleft = function(userid) {
 meeting.check();
 
 
-$("#toggleAudio").on("click", function() {
+// $("#toggleAudio").on("click", function() {
+// 	toggleAudio = !toggleAudio;
+// 	if (toggleAudio) {
+// 		audioElem.play();
+// 	} else {
+// 		audioElem.pause();
+// 	}
+// });
+
+$("#audioCheckbox").on("click", function() {
 	toggleAudio = !toggleAudio;
-	if (toggleAudio) {
-// 		let icon = $(".fa-volume-off");
-// 		icon.removeClass("fa-volume-off");
-// 		icon.addClass("fa-volume-up");
+	if ($("#audioCheckbox")[0].checked) {
 		audioElem.play();
 	} else {
-// 		let icon = $(".fa-volume-up");
-// 		icon.removeClass("fa-volume-up");
-// 		icon.addClass("fa-volume-off");
 		audioElem.pause();
 	}
 });
@@ -1659,6 +1665,65 @@ $("#toggleTheme").on("click", function() {
 	}
 });
 
+$("#darkThemeCheckbox").on("click", function() {
+	toggleDarkTheme = !toggleDarkTheme;
+	if ($("#darkThemeCheckbox")[0].checked) {
+		let icon = $(".glyphicon-fire");
+		icon.removeClass("glyphicon-fire");
+		icon.addClass("glyphicon-certificate");
+		
+		$(".well").each(function() {
+			$(this).removeClass("well");
+			$(this).addClass("well-dark");
+		});
+		
+		$(".list-group-item").each(function() {
+			$(this).removeClass("list-group-item");
+			$(this).addClass("list-group-item-dark");
+		});
+		
+		$("body").addClass("dark");
+		
+		$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
+		
+		
+// ::-webkit-scrollbar { width: 8px; height: 3px;}
+// ::-webkit-scrollbar-button {  background-color: #666; }
+// ::-webkit-scrollbar-track {  background-color: #646464;}
+// ::-webkit-scrollbar-track-piece { background-color: #000;}
+// ::-webkit-scrollbar-thumb { height: 50px; background-color: #666; border-radius: 3px;}
+// ::-webkit-scrollbar-corner { background-color: #646464;}}
+// ::-webkit-resizer { background-color: #666;}
+// 		$("::-webkit-scrollbar").css("width: 8px; height: 3px;");
+// 		$("::-webkit-scrollbar-button").css("background-color: #666;");
+// 		$("::-webkit-scrollbar-track").css("background-color: #646464;");
+// 		$("::-webkit-scrollbar-track-piece").css("background-color: #000;");
+		
+// 		$("::-webkit-scrollbar-thumb").css("height: 50px; background-color: #666; border-radius: 3px;");
+// 		$("::-webkit-scrollbar-corner").css("background-color: #646464;");
+// 		$("::-webkit-resizer").css("background-color: #666;");
+		
+	} else {
+		let icon = $(".glyphicon-certificate");
+		icon.removeClass("glyphicon-certificate");
+		icon.addClass("glyphicon-fire");
+		
+		$(".well-dark").each(function() {
+			$(this).removeClass("well-dark");
+			$(this).addClass("well");
+		});
+		
+		$(".list-group-item-dark").each(function() {
+			$(this).removeClass("list-group-item-dark");
+			$(this).addClass("list-group-item");
+		});
+		
+		$("body").removeClass("dark");
+		
+		$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
+	}
+});
+
 
 /* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 $("#toggleFullscreen").on("click", function() {
@@ -1678,19 +1743,49 @@ $("#toggleFullscreen").on("click", function() {
 	}
 });
 
+$("#fullscreenCheckbox").on("click", function() {
+	toggleFullscreen = !toggleFullscreen;
+	if ($("#fullscreenCheckbox")[0].checked) {
+		$("#screen")[0].style.width = "100%";
+		$("#screen")[0].style["margin-left"] = "0";
+		$("#videoCanvas2")[0].style.width = "100%";
+		$("#videoCanvas2")[0].style["margin-left"] = "0";
+		$("#videoCanvas3")[0].style.width = "100%";
+	} else {
+		$("#screen")[0].style.width = "75%";
+		$("#screen")[0].style["margin-left"] = "12.5%";
+		$("#videoCanvas2")[0].style.width = "75%";
+		$("#videoCanvas2")[0].style["margin-left"] = "12.5%";
+		$("#videoCanvas3")[0].style.width = "75%";
+	}
+});
 
 
-/* HIDE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#toggleChat").on("click", function() {
+
+/* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+// $("#toggleChat").on("click", function() {
+// 	toggleChat = !toggleChat;
+// 	if (toggleChat) {
+// 		$("#twitchChat").attr("style", "display: none;");
+// 		$("#picture").attr("style", "width: 100%;");
+// 	} else {
+// 		$("#twitchChat").attr("style", "display: visible;");
+// 		$("#picture").attr("style", "width: 75%;");
+// 	}
+// });
+
+// start checked:
+$("#chatCheckbox")[0].checked = true;
+
+$("#chatCheckbox").on("click", function() {
 	toggleChat = !toggleChat;
-	if (toggleChat) {
+	if (!$("#chatCheckbox")[0].checked) {
 		$("#twitchChat").attr("style", "display: none;");
 		$("#picture").attr("style", "width: 100%;");
 	} else {
 		$("#twitchChat").attr("style", "display: visible;");
 		$("#picture").attr("style", "width: 75%;");
 	}
-	
 });
 
 /* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
