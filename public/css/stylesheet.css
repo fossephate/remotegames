@@ -519,6 +519,68 @@ ul {
 	position: absolute;
 }
 
+#leftJoyConCanvas {
+    width: 100%;
+    height: 100%;
+/*     background: rgba(0, 0, 255, 0.2); */
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+#leftStick {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.2);
+/*     width: 50px;
+    height: 50px; */
+    width: 38%;
+    height: 12%;
+    left: 32%;
+    top: 16%;
+}
+
+
+.controllerButton {
+/*     width: 30px;
+    height: 30px; */
+    width: 30%;
+    height: 30%;
+}
+#dpadButtons {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.2);
+/*     width: 100px;
+    height: 100px; */
+    width: 71%;
+    height: 21%;
+    left: 13%;
+    top: 34%;
+}
+#upButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 36%;
+    top: 5%;
+}
+#downButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 36%;
+    top: 65%;
+}
+#leftButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 5%;
+    top: 35%;
+}
+#rightButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 66%;
+    top: 35%;
+}
+
 #rightJoyCon {
 	width: 12.5%;
 	height: 100%;
@@ -526,18 +588,58 @@ ul {
 	margin-left: 87.5%;
 }
 
-#leftStick {
-	position: relative;
-	background: rgba(0, 0, 255, 0.2);
-	width: 100%;
-	height: 100%;
+#rightJoyConCanvas {
+    width: 100%;
+    height: 100%;
+/*     background: rgba(255, 0, 0, 0.2); */
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 #rightStick {
-	position: relative;
-	background: rgba(255, 0, 0, 0.2);
-	width: 100%;
-	height: 100%;
+	position: absolute;
+	background: rgba(50, 50, 50, 0.2);
+/*     width: 50px;
+    height: 50px; */
+    width: 38%;
+    height: 12%;
+    left: 33%;
+    top: 39%;
+}
+#abxyButtons {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.2);
+/*     width: 100px;
+    height: 100px; */
+    width: 71%;
+    height: 21%;
+    left: 14%;
+    top: 11%;
+}
+#xButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 36%;
+    top: 5%;
+}
+#bButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 36%;
+    top: 65%;
+}
+#yButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 5%;
+    top: 35%;
+}
+#aButton {
+	position: absolute;
+	background: rgba(50, 50, 50, 0.5);
+    left: 66%;
+    top: 35%;
 }
 
 #touchSticks {
@@ -568,12 +670,12 @@ ul {
 	width: 40%; */
 }
 
-#ABXYButtons {
+/* #ABXYButtons {
 	background: rgba(0, 255, 0, 0.2);
 	width: 22%;
 	margin-left: 89%;
 	height: 100%;
-}
+} */
 
 
 /* control queue */

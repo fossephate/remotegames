@@ -17,12 +17,11 @@ let audio = true;
 let controlQueue = [];
 let twitchUsername = null;
 let toggleDarkTheme = false;
-let toggleChat = false;
-let toggleFullscreen = false;
 let timeLeft = 30000;
 let turnLength = 30000;
 let turnUsername = null;
 let lastCurrentTime = 0;
+let mouseMoveTimer = null;
 let pingTime = 0;
 let restPos = 128;
 let stats = new Stats();
@@ -137,11 +136,8 @@ function getLatestImage() {
 }
 
 // socket.on("viewImage", function(data) {
-	
 // 	//requestAnimationFrame(function() {
-
 // 		stats.begin();
-	
 // 		let src = "data:image/jpeg;base64," + data.src;
 // 	// 	if(src == "data:image/jpeg;base64,") {
 // 	// 		socket.emit("restart");
@@ -151,7 +147,6 @@ function getLatestImage() {
 // 		image.style = "max-width:100%; height:auto;";
 // 		//image.style = "width:120%; height:auto;";
 // 		image.id = "screenshot";
-
 // // 		$("#screen").empty();
 // // 		$("#screen").append(image);
 // 		$("#screenshot")[0].replaceWith(image);
@@ -486,8 +481,15 @@ window.addEventListener("keydown", function(e) {
 // }
 
 
-function getMouseInput2(e) {
+function getMouseInput(e) {
 	//console.log(e.movementX);
+	
+	// on mouse stop:
+	clearTimeout(mouseMoveTimer);
+	mouseMoveTimer = setTimeout(function(){
+		controller.RStick.x = restPos;
+		controller.RStick.y = restPos;
+	}, 100);
 	
 	var x = restPos + e.movementX*10;
 	var y = restPos - e.movementY*10;
@@ -510,18 +512,32 @@ function getMouseInput2(e) {
 	}
 }
 
-var c = $("#videoCanvas2")[0];
+function getMouseInput2(e) {
+	let value = e.type == "mousedown" ? 1 : 0;
+	// left button:
+	if(e.which === 1) {
+		controller.btns.zr = value;
+	// right button:
+	} else if (e.which == 3) {
+		//controller.btns.zr = value;
+	}
+}
 
+let c = $("#videoCanvas2")[0];
 c.requestPointerLock = c.requestPointerLock || c.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
 $("#mouseControlsCheckbox").change(function(e) {
 	if (this.checked) {
 		c.requestPointerLock();
-		document.addEventListener("mousemove", getMouseInput2, false);
+		document.addEventListener("mousemove", getMouseInput, false);
+		document.addEventListener("mousedown", getMouseInput2, false);
+		document.addEventListener("mouseup", getMouseInput2, false);
 	} else {
 		document.exitPointerLock();
-		document.removeEventListener("mousemove", getMouseInput2);
+		document.removeEventListener("mousemove", getMouseInput);
+		document.removeEventListener("mousedown", getMouseInput2);
+		document.removeEventListener("mouseup", getMouseInput2);
 	}
 });
 
@@ -894,7 +910,49 @@ $("#keyboardLayoutConfig").on("click", function(e) {
 
 
 /* TOUCH CONTROLS */
+let leftJoyConCanvas = $("#leftJoyConCanvas")[0];
+leftJoyConCanvas.width = 500;
+leftJoyConCanvas.height = 500;
+let leftJoyConCtx = leftJoyConCanvas.getContext("2d");
+let leftJoyConImage = new Image();
+leftJoyConImage.onload = function() {
+	let imgWidth = leftJoyConImage.width;
+	let imgHeight = leftJoyConImage.height;
+	let canvasWidth = leftJoyConCanvas.width;
+	let canvasHeight = leftJoyConCanvas.height;
+	let ratio = (imgHeight / imgWidth);
+	let canvasRatio = canvasWidth / canvasHeight;
+	let ratioW = 500 / $("#leftJoyConCanvas").innerWidth();
+	let ratioH = 500 / $("#leftJoyConCanvas").innerHeight();
+	let cWidth = $("#leftJoyConCanvas").innerWidth();
+	leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+};
+setTimeout(function(){
+	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon.png";
+}, 1000);
 
+
+let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
+rightJoyConCanvas.width = 500;
+rightJoyConCanvas.height = 500;
+let rightJoyConCtx = rightJoyConCanvas.getContext("2d");
+let rightJoyConImage = new Image();
+rightJoyConImage.onload = function() {
+	let imgWidth = rightJoyConImage.width;
+	let imgHeight = rightJoyConImage.height;
+	let canvasWidth = rightJoyConCanvas.width;
+	let canvasHeight = rightJoyConCanvas.height;
+	let ratio = (imgHeight / imgWidth);
+	let canvasRatio = canvasWidth / canvasHeight;
+	let ratioW = 500 / $("#rightJoyConCanvas").innerWidth();
+	let ratioH = 500 / $("#rightJoyConCanvas").innerHeight();
+	let cWidth = $("#rightJoyConCanvas").innerWidth();
+	rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+	rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+};
+setTimeout(function(){
+	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon.png";
+}, 1000);
 
 
 
@@ -1154,8 +1212,8 @@ function getTouchInput() {
 }
 
 
-$("#leftJoyCon")[0].style.display = "none";
-$("#rightJoyCon")[0].style.display = "none";
+// $("#leftJoyCon")[0].style.display = "none";
+// $("#rightJoyCon")[0].style.display = "none";
 
 // $("#videoCanvas2")[0].style.width = "100%";
 // $("#videoCanvas2")[0].style["margin-left"] = "0";
@@ -1726,9 +1784,8 @@ $("#darkThemeCheckbox").on("click", function() {
 
 
 /* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#toggleFullscreen").on("click", function() {
-	toggleFullscreen = !toggleFullscreen;
-	if (toggleFullscreen) {
+$("#fullscreenCheckbox").on("click", function() {
+	if ($("#fullscreenCheckbox")[0].checked) {
 		$("#screen")[0].style.width = "100%";
 		$("#screen")[0].style["margin-left"] = "0";
 		$("#videoCanvas2")[0].style.width = "100%";
@@ -1743,6 +1800,8 @@ $("#toggleFullscreen").on("click", function() {
 	}
 });
 
+
+/* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 $("#fullscreenCheckbox").on("click", function() {
 	toggleFullscreen = !toggleFullscreen;
 	if ($("#fullscreenCheckbox")[0].checked) {
@@ -1761,6 +1820,15 @@ $("#fullscreenCheckbox").on("click", function() {
 });
 
 
+/* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#navCheckbox").on("click", function() {
+	if ($("#navCheckbox")[0].checked) {
+		$(".nav")[0].style.display = "none"
+	} else {
+		$(".nav")[0].style.display = ""
+	}
+});
+
 
 /* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 // $("#toggleChat").on("click", function() {
@@ -1778,7 +1846,6 @@ $("#fullscreenCheckbox").on("click", function() {
 $("#chatCheckbox")[0].checked = true;
 
 $("#chatCheckbox").on("click", function() {
-	toggleChat = !toggleChat;
 	if (!$("#chatCheckbox")[0].checked) {
 		$("#twitchChat").attr("style", "display: none;");
 		$("#picture").attr("style", "width: 100%;");

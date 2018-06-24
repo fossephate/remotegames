@@ -1,6 +1,9 @@
 <html>
 
 <head>
+	
+	<title>TPNS</title>
+	
 	<!-- CSS -->
 	<link rel="stylesheet" href="css/stylesheet.css">
 
@@ -97,10 +100,23 @@
 							<div id="leftJoyCon">
 								<canvas id="leftJoyConCanvas"></canvas>
 								<div id="leftStick"></div>
+								<div id="dpadButtons">
+									<div id="upButton" class="controllerButton"></div>
+									<div id="downButton" class="controllerButton"></div>
+									<div id="leftButton" class="controllerButton"></div>
+									<div id="rightButton" class="controllerButton"></div>
+								</div>
 							</div>
 							<canvas id="videoCanvas2"></canvas>
 							<div id="rightJoyCon">
+								<canvas id="rightJoyConCanvas"></canvas>
 								<div id="rightStick"></div>
+								<div id="abxyButtons">
+									<div id="xButton" class="controllerButton"></div>
+									<div id="bButton" class="controllerButton"></div>
+									<div id="yButton" class="controllerButton"></div>
+									<div id="aButton" class="controllerButton"></div>
+								</div>
 							</div>
 						</div>
 <!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
@@ -112,7 +128,7 @@
 								<div id="lagless2Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div>
-							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe>
+<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
 						</div>
 					</div>
@@ -213,6 +229,13 @@
 											<input id="fullscreenCheckbox" type="checkbox">
 											<span class="ifas ifa-expand checkbox-placeholder"></span>
 											Enable Fullscreen Mode
+										</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="navCheckbox" type="checkbox">
+											<span class="ifas ifa-expand checkbox-placeholder"></span>
+											Hide Nav Bar
 										</label>
 								</li>
 							</ul>
