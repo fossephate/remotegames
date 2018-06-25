@@ -9,39 +9,20 @@ const crypto = require("crypto");
 const util = require("util");
 const fs = require("fs");
 
-// const PeerServer = require("peer").PeerServer;
-// let peerServer = PeerServer({
-// 	port: 8004,
-// 	path: "/twitchplays",
-// 	ssl: {
-// 		// need sudo :/
-// 		key: fs.readFileSync("/etc/letsencrypt/live/twitchplaysnintendoswitch.com/privkey.pem"),
-// 		cert: fs.readFileSync("/etc/letsencrypt/live/twitchplaysnintendoswitch.com/fullchain.pem"),
-// 	},
-// });
-
-// Find out which user used sudo through the environment letiable
-// let uid = parseInt(process.env.SUDO_UID);
-// // Set our server's uid to that user
-// if (uid) process.setuid(uid);
-// console.log('Server\'s UID is now ' + process.getuid());
-
 const WebSocketServer = require("ws").Server;
 const Splitter        = require("stream-split");
 const NALseparator    = new Buffer([0,0,0,1]);//NAL break
 
+const session = require("express-session");
+const passport = require("passport");
+const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
+const request = require("request");
+const handlebars = require("handlebars");
 
-// let streamSettings = {
-// 	x1: 255 - 1920,
-// 	x2: 1665 - 1920,
-// 	y1: 70,
-// 	y2: 855,
-// 	fps: 15,
-// 	quality: 60,
-// 	scale: 30,
-// };
-
-//{x1: 319-1920, x2: 319+1280-1920, y1: 61, y2: 61+720}
+const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
+const TWITCH_SECRET = config.TWITCH_SECRET;
+const SESSION_SECRET = config.SESSION_SECRET;
+const CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback"; // You can run locally with - http://localhost:3000/auth/twitch/callback
 
 let streamSettings = {
 	x1: 319 - 1920,
@@ -56,18 +37,19 @@ let streamSettings = {
 let lastImage = "";
 let usernameDB;
 let localStorage;
-
-
-let session = require("express-session");
-let passport = require("passport");
-let OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
-let request = require("request");
-let handlebars = require("handlebars");
-
-const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
-const TWITCH_SECRET = config.TWITCH_SECRET;
-const SESSION_SECRET = config.SESSION_SECRET;
-const CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback"; // You can run locally with - http://localhost:3000/auth/twitch/callback
+let clients = [];
+let channels = {};
+let controlQueue = [];
+let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
+let currentTurnUsername = null;
+let turnDuration = 30000;
+let controller = null;
+let controller2 = null;
+let restartAvailable = true;
+let turnStartTime = Date.now();
+let forfeitTimer = null;
+let timeTillForfeit = 10000;
+let moveLineTimer = null;
 
 app.use(session({
 	secret: SESSION_SECRET,
@@ -118,12 +100,6 @@ passport.use("twitch", new OAuth2Strategy({
 	function(accessToken, refreshToken, profile, done) {
 		profile.accessToken = accessToken;
 		profile.refreshToken = refreshToken;
-
-		// Securely store user profile in your DB
-		//User.findOrCreate(..., function(err, user) {
-		//  done(err, user);
-		//});
-
 		done(null, profile);
 	}
 ));
@@ -139,23 +115,6 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
 	failureRedirect: "/"
 }));
 
-// Define a simple template to safely generate HTML with values from user's profile
-let template = handlebars.compile(`
-<html>
-<head><title>Twitch Authentication</title></head>
-<!-- <table>
-    <tr><th>Access Token</th><td>{{accessToken}}</td></tr>
-    <tr><th>Refresh Token</th><td>{{refreshToken}}</td></tr>
-    <tr><th>Display Name</th><td>{{display_name}}</td></tr>
-    <tr><th>Bio</th><td>{{bio}}</td></tr>
-    <tr><th>Image</th><td>{{logo}}</td></tr>
-</table> -->
-Authenticating...
-<script>
-window.location.href = "https://twitchplaysnintendoswitch.com";
-</script>
-</html>`);
-
 // If user has an authenticated session, display it, otherwise display link to authenticate
 app.get("/", function(req, res) {
 	if (req.session && req.session.passport && req.session.passport.user) {
@@ -166,14 +125,14 @@ app.get("/", function(req, res) {
 		let username = req.session.passport.user.display_name;
 		let secret = config.HASH_SECRET;
 		let hashedUsername = crypto.createHmac("sha256", secret).update(username).digest("hex");
-
+		
 		usernameDB[hashedUsername] = username;
 		localStorage.setItem("db", JSON.stringify(usernameDB));
-
+		
 		res.cookie("TwitchPlaysNintendoSwitch", hashedUsername, {
 			maxAge: time
 		});
-		res.send(template(req.session.passport.user));
+		res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 	} else {
 		res.send(`<html><head><title>Twitch Auth Sample</title></head><a href="/8110/auth/twitch"><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></html>`);
 	}
@@ -181,15 +140,6 @@ app.get("/", function(req, res) {
 
 
 app.get("/stats/", function(req, res) {
-// 	if (req.session && req.session.passport && req.session.passport.user) {
-// 		console.log(req.session.passport.user);
-// 		res.cookie("TwitchPlaysNintendoSwitch", req.session.passport.user.display_name, {
-// 			maxAge: 900000
-// 		});
-// 		res.send(template(req.session.passport.user));
-// 	} else {
-// 		res.send(`<html><head><title>Twitch Auth Sample</title></head><a href="/8110/auth/twitch"><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></html>`);
-// 	}
 });
 
 app.get("/img/", function(req, res) {
@@ -231,7 +181,6 @@ let currentPlayerSite = `
 		} else {
 			$("#currentPlayer").text("Current Player: " + data.username);
 		}
-		
 	});
 </script>
 </html>`;
@@ -239,8 +188,6 @@ let currentPlayerSite = `
 app.get("/currentplayer/", function(req, res) {
 	res.send(currentPlayerSite);
 });
-
-
 
 let helpSite = `
 <html>
@@ -267,7 +214,6 @@ app.get("/help/", function(req, res) {
 	res.send(helpSite);
 });
 
-
 server.listen(port, function() {
 	console.log("Server listening at port %d", port);
 });
@@ -285,16 +231,9 @@ if (typeof usernameDB == "undefined" || usernameDB === null) {
 
 console.log(util.inspect(usernameDB, false, null));
 
-/*
-	// for client side
-	socket = io("http://fosse.co", {
-		path: "/8100/socket.io"
-	});
- */
-
 function Client(socket) {
-
-	//this.socket = socket;
+	
+	this.socket = socket;
 	this.id = socket.id;
 	this.name = "none";
 	this.username = null;
@@ -328,30 +267,12 @@ function Client(socket) {
 		objectToSend.s = s;
 		io.to(this.id).emit("ss3", objectToSend);
 	};
-
+	
 	this.quit = function() {
 		io.to(this.id).emit("quit");
 	}
 
 }
-
-
-
-
-let clients = [];
-let channels = {};
-let controlQueue = [];
-let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
-let currentTurnUsername = null;
-let turnDuration = 30000;
-let controller = null;
-let controller2 = null;
-let restartAvailable = true;
-let turnStartTime = Date.now();
-let forfeitTimer = null;
-let timeTillForfeit = 10000;
-let moveLineTimer = null;
-
 
 function findClientByID(id) {
 	let index = -1;
@@ -375,37 +296,38 @@ function findClientByName(name) {
 	return index;
 }
 
+function findClientByUsername(username) {
+	let index = -1;
+	for (let i = 0; i < clients.length; i++) {
+		if (clients[i].username == username) {
+			index = i;
+			return index;
+		}
+	}
+	return index;
+}
+
 function getImageFromUser(user, quality) {
 	let index = findClientByName(user);
-	if (index == -1) {
-		return;
-	}
+	if (index == -1) {return;}
 	let client = clients[index];
-
 	client.getImage(quality);
 }
 
 function getImageFromUser2(user, x1, y1, x2, y2, quality) {
 	let index = findClientByName(user);
-	if (index == -1) {
-		return;
-	}
+	if (index == -1) {return;}
 	let client = clients[index];
-
 	client.getImage2(x1, y1, x2, y2, quality);
 }
 
 function getImageFromUser3(user, x1, y1, x2, y2, quality, scale) {
 	let index = findClientByName(user);
-	if (index == -1) {
-		return;
-	}
+	if (index == -1) {return;}
 	let client = clients[index];
 
 	client.getImage3(x1, y1, x2, y2, quality, scale);
 }
-
-
 
 io.set("transports", [
 	"polling",
@@ -417,7 +339,6 @@ io.set("transports", [
 io.on("connection", function(socket) {
 
 	console.log("USER CONNECTED");
-	//numClients += 1;
 
 	let client = new Client(socket);
 	clients.push(client);
@@ -474,11 +395,8 @@ io.on("connection", function(socket) {
 		});
 	});
 
-
 	socket.on("listAll", function() {
-		
 		io.emit("registerNames");
-
 		let names = [];
 		for (let i = 0; i < clients.length; i++) {
 			let client = clients[i];
@@ -486,18 +404,10 @@ io.on("connection", function(socket) {
 				names.push(client.name);
 			}
 		}
-		
 		console.log(names);
-		// 		for(let i = 0; i < clients.length; i++) {
-		// 			socket.emit.to(clients[i].id
-		// 		}
 		io.emit("names", names);
-		//socket.broadcast.emit("names", names);
 	});
-
-
-
-
+	
 	// after recieving the image, send it to the console
 	socket.on("screenshot", function(data) {
 		
@@ -505,7 +415,7 @@ io.on("connection", function(socket) {
 		obj.src = data;
 		lastImage = data;
 		
-		if(lastImage == "") {
+		if(lastImage === "") {
 			io.emit("restart");
 		}
 		
@@ -522,9 +432,7 @@ io.on("connection", function(socket) {
 
 	socket.on("directedGetImage", function(data) {
 		let index = findClientByName(data.user);
-		if (index == -1) {
-			return;
-		}
+		if (index == -1) {return;}
 		let client = clients[index];
 		
 		let quality = parseInt(data.quality);
@@ -540,7 +448,7 @@ io.on("connection", function(socket) {
 		let client = clients[index];
 		if (client.username == null) {return;}
 		
-		if(controlQueue.length == 0) {return;}
+		if(controlQueue.length === 0) {return;}
 		currentTurnUsername = controlQueue[0];
 		if(client.username != currentTurnUsername) {return;}
 		
@@ -552,33 +460,7 @@ io.on("connection", function(socket) {
 		
 		// forfeit timer:
 		clearTimeout(forfeitTimer);
-		forfeitTimer = setTimeout(function(id) {
-			// cancel turn:
-			let index = findClientByID(id);
-			if (index == -1) {return;}
-			client = clients[index];
-			if(client.username == null) {return;}
-			index = controlQueue.indexOf(client.username);
-			if(index > -1) {
-				controlQueue.splice(index, 1);
-				socket.emit("controlQueue", {queue: controlQueue});
-			}
-			if(controlQueue.length >= 1) {
-				//currentTurnUsername = controlQueue[0];
-				//clearTimeout(moveLineTimer);
-				//moveLine();
-				turnStartTime = Date.now();
-				clearTimeout(moveLineTimer);
-				moveLineTimer = setTimeout(moveLine, turnDuration);
-			} else {
-				currentTurnUsername = null;
-			}
-			let currentTime = Date.now();
-			let elapsedTime = currentTime - turnStartTime;
-			let timeLeft = turnDuration - elapsedTime;
-			io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
-		}, timeTillForfeit, socket.id);
-		
+		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, socket.id);
 		
 		if (controller != null) {
 			io.to(controller.id).emit("controllerState", data);
@@ -628,33 +510,7 @@ io.on("connection", function(socket) {
 		
 		// forfeit timer:
 		clearTimeout(forfeitTimer);
-		forfeitTimer = setTimeout(function(id) {
-			// cancel turn:
-			let index = findClientByID(id);
-			if (index == -1) {return;}
-			client = clients[index];
-			if(client.username == null) {return;}
-			index = controlQueue.indexOf(client.username);
-			if(index > -1) {
-				controlQueue.splice(index, 1);
-				socket.emit("controlQueue", {queue: controlQueue});
-			}
-			if(controlQueue.length >= 1) {
-				//currentTurnUsername = controlQueue[0];
-// 				clearTimeout(moveLineTimer);
-// 				moveLine();
-				turnStartTime = Date.now();
-				clearTimeout(moveLineTimer);
-				moveLineTimer = setTimeout(moveLine, turnDuration);
-			} else {
-				currentTurnUsername = null;
-			}
-			let currentTime = Date.now();
-			let elapsedTime = currentTime - turnStartTime;
-			let timeLeft = turnDuration - elapsedTime;
-			io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
-		}, timeTillForfeit, socket.id);
-		
+		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, socket.id);
 	});
 	
 	socket.on("cancelTurn", function() {
@@ -668,7 +524,6 @@ io.on("connection", function(socket) {
 			controlQueue.splice(index, 1);
 			socket.emit("controlQueue", {queue: controlQueue});
 			
-			
 			if(controlQueue.length > 1) {
 				//currentTurnUsername = controlQueue[0];
 				//clearTimeout(moveLineTimer);
@@ -679,8 +534,6 @@ io.on("connection", function(socket) {
 			} else {
 				currentTurnUsername = null;
 			}
-			
-			
 			
 			let currentTime = Date.now();
 			let elapsedTime = currentTime - turnStartTime;
@@ -698,7 +551,6 @@ io.on("connection", function(socket) {
 			restartAvailable = false;
 			console.log("restarting");
 			io.emit("quit");
-			//io.emit("restart");
 		}
 	});
 	
@@ -730,7 +582,7 @@ io.on("connection", function(socket) {
 	/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("setQuality", function(data) {
 		
-		if(controlQueue.length == 0) {io.emit("setQuality", streamSettings.quality);return;}
+		if(controlQueue.length === 0) {io.emit("setQuality", streamSettings.quality);return;}
 		currentTurnUsername = controlQueue[0];
 		if(client.username != currentTurnUsername) {io.emit("setQuality", streamSettings.quality);return;}
 		
@@ -740,7 +592,7 @@ io.on("connection", function(socket) {
 	
 	socket.on("setScale", function(data) {
 		
-		if(controlQueue.length == 0) {io.emit("setScale", streamSettings.scale); return;}
+		if(controlQueue.length === 0) {io.emit("setScale", streamSettings.scale); return;}
 		currentTurnUsername = controlQueue[0];
 		if(client.username != currentTurnUsername) {io.emit("setScale", streamSettings.scale); return;}
 		
@@ -836,8 +688,6 @@ io.on("connection", function(socket) {
 		}
     });
 	
-	
-	
 	/* LATENCY @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("ping2", function() {
 		socket.emit("pong2");
@@ -869,61 +719,36 @@ function onNewNamespace(channel, sender) {
 	});
 }
 
-// 	setInterval(function(){
-// 		let user = "Matt";
-//     let x1 = 255;
-//     let x2 = 1665;
-//     let y1 = 70;
-//     let y2 = 855;
-
-//     let q = parseInt((Math.random()*80));
-//     //let quality = 14;
-// 		//let quality = parseInt((Math.random()*10));
-//     //let quality = parseInt((Math.random()*80));
-//     let quality = q;
-// 		//getImageFromUser(user, quality);
-//     getImageFromUser2(user, x1, y1, x2, y2, quality);
-// 	}, 100);
-
-
-
-// setInterval(function() {
-// 	let user = "Matt";
-// 	//     let x1 = 255;
-// 	//     let x2 = 1665;
-// 	//     let y1 = 70;
-// 	//     let y2 = 855;
-
-// 	let x1 = 255 - 1920;
-// 	let x2 = 1665 - 1920;
-// 	let y1 = 70;
-// 	let y2 = 855;
-
-// 	let quality = 10;
-// 	getImageFromUser2(user, x1, y1, x2, y2, quality);
-// }, 150);
-
-
-// setInterval(function() {
-// 	let user = "Matt";
-
-// 	let x1 = 255 - 1920;
-// 	let x2 = 1665 - 1920;
-// 	let y1 = 70;
-// 	let y2 = 855
-// 	let quality = streamSettings.quality;
-// 	let scale = streamSettings.scale;
-
-// 	getImageFromUser3(user, x1, y1, x2, y2, quality, scale);
-// }, 66.66666);
-
-
 setInterval(function() {
 	restartAvailable = true;
 }, 4000);
 
-
-
+function forfeitTurn(id) {
+	// cancel turn:
+	let index = findClientByID(id);
+	if (index == -1) {return;}
+	client = clients[index];
+	if(client.username == null) {return;}
+	index = controlQueue.indexOf(client.username);
+	if(index > -1) {
+		controlQueue.splice(index, 1);
+		socket.emit("controlQueue", {queue: controlQueue});
+	}
+	if(controlQueue.length >= 1) {
+		//currentTurnUsername = controlQueue[0];
+		//clearTimeout(moveLineTimer);
+		//moveLine();
+		turnStartTime = Date.now();
+		clearTimeout(moveLineTimer);
+		moveLineTimer = setTimeout(moveLine, turnDuration);
+	} else {
+		currentTurnUsername = null;
+	}
+	let currentTime = Date.now();
+	let elapsedTime = currentTime - turnStartTime;
+	let timeLeft = turnDuration - elapsedTime;
+	io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
+}
 
 function moveLine() {
 	if(controlQueue.length > 1) {
@@ -938,9 +763,17 @@ function moveLine() {
 	
 	turnStartTime = Date.now();
 	moveLineTimer = setTimeout(moveLine, turnDuration);
+	
+	let index = findClientByUsername(controlQueue[0]);
+	if (index == -1) {return;}
+	let id = clients[index].id;
+	
+	// forfeit timer:
+	clearTimeout(forfeitTimer);
+	forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, id);
+	
 }
 moveLine();
-
 
 setInterval(function() {
 	let currentTime = Date.now();
@@ -949,8 +782,6 @@ setInterval(function() {
 	
 	io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
 }, 500);
-
-
 
 function stream() {
 	let user = "Matt";

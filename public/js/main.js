@@ -929,7 +929,7 @@ leftJoyConImage.onload = function() {
 };
 setTimeout(function(){
 	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon.png";
-}, 1000);
+}, 3000);
 
 
 let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
@@ -952,7 +952,7 @@ rightJoyConImage.onload = function() {
 };
 setTimeout(function(){
 	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon.png";
-}, 1000);
+}, 3000);
 
 
 
@@ -1212,8 +1212,59 @@ function getTouchInput() {
 }
 
 
-// $("#leftJoyCon")[0].style.display = "none";
-// $("#rightJoyCon")[0].style.display = "none";
+function onButtonPress(e) {
+	
+	if (e.toElement == null) {return;}
+	if (e.toElement.id == "dpadButtons" || e.toElement.id == "abxyButtons") {return;}
+	
+	let value = 0;
+	if (e.type == "mousedown" || e.type == "touchstart") {
+		value = 1;
+	} else if (e.type == "mouseup" || e.type == "mouseleave" || e.type == "touchend") {
+		value = 0;
+	} else if (e.type == "touchmove") {
+		// todo: make an equivalent to mouseleave since touchleave doesn't exist :/
+	}
+	
+	
+	let button = e.toElement.id;
+	
+	switch(button) {
+		case "upButton":
+			controller.btns.up = value;
+			break;
+		case "downButton":
+			controller.btns.down = value;
+			break;
+		case "leftButton":
+			controller.btns.left = value;
+			break;
+		case "rightButton":
+			controller.btns.right = value;
+			break;
+		case "aButton":
+			controller.btns.a = value;
+			break;
+		case "bButton":
+			controller.btns.b = value;
+			break;
+		case "xButton":
+			controller.btns.x = value;
+			break;
+		case "yButton":
+			controller.btns.y = value;
+			break;
+		default:
+			break;
+	}
+	
+}
+
+setTimeout(function() {
+	$("#leftJoyCon")[0].style.display = "none";
+	$("#rightJoyCon")[0].style.display = "none";
+}, 5000);
+
 
 // $("#videoCanvas2")[0].style.width = "100%";
 // $("#videoCanvas2")[0].style["margin-left"] = "0";
@@ -1223,11 +1274,48 @@ $("#touchControlsCheckbox").on("click", function() {
 		$("#rightJoyCon")[0].style.display = "";
 // 		$("#videoCanvas2")[0].style.width = "75%";
 // 		$("#videoCanvas2")[0].style["margin-left"] = "12.5%";
+		
+		// for each button add event listener
+		$("#dpadButtons").children().each(function () {
+			this.addEventListener("touchstart", onButtonPress, false);
+			this.addEventListener("touchmove", onButtonPress, false);
+			this.addEventListener("touchend", onButtonPress, false);
+			this.addEventListener("mousedown", onButtonPress, false);
+			this.addEventListener("mouseup", onButtonPress, false);
+			this.addEventListener("mouseleave", onButtonPress, false);
+		});
+		$("#abxyButtons").children().each(function () {
+			this.addEventListener("touchstart", onButtonPress, false);
+			this.addEventListener("touchmove", onButtonPress, false);
+			this.addEventListener("touchend", onButtonPress, false);
+			this.addEventListener("mousedown", onButtonPress, false);
+			this.addEventListener("mouseup", onButtonPress, false);
+			this.addEventListener("mouseleave", onButtonPress, false);
+		});
 	} else {
 		$("#leftJoyCon")[0].style.display = "none";
 		$("#rightJoyCon")[0].style.display = "none";	
 // 		$("#videoCanvas2")[0].style.width = "100%";
 // 		$("#videoCanvas2")[0].style["margin-left"] = "0";
+		
+		
+		// for each button remove event listener
+		$("#dpadButtons").children().each(function () {
+			this.removeEventListener("touchstart", onButtonPress);
+			this.removeEventListener("touchmove", onButtonPress);
+			this.removeEventListener("touchend", onButtonPress);
+			this.removeEventListener("mousedown", onButtonPress);
+			this.removeEventListener("mouseup", onButtonPress);
+			this.removeEventListener("mouseleave", onButtonPress);
+		});
+		$("#abxyButtons").children().each(function () {
+			this.removeEventListener("touchstart", onButtonPress);
+			this.removeEventListener("touchmove", onButtonPress);
+			this.removeEventListener("touchend", onButtonPress);
+			this.removeEventListener("mousedown", onButtonPress);
+			this.removeEventListener("mouseup", onButtonPress);
+			this.removeEventListener("mouseleave", onButtonPress);
+		});
 	}
 });
 
