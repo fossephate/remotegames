@@ -1,7 +1,6 @@
 <html>
 
 <head>
-
 	<title>Restart Relay</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
 </head>
@@ -28,6 +27,11 @@
 		socket.on("restart lagless3", function(socket) {
 			socket3.emit("restart lagless3");
 		});
+		
+		// so we stay connected:
+		setTimeout(function() {
+			location.reload();
+		}, 1000 * 60 * 5);
 	</script>
 </body>
 

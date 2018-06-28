@@ -208,6 +208,8 @@ body {
 #videoCanvas2 {
 	width: 75%;
 	margin-left: 12.5%;
+/*     width: 63%;
+    margin-left: 18.5%; */
 	align-self: center;
 }
 #lagless2Bar {
@@ -533,28 +535,38 @@ ul {
 	background: rgba(50, 50, 50, 0.2);
 /*     width: 50px;
     height: 50px; */
-    width: 38%;
+/*     width: 38%;
     height: 12%;
     left: 32%;
-    top: 16%;
+    top: 16%; */
+    width: 40%;
+    height: 12%;
+    left: 33%;
+    top: 20%;
 }
 
 
 .controllerButton {
 /*     width: 30px;
     height: 30px; */
-    width: 30%;
-    height: 30%;
+    width: 32%;
+    height: 32%;
 }
 #dpadButtons {
 	position: absolute;
 	background: rgba(50, 50, 50, 0.2);
 /*     width: 100px;
     height: 100px; */
-    width: 71%;
+/*     width: 71%;
     height: 21%;
-    left: 13%;
-    top: 34%;
+    left: 17%;
+    top: 42.5%; */
+/*     width: 8vw;
+    height: 8vw; */
+    width: 85.25%;
+    height: 27.75%;
+    left: 10%;
+    top: 39%;
 }
 #upButton {
 	position: absolute;
@@ -602,20 +614,30 @@ ul {
 	background: rgba(50, 50, 50, 0.2);
 /*     width: 50px;
     height: 50px; */
-    width: 38%;
+/*     width: 38%;
     height: 12%;
     left: 33%;
-    top: 39%;
+    top: 39%; */
+    width: 40%;
+    height: 12%;
+    left: 26%;
+    top: 47%;
 }
 #abxyButtons {
 	position: absolute;
 	background: rgba(50, 50, 50, 0.2);
 /*     width: 100px;
     height: 100px; */
-    width: 71%;
+/*     width: 71%;
     height: 21%;
-    left: 14%;
-    top: 11%;
+    left: 10%;
+    top: 15%; */
+/*     width: 8vw;
+    height: 8vw; */
+    width: 85.25%;
+    height: 27.75%;
+    left: 3%;
+    top: 12%;
 }
 #xButton {
 	position: absolute;
@@ -669,13 +691,6 @@ ul {
 /* 	margin-left: 55%;
 	width: 40%; */
 }
-
-/* #ABXYButtons {
-	background: rgba(0, 255, 0, 0.2);
-	width: 22%;
-	margin-left: 89%;
-	height: 100%;
-} */
 
 
 /* control queue */

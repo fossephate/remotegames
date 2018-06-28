@@ -48,7 +48,7 @@ let controller2 = null;
 let restartAvailable = true;
 let turnStartTime = Date.now();
 let forfeitTimer = null;
-let timeTillForfeit = 10000;
+let timeTillForfeit = 15000;
 let moveLineTimer = null;
 
 app.use(session({
@@ -506,11 +506,11 @@ io.on("connection", function(socket) {
 			moveLineTimer = setTimeout(moveLine, turnDuration);
 		}
 		
-		if (controlQueue.length != 1) {return;}
-		
-		// forfeit timer:
-		clearTimeout(forfeitTimer);
-		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, socket.id);
+		if (controlQueue.length == 1) {
+			// forfeit timer:
+			clearTimeout(forfeitTimer);
+			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, socket.id);
+		}
 	});
 	
 	socket.on("cancelTurn", function() {
@@ -524,14 +524,15 @@ io.on("connection", function(socket) {
 			controlQueue.splice(index, 1);
 			socket.emit("controlQueue", {queue: controlQueue});
 			
-			if(controlQueue.length > 1) {
+			if(controlQueue.length >= 1) {
 				//currentTurnUsername = controlQueue[0];
 				//clearTimeout(moveLineTimer);
 				//moveLine();
+				currentTurnUsername = controlQueue[0];
 				turnStartTime = Date.now();
 				clearTimeout(moveLineTimer);
 				moveLineTimer = setTimeout(moveLine, turnDuration);
-			} else {
+			} else if (controlQueue.length === 0) {
 				currentTurnUsername = null;
 			}
 			
@@ -765,7 +766,7 @@ function moveLine() {
 	moveLineTimer = setTimeout(moveLine, turnDuration);
 	
 	let index = findClientByUsername(controlQueue[0]);
-	if (index == -1) {return;}
+	if (index == -1) {console.log("something went wrong!"); return;}
 	let id = clients[index].id;
 	
 	// forfeit timer:
@@ -781,6 +782,7 @@ setInterval(function() {
 	let timeLeft = turnDuration - elapsedTime;
 	
 	io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
+	io.emit("controlQueue", {queue: controlQueue});
 }, 500);
 
 function stream() {

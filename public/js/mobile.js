@@ -38,22 +38,6 @@ if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine
     isMobile = true;
 }
 
-if (isMobile) {
-	swal({
-		title: "Do you want to go to the mobile site?",
-// 		text: "You won't be able to revert this!",
-		type: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#3085d6",
-		cancelButtonColor: "#d33",
-		confirmButtonText: "Yes",
-	}).then((result) => {
-		if (result.value) {
-			window.location = "https://twitchplaysnintendoswitch.com/mobile.html";
-		}
-	});
-}
-
 
 let now;
 let elapsed;
@@ -61,33 +45,33 @@ let fpsInterval = 1000 / 15;
 let then = Date.now();
 let startTime = then;
 
-let keyboardLayout = {};
-keyboardLayout.LYU = "W";
-keyboardLayout.LYD = "S";
-keyboardLayout.LXL = "A";
-keyboardLayout.LXR = "D";
-keyboardLayout.RYU = "I";
-keyboardLayout.RYD = "K";
-keyboardLayout.RXL = "J";
-keyboardLayout.RXR = "L";
-keyboardLayout.A = "right";
-keyboardLayout.B = "down";
-keyboardLayout.X = "up";
-keyboardLayout.Y = "left";
-keyboardLayout.DUp = "T";
-keyboardLayout.DDown = "G";
-keyboardLayout.DLeft = "F";
-keyboardLayout.DRight = "H";
-keyboardLayout.LStick = "R";
-keyboardLayout.RStick = "Y";
-keyboardLayout.L = "U";
-keyboardLayout.ZL = "Q";
-keyboardLayout.R = "O";
-keyboardLayout.ZR = "E";
-keyboardLayout.Minus = "-";
-keyboardLayout.Plus = "=";
-keyboardLayout.Capture = "1";
-keyboardLayout.Home = "2";
+// let keyboardLayout = {};
+// keyboardLayout.LYU = "W";
+// keyboardLayout.LYD = "S";
+// keyboardLayout.LXL = "A";
+// keyboardLayout.LXR = "D";
+// keyboardLayout.RYU = "I";
+// keyboardLayout.RYD = "K";
+// keyboardLayout.RXL = "J";
+// keyboardLayout.RXR = "L";
+// keyboardLayout.A = "right";
+// keyboardLayout.B = "down";
+// keyboardLayout.X = "up";
+// keyboardLayout.Y = "left";
+// keyboardLayout.DUp = "T";
+// keyboardLayout.DDown = "G";
+// keyboardLayout.DLeft = "F";
+// keyboardLayout.DRight = "H";
+// keyboardLayout.LStick = "R";
+// keyboardLayout.RStick = "Y";
+// keyboardLayout.L = "U";
+// keyboardLayout.ZL = "Q";
+// keyboardLayout.R = "O";
+// keyboardLayout.ZR = "E";
+// keyboardLayout.Minus = "-";
+// keyboardLayout.Plus = "=";
+// keyboardLayout.Capture = "1";
+// keyboardLayout.Home = "2";
 
 function getMeta(url, callback) {
 	let img = new Image();
@@ -96,6 +80,89 @@ function getMeta(url, callback) {
 		callback(this.width, this.height);
 	}
 }
+
+// function getLatestImage() {
+// 	$("#screen").load("/8110/img/ #screenshot");
+// // 	document.getElementById("screen2").contentDocument.location.reload(true);
+
+// 	if (typeof $("#screen")[0].children[0] != "undefined") {
+// 		let src = $("#screen")[0].children[0].src;
+// 		if(src == "data:image/jpeg;base64,") {
+// 			socket.emit("restart");
+// 		}
+// 	}
+
+// 	if (lagless1Break) {
+// 		return;
+// 	}
+
+// // 	let fps = parseInt($("#fpsSlider").val());
+// // 	let timeToSleep = 1000 / fps;
+// // 	setTimeout(getLatestImage, timeToSleep);
+// 	requestAnimationFrame(getLatestImage);
+// }
+
+
+// function updateImage() {
+// 	$("#screen").load("/8110/img/ #screenshot");
+// 	if (typeof $("#screen")[0].children[0] != "undefined") {
+// 		// fix for dom freaking out:
+// 		$("#screen")[0].style.height = "" + $("#screenshot")[0].height;
+		
+// // 		if (toggleFullscreen) {
+// // 			$("#screenshot")[0].style.width = "100%";
+// // 		} else {
+// // 			$("#screenshot")[0].style.width = "75%";
+// // 		}
+		
+// 		let src = $("#screen")[0].children[0].src;
+// 		if(src == "data:image/jpeg;base64,") {
+// 			socket.emit("restart");
+// 		}
+// 	}
+// }
+
+// function getLatestImage() {
+	
+// 	if (lagless1Break) {
+// 		return;
+// 	}
+	
+//     requestAnimationFrame(getLatestImage);
+
+//     now = Date.now();
+//     elapsed = now - then;
+	
+//     if (elapsed > fpsInterval) {	
+		
+// 		let fps = parseInt($("#fpsSlider").val());
+// 		fpsInterval = 1000 / fps;
+		
+//         then = now - (elapsed % fpsInterval);
+// 		stats.begin();
+// 		updateImage();
+// 		stats.end();
+//     }
+// }
+
+// socket.on("viewImage", function(data) {
+// 	//requestAnimationFrame(function() {
+// 		stats.begin();
+// 		let src = "data:image/jpeg;base64," + data.src;
+// 	// 	if(src == "data:image/jpeg;base64,") {
+// 	// 		socket.emit("restart");
+// 	// 	}
+// 		let image = new Image();
+// 		image.src = src;
+// 		image.style = "max-width:100%; height:auto;";
+// 		//image.style = "width:120%; height:auto;";
+// 		image.id = "screenshot";
+// // 		$("#screen").empty();
+// // 		$("#screen").append(image);
+// 		$("#screenshot")[0].replaceWith(image);
+// 		stats.end();
+// 	//});
+// });
 
 
 /* CONTROLLER STUFF */
@@ -223,498 +290,498 @@ function sendControllerState() {
 
 
 
-let wasPressedKeyCodes = [];
+// let wasPressedKeyCodes = [];
 
-function getKeyboardInput() {
+// function getKeyboardInput() {
 
-	if (!document.getElementById("keyboardControllerCheckbox").checked) {
-		return;
-	}
-	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
-	if (authCookie == null) {
-		$("#keyboardControllerCheckbox").prop("checked", false);
-		swal("You need to connect to twitch! Redirecting you now!");
-		setTimeout(function() {
-			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-		}, 2000);
-		return;
-	}
-	
-	//controller.reset();
-
-	if (key.isPressed(keyboardLayout.LYU)) {
-		controller.LStick.y = 255;
-	} else if(key.wasPressed(keyboardLayout.LYU, wasPressedKeyCodes)) {
-		controller.LStick.y = restPos;
-	}
-	if (key.isPressed(keyboardLayout.LYD)) {
-		controller.LStick.y = 0;
-	} else if(key.wasPressed(keyboardLayout.LYD, wasPressedKeyCodes)) {
-		controller.LStick.y = restPos;
-	}
-	if (key.isPressed(keyboardLayout.LXL)) {
-		controller.LStick.x = 0;
-	} else if(key.wasPressed(keyboardLayout.LXL, wasPressedKeyCodes)) {
-		controller.LStick.x = restPos;
-	}
-	if (key.isPressed(keyboardLayout.LXR)) {
-		controller.LStick.x = 255;
-	} else if(key.wasPressed(keyboardLayout.LXR, wasPressedKeyCodes)) {
-		controller.LStick.x = restPos;
-	}
-
-	if (key.isPressed(keyboardLayout.X)) {
-		controller.btns.x = 1;
-	} else if(key.wasPressed(keyboardLayout.X, wasPressedKeyCodes)) {
-		controller.btns.x = 0;
-	}
-	if (key.isPressed(keyboardLayout.B)) {
-		controller.btns.b = 1;
-	} else if(key.wasPressed(keyboardLayout.B, wasPressedKeyCodes)) {
-		controller.btns.b = 0;
-	}
-	if (key.isPressed(keyboardLayout.Y)) {
-		controller.btns.y = 1;
-	} else if(key.wasPressed(keyboardLayout.Y, wasPressedKeyCodes)) {
-		controller.btns.y = 0;
-	}
-	if (key.isPressed(keyboardLayout.A)) {
-		controller.btns.a = 1;
-	} else if(key.wasPressed(keyboardLayout.A, wasPressedKeyCodes)) {
-		controller.btns.a = 0;
-	}
-
-	if (key.isPressed(keyboardLayout.DUp)) {
-		controller.btns.up = 1;
-	} else if(key.wasPressed(keyboardLayout.DUp, wasPressedKeyCodes)) {
-		controller.btns.up = 0;
-	}
-	if (key.isPressed(keyboardLayout.DDown)) {
-		controller.btns.down = 1;
-	} else if(key.wasPressed(keyboardLayout.DDown, wasPressedKeyCodes)) {
-		controller.btns.down = 0;
-	}
-	if (key.isPressed(keyboardLayout.DLeft)) {
-		controller.btns.left = 1;
-	} else if(key.wasPressed(keyboardLayout.DLeft, wasPressedKeyCodes)) {
-		controller.btns.left = 0;
-	}
-	if (key.isPressed(keyboardLayout.DRight)) {
-		controller.btns.right = 1;
-	} else if(key.wasPressed(keyboardLayout.DRight, wasPressedKeyCodes)) {
-		controller.btns.right = 0;
-	}
-
-	if (key.isPressed(keyboardLayout.RYU)) {
-		controller.RStick.y = 255;
-	} else if(key.wasPressed(keyboardLayout.RYU, wasPressedKeyCodes)) {
-		controller.RStick.y = restPos;
-	}
-	if (key.isPressed(keyboardLayout.RYD)) {
-		controller.RStick.y = 0;
-	} else if(key.wasPressed(keyboardLayout.RYD, wasPressedKeyCodes)) {
-		controller.RStick.y = restPos;
-	}
-	if (key.isPressed(keyboardLayout.RXL)) {
-		controller.RStick.x = 0;
-	} else if(key.wasPressed(keyboardLayout.RXL, wasPressedKeyCodes)) {
-		controller.RStick.x = restPos;
-	}
-	if (key.isPressed(keyboardLayout.RXR)) {
-		controller.RStick.x = 255;
-	} else if(key.wasPressed(keyboardLayout.RXR, wasPressedKeyCodes)) {
-		controller.RStick.x = restPos;
-	}
-
-	if (key.isPressed(keyboardLayout.Minus)) {
-		controller.btns.minus = 1;
-	} else if(key.wasPressed(keyboardLayout.Minus, wasPressedKeyCodes)) {
-		controller.btns.minus = 0;
-	}
-	if (key.isPressed(keyboardLayout.Plus)) {
-		controller.btns.plus = 1;
-	} else if(key.wasPressed(keyboardLayout.Plus, wasPressedKeyCodes)) {
-		controller.btns.plus = 0;
-	}
-	
-	if (key.isPressed(keyboardLayout.Capture)) {
-		controller.btns.capture = 1;
-	} else if(key.wasPressed(keyboardLayout.Capture, wasPressedKeyCodes)) {
-		controller.btns.capture = 0;
-	}
-	if (key.isPressed(keyboardLayout.Home)) {
-		controller.btns.home = 1;
-	} else if(key.wasPressed(keyboardLayout.Home, wasPressedKeyCodes)) {
-		controller.btns.home = 0;
-	}
-
-	if (key.isPressed(keyboardLayout.L)) {
-		controller.btns.l = 1;
-	} else if(key.wasPressed(keyboardLayout.L, wasPressedKeyCodes)) {
-		controller.btns.l = 0;
-	}
-	if (key.isPressed(keyboardLayout.R)) {
-		controller.btns.r = 1;
-	} else if(key.wasPressed(keyboardLayout.R, wasPressedKeyCodes)) {
-		controller.btns.r = 0;
-	}
-
-	if (key.isPressed(keyboardLayout.ZL)) {
-		controller.btns.zl = 1;
-	} else if(key.wasPressed(keyboardLayout.ZL, wasPressedKeyCodes)) {
-		controller.btns.zl = 0;
-	}
-	if (key.isPressed(keyboardLayout.ZR)) {
-		controller.btns.zr = 1;
-	} else if(key.wasPressed(keyboardLayout.ZR, wasPressedKeyCodes)) {
-		controller.btns.zr = 0;
-	}
-
-	if (key.isPressed(keyboardLayout.LStick)) {
-		controller.btns.stick_button = 1;
-	} else if(key.wasPressed(keyboardLayout.LStick, wasPressedKeyCodes)) {
-		controller.btns.stick_button = 0;
-	}
-	if (key.isPressed(keyboardLayout.RStick)) {
-		controller.btns.stick_button2 = 1;
-	} else if(key.wasPressed(keyboardLayout.RStick, wasPressedKeyCodes)) {
-		controller.btns.stick_button2 = 0;
-	}
-	
-	wasPressedKeyCodes = key.getPressedKeyCodes();
-	
-	//sendControllerState();
-}
-
-
-/* prevent arrow key scrolling */
-window.addEventListener("keydown", function(e) {
-	// space and arrow keys
-	if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-		e.preventDefault();
-	}
-}, false);
-
-// function getMouseInput() {
-// 	if (!document.getElementById("mouseControlsCheckbox").checked) {
+// 	if (!document.getElementById("keyboardControllerCheckbox").checked) {
+// 		return;
+// 	}
+// 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
+// 	if (authCookie == null) {
+// 		$("#keyboardControllerCheckbox").prop("checked", false);
+// 		swal("You need to connect to twitch! Redirecting you now!");
+// 		setTimeout(function() {
+// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+// 		}, 2000);
 // 		return;
 // 	}
 	
-// 	//canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+// 	//controller.reset();
+
+// 	if (key.isPressed(keyboardLayout.LYU)) {
+// 		controller.LStick.y = 255;
+// 	} else if(key.wasPressed(keyboardLayout.LYU, wasPressedKeyCodes)) {
+// 		controller.LStick.y = restPos;
+// 	}
+// 	if (key.isPressed(keyboardLayout.LYD)) {
+// 		controller.LStick.y = 0;
+// 	} else if(key.wasPressed(keyboardLayout.LYD, wasPressedKeyCodes)) {
+// 		controller.LStick.y = restPos;
+// 	}
+// 	if (key.isPressed(keyboardLayout.LXL)) {
+// 		controller.LStick.x = 0;
+// 	} else if(key.wasPressed(keyboardLayout.LXL, wasPressedKeyCodes)) {
+// 		controller.LStick.x = restPos;
+// 	}
+// 	if (key.isPressed(keyboardLayout.LXR)) {
+// 		controller.LStick.x = 255;
+// 	} else if(key.wasPressed(keyboardLayout.LXR, wasPressedKeyCodes)) {
+// 		controller.LStick.x = restPos;
+// 	}
+
+// 	if (key.isPressed(keyboardLayout.X)) {
+// 		controller.btns.x = 1;
+// 	} else if(key.wasPressed(keyboardLayout.X, wasPressedKeyCodes)) {
+// 		controller.btns.x = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.B)) {
+// 		controller.btns.b = 1;
+// 	} else if(key.wasPressed(keyboardLayout.B, wasPressedKeyCodes)) {
+// 		controller.btns.b = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.Y)) {
+// 		controller.btns.y = 1;
+// 	} else if(key.wasPressed(keyboardLayout.Y, wasPressedKeyCodes)) {
+// 		controller.btns.y = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.A)) {
+// 		controller.btns.a = 1;
+// 	} else if(key.wasPressed(keyboardLayout.A, wasPressedKeyCodes)) {
+// 		controller.btns.a = 0;
+// 	}
+
+// 	if (key.isPressed(keyboardLayout.DUp)) {
+// 		controller.btns.up = 1;
+// 	} else if(key.wasPressed(keyboardLayout.DUp, wasPressedKeyCodes)) {
+// 		controller.btns.up = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.DDown)) {
+// 		controller.btns.down = 1;
+// 	} else if(key.wasPressed(keyboardLayout.DDown, wasPressedKeyCodes)) {
+// 		controller.btns.down = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.DLeft)) {
+// 		controller.btns.left = 1;
+// 	} else if(key.wasPressed(keyboardLayout.DLeft, wasPressedKeyCodes)) {
+// 		controller.btns.left = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.DRight)) {
+// 		controller.btns.right = 1;
+// 	} else if(key.wasPressed(keyboardLayout.DRight, wasPressedKeyCodes)) {
+// 		controller.btns.right = 0;
+// 	}
+
+// 	if (key.isPressed(keyboardLayout.RYU)) {
+// 		controller.RStick.y = 255;
+// 	} else if(key.wasPressed(keyboardLayout.RYU, wasPressedKeyCodes)) {
+// 		controller.RStick.y = restPos;
+// 	}
+// 	if (key.isPressed(keyboardLayout.RYD)) {
+// 		controller.RStick.y = 0;
+// 	} else if(key.wasPressed(keyboardLayout.RYD, wasPressedKeyCodes)) {
+// 		controller.RStick.y = restPos;
+// 	}
+// 	if (key.isPressed(keyboardLayout.RXL)) {
+// 		controller.RStick.x = 0;
+// 	} else if(key.wasPressed(keyboardLayout.RXL, wasPressedKeyCodes)) {
+// 		controller.RStick.x = restPos;
+// 	}
+// 	if (key.isPressed(keyboardLayout.RXR)) {
+// 		controller.RStick.x = 255;
+// 	} else if(key.wasPressed(keyboardLayout.RXR, wasPressedKeyCodes)) {
+// 		controller.RStick.x = restPos;
+// 	}
+
+// 	if (key.isPressed(keyboardLayout.Minus)) {
+// 		controller.btns.minus = 1;
+// 	} else if(key.wasPressed(keyboardLayout.Minus, wasPressedKeyCodes)) {
+// 		controller.btns.minus = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.Plus)) {
+// 		controller.btns.plus = 1;
+// 	} else if(key.wasPressed(keyboardLayout.Plus, wasPressedKeyCodes)) {
+// 		controller.btns.plus = 0;
+// 	}
+	
+// 	if (key.isPressed(keyboardLayout.Capture)) {
+// 		controller.btns.capture = 1;
+// 	} else if(key.wasPressed(keyboardLayout.Capture, wasPressedKeyCodes)) {
+// 		controller.btns.capture = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.Home)) {
+// 		controller.btns.home = 1;
+// 	} else if(key.wasPressed(keyboardLayout.Home, wasPressedKeyCodes)) {
+// 		controller.btns.home = 0;
+// 	}
+
+// 	if (key.isPressed(keyboardLayout.L)) {
+// 		controller.btns.l = 1;
+// 	} else if(key.wasPressed(keyboardLayout.L, wasPressedKeyCodes)) {
+// 		controller.btns.l = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.R)) {
+// 		controller.btns.r = 1;
+// 	} else if(key.wasPressed(keyboardLayout.R, wasPressedKeyCodes)) {
+// 		controller.btns.r = 0;
+// 	}
+
+// 	if (key.isPressed(keyboardLayout.ZL)) {
+// 		controller.btns.zl = 1;
+// 	} else if(key.wasPressed(keyboardLayout.ZL, wasPressedKeyCodes)) {
+// 		controller.btns.zl = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.ZR)) {
+// 		controller.btns.zr = 1;
+// 	} else if(key.wasPressed(keyboardLayout.ZR, wasPressedKeyCodes)) {
+// 		controller.btns.zr = 0;
+// 	}
+
+// 	if (key.isPressed(keyboardLayout.LStick)) {
+// 		controller.btns.stick_button = 1;
+// 	} else if(key.wasPressed(keyboardLayout.LStick, wasPressedKeyCodes)) {
+// 		controller.btns.stick_button = 0;
+// 	}
+// 	if (key.isPressed(keyboardLayout.RStick)) {
+// 		controller.btns.stick_button2 = 1;
+// 	} else if(key.wasPressed(keyboardLayout.RStick, wasPressedKeyCodes)) {
+// 		controller.btns.stick_button2 = 0;
+// 	}
+	
+// 	wasPressedKeyCodes = key.getPressedKeyCodes();
+	
+// 	//sendControllerState();
 // }
 
 
-function getMouseInput(e) {
-	//console.log(e.movementX);
-	
-	// on mouse stop:
-	clearTimeout(mouseMoveTimer);
-	mouseMoveTimer = setTimeout(function(){
-		controller.RStick.x = restPos;
-		controller.RStick.y = restPos;
-	}, 100);
-	
-	var x = restPos + e.movementX*10;
-	var y = restPos - e.movementY*10;
-	
-	controller.RStick.x = x;
-	controller.RStick.y = y;
-	
-	// todo: min max this:
-	if (controller.RStick.x < 0) {
-		controller.RStick.x = 0;
-	}
-	if (controller.RStick.x > 255) {
-		controller.RStick.x = 255;
-	}
-	if (controller.RStick.y < 0) {
-		controller.RStick.y = 0;
-	}
-	if (controller.RStick.y > 255) {
-		controller.RStick.y = 255;
-	}
-}
+// /* prevent arrow key scrolling */
+// window.addEventListener("keydown", function(e) {
+// 	// space and arrow keys
+// 	if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+// 		e.preventDefault();
+// 	}
+// }, false);
 
-function getMouseInput2(e) {
-	let value = e.type == "mousedown" ? 1 : 0;
-	// left button:
-	if(e.which === 1) {
-		controller.btns.zr = value;
-	// right button:
-	} else if (e.which == 3) {
-		//controller.btns.zr = value;
-	}
-}
+// // function getMouseInput() {
+// // 	if (!document.getElementById("mouseControlsCheckbox").checked) {
+// // 		return;
+// // 	}
+	
+// // 	//canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
+// // }
 
-let c = $("#videoCanvas2")[0];
-c.requestPointerLock = c.requestPointerLock || c.mozRequestPointerLock;
-document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
-$("#mouseControlsCheckbox").change(function(e) {
-	if (this.checked) {
-		c.requestPointerLock();
-		document.addEventListener("mousemove", getMouseInput, false);
-		document.addEventListener("mousedown", getMouseInput2, false);
-		document.addEventListener("mouseup", getMouseInput2, false);
-	} else {
-		document.exitPointerLock();
-		document.removeEventListener("mousemove", getMouseInput);
-		document.removeEventListener("mousedown", getMouseInput2);
-		document.removeEventListener("mouseup", getMouseInput2);
-	}
-});
+// function getMouseInput(e) {
+// 	//console.log(e.movementX);
+	
+// 	// on mouse stop:
+// 	clearTimeout(mouseMoveTimer);
+// 	mouseMoveTimer = setTimeout(function(){
+// 		controller.RStick.x = restPos;
+// 		controller.RStick.y = restPos;
+// 	}, 100);
+	
+// 	var x = restPos + e.movementX*10;
+// 	var y = restPos - e.movementY*10;
+	
+// 	controller.RStick.x = x;
+// 	controller.RStick.y = y;
+	
+// 	// todo: min max this:
+// 	if (controller.RStick.x < 0) {
+// 		controller.RStick.x = 0;
+// 	}
+// 	if (controller.RStick.x > 255) {
+// 		controller.RStick.x = 255;
+// 	}
+// 	if (controller.RStick.y < 0) {
+// 		controller.RStick.y = 0;
+// 	}
+// 	if (controller.RStick.y > 255) {
+// 		controller.RStick.y = 255;
+// 	}
+// }
+
+// function getMouseInput2(e) {
+// 	let value = e.type == "mousedown" ? 1 : 0;
+// 	// left button:
+// 	if(e.which === 1) {
+// 		controller.btns.zr = value;
+// 	// right button:
+// 	} else if (e.which == 3) {
+// 		//controller.btns.zr = value;
+// 	}
+// }
+
+// let c = $("#videoCanvas2")[0];
+// c.requestPointerLock = c.requestPointerLock || c.mozRequestPointerLock;
+// document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+
+// $("#mouseControlsCheckbox").change(function(e) {
+// 	if (this.checked) {
+// 		c.requestPointerLock();
+// 		document.addEventListener("mousemove", getMouseInput, false);
+// 		document.addEventListener("mousedown", getMouseInput2, false);
+// 		document.addEventListener("mouseup", getMouseInput2, false);
+// 	} else {
+// 		document.exitPointerLock();
+// 		document.removeEventListener("mousemove", getMouseInput);
+// 		document.removeEventListener("mousedown", getMouseInput2);
+// 		document.removeEventListener("mouseup", getMouseInput2);
+// 	}
+// });
 
 
 /* GAMEPAD API */
 
-const gamepad = new Gamepad();
+// const gamepad = new Gamepad();
 
-gamepad.on("connect", e => {
-	console.log(`controller ${e.index} connected!`);
-	gamepadCounter += 1;
-});
+// gamepad.on("connect", e => {
+// 	console.log(`controller ${e.index} connected!`);
+// 	gamepadCounter += 1;
+// });
 
-gamepad.on("disconnect", e => {
-	console.log(`controller ${e.index} disconnected!`);
-	gamepadCounter -= 1;
-});
+// gamepad.on("disconnect", e => {
+// 	console.log(`controller ${e.index} disconnected!`);
+// 	gamepadCounter -= 1;
+// });
 
-gamepad.on("press", "button_1", e => {
-	controller.btns.b = 1;
-});
-gamepad.on("release", "button_1", e => {
-	controller.btns.b = 0;
-});
+// gamepad.on("press", "button_1", e => {
+// 	controller.btns.b = 1;
+// });
+// gamepad.on("release", "button_1", e => {
+// 	controller.btns.b = 0;
+// });
 
-gamepad.on("press", "button_2", e => {
-	controller.btns.a = 1;
-});
-gamepad.on("release", "button_2", e => {
-	controller.btns.a = 0;
-});
+// gamepad.on("press", "button_2", e => {
+// 	controller.btns.a = 1;
+// });
+// gamepad.on("release", "button_2", e => {
+// 	controller.btns.a = 0;
+// });
 
-gamepad.on("press", "button_3", e => {
-	controller.btns.y = 1;
-});
-gamepad.on("release", "button_3", e => {
-	controller.btns.y = 0;
-});
+// gamepad.on("press", "button_3", e => {
+// 	controller.btns.y = 1;
+// });
+// gamepad.on("release", "button_3", e => {
+// 	controller.btns.y = 0;
+// });
 
-gamepad.on("press", "button_4", e => {
-	controller.btns.x = 1;
-});
-gamepad.on("release", "button_4", e => {
-	controller.btns.x = 0;
-});
-
-
-gamepad.on("press", "shoulder_top_left", e => {
-	controller.btns.l = 1;
-});
-gamepad.on("release", "shoulder_top_left", e => {
-	controller.btns.l = 0;
-});
-
-gamepad.on("press", "shoulder_top_right", e => {
-	controller.btns.r = 1;
-});
-gamepad.on("release", "shoulder_top_right", e => {
-	controller.btns.r = 0;
-});
-
-gamepad.on("press", "shoulder_bottom_left", e => {
-	controller.btns.zl = 1;
-});
-gamepad.on("release", "shoulder_bottom_left", e => {
-	controller.btns.zl = 0;
-});
-
-gamepad.on("press", "shoulder_bottom_right", e => {
-	controller.btns.zr = 1;
-});
-gamepad.on("release", "shoulder_bottom_right", e => {
-	controller.btns.zr = 0;
-});
-
-gamepad.on("press", "select", e => {
-	controller.btns.minus = 1;
-});
-gamepad.on("release", "select", e => {
-	controller.btns.minus = 0;
-});
-gamepad.on("press", "start", e => {
-	controller.btns.plus = 1;
-});
-gamepad.on("release", "start", e => {
-	controller.btns.plus = 0;
-});
+// gamepad.on("press", "button_4", e => {
+// 	controller.btns.x = 1;
+// });
+// gamepad.on("release", "button_4", e => {
+// 	controller.btns.x = 0;
+// });
 
 
+// gamepad.on("press", "shoulder_top_left", e => {
+// 	controller.btns.l = 1;
+// });
+// gamepad.on("release", "shoulder_top_left", e => {
+// 	controller.btns.l = 0;
+// });
 
-gamepad.on("press", "d_pad_up", e => {
-	controller.btns.up = 1;
-});
-gamepad.on("release", "d_pad_up", e => {
-	controller.btns.up = 0;
-});
+// gamepad.on("press", "shoulder_top_right", e => {
+// 	controller.btns.r = 1;
+// });
+// gamepad.on("release", "shoulder_top_right", e => {
+// 	controller.btns.r = 0;
+// });
 
-gamepad.on("press", "d_pad_down", e => {
-	controller.btns.down = 1;
-});
-gamepad.on("release", "d_pad_down", e => {
-	controller.btns.down = 0;
-});
+// gamepad.on("press", "shoulder_bottom_left", e => {
+// 	controller.btns.zl = 1;
+// });
+// gamepad.on("release", "shoulder_bottom_left", e => {
+// 	controller.btns.zl = 0;
+// });
 
-gamepad.on("press", "d_pad_left", e => {
-	controller.btns.left = 1;
-});
-gamepad.on("release", "d_pad_left", e => {
-	controller.btns.left = 0;
-});
+// gamepad.on("press", "shoulder_bottom_right", e => {
+// 	controller.btns.zr = 1;
+// });
+// gamepad.on("release", "shoulder_bottom_right", e => {
+// 	controller.btns.zr = 0;
+// });
 
-gamepad.on("press", "d_pad_right", e => {
-	controller.btns.right = 1;
-});
-gamepad.on("release", "d_pad_right", e => {
-	controller.btns.right = 0;
-});
-
-gamepad.on("hold", "stick_axis_left", e => {
-	let x = e.value[0];
-	let y = e.value[1];
-	x = (x / 2) + 0.5;
-	y = (-y / 2) + 0.5;
-	x *= 255;
-	y *= 255;
-	controller.LStick.x = parseInt(x);
-	controller.LStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(restPos - controller.LStick.x) < thresh) {
-		controller.LStick.x = restPos;
-	}
-	if (Math.abs(restPos - controller.LStick.y) < thresh) {
-		controller.LStick.y = restPos;
-	}
-});
-gamepad.on("press", "stick_axis_left", e => {
-	let x = e.value[0];
-	let y = e.value[1];
-	x = (x / 2) + 0.5;
-	y = (-y / 2) + 0.5;
-	x *= 255;
-	y *= 255;
-	controller.LStick.x = parseInt(x);
-	controller.LStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(restPos - controller.LStick.x) < thresh) {
-		controller.LStick.x = restPos;
-	}
-	if (Math.abs(restPos - controller.LStick.y) < thresh) {
-		controller.LStick.y = restPos;
-	}
-});
-gamepad.on("release", "stick_axis_left", e => {
-	let x = e.value[0];
-	let y = e.value[1];
-	x = (x / 2) + 0.5;
-	y = (-y / 2) + 0.5;
-	x *= 255;
-	y *= 255;
-	controller.LStick.x = parseInt(x);
-	controller.LStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(restPos - controller.LStick.x) < thresh) {
-		controller.LStick.x = restPos;
-	}
-	if (Math.abs(restPos - controller.LStick.y) < thresh) {
-		controller.LStick.y = restPos;
-	}
-});
-gamepad.on("hold", "stick_axis_right", e => {
-	let x = e.value[0];
-	let y = e.value[1];
-	x = (x / 2) + 0.5;
-	y = (-y / 2) + 0.5;
-	x *= 255;
-	y *= 255;
-	controller.RStick.x = parseInt(x);
-	controller.RStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(restPos - controller.RStick.x) < thresh) {
-		controller.RStick.x = restPos;
-	}
-	if (Math.abs(restPos - controller.RStick.y) < thresh) {
-		controller.RStick.y = restPos;
-	}
-});
-gamepad.on("press", "stick_axis_right", e => {
-	let x = e.value[0];
-	let y = e.value[1];
-	x = (x / 2) + 0.5;
-	y = (-y / 2) + 0.5;
-	x *= 255;
-	y *= 255;
-	controller.RStick.x = parseInt(x);
-	controller.RStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(restPos - controller.RStick.x) < thresh) {
-		controller.RStick.x = restPos;
-	}
-	if (Math.abs(restPos - controller.RStick.y) < thresh) {
-		controller.RStick.y = restPos;
-	}
-});
-gamepad.on("release", "stick_axis_right", e => {
-	let x = e.value[0];
-	let y = e.value[1];
-	x = (x / 2) + 0.5;
-	y = (-y / 2) + 0.5;
-	x *= 255;
-	y *= 255;
-	controller.RStick.x = parseInt(x);
-	controller.RStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
-	if (Math.abs(restPos - controller.RStick.x) < thresh) {
-		controller.RStick.x = restPos;
-	}
-	if (Math.abs(restPos - controller.RStick.y) < thresh) {
-		controller.RStick.y = restPos;
-	}
-});
-
-gamepad.on("press", "stick_button_left", e => {
-	controller.btns.stick_button = 1;
-});
-gamepad.on("release", "stick_button_left", e => {
-	controller.btns.stick_button = 0;
-});
-gamepad.on("press", "stick_button_right", e => {
-	controller.btns.stick_button2 = 1;
-});
-gamepad.on("release", "stick_button_right", e => {
-	controller.btns.stick_button2 = 0;
-});
+// gamepad.on("press", "select", e => {
+// 	controller.btns.minus = 1;
+// });
+// gamepad.on("release", "select", e => {
+// 	controller.btns.minus = 0;
+// });
+// gamepad.on("press", "start", e => {
+// 	controller.btns.plus = 1;
+// });
+// gamepad.on("release", "start", e => {
+// 	controller.btns.plus = 0;
+// });
 
 
-function getGamepadInput() {
 
-	if (!document.getElementById("keyboardControllerCheckbox").checked) {
-		return;
-	}
-	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
-	if (authCookie == null) {
-		$("#keyboardControllerCheckbox").prop("checked", false);
-		swal("You need to connect to twitch! Redirecting you now!");
-		setTimeout(function() {
-			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-		}, 2000);
-		return;
-	}
-	//controller.reset();
-// 	if (gamepad._events.gamepad.length > 0) {
-// 		sendControllerState();
+// gamepad.on("press", "d_pad_up", e => {
+// 	controller.btns.up = 1;
+// });
+// gamepad.on("release", "d_pad_up", e => {
+// 	controller.btns.up = 0;
+// });
+
+// gamepad.on("press", "d_pad_down", e => {
+// 	controller.btns.down = 1;
+// });
+// gamepad.on("release", "d_pad_down", e => {
+// 	controller.btns.down = 0;
+// });
+
+// gamepad.on("press", "d_pad_left", e => {
+// 	controller.btns.left = 1;
+// });
+// gamepad.on("release", "d_pad_left", e => {
+// 	controller.btns.left = 0;
+// });
+
+// gamepad.on("press", "d_pad_right", e => {
+// 	controller.btns.right = 1;
+// });
+// gamepad.on("release", "d_pad_right", e => {
+// 	controller.btns.right = 0;
+// });
+
+// gamepad.on("hold", "stick_axis_left", e => {
+// 	let x = e.value[0];
+// 	let y = e.value[1];
+// 	x = (x / 2) + 0.5;
+// 	y = (-y / 2) + 0.5;
+// 	x *= 255;
+// 	y *= 255;
+// 	controller.LStick.x = parseInt(x);
+// 	controller.LStick.y = parseInt(y);
+// 	let thresh = parseInt($("#threshold").text());
+// 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
+// 		controller.LStick.x = restPos;
 // 	}
-}
+// 	if (Math.abs(restPos - controller.LStick.y) < thresh) {
+// 		controller.LStick.y = restPos;
+// 	}
+// });
+// gamepad.on("press", "stick_axis_left", e => {
+// 	let x = e.value[0];
+// 	let y = e.value[1];
+// 	x = (x / 2) + 0.5;
+// 	y = (-y / 2) + 0.5;
+// 	x *= 255;
+// 	y *= 255;
+// 	controller.LStick.x = parseInt(x);
+// 	controller.LStick.y = parseInt(y);
+// 	let thresh = parseInt($("#threshold").text());
+// 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
+// 		controller.LStick.x = restPos;
+// 	}
+// 	if (Math.abs(restPos - controller.LStick.y) < thresh) {
+// 		controller.LStick.y = restPos;
+// 	}
+// });
+// gamepad.on("release", "stick_axis_left", e => {
+// 	let x = e.value[0];
+// 	let y = e.value[1];
+// 	x = (x / 2) + 0.5;
+// 	y = (-y / 2) + 0.5;
+// 	x *= 255;
+// 	y *= 255;
+// 	controller.LStick.x = parseInt(x);
+// 	controller.LStick.y = parseInt(y);
+// 	let thresh = parseInt($("#threshold").text());
+// 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
+// 		controller.LStick.x = restPos;
+// 	}
+// 	if (Math.abs(restPos - controller.LStick.y) < thresh) {
+// 		controller.LStick.y = restPos;
+// 	}
+// });
+// gamepad.on("hold", "stick_axis_right", e => {
+// 	let x = e.value[0];
+// 	let y = e.value[1];
+// 	x = (x / 2) + 0.5;
+// 	y = (-y / 2) + 0.5;
+// 	x *= 255;
+// 	y *= 255;
+// 	controller.RStick.x = parseInt(x);
+// 	controller.RStick.y = parseInt(y);
+// 	let thresh = parseInt($("#threshold").text());
+// 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
+// 		controller.RStick.x = restPos;
+// 	}
+// 	if (Math.abs(restPos - controller.RStick.y) < thresh) {
+// 		controller.RStick.y = restPos;
+// 	}
+// });
+// gamepad.on("press", "stick_axis_right", e => {
+// 	let x = e.value[0];
+// 	let y = e.value[1];
+// 	x = (x / 2) + 0.5;
+// 	y = (-y / 2) + 0.5;
+// 	x *= 255;
+// 	y *= 255;
+// 	controller.RStick.x = parseInt(x);
+// 	controller.RStick.y = parseInt(y);
+// 	let thresh = parseInt($("#threshold").text());
+// 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
+// 		controller.RStick.x = restPos;
+// 	}
+// 	if (Math.abs(restPos - controller.RStick.y) < thresh) {
+// 		controller.RStick.y = restPos;
+// 	}
+// });
+// gamepad.on("release", "stick_axis_right", e => {
+// 	let x = e.value[0];
+// 	let y = e.value[1];
+// 	x = (x / 2) + 0.5;
+// 	y = (-y / 2) + 0.5;
+// 	x *= 255;
+// 	y *= 255;
+// 	controller.RStick.x = parseInt(x);
+// 	controller.RStick.y = parseInt(y);
+// 	let thresh = parseInt($("#threshold").text());
+// 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
+// 		controller.RStick.x = restPos;
+// 	}
+// 	if (Math.abs(restPos - controller.RStick.y) < thresh) {
+// 		controller.RStick.y = restPos;
+// 	}
+// });
+
+// gamepad.on("press", "stick_button_left", e => {
+// 	controller.btns.stick_button = 1;
+// });
+// gamepad.on("release", "stick_button_left", e => {
+// 	controller.btns.stick_button = 0;
+// });
+// gamepad.on("press", "stick_button_right", e => {
+// 	controller.btns.stick_button2 = 1;
+// });
+// gamepad.on("release", "stick_button_right", e => {
+// 	controller.btns.stick_button2 = 0;
+// });
+
+
+// function getGamepadInput() {
+
+// 	if (!document.getElementById("keyboardControllerCheckbox").checked) {
+// 		return;
+// 	}
+// 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
+// 	if (authCookie == null) {
+// 		$("#keyboardControllerCheckbox").prop("checked", false);
+// 		swal("You need to connect to twitch! Redirecting you now!");
+// 		setTimeout(function() {
+// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+// 		}, 2000);
+// 		return;
+// 	}
+// 	//controller.reset();
+// // 	if (gamepad._events.gamepad.length > 0) {
+// // 		sendControllerState();
+// // 	}
+// }
 
 
 
@@ -1116,10 +1183,6 @@ $("#touchControlsCheckbox").on("click", function() {
 $("#touchControlsCheckbox").trigger("click");
 
 function sendInputs() {
-	if(!isMobile) {
-		getKeyboardInput();
-		getGamepadInput();
-	}
 	getTouchInput();
 	sendControllerState();
 }
@@ -1180,79 +1243,7 @@ socket.on("setFPS", function(data) {
 });
 
 /* LAGLESS 1.0*/
-// function getLatestImage() {
-// 	$("#screen").load("/8110/img/ #screenshot");
-// // 	document.getElementById("screen2").contentDocument.location.reload(true);
-
-// 	if (typeof $("#screen")[0].children[0] != "undefined") {
-// 		let src = $("#screen")[0].children[0].src;
-// 		if(src == "data:image/jpeg;base64,") {
-// 			socket.emit("restart");
-// 		}
-// 	}
-
-// 	if (lagless1Break) {
-// 		return;
-// 	}
-
-// // 	let fps = parseInt($("#fpsSlider").val());
-// // 	let timeToSleep = 1000 / fps;
-// // 	setTimeout(getLatestImage, timeToSleep);
-// 	requestAnimationFrame(getLatestImage);
-// }
-function updateImage() {
-	$("#screen").load("/8110/img/ #screenshot");
-	if (typeof $("#screen")[0].children[0] != "undefined") {
-		// fix for dom freaking out:
-		$("#screen")[0].style.height = "" + $("#screenshot")[0].height;
-// 		if (toggleFullscreen) {
-// 			$("#screenshot")[0].style.width = "100%";
-// 		} else {
-// 			$("#screenshot")[0].style.width = "75%";
-// 		}
-		let src = $("#screen")[0].children[0].src;
-		if(src == "data:image/jpeg;base64,") {
-			socket.emit("restart");
-		}
-	}
-}
-function getLatestImage() {
-	if (lagless1Break) {
-		return;
-	}
-    requestAnimationFrame(getLatestImage);
-    now = Date.now();
-    elapsed = now - then;
-    if (elapsed > fpsInterval) {	
-		
-		let fps = parseInt($("#fpsSlider").val());
-		fpsInterval = 1000 / fps;
-		
-        then = now - (elapsed % fpsInterval);
-		stats.begin();
-		updateImage();
-		stats.end();
-    }
-}
-// socket.on("viewImage", function(data) {
-// 	//requestAnimationFrame(function() {
-// 		stats.begin();
-// 		let src = "data:image/jpeg;base64," + data.src;
-// 	// 	if(src == "data:image/jpeg;base64,") {
-// 	// 		socket.emit("restart");
-// 	// 	}
-// 		let image = new Image();
-// 		image.src = src;
-// 		image.style = "max-width:100%; height:auto;";
-// 		//image.style = "width:120%; height:auto;";
-// 		image.id = "screenshot";
-// // 		$("#screen").empty();
-// // 		$("#screen").append(image);
-// 		$("#screenshot")[0].replaceWith(image);
-// 		stats.end();
-// 	//});
-// });
-getLatestImage();
+//getLatestImage();
 
 /* LAGLESS 2.0 */
 // Setup the WebSocket connection and start the player
@@ -1303,21 +1294,21 @@ $("#lagless2VolumeSlider").children().next().on("click", function(){
 
 
 /* LAGLESS 3.0 */
-let canvas3 = document.getElementById("videoCanvas3");
-// Create h264 player
-let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
-wsavc.stats = stats;
+// let canvas3 = document.getElementById("videoCanvas3");
+// // Create h264 player
+// let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+// let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
+// wsavc.stats = stats;
 
 
-$("#lagless3Refresh").on("click", function() {
-	try {
-		wsavc.disconnect();
-	} catch(error) {
-	}
-	let uri = "wss://twitchplaysnintendoswitch.com/"+ lagless3Port + "/";
-	wsavc.connect(uri);
-});
+// $("#lagless3Refresh").on("click", function() {
+// 	try {
+// 		wsavc.disconnect();
+// 	} catch(error) {
+// 	}
+// 	let uri = "wss://twitchplaysnintendoswitch.com/"+ lagless3Port + "/";
+// 	wsavc.connect(uri);
+// });
 
 
 
@@ -1413,109 +1404,110 @@ $("#lagless3Refresh").on("click", function() {
 
 
 /* SWITCH IMPLEMENTATIONS */
+player.play();
 
-$(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
+// $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
-	let tab = $(e.target);
-	let contentId = tab.attr("href");
+// 	let tab = $(e.target);
+// 	let contentId = tab.attr("href");
 
-	//This check if the tab is active
-	if (tab.parent().hasClass("active")) {
+// 	//This check if the tab is active
+// 	if (tab.parent().hasClass("active")) {
 		
-		//console.log("the tab with the content id " + contentId + " is visible");
+// 		//console.log("the tab with the content id " + contentId + " is visible");
 		
-		// lagless 1:
-		if (contentId == "#lagless1") {
-			//$("#screen").append("<img id='screenshot'></img>")
-			lagless1Break = false;
-			getLatestImage();
-		} else {
-			lagless1Break = true;
-		}
+// 		// lagless 1:
+// 		if (contentId == "#lagless1") {
+// 			//$("#screen").append("<img id='screenshot'></img>")
+// 			lagless1Break = false;
+// 			getLatestImage();
+// 		} else {
+// 			lagless1Break = true;
+// 		}
 		
-		// lagless 2:
-		if (contentId == "#lagless2") {
-			if (typeof player != "undefined") {
-				player.play();
-			}
-		} else {
-			if (typeof player != "undefined") {
-				player.stop();
-			}
-		}
+// 		// lagless 2:
+// 		if (contentId == "#lagless2") {
+// 			if (typeof player != "undefined") {
+// 				player.play();
+// 			}
+// 		} else {
+// 			if (typeof player != "undefined") {
+// 				player.stop();
+// 			}
+// 		}
 		
-		// lagless 3:
-		if (contentId == "#lagless3") {
-			//let uri = "wss://twitchplaysnintendoswitch3.localtunnel.me";
-			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-			wsavc.connect(uri);
-		} else {
-			try {
-				wsavc.disconnect();
-			} catch(error) {
-			}
-		}
+// 		// lagless 3:
+// 		if (contentId == "#lagless3") {
+// 			//let uri = "wss://twitchplaysnintendoswitch3.localtunnel.me";
+// 			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+// 			wsavc.connect(uri);
+// 		} else {
+// 			try {
+// 				wsavc.disconnect();
+// 			} catch(error) {
+// 			}
+// 		}
 		
-		// lagless 4:
-		if (contentId == "#lagless4") {
-			if (typeof player2 != "undefined") {
-				player2.play();
-			}
-		} else {
-			if (typeof player2 != "undefined") {
-				player2.stop();
-			}
-		}
+// 		// lagless 4:
+// 		if (contentId == "#lagless4") {
+// 			if (typeof player2 != "undefined") {
+// 				player2.play();
+// 			}
+// 		} else {
+// 			if (typeof player2 != "undefined") {
+// 				player2.stop();
+// 			}
+// 		}
 
-	} else {}
+// 	} else {}
 
-});
+// });
 
 
 /* NEW AUDIO @@@@@@@@@@@@@@@@ */
-let hash = window.location.hash.replace("#", "");
-let meeting = new Meeting(hash);
-let remoteMediaStreams = document.getElementById("remote-media-streams");
-let localMediaStream = document.getElementById("local-media-stream");
-let channel = "#twitchplaysnintendoswitch";
-let sender = Math.round(Math.random() * 999999999) + 999999999;
-let socket2 = io("https://twitchplaysnintendoswitch.com", {
-	path: "/8110/socket.io/",
-	transports: ["websocket"],
-});
-socket2.emit("new-channel", {
-	channel: channel,
-	sender: sender
-});
-//socket = io.connect(SIGNALING_SERVER + channel);
-io.connect("https://twitchplaysnintendoswitch.com", {
-	path: "/8110/socket.io/",
-	transports: ["websocket"] // added
-});
-socket2.on("connect", function() {
-	// setup peer connection & pass socket object over the constructor!
-});
-socket2.send = function(message) {
-	socket.emit("message", {
-		sender: sender,
-		data: message
-	});
-};
-meeting.openSignalingChannel = function(callback) {
-	return socket.on("message", callback);
-};
-// on getting media stream
-meeting.onaddstream = function(e) {
-};
-// using firebase for signaling
-meeting.firebase = "rtcweb";
-// if someone leaves; just remove their audio
-meeting.onuserleft = function(userid) {
-	let audio = document.getElementById(userid);
-	if (audio) audio.parentNode.removeChild(audio);
-};
-// check pre-created meeting rooms
-meeting.check();
+// let hash = window.location.hash.replace("#", "");
+// let meeting = new Meeting(hash);
+// let remoteMediaStreams = document.getElementById("remote-media-streams");
+// let localMediaStream = document.getElementById("local-media-stream");
+// let channel = "#twitchplaysnintendoswitch";
+// let sender = Math.round(Math.random() * 999999999) + 999999999;
+// let socket2 = io("https://twitchplaysnintendoswitch.com", {
+// 	path: "/8110/socket.io/",
+// 	transports: ["websocket"],
+// });
+// socket2.emit("new-channel", {
+// 	channel: channel,
+// 	sender: sender
+// });
+// //socket = io.connect(SIGNALING_SERVER + channel);
+// io.connect("https://twitchplaysnintendoswitch.com", {
+// 	path: "/8110/socket.io/",
+// 	transports: ["websocket"] // added
+// });
+// socket2.on("connect", function() {
+// 	// setup peer connection & pass socket object over the constructor!
+// });
+// socket2.send = function(message) {
+// 	socket.emit("message", {
+// 		sender: sender,
+// 		data: message
+// 	});
+// };
+// meeting.openSignalingChannel = function(callback) {
+// 	return socket.on("message", callback);
+// };
+// // on getting media stream
+// meeting.onaddstream = function(e) {
+// };
+// // using firebase for signaling
+// meeting.firebase = "rtcweb";
+// // if someone leaves; just remove their audio
+// meeting.onuserleft = function(userid) {
+// 	let audio = document.getElementById(userid);
+// 	if (audio) audio.parentNode.removeChild(audio);
+// };
+// // check pre-created meeting rooms
+// meeting.check();
 
 
 // $("#toggleAudio").on("click", function() {
@@ -1527,26 +1519,26 @@ meeting.check();
 // 	}
 // });
 
-$("#audioCheckbox").on("click", function() {
-	toggleAudio = !toggleAudio;
-	if ($("#audioCheckbox")[0].checked) {
-		audioElem.play();
-	} else {
-		audioElem.pause();
-	}
-});
+// $("#audioCheckbox").on("click", function() {
+// 	toggleAudio = !toggleAudio;
+// 	if ($("#audioCheckbox")[0].checked) {
+// 		audioElem.play();
+// 	} else {
+// 		audioElem.pause();
+// 	}
+// });
 
-$("#globalVolume").slider({
-    min: 0,
-    max: 100,
-    value: 0,
-		range: "min",
-		animate: true,
-	slide: function(event, ui) {
-		audioElem.volume = ui.value / 100;
-  	}
-});
-audioElem.volume = 0;
+// $("#globalVolume").slider({
+//     min: 0,
+//     max: 100,
+//     value: 0,
+// 		range: "min",
+// 		animate: true,
+// 	slide: function(event, ui) {
+// 		audioElem.volume = ui.value / 100;
+//   	}
+// });
+// audioElem.volume = 0;
 
 
 /* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1570,25 +1562,25 @@ socket.on("twitchUsername", function(data) {
 	twitchUsername = data;
 });
 
-socket.on("turnTimeLeft", function(data) {
-	timeLeft = data.timeLeft;
-	turnUsername = data.username;
-	turnLength = data.turnLength;
-	lastCurrentTime = Date.now();
-	let timeLeftMilli = timeLeft;
-	let timeLeftSec = parseInt(timeLeft / 1000);
-	let percent = parseInt((timeLeftMilli / turnLength) * 100);
-	let progressBar = $(".progress-bar");
+// socket.on("turnTimeLeft", function(data) {
+// 	timeLeft = data.timeLeft;
+// 	turnUsername = data.username;
+// 	turnLength = data.turnLength;
+// 	lastCurrentTime = Date.now();
+// 	let timeLeftMilli = timeLeft;
+// 	let timeLeftSec = parseInt(timeLeft / 1000);
+// 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
+// 	let progressBar = $(".progress-bar");
 	
-	if (turnUsername == null) {
-		percent = 100;
-		progressBar.css("width", percent + "%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		$("#currentPlayer").text("No one is playing right now.");
-	} else {
-		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
-		$("#currentPlayer").text("Current Player: " + turnUsername);
-	}
-});
+// 	if (turnUsername == null) {
+// 		percent = 100;
+// 		progressBar.css("width", percent + "%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+// 		$("#currentPlayer").text("No one is playing right now.");
+// 	} else {
+// 		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
+// 		$("#currentPlayer").text("Current Player: " + turnUsername);
+// 	}
+// });
 
 
 // setInterval(function() {
@@ -1773,19 +1765,16 @@ $("#fullscreenCheckbox").on("click", function() {
 
 
 /* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#navCheckbox").on("click", function() {
-	if ($("#navCheckbox")[0].checked) {
-		$(".nav")[0].style.display = "none"
-	} else {
-		$(".nav")[0].style.display = ""
-	}
-});
+// $("#navCheckbox").on("click", function() {
+// 	if ($("#navCheckbox")[0].checked) {
+// 		$(".nav")[0].style.display = "none"
+// 	} else {
+// 		$(".nav")[0].style.display = ""
+// 	}
+// });
 
 
 /* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-
-// start checked:
-$("#chatCheckbox")[0].checked = true;
 
 $("#chatCheckbox").on("click", function() {
 	if (!$("#chatCheckbox")[0].checked) {
@@ -1797,9 +1786,12 @@ $("#chatCheckbox").on("click", function() {
 	}
 });
 
+$("#chatCheckbox")[0].checked = true;
+$("#chatCheckbox").trigger("click");// uncheck
+
 
 // default:
-$("#tab2").trigger("click");
+// $("#tab2").trigger("click");
 
 
 
@@ -1822,13 +1814,13 @@ img.src = "https://twitchplaysnintendoswitch.com/images/procontroller.png";
 
 
 /* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-setInterval(function() {
-	pingTime = Date.now();
-	socket.emit("ping2");
-}, 1000);
+// setInterval(function() {
+// 	pingTime = Date.now();
+// 	socket.emit("ping2");
+// }, 1000);
 
-socket.on("pong2", function() {
-	let latency = Date.now() - pingTime;
-	$("#ping").text(latency + "ms");
-});
+// socket.on("pong2", function() {
+// 	let latency = Date.now() - pingTime;
+// 	$("#ping").text(latency + "ms");
+// });
 

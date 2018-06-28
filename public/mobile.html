@@ -15,9 +15,7 @@
 	<!-- jquery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-
-	<script src="js/keymaster.js"></script>
-	<script src="js/gamepad.js"></script>
+	
 	<script src="js/localforage.min.js"></script>
 	<script src="js/tools.js"></script>
 	<script src="js/stats.min.js"></script>
@@ -29,7 +27,7 @@
 	<script src="js/http-live-player.js"></script>
 <!-- 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
-	<script src="js/meeting-client.js"></script>
+<!-- 	<script src="js/meeting-client.js"></script> -->
 
 	<!-- TODO: use browserify -->
 
@@ -59,43 +57,8 @@
 	<div id="container" class="container2">
 
 		<div id="picture" class="one well">
-
-			<ul class="nav nav-tabs" role="tablist">
-				<li class="nav-item active">
-					<a id="tab1" class="nav-link active" data-toggle="tab" href="#lagless1">Lagless 1</a>
-				</li>
-				<li class="nav-item">
-					<a id="tab2" class="nav-link" data-toggle="tab" href="#lagless2">Lagless 2</a>
-				</li>
-				<li class="nav-item">
-					<a id="tab3" class="nav-link" data-toggle="tab" href="#lagless3">Lagless 3</a>
-				</li>
-				<li class="nav-item">
-					<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">3DS Lagless 2</a>
-				</li>
-<!-- 				<li class="nav-item">
-					<a id="tab5" class="nav-link" data-toggle="tab" href="#lagless5">Lagless 5</a>
-				</li> -->
-			</ul>
-
-			<div class="tab-content">
-				<div id="lagless1" class="tab-pane active">
-					<div id="lagless1Container">
-						<div id="screen" oncontextmenu="return false">
-							<image id="screenshot"></image>
-						</div>
-						<div id="lagless1Bar">
-	<!-- 						<div id="lagless2VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless2Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
-							</div> -->
-<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
-							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
-						</div>
-					</div>
-				</div>
-				<div id="lagless2" class="tab-pane">
+			
+			<div id="lagless2" class="tab-pane">
 					<div id="lagless2Container">
 						<div id="lagless2View">
 							<div id="leftJoyCon">
@@ -130,48 +93,11 @@
 								<i class="fa fa-volume-up"></i>
 							</div>
 <!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
-							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
+<!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
 						</div>
 					</div>
 				</div>
-				<div id="lagless3" class="tab-pane">
-					<div id="lagless3Container">
-						<canvas id="videoCanvas3"></canvas>
-						<button id="lagless3Refresh" type="button" class="btn btn-info btn-settings">
-							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
-						</button>
-					</div>
-				</div>
-				<div id="lagless4" class="tab-pane">
-					<div id="lagless4Container">
-						<canvas id="videoCanvas4"></canvas>
-					</div>
-				</div>
-				<div id="lagless5" class="tab-pane">
-					<div id="lagless5Container">
-						<canvas id="videoCanvas5"></canvas>
-					</div>
-				</div>
-			</div>
-
-
-<!-- 			<div id="touchControls">
-				<div class="container6">
-					<div id="touchSticks" class="container5 nine">
-						<div id="leftStick" class="zone semi seven">
-						</div>
-						<div id="rightStick" class="zone semi eight">
-						</div>
-						<div id="ABXYButtons" class="">
-							<canvas id="buttonsCanvas" width="100%" height="100%"></canvas>
-						</div>
-					</div>
-				</div>
-			</div> -->
-
-
-
-
+			
 			<div id="description">
 
 				<div id="barUnderTheStream" class="well">
@@ -199,20 +125,6 @@
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="mouseControlsCheckbox" type="checkbox">
-											<span class="checkbox-placeholder"></span>
-											Enable Mouse Controls
-										</label>
-								</li>
-								<li class="list-group-item">
-									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="audioCheckbox" type="checkbox">
-											<span class="ifas ifa-volume-up checkbox-placeholder"></span>
-											Enable Audio 1.0
-										</label>
-								</li>
-								<li class="list-group-item">
-									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 											<input id="darkThemeCheckbox" type="checkbox">
 											<span class="ifas ifa-moon checkbox-placeholder"></span>
 											Enable Dark Theme
@@ -232,18 +144,7 @@
 											Enable Fullscreen Mode
 										</label>
 								</li>
-								<li class="list-group-item">
-									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="navCheckbox" type="checkbox">
-											<span class="ifas ifa-expand checkbox-placeholder"></span>
-											Hide Nav Bar
-										</label>
-								</li>
 							</ul>
-
-							<div class="well">
-								<canvas id="controllerViewCanvas"></canvas>
-							</div>
 
 						</div>
 
@@ -329,14 +230,6 @@
 							<ul class="list-group">
 								<li class="list-group-item">Default Keyboard Controls:</li>
 								<li class="list-group-item"><img style="width: 100%;" src="images/controls.jpg"></li>
-								<!-- 									<li class="list-group-item">W/A/S/D = Left Stick</li>
-									<li class="list-group-item">I/J/K/L = Right Stick</li>
-									<li class="list-group-item">T/F/G/H = DPad</li>
-									<li class="list-group-item">Arrow Keys = A/B/X/Y</li>
-									<li class="list-group-item">- = Minus</li>
-									<li class="list-group-item">Q/E = ZL / ZR</li>
-									<li class="list-group-item">U/O = L / R</li>
-									<li class="list-group-item">R/Y = LStick / RStick buttons</li> -->
 							</ul>
 							<ul class="list-group">
 								<li class="list-group-item">List of games on the switch:</li>
@@ -362,137 +255,18 @@
 
 				</div>
 
-				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>
+<!-- 				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
 
 			</div>
 
-
-
 		</div>
-
-		<!-- 			<div id="chat" class="two">
-				Chat
-				<div id="messages">
-					<ul id="messageList"></ul>
-				</div>
-
-				<form id="chatForm" class="form-inline">
-					<div class="form-group-invalid">
-						<input id="msgInput" class="form-control" type="text" autocomplete="off" />
-						<button id="sendButton" class="btn btn-primary" type="submit">Send</button>
-					</div>
-				</form>
-			</div> -->
 
 		<iframe id="twitchChat" class="two" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat" height="500" width="350"></iframe>
 
 	</div>
 
-
-
-	<!-- SETTINGS WINDOW ------------------------------------------- -->
-	<div class="modal fade" id="settingsWindow" role="dialog">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-
-				<div class="modal-header">
-					<h3 class="modal-title text-center">Settings</h3>
-				</div>
-
-				<div class="modal-body">
-
-					<ul class="nav nav-tabs nav-justified">
-						<li class="active"><a href="#keyboardSettingsFrame" data-toggle="tab">keyboard</a></li>
-						<!-- 						<li><a href="#soundSettingsFrame" data-toggle="tab">sound</a></li>
-						<li><a href="#videoSettingsFrame" data-toggle="tab">video</a></li> -->
-					</ul>
-
-					<div class="tab-content">
-						<div class="tab-pane active" id="keyboardSettingsFrame">
-
-							<div id="keyboardLayoutConfig">
-								<!-- <tabindex="0"> -->
-								<div class="actionText">Left Stick Up</div>
-								<div class="buttonConfig" id="LYU"></div><br>
-								<div class="actionText">Left Stick Down</div>
-								<div class="buttonConfig" id="LYD"></div><br>
-								<div class="actionText">Left Stick Left</div>
-								<div class="buttonConfig" id="LXL"></div><br>
-								<div class="actionText">Left Stick Right</div>
-								<div class="buttonConfig" id="LXR"></div><br>
-								<div class="actionText">Right Stick Up</div>
-								<div class="buttonConfig" id="RYU"></div><br>
-								<div class="actionText">Right Stick Down</div>
-								<div class="buttonConfig" id="RYD"></div><br>
-								<div class="actionText">Right Stick Left</div>
-								<div class="buttonConfig" id="RXL"></div><br>
-								<div class="actionText">Right Stick Right</div>
-								<div class="buttonConfig" id="RXR"></div><br>
-								<div class="actionText">A</div>
-								<div class="buttonConfig" id="A"></div><br>
-								<div class="actionText">B</div>
-								<div class="buttonConfig" id="B"></div><br>
-								<div class="actionText">X</div>
-								<div class="buttonConfig" id="X"></div><br>
-								<div class="actionText">Y</div>
-								<div class="buttonConfig" id="Y"></div><br>
-								<div class="actionText">DPad Up</div>
-								<div class="buttonConfig" id="DUP"></div><br>
-								<div class="actionText">DPad Down</div>
-								<div class="buttonConfig" id="DDown"></div><br>
-								<div class="actionText">DPad Left</div>
-								<div class="buttonConfig" id="DLeft"></div><br>
-								<div class="actionText">DPad Right</div>
-								<div class="buttonConfig" id="DRight"></div><br>
-								<div class="actionText">LStick Button</div>
-								<div class="buttonConfig" id="LStick"></div><br>
-								<div class="actionText">RStick Button</div>
-								<div class="buttonConfig" id="RStick"></div><br>
-								<div class="actionText">L</div>
-								<div class="buttonConfig" id="L"></div><br>
-								<div class="actionText">ZL</div>
-								<div class="buttonConfig" id="ZL"></div><br>
-								<div class="actionText">R</div>
-								<div class="buttonConfig" id="R"></div><br>
-								<div class="actionText">ZR</div>
-								<div class="buttonConfig" id="ZR"></div><br>
-								<div class="actionText">Minus</div>
-								<div class="buttonConfig" id="Minus"></div><br>
-								<div class="actionText">Plus</div>
-								<div class="buttonConfig" id="Plus"></div><br>
-								<div class="actionText">Capture</div>
-								<div class="buttonConfig" id="Capture"></div><br>
-								<div class="actionText">Home</div>
-								<div class="buttonConfig" id="Home"></div><br>
-								<input type="button" id="resetControls" value="Reset" />
-							</div>
-						</div>
-
-						<!-- 						<div class="tab-pane" id="soundSettingsFrame">
-							<div id="volumeConfig">
-								<div class="actionText">Master Volume</div>
-								<div class="buttonConfig" title="forward" id="forward"></div><br>
-							</div>
-
-							<input id="ex1" data-slider-id="ex1Slider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" />
-
-							sound stuff
-						</div>
-
-						<div class="tab-pane" id="videoSettingsFrame">
-							video stuff
-						</div> -->
-
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- END OF SETTINGS WINDOW ------------------------------------------- -->
-
 </body>
 
-<script src="js/main.js"></script>
+<script src="js/mobile.js"></script>
 
 </html>
