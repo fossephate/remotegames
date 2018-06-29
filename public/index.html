@@ -1,9 +1,9 @@
 <html>
 
 <head>
-	
+
 	<title>TPNS</title>
-	
+
 	<!-- CSS -->
 	<link rel="stylesheet" href="css/stylesheet.css">
 
@@ -22,13 +22,12 @@
 	<script src="js/tools.js"></script>
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
-	<script src="js/chillout.min.js"></script>
-<!-- 	<script src="js/interact.min.js"></script> -->
+	<!-- 	<script src="js/chillout.min.js"></script> -->
+	<script src="js/interact.min.js"></script>
 
 	<script src="js/jsmpg.js"></script>
 	<script src="js/http-live-player.js"></script>
-<!-- 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
+	<script src="js/sweetalert2.min.js"></script>
 	<script src="js/meeting-client.js"></script>
 
 	<!-- TODO: use browserify -->
@@ -58,7 +57,7 @@
 
 	<div id="container" class="container2">
 
-		<div id="picture" class="one well">
+		<div id="picture" class="well">
 
 			<ul class="nav nav-tabs" role="tablist">
 				<li class="nav-item active">
@@ -73,7 +72,7 @@
 				<li class="nav-item">
 					<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">3DS Lagless 2</a>
 				</li>
-<!-- 				<li class="nav-item">
+				<!-- 				<li class="nav-item">
 					<a id="tab5" class="nav-link" data-toggle="tab" href="#lagless5">Lagless 5</a>
 				</li> -->
 			</ul>
@@ -81,17 +80,20 @@
 			<div class="tab-content">
 				<div id="lagless1" class="tab-pane active">
 					<div id="lagless1Container">
-						<div id="screen" oncontextmenu="return false">
-							<image id="screenshot"></image>
-						</div>
-						<div id="lagless1Bar">
-	<!-- 						<div id="lagless2VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless2Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
+						<div id="lagless1View">
+							<canvas id="videoCanvas1"></canvas>
+<!-- 							<div id="screen" oncontextmenu="return false">
+								<image id="screenshot"></image>
 							</div> -->
-<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
-							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
+							<div id="lagless1Bar">
+								<!-- 						<div id="lagless2VolumeSlider" class="volumeSlider">
+									<i class="fa fa-volume-down"></i>
+									<div id="lagless2Volume" class="volume"></div>
+									<i class="fa fa-volume-up"></i>
+								</div> -->
+								<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
+								<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -101,26 +103,40 @@
 							<div id="leftJoyCon">
 								<canvas id="leftJoyConCanvas"></canvas>
 								<div id="leftStick"></div>
+								<div id="leftStick2"></div>
 								<div id="dpadButtons">
 									<div id="upButton" class="controllerButton"></div>
 									<div id="downButton" class="controllerButton"></div>
 									<div id="leftButton" class="controllerButton"></div>
 									<div id="rightButton" class="controllerButton"></div>
 								</div>
+								<div id="leftJoyConOther">
+									<div id="minusButton" class="controllerButton"></div>
+									<div id="captureButton" class="controllerButton"></div>
+									<div id="lButton" class="controllerButton">L Button</div>
+									<div id="zlButton" class="controllerButton">ZL Button</div>
+								</div>
 							</div>
 							<canvas id="videoCanvas2"></canvas>
 							<div id="rightJoyCon">
 								<canvas id="rightJoyConCanvas"></canvas>
 								<div id="rightStick"></div>
+								<div id="rightStick2"></div>
 								<div id="abxyButtons">
 									<div id="xButton" class="controllerButton"></div>
 									<div id="bButton" class="controllerButton"></div>
 									<div id="yButton" class="controllerButton"></div>
 									<div id="aButton" class="controllerButton"></div>
 								</div>
+								<div id="rightJoyConOther">
+									<div id="plusButton" class="controllerButton"></div>
+									<div id="homeButton" class="controllerButton"></div>
+									<div id="rButton" class="controllerButton">R Button</div>
+									<div id="zrButton" class="controllerButton">ZR Button</div>
+								</div>
 							</div>
 						</div>
-<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
+						<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
 							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
 						</button> -->
 						<div id="lagless2Bar">
@@ -129,7 +145,7 @@
 								<div id="lagless2Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div>
-<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
+							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
 						</div>
 					</div>
@@ -153,24 +169,6 @@
 					</div>
 				</div>
 			</div>
-
-
-<!-- 			<div id="touchControls">
-				<div class="container6">
-					<div id="touchSticks" class="container5 nine">
-						<div id="leftStick" class="zone semi seven">
-						</div>
-						<div id="rightStick" class="zone semi eight">
-						</div>
-						<div id="ABXYButtons" class="">
-							<canvas id="buttonsCanvas" width="100%" height="100%"></canvas>
-						</div>
-					</div>
-				</div>
-			</div> -->
-
-
-
 
 			<div id="description">
 
@@ -241,10 +239,6 @@
 								</li>
 							</ul>
 
-							<div class="well">
-								<canvas id="controllerViewCanvas"></canvas>
-							</div>
-
 						</div>
 
 						<div class="six">
@@ -262,7 +256,7 @@
 								Ping: <span id="ping"></span>
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
 
@@ -276,7 +270,7 @@
 							<button type="button" data-toggle="modal" data-target="#settingsWindow" class="btn btn-info btn-settings">
 								<i class="fas fa-cogs"></i>
 							</button>
-<!-- 							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
+							<!-- 							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="fas fa-volume-up"></i>
 							</button>
 							<button id="toggleTheme" type="button" data-toggle="modal" class="btn btn-info btn-settings">
@@ -354,7 +348,7 @@
 								<li class="list-group-item">skyrim (Skyrim)</li>
 								<li class="list-group-item">pokemon quest (Pokemon Quest)</li>
 								<li class="list-group-item">torquel (TorqueL)</li>
-<!-- 								<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
+								<!-- 								<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
 								<li class="list-group-item">arms (Arms)</li>
 							</ul>
 						</div>
@@ -370,21 +364,7 @@
 
 		</div>
 
-		<!-- 			<div id="chat" class="two">
-				Chat
-				<div id="messages">
-					<ul id="messageList"></ul>
-				</div>
-
-				<form id="chatForm" class="form-inline">
-					<div class="form-group-invalid">
-						<input id="msgInput" class="form-control" type="text" autocomplete="off" />
-						<button id="sendButton" class="btn btn-primary" type="submit">Send</button>
-					</div>
-				</form>
-			</div> -->
-
-		<iframe id="twitchChat" class="two" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat" height="500" width="350"></iframe>
+		<iframe id="twitchChat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat" height="500" width="350"></iframe>
 
 	</div>
 
@@ -467,21 +447,6 @@
 								<input type="button" id="resetControls" value="Reset" />
 							</div>
 						</div>
-
-						<!-- 						<div class="tab-pane" id="soundSettingsFrame">
-							<div id="volumeConfig">
-								<div class="actionText">Master Volume</div>
-								<div class="buttonConfig" title="forward" id="forward"></div><br>
-							</div>
-
-							<input id="ex1" data-slider-id="ex1Slider" type="text" data-slider-min="0" data-slider-max="100" data-slider-step="1" data-slider-value="50" />
-
-							sound stuff
-						</div>
-
-						<div class="tab-pane" id="videoSettingsFrame">
-							video stuff
-						</div> -->
 
 					</div>
 

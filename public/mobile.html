@@ -1,9 +1,9 @@
 <html>
 
 <head>
-	
+
 	<title>TPNS</title>
-	
+
 	<!-- CSS -->
 	<link rel="stylesheet" href="css/stylesheet.css">
 
@@ -15,19 +15,20 @@
 	<!-- jquery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-	
+
+	<script src="js/keymaster.js"></script>
+	<script src="js/gamepad.js"></script>
 	<script src="js/localforage.min.js"></script>
 	<script src="js/tools.js"></script>
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
-	<script src="js/chillout.min.js"></script>
-<!-- 	<script src="js/interact.min.js"></script> -->
+	<!-- 	<script src="js/chillout.min.js"></script> -->
+	<!-- 	<script src="js/interact.min.js"></script> -->
 
 	<script src="js/jsmpg.js"></script>
 	<script src="js/http-live-player.js"></script>
-<!-- 	<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script> -->
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2"></script>
-<!-- 	<script src="js/meeting-client.js"></script> -->
+	<script src="js/sweetalert2.min.js"></script>
+	<script src="js/meeting-client.js"></script>
 
 	<!-- TODO: use browserify -->
 
@@ -56,48 +57,62 @@
 
 	<div id="container" class="container2">
 
-		<div id="picture" class="one well">
-			
+		<div id="picture" class="well">
+
 			<div id="lagless2" class="tab-pane">
-					<div id="lagless2Container">
-						<div id="lagless2View">
-							<div id="leftJoyCon">
-								<canvas id="leftJoyConCanvas"></canvas>
-								<div id="leftStick"></div>
-								<div id="dpadButtons">
-									<div id="upButton" class="controllerButton"></div>
-									<div id="downButton" class="controllerButton"></div>
-									<div id="leftButton" class="controllerButton"></div>
-									<div id="rightButton" class="controllerButton"></div>
-								</div>
+				<div id="lagless2Container">
+					<div id="lagless2View">
+						<div id="leftJoyCon">
+							<canvas id="leftJoyConCanvas"></canvas>
+							<div id="leftStick"></div>
+							<div id="leftStick2"></div>
+							<div id="dpadButtons">
+								<div id="upButton" class="controllerButton"></div>
+								<div id="downButton" class="controllerButton"></div>
+								<div id="leftButton" class="controllerButton"></div>
+								<div id="rightButton" class="controllerButton"></div>
 							</div>
-							<canvas id="videoCanvas2"></canvas>
-							<div id="rightJoyCon">
-								<canvas id="rightJoyConCanvas"></canvas>
-								<div id="rightStick"></div>
-								<div id="abxyButtons">
-									<div id="xButton" class="controllerButton"></div>
-									<div id="bButton" class="controllerButton"></div>
-									<div id="yButton" class="controllerButton"></div>
-									<div id="aButton" class="controllerButton"></div>
-								</div>
+							<div id="leftJoyConOther">
+								<div id="minusButton" class="controllerButton"></div>
+								<div id="captureButton" class="controllerButton"></div>
+								<div id="lButton" class="controllerButton">L Button</div>
+								<div id="zlButton" class="controllerButton">ZL Button</div>
 							</div>
 						</div>
-<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
-							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
-						</button> -->
-						<div id="lagless2Bar">
-							<div id="lagless2VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless2Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
+						<canvas id="videoCanvas2"></canvas>
+						<div id="rightJoyCon">
+							<canvas id="rightJoyConCanvas"></canvas>
+							<div id="rightStick"></div>
+							<div id="rightStick2"></div>
+							<div id="abxyButtons">
+								<div id="xButton" class="controllerButton"></div>
+								<div id="bButton" class="controllerButton"></div>
+								<div id="yButton" class="controllerButton"></div>
+								<div id="aButton" class="controllerButton"></div>
 							</div>
-<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
-<!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
+							<div id="rightJoyConOther">
+								<div id="plusButton" class="controllerButton"></div>
+								<div id="homeButton" class="controllerButton"></div>
+								<div id="rButton" class="controllerButton">R Button</div>
+								<div id="zrButton" class="controllerButton">ZR Button</div>
+							</div>
 						</div>
 					</div>
+					<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
+						<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
+					</button> -->
+					<div id="lagless2Bar">
+						<div id="lagless2VolumeSlider" class="volumeSlider">
+							<i class="fa fa-volume-down"></i>
+							<div id="lagless2Volume" class="volume"></div>
+							<i class="fa fa-volume-up"></i>
+						</div>
+						<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
+<!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
+					</div>
 				</div>
-			
+			</div>
+
 			<div id="description">
 
 				<div id="barUnderTheStream" class="well">
@@ -109,13 +124,13 @@
 					<div class="container4">
 						<div class="five">
 							<ul class="list-group">
-								<li class="list-group-item">
+<!-- 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 											<input id="keyboardControllerCheckbox" type="checkbox">
 											<span class="checkbox-placeholder"></span>
 											Enable Keyboard / Controller
 										</label>
-								</li>
+								</li> -->
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 											<input id="touchControlsCheckbox" type="checkbox">
@@ -123,6 +138,20 @@
 											Enable Touch Controls
 										</label>
 								</li>
+<!-- 								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="mouseControlsCheckbox" type="checkbox">
+											<span class="checkbox-placeholder"></span>
+											Enable Mouse Controls
+										</label>
+								</li> -->
+<!-- 								<li class="list-group-item">
+									<label class="checkbox-inline crightheckbox-bootstrap checkbox-lg">
+											<input id="audioCheckbox" type="checkbox">
+											<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+											Enable Audio 1.0
+										</label>
+								</li> -->
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 											<input id="darkThemeCheckbox" type="checkbox">
@@ -144,7 +173,18 @@
 											Enable Fullscreen Mode
 										</label>
 								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="navCheckbox" type="checkbox">
+											<span class="ifas ifa-expand checkbox-placeholder"></span>
+											Hide Nav Bar
+										</label>
+								</li>
 							</ul>
+
+							<div class="well">
+								<canvas id="controllerViewCanvas"></canvas>
+							</div>
 
 						</div>
 
@@ -163,7 +203,7 @@
 								Ping: <span id="ping"></span>
 							</div>
 						</div>
-						
+
 					</div>
 				</div>
 
@@ -177,7 +217,7 @@
 							<button type="button" data-toggle="modal" data-target="#settingsWindow" class="btn btn-info btn-settings">
 								<i class="fas fa-cogs"></i>
 							</button>
-<!-- 							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
+							<!-- 							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="fas fa-volume-up"></i>
 							</button>
 							<button id="toggleTheme" type="button" data-toggle="modal" class="btn btn-info btn-settings">
@@ -230,6 +270,14 @@
 							<ul class="list-group">
 								<li class="list-group-item">Default Keyboard Controls:</li>
 								<li class="list-group-item"><img style="width: 100%;" src="images/controls.jpg"></li>
+								<!-- 									<li class="list-group-item">W/A/S/D = Left Stick</li>
+									<li class="list-group-item">I/J/K/L = Right Stick</li>
+									<li class="list-group-item">T/F/G/H = DPad</li>
+									<li class="list-group-item">Arrow Keys = A/B/X/Y</li>
+									<li class="list-group-item">- = Minus</li>
+									<li class="list-group-item">Q/E = ZL / ZR</li>
+									<li class="list-group-item">U/O = L / R</li>
+									<li class="list-group-item">R/Y = LStick / RStick buttons</li> -->
 							</ul>
 							<ul class="list-group">
 								<li class="list-group-item">List of games on the switch:</li>
@@ -247,7 +295,7 @@
 								<li class="list-group-item">skyrim (Skyrim)</li>
 								<li class="list-group-item">pokemon quest (Pokemon Quest)</li>
 								<li class="list-group-item">torquel (TorqueL)</li>
-<!-- 								<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
+								<!-- 								<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
 								<li class="list-group-item">arms (Arms)</li>
 							</ul>
 						</div>
@@ -255,15 +303,105 @@
 
 				</div>
 
-<!-- 				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
+				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>
 
 			</div>
 
+
+
 		</div>
 
-		<iframe id="twitchChat" class="two" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat" height="500" width="350"></iframe>
+		<iframe id="twitchChat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat" height="500" width="350"></iframe>
 
 	</div>
+
+
+
+	<!-- SETTINGS WINDOW ------------------------------------------- -->
+	<div class="modal fade" id="settingsWindow" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<h3 class="modal-title text-center">Settings</h3>
+				</div>
+
+				<div class="modal-body">
+
+					<ul class="nav nav-tabs nav-justified">
+						<li class="active"><a href="#keyboardSettingsFrame" data-toggle="tab">keyboard</a></li>
+						<!-- 						<li><a href="#soundSettingsFrame" data-toggle="tab">sound</a></li>
+						<li><a href="#videoSettingsFrame" data-toggle="tab">video</a></li> -->
+					</ul>
+
+					<div class="tab-content">
+						<div class="tab-pane active" id="keyboardSettingsFrame">
+
+							<div id="keyboardLayoutConfig">
+								<!-- <tabindex="0"> -->
+								<div class="actionText">Left Stick Up</div>
+								<div class="buttonConfig" id="LYU"></div><br>
+								<div class="actionText">Left Stick Down</div>
+								<div class="buttonConfig" id="LYD"></div><br>
+								<div class="actionText">Left Stick Left</div>
+								<div class="buttonConfig" id="LXL"></div><br>
+								<div class="actionText">Left Stick Right</div>
+								<div class="buttonConfig" id="LXR"></div><br>
+								<div class="actionText">Right Stick Up</div>
+								<div class="buttonConfig" id="RYU"></div><br>
+								<div class="actionText">Right Stick Down</div>
+								<div class="buttonConfig" id="RYD"></div><br>
+								<div class="actionText">Right Stick Left</div>
+								<div class="buttonConfig" id="RXL"></div><br>
+								<div class="actionText">Right Stick Right</div>
+								<div class="buttonConfig" id="RXR"></div><br>
+								<div class="actionText">A</div>
+								<div class="buttonConfig" id="A"></div><br>
+								<div class="actionText">B</div>
+								<div class="buttonConfig" id="B"></div><br>
+								<div class="actionText">X</div>
+								<div class="buttonConfig" id="X"></div><br>
+								<div class="actionText">Y</div>
+								<div class="buttonConfig" id="Y"></div><br>
+								<div class="actionText">DPad Up</div>
+								<div class="buttonConfig" id="DUP"></div><br>
+								<div class="actionText">DPad Down</div>
+								<div class="buttonConfig" id="DDown"></div><br>
+								<div class="actionText">DPad Left</div>
+								<div class="buttonConfig" id="DLeft"></div><br>
+								<div class="actionText">DPad Right</div>
+								<div class="buttonConfig" id="DRight"></div><br>
+								<div class="actionText">LStick Button</div>
+								<div class="buttonConfig" id="LStick"></div><br>
+								<div class="actionText">RStick Button</div>
+								<div class="buttonConfig" id="RStick"></div><br>
+								<div class="actionText">L</div>
+								<div class="buttonConfig" id="L"></div><br>
+								<div class="actionText">ZL</div>
+								<div class="buttonConfig" id="ZL"></div><br>
+								<div class="actionText">R</div>
+								<div class="buttonConfig" id="R"></div><br>
+								<div class="actionText">ZR</div>
+								<div class="buttonConfig" id="ZR"></div><br>
+								<div class="actionText">Minus</div>
+								<div class="buttonConfig" id="Minus"></div><br>
+								<div class="actionText">Plus</div>
+								<div class="buttonConfig" id="Plus"></div><br>
+								<div class="actionText">Capture</div>
+								<div class="buttonConfig" id="Capture"></div><br>
+								<div class="actionText">Home</div>
+								<div class="buttonConfig" id="Home"></div><br>
+								<input type="button" id="resetControls" value="Reset" />
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END OF SETTINGS WINDOW ------------------------------------------- -->
 
 </body>
 

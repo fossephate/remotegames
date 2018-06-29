@@ -29,7 +29,7 @@ let streamSettings = {
 	y1: 61 + 360,
 	x2: 319 + 1280 - 1920,
 	y2: 61 + 720 + 360,
-	fps: 15,
+	fps: 10,
 	quality: 60,
 	scale: 30,
 };
@@ -460,11 +460,10 @@ io.on("connection", function(socket) {
 		
 		// forfeit timer:
 		clearTimeout(forfeitTimer);
-		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, socket.id);
+		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, client.username);
 		
-		if (controller != null) {
-			io.to(controller.id).emit("controllerState", data);
-		}
+		io.emit("controllerState", data);
+		//io.to("controller").emit("controllerState", data);
 		io.emit("currentPlayer", client.username);
 	});
 
@@ -478,13 +477,13 @@ io.on("connection", function(socket) {
 		client.getImage(quality);
 	});
 
-	socket.on("IamController", function() {
-		let index = findClientByID(socket.id);
-		if (index == -1) {return;}
-		client = clients[index];
-		client.isController = true;
-		controller = client;
-	});
+// 	socket.on("IamController", function() {
+// 		let index = findClientByID(socket.id);
+// 		if (index == -1) {return;}
+// 		client = clients[index];
+// 		client.isController = true;
+// 		controller = client;
+// 	});
 	
 	/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	
@@ -497,7 +496,7 @@ io.on("connection", function(socket) {
 		if(controlQueue.indexOf(client.username) == -1) {
 			controlQueue.push(client.username);
 			currentTurnUsername = controlQueue[0];
-			socket.emit("controlQueue", {queue: controlQueue});
+			io.emit("controlQueue", {queue: controlQueue});
 		}
 		
 		if (controlQueue.length == 1) {
@@ -509,7 +508,7 @@ io.on("connection", function(socket) {
 		if (controlQueue.length == 1) {
 			// forfeit timer:
 			clearTimeout(forfeitTimer);
-			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, socket.id);
+			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, client.username);
 		}
 	});
 	
@@ -522,7 +521,7 @@ io.on("connection", function(socket) {
 		index = controlQueue.indexOf(client.username);
 		if(index > -1) {
 			controlQueue.splice(index, 1);
-			socket.emit("controlQueue", {queue: controlQueue});
+			io.emit("controlQueue", {queue: controlQueue});
 			
 			if(controlQueue.length >= 1) {
 				//currentTurnUsername = controlQueue[0];
@@ -530,8 +529,10 @@ io.on("connection", function(socket) {
 				//moveLine();
 				currentTurnUsername = controlQueue[0];
 				turnStartTime = Date.now();
-				clearTimeout(moveLineTimer);
-				moveLineTimer = setTimeout(moveLine, turnDuration);
+				if (index === 0) {
+					clearTimeout(moveLineTimer);
+					moveLineTimer = setTimeout(moveLine, turnDuration);
+				}
 			} else if (controlQueue.length === 0) {
 				currentTurnUsername = null;
 			}
@@ -647,52 +648,18 @@ io.on("connection", function(socket) {
 		}
 	});
 	
-	
-	/* AUDIO 2.0 @@@@@@@@@@@@@@@@@@@@@@@@ */
-	
-    socket.on("receive-audio", function (data) {
-		if (controller != null) {
-			for (let i = 0; i < clients.length; i++) {
-				let c = clients[i];
-				if (c.id != controller.id) {
-					io.to(c.id).emit("send-audio", data);
-				}
-			}
-		} else {
-			io.emit("send-audio", data);
-		}
-    });
-	
-	socket.on("client-signal", function (data) {
-		if (controller != null) {
-			for (let i = 0; i < clients.length; i++) {
-				let c = clients[i];
-				if (c.id != controller.id) {
-					io.to(c.id).emit("client-signal", data);
-				}
-			}
-		} else {
-			io.emit("client-signal", data);
-		}
-    });
-	
-	socket.on("host-signal", function (data) {
-		if (controller != null) {
-			for (let i = 0; i < clients.length; i++) {
-				let c = clients[i];
-				if (c.id != controller.id) {
-					io.to(c.id).emit("host-signal", data);
-				}
-			}
-		} else {
-			io.emit("host-signal", data);
-		}
-    });
-	
 	/* LATENCY @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("ping2", function() {
 		socket.emit("pong2");
 	});
+	
+	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
+    socket.on("join", function(room) {
+        socket.join(room);
+    });
+    socket.on("leave", function(room) {
+        socket.leave(room);
+    });
 	
 });
 
@@ -724,16 +691,14 @@ setInterval(function() {
 	restartAvailable = true;
 }, 4000);
 
-function forfeitTurn(id) {
+function forfeitTurn(username) {
 	// cancel turn:
-	let index = findClientByID(id);
-	if (index == -1) {return;}
-	client = clients[index];
-	if(client.username == null) {return;}
-	index = controlQueue.indexOf(client.username);
-	if(index > -1) {
+	let index2 = controlQueue.indexOf(username);
+	if(index2 > -1) {
 		controlQueue.splice(index, 1);
-		socket.emit("controlQueue", {queue: controlQueue});
+		io.emit("controlQueue", {queue: controlQueue});
+		// stop the controller
+		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
 	}
 	if(controlQueue.length >= 1) {
 		//currentTurnUsername = controlQueue[0];
@@ -756,23 +721,19 @@ function moveLine() {
 		controlQueue.shift();
 		currentTurnUsername = controlQueue[0];
 		// stop the controller
-		if (controller != null) {
-			io.to(controller.id).emit("controllerState", "800000000000000 127 127 127 127");
-		}
+		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
 	}
 	io.emit("controlQueue", {queue: controlQueue});
 	
 	turnStartTime = Date.now();
+	clearTimeout(moveLineTimer);
 	moveLineTimer = setTimeout(moveLine, turnDuration);
 	
-	let index = findClientByUsername(controlQueue[0]);
-	if (index == -1) {console.log("something went wrong!"); return;}
-	let id = clients[index].id;
-	
-	// forfeit timer:
-	clearTimeout(forfeitTimer);
-	forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, id);
-	
+	if (controlQueue.length > 0) {
+		// forfeit timer:
+		clearTimeout(forfeitTimer);
+		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, controlQueue[0]);
+	}
 }
 moveLine();
 

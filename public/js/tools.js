@@ -29,3 +29,13 @@ function setCookie(name,value,seconds) {
     }
     document.cookie = name + "=" + (value || "")  + expires + "; path=/";
 }
+
+function minmax(num, min, max) {
+	if (num < min) {
+		return min;
+	} else if (num > max) {
+		return max;
+	} else {
+		return num;
+	}
+}

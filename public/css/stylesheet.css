@@ -8,8 +8,6 @@ body {
 	/* 	height: 100%; */
 }
 
-#twitchChat {}
-
 #twitchvideo {
 	/*   position: absolute; */
 	/*   top: 0; */
@@ -34,6 +32,7 @@ body {
 	flex-flow: column;
 	min-height: 125px;
 	padding: 20px;
+	width: 100%;
 }
 
 #controls {
@@ -139,7 +138,8 @@ body {
 }
 
 #container {
-	/* 	text-align: center; */
+    display: flex;
+    flex-flow: row;
 }
 
 #description {
@@ -149,38 +149,43 @@ body {
 
 .container2 {
 	width: 100%;
-	/*     height: 200px; */
-	/*     background: aqua; */
 	margin: auto;
 	padding: 0;
 }
 
-.one {
+#picture {
 	width: 75%;
-	/* 	width: auto; */
 	padding: 1%;
 	margin: 0;
-	/*     height: 200px; */
-	/*     background: red; */
-	float: left;
 }
 
-.two {
-	/*     margin-left: 85%; */
+#twitchChat {
 	height: 100%;
-	background: black;
-	/*     display: inline-block; */
-	width: 25%;
-	/*     float: right; */
+/* 	width: 25%; */
+	flex-grow: 1;
 }
 
-#picture {
-	/* 		margin-left: 20%; */
-}
 
 /* VIDEO CONTAINERS */
 
 /* LAGLESS1 */
+#lagless1Container {
+	text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
+}
+#lagless1View {
+	display: inline-flex;
+	flex-flow: row;
+	justify-content: start;
+	position: relative;
+}
+#videoCanvas1 {
+	width: 75%;
+	margin-left: 12.5%;
+	align-self: center;
+}
 #screen {
 	width: 75%;
 	margin-left: 12.5%;
@@ -190,12 +195,6 @@ body {
 	width: 100%;
 /* 	height: auto; */
 }
-#lagless1Container {
-	text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-flow: column;
-}
 
 
 /* LAGLESS2 */
@@ -204,6 +203,12 @@ body {
     display: flex;
     justify-content: center;
     flex-flow: column;
+}
+#lagless2View {
+	display: inline-flex;
+	flex-flow: row;
+	justify-content: start;
+	position: relative;
 }
 #videoCanvas2 {
 	width: 75%;
@@ -487,38 +492,14 @@ ul {
 
 /* TOUCH CONTROLS */
 
-/* #touchControls {
-	position: relative;
-	height: 150px;
-	margin-bottom: 100px;
-}
-
-#leftStick {
-	background: rgba(0, 0, 255, 0.2);
-	width: 40%;
-	float: left;
-	margin-bottom: 0;
-}
-
-#rightStick {
-	background: rgba(255, 0, 0, 0.2);
-	width: 40%;
-	margin-left: 40%;
-	margin-bottom: 0;
-} */
-
-
-#lagless2View {
-	display: inline-flex;
-	flex-flow: row;
-	justify-content: start;
-	position: relative;
-}
-
 #leftJoyCon {
 	width: 12.5%;
 	height: 100%;
 	position: absolute;
+}
+
+.highlighted {
+	background: rgba(255, 255, 50, 0.2);
 }
 
 #leftJoyConCanvas {
@@ -532,37 +513,36 @@ ul {
 
 #leftStick {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.2);
-/*     width: 50px;
-    height: 50px; */
-/*     width: 38%;
-    height: 12%;
-    left: 32%;
-    top: 16%; */
+/* 	background: rgba(50, 50, 50, 0.2); */
     width: 40%;
     height: 12%;
     left: 33%;
     top: 20%;
 }
 
+#leftStick2 {
+	position: absolute;
+	background: #bb5050;
+    width: 20%;
+    height: 6%;
+	left: 43%;
+    top: 23%;
+	pointer-events: none;
+	border-radius: 50%;
+}
+
 
 .controllerButton {
+	background: rgba(50, 50, 50, 0.2);
 /*     width: 30px;
     height: 30px; */
     width: 32%;
     height: 32%;
+	border: 2px solid #333;
 }
 #dpadButtons {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.2);
-/*     width: 100px;
-    height: 100px; */
-/*     width: 71%;
-    height: 21%;
-    left: 17%;
-    top: 42.5%; */
-/*     width: 8vw;
-    height: 8vw; */
+/* 	background: rgba(50, 50, 50, 0.2); */
     width: 85.25%;
     height: 27.75%;
     left: 10%;
@@ -570,28 +550,53 @@ ul {
 }
 #upButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 36%;
     top: 5%;
 }
 #downButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 36%;
     top: 65%;
 }
 #leftButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 5%;
     top: 35%;
 }
 #rightButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 66%;
     top: 35%;
 }
+#minusButton {
+	position: absolute;
+    left: 66%;
+    top: 6%;
+    width: 32%;
+    height: 9%;
+}
+#captureButton {
+	position: absolute;
+    left: 54%;
+    top: 67.5%;
+    width: 32%;
+    height: 9%;
+}
+#lButton {
+	position: absolute;
+	left: 1%;
+    top: 6%;
+    width: 60%;
+    height: 6%;
+}
+#zlButton {
+	position: absolute;
+    left: 1%;
+    top: 0%;
+    width: 60%;
+    height: 6%;
+}
+
 
 #rightJoyCon {
 	width: 12.5%;
@@ -611,29 +616,26 @@ ul {
 
 #rightStick {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.2);
-/*     width: 50px;
-    height: 50px; */
-/*     width: 38%;
-    height: 12%;
-    left: 33%;
-    top: 39%; */
+/* 	background: rgba(50, 50, 50, 0.2); */
     width: 40%;
     height: 12%;
     left: 26%;
     top: 47%;
 }
+#rightStick2 {
+	position: absolute;
+	background: #5050bb;
+    width: 20%;
+    height: 6%;
+    left: 36.5%;
+    top: 50%;
+	pointer-events: none;
+	border-radius: 50%;
+}
+
 #abxyButtons {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.2);
-/*     width: 100px;
-    height: 100px; */
-/*     width: 71%;
-    height: 21%;
-    left: 10%;
-    top: 15%; */
-/*     width: 8vw;
-    height: 8vw; */
+/* 	background: rgba(50, 50, 50, 0.2); */
     width: 85.25%;
     height: 27.75%;
     left: 3%;
@@ -641,27 +643,51 @@ ul {
 }
 #xButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 36%;
     top: 5%;
 }
 #bButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 36%;
     top: 65%;
 }
 #yButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 5%;
     top: 35%;
 }
 #aButton {
 	position: absolute;
-	background: rgba(50, 50, 50, 0.5);
     left: 66%;
     top: 35%;
+}
+#plusButton {
+	position: absolute;
+	left: 1%;
+    top: 6%;
+    width: 32%;
+    height: 9%;
+}
+#homeButton {
+	position: absolute;
+    left: 14%;
+    top: 67.5%;
+    width: 32%;
+    height: 9%;
+}
+#rButton {
+	position: absolute;
+	left: 40%;
+    top: 6%;
+    width: 60%;
+    height: 6%;
+}
+#zrButton {
+	position: absolute;
+    left: 40%;
+    top: 0%;
+    width: 60%;
+    height: 6%;
 }
 
 #touchSticks {
