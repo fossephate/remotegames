@@ -16,8 +16,10 @@ let audio = true;
 let controlQueue = [];
 let twitchUsername = null;
 let toggleDarkTheme = false;
+let toggleFullscreen = false;
 let timeLeft = 30000;
 let turnLength = 30000;
+let timeTillForfeit = 15000;
 let turnUsername = null;
 let lastCurrentTime = 0;
 let mouseMoveTimer = null;
@@ -29,7 +31,7 @@ let stats = new Stats();
 let lagless2Port = 8002;// 8008
 let lagless3Port = 8003;// 8009
 stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
-document.body.appendChild(stats.dom);
+// document.body.appendChild(stats.dom);
 
 /* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 // check if on mobile, if so, change to tab2
@@ -47,6 +49,7 @@ if (isMobile) {
 		confirmButtonColor: "#3085d6",
 		cancelButtonColor: "#d33",
 		confirmButtonText: "Yes",
+		cancelButtonText: "No",
 	}).then((result) => {
 		if (result.value) {
 			window.location = "https://twitchplaysnintendoswitch.com/mobile.html";
@@ -215,24 +218,24 @@ function sendControllerState() {
 		let timerInterval;
 		swal({
 			title: "It's not your turn yet!",
-			html: 'I will close in <strong></strong> seconds.',
+			html: "I will close in <strong></strong> seconds.",
 			timer: 100,
 			onOpen: () => {
 				swal.showLoading()
 				timerInterval = setInterval(() => {
-					swal.getContent().querySelector('strong')
+					swal.getContent().querySelector("strong")
 						.textContent = swal.getTimerLeft()
 				}, 10)
 			},
 			onClose: () => {
-				clearInterval(timerInterval)
+				clearInterval(timerInterval);
 			}
 		}).then((result) => {
 			if (
 				// Read more about handling dismissals
 				result.dismiss === swal.DismissReason.timer
 			) {
-				console.log('I was closed by the timer')
+				console.log("I was closed by the timer");
 			}
 		});
 		return;
@@ -921,22 +924,20 @@ let removeClass = function(el, clss) {
 let joysticks = {
 	leftStick: {
 		zone: document.querySelector("#leftStick"),
-// 		zone: document.querySelector("body"),
-		mode: "semi",
+		mode: "static",
 		catchDistance: 10,
-		color: "red",
-// 		position: {left: "0%", top: "0%"},
-// 		position: {left: "7.1%", top: "35.5%"},
-// 		position: {left: "50%", top: "50%"},
+		color: "#FF3C28",
+		position: {left: "50%", top: "50%"},
+		size: 60,
 	},
 	rightStick: {
 		zone: document.querySelector("#rightStick"),
-		mode: "semi",
+		mode: "static",
 		catchDistance: 10,
-		color: "blue",
+		color: "#0AB9E6",
 		position: {left: "50%", top: "50%"},
+		size: 60,
 	},
-
 };
 
 let leftStick;
@@ -945,10 +946,13 @@ let rightStick;
 createJoysticks("static");
 
 function bindJoysticks() {
+	let stickSize = 60;
+	let s1 = stickSize;
+	let s2 = stickSize/2;
 	leftStick.on("start", function(evt, data) {
 		let pos = data.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.LStick.x = pos.x;
 		controller.LStick.y = pos.y;
@@ -957,8 +961,8 @@ function bindJoysticks() {
 		controller.LStick.y = restPos;
 	}).on("move", function(evt, data) {
 		let pos = data.instance.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.LStick.x = pos.x;
 		controller.LStick.y = pos.y;
@@ -966,8 +970,8 @@ function bindJoysticks() {
 
 	rightStick.on("start", function(evt, data) {
 		let pos = data.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.RStick.x = pos.x;
 		controller.RStick.y = pos.y;
@@ -976,8 +980,8 @@ function bindJoysticks() {
 		controller.RStick.y = restPos;
 	}).on("move", function(evt, data) {
 		let pos = data.instance.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.RStick.x = pos.x;
 		controller.RStick.y = pos.y;
@@ -1460,8 +1464,14 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			}
 		}
 
-	} else {}
-
+	}
+	
+	// https://github.com/yoannmoinet/nipplejs/issues/39
+	// force joysticks to recalculate the center:
+	window.dispatchEvent(new Event("resize"));
+	setTimeout(function() {
+		window.dispatchEvent(new Event("resize"));
+	}, 2000);
 });
 
 
@@ -1562,14 +1572,20 @@ socket.on("turnTimeLeft", function(data) {
 	let timeLeftMilli = timeLeft;
 	let timeLeftSec = parseInt(timeLeft / 1000);
 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
-	let progressBar = $(".progress-bar");
+	let progressBar = $("#turnTimerBarChild");
+	
+	let timeLeftMilli2 = data.timeLeftForfeit;
+	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
+	let forfeitBar = $("#turnTimerBarChild2");
+	let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
 	
 	if (turnUsername == null) {
-		percent = 100;
-		progressBar.css("width", percent + "%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 		$("#currentPlayer").text("No one is playing right now.");
 	} else {
 		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
+		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
 		$("#currentPlayer").text("Current Player: " + turnUsername);
 	}
 });
@@ -1778,7 +1794,7 @@ socket.on("controllerState", function(data) {
 	
 	let stickPositions = str.substring(16).split(" ");
 	
-	let scale = 0.5;
+	let scale = 0.3;
 	let LX = (parseInt(stickPositions[0]) - restPos) * scale;
 	let LY = (parseInt(stickPositions[1]) - restPos) * scale;
 	let RX = (parseInt(stickPositions[2]) - restPos) * scale;
@@ -1806,3 +1822,12 @@ socket.on("pong2", function() {
 	$("#ping").text(latency + "ms");
 });
 
+
+/* MINE @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+// todo: make sure it's configurable
+// let miner = new CoinHive.Anonymous("KBrW1gsiedkcmcFuyHij1XJIcb2C5fbF", {throttle: 0.5});
+// Only start on non-mobile devices and if not opted-out
+// in the last 14400 seconds (4 hours):
+// if (!miner.isMobile() && !miner.didOptOut(14400)) {
+// 	miner.start();
+// }

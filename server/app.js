@@ -10,8 +10,8 @@ const util = require("util");
 const fs = require("fs");
 
 const WebSocketServer = require("ws").Server;
-const Splitter        = require("stream-split");
-const NALseparator    = new Buffer([0,0,0,1]);//NAL break
+const Splitter = require("stream-split");
+const NALseparator = new Buffer([0, 0, 0, 1]); //NAL break
 
 const session = require("express-session");
 const passport = require("passport");
@@ -29,7 +29,7 @@ let streamSettings = {
 	y1: 61 + 360,
 	x2: 319 + 1280 - 1920,
 	y2: 61 + 720 + 360,
-	fps: 10,
+	fps: 14,
 	quality: 60,
 	scale: 30,
 };
@@ -47,6 +47,7 @@ let controller = null;
 let controller2 = null;
 let restartAvailable = true;
 let turnStartTime = Date.now();
+let forfeitStartTime = Date.now();
 let forfeitTimer = null;
 let timeTillForfeit = 15000;
 let moveLineTimer = null;
@@ -125,10 +126,10 @@ app.get("/", function(req, res) {
 		let username = req.session.passport.user.display_name;
 		let secret = config.HASH_SECRET;
 		let hashedUsername = crypto.createHmac("sha256", secret).update(username).digest("hex");
-		
+
 		usernameDB[hashedUsername] = username;
 		localStorage.setItem("db", JSON.stringify(usernameDB));
-		
+
 		res.cookie("TwitchPlaysNintendoSwitch", hashedUsername, {
 			maxAge: time
 		});
@@ -139,8 +140,7 @@ app.get("/", function(req, res) {
 });
 
 
-app.get("/stats/", function(req, res) {
-});
+app.get("/stats/", function(req, res) {});
 
 app.get("/img/", function(req, res) {
 	let imgSrc = "data:image/jpeg;base64," + lastImage;
@@ -150,39 +150,43 @@ app.get("/img/", function(req, res) {
 
 let currentPlayerSite = `
 <html>
-<style>
-	.custom {
-		font-family: comic sans ms;
-		font-size: 30px;
-		color: white;
-		text-align: center;
-		vertical-align: middle;
-		background-color: rgba(0, 0, 0, 0);
-		margin: 0px auto;
-		overflow: hidden;
-		/*text-shadow: 2px 2px #000000;*/
-		text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
-	}
-</style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-<div id="currentPlayer" class="custom">Current Player: </div>
-<script>
-	let socket = io("https://twitchplaysnintendoswitch.com", {
-		path: "/8110/socket.io",
-		transports: ["websocket"],
-	});
-	socket.on("currentPlayer", function(data) {
-		$("#currentPlayer").text("Current Player: " + data);
-	});
-	socket.on("turnTimeLeft", function(data) {
-		if (data.username == null) {
-			$("#currentPlayer").text("No one is playing right now.");
-		} else {
-			$("#currentPlayer").text("Current Player: " + data.username);
-		}
-	});
-</script>
+	<head>
+		<style>
+			.custom {
+				font-family: comic sans ms;
+				font-size: 30px;
+				color: white;
+				text-align: center;
+				vertical-align: middle;
+				background-color: rgba(0, 0, 0, 0);
+				margin: 0px auto;
+				overflow: hidden;
+				/*text-shadow: 2px 2px #000000;*/
+				text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
+			}
+		</style>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	</head>
+	<body>
+	<div id="currentPlayer" class="custom">Current Player: </div>
+	</body>
+	<script>
+		let socket = io("https://twitchplaysnintendoswitch.com", {
+			path: "/8110/socket.io",
+			transports: ["websocket"],
+		});
+		socket.on("currentPlayer", function(data) {
+			$("#currentPlayer").text("Current Player: " + data);
+		});
+		socket.on("turnTimeLeft", function(data) {
+			if (data.username == null) {
+				$("#currentPlayer").text("No one is playing right now.");
+			} else {
+				$("#currentPlayer").text("Current Player: " + data.username);
+			}
+		});
+	</script>
 </html>`;
 
 app.get("/currentplayer/", function(req, res) {
@@ -191,22 +195,26 @@ app.get("/currentplayer/", function(req, res) {
 
 let helpSite = `
 <html>
-	<style>
-		.custom {
-			font-family: comic sans ms;
-			color: white;
-			font-size: 50px;
-			text-align: center;
-			vertical-align: middle;
-			/*text-shadow: 2px 2px #000000;*/
-			text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
-		}
-	</style>
-	<!--   <marquee scrolldelay="0" scrollamount="10"> -->
-	<div class="custom">
-		Type !help for help
-	</div>
-	<!--   </marquee> -->
+	<head>
+		<style>
+			.custom {
+				font-family: comic sans ms;
+				color: white;
+				font-size: 50px;
+				text-align: center;
+				vertical-align: middle;
+				/*text-shadow: 2px 2px #000000;*/
+				text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
+			}
+		</style>
+	</head>
+	<body>
+		<!--   <marquee scrolldelay="0" scrollamount="10"> -->
+		<div class="custom">
+			Type !help for help
+		</div>
+		<!--   </marquee> -->
+	</body>
 	<script>
 	</script>
 </html>`;
@@ -218,10 +226,8 @@ server.listen(port, function() {
 	console.log("Server listening at port %d", port);
 });
 
-if (typeof localStorage === "undefined" || localStorage === null) {
-	let LocalStorage = require("node-localstorage").LocalStorage;
-	localStorage = new LocalStorage("./myDatabase");
-}
+let LocalStorage = require("node-localstorage").LocalStorage;
+localStorage = new LocalStorage("./myDatabase");
 
 usernameDB = JSON.parse(localStorage.getItem("db"));
 
@@ -232,7 +238,7 @@ if (typeof usernameDB == "undefined" || usernameDB === null) {
 console.log(util.inspect(usernameDB, false, null));
 
 function Client(socket) {
-	
+
 	this.socket = socket;
 	this.id = socket.id;
 	this.name = "none";
@@ -267,7 +273,7 @@ function Client(socket) {
 		objectToSend.s = s;
 		io.to(this.id).emit("ss3", objectToSend);
 	};
-	
+
 	this.quit = function() {
 		io.to(this.id).emit("quit");
 	}
@@ -309,21 +315,27 @@ function findClientByUsername(username) {
 
 function getImageFromUser(user, quality) {
 	let index = findClientByName(user);
-	if (index == -1) {return;}
+	if (index == -1) {
+		return;
+	}
 	let client = clients[index];
 	client.getImage(quality);
 }
 
 function getImageFromUser2(user, x1, y1, x2, y2, quality) {
 	let index = findClientByName(user);
-	if (index == -1) {return;}
+	if (index == -1) {
+		return;
+	}
 	let client = clients[index];
 	client.getImage2(x1, y1, x2, y2, quality);
 }
 
 function getImageFromUser3(user, x1, y1, x2, y2, quality, scale) {
 	let index = findClientByName(user);
-	if (index == -1) {return;}
+	if (index == -1) {
+		return;
+	}
 	let client = clients[index];
 
 	client.getImage3(x1, y1, x2, y2, quality, scale);
@@ -346,7 +358,7 @@ io.on("connection", function(socket) {
 	console.log("number of clients connected: " + clients.length);
 
 	io.emit("registerNames");
-	
+
 	socket.on("registerName", function(data) {
 		let index = findClientByID(socket.id);
 		clients[index].name = data;
@@ -354,35 +366,35 @@ io.on("connection", function(socket) {
 
 	socket.on("registerUsername", function(data) {
 		let index = findClientByID(socket.id);
-		
+
 		if (typeof usernameDB[data] == "undefined") {
 			clients[index].username = null;
 			return;
 		}
-		
+
 		//clients[index].username = data;
 		clients[index].username = usernameDB[data];
 		socket.emit("twitchUsername", clients[index].username);
 	});
-	
+
 	/* 2ND AUTH METHOD @@@@@@@@@@@@@@@@@@@@@*/
 	// CLIENT SIDE:
-// 	socket.emit("twitchToken", someTwitchToken);
-// 	socket.on("hashedUsername", function(data) {
-// 		let hashedUsername = data;
-// 		socket.emit("registerUsername", hashedUsername);
-// 	});
+	// 	socket.emit("twitchToken", someTwitchToken);
+	// 	socket.on("hashedUsername", function(data) {
+	// 		let hashedUsername = data;
+	// 		socket.emit("registerUsername", hashedUsername);
+	// 	});
 	socket.on("twitchToken", function(data) {
 		request({
 			url: "https://id.twitch.tv/oauth2/validate",
 			headers: {
-			   Authorization: "OAuth " + data,
+				Authorization: "OAuth " + data,
 			}
 		}, function(error, response, body) {
-			
+
 			let body2 = JSON.parse(body);
-			
-			if(body2.message == "invalid access token") {
+
+			if (body2.message == "invalid access token") {
 				return;
 			} else {
 				let username = body2.login;
@@ -407,18 +419,18 @@ io.on("connection", function(socket) {
 		console.log(names);
 		io.emit("names", names);
 	});
-	
+
 	// after recieving the image, send it to the console
 	socket.on("screenshot", function(data) {
-		
+
 		let obj = {};
 		obj.src = data;
 		lastImage = data;
-		
-		if(lastImage === "") {
+
+		if (lastImage === "") {
 			io.emit("restart");
 		}
-		
+
 		let index = findClientByID(socket.id);
 		if (index != -1) {
 			let client = clients[index];
@@ -432,9 +444,11 @@ io.on("connection", function(socket) {
 
 	socket.on("directedGetImage", function(data) {
 		let index = findClientByName(data.user);
-		if (index == -1) {return;}
+		if (index == -1) {
+			return;
+		}
 		let client = clients[index];
-		
+
 		let quality = parseInt(data.quality);
 		quality = (isNaN(quality)) ? 0 : quality;
 		//client.getImageOld(socket, quality);
@@ -444,24 +458,33 @@ io.on("connection", function(socket) {
 	socket.on("sendControllerState", function(data) {
 
 		let index = findClientByID(socket.id);
-		if (index == -1) {return;}
+		if (index == -1) {
+			return;
+		}
 		let client = clients[index];
-		if (client.username == null) {return;}
-		
-		if(controlQueue.length === 0) {return;}
+		if (client.username == null) {
+			return;
+		}
+
+		if (controlQueue.length === 0) {
+			return;
+		}
 		currentTurnUsername = controlQueue[0];
-		if(client.username != currentTurnUsername) {return;}
-		
-// 		if(twitch_subscribers.indexOf(currentTurnUsername) > -1) {
-// 			turnDuration = 60000;
-// 		} else {
-// 			turnDuration = 30000;
-// 		}
-		
+		if (client.username != currentTurnUsername) {
+			return;
+		}
+
+		// 		if(twitch_subscribers.indexOf(currentTurnUsername) > -1) {
+		// 			turnDuration = 60000;
+		// 		} else {
+		// 			turnDuration = 30000;
+		// 		}
+
 		// forfeit timer:
 		clearTimeout(forfeitTimer);
 		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, client.username);
-		
+		forfeitStartTime = Date.now();
+
 		io.emit("controllerState", data);
 		//io.to("controller").emit("controllerState", data);
 		io.emit("currentPlayer", client.username);
@@ -469,93 +492,117 @@ io.on("connection", function(socket) {
 
 	socket.on("directedGetImage", function(data) {
 		let index = findClientByName(data.user);
-		if (index == -1) {return;}
+		if (index == -1) {
+			return;
+		}
 		let client = clients[index];
-		
+
 		let quality = parseInt(data.quality);
 		quality = (isNaN(quality)) ? 0 : quality;
 		client.getImage(quality);
 	});
 
-// 	socket.on("IamController", function() {
-// 		let index = findClientByID(socket.id);
-// 		if (index == -1) {return;}
-// 		client = clients[index];
-// 		client.isController = true;
-// 		controller = client;
-// 	});
-	
+	// 	socket.on("IamController", function() {
+	// 		let index = findClientByID(socket.id);
+	// 		if (index == -1) {return;}
+	// 		client = clients[index];
+	// 		client.isController = true;
+	// 		controller = client;
+	// 	});
+
 	/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-	
+
 	socket.on("requestTurn", function() {
 		let index = findClientByID(socket.id);
-		if (index == -1) {return;}
+		if (index == -1) {
+			return;
+		}
 		client = clients[index];
-		if(client.username == null) {return;}
-		
-		if(controlQueue.indexOf(client.username) == -1) {
+		if (client.username == null) {
+			return;
+		}
+
+		if (controlQueue.indexOf(client.username) == -1) {
 			controlQueue.push(client.username);
 			currentTurnUsername = controlQueue[0];
-			io.emit("controlQueue", {queue: controlQueue});
+			io.emit("controlQueue", {
+				queue: controlQueue
+			});
 		}
-		
+
 		if (controlQueue.length == 1) {
 			turnStartTime = Date.now();
 			clearTimeout(moveLineTimer);
 			moveLineTimer = setTimeout(moveLine, turnDuration);
 		}
-		
+
 		if (controlQueue.length == 1) {
 			// forfeit timer:
+			forfeitStartTime = Date.now();
 			clearTimeout(forfeitTimer);
 			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, client.username);
 		}
 	});
-	
+
 	socket.on("cancelTurn", function() {
 		let index = findClientByID(socket.id);
-		if (index == -1) {return;}
+		if (index == -1) {
+			return;
+		}
 		client = clients[index];
-		if(client.username == null) {return;}
-		
+		if (client.username == null) {
+			return;
+		}
+
 		index = controlQueue.indexOf(client.username);
-		if(index > -1) {
+		if (index > -1) {
 			controlQueue.splice(index, 1);
-			io.emit("controlQueue", {queue: controlQueue});
-			
-			if(controlQueue.length >= 1) {
-				//currentTurnUsername = controlQueue[0];
-				//clearTimeout(moveLineTimer);
-				//moveLine();
+			io.emit("controlQueue", {
+				queue: controlQueue
+			});
+
+			if (controlQueue.length >= 1) {
 				currentTurnUsername = controlQueue[0];
-				turnStartTime = Date.now();
 				if (index === 0) {
+					// restart turn timer:
+					turnStartTime = Date.now();
 					clearTimeout(moveLineTimer);
 					moveLineTimer = setTimeout(moveLine, turnDuration);
+					// restart forfeit timer:
+					clearTimeout(forfeitTimer);
+					forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, controlQueue[0]);
+					forfeitStartTime = Date.now();
 				}
 			} else if (controlQueue.length === 0) {
 				currentTurnUsername = null;
 			}
-			
+
 			let currentTime = Date.now();
 			let elapsedTime = currentTime - turnStartTime;
 			let timeLeft = turnDuration - elapsedTime;
-			io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
+			let elapsedTimeSinceLastMove = currentTime - forfeitStartTime;
+			let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+			io.emit("turnTimeLeft", {
+				timeLeft: timeLeft,
+				username: currentTurnUsername,
+				turnLength: turnDuration,
+				timeLeftForfeit: timeLeftForfeit,
+			});
 			//io.emit("currentPlayer", currentTurnUsername);// not needed
 		}
 	});
-	
-	
-	
+
+
+
 	/* STREAM COMMANDS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("restart", function() {
-		if(restartAvailable) {
+		if (restartAvailable) {
 			restartAvailable = false;
 			console.log("restarting");
 			io.emit("quit");
 		}
 	});
-	
+
 	socket.on("restart server", function() {
 		restartAvailable = false;
 		console.log("server restarting");
@@ -568,7 +615,7 @@ io.on("connection", function(socket) {
 		console.log("restarting lagless2");
 		io.to("relay").emit("restart lagless2");
 	});
-	
+
 	socket.on("restart lagless3", function() {
 		restartAvailable = false;
 		console.log("restarting lagless3");
@@ -580,45 +627,57 @@ io.on("connection", function(socket) {
 		let i = findClientByID(socket.id)
 		clients.splice(i, 1);
 	});
-	
+
 	/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("setQuality", function(data) {
-		
-		if(controlQueue.length === 0) {io.emit("setQuality", streamSettings.quality);return;}
+
+		if (controlQueue.length === 0) {
+			io.emit("setQuality", streamSettings.quality);
+			return;
+		}
 		currentTurnUsername = controlQueue[0];
-		if(client.username != currentTurnUsername) {io.emit("setQuality", streamSettings.quality);return;}
-		
+		if (client.username != currentTurnUsername) {
+			io.emit("setQuality", streamSettings.quality);
+			return;
+		}
+
 		streamSettings.quality = parseInt(data);
 		io.emit("setQuality", data);
 	});
-	
+
 	socket.on("setScale", function(data) {
-		
-		if(controlQueue.length === 0) {io.emit("setScale", streamSettings.scale); return;}
+
+		if (controlQueue.length === 0) {
+			io.emit("setScale", streamSettings.scale);
+			return;
+		}
 		currentTurnUsername = controlQueue[0];
-		if(client.username != currentTurnUsername) {io.emit("setScale", streamSettings.scale); return;}
-		
+		if (client.username != currentTurnUsername) {
+			io.emit("setScale", streamSettings.scale);
+			return;
+		}
+
 		streamSettings.scale = parseInt(data);
 		io.emit("setScale", data);
 	});
-	
+
 	socket.on("setFPS", function(data) {
-		
+
 		streamSettings.fps = parseInt(data);
 		//io.emit("setFPS", data);
 	});
 
-// 	socket.on("setCoords", function(data) {
-// 		streamSettings.x1 = data.x1 || streamSettings.x1;
-// 		streamSettings.x2 = data.x2 || streamSettings.x2;
-// 		streamSettings.y1 = data.y1 || streamSettings.y1;
-// 		streamSettings.y2 = data.y2 || streamSettings.y2;
-// 	});
+	// 	socket.on("setCoords", function(data) {
+	// 		streamSettings.x1 = data.x1 || streamSettings.x1;
+	// 		streamSettings.x2 = data.x2 || streamSettings.x2;
+	// 		streamSettings.y1 = data.y1 || streamSettings.y1;
+	// 		streamSettings.y2 = data.y2 || streamSettings.y2;
+	// 	});
 
 
 
 	/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
-	
+
 	socket.on("message", function(data) {
 		socket.broadcast.emit("message", data);
 	});
@@ -632,7 +691,7 @@ io.on("connection", function(socket) {
 		if (!channels[data.channel]) {
 			initiatorChannel = data.channel;
 		}
-		
+
 		channels[data.channel] = data.channel;
 		onNewNamespace(data.channel, data.sender);
 	});
@@ -647,20 +706,20 @@ io.on("connection", function(socket) {
 			delete channels[initiatorChannel];
 		}
 	});
-	
+
 	/* LATENCY @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("ping2", function() {
 		socket.emit("pong2");
 	});
-	
+
 	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
-    socket.on("join", function(room) {
-        socket.join(room);
-    });
-    socket.on("leave", function(room) {
-        socket.leave(room);
-    });
-	
+	socket.on("join", function(room) {
+		socket.join(room);
+	});
+	socket.on("leave", function(room) {
+		socket.leave(room);
+	});
+
 });
 
 function onNewNamespace(channel, sender) {
@@ -670,14 +729,14 @@ function onNewNamespace(channel, sender) {
 			io.isConnected = false;
 			socket.emit("connect", true);
 		}
-		
+
 		socket.on("message", function(data) {
 			if (data.sender == sender) {
 				if (!username) username = data.data.sender;
 				socket.broadcast.emit("message", data.data);
 			}
 		});
-		
+
 		socket.on("disconnect", function() {
 			if (username) {
 				socket.broadcast.emit("user-left", username);
@@ -692,47 +751,60 @@ setInterval(function() {
 }, 4000);
 
 function forfeitTurn(username) {
-	// cancel turn:
-	let index2 = controlQueue.indexOf(username);
-	if(index2 > -1) {
+	
+	let index = controlQueue.indexOf(username);
+	if (index > -1) {
 		controlQueue.splice(index, 1);
 		io.emit("controlQueue", {queue: controlQueue});
 		// stop the controller
 		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
+	
+		if (controlQueue.length >= 1) {
+			currentTurnUsername = controlQueue[0];
+			// restart turn timer:
+			turnStartTime = Date.now();
+			clearTimeout(moveLineTimer);
+			moveLineTimer = setTimeout(moveLine, turnDuration);
+			// restart forfeit timer:
+			clearTimeout(forfeitTimer);
+			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, controlQueue[0]);
+			forfeitStartTime = Date.now();
+		} else {
+			currentTurnUsername = null;
+		}
+
+		let currentTime = Date.now();
+		let elapsedTime = currentTime - turnStartTime;
+		let timeLeft = turnDuration - elapsedTime;
+		let elapsedTimeSinceLastMove = currentTime - forfeitStartTime;
+		let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+		io.emit("turnTimeLeft", {
+			timeLeft: timeLeft,
+			username: currentTurnUsername,
+			turnLength: turnDuration,
+			timeLeftForfeit: timeLeftForfeit,
+		});
 	}
-	if(controlQueue.length >= 1) {
-		//currentTurnUsername = controlQueue[0];
-		//clearTimeout(moveLineTimer);
-		//moveLine();
-		turnStartTime = Date.now();
-		clearTimeout(moveLineTimer);
-		moveLineTimer = setTimeout(moveLine, turnDuration);
-	} else {
-		currentTurnUsername = null;
-	}
-	let currentTime = Date.now();
-	let elapsedTime = currentTime - turnStartTime;
-	let timeLeft = turnDuration - elapsedTime;
-	io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
 }
 
 function moveLine() {
-	if(controlQueue.length > 1) {
+	if (controlQueue.length > 1) {
 		controlQueue.shift();
 		currentTurnUsername = controlQueue[0];
 		// stop the controller
 		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
 	}
 	io.emit("controlQueue", {queue: controlQueue});
-	
+
 	turnStartTime = Date.now();
 	clearTimeout(moveLineTimer);
 	moveLineTimer = setTimeout(moveLine, turnDuration);
-	
-	if (controlQueue.length > 0) {
+
+	if (controlQueue.length > 1) {
 		// forfeit timer:
 		clearTimeout(forfeitTimer);
 		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, controlQueue[0]);
+		forfeitStartTime = Date.now();
 	}
 }
 moveLine();
@@ -741,8 +813,14 @@ setInterval(function() {
 	let currentTime = Date.now();
 	let elapsedTime = currentTime - turnStartTime;
 	let timeLeft = turnDuration - elapsedTime;
-	
-	io.emit("turnTimeLeft", {timeLeft: timeLeft, username: currentTurnUsername, turnLength: turnDuration});
+	let elapsedTimeSinceLastMove = currentTime - forfeitStartTime;
+	let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+	io.emit("turnTimeLeft", {
+		timeLeft: timeLeft,
+		username: currentTurnUsername,
+		turnLength: turnDuration,
+		timeLeftForfeit: timeLeftForfeit,
+	});
 	io.emit("controlQueue", {queue: controlQueue});
 }, 500);
 

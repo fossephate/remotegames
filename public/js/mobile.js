@@ -180,29 +180,29 @@ controller.RStick = {
 	y: restPos
 };
 
-controller.btns.up = false;
-controller.btns.down = false;
-controller.btns.left = false;
-controller.btns.right = false;
-controller.btns.stick_button = false;
-controller.btns.l = false;
-controller.btns.zl = false;
-controller.btns.minus = false;
-controller.btns.capture = false;
+controller.btns.up = 0;
+controller.btns.down = 0;
+controller.btns.left = 0;
+controller.btns.right = 0;
+controller.btns.stick_button = 0;
+controller.btns.l = 0;
+controller.btns.zl = 0;
+controller.btns.minus = 0;
+controller.btns.capture = 0;
 
-controller.btns.a = false;
-controller.btns.b = false;
-controller.btns.x = false;
-controller.btns.y = false;
-controller.btns.stick_button2 = false;
-controller.btns.r = false;
-controller.btns.zr = false;
-controller.btns.plus = false;
-controller.btns.home = false;
+controller.btns.a = 0;
+controller.btns.b = 0;
+controller.btns.x = 0;
+controller.btns.y = 0;
+controller.btns.stick_button2 = 0;
+controller.btns.r = 0;
+controller.btns.zr = 0;
+controller.btns.plus = 0;
+controller.btns.home = 0;
 
 controller.reset = function() {
 	for (let prop in controller.btns) {
-		controller.btns[prop] = false;
+		controller.btns[prop] = 0;
 	}
 	controller.LStick.x = restPos;
 	controller.LStick.y = restPos;
@@ -216,7 +216,7 @@ function sendControllerState() {
 
 	if (controller.btns.up == 1 && controller.btns.left == 1) {
 		newControllerState += "7";
-	} else if (controller.btns.up && controller.btns.right == 1) {
+	} else if (controller.btns.up == 1 && controller.btns.right == 1) {
 		newControllerState += "1";
 	} else if (controller.btns.down == 1 && controller.btns.left == 1) {
 		newControllerState += "5";
@@ -234,21 +234,21 @@ function sendControllerState() {
 		newControllerState += "8";
 	}
 
-	newControllerState += controller.btns.stick_button == 1 ? "1" : "0";
-	newControllerState += controller.btns.l == 1 ? "1" : "0";
-	newControllerState += controller.btns.zl == 1 ? "1" : "0";
-	newControllerState += controller.btns.minus == 1 ? "1" : "0";
-	newControllerState += controller.btns.capture == 1 ? "1" : "0";
+	newControllerState += controller.btns.stick_button;
+	newControllerState += controller.btns.l;
+	newControllerState += controller.btns.zl;
+	newControllerState += controller.btns.minus;
+	newControllerState += controller.btns.capture;
 
-	newControllerState += controller.btns.a == 1 ? "1" : "0";
-	newControllerState += controller.btns.b == 1 ? "1" : "0";
-	newControllerState += controller.btns.x == 1 ? "1" : "0";
-	newControllerState += controller.btns.y == 1 ? "1" : "0";
-	newControllerState += controller.btns.stick_button2 == 1 ? "1" : "0";
-	newControllerState += controller.btns.r == 1 ? "1" : "0";
-	newControllerState += controller.btns.zr == 1 ? "1" : "0";
-	newControllerState += controller.btns.plus == 1 ? "1" : "0";
-	newControllerState += controller.btns.home == 1 ? "1" : "0";
+	newControllerState += controller.btns.a;
+	newControllerState += controller.btns.b;
+	newControllerState += controller.btns.x;
+	newControllerState += controller.btns.y;
+	newControllerState += controller.btns.stick_button2;
+	newControllerState += controller.btns.r;
+	newControllerState += controller.btns.zr;
+	newControllerState += controller.btns.plus;
+	newControllerState += controller.btns.home;
 
 
 	let LX = controller.LStick.x;
@@ -266,9 +266,9 @@ function sendControllerState() {
 	}
 	
 	// check to see if any of the controls checkboxes are enabled:
-	if (!document.getElementById("keyboardControllerCheckbox").checked &&
-		!document.getElementById("touchControlsCheckbox").checked &&
-		!document.getElementById("mouseControlsCheckbox").checked) {
+	if (/*!document.getElementById("keyboardControllerCheckbox").checked &&*/
+		!document.getElementById("touchControlsCheckbox").checked /*&&
+		!document.getElementById("mouseControlsCheckbox").checked*/) {
 		return;
 	}
 	
@@ -964,7 +964,7 @@ setTimeout(function() {
 	setVideo2Width(73.2);
 }, 2000);
 
-/**/
+/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 let s = function(sel) {
 	return document.querySelector(sel);
 };
@@ -977,22 +977,20 @@ let removeClass = function(el, clss) {
 let joysticks = {
 	leftStick: {
 		zone: document.querySelector("#leftStick"),
-// 		zone: document.querySelector("body"),
-		mode: "semi",
+		mode: "static",
 		catchDistance: 10,
-		color: "red",
-// 		position: {left: "0%", top: "0%"},
-// 		position: {left: "7.1%", top: "35.5%"},
-// 		position: {left: "50%", top: "50%"},
+		color: "#FF3C28",
+		position: {left: "50%", top: "50%"},
+		size: 60,
 	},
 	rightStick: {
 		zone: document.querySelector("#rightStick"),
-		mode: "semi",
+		mode: "static",
 		catchDistance: 10,
-		color: "blue",
+		color: "#0AB9E6",
 		position: {left: "50%", top: "50%"},
+		size: 60,
 	},
-
 };
 
 let leftStick;
@@ -1001,10 +999,13 @@ let rightStick;
 createJoysticks("static");
 
 function bindJoysticks() {
+	let stickSize = 60;
+	let s1 = stickSize;
+	let s2 = stickSize/2;
 	leftStick.on("start", function(evt, data) {
 		let pos = data.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.LStick.x = pos.x;
 		controller.LStick.y = pos.y;
@@ -1013,8 +1014,8 @@ function bindJoysticks() {
 		controller.LStick.y = restPos;
 	}).on("move", function(evt, data) {
 		let pos = data.instance.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.LStick.x = pos.x;
 		controller.LStick.y = pos.y;
@@ -1022,8 +1023,8 @@ function bindJoysticks() {
 
 	rightStick.on("start", function(evt, data) {
 		let pos = data.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.RStick.x = pos.x;
 		controller.RStick.y = pos.y;
@@ -1032,8 +1033,8 @@ function bindJoysticks() {
 		controller.RStick.y = restPos;
 	}).on("move", function(evt, data) {
 		let pos = data.instance.frontPosition;
-		pos.x = parseInt(((pos.x + 50) / 100) * 255);
-		pos.y = parseInt(((pos.y + 50) / 100) * 255);
+		pos.x = parseInt(((pos.x + s2) / s1) * 255);
+		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.RStick.x = pos.x;
 		controller.RStick.y = pos.y;
@@ -1045,6 +1046,11 @@ function createJoysticks(evt) {
 	rightStick = nipplejs.create(joysticks["rightStick"]);
 	bindJoysticks();
 }
+
+// for sticks:
+setTimeout(function() {
+	window.dispatchEvent(new Event("resize"));
+}, 2000);
 
 
 function getTouchInput() {
@@ -1085,6 +1091,8 @@ function onButtonPress(e) {
 	
 	
 	let button = e.toElement.id;
+	
+	let oldState = JSON.stringify(controller);
 	
 	switch(button) {
 		case "upButton":
@@ -1139,12 +1147,13 @@ function onButtonPress(e) {
 		case "homeButton":
 			controller.btns.home = value;
 			break;
-			
-		default:
-			return;
 	}
 	
-	// only request a turn if we actually hit a button (mouse leave event):
+	let newState = JSON.stringify(controller);
+	
+	if (newState == oldState) {
+		return;
+	}
 	
 	if(controlQueue.indexOf(twitchUsername) == -1) {
 		socket.emit("requestTurn");
@@ -1812,7 +1821,7 @@ socket.on("controllerState", function(data) {
 	
 	let stickPositions = str.substring(16).split(" ");
 	
-	let scale = 0.5;
+	let scale = 0.3;
 	let LX = (parseInt(stickPositions[0]) - restPos) * scale;
 	let LY = (parseInt(stickPositions[1]) - restPos) * scale;
 	let RX = (parseInt(stickPositions[2]) - restPos) * scale;

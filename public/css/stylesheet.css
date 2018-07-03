@@ -17,14 +17,30 @@ body {
 #turnTimerBar {
 	height: 30px;
 	width: 50%;
-    align-self: center;
+	align-self: center;
 	line-height: 30px;
-	margin-bottom: 20px;
+/* 	margin-bottom: 20px; */
+	margin-bottom: 2px;
 	border: 2px solid #333;
 }
+
 #turnTimerBarChild {
 	height: 30px;
 	line-height: 30px;
+}
+
+#turnTimerBar2 {
+	height: 15px;
+	width: 50%;
+	align-self: center;
+	line-height: 15px;
+	margin-bottom: 20px;
+	border: 2px solid #333;
+}
+
+#turnTimerBarChild2 {
+	height: 15px;
+	line-height: 15px;
 }
 
 #barUnderTheStream {
@@ -41,26 +57,27 @@ body {
 }
 
 #timer {
-    padding: 0;
-    margin: 0;
+	padding: 0;
+	margin: 0;
 	width: 190px;
-    height: 50px;
-    overflow: hidden;
+	height: 50px;
+	overflow: hidden;
 	margin-left: auto;
 }
 
 #speedrunTimer {
-    padding: 0;
-    margin: 0;
+	padding: 0;
+	margin: 0;
 	width: 190px;
-    height: 50px;
-    overflow: hidden;
+	height: 50px;
+	overflow: hidden;
 	margin-left: auto;
 }
 
 /* tabs */
+
 .nav-tabs>li>a {
-/* 	background-color: #cccccc; */
+	/* 	background-color: #cccccc; */
 }
 
 #currentPlayer {
@@ -70,10 +87,10 @@ body {
 
 #chat {
 	/* 	position: absolute;
-	top: 10%;
-	right: 0; */
+top: 10%;
+right: 0; */
 	/* 	min-width: 200px;
-	max-width: 500px; */
+max-width: 500px; */
 	/* 	width: 300px; */
 	min-width: 250px;
 	/* 	width: 30%; */
@@ -138,8 +155,8 @@ body {
 }
 
 #container {
-    display: flex;
-    flex-flow: row;
+	display: flex;
+	flex-flow: row;
 }
 
 #description {
@@ -161,76 +178,86 @@ body {
 
 #twitchChat {
 	height: 100%;
-/* 	width: 25%; */
+	/* 	width: 25%; */
 	flex-grow: 1;
 }
-
 
 /* VIDEO CONTAINERS */
 
 /* LAGLESS1 */
+
 #lagless1Container {
 	text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-flow: column;
+	display: flex;
+	justify-content: center;
+	flex-flow: column;
 }
+
 #lagless1View {
 	display: inline-flex;
 	flex-flow: row;
 	justify-content: start;
 	position: relative;
 }
+
 #videoCanvas1 {
 	width: 75%;
 	margin-left: 12.5%;
 	align-self: center;
 }
+
 #screen {
 	width: 75%;
 	margin-left: 12.5%;
 }
-#screenshot {
-/* 	width: 75%; */
-	width: 100%;
-/* 	height: auto; */
-}
 
+#screenshot {
+	/* 	width: 75%; */
+	width: 100%;
+	/* 	height: auto; */
+}
 
 /* LAGLESS2 */
+
 #lagless2Container {
 	text-align: center;
-    display: flex;
-    justify-content: center;
-    flex-flow: column;
+	display: flex;
+	justify-content: center;
+	flex-flow: column;
 }
+
 #lagless2View {
 	display: inline-flex;
 	flex-flow: row;
 	justify-content: start;
 	position: relative;
 }
+
 #videoCanvas2 {
 	width: 75%;
 	margin-left: 12.5%;
-/*     width: 63%;
-    margin-left: 18.5%; */
+	/*     width: 63%;
+margin-left: 18.5%; */
 	align-self: center;
 }
+
 #lagless2Bar {
 	display: flex;
 	justify-content: space-evenly;
 	align-self: center;
 	width: 75%;
 }
+
 #lagless2VolumeSlider {
 	margin-left: auto;
 }
 
 /* LAGLESS3 */
+
 #lagless3Container {
 	text-align: center;
 }
+
 #videoCanvas3 {
 	width: 75%;
 }
@@ -239,9 +266,6 @@ body {
 	/*   overflow: visible; */
 	height: 100%;
 }
-
-
-
 
 #namesList {
 	width: 80%;
@@ -260,18 +284,18 @@ ul {
 	margin-left: 5px;
 	border: 1px solid red;
 	width: 40%;
-/* 	height: 50%; */
+	/* 	height: 50%; */
 	/*display: inline-block;
-	text-align: right;*/
+text-align: right;*/
 	/*position: fixed;*/
 	/*top: 10px;
-	left: 10px;*/
+left: 10px;*/
 }
 
 .actionText {
 	width: 50%;
 	/*left: 0;
-	margin: 5px 0;*/
+margin: 5px 0;*/
 	margin-top: 5px;
 	margin-bottom: 5px;
 	margin-left: 10px;
@@ -291,8 +315,8 @@ ul {
 	margin-bottom: 5px;
 	margin-right: 10px;
 	/*right: 0;
-	position: absolute;
-	margin: 5px 0;*/
+position: absolute;
+margin: 5px 0;*/
 	height: 50px;
 	width: 50px;
 	background-color: #888;
@@ -326,7 +350,7 @@ ul {
 	width: 25px;
 	height: 25px;
 	border-radius: 50%;
-/* 	background: #4CAF50; */
+	/* 	background: #4CAF50; */
 	background: #606060;
 	cursor: pointer;
 }
@@ -477,7 +501,7 @@ ul {
 }
 
 .zone>h1 {
-/* 	position: absolute; */
+	/* 	position: absolute; */
 	position: relative;
 	padding: 10px 10px;
 	margin: 0;
@@ -503,100 +527,107 @@ ul {
 }
 
 #leftJoyConCanvas {
-    width: 100%;
-    height: 100%;
-/*     background: rgba(0, 0, 255, 0.2); */
-    position: absolute;
-    left: 0;
-    top: 0;
+	width: 100%;
+	height: 100%;
+	/*     background: rgba(0, 0, 255, 0.2); */
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 #leftStick {
 	position: absolute;
-/* 	background: rgba(50, 50, 50, 0.2); */
-    width: 40%;
-    height: 12%;
-    left: 33%;
-    top: 20%;
+	/* 	background: rgba(50, 50, 50, 0.2); */
+	width: 40%;
+	height: 12%;
+	left: 33%;
+	top: 20%;
 }
 
 #leftStick2 {
 	position: absolute;
-	background: #bb5050;
-    width: 20%;
-    height: 6%;
+	background: #FF3C28;/*#bb5050;*/
+	width: 20%;
+	height: 6%;
 	left: 43%;
-    top: 23%;
+	top: 23%;
 	pointer-events: none;
 	border-radius: 50%;
 }
 
-
 .controllerButton {
 	background: rgba(50, 50, 50, 0.2);
-/*     width: 30px;
-    height: 30px; */
-    width: 32%;
-    height: 32%;
+	/*     width: 30px;
+height: 30px; */
+	width: 32%;
+	height: 32%;
 	border: 2px solid #333;
 }
+
 #dpadButtons {
 	position: absolute;
-/* 	background: rgba(50, 50, 50, 0.2); */
-    width: 85.25%;
-    height: 27.75%;
-    left: 10%;
-    top: 39%;
+	/* 	background: rgba(50, 50, 50, 0.2); */
+	width: 85.25%;
+	height: 27.75%;
+	left: 10%;
+	top: 39%;
 }
+
 #upButton {
 	position: absolute;
-    left: 36%;
-    top: 5%;
+	left: 36%;
+	top: 5%;
 }
+
 #downButton {
 	position: absolute;
-    left: 36%;
-    top: 65%;
+	left: 36%;
+	top: 65%;
 }
+
 #leftButton {
 	position: absolute;
-    left: 5%;
-    top: 35%;
+	left: 5%;
+	top: 35%;
 }
+
 #rightButton {
 	position: absolute;
-    left: 66%;
-    top: 35%;
+	left: 66%;
+	top: 35%;
 }
+
 #minusButton {
 	position: absolute;
-    left: 66%;
-    top: 6%;
-    width: 32%;
-    height: 9%;
+	left: 66%;
+	top: 6%;
+	width: 32%;
+	height: 9%;
 }
+
 #captureButton {
 	position: absolute;
-    left: 54%;
-    top: 67.5%;
-    width: 32%;
-    height: 9%;
+	left: 54%;
+	top: 67.5%;
+	width: 32%;
+	height: 9%;
 }
+
 #lButton {
 	position: absolute;
 	left: 1%;
-    top: 6%;
-    width: 60%;
-    height: 6%;
-}
-#zlButton {
-	position: absolute;
-    left: 1%;
-    top: 0%;
-    width: 60%;
-    height: 6%;
+	top: 6%;
+	width: 60%;
+	height: 6%;
 }
 
+#zlButton {
+	position: absolute;
+	left: 1%;
+	top: 0%;
+	width: 60%;
+	height: 6%;
+}
 
 #rightJoyCon {
 	width: 12.5%;
@@ -606,88 +637,97 @@ ul {
 }
 
 #rightJoyConCanvas {
-    width: 100%;
-    height: 100%;
-/*     background: rgba(255, 0, 0, 0.2); */
-    position: absolute;
-    left: 0;
-    top: 0;
+	width: 100%;
+	height: 100%;
+	/*     background: rgba(255, 0, 0, 0.2); */
+	position: absolute;
+	left: 0;
+	top: 0;
 }
 
 #rightStick {
 	position: absolute;
-/* 	background: rgba(50, 50, 50, 0.2); */
-    width: 40%;
-    height: 12%;
-    left: 26%;
-    top: 47%;
+	/* 	background: rgba(50, 50, 50, 0.2); */
+	width: 40%;
+	height: 12%;
+	left: 26%;
+	top: 47%;
 }
+
 #rightStick2 {
 	position: absolute;
-	background: #5050bb;
-    width: 20%;
-    height: 6%;
-    left: 36.5%;
-    top: 50%;
+	background: #0AB9E6;/*#5050bb;*/
+	width: 20%;
+	height: 6%;
+	left: 36.5%;
+	top: 50%;
 	pointer-events: none;
 	border-radius: 50%;
 }
 
 #abxyButtons {
 	position: absolute;
-/* 	background: rgba(50, 50, 50, 0.2); */
-    width: 85.25%;
-    height: 27.75%;
-    left: 3%;
-    top: 12%;
+	/* 	background: rgba(50, 50, 50, 0.2); */
+	width: 85.25%;
+	height: 27.75%;
+	left: 3%;
+	top: 12%;
 }
+
 #xButton {
 	position: absolute;
-    left: 36%;
-    top: 5%;
+	left: 36%;
+	top: 5%;
 }
+
 #bButton {
 	position: absolute;
-    left: 36%;
-    top: 65%;
+	left: 36%;
+	top: 65%;
 }
+
 #yButton {
 	position: absolute;
-    left: 5%;
-    top: 35%;
+	left: 5%;
+	top: 35%;
 }
+
 #aButton {
 	position: absolute;
-    left: 66%;
-    top: 35%;
+	left: 66%;
+	top: 35%;
 }
+
 #plusButton {
 	position: absolute;
 	left: 1%;
-    top: 6%;
-    width: 32%;
-    height: 9%;
+	top: 6%;
+	width: 32%;
+	height: 9%;
 }
+
 #homeButton {
 	position: absolute;
-    left: 14%;
-    top: 67.5%;
-    width: 32%;
-    height: 9%;
+	left: 14%;
+	top: 67.5%;
+	width: 32%;
+	height: 9%;
 }
+
 #rButton {
 	position: absolute;
 	left: 40%;
-    top: 6%;
-    width: 60%;
-    height: 6%;
+	top: 6%;
+	width: 60%;
+	height: 6%;
 }
+
 #zrButton {
 	position: absolute;
-    left: 40%;
-    top: 0%;
-    width: 60%;
-    height: 6%;
+	left: 40%;
+	top: 0%;
+	width: 60%;
+	height: 6%;
 }
 
 #touchSticks {
@@ -707,19 +747,19 @@ ul {
 }
 
 .nine {
-/* 	width: 40%;
-	padding: 0;
-	margin-left: 5%;
-	float: left; */
+	/* 	width: 40%;
+padding: 0;
+margin-left: 5%;
+float: left; */
 }
 
 .ten {
-/* 	margin-left: 55%;
-	width: 40%; */
+	/* 	margin-left: 55%;
+width: 40%; */
 }
 
-
 /* control queue */
+
 #controlQueue {
 	overflow-y: auto;
 	max-height: 200px;
@@ -727,143 +767,148 @@ ul {
 	margin-top: 20px;
 }
 
-
 /* Dark Theme */
+
 .dark {
 	background-color: #212121;
 	color: #ffffff;
-/* 	text-shadow: 2px 2px #212121; */
+	/* 	text-shadow: 2px 2px #212121; */
 }
 
 .well-dark {
 	background-color: #212121;
 	border: 2px solid #404040;
-	
 	border-radius: 4px;
 	min-height: 20px;
-	box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
-    padding: 19px;
-    margin-bottom: 20px;
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
+	padding: 19px;
+	margin-bottom: 20px;
 }
 
 .list-group-item-dark {
-    position: relative;
-    display: block;
-    padding: 10px 15px;
-    margin-bottom: -1px;
-	
-/*     background-color: #fff;
-    border: 1px solid #ddd; */
-	
-    background-color: #212121;
-    border: 2px solid #404040;
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+	margin-bottom: -1px;
+	/*     background-color: #fff;
+border: 1px solid #ddd; */
+	background-color: #212121;
+	border: 2px solid #404040;
 }
+
 .list-group-item-dark:last-child {
-    margin-bottom: 0;
-    border-bottom-right-radius: 4px;
-    border-bottom-left-radius: 4px;
+	margin-bottom: 0;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
 }
 
 .list-group-item-dark:first-child {
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
 }
 
 /* CONTROLLER VIEW */
+
 #controllerViewCanvas {
 	width: 100%;
 	height: 30%;
-/* 	min-height: 400px; */
+	/* 	min-height: 400px; */
 	margin: 0;
 	padding: 0;
 	background-color: #bb5050;
-	
 }
 
-
-
 /* check box */
+
 /* https://github.com/Artur-A/Bootstrap-Checkbox/ */
 
 :root {
-  /* larger checkbox */
+	/* larger checkbox */
 }
+
 :root label.checkbox-bootstrap input[type=checkbox] {
-  /* hide original check box */
-  opacity: 0;
-  position: absolute;
-  /* find the nearest span with checkbox-placeholder class and draw custom checkbox */
-  /* draw checkmark before the span placeholder when original hidden input is checked */
-  /* disabled checkbox style */
-  /* disabled and checked checkbox style */
-  /* when the checkbox is focused with tab key show dots arround */
-}
-:root label.checkbox-bootstrap input[type=checkbox] + span.checkbox-placeholder {
-  width: 14px;
-  height: 14px;
-  border: 1px solid;
-  border-radius: 3px;
-  /*checkbox border color*/
-  border-color: #737373;
-  display: inline-block;
-  cursor: pointer;
-  margin: 0 7px 0 -20px;
-  vertical-align: middle;
-  text-align: center;
-}
-:root label.checkbox-bootstrap input[type=checkbox]:checked + span.checkbox-placeholder {
-/*   background: #0ccce4; */
-  background: #60bb60;
-}
-:root label.checkbox-bootstrap input[type=checkbox]:checked + span.checkbox-placeholder:before {
-  display: inline-block;
-  position: relative;
-  vertical-align: text-top;
-  width: 5px;
-  height: 9px;
-  /*checkmark arrow color*/
-  border: solid white;
-  border-width: 0 2px 2px 0;
-  /*can be done with post css autoprefixer*/
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-  content: "";
+	/* hide original check box */
+	opacity: 0;
+	position: absolute;
+	/* find the nearest span with checkbox-placeholder class and draw custom checkbox */
+	/* draw checkmark before the span placeholder when original hidden input is checked */
+	/* disabled checkbox style */
+	/* disabled and checked checkbox style */
+	/* when the checkbox is focused with tab key show dots arround */
 }
 
-:root label.checkbox-bootstrap input[type=checkbox]:disabled + span.checkbox-placeholder {
-  background: #ececec;
-  border-color: #c3c2c2;
-}
-:root label.checkbox-bootstrap input[type=checkbox]:checked:disabled + span.checkbox-placeholder {
-  background: #d6d6d6;
-  border-color: #bdbdbd;
-}
-:root label.checkbox-bootstrap input[type=checkbox]:focus:not(:hover) + span.checkbox-placeholder {
-  outline: 1px dotted black;
-}
-:root label.checkbox-bootstrap.checkbox-lg input[type=checkbox] + span.checkbox-placeholder {
-  width: 26px;
-  height: 26px;
-  border: 2px solid;
-  border-radius: 5px;
-  /*checkbox border color*/
-  border-color: #737373;
-}
-:root label.checkbox-bootstrap.checkbox-lg input[type=checkbox]:checked + span.checkbox-placeholder:before {
-  width: 9px;
-  height: 15px;
-  /*checkmark arrow color*/
-  border: solid white;
-  border-width: 0 3px 3px 0;
+:root label.checkbox-bootstrap input[type=checkbox]+span.checkbox-placeholder {
+	width: 14px;
+	height: 14px;
+	border: 1px solid;
+	border-radius: 3px;
+	/*checkbox border color*/
+	border-color: #737373;
+	display: inline-block;
+	cursor: pointer;
+	margin: 0 7px 0 -20px;
+	vertical-align: middle;
+	text-align: center;
 }
 
+:root label.checkbox-bootstrap input[type=checkbox]:checked+span.checkbox-placeholder {
+	/*   background: #0ccce4; */
+	background: #60bb60;
+}
 
+:root label.checkbox-bootstrap input[type=checkbox]:checked+span.checkbox-placeholder:before {
+	display: inline-block;
+	position: relative;
+	vertical-align: text-top;
+	width: 5px;
+	height: 9px;
+	/*checkmark arrow color*/
+	border: solid white;
+	border-width: 0 2px 2px 0;
+	/*can be done with post css autoprefixer*/
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+	content: "";
+}
+
+:root label.checkbox-bootstrap input[type=checkbox]:disabled+span.checkbox-placeholder {
+	background: #ececec;
+	border-color: #c3c2c2;
+}
+
+:root label.checkbox-bootstrap input[type=checkbox]:checked:disabled+span.checkbox-placeholder {
+	background: #d6d6d6;
+	border-color: #bdbdbd;
+}
+
+:root label.checkbox-bootstrap input[type=checkbox]:focus:not(:hover)+span.checkbox-placeholder {
+	outline: 1px dotted black;
+}
+
+:root label.checkbox-bootstrap.checkbox-lg input[type=checkbox]+span.checkbox-placeholder {
+	width: 26px;
+	height: 26px;
+	border: 2px solid;
+	border-radius: 5px;
+	/*checkbox border color*/
+	border-color: #737373;
+}
+
+:root label.checkbox-bootstrap.checkbox-lg input[type=checkbox]:checked+span.checkbox-placeholder:before {
+	width: 9px;
+	height: 15px;
+	/*checkmark arrow color*/
+	border: solid white;
+	border-width: 0 3px 3px 0;
+}
 
 /* Volume Slider */
+
 /* https://codepen.io/emilcarlsson/pres/PPNLPy */
+
 /*
 Copyright (c) 2018 by Emil (https://codepen.io/emilcarlsson/pen/PPNLPy)
 Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
@@ -872,43 +917,47 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 .volumeSlider {
-/* 	width: 350px;
+	/* 	width: 350px;
+height: 50px;
+position: relative;
+margin: 0 auto;
+top: 20px; */
+	display: flex;
+	justify-content: space-evenly;
+	width: 250px;
 	height: 50px;
 	position: relative;
-	margin: 0 auto;
-	top: 20px; */
-	
-    display: flex;
-    justify-content: space-evenly;
-    width: 250px;
-    height: 50px;
-    position: relative;
-    top: 20px;
+	top: 20px;
 }
+
 .volumeSlider i {
 	position: absolute;
 	margin-top: -6px;
 	color: #666;
 }
+
 .volumeSlider i.fa-volume-down {
 	left: 0;
 }
+
 /* hack to add -50% + -8px */
+
 .volumeSlider i.fa-volume-down::before {
 	margin-left: -40px;
 }
+
 .volumeSlider i.fa-volume-up {
-    margin-right: -30px;
-    right: 0;
+	margin-right: -30px;
+	right: 0;
 }
 
 .volume {
-    height: 5px;
-/*     margin-left: 20px;
-    margin-right: 20px; */
-    width: 100%;
-    background: #555;
-    border-radius: 15px;
+	height: 5px;
+	/*     margin-left: 20px;
+margin-right: 20px; */
+	width: 100%;
+	background: #555;
+	border-radius: 15px;
 }
 
 .volume .ui-slider-range-min {
@@ -920,6 +969,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	border-radius: 10px;
 	outline: none;
 }
+
 .volume .ui-slider-handle {
 	width: 20px;
 	height: 20px;
