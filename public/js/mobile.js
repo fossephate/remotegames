@@ -12,12 +12,15 @@ let keyboardTimer;
 let gamepadTimer;
 let touchTimer;
 let lagless1Break = false;
+let lagless1JoinTimer;
 let audio = true;
 let controlQueue = [];
 let twitchUsername = null;
 let toggleDarkTheme = false;
+let toggleFullscreen = false;
 let timeLeft = 30000;
 let turnLength = 30000;
+let timeTillForfeit = 15000;
 let turnUsername = null;
 let lastCurrentTime = 0;
 let mouseMoveTimer = null;
@@ -965,15 +968,6 @@ setTimeout(function() {
 }, 2000);
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-let s = function(sel) {
-	return document.querySelector(sel);
-};
-let sId = function(sel) {
-	return document.getElementById(sel);
-};
-let removeClass = function(el, clss) {
-	el.className = el.className.replace(new RegExp("\\b" + clss + " ?\\b", "g"), "");
-}
 let joysticks = {
 	leftStick: {
 		zone: document.querySelector("#leftStick"),
@@ -1041,11 +1035,9 @@ function bindJoysticks() {
 	})
 }
 
-function createJoysticks(evt) {
-	leftStick = nipplejs.create(joysticks["leftStick"]);
-	rightStick = nipplejs.create(joysticks["rightStick"]);
-	bindJoysticks();
-}
+leftStick = nipplejs.create(joysticks.leftStick);
+rightStick = nipplejs.create(joysticks.rightStick);
+bindJoysticks();
 
 // for sticks:
 setTimeout(function() {
@@ -1601,14 +1593,20 @@ socket.on("turnTimeLeft", function(data) {
 	let timeLeftMilli = timeLeft;
 	let timeLeftSec = parseInt(timeLeft / 1000);
 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
-	let progressBar = $(".progress-bar");
+	let progressBar = $("#turnTimerBarChild");
+	
+	let timeLeftMilli2 = data.timeLeftForfeit;
+	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
+	let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
+	let forfeitBar = $("#turnTimerBarChild2");
 	
 	if (turnUsername == null) {
-		percent = 100;
-		progressBar.css("width", percent + "%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 		$("#currentPlayer").text("No one is playing right now.");
 	} else {
 		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
+		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
 		$("#currentPlayer").text("Current Player: " + turnUsername);
 	}
 });
@@ -1721,6 +1719,13 @@ $("#chatCheckbox").on("click", function() {
 		$("#twitchChat").attr("style", "display: visible;");
 		$("#picture").attr("style", "width: 75%;");
 	}
+	
+	// https://github.com/yoannmoinet/nipplejs/issues/39
+	// force joysticks to recalculate the center:
+	window.dispatchEvent(new Event("resize"));
+	setTimeout(function() {
+		window.dispatchEvent(new Event("resize"));
+	}, 2000);
 });
 
 $("#chatCheckbox")[0].checked = true;
@@ -1813,7 +1818,7 @@ socket.on("controllerState", function(data) {
 	});
 	
 	for (let i = 0; i < btns.length; i++) {
-		$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.2)";//50bb50
+		$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)";//50bb50
 	}
 	for (let i = 0; i < unpressedBtns.length; i++) {
 		$("#" + unpressedBtns[i])[0].style.background = "";

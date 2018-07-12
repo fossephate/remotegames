@@ -39,18 +39,22 @@ let usernameDB;
 let localStorage;
 let clients = [];
 let channels = {};
+let restartAvailable = true;
 let controlQueue = [];
+let controlQueue2 = [];
+let controlQueue3 = [];
+let controlQueue4 = [];
 let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
 let currentTurnUsername = null;
 let turnDuration = 30000;
+let timeTillForfeit = 15000;
 let controller = null;
 let controller2 = null;
-let restartAvailable = true;
 let turnStartTime = Date.now();
 let forfeitStartTime = Date.now();
 let forfeitTimer = null;
-let timeTillForfeit = 15000;
 let moveLineTimer = null;
+let banlist = [];
 
 app.use(session({
 	secret: SESSION_SECRET,
@@ -465,7 +469,7 @@ io.on("connection", function(socket) {
 		if (client.username == null) {
 			return;
 		}
-
+		
 		if (controlQueue.length === 0) {
 			return;
 		}
@@ -473,7 +477,7 @@ io.on("connection", function(socket) {
 		if (client.username != currentTurnUsername) {
 			return;
 		}
-
+		
 		// 		if(twitch_subscribers.indexOf(currentTurnUsername) > -1) {
 		// 			turnDuration = 60000;
 		// 		} else {
@@ -521,7 +525,11 @@ io.on("connection", function(socket) {
 		if (client.username == null) {
 			return;
 		}
-
+		// return if banned:
+		if (banlist.indexOf(client.username) > -1) {
+			return;
+		}
+		
 		if (controlQueue.indexOf(client.username) == -1) {
 			controlQueue.push(client.username);
 			currentTurnUsername = controlQueue[0];
@@ -620,6 +628,10 @@ io.on("connection", function(socket) {
 		restartAvailable = false;
 		console.log("restarting lagless3");
 		io.to("relay").emit("restart lagless3");
+	});
+	
+	socket.on("banlist", function(data) {
+		banlist = data;
 	});
 
 	socket.on("disconnect", function() {

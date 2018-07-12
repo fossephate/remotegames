@@ -213,31 +213,31 @@ function sendControllerState() {
 	}
 	
 	if(controlQueue[0] != twitchUsername && controlQueue.length > 0) {
-		//swal("It's not your turn yet!");
+		swal("It's not your turn yet!");
 		//$("#turnTimerBar").effect("shake", {direction: "left", distance: 100, times: 2}, 250);
-		let timerInterval;
-		swal({
-			title: "It's not your turn yet!",
-			html: "I will close in <strong></strong> seconds.",
-			timer: 100,
-			onOpen: () => {
-				swal.showLoading()
-				timerInterval = setInterval(() => {
-					swal.getContent().querySelector("strong")
-						.textContent = swal.getTimerLeft()
-				}, 10)
-			},
-			onClose: () => {
-				clearInterval(timerInterval);
-			}
-		}).then((result) => {
-			if (
-				// Read more about handling dismissals
-				result.dismiss === swal.DismissReason.timer
-			) {
-				console.log("I was closed by the timer");
-			}
-		});
+// 		let timerInterval;
+// 		swal({
+// 			title: "It's not your turn yet!",
+// 			html: "I will close in <strong></strong> seconds.",
+// 			timer: 100,
+// 			onOpen: () => {
+// 				swal.showLoading()
+// 				timerInterval = setInterval(() => {
+// 					swal.getContent().querySelector("strong")
+// 						.textContent = swal.getTimerLeft()
+// 				}, 10)
+// 			},
+// 			onClose: () => {
+// 				clearInterval(timerInterval);
+// 			}
+// 		}).then((result) => {
+// 			if (
+// 				// Read more about handling dismissals
+// 				result.dismiss === swal.DismissReason.timer
+// 			) {
+// 				console.log("I was closed by the timer");
+// 			}
+// 		});
 		return;
 	}
 	
@@ -844,106 +844,97 @@ $("#keyboardLayoutConfig").on("click", function(e) {
 
 
 
-
+let leftJoyConImage;
+let rightJoyConImage;
 
 
 /* TOUCH CONTROLS */
-let leftJoyConCanvas = $("#leftJoyConCanvas")[0];
-leftJoyConCanvas.width = 500;
-leftJoyConCanvas.height = 500;
-let leftJoyConCtx = leftJoyConCanvas.getContext("2d");
-let leftJoyConImage = new Image();
-leftJoyConImage.onload = function() {
-	let imgWidth = leftJoyConImage.width;
-	let imgHeight = leftJoyConImage.height;
-	let canvasWidth = leftJoyConCanvas.width;
-	let canvasHeight = leftJoyConCanvas.height;
-	let ratio = (imgHeight / imgWidth);
-	let canvasRatio = canvasWidth / canvasHeight;
-	let ratioW = 500 / $("#leftJoyConCanvas").innerWidth();
-	let ratioH = 500 / $("#leftJoyConCanvas").innerHeight();
-	let cWidth = $("#leftJoyConCanvas").innerWidth();
-	leftJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-	leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-};
-setTimeout(function(){
-	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
-}, 3000);
+function drawJoyCons() {
+	let leftJoyConCanvas = $("#leftJoyConCanvas")[0];
+	leftJoyConCanvas.width = 500;
+	leftJoyConCanvas.height = 500;
+	let leftJoyConCtx = leftJoyConCanvas.getContext("2d");
+	/*let */leftJoyConImage = new Image();
+	leftJoyConImage.onload = function() {
+		let imgWidth = leftJoyConImage.width;
+		let imgHeight = leftJoyConImage.height;
+		let canvasWidth = leftJoyConCanvas.width;
+		let canvasHeight = leftJoyConCanvas.height;
+		let ratio = (imgHeight / imgWidth);
+		let canvasRatio = canvasWidth / canvasHeight;
+		let ratioW = 500 / $("#leftJoyConCanvas").innerWidth();
+		let ratioH = 500 / $("#leftJoyConCanvas").innerHeight();
+		let cWidth = $("#leftJoyConCanvas").innerWidth();
+		leftJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+		leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+	};
+	setTimeout(function(){
+		leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
+	}, 3000);
 
 
-let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
-rightJoyConCanvas.width = 500;
-rightJoyConCanvas.height = 500;
-let rightJoyConCtx = rightJoyConCanvas.getContext("2d");
-let rightJoyConImage = new Image();
-rightJoyConImage.onload = function() {
-	let imgWidth = rightJoyConImage.width;
-	let imgHeight = rightJoyConImage.height;
-	let canvasWidth = rightJoyConCanvas.width;
-	let canvasHeight = rightJoyConCanvas.height;
-	let ratio = (imgHeight / imgWidth);
-	let canvasRatio = canvasWidth / canvasHeight;
-	let ratioW = 500 / $("#rightJoyConCanvas").innerWidth();
-	let ratioH = 500 / $("#rightJoyConCanvas").innerHeight();
-	let cWidth = $("#rightJoyConCanvas").innerWidth();
-	rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-	rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-};
-setTimeout(function(){
-	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
-}, 3000);
+	let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
+	rightJoyConCanvas.width = 500;
+	rightJoyConCanvas.height = 500;
+	let rightJoyConCtx = rightJoyConCanvas.getContext("2d");
+	/*let */rightJoyConImage = new Image();
+	rightJoyConImage.onload = function() {
+		let imgWidth = rightJoyConImage.width;
+		let imgHeight = rightJoyConImage.height;
+		let canvasWidth = rightJoyConCanvas.width;
+		let canvasHeight = rightJoyConCanvas.height;
+		let ratio = (imgHeight / imgWidth);
+		let canvasRatio = canvasWidth / canvasHeight;
+		let ratioW = 500 / $("#rightJoyConCanvas").innerWidth();
+		let ratioH = 500 / $("#rightJoyConCanvas").innerHeight();
+		let cWidth = $("#rightJoyConCanvas").innerWidth();
+		rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+		rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+	};
+	setTimeout(function(){
+		rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
+	}, 3000);
+}
+drawJoyCons();
 
-
-
-function setVideo2Width(width) {
-	
+function setVideoWidth(width, num) {
+	$("#videoCanvas1")[0].style.width = width + "%";
+	$("#videoCanvas1")[0].style["margin-left"] = ((100-width)/2) + "%";
 	$("#videoCanvas2")[0].style.width = width + "%";
 	$("#videoCanvas2")[0].style["margin-left"] = ((100-width)/2) + "%";
+	$("#videoCanvas3")[0].style.width = width + "%";
+	$("#videoCanvas3")[0].style["margin-left"] = ((100-width)/2) + "%";
 	$("#rightJoyCon")[0].style["margin-left"] = (width) + ((100-width)/2) + "%";
-	
 	$("#leftJoyCon")[0].style.width = ((100-width)/2) + "%";
 	$("#rightJoyCon")[0].style.width = ((100-width)/2) + "%";
-	
 	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
 	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
 }
+
 setTimeout(function() {
-	setVideo2Width(73.2);
+	setVideoWidth(73.2);
 }, 2000);
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-let s = function(sel) {
-	return document.querySelector(sel);
+let leftJoyStick = {
+	zone: document.querySelector("#leftStick"),
+	mode: "static",
+	catchDistance: 10,
+	color: "#FF3C28",
+	position: {left: "50%", top: "50%"},
+	size: 60,
 };
-let sId = function(sel) {
-	return document.getElementById(sel);
-};
-let removeClass = function(el, clss) {
-	el.className = el.className.replace(new RegExp("\\b" + clss + " ?\\b", "g"), "");
-}
-let joysticks = {
-	leftStick: {
-		zone: document.querySelector("#leftStick"),
-		mode: "static",
-		catchDistance: 10,
-		color: "#FF3C28",
-		position: {left: "50%", top: "50%"},
-		size: 60,
-	},
-	rightStick: {
-		zone: document.querySelector("#rightStick"),
-		mode: "static",
-		catchDistance: 10,
-		color: "#0AB9E6",
-		position: {left: "50%", top: "50%"},
-		size: 60,
-	},
+let rightJoyStick = {
+	zone: document.querySelector("#rightStick"),
+	mode: "static",
+	catchDistance: 10,
+	color: "#0AB9E6",
+	position: {left: "50%", top: "50%"},
+	size: 60,
 };
 
 let leftStick;
 let rightStick;
-
-createJoysticks("static");
 
 function bindJoysticks() {
 	let stickSize = 60;
@@ -987,12 +978,9 @@ function bindJoysticks() {
 		controller.RStick.y = pos.y;
 	})
 }
-
-function createJoysticks(evt) {
-	leftStick = nipplejs.create(joysticks["leftStick"]);
-	rightStick = nipplejs.create(joysticks["rightStick"]);
-	bindJoysticks();
-}
+// leftStick = nipplejs.create(leftJoyStick);
+// rightStick = nipplejs.create(rightJoyStick);
+// bindJoysticks();
 
 
 function getTouchInput() {
@@ -1115,7 +1103,7 @@ $("#touchControlsCheckbox").on("click", function() {
 		$("#leftJoyCon")[0].style.display = "";
 		$("#rightJoyCon")[0].style.display = "";
 		
-		setVideo2Width(73.2);
+		setVideoWidth(73.2);
 		
 		for (let i = 0; i < buttonsList.length; i++) {
 			$(buttonsList[i]).bind("touchstart", onButtonPress);
@@ -1251,6 +1239,9 @@ socket.on("viewImage", function(data) {
 	image.src = src;
 	stats.end();
 });
+$("#lagless1Refresh").on("click", function() {
+	socket.emit("restart");
+});
 
 /* LAGLESS 2.0 */
 // Setup the WebSocket connection and start the player
@@ -1292,6 +1283,17 @@ $("#lagless2VolumeSlider").children().next().on("click", function(){
 	$("#lagless2Volume").slider("value", 100);
 	player.volume = 1;// doesn't update automatically :/
 });
+
+function resizeVideo2(scale) {
+	let w = 960;
+	let h = 540;
+	let s = scale / 100;
+	let newWidth = w * s;
+	let newHeight = h * s;
+	player.renderer.canvas.width = newWidth;
+	player.renderer.canvas.height = newHeight;
+	player.renderer.gl.viewport(0, 0, newWidth, newHeight);
+}
 
 
 /* LAGLESS 3.0 */
@@ -1406,6 +1408,81 @@ setTimeout(function() {
 //   });
 
 
+function addJoyCons(tab) {
+	
+	tab = tab + "View";
+	
+	// delete old joycons:
+	try {
+		leftStick.destroy();
+		rightStick.destroy();
+	} catch(e) {
+		
+	}
+	$("#leftJoyCon").remove();
+	$("#rightJoyCon").remove();
+	
+	
+	let leftJoyConHTML = `
+	<div id="leftJoyCon">
+		<canvas id="leftJoyConCanvas"></canvas>
+		<div id="leftStick"></div>
+		<div id="leftStick2"></div>
+		<div id="dpadButtons">
+			<div id="upButton" class="controllerButton"></div>
+			<div id="downButton" class="controllerButton"></div>
+			<div id="leftButton" class="controllerButton"></div>
+			<div id="rightButton" class="controllerButton"></div>
+		</div>
+		<div id="leftJoyConOther">
+			<div id="minusButton" class="controllerButton"></div>
+			<div id="captureButton" class="controllerButton"></div>
+			<div id="lButton" class="controllerButton">L Button</div>
+			<div id="zlButton" class="controllerButton">ZL Button</div>
+		</div>
+	</div>`;
+	
+	let rightJoyConHTML = `
+	<div id="rightJoyCon">
+		<canvas id="rightJoyConCanvas"></canvas>
+		<div id="rightStick"></div>
+		<div id="rightStick2"></div>
+		<div id="abxyButtons">
+			<div id="xButton" class="controllerButton"></div>
+			<div id="bButton" class="controllerButton"></div>
+			<div id="yButton" class="controllerButton"></div>
+			<div id="aButton" class="controllerButton"></div>
+		</div>
+		<div id="rightJoyConOther">
+			<div id="plusButton" class="controllerButton"></div>
+			<div id="homeButton" class="controllerButton"></div>
+			<div id="rButton" class="controllerButton">R Button</div>
+			<div id="zrButton" class="controllerButton">ZR Button</div>
+		</div>
+	</div>`;
+	
+	$(tab).prepend(leftJoyConHTML);
+	$(tab).prepend(rightJoyConHTML);
+	
+	// rebind touch controls:
+	$("#touchControlsCheckbox").trigger("click");
+	$("#touchControlsCheckbox").trigger("click");
+	
+	// redraw joycons:
+	drawJoyCons();
+	
+	// resize window:
+	setVideoWidth(73.2);
+	
+	// rebind sticks:
+	leftJoyStick.zone = document.querySelector("#leftStick");
+	rightJoyStick.zone = document.querySelector("#rightStick");
+	leftStick = nipplejs.create(leftJoyStick);
+	rightStick = nipplejs.create(rightJoyStick);
+	bindJoysticks();
+}
+
+
 
 /* SWITCH IMPLEMENTATIONS */
 
@@ -1424,6 +1501,8 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			lagless1JoinTimer = setInterval(function() {
 				socket.emit("join", "viewers");
 			}, 5000);
+			$("#lagless1Volume").slider("value", 50);
+			audioElem.volume = 0.5;// doesn't update automatically :/
 		} else {
 			clearInterval(lagless1JoinTimer);
 			socket.emit("leave", "viewers");
@@ -1434,7 +1513,8 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			if (typeof player != "undefined") {
 				player.play();
 			}
-			setVideo2Width(73.2);
+			$("#lagless1Volume").slider("value", 0);
+			audioElem.volume = 0;// doesn't update automatically :/
 		} else {
 			if (typeof player != "undefined") {
 				player.stop();
@@ -1446,6 +1526,9 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			//let uri = "wss://twitchplaysnintendoswitch3.localtunnel.me";
 			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 			wsavc.connect(uri);
+			
+			$("#lagless1Volume").slider("value", 50);
+			audioElem.volume = 0.5;// doesn't update automatically :/
 		} else {
 			try {
 				wsavc.disconnect();
@@ -1463,7 +1546,8 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 				player2.stop();
 			}
 		}
-
+		
+		addJoyCons(contentId);
 	}
 	
 	// https://github.com/yoannmoinet/nipplejs/issues/39
@@ -1530,17 +1614,42 @@ $("#audioCheckbox").on("click", function() {
 	}
 });
 
-$("#globalVolume").slider({
+// $("#globalVolume").slider({
+//     min: 0,
+//     max: 100,
+//     value: 0,
+// 		range: "min",
+// 		animate: true,
+// 	slide: function(event, ui) {
+// 		audioElem.volume = ui.value / 100;
+//   	}
+// });
+// audioElem.volume = 0;
+
+$("#lagless1Volume").slider({
     min: 0,
     max: 100,
     value: 0,
-		range: "min",
-		animate: true,
+	range: "min",
+	animate: true,
 	slide: function(event, ui) {
 		audioElem.volume = ui.value / 100;
   	}
 });
-audioElem.volume = 0;
+// $("#lagless1Volume").slider("value", 50);
+// audioElem.volume = 0.5;// doesn't update automatically :/
+$("#lagless1Volume").slider("value", 0);
+audioElem.volume = 0;// doesn't update automatically :/
+
+$("#lagless1VolumeSlider").children().on("click", function(){
+	$("#lagless1Volume").slider("value", 0);
+	audioElem.volume = 0.0;// doesn't update automatically :/
+});
+
+$("#lagless1VolumeSlider").children().next().on("click", function(){
+	$("#lagless1Volume").slider("value", 100);
+	audioElem.volume = 1;// doesn't update automatically :/
+});
 
 
 /* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1576,8 +1685,8 @@ socket.on("turnTimeLeft", function(data) {
 	
 	let timeLeftMilli2 = data.timeLeftForfeit;
 	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
-	let forfeitBar = $("#turnTimerBarChild2");
 	let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
+	let forfeitBar = $("#forfeitTimerBarChild");
 	
 	if (turnUsername == null) {
 		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
@@ -1786,7 +1895,7 @@ socket.on("controllerState", function(data) {
 	});
 	
 	for (let i = 0; i < btns.length; i++) {
-		$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.5)";//50bb50
+		$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)";//50bb50
 	}
 	for (let i = 0; i < unpressedBtns.length; i++) {
 		$("#" + unpressedBtns[i])[0].style.background = "";
