@@ -84,6 +84,9 @@
 							<canvas id="videoCanvas1"></canvas>
 						</div>
 							<div id="lagless1Bar">
+								<div id="lagless1ViewerCount">
+									X/X Viewers
+								</div>
 								<div id="lagless1VolumeSlider" class="volumeSlider">
 									<i class="fa fa-volume-down"></i>
 									<div id="lagless1Volume" class="volume"></div>
@@ -140,6 +143,9 @@
 							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
 						</button> -->
 						<div id="lagless2Bar">
+							<div id="lagless2ViewerCount">
+								X/X Viewers
+							</div>
 							<div id="lagless2VolumeSlider" class="volumeSlider">
 								<i class="fa fa-volume-down"></i>
 								<div id="lagless2Volume" class="volume"></div>
@@ -159,15 +165,17 @@
 							</button>
 						</div>
 					</div>
+					<div id="lagless3Bar">
+						<div id="lagless3ViewerCount">
+							X/X Viewers
+						</div>
+					</div>
 				</div>
 				<div id="lagless4" class="tab-pane">
 					<div id="lagless4Container">
-						<canvas id="videoCanvas4"></canvas>
-					</div>
-				</div>
-				<div id="lagless5" class="tab-pane">
-					<div id="lagless5Container">
-						<canvas id="videoCanvas5"></canvas>
+						<div id="lagless4View">
+							<canvas id="videoCanvas4"></canvas>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -187,11 +195,11 @@
 						</div>
 
 						<div id="player2TimerBars">
-							<div id="turnTimerBar" class="turnTimerBar progress">
-								<div id="turnTimerBarChild" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							<div id="turnTimerBar2" class="turnTimerBar progress">
+								<div id="turnTimerBarChild2" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<div id="forfeitTimerBar" class="forfeitTimerBar progress">
-								<div id="forfeitTimerBarChild" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							<div id="forfeitTimerBar2" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild2" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 						</div>
 					</div>
@@ -264,11 +272,20 @@
 								Current Player:
 							</div> -->
 							<div class="well">
-								Control Queue:
-								<btn id="requestTurn" type="button" class="btn btn-primary">Request Turn</btn>
-								<btn id="cancelTurn" type="button" class="btn btn-primary">Cancel Turn</btn>
-								<ul id="controlQueue" class="list-group">
-								</ul>
+								<div id="controlQueues">
+									<div id="queue1" class="queue">
+										<btn id="requestTurn" type="button" class="btn btn-primary">Request Turn</btn>
+										<btn id="cancelTurn" type="button" class="btn btn-primary">Cancel Turn</btn>
+										<ul id="controlQueue" class="list-group">
+										</ul>
+									</div>
+									<div id="queue2" class="queue">
+										<btn id="requestTurn2" type="button" class="btn btn-primary">Request Turn</btn>
+										<btn id="cancelTurn2" type="button" class="btn btn-primary">Cancel Turn</btn>
+										<ul id="controlQueue2" class="list-group">
+										</ul>
+									</div>
+								</div>
 							</div>
 							<div class="well">
 								Ping: <span id="ping"></span>
@@ -368,13 +385,14 @@
 								<li class="list-group-item">torquel (TorqueL)</li>
 								<!-- 								<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
 								<li class="list-group-item">arms (Arms)</li>
+								<li class="list-group-item">snipperclips (Snipper Clips)</li>
 							</ul>
 						</div>
 					</div>
 
 				</div>
 
-				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>
+<!-- 				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
 
 			</div>
 

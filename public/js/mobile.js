@@ -968,29 +968,25 @@ setTimeout(function() {
 }, 2000);
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-let joysticks = {
-	leftStick: {
-		zone: document.querySelector("#leftStick"),
-		mode: "static",
-		catchDistance: 10,
-		color: "#FF3C28",
-		position: {left: "50%", top: "50%"},
-		size: 60,
-	},
-	rightStick: {
-		zone: document.querySelector("#rightStick"),
-		mode: "static",
-		catchDistance: 10,
-		color: "#0AB9E6",
-		position: {left: "50%", top: "50%"},
-		size: 60,
-	},
+let leftJoyStick = {
+	zone: document.querySelector("#leftStick"),
+	mode: "static",
+	catchDistance: 10,
+	color: "#FF3C28",
+	position: {left: "50%", top: "50%"},
+	size: 60,
+};
+let rightJoyStick = {
+	zone: document.querySelector("#rightStick"),
+	mode: "static",
+	catchDistance: 10,
+	color: "#0AB9E6",
+	position: {left: "50%", top: "50%"},
+	size: 60,
 };
 
 let leftStick;
 let rightStick;
-
-createJoysticks("static");
 
 function bindJoysticks() {
 	let stickSize = 60;
@@ -1034,9 +1030,8 @@ function bindJoysticks() {
 		controller.RStick.y = pos.y;
 	})
 }
-
-leftStick = nipplejs.create(joysticks.leftStick);
-rightStick = nipplejs.create(joysticks.rightStick);
+leftStick = nipplejs.create(leftJoyStick);
+rightStick = nipplejs.create(rightJoyStick);
 bindJoysticks();
 
 // for sticks:

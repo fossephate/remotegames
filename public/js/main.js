@@ -12,16 +12,29 @@ let gamepadTimer;
 let touchTimer;
 let lagless1Break = false;
 let lagless1JoinTimer;
-let audio = true;
+let currentTab = "#lagless1";
+
 let controlQueue = [];
+let controlQueue2 = [];
 let twitchUsername = null;
+
+// settings:
 let toggleDarkTheme = false;
 let toggleFullscreen = false;
+let audio = true;
+
 let timeLeft = 30000;
+let timeLeft2 = 30000;
 let turnLength = 30000;
 let timeTillForfeit = 15000;
+let timeTillForfeit2 = 15000;// todo: remove
 let turnUsername = null;
+let turnUsername2 = null;
 let lastCurrentTime = 0;
+let lastCurrentTime2 = 0;
+
+let wiiU3DsTab = false;
+
 let mouseMoveTimer = null;
 let isMobile = false;
 let pingTime = 0;
@@ -208,11 +221,17 @@ function sendControllerState() {
 		return;
 	}
 	
+	if (wiiU3DsTab) {
+		socket.emit("sendControllerStateWiiU3Ds", newControllerState);
+		return;
+	}
+	
 	if(controlQueue.indexOf(twitchUsername) == -1) {
 		socket.emit("requestTurn");
 	}
 	
-	if(controlQueue[0] != twitchUsername && controlQueue.length > 0) {
+	// todo: possibly broken?:
+	if(controlQueue[0] != twitchUsername && controlQueue2[0] != twitchUsername && (controlQueue.length > 0 || controlQueue2.length > 0)) {
 		swal("It's not your turn yet!");
 		//$("#turnTimerBar").effect("shake", {direction: "left", distance: 100, times: 2}, 250);
 // 		let timerInterval;
@@ -242,9 +261,12 @@ function sendControllerState() {
 	}
 	
 	console.log(newControllerState);
-	//if(controlQueue[0] == twitchUsername) {
-	socket.emit("sendControllerState", newControllerState);
-	//}
+	
+	if (controlQueue[0] == twitchUsername) {
+		socket.emit("sendControllerState", newControllerState);
+	} else if (controlQueue2[0] == twitchUsername) {
+		socket.emit("sendControllerState2", newControllerState);
+	}
 }
 
 
@@ -898,12 +920,27 @@ function drawJoyCons() {
 drawJoyCons();
 
 function setVideoWidth(width, num) {
-	$("#videoCanvas1")[0].style.width = width + "%";
-	$("#videoCanvas1")[0].style["margin-left"] = ((100-width)/2) + "%";
-	$("#videoCanvas2")[0].style.width = width + "%";
-	$("#videoCanvas2")[0].style["margin-left"] = ((100-width)/2) + "%";
-	$("#videoCanvas3")[0].style.width = width + "%";
-	$("#videoCanvas3")[0].style["margin-left"] = ((100-width)/2) + "%";
+	if (typeof $("#videoCanvas1")[0] != "undefined") {
+		$("#videoCanvas1")[0].style.width = width + "%";
+		$("#videoCanvas1")[0].style["margin-left"] = ((100-width)/2) + "%";
+	}
+	if (typeof $("#videoCanvas2")[0] != "undefined") {
+		$("#videoCanvas2")[0].style.width = width + "%";
+		$("#videoCanvas2")[0].style["margin-left"] = ((100-width)/2) + "%";
+	}
+	if (typeof $("#videoCanvas3")[0] != "undefined") {
+		$("#videoCanvas3")[0].style.width = width + "%";
+		$("#videoCanvas3")[0].style["margin-left"] = ((100-width)/2) + "%";
+	}
+	
+	if (typeof $("#twitchvideo")[0] != "undefined") {
+		$("#twitchvideo")[0].style.width = width + "%";
+		$("#twitchvideo")[0].style["margin-left"] = ((100-width)/2) + "%";
+		// calculate height for twitch:
+		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width();
+		$("#twitchvideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+	}
+	
 	$("#rightJoyCon")[0].style["margin-left"] = (width) + ((100-width)/2) + "%";
 	$("#leftJoyCon")[0].style.width = ((100-width)/2) + "%";
 	$("#rightJoyCon")[0].style.width = ((100-width)/2) + "%";
@@ -1317,13 +1354,14 @@ $("#lagless3Refresh").on("click", function() {
 
 /* LAGLESS 2.0 3DS*/
 // Setup the WebSocket connection and start the player
-// let url2 = "wss://twitchplaysnintendoswitch.com/8004/";
-// let canvas4 = document.getElementById("videoCanvas4");
-// let player2 = new JSMpeg.Player(url, {canvas: canvas4, audio: true});
-// player2.maxAudioLag = 0.5;// todo: max adjustable
-// player2.stop();
-// player2.stats = stats;
-
+let url2 = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
+let canvas4 = document.getElementById("videoCanvas4");
+// Default 512*1024 (512kb).
+// Default 128*1024 (128kb)
+let player4 = new JSMpeg.Player(url, {canvas: canvas4, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
+player4.maxAudioLag = 0.5;
+player4.stop();
+player4.stats = stats;
 
 // default:
 setTimeout(function() {
@@ -1494,9 +1532,12 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 	// check if the tab is active
 	if (tab.parent().hasClass("active")) {
 		
+		currentTab = contentId;
+		
 		// lagless 1:
 		if (contentId == "#lagless1") {
 			socket.emit("join", "viewers");
+			socket.emit("joinLagless1");
 			// todo: fix this:
 			lagless1JoinTimer = setInterval(function() {
 				socket.emit("join", "viewers");
@@ -1510,6 +1551,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		
 		// lagless 2:
 		if (contentId == "#lagless2") {
+			socket.emit("joinLagless2");
 			if (typeof player != "undefined") {
 				player.play();
 			}
@@ -1523,6 +1565,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		
 		// lagless 3:
 		if (contentId == "#lagless3") {
+			socket.emit("joinLagless3");
 			//let uri = "wss://twitchplaysnintendoswitch3.localtunnel.me";
 			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 			wsavc.connect(uri);
@@ -1538,6 +1581,9 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		
 		// lagless 4:
 		if (contentId == "#lagless4") {
+			
+			wiiU3DsTab = true;
+			
 			if (typeof player2 != "undefined") {
 				player2.play();
 			}
@@ -1545,6 +1591,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			if (typeof player2 != "undefined") {
 				player2.stop();
 			}
+			wiiU3DsTab = false;
 		}
 		
 		addJoyCons(contentId);
@@ -1559,60 +1606,112 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 });
 
 
-/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-let hash = window.location.hash.replace("#", "");
-let meeting = new Meeting(hash);
-let remoteMediaStreams = document.getElementById("remote-media-streams");
-let localMediaStream = document.getElementById("local-media-stream");
-let channel = "#twitchplaysnintendoswitch";
-let sender = Math.round(Math.random() * 999999999) + 999999999;
-let socket2 = io("https://twitchplaysnintendoswitch.com", {
-	path: "/8110/socket.io/",
-	transports: ["websocket"],
-});
-socket2.emit("new-channel", {
-	channel: channel,
-	sender: sender
-});
-//socket = io.connect(SIGNALING_SERVER + channel);
-io.connect("https://twitchplaysnintendoswitch.com", {
-	path: "/8110/socket.io/",
-	transports: ["websocket"] // added
-});
-socket2.on("connect", function() {
-	// setup peer connection & pass socket object over the constructor!
-});
-socket2.send = function(message) {
-	socket.emit("message", {
-		sender: sender,
-		data: message
-	});
-};
-meeting.openSignalingChannel = function(callback) {
-	return socket.on("message", callback);
-};
-// on getting media stream
-meeting.onaddstream = function(e) {
-};
-// using firebase for signaling
-meeting.firebase = "rtcweb";
-// if someone leaves; just remove their audio
-meeting.onuserleft = function(userid) {
-	let audio = document.getElementById(userid);
-	if (audio) audio.parentNode.removeChild(audio);
-};
-// check pre-created meeting rooms
-meeting.check();
 
+function replaceWithTwitch(tab) {
+	tab = tab || currentTab;
+	let twitchIFrame = '<iframe id="twitchvideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
 
-$("#audioCheckbox").on("click", function() {
-	toggleAudio = !toggleAudio;
-	if ($("#audioCheckbox")[0].checked) {
-		audioElem.play();
-	} else {
-		audioElem.pause();
+	if (tab == "#lagless1") {
+		$("#videoCanvas1").replaceWith(twitchIFrame);
+		socket.emit("leave", "viewers");
 	}
-});
+	
+	if (tab == "#lagless2") {
+		player.stop();
+		$("#videoCanvas2")[0].style.display = "none";
+		$("#videoCanvas2").after(twitchIFrame);
+	}
+	
+	if (tab == "#lagless3") {
+		wsavc.disconnect();
+		$("#videoCanvas3").replaceWith(twitchIFrame);
+	}
+	setVideoWidth(73.2);
+}
+
+
+function replaceWithLagless(tab) {
+	tab = tab || currentTab;
+	let laglessCanvas;
+	if (tab == "#lagless1") {
+		laglessCanvas = '<canvas id="videoCanvas1"></canvas>';
+		$("#videoCanvas1").replaceWith(laglessCanvas);
+		socket.emit("join", "viewers");
+	}
+	
+	if (tab == "#lagless2") {
+		//laglessCanvas = '<canvas id="videoCanvas2"></canvas>';
+		//$("#twitchvideo").replaceWith(laglessCanvas);
+		$("#videoCanvas2")[0].style.display = "";
+		$("#twitchvideo").remove();
+		player.play();
+	}
+	
+	if (tab == "#lagless3") {
+		laglessCanvas = '<canvas id="videoCanvas3"></canvas>';
+		$("#twitchvideo").replaceWith(laglessCanvas);
+		
+		socket.emit("joinLagless3");
+		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+		wsavc.connect(uri);
+	}
+	setVideoWidth(73.2);
+}
+
+/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
+// let hash = window.location.hash.replace("#", "");
+// let meeting = new Meeting(hash);
+// let remoteMediaStreams = document.getElementById("remote-media-streams");
+// let localMediaStream = document.getElementById("local-media-stream");
+// let channel = "#twitchplaysnintendoswitch";
+// let sender = Math.round(Math.random() * 999999999) + 999999999;
+// let socket2 = io("https://twitchplaysnintendoswitch.com", {
+// 	path: "/8110/socket.io/",
+// 	transports: ["websocket"],
+// });
+// socket2.emit("new-channel", {
+// 	channel: channel,
+// 	sender: sender
+// });
+// //socket = io.connect(SIGNALING_SERVER + channel);
+// io.connect("https://twitchplaysnintendoswitch.com", {
+// 	path: "/8110/socket.io/",
+// 	transports: ["websocket"] // added
+// });
+// socket2.on("connect", function() {
+// 	// setup peer connection & pass socket object over the constructor!
+// });
+// socket2.send = function(message) {
+// 	socket.emit("message", {
+// 		sender: sender,
+// 		data: message
+// 	});
+// };
+// meeting.openSignalingChannel = function(callback) {
+// 	return socket.on("message", callback);
+// };
+// // on getting media stream
+// meeting.onaddstream = function(e) {
+// };
+// // using firebase for signaling
+// meeting.firebase = "rtcweb";
+// // if someone leaves; just remove their audio
+// meeting.onuserleft = function(userid) {
+// 	let audio = document.getElementById(userid);
+// 	if (audio) audio.parentNode.removeChild(audio);
+// };
+// // check pre-created meeting rooms
+// meeting.check();
+
+
+// $("#audioCheckbox").on("click", function() {
+// 	toggleAudio = !toggleAudio;
+// 	if ($("#audioCheckbox")[0].checked) {
+// 		audioElem.play();
+// 	} else {
+// 		audioElem.pause();
+// 	}
+// });
 
 // $("#globalVolume").slider({
 //     min: 0,
@@ -1669,6 +1768,22 @@ socket.on("controlQueue", function(data) {
 	}
 });
 
+socket.on("controlQueue2", function(data) {
+	controlQueue2 = data.queue;
+	$("#controlQueue2").empty();
+	
+	for (let i = 0; i < controlQueue2.length; i++) {
+		let username = controlQueue2[i];
+		let html;
+		if (!toggleDarkTheme) {
+			html = "<li class='list-group-item'>" + username + "</li>";
+		} else {
+			html = "<li class='list-group-item-dark'>" + username + "</li>";
+		} 
+		$("#controlQueue2").append(html);
+	}
+});
+
 socket.on("twitchUsername", function(data) {
 	twitchUsername = data;
 });
@@ -1697,6 +1812,37 @@ socket.on("turnTimeLeft", function(data) {
 		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
 		$("#currentPlayer").text("Current Player: " + turnUsername);
 	}
+	let totalViewers = data.viewerCounts[0] + data.viewerCounts[1] + data.viewerCounts[2];
+	$("#lagless1ViewerCount").text(data.viewerCounts[0] + "/" + totalViewers + " Viewers");
+	$("#lagless2ViewerCount").text(data.viewerCounts[1] + "/" + totalViewers + " Viewers");
+	$("#lagless3ViewerCount").text(data.viewerCounts[2] + "/" + totalViewers + " Viewers");
+	//console.log(data.viewerCounts);
+});
+
+socket.on("turnTimeLeft2", function(data) {
+	timeLeft2 = data.timeLeft;
+	turnUsername2 = data.username;
+	turnLength2 = data.turnLength;
+	lastCurrentTime2 = Date.now();
+	let timeLeftMilli = timeLeft2;
+	let timeLeftSec = parseInt(timeLeft2 / 1000);
+	let percent = parseInt((timeLeftMilli / turnLength2) * 100);
+	let progressBar = $("#turnTimerBarChild2");
+	
+	let timeLeftMilli2 = data.timeLeftForfeit;
+	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
+	let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
+	let forfeitBar = $("#forfeitTimerBarChild2");
+	
+	if (turnUsername2 == null) {
+		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		$("#currentPlayer").text("No one is playing right now.");
+	} else {
+		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
+		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+		$("#currentPlayer").text("Current Player: " + turnUsername2);
+	}
 });
 
 
@@ -1713,11 +1859,16 @@ socket.on("turnTimeLeft", function(data) {
 $("#requestTurn").on("click", function(event) {
 	socket.emit("requestTurn");
 });
-
 $("#cancelTurn").on("click", function(event) {
 	socket.emit("cancelTurn");
 });
 
+$("#requestTurn2").on("click", function(event) {
+	socket.emit("requestTurn2");
+});
+$("#cancelTurn2").on("click", function(event) {
+	socket.emit("cancelTurn2");
+});
 
 
 

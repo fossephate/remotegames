@@ -16,6 +16,8 @@ html {
 	/*   position: absolute; */
 	/*   top: 0; */
 	/*   right: 0; */
+    width: 73.2%;
+    margin-left: 13.4%;
 }
 
 #timerBars {
@@ -56,8 +58,8 @@ html {
 	border: 2px solid #333;
 }
 
-#forfeitTimerBarChild {
-	line-height: 15px;
+.forfeitTimerBarChild {
+	line-height: 15px !important;
 }
 
 #barUnderTheStream {
@@ -225,6 +227,12 @@ max-width: 500px; */
 	width: 75%;
 }
 
+#lagless1ViewerCount {
+	display: flex;
+	justify-content: space-evenly;
+	align-self: center;
+}
+
 #videoCanvas1 {
 	width: 75%;
 	margin-left: 12.5%;
@@ -271,6 +279,12 @@ max-width: 500px; */
 	width: 75%;
 }
 
+#lagless2ViewerCount {
+	display: flex;
+	justify-content: space-evenly;
+	align-self: center;
+}
+
 #lagless2VolumeSlider {
 	margin-left: auto;
 }
@@ -279,6 +293,9 @@ max-width: 500px; */
 
 #lagless3Container {
 	text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-flow: column;
 }
 
 #lagless3View {
@@ -291,6 +308,19 @@ max-width: 500px; */
 #videoCanvas3 {
 	width: 75%;
 	margin-left: 12.5%;
+	align-self: center;
+}
+
+#lagless3Bar {
+	display: flex;
+	justify-content: space-evenly;
+	align-self: center;
+	width: 75%;
+}
+
+#lagless3ViewerCount {
+	display: flex;
+	justify-content: space-evenly;
 	align-self: center;
 }
 
@@ -803,6 +833,16 @@ width: 40%; */
 	max-height: 200px;
 	text-align: center;
 	margin-top: 20px;
+}
+
+#controlQueues {
+	display: flex;
+}
+
+.queue {
+	display: flex;
+	flex-flow: column;
+	width: 50%;
 }
 
 /* Dark Theme */

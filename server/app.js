@@ -44,17 +44,30 @@ let controlQueue = [];
 let controlQueue2 = [];
 let controlQueue3 = [];
 let controlQueue4 = [];
+let banlist = [];
 let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
-let currentTurnUsername = null;
+
+let lagless1Clients = [];
+let lagless2Clients = [];
+let lagless3Clients = [];
+
+
 let turnDuration = 30000;
 let timeTillForfeit = 15000;
-let controller = null;
-let controller2 = null;
+
+// player1:
 let turnStartTime = Date.now();
 let forfeitStartTime = Date.now();
 let forfeitTimer = null;
 let moveLineTimer = null;
-let banlist = [];
+let currentTurnUsername = null;
+
+// player 2:
+let turnStartTime2 = Date.now();
+let forfeitStartTime2 = Date.now();
+let forfeitTimer2 = null;
+let moveLineTimer2 = null;
+let currentTurnUsername2 = null;
 
 app.use(session({
 	secret: SESSION_SECRET,
@@ -248,9 +261,6 @@ function Client(socket) {
 	this.name = "none";
 	this.username = null;
 
-	this.isController = false;
-	this.isController2 = false;
-
 	this.getImage = function(q) {
 		let objectToSend = {};
 		objectToSend.q = q;
@@ -343,6 +353,14 @@ function getImageFromUser3(user, x1, y1, x2, y2, quality, scale) {
 	let client = clients[index];
 
 	client.getImage3(x1, y1, x2, y2, quality, scale);
+}
+
+function intersect(a, b) {
+	var t;
+	if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+	return a.filter(function (e) {
+		return b.indexOf(e) > -1;
+	});
 }
 
 io.set("transports", [
@@ -490,8 +508,64 @@ io.on("connection", function(socket) {
 		forfeitStartTime = Date.now();
 
 		io.emit("controllerState", data);
-		//io.to("controller").emit("controllerState", data);
 		io.emit("currentPlayer", client.username);
+	});
+	
+	socket.on("sendControllerState2", function(data) {
+
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		let client = clients[index];
+		if (client.username == null) {
+			return;
+		}
+		
+		if (controlQueue2.length === 0) {
+			return;
+		}
+		currentTurnUsername2 = controlQueue2[0];
+		if (client.username != currentTurnUsername2) {
+			return;
+		}
+
+		// forfeit timer:
+		clearTimeout(forfeitTimer2);
+		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, client.username);
+		forfeitStartTime2 = Date.now();
+
+		io.emit("controllerState2", data);
+		io.emit("currentPlayer2", client.username);
+	});
+	
+	
+	socket.on("sendControllerStateWiiU3Ds", function(data) {
+
+// 		let index = findClientByID(socket.id);
+// 		if (index == -1) {
+// 			return;
+// 		}
+// 		let client = clients[index];
+// 		if (client.username == null) {
+// 			return;
+// 		}
+		
+// 		if (controlQueue2.length === 0) {
+// 			return;
+// 		}
+// 		currentTurnUsername2 = controlQueue2[0];
+// 		if (client.username != currentTurnUsername2) {
+// 			return;
+// 		}
+
+		// forfeit timer:
+		clearTimeout(forfeitTimer2);
+		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, client.username);
+		forfeitStartTime2 = Date.now();
+
+		io.to("wiiu3dscontroller").emit("controllerState", data);
+// 		io.emit("currentPlayer2", client.username);
 	});
 
 	socket.on("directedGetImage", function(data) {
@@ -505,14 +579,6 @@ io.on("connection", function(socket) {
 		quality = (isNaN(quality)) ? 0 : quality;
 		client.getImage(quality);
 	});
-
-	// 	socket.on("IamController", function() {
-	// 		let index = findClientByID(socket.id);
-	// 		if (index == -1) {return;}
-	// 		client = clients[index];
-	// 		client.isController = true;
-	// 		controller = client;
-	// 	});
 
 	/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
@@ -530,6 +596,11 @@ io.on("connection", function(socket) {
 			return;
 		}
 		
+		// check if the username is in any of the other lists:
+		if (controlQueue2.indexOf(client.username) > -1) {
+			return;
+		}
+		
 		if (controlQueue.indexOf(client.username) == -1) {
 			controlQueue.push(client.username);
 			currentTurnUsername = controlQueue[0];
@@ -539,12 +610,11 @@ io.on("connection", function(socket) {
 		}
 
 		if (controlQueue.length == 1) {
+			// turn timer:
 			turnStartTime = Date.now();
 			clearTimeout(moveLineTimer);
 			moveLineTimer = setTimeout(moveLine, turnDuration);
-		}
-
-		if (controlQueue.length == 1) {
+			
 			// forfeit timer:
 			forfeitStartTime = Date.now();
 			clearTimeout(forfeitTimer);
@@ -578,7 +648,7 @@ io.on("connection", function(socket) {
 					moveLineTimer = setTimeout(moveLine, turnDuration);
 					// restart forfeit timer:
 					clearTimeout(forfeitTimer);
-					forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, controlQueue[0]);
+					forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, currentTurnUsername);
 					forfeitStartTime = Date.now();
 				}
 			} else if (controlQueue.length === 0) {
@@ -595,8 +665,96 @@ io.on("connection", function(socket) {
 				username: currentTurnUsername,
 				turnLength: turnDuration,
 				timeLeftForfeit: timeLeftForfeit,
+				viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
 			});
-			//io.emit("currentPlayer", currentTurnUsername);// not needed
+		}
+	});
+	
+	
+	socket.on("requestTurn2", function() {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.username == null) {
+			return;
+		}
+		// return if banned:
+		if (banlist.indexOf(client.username) > -1) {
+			return;
+		}
+		
+		// check if the username is in any of the other lists:
+		if (controlQueue.indexOf(client.username) > -1) {
+			return;
+		}
+		
+		if (controlQueue2.indexOf(client.username) == -1) {
+			controlQueue2.push(client.username);
+			currentTurnUsername2 = controlQueue2[0];
+			io.emit("controlQueue2", {
+				queue: controlQueue2
+			});
+		}
+
+		if (controlQueue2.length == 1) {
+			// turn timer:
+			turnStartTime2 = Date.now();
+			clearTimeout(moveLineTimer2);
+			moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+			
+			// forfeit timer:
+			forfeitStartTime2 = Date.now();
+			clearTimeout(forfeitTimer2);
+			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, client.username);
+		}
+	});
+
+	socket.on("cancelTurn2", function() {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.username == null) {
+			return;
+		}
+
+		index = controlQueue2.indexOf(client.username);
+		if (index > -1) {
+			controlQueue2.splice(index, 1);
+			io.emit("controlQueue2", {
+				queue: controlQueue2
+			});
+
+			if (controlQueue2.length >= 1) {
+				currentTurnUsername2 = controlQueue2[0];
+				if (index === 0) {
+					// restart turn timer:
+					turnStartTime2 = Date.now();
+					clearTimeout(moveLineTimer2);
+					moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+					// restart forfeit timer:
+					clearTimeout(forfeitTimer2);
+					forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, currentTurnUsername2);
+					forfeitStartTime2 = Date.now();
+				}
+			} else if (controlQueue2.length === 0) {
+				currentTurnUsername2 = null;
+			}
+
+			let currentTime = Date.now();
+			let elapsedTime = currentTime - turnStartTime2;
+			let timeLeft = turnDuration - elapsedTime;
+			let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
+			let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+			io.emit("turnTimeLeft2", {
+				timeLeft: timeLeft,
+				username: currentTurnUsername2,
+				turnLength: turnDuration,
+				timeLeftForfeit: timeLeftForfeit,
+			});
 		}
 	});
 
@@ -731,6 +889,62 @@ io.on("connection", function(socket) {
 	socket.on("leave", function(room) {
 		socket.leave(room);
 	});
+	
+	
+	/* COUNT IMPLEMENTATIONS @@@@@@@@@@@@@@@@@@@@@@@@ */
+	socket.on("joinLagless1", function() {
+		let id = socket.id;
+		// if the id isn't in the list, add it:
+		if (lagless1Clients.indexOf(id) == -1) {
+			lagless1Clients.push(id);
+		}
+		// remove from other lists:
+		let index;
+		index = lagless2Clients.indexOf(id);
+		if (index > -1) {
+			lagless2Clients.splice(index, 1);
+		}
+		index = lagless3Clients.indexOf(id);
+		if (index > -1) {
+			lagless3Clients.splice(index, 1);
+		}
+	});
+	socket.on("joinLagless2", function() {
+		let id = socket.id;
+		// if the id isn't in the list, add it:
+		if (lagless2Clients.indexOf(id) == -1) {
+			lagless2Clients.push(id);
+		}
+		// remove from other lists:
+		let index;
+		index = lagless1Clients.indexOf(id);
+		if (index > -1) {
+			lagless1Clients.splice(index, 1);
+		}
+		index = lagless3Clients.indexOf(id);
+		if (index > -1) {
+			lagless3Clients.splice(index, 1);
+		}
+	});
+	socket.on("joinLagless3", function() {
+		let id = socket.id;
+		// if the id isn't in the list, add it:
+		if (lagless3Clients.indexOf(id) == -1) {
+			lagless3Clients.push(id);
+		}
+		// remove from other lists:
+		let index;
+		index = lagless1Clients.indexOf(id);
+		if (index > -1) {
+			lagless1Clients.splice(index, 1);
+		}
+		index = lagless2Clients.indexOf(id);
+		if (index > -1) {
+			lagless2Clients.splice(index, 1);
+		}
+	});
+	
+	//Object.keys(io.sockets.sockets);
 
 });
 
@@ -763,7 +977,6 @@ setInterval(function() {
 }, 4000);
 
 function forfeitTurn(username) {
-	
 	let index = controlQueue.indexOf(username);
 	if (index > -1) {
 		controlQueue.splice(index, 1);
@@ -779,7 +992,7 @@ function forfeitTurn(username) {
 			moveLineTimer = setTimeout(moveLine, turnDuration);
 			// restart forfeit timer:
 			clearTimeout(forfeitTimer);
-			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, controlQueue[0]);
+			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, currentTurnUsername2);
 			forfeitStartTime = Date.now();
 		} else {
 			currentTurnUsername = null;
@@ -793,6 +1006,43 @@ function forfeitTurn(username) {
 		io.emit("turnTimeLeft", {
 			timeLeft: timeLeft,
 			username: currentTurnUsername,
+			turnLength: turnDuration,
+			timeLeftForfeit: timeLeftForfeit,
+			viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+		});
+	}
+}
+
+function forfeitTurn2(username) {
+	let index = controlQueue2.indexOf(username);
+	if (index > -1) {
+		controlQueue2.splice(index, 1);
+		io.emit("controlQueue2", {queue: controlQueue2});
+		// stop the controller
+		io.to("controller").emit("controllerState2", "800000000000000 127 127 127 127");
+	
+		if (controlQueue.length >= 1) {
+			currentTurnUsername2 = controlQueue2[0];
+			// restart turn timer:
+			turnStartTime2 = Date.now();
+			clearTimeout(moveLineTimer2);
+			moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+			// restart forfeit timer:
+			clearTimeout(forfeitTimer2);
+			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, currentTurnUsername2);
+			forfeitStartTime2 = Date.now();
+		} else {
+			currentTurnUsername2 = null;
+		}
+
+		let currentTime = Date.now();
+		let elapsedTime = currentTime - turnStartTime2;
+		let timeLeft = turnDuration - elapsedTime;
+		let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
+		let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+		io.emit("turnTimeLeft2", {
+			timeLeft: timeLeft,
+			username: currentTurnUsername2,
 			turnLength: turnDuration,
 			timeLeftForfeit: timeLeftForfeit,
 		});
@@ -821,7 +1071,38 @@ function moveLine() {
 }
 moveLine();
 
+function moveLine2() {
+	if (controlQueue2.length > 1) {
+		controlQueue2.shift();
+		currentTurnUsername2 = controlQueue2[0];
+		// stop the controller
+		io.to("controller").emit("controllerState2", "800000000000000 127 127 127 127");
+	}
+	io.emit("controlQueue2", {queue: controlQueue2});
+
+	turnStartTime2 = Date.now();
+	clearTimeout(moveLineTimer2);
+	moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+
+	if (controlQueue2.length > 1) {
+		// forfeit timer:
+		clearTimeout(forfeitTimer2);
+		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, controlQueue2[0]);
+		forfeitStartTime2 = Date.now();
+	}
+}
+moveLine2();
+
 setInterval(function() {
+	// get all connected id's
+	let ids = Object.keys(io.sockets.sockets);
+	
+	// remove any clients not still connected:
+	lagless1Clients = lagless1Clients.filter(value => -1 !== ids.indexOf(value));
+	lagless2Clients = lagless2Clients.filter(value => -1 !== ids.indexOf(value));
+	lagless3Clients = lagless3Clients.filter(value => -1 !== ids.indexOf(value));
+	
+	
 	let currentTime = Date.now();
 	let elapsedTime = currentTime - turnStartTime;
 	let timeLeft = turnDuration - elapsedTime;
@@ -832,8 +1113,24 @@ setInterval(function() {
 		username: currentTurnUsername,
 		turnLength: turnDuration,
 		timeLeftForfeit: timeLeftForfeit,
+		viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
 	});
 	io.emit("controlQueue", {queue: controlQueue});
+}, 500);
+
+setInterval(function() {
+	let currentTime = Date.now();
+	let elapsedTime = currentTime - turnStartTime2;
+	let timeLeft = turnDuration - elapsedTime;
+	let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
+	let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+	io.emit("turnTimeLeft2", {
+		timeLeft: timeLeft,
+		username: currentTurnUsername2,
+		turnLength: turnDuration,
+		timeLeftForfeit: timeLeftForfeit,
+	});
+	io.emit("controlQueue2", {queue: controlQueue2});
 }, 500);
 
 function stream() {
