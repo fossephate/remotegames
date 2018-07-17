@@ -534,7 +534,8 @@ io.on("connection", function(socket) {
 		clearTimeout(forfeitTimer2);
 		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, client.username);
 		forfeitStartTime2 = Date.now();
-
+		
+		console.log("controller2");
 		io.emit("controllerState2", data);
 		io.emit("currentPlayer2", client.username);
 	});
@@ -944,7 +945,23 @@ io.on("connection", function(socket) {
 		}
 	});
 	
-	//Object.keys(io.sockets.sockets);
+	socket.on("leaveLagless", function() {
+		let id = socket.id;
+		// remove from lists:
+		let index;
+		index = lagless1Clients.indexOf(id);
+		if (index > -1) {
+			lagless1Clients.splice(index, 1);
+		}
+		index = lagless2Clients.indexOf(id);
+		if (index > -1) {
+			lagless2Clients.splice(index, 1);
+		}
+		index = lagless3Clients.indexOf(id);
+		if (index > -1) {
+			lagless3Clients.splice(index, 1);
+		}
+	});
 
 });
 

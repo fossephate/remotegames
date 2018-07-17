@@ -475,10 +475,10 @@ var audioElem = 0;
 			// return 'You\'re leaving the session.';
 		};
 
-		window.onkeyup = function(e) {
-			if (e.keyCode == 116)
-				leaveRoom();
-		};
+// 		window.onkeyup = function(e) {
+// 			if (e.keyCode == 116)
+// 				leaveRoom();
+// 		};
 
 		var anchors = document.querySelectorAll('a'),
 			length = anchors.length;

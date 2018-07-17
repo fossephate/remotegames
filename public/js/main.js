@@ -19,6 +19,7 @@ let controlQueue2 = [];
 let twitchUsername = null;
 
 // settings:
+let toggleAudio = false;
 let toggleDarkTheme = false;
 let toggleFullscreen = false;
 let audio = true;
@@ -440,6 +441,13 @@ window.addEventListener("keydown", function(e) {
 	// space and arrow keys
 	if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
 		e.preventDefault();
+	}
+	if ([27].indexOf(e.keyCode) > -1) {
+		document.exitPointerLock();
+		document.removeEventListener("mousemove", getMouseInput);
+		document.removeEventListener("mousedown", getMouseInput2);
+		document.removeEventListener("mouseup", getMouseInput2);
+		$("#mouseControlsCheckbox").prop("checked", false);
 	}
 }, false);
 
@@ -1627,6 +1635,7 @@ function replaceWithTwitch(tab) {
 		$("#videoCanvas3").replaceWith(twitchIFrame);
 	}
 	setVideoWidth(73.2);
+	socket.emit("leaveLagless");
 }
 
 
@@ -1636,6 +1645,7 @@ function replaceWithLagless(tab) {
 	if (tab == "#lagless1") {
 		laglessCanvas = '<canvas id="videoCanvas1"></canvas>';
 		$("#videoCanvas1").replaceWith(laglessCanvas);
+		socket.emit("joinLagless1");
 		socket.emit("join", "viewers");
 	}
 	
@@ -1644,13 +1654,13 @@ function replaceWithLagless(tab) {
 		//$("#twitchvideo").replaceWith(laglessCanvas);
 		$("#videoCanvas2")[0].style.display = "";
 		$("#twitchvideo").remove();
+		socket.emit("joinLagless2");
 		player.play();
 	}
 	
 	if (tab == "#lagless3") {
 		laglessCanvas = '<canvas id="videoCanvas3"></canvas>';
 		$("#twitchvideo").replaceWith(laglessCanvas);
-		
 		socket.emit("joinLagless3");
 		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 		wsavc.connect(uri);
@@ -1658,72 +1668,57 @@ function replaceWithLagless(tab) {
 	setVideoWidth(73.2);
 }
 
+$("#replaceWithTwitch").on("click", function() {
+	replaceWithTwitch();
+});
+
+$("#replaceWithLagless").on("click", function() {
+	replaceWithLagless();
+});
+
 /* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-// let hash = window.location.hash.replace("#", "");
-// let meeting = new Meeting(hash);
-// let remoteMediaStreams = document.getElementById("remote-media-streams");
-// let localMediaStream = document.getElementById("local-media-stream");
-// let channel = "#twitchplaysnintendoswitch";
-// let sender = Math.round(Math.random() * 999999999) + 999999999;
+let hash = window.location.hash.replace("#", "");
+let meeting = new Meeting(hash);
+let channel = "#twitchplaysnintendoswitch";
+let sender = Math.round(Math.random() * 999999999) + 999999999;
 // let socket2 = io("https://twitchplaysnintendoswitch.com", {
 // 	path: "/8110/socket.io/",
 // 	transports: ["websocket"],
 // });
-// socket2.emit("new-channel", {
-// 	channel: channel,
-// 	sender: sender
-// });
-// //socket = io.connect(SIGNALING_SERVER + channel);
-// io.connect("https://twitchplaysnintendoswitch.com", {
-// 	path: "/8110/socket.io/",
-// 	transports: ["websocket"] // added
-// });
-// socket2.on("connect", function() {
-// 	// setup peer connection & pass socket object over the constructor!
-// });
-// socket2.send = function(message) {
-// 	socket.emit("message", {
-// 		sender: sender,
-// 		data: message
-// 	});
-// };
-// meeting.openSignalingChannel = function(callback) {
-// 	return socket.on("message", callback);
-// };
-// // on getting media stream
-// meeting.onaddstream = function(e) {
-// };
-// // using firebase for signaling
-// meeting.firebase = "rtcweb";
-// // if someone leaves; just remove their audio
-// meeting.onuserleft = function(userid) {
-// 	let audio = document.getElementById(userid);
-// 	if (audio) audio.parentNode.removeChild(audio);
-// };
-// // check pre-created meeting rooms
-// meeting.check();
+socket.emit("new-channel", {
+	channel: channel,
+	sender: sender
+});
+meeting.openSignalingChannel = function(callback) {
+	return socket.on("message", callback);
+};
+// check pre-created meeting rooms
+//meeting.check();
 
 
-// $("#audioCheckbox").on("click", function() {
-// 	toggleAudio = !toggleAudio;
-// 	if ($("#audioCheckbox")[0].checked) {
-// 		audioElem.play();
-// 	} else {
-// 		audioElem.pause();
-// 	}
-// });
+$("#audioCheckbox").on("click", function() {
+	toggleAudio = !toggleAudio;
+	if ($("#audioCheckbox")[0].checked) {
+		meeting.check();
+		setTimeout(function() {
+			audioElem.play();
+		}, 1000);
+	} else {
+		audioElem.pause();
+	}
+});
 
-// $("#globalVolume").slider({
-//     min: 0,
-//     max: 100,
-//     value: 0,
-// 		range: "min",
-// 		animate: true,
-// 	slide: function(event, ui) {
-// 		audioElem.volume = ui.value / 100;
-//   	}
-// });
-// audioElem.volume = 0;
+$("#globalVolume").slider({
+    min: 0,
+    max: 100,
+    value: 0,
+		range: "min",
+		animate: true,
+	slide: function(event, ui) {
+		audioElem.volume = ui.value / 100;
+  	}
+});
+//audioElem.volume = 0;
 
 $("#lagless1Volume").slider({
     min: 0,
@@ -1737,12 +1732,12 @@ $("#lagless1Volume").slider({
 });
 // $("#lagless1Volume").slider("value", 50);
 // audioElem.volume = 0.5;// doesn't update automatically :/
-$("#lagless1Volume").slider("value", 0);
-audioElem.volume = 0;// doesn't update automatically :/
+//$("#lagless1Volume").slider("value", 0);
+//audioElem.volume = 0;// doesn't update automatically :/
 
 $("#lagless1VolumeSlider").children().on("click", function(){
 	$("#lagless1Volume").slider("value", 0);
-	audioElem.volume = 0.0;// doesn't update automatically :/
+	audioElem.volume = 0;// doesn't update automatically :/
 });
 
 $("#lagless1VolumeSlider").children().next().on("click", function(){

@@ -832,7 +832,14 @@ width: 40%; */
 	overflow-y: auto;
 	max-height: 200px;
 	text-align: center;
-	margin-top: 20px;
+	margin-top: 5px;
+}
+
+#controlQueue2 {
+	overflow-y: auto;
+	max-height: 200px;
+	text-align: center;
+	margin-top: 5px;
 }
 
 #controlQueues {
