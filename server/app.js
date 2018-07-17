@@ -501,15 +501,15 @@ io.on("connection", function(socket) {
 			return;
 		}
 		
-		// 		if(twitch_subscribers.indexOf(currentTurnUsername) > -1) {
-		// 			turnDuration = 60000;
+		// 		if(twitch_subscribers.indexOf(currentTurnUsername1) > -1) {
+		// 			turnDuration1 = 60000;
 		// 		} else {
-		// 			turnDuration = 30000;
+		// 			turnDuration1 = 30000;
 		// 		}
 
 		// forfeit timer:
 		clearTimeout(forfeitTimer1);
-		forfeitTimer = setTimeout(forfeitTurn1, timeTillForfeit1, client.username);
+		forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, client.username);
 		forfeitStartTime1 = Date.now();
 
 		io.emit("controllerState", data);
@@ -618,7 +618,7 @@ io.on("connection", function(socket) {
 			// turn timer:
 			turnStartTime1 = Date.now();
 			clearTimeout(moveLineTimer1);
-			moveLineTimer = setTimeout(moveLine1, turnDuration1);
+			moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
 			
 			// forfeit timer:
 			forfeitStartTime1 = Date.now();
@@ -653,7 +653,7 @@ io.on("connection", function(socket) {
 					moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
 					// restart forfeit timer:
 					clearTimeout(forfeitTimer1);
-					forfeitTimer = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
+					forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
 					forfeitStartTime1 = Date.now();
 				}
 			} else if (controlQueue1.length === 0) {
@@ -1013,7 +1013,7 @@ function forfeitTurn1(username) {
 			moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
 			// restart forfeit timer:
 			clearTimeout(forfeitTimer1);
-			forfeitTimer = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
+			forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
 			forfeitStartTime1 = Date.now();
 		} else {
 			currentTurnUsername1 = null;
@@ -1079,7 +1079,7 @@ function moveLine1() {
 	}
 	io.emit("controlQueue", {queue: controlQueue1});
 
-	turnStartTime = Date.now();
+	turnStartTime1 = Date.now();
 	clearTimeout(moveLineTimer1);
 	moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
 
