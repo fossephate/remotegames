@@ -16,7 +16,8 @@ let lagless1JoinTimer;
 let currentTab = "#lagless1";
 let currentPlayerChosen = 1;
 
-let controlQueue = [];
+let controlQueues = [];
+let controlQueue1 = [];
 let controlQueue2 = [];
 let twitchUsername = null;
 
@@ -230,16 +231,16 @@ function sendControllerState() {
 	}
 	
 	
-	if(controlQueue.indexOf(twitchUsername) == -1 && currentPlayerChosen == 1) {
-		socket.emit("requestTurn");
+	if(controlQueue1.indexOf(twitchUsername) == -1 && currentPlayerChosen == 1) {
+		socket.emit("requestTurn", 0);
 	}
 	
 	if(controlQueue2.indexOf(twitchUsername) == -1 && currentPlayerChosen == 2) {
-		socket.emit("requestTurn2");
+		socket.emit("requestTurn", 1);
 	}
 	
 	// todo: possibly broken?:
-	if(controlQueue[0] != twitchUsername && controlQueue2[0] != twitchUsername && (controlQueue.length > 0 || controlQueue2.length > 0)) {
+	if(controlQueue1[0] != twitchUsername && controlQueue2[0] != twitchUsername && (controlQueue1.length > 0 || controlQueue2.length > 0)) {
 		swal("It's not your turn yet!");
 		//$("#turnTimerBar").effect("shake", {direction: "left", distance: 100, times: 2}, 250);
 // 		let timerInterval;
@@ -270,11 +271,14 @@ function sendControllerState() {
 	
 	console.log(newControllerState);
 	
-	if (controlQueue[0] == twitchUsername) {
-		socket.emit("sendControllerState", newControllerState);
+	let obj = {state: newControllerState}
+	
+	if (controlQueue1[0] == twitchUsername) {
+		obj.cNum = 0;
 	} else if (controlQueue2[0] == twitchUsername) {
-		socket.emit("sendControllerState2", newControllerState);
+		obj.cNum = 1;
 	}
+	socket.emit("sendControllerState", obj);
 }
 
 
@@ -1137,8 +1141,8 @@ function onButtonPress(e) {
 		return;
 	}
 	
-	if(controlQueue.indexOf(twitchUsername) == -1) {
-		socket.emit("requestTurn");
+	if(controlQueue1.indexOf(twitchUsername) == -1) {
+		socket.emit("requestTurn", 0);
 	}
 	
 }
@@ -1754,26 +1758,25 @@ $("#lagless1VolumeSlider").children().next().on("click", function(){
 
 
 /* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-socket.on("controlQueue", function(data) {
-	controlQueue = data.queue;
-	$("#controlQueue").empty();
+socket.on("controlQueues", function(data) {
+	controlQueues = data.queues;
+	controlQueue1 = controlQueues[0];
+	controlQueue2 = controlQueues[1];
 	
-	for (let i = 0; i < controlQueue.length; i++) {
-		let username = controlQueue[i];
+	$("#controlQueue1").empty();
+	for (let i = 0; i < controlQueue1.length; i++) {
+		let username = controlQueue1[i];
 		let html;
 		if (!toggleDarkTheme) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
 		} 
-		$("#controlQueue").append(html);
+		$("#controlQueue1").append(html);
 	}
-});
-
-socket.on("controlQueue2", function(data) {
-	controlQueue2 = data.queue;
-	$("#controlQueue2").empty();
 	
+	
+	$("#controlQueue2").empty();
 	for (let i = 0; i < controlQueue2.length; i++) {
 		let username = controlQueue2[i];
 		let html;
@@ -1790,17 +1793,18 @@ socket.on("twitchUsername", function(data) {
 	twitchUsername = data;
 });
 
-socket.on("turnTimeLeft", function(data) {
-	timeLeft = data.timeLeft;
-	turnUsername = data.username;
-	turnLength = data.turnLength;
+socket.on("turnTimesLeft", function(data) {
+	timeLeft = data.turnTimesLeft[0];
+	turnUsername = data.usernames[0];
+	turnLength = data.turnLengths[0];
 	lastCurrentTime = Date.now();
+	
 	let timeLeftMilli = timeLeft;
 	let timeLeftSec = parseInt(timeLeft / 1000);
 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
 	let progressBar = $("#turnTimerBarChild");
 	
-	let timeLeftMilli2 = data.timeLeftForfeit;
+	let timeLeftMilli2 = data.forfeitTimesLeft[0];
 	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
 	let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
 	let forfeitBar = $("#forfeitTimerBarChild");
@@ -1810,10 +1814,37 @@ socket.on("turnTimeLeft", function(data) {
 		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 		$("#currentPlayer").text("No one is playing right now.");
 	} else {
-		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
+		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
 		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
 		$("#currentPlayer").text("Current Player: " + turnUsername);
 	}
+	
+	
+	timeLef2t = data.turnTimesLeft[1];
+	turnUsername2 = data.usernames[1];
+	turnLength2 = data.turnLengths[1];
+	lastCurrentTime2 = Date.now();
+	timeLeftMilli = timeLeft2;
+	timeLeftSec = parseInt(timeLeft2 / 1000);
+	percent = parseInt((timeLeftMilli / turnLength2) * 100);
+	progressBar = $("#turnTimerBarChild2");
+	
+	timeLeftMilli2 = data.forfeitTimesLeft[1];
+	timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
+	percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
+	forfeitBar = $("#forfeitTimerBarChild2");
+	
+	if (turnUsername2 == null) {
+		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		$("#currentPlayer").text("No one is playing right now.");
+	} else {
+		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername2 + ": " + timeLeftSec + " seconds");
+		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+		$("#currentPlayer").text("Current Player: " + turnUsername2);
+	}
+	
+	
 	let totalViewers = data.viewerCounts[0] + data.viewerCounts[1] + data.viewerCounts[2];
 	$("#lagless1ViewerCount").text(data.viewerCounts[0] + "/" + totalViewers + " Viewers");
 	$("#lagless2ViewerCount").text(data.viewerCounts[1] + "/" + totalViewers + " Viewers");
@@ -1822,29 +1853,6 @@ socket.on("turnTimeLeft", function(data) {
 });
 
 socket.on("turnTimeLeft2", function(data) {
-	timeLeft2 = data.timeLeft;
-	turnUsername2 = data.username;
-	turnLength2 = data.turnLength;
-	lastCurrentTime2 = Date.now();
-	let timeLeftMilli = timeLeft2;
-	let timeLeftSec = parseInt(timeLeft2 / 1000);
-	let percent = parseInt((timeLeftMilli / turnLength2) * 100);
-	let progressBar = $("#turnTimerBarChild2");
-	
-	let timeLeftMilli2 = data.timeLeftForfeit;
-	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
-	let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
-	let forfeitBar = $("#forfeitTimerBarChild2");
-	
-	if (turnUsername2 == null) {
-		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		$("#currentPlayer").text("No one is playing right now.");
-	} else {
-		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
-		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
-		$("#currentPlayer").text("Current Player: " + turnUsername2);
-	}
 });
 
 
@@ -1858,18 +1866,18 @@ socket.on("turnTimeLeft2", function(data) {
 // 	progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
 // }, 200);
 
-$("#requestTurn").on("click", function(event) {
-	socket.emit("requestTurn");
+$("#requestTurn1").on("click", function(event) {
+	socket.emit("requestTurn", 0);
 });
-$("#cancelTurn").on("click", function(event) {
-	socket.emit("cancelTurn");
+$("#cancelTurn1").on("click", function(event) {
+	socket.emit("cancelTurn", 0);
 });
 
 $("#requestTurn2").on("click", function(event) {
-	socket.emit("requestTurn2");
+	socket.emit("requestTurn", 1);
 });
 $("#cancelTurn2").on("click", function(event) {
-	socket.emit("cancelTurn2");
+	socket.emit("cancelTurn", 1);
 });
 
 

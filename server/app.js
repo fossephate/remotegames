@@ -43,10 +43,13 @@ let localStorage;
 let clients = [];
 let channels = {};
 let restartAvailable = true;
-let controlQueue1 = [];
-let controlQueue2 = [];
-let controlQueue3 = [];
-let controlQueue4 = [];
+// let controlQueue1 = [];
+// let controlQueue2 = [];
+// let controlQueue3 = [];
+// let controlQueue4 = [];
+
+let controlQueues = [[],[],[],[]];
+
 let banlist = [];
 let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
 
@@ -55,25 +58,21 @@ let lagless2Clients = [];
 let lagless3Clients = [];
 
 
-let turnDuration1 = 30000;
-let timeTillForfeit1 = 15000;
+// let turnDuration1 = 30000;
+// let timeTillForfeit1 = 15000;
+// let turnDuration2 = 30000;
+// let timeTillForfeit2 = 15000;
 
-let turnDuration2 = 30000;
-let timeTillForfeit2 = 15000;
+let turnDurations = [30000, 30000, 30000, 30000];
+let timeTillForfeitDurations = [15000, 15000, 15000, 15000];
+let turnStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
+let forfeitStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
+let moveLineTimers = [null, null, null, null];
+let forfeitTimers = [null, null, null, null];
+let currentTurnUsernames = [null, null, null, null];
 
-// player1:
-let turnStartTime1 = Date.now();
-let forfeitStartTime1 = Date.now();
-let forfeitTimer1 = null;
-let moveLineTimer1 = null;
-let currentTurnUsername1 = null;
-
-// player 2:
-let turnStartTime2 = Date.now();
-let forfeitStartTime2 = Date.now();
-let forfeitTimer2 = null;
-let moveLineTimer2 = null;
-let currentTurnUsername2 = null;
+let turnTimesLeft = [0, 0, 0, 0];
+let forfeitTimesLeft = [0, 0, 0, 0];
 
 app.use(session({
 	secret: SESSION_SECRET,
@@ -493,11 +492,14 @@ io.on("connection", function(socket) {
 			return;
 		}
 		
-		if (controlQueue1.length === 0) {
+		let cNum = data.cNum;
+		let controllerState = data.state;
+		
+		if (controlQueues[cNum].length === 0) {
 			return;
 		}
-		currentTurnUsername1 = controlQueue1[0];
-		if (client.username != currentTurnUsername1) {
+		currentTurnUsernames[cNum] = controlQueues[cNum][0];
+		if (client.username != currentTurnUsernames[cNum]) {
 			return;
 		}
 		
@@ -507,41 +509,17 @@ io.on("connection", function(socket) {
 		// 			turnDuration1 = 30000;
 		// 		}
 
-		// forfeit timer:
-		clearTimeout(forfeitTimer1);
-		forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, client.username);
-		forfeitStartTime1 = Date.now();
-
-		io.emit("controllerState", data);
+		// reset forfeit timer:
+		clearTimeout(forfeitTimers[cNum]);
+		forfeitTimers[cNum] = setTimeout(forfeitTurn, timeTillForfeitDurations[cNum], client.username, cNum);
+		forfeitStartTimes[cNum] = Date.now();
+		
+		if (cNum === 0) {
+			io.emit("controllerState", controllerState);
+		} else if (cNum == 1) {
+			io.emit("controllerState2", controllerState);
+		}
 		io.emit("currentPlayer", client.username);
-	});
-	
-	socket.on("sendControllerState2", function(data) {
-
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		let client = clients[index];
-		if (client.username == null) {
-			return;
-		}
-		
-		if (controlQueue2.length === 0) {
-			return;
-		}
-		currentTurnUsername2 = controlQueue2[0];
-		if (client.username != currentTurnUsername2) {
-			return;
-		}
-
-		// forfeit timer:
-		clearTimeout(forfeitTimer2);
-		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
-		forfeitStartTime2 = Date.now();
-		
-		io.emit("controllerState2", data);
-		io.emit("currentPlayer2", client.username);
 	});
 	
 	
@@ -587,7 +565,7 @@ io.on("connection", function(socket) {
 
 	/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
-	socket.on("requestTurn", function() {
+	socket.on("requestTurn", function(cNum) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
 			return;
@@ -596,38 +574,37 @@ io.on("connection", function(socket) {
 		if (client.username == null) {
 			return;
 		}
-		// return if banned:
+		// return if banned
 		if (banlist.indexOf(client.username) > -1) {
 			return;
 		}
 		
-		// check if the username is in any of the other lists:
-		if (controlQueue2.indexOf(client.username) > -1) {
-			return;
+		// check to make sure username isn't already in another queue
+		let controllerList = [0, 1, 2, 3];
+		controllerList.splice(controllerList.indexOf(cNum), 1);
+		for (let i = 0; i < controllerList.length; i++) {
+			let listNum = controllerList[i];
+			if (controlQueues[listNum].indexOf(client.username) > -1) {
+				return;
+			}
 		}
 		
-		if (controlQueue1.indexOf(client.username) == -1) {
-			controlQueue1.push(client.username);
-			currentTurnUsername1 = controlQueue1[0];
-			io.emit("controlQueue", {
-				queue: controlQueue1
+		// check to make sure they aren't in this queue (so we don't push it more than once)
+		if (controlQueues[cNum].indexOf(client.username) == -1) {
+			controlQueues[cNum].push(client.username);
+			currentTurnUsernames[cNum] = controlQueues[cNum][0];// todo: delete this
+			io.emit("controlQueues", {
+				queues: controlQueues
 			});
 		}
-
-		if (controlQueue1.length == 1) {
-			// turn timer:
-			turnStartTime1 = Date.now();
-			clearTimeout(moveLineTimer1);
-			moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
-			
-			// forfeit timer:
-			forfeitStartTime1 = Date.now();
-			clearTimeout(forfeitTimer1);
-			forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, client.username);
+		
+		// only if there's only one person in the queue
+		if (controlQueues[cNum].length == 1) {
+			resetTimers(client.username, cNum);
 		}
 	});
 
-	socket.on("cancelTurn", function() {
+	socket.on("cancelTurn", function(cNum) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
 			return;
@@ -636,130 +613,36 @@ io.on("connection", function(socket) {
 		if (client.username == null) {
 			return;
 		}
-
-		index = controlQueue1.indexOf(client.username);
+		
+		// only do anything if the user is actually in the queue
+		index = controlQueues[cNum].indexOf(client.username);
 		if (index > -1) {
-			controlQueue1.splice(index, 1);
-			io.emit("controlQueue", {
-				queue: controlQueue1
+			controlQueues[cNum].splice(index, 1);
+			io.emit("controlQueues", {
+				queues: controlQueues
 			});
-
-			if (controlQueue1.length >= 1) {
-				currentTurnUsername1 = controlQueue1[0];
+			
+			if (controlQueues[cNum].length >= 1) {
+				currentTurnUsernames[cNum] = controlQueues[cNum][0];// todo: delete this
 				if (index === 0) {
-					// restart turn timer:
-					turnStartTime1 = Date.now();
-					clearTimeout(moveLineTimer1);
-					moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
-					// restart forfeit timer:
-					clearTimeout(forfeitTimer1);
-					forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
-					forfeitStartTime1 = Date.now();
+					resetTimers(client.username, cNum);
 				}
-			} else if (controlQueue1.length === 0) {
-				currentTurnUsername1 = null;
+			} else if (controlQueues[cNum].length === 0) {
+				currentTurnUsernames[cNum] = null;
 			}
 
-			let currentTime = Date.now();
-			let elapsedTime = currentTime - turnStartTime1;
-			let timeLeft = turnDuration1 - elapsedTime;
-			let elapsedTimeSinceLastMove = currentTime - forfeitStartTime1;
-			let timeLeftForfeit = timeTillForfeit1 - elapsedTimeSinceLastMove;
-			io.emit("turnTimeLeft", {
-				timeLeft: timeLeft,
-				username: currentTurnUsername1,
-				turnLength: turnDuration1,
-				timeLeftForfeit: timeLeftForfeit,
-				viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
-			});
-		}
-	});
-	
-	
-	socket.on("requestTurn2", function() {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
-		if (client.username == null) {
-			return;
-		}
-		// return if banned:
-		if (banlist.indexOf(client.username) > -1) {
-			return;
-		}
-		
-		// check if the username is in any of the other lists:
-		if (controlQueue1.indexOf(client.username) > -1) {
-			return;
-		}
-		
-		if (controlQueue2.indexOf(client.username) == -1) {
-			controlQueue2.push(client.username);
-			currentTurnUsername2 = controlQueue2[0];
-			io.emit("controlQueue2", {
-				queue: controlQueue2
-			});
-		}
-
-		if (controlQueue2.length == 1) {
-			// turn timer:
-			turnStartTime2 = Date.now();
-			clearTimeout(moveLineTimer2);
-			moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
-			
-			// forfeit timer:
-			forfeitStartTime2 = Date.now();
-			clearTimeout(forfeitTimer2);
-			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
-		}
-	});
-
-	socket.on("cancelTurn2", function() {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
-		if (client.username == null) {
-			return;
-		}
-
-		index = controlQueue2.indexOf(client.username);
-		if (index > -1) {
-			controlQueue2.splice(index, 1);
-			io.emit("controlQueue2", {
-				queue: controlQueue2
-			});
-
-			if (controlQueue2.length >= 1) {
-				currentTurnUsername2 = controlQueue2[0];
-				if (index === 0) {
-					// restart turn timer:
-					turnStartTime2 = Date.now();
-					clearTimeout(moveLineTimer2);
-					moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
-					// restart forfeit timer:
-					clearTimeout(forfeitTimer2);
-					forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, currentTurnUsername2);
-					forfeitStartTime2 = Date.now();
-				}
-			} else if (controlQueue2.length === 0) {
-				currentTurnUsername2 = null;
-			}
-
-			let currentTime = Date.now();
-			let elapsedTime = currentTime - turnStartTime2;
-			let timeLeft = turnDuration2 - elapsedTime;
-			let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
-			let timeLeftForfeit = timeTillForfeit2 - elapsedTimeSinceLastMove;
-			io.emit("turnTimeLeft2", {
-				timeLeft: timeLeft,
-				username: currentTurnUsername2,
-				turnLength: turnDuration2,
-				timeLeftForfeit: timeLeftForfeit,
-			});
+// 			let currentTime = Date.now();
+// 			let elapsedTime = currentTime - turnStartTimes[cNum];
+// 			let timeLeft = turnDurations[cNum] - elapsedTime;
+// 			let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[cNum];
+// 			let timeLeftForfeit = timeTillForfeitDurations[cNum] - elapsedTimeSinceLastMove;
+// 			io.emit("turnTimeLeft", {
+// 				timeLeft: timeLeft,
+// 				username: currentTurnUsernames[cNum],
+// 				turnLength: turnDurations[cNum],
+// 				timeLeftForfeit: timeLeftForfeit,
+// 				viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+// 			});
 		}
 	});
 
@@ -896,7 +779,7 @@ io.on("connection", function(socket) {
 	});
 	
 	
-	/* COUNT IMPLEMENTATIONS @@@@@@@@@@@@@@@@@@@@@@@@ */
+	/* VIEWER COUNTS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("joinLagless1", function() {
 		let id = socket.id;
 		// if the id isn't in the list, add it:
@@ -997,122 +880,76 @@ setInterval(function() {
 	restartAvailable = true;
 }, 4000);
 
-function forfeitTurn1(username) {
-	let index = controlQueue1.indexOf(username);
+function forfeitTurn(username, cNum) {
+	let index = controlQueues[cNum].indexOf(username);
 	if (index > -1) {
-		controlQueue1.splice(index, 1);
-		io.emit("controlQueue", {queue: controlQueue1});
+		controlQueues[cNum].splice(index, 1);
+		io.emit("controlQueues", {
+			queues: controlQueues
+		});
 		// stop the controller
-		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
+		io.to("controller").emit("controllerState", "800000000000000 128 128 128 128");// update this to use restPos
 	
-		if (controlQueue1.length >= 1) {
-			currentTurnUsername1 = controlQueue1[0];
-			// restart turn timer:
-			turnStartTime1 = Date.now();
-			clearTimeout(moveLineTimer1);
-			moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
-			// restart forfeit timer:
-			clearTimeout(forfeitTimer1);
-			forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
-			forfeitStartTime1 = Date.now();
+		if (controlQueues[cNum].length >= 1) {
+			currentTurnUsernames[cNum] = controlQueues[cNum][0];
+			resetTimers(client.username, cNum);
 		} else {
-			currentTurnUsername1 = null;
+			currentTurnUsernames[cNum] = null;
 		}
 
-		let currentTime = Date.now();
-		let elapsedTime = currentTime - turnStartTime1;
-		let timeLeft = turnDuration1 - elapsedTime;
-		let elapsedTimeSinceLastMove = currentTime - forfeitStartTime1;
-		let timeLeftForfeit = timeTillForfeit1 - elapsedTimeSinceLastMove;
-		io.emit("turnTimeLeft", {
-			timeLeft: timeLeft,
-			username: currentTurnUsername1,
-			turnLength: turnDuration1,
-			timeLeftForfeit: timeLeftForfeit,
-			viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
-		});
+// 		let currentTime = Date.now();
+// 		let elapsedTime = currentTime - turnStartTimes[cNum];
+// 		let timeLeft = turnDurations[cNum] - elapsedTime;
+// 		let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[cNum];
+// 		let timeLeftForfeit = timeTillForfeitDurations[cNum] - elapsedTimeSinceLastMove;
+// 		io.emit("turnTimeLeft", {
+// 			timeLeft: timeLeft,
+// 			username: currentTurnUsernames[cNum],
+// 			turnLength: turnDuration1,
+// 			timeLeftForfeit: timeLeftForfeit,
+// 			viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+// 		});
 	}
 }
 
-function forfeitTurn2(username) {
-	let index = controlQueue2.indexOf(username);
-	if (index > -1) {
-		controlQueue2.splice(index, 1);
-		io.emit("controlQueue2", {queue: controlQueue2});
+function resetTimers(username, cNum) {
+	// reset turn timer:
+	turnStartTimes[cNum] = Date.now();
+	clearTimeout(moveLineTimers[cNum]);
+	moveLineTimers[cNum] = setTimeout(moveLine, turnDurations[cNum], cNum);
+
+	// reset forfeit timer:
+	forfeitStartTimes[cNum] = Date.now();
+	clearTimeout(forfeitTimers[cNum]);
+	forfeitTimers[cNum] = setTimeout(forfeitTurn, timeTillForfeitDurations[cNum], username, cNum);
+}
+
+function moveLine(cNum) {
+	if (controlQueues[cNum].length > 1) {
+		controlQueues[cNum].shift();
+		currentTurnUsernames[cNum] = controlQueues[cNum][0];
 		// stop the controller
-		io.to("controller").emit("controllerState2", "800000000000000 127 127 127 127");
+		io.to("controller").emit("controllerState", "800000000000000 128 128 128 128");
+	}
+	io.emit("controlQueues", {
+		queues: controlQueues
+	});
 	
-		if (controlQueue2.length >= 1) {
-			currentTurnUsername2 = controlQueue2[0];
-			// restart turn timer:
-			turnStartTime2 = Date.now();
-			clearTimeout(moveLineTimer2);
-			moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
-			// restart forfeit timer:
-			clearTimeout(forfeitTimer2);
-			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, currentTurnUsername2);
-			forfeitStartTime2 = Date.now();
-		} else {
-			currentTurnUsername2 = null;
-		}
+	turnStartTimes[cNum] = Date.now();
+	clearTimeout(moveLineTimers[cNum]);
+	moveLineTimers[cNum] = setTimeout(moveLine, turnDurations[cNum], cNum);
 
-		let currentTime = Date.now();
-		let elapsedTime = currentTime - turnStartTime2;
-		let timeLeft = turnDuration2 - elapsedTime;
-		let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
-		let timeLeftForfeit = timeTillForfeit2 - elapsedTimeSinceLastMove;
-		io.emit("turnTimeLeft2", {
-			timeLeft: timeLeft,
-			username: currentTurnUsername2,
-			turnLength: turnDuration2,
-			timeLeftForfeit: timeLeftForfeit,
-		});
+	if (controlQueues[cNum].length > 1) {
+		// reset forfeit timer:
+		forfeitStartTimes[cNum] = Date.now();
+		clearTimeout(forfeitTimers[cNum]);
+		forfeitTimers[cNum] = setTimeout(forfeitTurn, timeTillForfeitDurations[cNum], controlQueues[cNum][0], cNum);
 	}
 }
-
-function moveLine1() {
-	if (controlQueue1.length > 1) {
-		controlQueue1.shift();
-		currentTurnUsername1 = controlQueue1[0];
-		// stop the controller
-		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
-	}
-	io.emit("controlQueue", {queue: controlQueue1});
-
-	turnStartTime1 = Date.now();
-	clearTimeout(moveLineTimer1);
-	moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
-
-	if (controlQueue1.length > 1) {
-		// forfeit timer:
-		clearTimeout(forfeitTimer1);
-		forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, controlQueue1[0]);
-		forfeitStartTime1 = Date.now();
-	}
-}
-moveLine1();
-
-function moveLine2() {
-	if (controlQueue2.length > 1) {
-		controlQueue2.shift();
-		currentTurnUsername2 = controlQueue2[0];
-		// stop the controller
-		io.to("controller").emit("controllerState2", "800000000000000 127 127 127 127");
-	}
-	io.emit("controlQueue2", {queue: controlQueue2});
-
-	turnStartTime2 = Date.now();
-	clearTimeout(moveLineTimer2);
-	moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
-
-	if (controlQueue2.length > 1) {
-		// forfeit timer:
-		clearTimeout(forfeitTimer2);
-		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, controlQueue2[0]);
-		forfeitStartTime2 = Date.now();
-	}
-}
-moveLine2();
+moveLine(0);
+moveLine(1);
+moveLine(2);
+moveLine(3);
 
 setInterval(function() {
 	// get all connected id's
@@ -1123,35 +960,30 @@ setInterval(function() {
 	lagless2Clients = lagless2Clients.filter(value => -1 !== ids.indexOf(value));
 	lagless3Clients = lagless3Clients.filter(value => -1 !== ids.indexOf(value));
 	
+	// calculate time left for each player
+	for (let i = 0; i < 2; i++) {
+		let currentTime = Date.now();
+		let elapsedTime = currentTime - turnStartTimes[i];
+		let timeLeft = turnDurations[i] - elapsedTime;
+		let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[i];
+		let timeLeftForfeit = timeTillForfeitDurations[i] - elapsedTimeSinceLastMove;
+		
+		turnTimesLeft[i] = timeLeft;
+		forfeitTimesLeft[i] = timeLeftForfeit;
+	}
 	
-	let currentTime = Date.now();
-	let elapsedTime = currentTime - turnStartTime1;
-	let timeLeft = turnDuration1 - elapsedTime;
-	let elapsedTimeSinceLastMove = currentTime - forfeitStartTime1;
-	let timeLeftForfeit = timeTillForfeit1 - elapsedTimeSinceLastMove;
-	io.emit("turnTimeLeft", {
-		timeLeft: timeLeft,
-		username: currentTurnUsername1,
-		turnLength: turnDuration1,
-		timeLeftForfeit: timeLeftForfeit,
+
+	io.emit("turnTimesLeft", {
+		turnTimesLeft: turnTimesLeft,
+		forfeitTimesLeft: forfeitTimesLeft,
+		usernames: currentTurnUsernames,
+		turnLengths: turnDurations,
+		
 		viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
 	});
-	io.emit("controlQueue", {queue: controlQueue1});
-}, 500);
-
-setInterval(function() {
-	let currentTime = Date.now();
-	let elapsedTime = currentTime - turnStartTime2;
-	let timeLeft = turnDuration2 - elapsedTime;
-	let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
-	let timeLeftForfeit = timeTillForfeit2 - elapsedTimeSinceLastMove;
-	io.emit("turnTimeLeft2", {
-		timeLeft: timeLeft,
-		username: currentTurnUsername2,
-		turnLength: turnDuration2,
-		timeLeftForfeit: timeLeftForfeit,
+	io.emit("controlQueues", {
+		queues: controlQueues
 	});
-	io.emit("controlQueue2", {queue: controlQueue2});
 }, 500);
 
 function stream() {
