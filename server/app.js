@@ -2,8 +2,9 @@ const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
-const config = require("./config.js");
 const port = 8110;
+
+
 
 const crypto = require("crypto");
 const util = require("util");
@@ -18,6 +19,8 @@ const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
 const request = require("request");
 const handlebars = require("handlebars");
+
+const config = require("./config.js");
 
 const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
 const TWITCH_SECRET = config.TWITCH_SECRET;
@@ -40,7 +43,7 @@ let localStorage;
 let clients = [];
 let channels = {};
 let restartAvailable = true;
-let controlQueue = [];
+let controlQueue1 = [];
 let controlQueue2 = [];
 let controlQueue3 = [];
 let controlQueue4 = [];
@@ -52,15 +55,18 @@ let lagless2Clients = [];
 let lagless3Clients = [];
 
 
-let turnDuration = 30000;
-let timeTillForfeit = 15000;
+let turnDuration1 = 30000;
+let timeTillForfeit1 = 15000;
+
+let turnDuration2 = 30000;
+let timeTillForfeit2 = 15000;
 
 // player1:
-let turnStartTime = Date.now();
-let forfeitStartTime = Date.now();
-let forfeitTimer = null;
-let moveLineTimer = null;
-let currentTurnUsername = null;
+let turnStartTime1 = Date.now();
+let forfeitStartTime1 = Date.now();
+let forfeitTimer1 = null;
+let moveLineTimer1 = null;
+let currentTurnUsername1 = null;
 
 // player 2:
 let turnStartTime2 = Date.now();
@@ -262,30 +268,30 @@ function Client(socket) {
 	this.username = null;
 
 	this.getImage = function(q) {
-		let objectToSend = {};
-		objectToSend.q = q;
-		io.to(this.id).emit("ss", objectToSend);
+		let obj = {};
+		obj.q = q;
+		io.to(this.id).emit("ss", obj);
 	};
 
 	this.getImage2 = function(x1, y1, x2, y2, q) {
-		let objectToSend = {};
-		objectToSend.x1 = x1;
-		objectToSend.y1 = y1;
-		objectToSend.x2 = x2;
-		objectToSend.y2 = y2;
-		objectToSend.q = q;
-		io.to(this.id).emit("ss2", objectToSend);
+		let obj = {};
+		obj.x1 = x1;
+		obj.y1 = y1;
+		obj.x2 = x2;
+		obj.y2 = y2;
+		obj.q = q;
+		io.to(this.id).emit("ss2", obj);
 	};
 
 	this.getImage3 = function(x1, y1, x2, y2, q, s) {
-		let objectToSend = {};
-		objectToSend.x1 = x1;
-		objectToSend.y1 = y1;
-		objectToSend.x2 = x2;
-		objectToSend.y2 = y2;
-		objectToSend.q = q;
-		objectToSend.s = s;
-		io.to(this.id).emit("ss3", objectToSend);
+		let obj = {};
+		obj.x1 = x1;
+		obj.y1 = y1;
+		obj.x2 = x2;
+		obj.y2 = y2;
+		obj.q = q;
+		obj.s = s;
+		io.to(this.id).emit("ss3", obj);
 	};
 
 	this.quit = function() {
@@ -442,7 +448,7 @@ io.on("connection", function(socket) {
 		io.emit("names", names);
 	});
 
-	// after recieving the image, send it to the console
+	// after recieving the image, broadcast it to viewers
 	socket.on("screenshot", function(data) {
 
 		let obj = {};
@@ -452,7 +458,6 @@ io.on("connection", function(socket) {
 		if (lastImage === "") {
 			io.emit("restart");
 		}
-
 		let index = findClientByID(socket.id);
 		if (index != -1) {
 			let client = clients[index];
@@ -488,11 +493,11 @@ io.on("connection", function(socket) {
 			return;
 		}
 		
-		if (controlQueue.length === 0) {
+		if (controlQueue1.length === 0) {
 			return;
 		}
-		currentTurnUsername = controlQueue[0];
-		if (client.username != currentTurnUsername) {
+		currentTurnUsername1 = controlQueue1[0];
+		if (client.username != currentTurnUsername1) {
 			return;
 		}
 		
@@ -503,9 +508,9 @@ io.on("connection", function(socket) {
 		// 		}
 
 		// forfeit timer:
-		clearTimeout(forfeitTimer);
-		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, client.username);
-		forfeitStartTime = Date.now();
+		clearTimeout(forfeitTimer1);
+		forfeitTimer = setTimeout(forfeitTurn1, timeTillForfeit1, client.username);
+		forfeitStartTime1 = Date.now();
 
 		io.emit("controllerState", data);
 		io.emit("currentPlayer", client.username);
@@ -532,10 +537,9 @@ io.on("connection", function(socket) {
 
 		// forfeit timer:
 		clearTimeout(forfeitTimer2);
-		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, client.username);
+		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
 		forfeitStartTime2 = Date.now();
 		
-		console.log("controller2");
 		io.emit("controllerState2", data);
 		io.emit("currentPlayer2", client.username);
 	});
@@ -562,7 +566,7 @@ io.on("connection", function(socket) {
 
 		// forfeit timer:
 		clearTimeout(forfeitTimer2);
-		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, client.username);
+		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
 		forfeitStartTime2 = Date.now();
 
 		io.to("wiiu3dscontroller").emit("controllerState", data);
@@ -602,24 +606,24 @@ io.on("connection", function(socket) {
 			return;
 		}
 		
-		if (controlQueue.indexOf(client.username) == -1) {
-			controlQueue.push(client.username);
-			currentTurnUsername = controlQueue[0];
+		if (controlQueue1.indexOf(client.username) == -1) {
+			controlQueue1.push(client.username);
+			currentTurnUsername1 = controlQueue1[0];
 			io.emit("controlQueue", {
-				queue: controlQueue
+				queue: controlQueue1
 			});
 		}
 
-		if (controlQueue.length == 1) {
+		if (controlQueue1.length == 1) {
 			// turn timer:
-			turnStartTime = Date.now();
-			clearTimeout(moveLineTimer);
-			moveLineTimer = setTimeout(moveLine, turnDuration);
+			turnStartTime1 = Date.now();
+			clearTimeout(moveLineTimer1);
+			moveLineTimer = setTimeout(moveLine1, turnDuration1);
 			
 			// forfeit timer:
-			forfeitStartTime = Date.now();
-			clearTimeout(forfeitTimer);
-			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, client.username);
+			forfeitStartTime1 = Date.now();
+			clearTimeout(forfeitTimer1);
+			forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, client.username);
 		}
 	});
 
@@ -633,38 +637,38 @@ io.on("connection", function(socket) {
 			return;
 		}
 
-		index = controlQueue.indexOf(client.username);
+		index = controlQueue1.indexOf(client.username);
 		if (index > -1) {
-			controlQueue.splice(index, 1);
+			controlQueue1.splice(index, 1);
 			io.emit("controlQueue", {
-				queue: controlQueue
+				queue: controlQueue1
 			});
 
-			if (controlQueue.length >= 1) {
-				currentTurnUsername = controlQueue[0];
+			if (controlQueue1.length >= 1) {
+				currentTurnUsername1 = controlQueue1[0];
 				if (index === 0) {
 					// restart turn timer:
-					turnStartTime = Date.now();
-					clearTimeout(moveLineTimer);
-					moveLineTimer = setTimeout(moveLine, turnDuration);
+					turnStartTime1 = Date.now();
+					clearTimeout(moveLineTimer1);
+					moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
 					// restart forfeit timer:
-					clearTimeout(forfeitTimer);
-					forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, currentTurnUsername);
-					forfeitStartTime = Date.now();
+					clearTimeout(forfeitTimer1);
+					forfeitTimer = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
+					forfeitStartTime1 = Date.now();
 				}
-			} else if (controlQueue.length === 0) {
-				currentTurnUsername = null;
+			} else if (controlQueue1.length === 0) {
+				currentTurnUsername1 = null;
 			}
 
 			let currentTime = Date.now();
-			let elapsedTime = currentTime - turnStartTime;
-			let timeLeft = turnDuration - elapsedTime;
-			let elapsedTimeSinceLastMove = currentTime - forfeitStartTime;
-			let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+			let elapsedTime = currentTime - turnStartTime1;
+			let timeLeft = turnDuration1 - elapsedTime;
+			let elapsedTimeSinceLastMove = currentTime - forfeitStartTime1;
+			let timeLeftForfeit = timeTillForfeit1 - elapsedTimeSinceLastMove;
 			io.emit("turnTimeLeft", {
 				timeLeft: timeLeft,
-				username: currentTurnUsername,
-				turnLength: turnDuration,
+				username: currentTurnUsername1,
+				turnLength: turnDuration1,
 				timeLeftForfeit: timeLeftForfeit,
 				viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
 			});
@@ -687,7 +691,7 @@ io.on("connection", function(socket) {
 		}
 		
 		// check if the username is in any of the other lists:
-		if (controlQueue.indexOf(client.username) > -1) {
+		if (controlQueue1.indexOf(client.username) > -1) {
 			return;
 		}
 		
@@ -703,12 +707,12 @@ io.on("connection", function(socket) {
 			// turn timer:
 			turnStartTime2 = Date.now();
 			clearTimeout(moveLineTimer2);
-			moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+			moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
 			
 			// forfeit timer:
 			forfeitStartTime2 = Date.now();
 			clearTimeout(forfeitTimer2);
-			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, client.username);
+			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
 		}
 	});
 
@@ -735,10 +739,10 @@ io.on("connection", function(socket) {
 					// restart turn timer:
 					turnStartTime2 = Date.now();
 					clearTimeout(moveLineTimer2);
-					moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+					moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
 					// restart forfeit timer:
 					clearTimeout(forfeitTimer2);
-					forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, currentTurnUsername2);
+					forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, currentTurnUsername2);
 					forfeitStartTime2 = Date.now();
 				}
 			} else if (controlQueue2.length === 0) {
@@ -747,13 +751,13 @@ io.on("connection", function(socket) {
 
 			let currentTime = Date.now();
 			let elapsedTime = currentTime - turnStartTime2;
-			let timeLeft = turnDuration - elapsedTime;
+			let timeLeft = turnDuration2 - elapsedTime;
 			let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
-			let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+			let timeLeftForfeit = timeTillForfeit2 - elapsedTimeSinceLastMove;
 			io.emit("turnTimeLeft2", {
 				timeLeft: timeLeft,
 				username: currentTurnUsername2,
-				turnLength: turnDuration,
+				turnLength: turnDuration2,
 				timeLeftForfeit: timeLeftForfeit,
 			});
 		}
@@ -802,12 +806,12 @@ io.on("connection", function(socket) {
 	/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("setQuality", function(data) {
 
-		if (controlQueue.length === 0) {
+		if (controlQueue1.length === 0) {
 			io.emit("setQuality", streamSettings.quality);
 			return;
 		}
-		currentTurnUsername = controlQueue[0];
-		if (client.username != currentTurnUsername) {
+		currentTurnUsername1 = controlQueue1[0];
+		if (client.username != currentTurnUsername1) {
 			io.emit("setQuality", streamSettings.quality);
 			return;
 		}
@@ -818,12 +822,12 @@ io.on("connection", function(socket) {
 
 	socket.on("setScale", function(data) {
 
-		if (controlQueue.length === 0) {
+		if (controlQueue1.length === 0) {
 			io.emit("setScale", streamSettings.scale);
 			return;
 		}
-		currentTurnUsername = controlQueue[0];
-		if (client.username != currentTurnUsername) {
+		currentTurnUsername1 = controlQueue1[0];
+		if (client.username != currentTurnUsername1) {
 			io.emit("setScale", streamSettings.scale);
 			return;
 		}
@@ -993,37 +997,37 @@ setInterval(function() {
 	restartAvailable = true;
 }, 4000);
 
-function forfeitTurn(username) {
-	let index = controlQueue.indexOf(username);
+function forfeitTurn1(username) {
+	let index = controlQueue1.indexOf(username);
 	if (index > -1) {
-		controlQueue.splice(index, 1);
-		io.emit("controlQueue", {queue: controlQueue});
+		controlQueue1.splice(index, 1);
+		io.emit("controlQueue", {queue: controlQueue1});
 		// stop the controller
 		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
 	
-		if (controlQueue.length >= 1) {
-			currentTurnUsername = controlQueue[0];
+		if (controlQueue1.length >= 1) {
+			currentTurnUsername1 = controlQueue1[0];
 			// restart turn timer:
-			turnStartTime = Date.now();
-			clearTimeout(moveLineTimer);
-			moveLineTimer = setTimeout(moveLine, turnDuration);
+			turnStartTime1 = Date.now();
+			clearTimeout(moveLineTimer1);
+			moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
 			// restart forfeit timer:
-			clearTimeout(forfeitTimer);
-			forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, currentTurnUsername2);
-			forfeitStartTime = Date.now();
+			clearTimeout(forfeitTimer1);
+			forfeitTimer = setTimeout(forfeitTurn1, timeTillForfeit1, currentTurnUsername1);
+			forfeitStartTime1 = Date.now();
 		} else {
-			currentTurnUsername = null;
+			currentTurnUsername1 = null;
 		}
 
 		let currentTime = Date.now();
-		let elapsedTime = currentTime - turnStartTime;
-		let timeLeft = turnDuration - elapsedTime;
-		let elapsedTimeSinceLastMove = currentTime - forfeitStartTime;
-		let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+		let elapsedTime = currentTime - turnStartTime1;
+		let timeLeft = turnDuration1 - elapsedTime;
+		let elapsedTimeSinceLastMove = currentTime - forfeitStartTime1;
+		let timeLeftForfeit = timeTillForfeit1 - elapsedTimeSinceLastMove;
 		io.emit("turnTimeLeft", {
 			timeLeft: timeLeft,
-			username: currentTurnUsername,
-			turnLength: turnDuration,
+			username: currentTurnUsername1,
+			turnLength: turnDuration1,
 			timeLeftForfeit: timeLeftForfeit,
 			viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
 		});
@@ -1038,15 +1042,15 @@ function forfeitTurn2(username) {
 		// stop the controller
 		io.to("controller").emit("controllerState2", "800000000000000 127 127 127 127");
 	
-		if (controlQueue.length >= 1) {
+		if (controlQueue2.length >= 1) {
 			currentTurnUsername2 = controlQueue2[0];
 			// restart turn timer:
 			turnStartTime2 = Date.now();
 			clearTimeout(moveLineTimer2);
-			moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+			moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
 			// restart forfeit timer:
 			clearTimeout(forfeitTimer2);
-			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, currentTurnUsername2);
+			forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, currentTurnUsername2);
 			forfeitStartTime2 = Date.now();
 		} else {
 			currentTurnUsername2 = null;
@@ -1054,39 +1058,39 @@ function forfeitTurn2(username) {
 
 		let currentTime = Date.now();
 		let elapsedTime = currentTime - turnStartTime2;
-		let timeLeft = turnDuration - elapsedTime;
+		let timeLeft = turnDuration2 - elapsedTime;
 		let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
-		let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+		let timeLeftForfeit = timeTillForfeit2 - elapsedTimeSinceLastMove;
 		io.emit("turnTimeLeft2", {
 			timeLeft: timeLeft,
 			username: currentTurnUsername2,
-			turnLength: turnDuration,
+			turnLength: turnDuration2,
 			timeLeftForfeit: timeLeftForfeit,
 		});
 	}
 }
 
-function moveLine() {
-	if (controlQueue.length > 1) {
-		controlQueue.shift();
-		currentTurnUsername = controlQueue[0];
+function moveLine1() {
+	if (controlQueue1.length > 1) {
+		controlQueue1.shift();
+		currentTurnUsername1 = controlQueue1[0];
 		// stop the controller
 		io.to("controller").emit("controllerState", "800000000000000 127 127 127 127");
 	}
-	io.emit("controlQueue", {queue: controlQueue});
+	io.emit("controlQueue", {queue: controlQueue1});
 
 	turnStartTime = Date.now();
-	clearTimeout(moveLineTimer);
-	moveLineTimer = setTimeout(moveLine, turnDuration);
+	clearTimeout(moveLineTimer1);
+	moveLineTimer1 = setTimeout(moveLine1, turnDuration1);
 
-	if (controlQueue.length > 1) {
+	if (controlQueue1.length > 1) {
 		// forfeit timer:
-		clearTimeout(forfeitTimer);
-		forfeitTimer = setTimeout(forfeitTurn, timeTillForfeit, controlQueue[0]);
-		forfeitStartTime = Date.now();
+		clearTimeout(forfeitTimer1);
+		forfeitTimer1 = setTimeout(forfeitTurn1, timeTillForfeit1, controlQueue1[0]);
+		forfeitStartTime1 = Date.now();
 	}
 }
-moveLine();
+moveLine1();
 
 function moveLine2() {
 	if (controlQueue2.length > 1) {
@@ -1099,12 +1103,12 @@ function moveLine2() {
 
 	turnStartTime2 = Date.now();
 	clearTimeout(moveLineTimer2);
-	moveLineTimer2 = setTimeout(moveLine2, turnDuration);
+	moveLineTimer2 = setTimeout(moveLine2, turnDuration2);
 
 	if (controlQueue2.length > 1) {
 		// forfeit timer:
 		clearTimeout(forfeitTimer2);
-		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit, controlQueue2[0]);
+		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, controlQueue2[0]);
 		forfeitStartTime2 = Date.now();
 	}
 }
@@ -1121,30 +1125,30 @@ setInterval(function() {
 	
 	
 	let currentTime = Date.now();
-	let elapsedTime = currentTime - turnStartTime;
-	let timeLeft = turnDuration - elapsedTime;
-	let elapsedTimeSinceLastMove = currentTime - forfeitStartTime;
-	let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+	let elapsedTime = currentTime - turnStartTime1;
+	let timeLeft = turnDuration1 - elapsedTime;
+	let elapsedTimeSinceLastMove = currentTime - forfeitStartTime1;
+	let timeLeftForfeit = timeTillForfeit1 - elapsedTimeSinceLastMove;
 	io.emit("turnTimeLeft", {
 		timeLeft: timeLeft,
-		username: currentTurnUsername,
-		turnLength: turnDuration,
+		username: currentTurnUsername1,
+		turnLength: turnDuration1,
 		timeLeftForfeit: timeLeftForfeit,
 		viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
 	});
-	io.emit("controlQueue", {queue: controlQueue});
+	io.emit("controlQueue", {queue: controlQueue1});
 }, 500);
 
 setInterval(function() {
 	let currentTime = Date.now();
 	let elapsedTime = currentTime - turnStartTime2;
-	let timeLeft = turnDuration - elapsedTime;
+	let timeLeft = turnDuration2 - elapsedTime;
 	let elapsedTimeSinceLastMove = currentTime - forfeitStartTime2;
-	let timeLeftForfeit = timeTillForfeit - elapsedTimeSinceLastMove;
+	let timeLeftForfeit = timeTillForfeit2 - elapsedTimeSinceLastMove;
 	io.emit("turnTimeLeft2", {
 		timeLeft: timeLeft,
 		username: currentTurnUsername2,
-		turnLength: turnDuration,
+		turnLength: turnDuration2,
 		timeLeftForfeit: timeLeftForfeit,
 	});
 	io.emit("controlQueue2", {queue: controlQueue2});
