@@ -43,10 +43,6 @@ let localStorage;
 let clients = [];
 let channels = {};
 let restartAvailable = true;
-// let controlQueue1 = [];
-// let controlQueue2 = [];
-// let controlQueue3 = [];
-// let controlQueue4 = [];
 
 let controlQueues = [[],[],[],[]];
 
@@ -56,12 +52,6 @@ let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo"
 let lagless1Clients = [];
 let lagless2Clients = [];
 let lagless3Clients = [];
-
-
-// let turnDuration1 = 30000;
-// let timeTillForfeit1 = 15000;
-// let turnDuration2 = 30000;
-// let timeTillForfeit2 = 15000;
 
 let turnDurations = [30000, 30000, 30000, 30000];
 let timeTillForfeitDurations = [15000, 15000, 15000, 15000];
@@ -514,12 +504,9 @@ io.on("connection", function(socket) {
 		forfeitTimers[cNum] = setTimeout(forfeitTurn, timeTillForfeitDurations[cNum], client.username, cNum);
 		forfeitStartTimes[cNum] = Date.now();
 		
-		if (cNum === 0) {
-			io.emit("controllerState", controllerState);
-		} else if (cNum == 1) {
-			io.emit("controllerState2", controllerState);
-		}
-		io.emit("currentPlayer", client.username);
+		cNum += 1;
+		io.emit("controllerState" + cNum, controllerState);
+// 		io.emit("currentPlayers", currentTurnUsernames);
 	});
 	
 	
@@ -631,18 +618,23 @@ io.on("connection", function(socket) {
 				currentTurnUsernames[cNum] = null;
 			}
 
-// 			let currentTime = Date.now();
-// 			let elapsedTime = currentTime - turnStartTimes[cNum];
-// 			let timeLeft = turnDurations[cNum] - elapsedTime;
-// 			let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[cNum];
-// 			let timeLeftForfeit = timeTillForfeitDurations[cNum] - elapsedTimeSinceLastMove;
-// 			io.emit("turnTimeLeft", {
-// 				timeLeft: timeLeft,
-// 				username: currentTurnUsernames[cNum],
-// 				turnLength: turnDurations[cNum],
-// 				timeLeftForfeit: timeLeftForfeit,
-// 				viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
-// 			});
+			// calculate time left for each player
+			for (let i = 0; i < 4; i++) {
+				let currentTime = Date.now();
+				let elapsedTime = currentTime - turnStartTimes[i];
+				let timeLeft = turnDurations[i] - elapsedTime;
+				let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[i];
+				let timeLeftForfeit = timeTillForfeitDurations[i] - elapsedTimeSinceLastMove;
+				turnTimesLeft[i] = timeLeft;
+				forfeitTimesLeft[i] = timeLeftForfeit;
+			}
+			io.emit("turnTimesLeft", {
+				turnTimesLeft: turnTimesLeft,
+				forfeitTimesLeft: forfeitTimesLeft,
+				usernames: currentTurnUsernames,
+				turnLengths: turnDurations,
+				viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+			});
 		}
 	});
 
@@ -689,12 +681,12 @@ io.on("connection", function(socket) {
 	/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("setQuality", function(data) {
 
-		if (controlQueue1.length === 0) {
+		if (controlQueues[0].length === 0) {
 			io.emit("setQuality", streamSettings.quality);
 			return;
 		}
-		currentTurnUsername1 = controlQueue1[0];
-		if (client.username != currentTurnUsername1) {
+		currentTurnUsernames[0] = controlQueues[0][0];
+		if (client.username != currentTurnUsernames[0]) {
 			io.emit("setQuality", streamSettings.quality);
 			return;
 		}
@@ -705,12 +697,12 @@ io.on("connection", function(socket) {
 
 	socket.on("setScale", function(data) {
 
-		if (controlQueue1.length === 0) {
+		if (controlQueues[0].length === 0) {
 			io.emit("setScale", streamSettings.scale);
 			return;
 		}
-		currentTurnUsername1 = controlQueue1[0];
-		if (client.username != currentTurnUsername1) {
+		currentTurnUsernames[0] = controlQueues[0][0];
+		if (client.username != currentTurnUsernames[0]) {
 			io.emit("setScale", streamSettings.scale);
 			return;
 		}
@@ -731,6 +723,11 @@ io.on("connection", function(socket) {
 	// 		streamSettings.y1 = data.y1 || streamSettings.y1;
 	// 		streamSettings.y2 = data.y2 || streamSettings.y2;
 	// 	});
+	
+	// broadcast when someone joins:
+	io.emit("setQuality", streamSettings.quality);
+	io.emit("setScale", streamSettings.scale);
+	io.emit("setScale", streamSettings.scale);
 
 
 
@@ -892,23 +889,28 @@ function forfeitTurn(username, cNum) {
 	
 		if (controlQueues[cNum].length >= 1) {
 			currentTurnUsernames[cNum] = controlQueues[cNum][0];
-			resetTimers(client.username, cNum);
+			resetTimers(username, cNum);
 		} else {
 			currentTurnUsernames[cNum] = null;
 		}
 
-// 		let currentTime = Date.now();
-// 		let elapsedTime = currentTime - turnStartTimes[cNum];
-// 		let timeLeft = turnDurations[cNum] - elapsedTime;
-// 		let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[cNum];
-// 		let timeLeftForfeit = timeTillForfeitDurations[cNum] - elapsedTimeSinceLastMove;
-// 		io.emit("turnTimeLeft", {
-// 			timeLeft: timeLeft,
-// 			username: currentTurnUsernames[cNum],
-// 			turnLength: turnDuration1,
-// 			timeLeftForfeit: timeLeftForfeit,
-// 			viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
-// 		});
+		// calculate time left for each player
+		for (let i = 0; i < 4; i++) {
+			let currentTime = Date.now();
+			let elapsedTime = currentTime - turnStartTimes[i];
+			let timeLeft = turnDurations[i] - elapsedTime;
+			let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[i];
+			let timeLeftForfeit = timeTillForfeitDurations[i] - elapsedTimeSinceLastMove;
+			turnTimesLeft[i] = timeLeft;
+			forfeitTimesLeft[i] = timeLeftForfeit;
+		}
+		io.emit("turnTimesLeft", {
+			turnTimesLeft: turnTimesLeft,
+			forfeitTimesLeft: forfeitTimesLeft,
+			usernames: currentTurnUsernames,
+			turnLengths: turnDurations,
+			viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+		});
 	}
 }
 
@@ -961,7 +963,7 @@ setInterval(function() {
 	lagless3Clients = lagless3Clients.filter(value => -1 !== ids.indexOf(value));
 	
 	// calculate time left for each player
-	for (let i = 0; i < 2; i++) {
+	for (let i = 0; i < 4; i++) {
 		let currentTime = Date.now();
 		let elapsedTime = currentTime - turnStartTimes[i];
 		let timeLeft = turnDurations[i] - elapsedTime;
@@ -978,7 +980,6 @@ setInterval(function() {
 		forfeitTimesLeft: forfeitTimesLeft,
 		usernames: currentTurnUsernames,
 		turnLengths: turnDurations,
-		
 		viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
 	});
 	io.emit("controlQueues", {

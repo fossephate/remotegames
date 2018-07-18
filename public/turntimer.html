@@ -31,24 +31,29 @@
 	let socket = io("https://twitchplaysnintendoswitch.com", {
 		path: "/8110/socket.io",
 	});
-	socket.on("turnTimeLeft", function(data) {
-		let timeLeft = data.timeLeft;
-		let turnUsername = data.username;
-		let turnLength = data.turnLength;
-		let lastCurrentTime = Date.now();
-		let timeLeftMilli = timeLeft;
-		let timeLeftSec = parseInt(timeLeft / 1000);
-		let percent = parseInt((timeLeftMilli / turnLength) * 100);
-		let progressBar = $(".progress-bar");
-
-		if (turnUsername == null) {
-			percent = 100;
-			progressBar.css("width", percent + "%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-			$("#currentPlayer").text("No one is playing right now.");
-		} else {
-			progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.username + ": " + timeLeftSec + " seconds");
-			$("#currentPlayer").text("Current Player: " + turnUsername);
-		}
+	socket.on("turnTimesLeft", function(data) {
+	let timeLeft = data.turnTimesLeft[0];
+	let turnUsername = data.usernames[0];
+	let turnLength = data.turnLengths[0];
+	let lastCurrentTime = Date.now();
+	
+	let timeLeftMilli = timeLeft;
+	let timeLeftSec = parseInt(timeLeft / 1000);
+	let percent = parseInt((timeLeftMilli / turnLength) * 100);
+	let progressBar = $("#turnTimerBarChild");
+	
+	let timeLeftMilli2 = data.forfeitTimesLeft[0];
+	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
+	let percent2 = parseInt((timeLeftMilli2 / 15000) * 100);
+	let forfeitBar = $("#forfeitTimerBarChild");
+	
+	if (turnUsername == null) {
+		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		//forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+	} else {
+		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
+		//forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+	}
 	});
 </script>
 </html>

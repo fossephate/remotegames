@@ -8,17 +8,16 @@ let socket = io("https://twitchplaysnintendoswitch.com", {
 let socket2 = socket;
 
 let globalEventTimer = false;
-let keyboardTimer;
-let gamepadTimer;
-let touchTimer;
-let lagless1Break = false;
 let lagless1JoinTimer;
 let currentTab = "#lagless1";
-let currentPlayerChosen = 1;
+let currentPlayerChosen = 0;
+let wasPressedKeyCodes = [];
 
 let controlQueues = [];
 let controlQueue1 = [];
 let controlQueue2 = [];
+let controlQueue3 = [];
+let controlQueue4 = [];
 let twitchUsername = null;
 
 // settings:
@@ -230,17 +229,25 @@ function sendControllerState() {
 		return;
 	}
 	
+// 	if(controlQueues[0].indexOf(twitchUsername) == -1 && currentPlayerChosen == 0) {
+// 		socket.emit("requestTurn", 0);
+// 	}
+// 	if(controlQueues[1].indexOf(twitchUsername) == -1 && currentPlayerChosen == 1) {
+// 		socket.emit("requestTurn", 1);
+// 	}
+// 	if(controlQueues[2].indexOf(twitchUsername) == -1 && currentPlayerChosen == 2) {
+// 		socket.emit("requestTurn", 1);
+// 	}
+// 	if(controlQueues[3].indexOf(twitchUsername) == -1 && currentPlayerChosen == 3) {
+// 		socket.emit("requestTurn", 1);
+// 	}
 	
-	if(controlQueue1.indexOf(twitchUsername) == -1 && currentPlayerChosen == 1) {
-		socket.emit("requestTurn", 0);
-	}
-	
-	if(controlQueue2.indexOf(twitchUsername) == -1 && currentPlayerChosen == 2) {
-		socket.emit("requestTurn", 1);
+	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) == -1) {
+		socket.emit("requestTurn", currentPlayerChosen);
 	}
 	
 	// todo: possibly broken?:
-	if(controlQueue1[0] != twitchUsername && controlQueue2[0] != twitchUsername && (controlQueue1.length > 0 || controlQueue2.length > 0)) {
+	if(controlQueues[0][0] != twitchUsername && controlQueues[1][0] != twitchUsername && (controlQueues[0].length > 0 || controlQueues[1].length > 0)) {
 		swal("It's not your turn yet!");
 		//$("#turnTimerBar").effect("shake", {direction: "left", distance: 100, times: 2}, 250);
 // 		let timerInterval;
@@ -271,19 +278,16 @@ function sendControllerState() {
 	
 	console.log(newControllerState);
 	
-	let obj = {state: newControllerState}
+	let obj = {state: newControllerState, cNum: 0}
 	
-	if (controlQueue1[0] == twitchUsername) {
+	if (controlQueues[0][0] == twitchUsername) {
 		obj.cNum = 0;
-	} else if (controlQueue2[0] == twitchUsername) {
+	} else if (controlQueues[1][0] == twitchUsername) {
 		obj.cNum = 1;
 	}
 	socket.emit("sendControllerState", obj);
 }
 
-
-
-let wasPressedKeyCodes = [];
 
 function getKeyboardInput() {
 
@@ -952,12 +956,19 @@ function setVideoWidth(width, num) {
 		$("#videoCanvas3")[0].style["margin-left"] = ((100-width)/2) + "%";
 	}
 	
-	if (typeof $("#twitchvideo")[0] != "undefined") {
-		$("#twitchvideo")[0].style.width = width + "%";
-		$("#twitchvideo")[0].style["margin-left"] = ((100-width)/2) + "%";
+	if (typeof $("#twitchVideo")[0] != "undefined") {
+		$("#twitchVideo")[0].style.width = width + "%";
+		$("#twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
 		// calculate height for twitch:
 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width();
-		$("#twitchvideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+		$("#twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+	}
+	if (typeof $(".twitchVideo")[0] != "undefined") {
+		$(".twitchVideo")[0].style.width = width + "%";
+		$(".twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
+		// calculate height for twitch:
+		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width();
+		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
 	}
 	
 	$("#rightJoyCon")[0].style["margin-left"] = (width) + ((100-width)/2) + "%";
@@ -1603,12 +1614,12 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			
 			wiiU3DsTab = true;
 			
-			if (typeof player2 != "undefined") {
-				player2.play();
+			if (typeof player4 != "undefined") {
+				player4.play();
 			}
 		} else {
-			if (typeof player2 != "undefined") {
-				player2.stop();
+			if (typeof player4 != "undefined") {
+				player4.stop();
 			}
 			wiiU3DsTab = false;
 		}
@@ -1625,25 +1636,47 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 });
 
 
+// let twitchPlayer1 = new Twitch.Player("lagless1View", {channel: "twitchplaysconsoles"});
+// let twitchPlayer2 = new Twitch.Player("lagless2View", {channel: "twitchplaysconsoles"});
+// let twitchPlayer3 = new Twitch.Player("lagless3View", {channel: "twitchplaysconsoles"});
+// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[0].id = "twitchVideo1";
+// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[1].id = "twitchVideo2";
+// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[2].id = "twitchVideo3";
+// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[0].className = "twitchVideo";
+// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[1].className = "twitchVideo";
+// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[2].className = "twitchVideo";
+// twitchPlayer1.pause();
+// twitchPlayer2.pause();
+// twitchPlayer3.pause();
+// $("#twitchVideo1")[0].style.display = "none";
+// $("#twitchVideo2")[0].style.display = "none";
+// $("#twitchVideo3")[0].style.display = "none";
+
+
+
 
 function replaceWithTwitch(tab) {
 	tab = tab || currentTab;
-	let twitchIFrame = '<iframe id="twitchvideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
+	let twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
 
 	if (tab == "#lagless1") {
-		$("#videoCanvas1").replaceWith(twitchIFrame);
 		socket2.emit("leave", "viewers");
+		$("#videoCanvas1")[0].style.display = "none";
+		$("#videoCanvas1").after(twitchIFrame);
 	}
 	
 	if (tab == "#lagless2") {
 		player.stop();
 		$("#videoCanvas2")[0].style.display = "none";
 		$("#videoCanvas2").after(twitchIFrame);
+// 		$("#twitchVideo2")[0].style.display = "";
+// 		twitchPlayer2.play();
 	}
 	
 	if (tab == "#lagless3") {
 		wsavc.disconnect();
-		$("#videoCanvas3").replaceWith(twitchIFrame);
+		$("#videoCanvas3")[0].style.display = "none";
+		$("#videoCanvas3").after(twitchIFrame);
 	}
 	setVideoWidth(73.2);
 	socket.emit("leaveLagless");
@@ -1654,27 +1687,30 @@ function replaceWithLagless(tab) {
 	tab = tab || currentTab;
 	let laglessCanvas;
 	if (tab == "#lagless1") {
-		laglessCanvas = '<canvas id="videoCanvas1"></canvas>';
-		$("#videoCanvas1").replaceWith(laglessCanvas);
 		socket.emit("joinLagless1");
 		socket2.emit("join", "viewers");
+		
+		$("#videoCanvas1")[0].style.display = "";
+		$("#twitchVideo").remove();
 	}
 	
 	if (tab == "#lagless2") {
-		//laglessCanvas = '<canvas id="videoCanvas2"></canvas>';
-		//$("#twitchvideo").replaceWith(laglessCanvas);
-		$("#videoCanvas2")[0].style.display = "";
-		$("#twitchvideo").remove();
 		socket.emit("joinLagless2");
 		player.play();
+		
+		$("#videoCanvas2")[0].style.display = "";
+		$("#twitchVideo").remove();
+// 		$("#twitchVideo2")[0].style.display = "none";
+// 		twitchPlayer2.pause();
 	}
 	
 	if (tab == "#lagless3") {
-		laglessCanvas = '<canvas id="videoCanvas3"></canvas>';
-		$("#twitchvideo").replaceWith(laglessCanvas);
 		socket.emit("joinLagless3");
 		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 		wsavc.connect(uri);
+		
+		$("#videoCanvas3")[0].style.display = "";
+		$("#twitchVideo").remove();
 	}
 	setVideoWidth(73.2);
 }
@@ -1762,6 +1798,10 @@ socket.on("controlQueues", function(data) {
 	controlQueues = data.queues;
 	controlQueue1 = controlQueues[0];
 	controlQueue2 = controlQueues[1];
+	controlQueue3 = controlQueues[2];
+	controlQueue4 = controlQueues[3];
+	
+	// todo: for loop this
 	
 	$("#controlQueue1").empty();
 	for (let i = 0; i < controlQueue1.length; i++) {
@@ -1787,6 +1827,30 @@ socket.on("controlQueues", function(data) {
 		} 
 		$("#controlQueue2").append(html);
 	}
+	
+	$("#controlQueue3").empty();
+	for (let i = 0; i < controlQueue3.length; i++) {
+		let username = controlQueue3[i];
+		let html;
+		if (!toggleDarkTheme) {
+			html = "<li class='list-group-item'>" + username + "</li>";
+		} else {
+			html = "<li class='list-group-item-dark'>" + username + "</li>";
+		} 
+		$("#controlQueue3").append(html);
+	}
+	
+	$("#controlQueue4").empty();
+	for (let i = 0; i < controlQueue4.length; i++) {
+		let username = controlQueue4[i];
+		let html;
+		if (!toggleDarkTheme) {
+			html = "<li class='list-group-item'>" + username + "</li>";
+		} else {
+			html = "<li class='list-group-item-dark'>" + username + "</li>";
+		} 
+		$("#controlQueue4").append(html);
+	}
 });
 
 socket.on("twitchUsername", function(data) {
@@ -1794,56 +1858,28 @@ socket.on("twitchUsername", function(data) {
 });
 
 socket.on("turnTimesLeft", function(data) {
-	timeLeft = data.turnTimesLeft[0];
-	turnUsername = data.usernames[0];
-	turnLength = data.turnLengths[0];
+	
 	lastCurrentTime = Date.now();
 	
-	let timeLeftMilli = timeLeft;
-	let timeLeftSec = parseInt(timeLeft / 1000);
-	let percent = parseInt((timeLeftMilli / turnLength) * 100);
-	let progressBar = $("#turnTimerBarChild");
-	
-	let timeLeftMilli2 = data.forfeitTimesLeft[0];
-	let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
-	let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
-	let forfeitBar = $("#forfeitTimerBarChild");
-	
-	if (turnUsername == null) {
-		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		$("#currentPlayer").text("No one is playing right now.");
-	} else {
-		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
-		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
-		$("#currentPlayer").text("Current Player: " + turnUsername);
+	for (let i = 0; i < 4; i++) {
+		let timeLeftMilli = data.turnTimesLeft[i];
+		let timeLeftSec = parseInt(data.turnTimesLeft[i] / 1000);
+		let percent = parseInt((timeLeftMilli / data.turnLengths[i]) * 100);
+
+		let timeLeftMilli2 = data.forfeitTimesLeft[i];
+		let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
+		let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
+		
+		let n = i+1;
+
+		if (data.usernames[i] == null) {
+			$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+			$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		} else {
+			$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.usernames[i] + ": " + timeLeftSec + " seconds");
+			$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+		}
 	}
-	
-	
-	timeLef2t = data.turnTimesLeft[1];
-	turnUsername2 = data.usernames[1];
-	turnLength2 = data.turnLengths[1];
-	lastCurrentTime2 = Date.now();
-	timeLeftMilli = timeLeft2;
-	timeLeftSec = parseInt(timeLeft2 / 1000);
-	percent = parseInt((timeLeftMilli / turnLength2) * 100);
-	progressBar = $("#turnTimerBarChild2");
-	
-	timeLeftMilli2 = data.forfeitTimesLeft[1];
-	timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
-	percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
-	forfeitBar = $("#forfeitTimerBarChild2");
-	
-	if (turnUsername2 == null) {
-		progressBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		forfeitBar.css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		$("#currentPlayer").text("No one is playing right now.");
-	} else {
-		progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername2 + ": " + timeLeftSec + " seconds");
-		forfeitBar.css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
-		$("#currentPlayer").text("Current Player: " + turnUsername2);
-	}
-	
 	
 	let totalViewers = data.viewerCounts[0] + data.viewerCounts[1] + data.viewerCounts[2];
 	$("#lagless1ViewerCount").text(data.viewerCounts[0] + "/" + totalViewers + " Viewers");
@@ -1872,16 +1908,79 @@ $("#requestTurn1").on("click", function(event) {
 $("#cancelTurn1").on("click", function(event) {
 	socket.emit("cancelTurn", 0);
 });
-
 $("#requestTurn2").on("click", function(event) {
 	socket.emit("requestTurn", 1);
 });
 $("#cancelTurn2").on("click", function(event) {
 	socket.emit("cancelTurn", 1);
 });
+$("#requestTurn3").on("click", function(event) {
+	socket.emit("requestTurn", 2);
+});
+$("#cancelTurn3").on("click", function(event) {
+	socket.emit("cancelTurn", 2);
+});
+$("#requestTurn4").on("click", function(event) {
+	socket.emit("requestTurn", 3);
+});
+$("#cancelTurn4").on("click", function(event) {
+	socket.emit("cancelTurn", 3);
+});
 
 
+/* MULTIPLAYER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#player1Checkbox").prop("checked", true);
+$("#player1Checkbox").on("click", function(event) {
+	if ($("#player1Checkbox")[0].checked) {
+		socket.emit("cancelTurn", currentPlayerChosen);
+		currentPlayerChosen = 0;
+		$("#player2Checkbox").prop("checked", false);
+		$("#player3Checkbox").prop("checked", false);
+		$("#player4Checkbox").prop("checked", false);
+	} else {
+		// prevent unchecking
+		event.preventDefault();
+	}
+});
 
+$("#player2Checkbox").on("click", function(event) {
+	if ($("#player2Checkbox")[0].checked) {
+		socket.emit("cancelTurn", currentPlayerChosen);
+		currentPlayerChosen = 1;
+		$("#player1Checkbox").prop("checked", false);
+		$("#player3Checkbox").prop("checked", false);
+		$("#player4Checkbox").prop("checked", false);
+	} else {
+		// prevent unchecking
+		event.preventDefault();
+	}
+});
+
+$("#player3Checkbox").on("click", function(event) {
+	if ($("#player3Checkbox")[0].checked) {
+		socket.emit("cancelTurn", currentPlayerChosen);
+		currentPlayerChosen = 2;
+		$("#player1Checkbox").prop("checked", false);
+		$("#player2Checkbox").prop("checked", false);
+		$("#player4Checkbox").prop("checked", false);
+	} else {
+		// prevent unchecking
+		event.preventDefault();
+	}
+});
+
+$("#player4Checkbox").on("click", function(event) {
+	if ($("#player4Checkbox")[0].checked) {
+		socket.emit("cancelTurn", currentPlayerChosen);
+		currentPlayerChosen = 3;
+		$("#player1Checkbox").prop("checked", false);
+		$("#player2Checkbox").prop("checked", false);
+		$("#player3Checkbox").prop("checked", false);
+	} else {
+		// prevent unchecking
+		event.preventDefault();
+	}
+});
 
 
 /* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1976,7 +2075,7 @@ $("#chatCheckbox").on("click", function() {
 
 
 /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-socket.on("controllerState", function(data) {
+socket.on("controllerState1", function(data) {
 	
 	let str = data;
 	let dpad = str[0];

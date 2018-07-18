@@ -32,6 +32,9 @@
 	<script src="js/meeting-client.js"></script>
 <!-- 	<script src="/js/ads.js"></script> -->
 <!-- 	<script src="https://authedmine.com/lib/authedmine.min.js"></script> -->
+	
+	<!-- twitch embed -->
+	<script src= "https://player.twitch.tv/js/embed/v1.js"></script>
 
 	<!-- TODO: use browserify -->
 
@@ -184,25 +187,73 @@
 
 				<div id="barUnderTheStream" class="well">
 					
-					<div id="timerBars">
-						<div id="player1TimerBars">
-							Player 1
-							<div id="turnTimerBar" class="turnTimerBar progress">
-								<div id="turnTimerBarChild" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+					<div id="players">
+						<div id="player1" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player1Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 1
+							</label>
+							<div id="turnTimerBar1" class="turnTimerBar progress">
+								<div id="turnTimerBarChild1" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<div id="forfeitTimerBar" class="forfeitTimerBar progress">
-								<div id="forfeitTimerBarChild" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							<div id="forfeitTimerBar1" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild1" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
+							<btn id="requestTurn1" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn1" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue1" class="list-group"></ul>
 						</div>
-
-						<div id="player2TimerBars">
-							Player 2
+						
+						<div id="player2" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player2Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 2
+							</label>
 							<div id="turnTimerBar2" class="turnTimerBar progress">
 								<div id="turnTimerBarChild2" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<div id="forfeitTimerBar2" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild2" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
+							<btn id="requestTurn2" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn2" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue2" class="list-group"></ul>
+						</div>
+						
+						<div id="player3" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player3Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 3
+							</label>
+							<div id="turnTimerBar3" class="turnTimerBar progress">
+								<div id="turnTimerBarChild3" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<div id="forfeitTimerBar3" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild3" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<btn id="requestTurn3" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn3" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue3" class="list-group"></ul>
+						</div>
+						
+						<div id="player4" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player4Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 4
+							</label>
+							<div id="turnTimerBar4" class="turnTimerBar progress">
+								<div id="turnTimerBarChild4" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<div id="forfeitTimerBar4" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild4" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<btn id="requestTurn4" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn4" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue4" class="list-group"></ul>
 						</div>
 					</div>
 
@@ -211,84 +262,65 @@
 							<ul class="list-group">
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="keyboardControllerCheckbox" type="checkbox">
-											<span class="checkbox-placeholder"></span>
-											Enable Keyboard / Controller
-										</label>
+										<input id="keyboardControllerCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Enable Keyboard / Controller
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="touchControlsCheckbox" type="checkbox">
-											<span class="checkbox-placeholder"></span>
-											Enable Touch Controls
-										</label>
+										<input id="touchControlsCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Enable Touch Controls
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="mouseControlsCheckbox" type="checkbox">
-											<span class="checkbox-placeholder"></span>
-											Enable Mouse Controls
-										</label>
+										<input id="mouseControlsCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Enable Mouse Controls
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="audioCheckbox" type="checkbox">
-											<span class="ifas ifa-volume-up checkbox-placeholder"></span>
-											Enable Audio 1.0
-										</label>
+										<input id="audioCheckbox" type="checkbox" />
+										<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+										Enable Audio 1.0
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="darkThemeCheckbox" type="checkbox">
-											<span class="ifas ifa-moon checkbox-placeholder"></span>
-											Enable Dark Theme
-										</label>
+										<input id="darkThemeCheckbox" type="checkbox" />
+										<span class="ifas ifa-moon checkbox-placeholder"></span>
+										Enable Dark Theme
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="chatCheckbox" type="checkbox">
-											<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
-											Enable Chat
-										</label>
+										<input id="chatCheckbox" type="checkbox" />
+										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+										Enable Chat
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="fullscreenCheckbox" type="checkbox">
-											<span class="ifas ifa-expand checkbox-placeholder"></span>
-											Enable Fullscreen Mode
-										</label>
+										<input id="fullscreenCheckbox" type="checkbox" />
+										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										Enable Fullscreen Mode
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="navCheckbox" type="checkbox">
-											<span class="ifas ifa-expand checkbox-placeholder"></span>
-											Hide Nav Bar
-										</label>
+										<input id="navCheckbox" type="checkbox" />
+										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										Hide Nav Bar
+									</label>
 								</li>
 							</ul>
 
 						</div>
 
 						<div class="six">
-<!-- 							<div id="currentPlayer" class="well">
-								Current Player:
-							</div> -->
-							<div class="well">
-								<div id="controlQueues">
-									<div id="queue1" class="queue">
-										<btn id="requestTurn1" type="button" class="btn btn-primary">Request Turn</btn>
-										<btn id="cancelTurn1" type="button" class="btn btn-primary">Cancel Turn</btn>
-										<ul id="controlQueue1" class="list-group">
-										</ul>
-									</div>
-									<div id="queue2" class="queue">
-										<btn id="requestTurn2" type="button" class="btn btn-primary">Request Turn</btn>
-										<btn id="cancelTurn2" type="button" class="btn btn-primary">Cancel Turn</btn>
-										<ul id="controlQueue2" class="list-group">
-										</ul>
-									</div>
-								</div>
-							</div>
 							<div class="well">
 								Ping: <span id="ping"></span>
 							</div>
@@ -333,19 +365,19 @@
 							</div>
 							<div class="sliderContainer">
 								Quality: <span id="quality">70</span>
-								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70">
+								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70" />
 							</div>
 							<div class="sliderContainer">
 								Scale: <span id="scale">30</span>
-								<input id="scaleSlider" class="slider" type="range" min="10" step="1" max="60" value="30">
+								<input id="scaleSlider" class="slider" type="range" min="10" step="1" max="60" value="30" />
 							</div>
 							<div class="sliderContainer">
 								FPS: <span id="fps">15</span>
-								<input id="fpsSlider" class="slider" type="range" min="1" step="1" max="15" value="15">
+								<input id="fpsSlider" class="slider" type="range" min="1" step="1" max="15" value="15" />
 							</div>
 							<div class="sliderContainer">
 								Threshold: <span id="threshold">50</span>
-								<input id="thresholdSlider" class="slider" type="range" min="1" step="1" max="128" value="50">
+								<input id="thresholdSlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
 							</div>
 						</div>
 					</div>
@@ -398,7 +430,7 @@
 
 				</div>
 
-<!-- 				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
+<!-- 				<iframe id="twitchVideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
 
 			</div>
 
