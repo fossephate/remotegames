@@ -24,12 +24,17 @@
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
 	<!-- 	<script src="js/chillout.min.js"></script> -->
-	<!-- 	<script src="js/interact.min.js"></script> -->
+	<script src="js/interact.min.js"></script>
 
 	<script src="js/jsmpg.js"></script>
 	<script src="js/http-live-player.js"></script>
 	<script src="js/sweetalert2.min.js"></script>
 	<script src="js/meeting-client.js"></script>
+<!-- 	<script src="/js/ads.js"></script> -->
+<!-- 	<script src="https://authedmine.com/lib/authedmine.min.js"></script> -->
+	
+	<!-- twitch embed -->
+	<script src= "https://player.twitch.tv/js/embed/v1.js"></script>
 
 	<!-- TODO: use browserify -->
 
@@ -60,56 +65,120 @@
 
 		<div id="picture" class="well">
 
-			<div id="lagless2" class="tab-pane">
-				<div id="lagless2Container">
-					<div id="lagless2View">
-						<div id="leftJoyCon">
-							<canvas id="leftJoyConCanvas"></canvas>
-							<div id="leftStick"></div>
-							<div id="leftStick2"></div>
-							<div id="dpadButtons">
-								<div id="upButton" class="controllerButton"></div>
-								<div id="downButton" class="controllerButton"></div>
-								<div id="leftButton" class="controllerButton"></div>
-								<div id="rightButton" class="controllerButton"></div>
+			<ul class="nav nav-tabs" role="tablist">
+				<li class="nav-item active">
+					<a id="tab1" class="nav-link active" data-toggle="tab" href="#lagless1">Lagless 1</a>
+				</li>
+				<li class="nav-item">
+					<a id="tab2" class="nav-link" data-toggle="tab" href="#lagless2">Lagless 2</a>
+				</li>
+				<li class="nav-item">
+					<a id="tab3" class="nav-link" data-toggle="tab" href="#lagless3">Lagless 3</a>
+				</li>
+				<li class="nav-item">
+					<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">3DS Lagless 2</a>
+				</li>
+			</ul>
+
+			<div class="tab-content">
+				<div id="lagless1" class="tab-pane active">
+					<div id="lagless1Container">
+						<div id="lagless1View">
+							<canvas id="videoCanvas1"></canvas>
+						</div>
+							<div id="lagless1Bar">
+								<div id="lagless1ViewerCount">
+									X/X Viewers
+								</div>
+								<div id="lagless1VolumeSlider" class="volumeSlider">
+									<i class="fa fa-volume-down"></i>
+									<div id="lagless1Volume" class="volume"></div>
+									<i class="fa fa-volume-up"></i>
+								</div>
+								<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
+<!-- 								<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
 							</div>
-							<div id="leftJoyConOther">
-								<div id="minusButton" class="controllerButton"></div>
-								<div id="captureButton" class="controllerButton"></div>
-								<div id="lButton" class="controllerButton">L Button</div>
-								<div id="zlButton" class="controllerButton">ZL Button</div>
+						<button id="lagless1Refresh" type="button" class="btn btn-info btn-settings">
+							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
+						</button>
+					</div>
+				</div>
+				<div id="lagless2" class="tab-pane">
+					<div id="lagless2Container">
+						<div id="lagless2View">
+							<div id="leftJoyCon">
+								<canvas id="leftJoyConCanvas"></canvas>
+								<div id="leftStick"></div>
+								<div id="leftStick2"></div>
+								<div id="dpadButtons">
+									<div id="upButton" class="controllerButton"></div>
+									<div id="downButton" class="controllerButton"></div>
+									<div id="leftButton" class="controllerButton"></div>
+									<div id="rightButton" class="controllerButton"></div>
+								</div>
+								<div id="leftJoyConOther">
+									<div id="minusButton" class="controllerButton"></div>
+									<div id="captureButton" class="controllerButton"></div>
+									<div id="lButton" class="controllerButton">L Button</div>
+									<div id="zlButton" class="controllerButton">ZL Button</div>
+								</div>
+							</div>
+							<canvas id="videoCanvas2"></canvas>
+							<div id="rightJoyCon">
+								<canvas id="rightJoyConCanvas"></canvas>
+								<div id="rightStick"></div>
+								<div id="rightStick2"></div>
+								<div id="abxyButtons">
+									<div id="xButton" class="controllerButton"></div>
+									<div id="bButton" class="controllerButton"></div>
+									<div id="yButton" class="controllerButton"></div>
+									<div id="aButton" class="controllerButton"></div>
+								</div>
+								<div id="rightJoyConOther">
+									<div id="plusButton" class="controllerButton"></div>
+									<div id="homeButton" class="controllerButton"></div>
+									<div id="rButton" class="controllerButton">R Button</div>
+									<div id="zrButton" class="controllerButton">ZR Button</div>
+								</div>
 							</div>
 						</div>
-						<canvas id="videoCanvas2"></canvas>
-						<div id="rightJoyCon">
-							<canvas id="rightJoyConCanvas"></canvas>
-							<div id="rightStick"></div>
-							<div id="rightStick2"></div>
-							<div id="abxyButtons">
-								<div id="xButton" class="controllerButton"></div>
-								<div id="bButton" class="controllerButton"></div>
-								<div id="yButton" class="controllerButton"></div>
-								<div id="aButton" class="controllerButton"></div>
+						<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
+							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
+						</button> -->
+						<div id="lagless2Bar">
+							<div id="lagless2ViewerCount">
+								X/X Viewers
 							</div>
-							<div id="rightJoyConOther">
-								<div id="plusButton" class="controllerButton"></div>
-								<div id="homeButton" class="controllerButton"></div>
-								<div id="rButton" class="controllerButton">R Button</div>
-								<div id="zrButton" class="controllerButton">ZR Button</div>
+							<div id="lagless2VolumeSlider" class="volumeSlider">
+								<i class="fa fa-volume-down"></i>
+								<div id="lagless2Volume" class="volume"></div>
+								<i class="fa fa-volume-up"></i>
 							</div>
+							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
+							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
 						</div>
 					</div>
-					<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
-						<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
-					</button> -->
-					<div id="lagless2Bar">
-						<div id="lagless2VolumeSlider" class="volumeSlider">
-							<i class="fa fa-volume-down"></i>
-							<div id="lagless2Volume" class="volume"></div>
-							<i class="fa fa-volume-up"></i>
+				</div>
+				<div id="lagless3" class="tab-pane">
+					<div id="lagless3Container">
+						<div id="lagless3View">
+							<canvas id="videoCanvas3"></canvas>
+							<button id="lagless3Refresh" type="button" class="btn btn-info btn-settings">
+								<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
+							</button>
 						</div>
-						<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
-<!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
+					</div>
+					<div id="lagless3Bar">
+						<div id="lagless3ViewerCount">
+							X/X Viewers
+						</div>
+					</div>
+				</div>
+				<div id="lagless4" class="tab-pane">
+					<div id="lagless4Container">
+						<div id="lagless4View">
+							<canvas id="videoCanvas4"></canvas>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -117,94 +186,147 @@
 			<div id="description">
 
 				<div id="barUnderTheStream" class="well">
-
-					<div id="turnTimerBar" class="progress">
-						<div id="turnTimerBarChild" class="progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
-					</div>
-					<div id="turnTimerBar2" class="progress">
-						<div id="turnTimerBarChild2" class="progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+					
+					<div id="players">
+						<div id="player1" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player1Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 1
+							</label>
+							<div id="turnTimerBar1" class="turnTimerBar progress">
+								<div id="turnTimerBarChild1" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<div id="forfeitTimerBar1" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild1" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<btn id="requestTurn1" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn1" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue1" class="list-group"></ul>
+						</div>
+						
+						<div id="player2" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player2Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 2
+							</label>
+							<div id="turnTimerBar2" class="turnTimerBar progress">
+								<div id="turnTimerBarChild2" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<div id="forfeitTimerBar2" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild2" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<btn id="requestTurn2" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn2" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue2" class="list-group"></ul>
+						</div>
+						
+						<div id="player3" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player3Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 3
+							</label>
+							<div id="turnTimerBar3" class="turnTimerBar progress">
+								<div id="turnTimerBarChild3" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<div id="forfeitTimerBar3" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild3" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<btn id="requestTurn3" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn3" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue3" class="list-group"></ul>
+						</div>
+						
+						<div id="player4" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player4Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 4
+							</label>
+							<div id="turnTimerBar4" class="turnTimerBar progress">
+								<div id="turnTimerBarChild4" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<div id="forfeitTimerBar4" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild4" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<btn id="requestTurn4" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn4" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue4" class="list-group"></ul>
+						</div>
 					</div>
 
 					<div class="container4">
 						<div class="five">
 							<ul class="list-group">
-<!-- 								<li class="list-group-item">
-									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="keyboardControllerCheckbox" type="checkbox">
-											<span class="checkbox-placeholder"></span>
-											Enable Keyboard / Controller
-										</label>
-								</li> -->
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="touchControlsCheckbox" type="checkbox">
-											<span class="checkbox-placeholder"></span>
-											Enable Touch Controls
-										</label>
-								</li>
-<!-- 								<li class="list-group-item">
-									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="mouseControlsCheckbox" type="checkbox">
-											<span class="checkbox-placeholder"></span>
-											Enable Mouse Controls
-										</label>
-								</li> -->
-<!-- 								<li class="list-group-item">
-									<label class="checkbox-inline crightheckbox-bootstrap checkbox-lg">
-											<input id="audioCheckbox" type="checkbox">
-											<span class="ifas ifa-volume-up checkbox-placeholder"></span>
-											Enable Audio 1.0
-										</label>
-								</li> -->
-								<li class="list-group-item">
-									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="darkThemeCheckbox" type="checkbox">
-											<span class="ifas ifa-moon checkbox-placeholder"></span>
-											Enable Dark Theme
-										</label>
+										<input id="keyboardControllerCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Enable Keyboard / Controller
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="chatCheckbox" type="checkbox">
-											<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
-											Enable Chat
-										</label>
+										<input id="touchControlsCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Enable Touch Controls
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="fullscreenCheckbox" type="checkbox">
-											<span class="ifas ifa-expand checkbox-placeholder"></span>
-											Enable Fullscreen Mode
-										</label>
+										<input id="mouseControlsCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Enable Mouse Controls
+									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="navCheckbox" type="checkbox">
-											<span class="ifas ifa-expand checkbox-placeholder"></span>
-											Hide Nav Bar
-										</label>
+										<input id="audioCheckbox" type="checkbox" />
+										<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+										Enable Audio 1.0
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="darkThemeCheckbox" type="checkbox" />
+										<span class="ifas ifa-moon checkbox-placeholder"></span>
+										Enable Dark Theme
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="chatCheckbox" type="checkbox" />
+										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+										Enable Chat
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="fullscreenCheckbox" type="checkbox" />
+										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										Enable Fullscreen Mode
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="navCheckbox" type="checkbox" />
+										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										Hide Nav Bar
+									</label>
 								</li>
 							</ul>
-
-							<div class="well">
-								<canvas id="controllerViewCanvas"></canvas>
-							</div>
 
 						</div>
 
 						<div class="six">
-							<div id="currentPlayer" class="well">
-								Current Player:
-							</div>
-							<div class="well">
-								Control Queue:
-								<btn id="requestTurn" type="button" class="btn btn-primary">Request Turn</btn>
-								<btn id="cancelTurn" type="button" class="btn btn-primary">Cancel Turn</btn>
-								<ul id="controlQueue" class="list-group">
-								</ul>
-							</div>
 							<div class="well">
 								Ping: <span id="ping"></span>
+							</div>
+							<div class="well">
+								<btn id="replaceWithTwitch" type="button" class="btn btn-primary">Replace With Twitch</btn>
+								<btn id="replaceWithLagless" type="button" class="btn btn-primary">Replace With Lagless</btn>
 							</div>
 						</div>
 
@@ -235,27 +357,27 @@
 							</button> -->
 							<a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
 							<div class="sliderContainer">
-								<div id="globalVolumeSlider" class="volumeSlider">
+<!-- 								<div id="globalVolumeSlider" class="volumeSlider">
 									<i class="fa fa-volume-down"></i>
 									<div id="globalVolume" class="volume"></div>
 									<i class="fa fa-volume-up"></i>
-								</div>
+								</div> -->
 							</div>
 							<div class="sliderContainer">
 								Quality: <span id="quality">70</span>
-								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70">
+								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70" />
 							</div>
 							<div class="sliderContainer">
 								Scale: <span id="scale">30</span>
-								<input id="scaleSlider" class="slider" type="range" min="10" step="1" max="60" value="30">
+								<input id="scaleSlider" class="slider" type="range" min="10" step="1" max="60" value="30" />
 							</div>
 							<div class="sliderContainer">
 								FPS: <span id="fps">15</span>
-								<input id="fpsSlider" class="slider" type="range" min="1" step="1" max="15" value="15">
+								<input id="fpsSlider" class="slider" type="range" min="1" step="1" max="15" value="15" />
 							</div>
 							<div class="sliderContainer">
 								Threshold: <span id="threshold">50</span>
-								<input id="thresholdSlider" class="slider" type="range" min="1" step="1" max="128" value="50">
+								<input id="thresholdSlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
 							</div>
 						</div>
 					</div>
@@ -285,7 +407,7 @@
 							</ul>
 							<ul class="list-group">
 								<li class="list-group-item">List of games on the switch:</li>
-								<li class="list-group-item">Use "goto [name of game]" to start a vote to switch games</li>
+								<li class="list-group-item">Use "!goto [name of game]" to start a vote to switch games</li>
 								<li class="list-group-item">botw (Breath of the Wild)</li>
 								<li class="list-group-item">smo (Super Mario Odyssey)</li>
 								<li class="list-group-item">celeste (Celeste)</li>
@@ -308,7 +430,7 @@
 
 				</div>
 
-<!-- 				<iframe id="twitchvideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
+<!-- 				<iframe id="twitchVideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
 
 			</div>
 
@@ -410,6 +532,6 @@
 
 </body>
 
-<script src="js/mobile.js"></script>
+<script src="js/main.js"></script>
 
 </html>

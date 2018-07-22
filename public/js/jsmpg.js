@@ -1688,7 +1688,7 @@ JSMpeg.Decoder.MP2Audio = function() {
         this.bits = new JSMpeg.BitBuffer(bufferSize, bufferMode);
         this.left = new Float32Array(1152);
         this.right = new Float32Array(1152);
-        this.sampleRate = 22050;
+        this.sampleRate = 44100;
         this.D = new Float32Array(1024);
         this.D.set(MP2.SYNTHESIS_WINDOW, 0);
         this.D.set(MP2.SYNTHESIS_WINDOW, 512);

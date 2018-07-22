@@ -11,11 +11,11 @@
 		let socket = io("https://twitchplaysnintendoswitch.com", {
 			path: "/8110/socket.io",
 		});
-		
-		let socket2 = io("http://localhost:8004");
-		let socket3 = io("http://localhost:8005");
+// 		let socket1 = io("http://localhost:8004");
+		let socket2 = io("http://localhost:8005");
+		let socket3 = io("http://localhost:8006");
 
-		socket.on("connection", function(socket) {
+		socket.on("connection", function(data) {
 			socket.emit("join", "relay");
 		});
 		
@@ -23,12 +23,17 @@
 			socket.emit("join", "relay");
 		}, 5000);
 		
-		socket.on("restart lagless2", function(socket) {
+		socket.on("restart lagless2", function(data) {
 			console.log("restarting lagless2");
 			socket2.emit("restart lagless2");
 		});
 		
-		socket.on("restart lagless3", function(socket) {
+		socket.on("lagless2Settings", function(data) {
+			console.log("changing lagless2 settings");
+			socket2.emit("settings", data);
+		});
+		
+		socket.on("restart lagless3", function(data) {
 			console.log("restarting lagless3");
 			socket3.emit("restart lagless3");
 		});

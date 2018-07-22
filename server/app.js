@@ -27,15 +27,16 @@ const TWITCH_SECRET = config.TWITCH_SECRET;
 const SESSION_SECRET = config.SESSION_SECRET;
 const CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback"; // You can run locally with - http://localhost:3000/auth/twitch/callback
 
-let streamSettings = {
+let lagless1Settings = {
 	x1: 319 - 1920,
 	y1: 61 + 360,
 	x2: 319 + 1280 - 1920,
 	y2: 61 + 720 + 360,
-	fps: 14,
+	fps: 15,
 	quality: 60,
 	scale: 30,
 };
+let lagless2Settings = {scale: 960, videoBitrate: 1};
 
 let lastImage = "";
 let usernameDB;
@@ -43,15 +44,20 @@ let localStorage;
 let clients = [];
 let channels = {};
 let restartAvailable = true;
+let lagless2ChangeAvailable = true;
 
 let controlQueues = [[],[],[],[]];
 
 let banlist = [];
 let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
 
-let lagless1Clients = [];
-let lagless2Clients = [];
-let lagless3Clients = [];
+let lagless1ClientIds = [];
+let lagless2ClientIds = [];
+let lagless3ClientIds = [];
+
+let lagless1ClientNames = [];
+let lagless2ClientNames = [];
+let lagless3ClientNames = [];
 
 let turnDurations = [30000, 30000, 30000, 30000];
 let timeTillForfeitDurations = [15000, 15000, 15000, 15000];
@@ -300,6 +306,23 @@ function findClientByID(id) {
 	return index;
 }
 
+function getClientNameByID(id) {
+	let index = -1;
+	for (let i = 0; i < clients.length; i++) {
+		if (clients[i].id == id) {
+			index = i;
+			break;
+		}
+	}
+	if (index == -1) {
+		return "";
+	} else if (clients[index].username == null) {
+		return "";
+	} else {
+		return clients[index].username;
+	}
+}
+
 function findClientByName(name) {
 	let index = -1;
 	for (let i = 0; i < clients.length; i++) {
@@ -348,14 +371,6 @@ function getImageFromUser3(user, x1, y1, x2, y2, quality, scale) {
 	let client = clients[index];
 
 	client.getImage3(x1, y1, x2, y2, quality, scale);
-}
-
-function intersect(a, b) {
-	var t;
-	if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
-	return a.filter(function (e) {
-		return b.indexOf(e) > -1;
-	});
 }
 
 io.set("transports", [
@@ -439,20 +454,11 @@ io.on("connection", function(socket) {
 
 	// after recieving the image, broadcast it to viewers
 	socket.on("screenshot", function(data) {
-
-		let obj = {};
-		obj.src = data;
 		lastImage = data;
-
 		if (lastImage === "") {
 			io.emit("restart");
 		}
-		let index = findClientByID(socket.id);
-		if (index != -1) {
-			let client = clients[index];
-			obj.name = client.name;
-		}
-		io.to("viewers").emit("viewImage", obj);
+		io.to("viewers").emit("viewImage", data);
 	});
 
 
@@ -510,33 +516,33 @@ io.on("connection", function(socket) {
 	});
 	
 	
-	socket.on("sendControllerStateWiiU3Ds", function(data) {
+// 	socket.on("sendControllerStateWiiU3Ds", function(data) {
 
-// 		let index = findClientByID(socket.id);
-// 		if (index == -1) {
-// 			return;
-// 		}
-// 		let client = clients[index];
-// 		if (client.username == null) {
-// 			return;
-// 		}
+// // 		let index = findClientByID(socket.id);
+// // 		if (index == -1) {
+// // 			return;
+// // 		}
+// // 		let client = clients[index];
+// // 		if (client.username == null) {
+// // 			return;
+// // 		}
 		
-// 		if (controlQueue2.length === 0) {
-// 			return;
-// 		}
-// 		currentTurnUsername2 = controlQueue2[0];
-// 		if (client.username != currentTurnUsername2) {
-// 			return;
-// 		}
+// // 		if (controlQueue2.length === 0) {
+// // 			return;
+// // 		}
+// // 		currentTurnUsername2 = controlQueue2[0];
+// // 		if (client.username != currentTurnUsername2) {
+// // 			return;
+// // 		}
 
-		// forfeit timer:
-		clearTimeout(forfeitTimer2);
-		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
-		forfeitStartTime2 = Date.now();
+// 		// forfeit timer:
+// 		clearTimeout(forfeitTimer2);
+// 		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
+// 		forfeitStartTime2 = Date.now();
 
-		io.to("wiiu3dscontroller").emit("controllerState", data);
-// 		io.emit("currentPlayer2", client.username);
-	});
+// 		io.to("wiiu3dscontroller").emit("controllerState", data);
+// // 		io.emit("currentPlayer2", client.username);
+// 	});
 
 	socket.on("directedGetImage", function(data) {
 		let index = findClientByName(data.user);
@@ -576,6 +582,12 @@ io.on("connection", function(socket) {
 			}
 		}
 		
+		if (typeof controlQueues[cNum] == "undefined") {
+			console.log("something weird happened.");
+			console.log(cNum);
+			return;
+		}
+		
 		// check to make sure they aren't in this queue (so we don't push it more than once)
 		if (controlQueues[cNum].indexOf(client.username) == -1) {
 			controlQueues[cNum].push(client.username);
@@ -583,11 +595,13 @@ io.on("connection", function(socket) {
 			io.emit("controlQueues", {
 				queues: controlQueues
 			});
-		}
-		
-		// only if there's only one person in the queue
-		if (controlQueues[cNum].length == 1) {
-			resetTimers(client.username, cNum);
+			
+			
+			// recently moved into this block// 7/21/18
+			// only if there's only one person in the queue
+			if (controlQueues[cNum].length == 1) {
+				resetTimers(client.username, cNum);
+			}
 		}
 	});
 
@@ -633,7 +647,8 @@ io.on("connection", function(socket) {
 				forfeitTimesLeft: forfeitTimesLeft,
 				usernames: currentTurnUsernames,
 				turnLengths: turnDurations,
-				viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+				viewerCounts: [lagless1ClientIds.length, lagless2ClientIds.length, lagless3ClientIds.length],// todo: remove
+				viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames],
 			});
 		}
 	});
@@ -655,17 +670,17 @@ io.on("connection", function(socket) {
 		io.emit("quit");
 		process.exit();
 	});
-
 	socket.on("restart lagless2", function() {
 		restartAvailable = false;
 		console.log("restarting lagless2");
-		io.to("relay").emit("restart lagless2");
+		io.to("lagless2Host").emit("restart");
+		// notify client to restart:
+		io.emit("lagless2SettingsChange");
 	});
-
 	socket.on("restart lagless3", function() {
 		restartAvailable = false;
 		console.log("restarting lagless3");
-		io.to("relay").emit("restart lagless3");
+		io.to("lagless3Host").emit("restart");
 	});
 	
 	socket.on("banlist", function(data) {
@@ -679,57 +694,70 @@ io.on("connection", function(socket) {
 	});
 
 	/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-	socket.on("setQuality", function(data) {
-
-		if (controlQueues[0].length === 0) {
-			io.emit("setQuality", streamSettings.quality);
-			return;
-		}
+	
+	/* LAGLESS 1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+	socket.on("lagless1Settings", function(data) {
 		currentTurnUsernames[0] = controlQueues[0][0];
-		if (client.username != currentTurnUsernames[0]) {
-			io.emit("setQuality", streamSettings.quality);
+		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0) {
+			io.emit("lagless1Settings", lagless1Settings);
 			return;
 		}
-
-		streamSettings.quality = parseInt(data);
-		io.emit("setQuality", data);
-	});
-
-	socket.on("setScale", function(data) {
-
-		if (controlQueues[0].length === 0) {
-			io.emit("setScale", streamSettings.scale);
-			return;
+		
+		let obj = {};
+		if (typeof data.scale != "undefined") {
+			if (typeof data.scale == "number") {
+				obj.scale = data.scale;
+			}
 		}
-		currentTurnUsernames[0] = controlQueues[0][0];
-		if (client.username != currentTurnUsernames[0]) {
-			io.emit("setScale", streamSettings.scale);
-			return;
+		if (typeof data.quality != "undefined") {
+			if (typeof data.quality == "number") {
+				obj.quality = data.quality;
+			}
 		}
-
-		streamSettings.scale = parseInt(data);
-		io.emit("setScale", data);
-	});
-
-	socket.on("setFPS", function(data) {
-
-		streamSettings.fps = parseInt(data);
-		//io.emit("setFPS", data);
+		
+		lagless1Settings = Object.assign({}, lagless1Settings, obj);
+		io.emit("lagless1Settings", lagless1Settings);
 	});
 
 	// 	socket.on("setCoords", function(data) {
-	// 		streamSettings.x1 = data.x1 || streamSettings.x1;
-	// 		streamSettings.x2 = data.x2 || streamSettings.x2;
-	// 		streamSettings.y1 = data.y1 || streamSettings.y1;
-	// 		streamSettings.y2 = data.y2 || streamSettings.y2;
+	// 		lagless1Settings.x1 = data.x1 || lagless1Settings.x1;
+	// 		lagless1Settings.x2 = data.x2 || lagless1Settings.x2;
+	// 		lagless1Settings.y1 = data.y1 || lagless1Settings.y1;
+	// 		lagless1Settings.y2 = data.y2 || lagless1Settings.y2;
 	// 	});
 	
-	// broadcast when someone joins:
-	io.emit("setQuality", streamSettings.quality);
-	io.emit("setScale", streamSettings.scale);
-	io.emit("setScale", streamSettings.scale);
-
-
+	
+	/* LAGLESS2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+	socket.on("lagless2Settings", function(data) {
+		currentTurnUsernames[0] = controlQueues[0][0];
+		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0) {
+			io.emit("lagless2Settings", lagless2Settings);
+			return;
+		}
+		
+		lagless2Settings = Object.assign({}, lagless2Settings, data);
+		
+		let obj = {};
+		if (typeof data.scale != "undefined") {
+			io.emit("lagless2SettingsChange");
+			if (typeof data.scale == "number") {
+				obj.scale = data.scale + ":" + (data.scale * (9/16));
+			}
+		}
+		if (typeof data.videoBitrate != "undefined") {
+			io.emit("lagless2SettingsChange");
+			if (typeof data.videoBitrate == "number") {
+				obj.videoBitrate = data.videoBitrate + "M";
+			}
+		}
+		
+		io.to("lagless2Host").emit("settings", obj);
+		io.emit("lagless2Settings", data);
+	});
+	
+	// broadcast settings when someone joins:
+	io.emit("lagless1Settings", lagless1Settings);
+	io.emit("lagless2Settings", lagless2Settings);
 
 	/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -780,52 +808,52 @@ io.on("connection", function(socket) {
 	socket.on("joinLagless1", function() {
 		let id = socket.id;
 		// if the id isn't in the list, add it:
-		if (lagless1Clients.indexOf(id) == -1) {
-			lagless1Clients.push(id);
+		if (lagless1ClientIds.indexOf(id) == -1) {
+			lagless1ClientIds.push(id);
 		}
 		// remove from other lists:
 		let index;
-		index = lagless2Clients.indexOf(id);
+		index = lagless2ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless2Clients.splice(index, 1);
+			lagless2ClientIds.splice(index, 1);
 		}
-		index = lagless3Clients.indexOf(id);
+		index = lagless3ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless3Clients.splice(index, 1);
+			lagless3ClientIds.splice(index, 1);
 		}
 	});
 	socket.on("joinLagless2", function() {
 		let id = socket.id;
 		// if the id isn't in the list, add it:
-		if (lagless2Clients.indexOf(id) == -1) {
-			lagless2Clients.push(id);
+		if (lagless2ClientIds.indexOf(id) == -1) {
+			lagless2ClientIds.push(id);
 		}
 		// remove from other lists:
 		let index;
-		index = lagless1Clients.indexOf(id);
+		index = lagless1ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless1Clients.splice(index, 1);
+			lagless1ClientIds.splice(index, 1);
 		}
-		index = lagless3Clients.indexOf(id);
+		index = lagless3ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless3Clients.splice(index, 1);
+			lagless3ClientIds.splice(index, 1);
 		}
 	});
 	socket.on("joinLagless3", function() {
 		let id = socket.id;
 		// if the id isn't in the list, add it:
-		if (lagless3Clients.indexOf(id) == -1) {
-			lagless3Clients.push(id);
+		if (lagless3ClientIds.indexOf(id) == -1) {
+			lagless3ClientIds.push(id);
 		}
 		// remove from other lists:
 		let index;
-		index = lagless1Clients.indexOf(id);
+		index = lagless1ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless1Clients.splice(index, 1);
+			lagless1ClientIds.splice(index, 1);
 		}
-		index = lagless2Clients.indexOf(id);
+		index = lagless2ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless2Clients.splice(index, 1);
+			lagless2ClientIds.splice(index, 1);
 		}
 	});
 	
@@ -833,17 +861,17 @@ io.on("connection", function(socket) {
 		let id = socket.id;
 		// remove from lists:
 		let index;
-		index = lagless1Clients.indexOf(id);
+		index = lagless1ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless1Clients.splice(index, 1);
+			lagless1ClientIds.splice(index, 1);
 		}
-		index = lagless2Clients.indexOf(id);
+		index = lagless2ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless2Clients.splice(index, 1);
+			lagless2ClientIds.splice(index, 1);
 		}
-		index = lagless3Clients.indexOf(id);
+		index = lagless3ClientIds.indexOf(id);
 		if (index > -1) {
-			lagless3Clients.splice(index, 1);
+			lagless3ClientIds.splice(index, 1);
 		}
 	});
 
@@ -876,6 +904,10 @@ function onNewNamespace(channel, sender) {
 setInterval(function() {
 	restartAvailable = true;
 }, 4000);
+setInterval(function() {
+	lagless2ChangeAvailable = true;
+}, 300);
+
 
 function forfeitTurn(username, cNum) {
 	let index = controlQueues[cNum].indexOf(username);
@@ -909,7 +941,8 @@ function forfeitTurn(username, cNum) {
 			forfeitTimesLeft: forfeitTimesLeft,
 			usernames: currentTurnUsernames,
 			turnLengths: turnDurations,
-			viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+			viewerCounts: [lagless1ClientIds.length, lagless2ClientIds.length, lagless3ClientIds.length],
+			viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames],
 		});
 	}
 }
@@ -958,9 +991,9 @@ setInterval(function() {
 	let ids = Object.keys(io.sockets.sockets);
 	
 	// remove any clients not still connected:
-	lagless1Clients = lagless1Clients.filter(value => -1 !== ids.indexOf(value));
-	lagless2Clients = lagless2Clients.filter(value => -1 !== ids.indexOf(value));
-	lagless3Clients = lagless3Clients.filter(value => -1 !== ids.indexOf(value));
+	lagless1ClientIds = lagless1ClientIds.filter(value => -1 !== ids.indexOf(value));
+	lagless2ClientIds = lagless2ClientIds.filter(value => -1 !== ids.indexOf(value));
+	lagless3ClientIds = lagless3ClientIds.filter(value => -1 !== ids.indexOf(value));
 	
 	// calculate time left for each player
 	for (let i = 0; i < 4; i++) {
@@ -972,6 +1005,34 @@ setInterval(function() {
 		
 		turnTimesLeft[i] = timeLeft;
 		forfeitTimesLeft[i] = timeLeftForfeit;
+		
+		if(timeLeftForfeit < 0) {
+			console.log("forfeit system screwed up somehow");
+			// reset forfeit timer:
+			forfeitStartTimes[i] = Date.now();
+			clearTimeout(forfeitTimers[i]);
+			forfeitTimers[i] = setTimeout(forfeitTurn, timeTillForfeitDurations[i], controlQueues[i][0], i);
+			
+			// set the forfeitTime left to the duration of the forfeit timer:
+			forfeitTimesLeft[i] = timeTillForfeitDurations[i];
+		}
+		
+		
+	}
+	
+	lagless1ClientNames = [];
+	lagless2ClientNames = [];
+	lagless3ClientNames = [];
+	
+	// create viewer list:
+	for (let i = 0; i < lagless1ClientIds.length; i++) {
+		lagless1ClientNames.push(getClientNameByID(lagless1ClientIds[i]));
+	}
+	for (let i = 0; i < lagless1ClientIds.length; i++) {
+		lagless2ClientNames.push(getClientNameByID(lagless2ClientIds[i]));
+	}
+	for (let i = 0; i < lagless1ClientIds.length; i++) {
+		lagless3ClientNames.push(getClientNameByID(lagless3ClientIds[i]));
 	}
 	
 
@@ -980,7 +1041,8 @@ setInterval(function() {
 		forfeitTimesLeft: forfeitTimesLeft,
 		usernames: currentTurnUsernames,
 		turnLengths: turnDurations,
-		viewerCounts: [lagless1Clients.length, lagless2Clients.length, lagless3Clients.length],
+		viewerCounts: [lagless1ClientIds.length, lagless2ClientIds.length, lagless3ClientIds.length],// todo: remove
+		viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames],
 	});
 	io.emit("controlQueues", {
 		queues: controlQueues
@@ -989,13 +1051,15 @@ setInterval(function() {
 
 function stream() {
 	let user = "Matt";
-	let x1 = streamSettings.x1;
-	let x2 = streamSettings.x2;
-	let y1 = streamSettings.y1;
-	let y2 = streamSettings.y2;
-	let quality = streamSettings.quality;
-	let scale = streamSettings.scale;
-	getImageFromUser3(user, x1, y1, x2, y2, quality, scale);
-	setTimeout(stream, 1000 / streamSettings.fps);
+	let x1 = lagless1Settings.x1;
+	let x2 = lagless1Settings.x2;
+	let y1 = lagless1Settings.y1;
+	let y2 = lagless1Settings.y2;
+	let quality = lagless1Settings.quality;
+	let scale = lagless1Settings.scale;
+	if (lagless1ClientIds.length > 0) {
+		getImageFromUser3(user, x1, y1, x2, y2, quality, scale);
+	}
+	setTimeout(stream, 1000 / lagless1Settings.fps);
 }
 stream();

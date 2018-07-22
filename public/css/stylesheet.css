@@ -192,6 +192,9 @@ max-width: 500px; */
 #container {
 	display: flex;
 	flex-flow: row;
+	width: 100%;
+	margin: auto;
+	padding: 0;
 }
 
 #description {
@@ -199,14 +202,8 @@ max-width: 500px; */
 	/* 	width: 50%; */
 }
 
-.container2 {
-	width: 100%;
-	margin: auto;
-	padding: 0;
-}
-
 #picture {
-	width: 75%;
+	width: 80%;
 	padding: 1%;
 	margin: 0;
 }
@@ -446,7 +443,7 @@ margin: 5px 0;*/
 }
 
 .sliderContainer {
-	width: 75%;
+/* 	width: 75%; */
 	margin: 0 auto;
 	padding: 5px;
 }
@@ -474,18 +471,27 @@ margin: 5px 0;*/
 	margin: auto;
 	padding: 0;
 	overflow-y: hidden;
-	display: inline-flex;
+	display: flex;
 	justify-content: space-evenly;
 }
 
-.five {
+#checkboxSettings {
+	width: 25%;
+	padding: 0;
+}
+
+.laglessSettings {
+	width: 25%;
+}
+
+/* .five {
 	width: 25%;
 	padding: 0;
 }
 
 .six {
 	width: 60%;
-}
+} */
 
 #controlsLabel {
 	margin-bottom: 10px;

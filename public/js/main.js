@@ -12,6 +12,8 @@ let lagless1JoinTimer;
 let currentTab = "#lagless1";
 let currentPlayerChosen = 0;
 let wasPressedKeyCodes = [];
+let viewerCounts = [];
+let viewers = [];
 
 let controlQueues = [];
 let controlQueue1 = [];
@@ -25,6 +27,17 @@ let toggleAudio = false;
 let toggleDarkTheme = false;
 let toggleFullscreen = false;
 let audio = true;
+let stickSensitivityX = 1;
+let stickSensitivityY = 1;
+let lagless1Settings = {};
+let lagless2Settings = {videoBitrate: 1, scale: 960};
+
+// detect firefox:
+// todo: make user configurable
+if(navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
+	stickSensitivityX = 1.5;
+	stickSensitivityY = 1.5;
+}
 
 let timeLeft = 30000;
 let timeLeft2 = 30000;
@@ -163,6 +176,11 @@ controller.reset = function() {
 }
 
 function sendControllerState() {
+	
+	controller.LStick.x = minmax(controller.LStick.x, 0, 255);
+	controller.LStick.y = minmax(controller.LStick.y, 0, 255);
+	controller.RStick.x = minmax(controller.RStick.x, 0, 255);
+	controller.RStick.y = minmax(controller.RStick.y, 0, 255);
 	
 	let newControllerState = "";
 
@@ -639,8 +657,8 @@ gamepad.on("release", "d_pad_right", e => {
 });
 
 gamepad.on("hold", "stick_axis_left", e => {
-	let x = e.value[0];
-	let y = e.value[1];
+	let x = e.value[0]*stickSensitivityX;
+	let y = e.value[1]*stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
@@ -656,8 +674,8 @@ gamepad.on("hold", "stick_axis_left", e => {
 	}
 });
 gamepad.on("press", "stick_axis_left", e => {
-	let x = e.value[0];
-	let y = e.value[1];
+	let x = e.value[0]*stickSensitivityX;
+	let y = e.value[1]*stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
@@ -673,8 +691,8 @@ gamepad.on("press", "stick_axis_left", e => {
 	}
 });
 gamepad.on("release", "stick_axis_left", e => {
-	let x = e.value[0];
-	let y = e.value[1];
+	let x = e.value[0]*stickSensitivityX;
+	let y = e.value[1]*stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
@@ -690,8 +708,8 @@ gamepad.on("release", "stick_axis_left", e => {
 	}
 });
 gamepad.on("hold", "stick_axis_right", e => {
-	let x = e.value[0];
-	let y = e.value[1];
+	let x = e.value[0]*stickSensitivityX;
+	let y = e.value[1]*stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
@@ -707,8 +725,8 @@ gamepad.on("hold", "stick_axis_right", e => {
 	}
 });
 gamepad.on("press", "stick_axis_right", e => {
-	let x = e.value[0];
-	let y = e.value[1];
+	let x = e.value[0]*stickSensitivityX;
+	let y = e.value[1]*stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
@@ -724,8 +742,8 @@ gamepad.on("press", "stick_axis_right", e => {
 	}
 });
 gamepad.on("release", "stick_axis_right", e => {
-	let x = e.value[0];
-	let y = e.value[1];
+	let x = e.value[0]*stickSensitivityX;
+	let y = e.value[1]*stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
@@ -980,6 +998,8 @@ function setVideoWidth(width, num) {
 
 setTimeout(function() {
 	setVideoWidth(73.2);
+	// 20px is for well class:
+	$("#twitchChat").height( $("#navTabs").height() + $("#videoCanvas1").height() + $("#videoCanvas2").height() + $("#videoCanvas3").height() + 20 );
 }, 2000);
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1242,37 +1262,57 @@ setInterval(function() {
 /* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 $("#qualitySlider").on("input", function(event) {
-	let quality = this.value;
-	$("#quality").text(quality);
-	socket.emit("setQuality", parseInt(quality));
-})
+	$("#quality").text(this.value);
+	socket.emit("lagless1Settings", {quality: parseInt(this.value)});
+});
 $("#scaleSlider").on("input", function(event) {
-	let scale = this.value;
-	$("#scale").text(scale);
-	socket.emit("setScale", parseInt(scale));
-})
+	$("#scale").text(this.value);
+	socket.emit("lagless1Settings", {scale: parseInt(this.value)});
+});
 $("#fpsSlider").on("input", function(event) {
-	let fps = this.value;
-	$("#fps").text(fps);
-	// 		socket.emit("setFPS", parseInt(fps));
-})
+	$("#fps").text(this.value);
+});
 $("#thresholdSlider").on("input", function(event) {
-	let threshold = this.value;
-	$("#threshold").text(threshold);
-})
+	$("#threshold").text(this.value);
+});
 
-socket.on("setQuality", function(data) {
-	$("#quality").text(data);
-	$("#qualitySlider").val(data);
+socket.on("lagless1Settings", function(data) {
+	lagless1Settings = Object.assign({}, lagless1Settings, data);
+	$("#scale").text(lagless1Settings.scale);
+	$("#scaleSlider").val(lagless1Settings.scale);
+	$("#quality").text(lagless1Settings.quality);
+	$("#qualitySlider").val(lagless1Settings.quality);
 });
-socket.on("setScale", function(data) {
-	$("#scale").text(data);
-	$("#scaleSlider").val(data);
+
+
+// lagless2:
+$("#scaleSlider2").on("input", function(event) {
+	$("#scale2").text(this.value);
 });
-socket.on("setFPS", function(data) {
-	$("#fps").text(data);
-	$("#fpsSlider").val(data);
+$("#scaleSlider2").on("mouseup", function(event) {
+	$("#scale2").text(this.value);
+	socket.emit("lagless2Settings", {scale: parseInt(this.value)});
 });
+$("#bitrateSlider").on("input", function(event) {
+	$("#bitrate").text(this.value);
+});
+$("#bitrateSlider").on("mouseup", function(event) {
+	$("#bitrate").text(this.value);
+	socket.emit("lagless2Settings", {videoBitrate: parseFloat(this.value)});
+});
+
+socket.on("lagless2Settings", function(data) {
+	lagless2Settings = Object.assign({}, lagless2Settings, data);
+	
+	$("#scale2").text(lagless2Settings.scale);
+	$("#scaleSlider2").val(lagless2Settings.scale);
+	
+	$("#bitrate").text(lagless2Settings.videoBitrate);
+	$("#bitrateSlider").val(lagless2Settings.videoBitrate);
+});
+
+
+
 
 /* LAGLESS 1.0*/
 
@@ -1283,7 +1323,7 @@ videoCanvas1.height = 720;
 
 socket2.on("viewImage", function(data) {
 	stats.begin();
-	let src = "data:image/jpeg;base64," + data.src;
+	let src = "data:image/jpeg;base64," + data;
 	if(src == "data:image/jpeg;base64,") {
 		socket.emit("restart");
 		return;
@@ -1316,7 +1356,7 @@ let url = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
 let canvas2 = document.getElementById("videoCanvas2");
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-let player = new JSMpeg.Player(url, {canvas: canvas2, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
+let player = new JSMpeg.Player(url, {canvas: canvas2, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
 player.maxAudioLag = 0.5;
 player.stop();
 player.stats = stats;
@@ -1362,6 +1402,14 @@ function resizeVideo2(scale) {
 	player.renderer.gl.viewport(0, 0, newWidth, newHeight);
 }
 
+// on settings change:
+socket.on("lagless2SettingsChange", function(data) {
+	player.destroy();
+	player = new JSMpeg.Player(url, {canvas: canvas2, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
+});
+
+//socket.emit("lagless2Settings", {videoBitrate: "2M", framerate: 20, scale: "640:360"});
+
 
 /* LAGLESS 3.0 */
 let canvas3 = document.getElementById("videoCanvas3");
@@ -1398,7 +1446,7 @@ setTimeout(function() {
 	$("#tab2").trigger("click");
 }, 100);
 
-/* RESIZALBLE */
+/* RESIZABLE */
 // interact("#picture")
 // 	.resizable({
 //     // resize from all edges and corners
@@ -1485,8 +1533,9 @@ function addJoyCons(tab) {
 		leftStick.destroy();
 		rightStick.destroy();
 	} catch(e) {
-		
+		console.log("JoyCon delete error.");
 	}
+	
 	$("#leftJoyCon").remove();
 	$("#rightJoyCon").remove();
 	
@@ -1569,6 +1618,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			socket2.emit("join", "viewers");
 			socket.emit("joinLagless1");
 			// todo: fix this:
+			clearInterval(lagless1JoinTimer);
 			lagless1JoinTimer = setInterval(function() {
 				socket2.emit("join", "viewers");
 			}, 5000);
@@ -1596,7 +1646,6 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		// lagless 3:
 		if (contentId == "#lagless3") {
 			socket.emit("joinLagless3");
-			//let uri = "wss://twitchplaysnintendoswitch3.localtunnel.me";
 			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 			wsavc.connect(uri);
 			
@@ -1634,6 +1683,16 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		window.dispatchEvent(new Event("resize"));
 	}, 2000);
 });
+
+setInterval(function() {
+	if (currentTab == "#lagless1") {
+		socket.emit("joinLagless1");
+	} else if (currentTab == "#lagless2") {
+		socket.emit("joinLagless2");
+	} else if (currentTab == "#lagless3") {
+		socket.emit("joinLagless3");
+	}
+}, 10000);
 
 
 // let twitchPlayer1 = new Twitch.Player("lagless1View", {channel: "twitchplaysconsoles"});
@@ -1860,6 +1919,7 @@ socket.on("twitchUsername", function(data) {
 socket.on("turnTimesLeft", function(data) {
 	
 	lastCurrentTime = Date.now();
+	viewerCounts = data.viewerCounts;
 	
 	for (let i = 0; i < 4; i++) {
 		let timeLeftMilli = data.turnTimesLeft[i];
@@ -2081,7 +2141,7 @@ socket.on("controllerState1", function(data) {
 	let dpad = str[0];
 	
 	let btns = [];
-	let unpressedBtns = ["upButton", "downButton", "leftButton", "rightButton", "aButton", "bButton", "xButton", "yButton", "lButton", "zlButton", "rButton", "zrButton", "minusButton", "captureButton", "plusButton", "homeButton"];
+	let unpressedBtns = ["upButton", "downButton", "leftButton", "rightButton", "aButton", "bButton", "xButton", "yButton", "lButton", "zlButton", "rButton", "zrButton", "minusButton", "captureButton", "plusButton", "homeButton", "leftStick", "rightStick"];
 	
 	if(dpad == "7") {
 		btns.push("upButton");
@@ -2148,6 +2208,13 @@ socket.on("controllerState1", function(data) {
 	}
 	if (str[14] == "1") {
 		btns.push("homeButton");
+	}
+	
+	if (str[1] == "1") {
+		btns.push("leftStick");
+	}
+	if (str[10] == "1") {
+		btns.push("rightStick");
 	}
 	
 	unpressedBtns = unpressedBtns.filter( function(el) {

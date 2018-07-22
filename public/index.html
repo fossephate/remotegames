@@ -61,11 +61,11 @@
 
 <body>
 
-	<div id="container" class="container2">
+	<div id="container">
 
 		<div id="picture" class="well">
 
-			<ul class="nav nav-tabs" role="tablist">
+			<ul id="navTabs" class="nav nav-tabs" role="tablist">
 				<li class="nav-item active">
 					<a id="tab1" class="nav-link active" data-toggle="tab" href="#lagless1">Lagless 1</a>
 				</li>
@@ -258,7 +258,7 @@
 					</div>
 
 					<div class="container4">
-						<div class="five">
+						<div id="checkboxSettings" class="five">
 							<ul class="list-group">
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
@@ -320,13 +320,46 @@
 
 						</div>
 
-						<div class="six">
+						<div id="lagless1Settings" class="laglessSettings well">
+							Lagless 1 Settings
+							<div class="sliderContainer">
+								Quality: <span id="quality">70</span>
+								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70" />
+							</div>
+							<div class="sliderContainer">
+								Scale: <span id="scale">30</span>
+								<input id="scaleSlider" class="slider" type="range" min="10" step="1" max="60" value="30" />
+							</div>
+							<div class="sliderContainer">
+								FPS: <span id="fps">15</span>
+								<input id="fpsSlider" class="slider" type="range" min="1" step="1" max="15" value="15" />
+							</div>
+							<div class="sliderContainer">
+								Stick Deadzone: <span id="threshold">50</span>
+								<input id="thresholdSlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
+							</div>
+							<div class="sliderContainer">
+								Stick Sensitivity: <span id="threshold">50</span>
+								<input id="stickSensitivitySlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
+							</div>
 							<div class="well">
 								Ping: <span id="ping"></span>
 							</div>
 							<div class="well">
 								<btn id="replaceWithTwitch" type="button" class="btn btn-primary">Replace With Twitch</btn>
 								<btn id="replaceWithLagless" type="button" class="btn btn-primary">Replace With Lagless</btn>
+							</div>
+						</div>
+						
+						<div id="lagless2Settings" class="laglessSettings well">
+							Lagless 2 Settings
+							<div class="sliderContainer">
+								Scale: <span id="scale2">960</span>
+								<input id="scaleSlider2" class="slider" type="range" min="100" step="10" max="960" value="960" />
+							</div>
+							<div class="sliderContainer">
+								Bitrate: <span id="bitrate">2</span>
+								<input id="bitrateSlider" class="slider" type="range" min="0" step="0.05" max="2" value="1" />
 							</div>
 						</div>
 
@@ -363,7 +396,7 @@
 									<i class="fa fa-volume-up"></i>
 								</div> -->
 							</div>
-							<div class="sliderContainer">
+<!-- 							<div class="sliderContainer">
 								Quality: <span id="quality">70</span>
 								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70" />
 							</div>
@@ -376,9 +409,13 @@
 								<input id="fpsSlider" class="slider" type="range" min="1" step="1" max="15" value="15" />
 							</div>
 							<div class="sliderContainer">
-								Threshold: <span id="threshold">50</span>
+								Stick Deadzone: <span id="threshold">50</span>
 								<input id="thresholdSlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
 							</div>
+							<div class="sliderContainer">
+								Stick Sensitivity: <span id="threshold">50</span>
+								<input id="stickSensitivitySlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
+							</div> -->
 						</div>
 					</div>
 
@@ -407,7 +444,7 @@
 							</ul>
 							<ul class="list-group">
 								<li class="list-group-item">List of games on the switch:</li>
-								<li class="list-group-item">Use "goto [name of game]" to start a vote to switch games</li>
+								<li class="list-group-item">Use "!goto [name of game]" to start a vote to switch games</li>
 								<li class="list-group-item">botw (Breath of the Wild)</li>
 								<li class="list-group-item">smo (Super Mario Odyssey)</li>
 								<li class="list-group-item">celeste (Celeste)</li>
