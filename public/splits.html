@@ -1,9 +1,10 @@
 <html>
 
 <head>
+	<title>Split Timer</title>
 	<style>
 		.time {
-/* 			font-family: comic sans ms; */
+			/* 			font-family: comic sans ms; */
 			font-family: monospace;
 			font-size: 30px;
 			color: white;
@@ -12,24 +13,186 @@
 			background-color: rgba(0, 0, 0, 0);
 			margin: 0px auto;
 			overflow: hidden;
-/* 			text-shadow: 3px 3px #000000; */
+			/* 			text-shadow: 3px 3px #000000; */
 			text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
 		}
+		
+		#splitMetaContainer {
+			display: flex;
+			flex-direction: column;
+			width: max-content;
+		}
+
+		#splitContainer {
+			display: flex;
+			flex-direction: row;
+			width: max-content;
+		}
+		
+		#splitNames {
+			display: flex;
+			flex-direction: column;
+			margin: 0;
+		}
+
+		#splitTimes {
+			display: flex;
+			flex-direction: column;
+			margin: 0;
+		}
 	</style>
+	<!-- socket.io -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+	<!-- jquery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<!-- BOOTSTRAP 3 -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
+
 <body style="margin: 0; padding: 0;">
-	<div id="time" class="time"></div>
+	<div id="splitMetaContainer">
+		
+		<div id="splitContainer">
+			<ul id="splitNames" class="list-group">
+				<li class="list-group-item">Great Plateau</li>
+				<li class="list-group-item">Enter Hyrule Castle</li>
+				<li class="list-group-item">Enter Sanctum</li>
+				<li class="list-group-item">Blights</li>
+				<li class="list-group-item">Calamity Ganon</li>
+				<li class="list-group-item">Dark Beast</li>
+			</ul>
+			<ul id="splitTimes" class="list-group"></ul>
+		</div>
+		
+		<ul id="times" class="list-group">
+			<li class="list-group-item"></li>
+		</ul>
+	</div>
+	<btn id="splitButton" class="btn btn-primary">Split</btn>
 </body>
 <script src="js/dateformat.js"></script>
 <script>
+	let socket = io("https://twitchplaysnintendoswitch.com", {
+		path: "/8110/socket.io",
+	});
+
+	function createSplitTimer(startTime, splitNames, name) {
+		let obj = {
+			startTime: startTime,
+			splitNames: splitNames,
+			name: name
+		};
+		socket.emit("createSplitTimer", obj);
+	}
+
+	// server:
+	function SplitTimer(startTime, splitNames, name) {
+		this.startTime = startTime;
+		this.splitNames = splitNames;
+		this.name = name;
+		this.currentSplit = 0;
+		this.currentTime = 0;
+		this.times = [];
+		
+		this.addSplit = function(splitName) {
+			this.splitNames.push(splitName);
+		}
+		this.moveToNextSplit = function() {
+			this.currentSplit += 1;
+			let time = (new Date()) - startTime;
+			this.times.push(time);
+			this.currentTime = time;
+		}
+		this.removeLastSplit = function() {
+			this.currentSplit -= 1;
+			this.times.pop();
+		}
+		this.getCurrentTime = function() {
+			let time = (new Date()) - startTime;
+			this.currentTime = time;
+			return time;
+		}
+		return this;
+	}
+
+	let splitNames = ["Great Plateau", "Enter Hyrule Castle", "Enter Sanctum", "Blights", "Calamity Ganon", "Dark Beast"];
+	let myTimer = SplitTimer(new Date(), splitNames, "myTimer");
+
+	$("#splitButton").on("click", function(event) {
+		myTimer.moveToNextSplit();
+	});
+	
 	setInterval(function() {
 		
+		let times = myTimer.times;
+		let splitNames = myTimer.splitNames;
+		let currentTime = myTimer.currentTime;
+		
+		if ($("#splitTimes").children().length != times.length) {
+			$("#splitTimes").empty();
+			let listHTML = "<li class='list-group-item'>" + "</li>";
+			for (let i = 0; i < times.length; i++) {
+				$("#splitTimes").append(listHTML);
+			}
+		}
+		if ($("#splitNames").children().length != splitNames.length) {
+			$("#splitNames").empty();
+			let listHTML; "<li class='list-group-item'>" + "</li>";
+			for (let i = 0; i < times.length; i++) {
+				listHTML = "<li class='list-group-item'>" + splitNames[i] + "</li>";
+				$("#splitNames").append(listHTML);
+			}
+		}
+		for (let i = 0; i < myTimer.times.length; i++) {
+// 			if (i > myTimer.splitNames.length-1) {
+// 				continue;
+// 			}
+			let t = myTimer.times[i] / 1000;
+			$("#splitTimes").children()[i].innerHTML = t;
+		}
+		$("#times").children()[0].innerHTML = myTimer.getCurrentTime() / 1000;
+	}, 50);
+	
+	socket.on("splitTimes", function(data) {
+		let times = data.times;
+		let splitNames = data.splitNames;
+		let currentTime = data.currentTime;
+		
+		if ($("#splitTimes").children().length != times.length) {
+			$("#splitTimes").empty();
+			let listHTML = "<li class='list-group-item'>" + "</li>";
+			for (let i = 0; i < times.length; i++) {
+				$("#splitTimes").append(listHTML);
+			}
+		}
+		if ($("#splitNames").children().length != splitNames.length) {
+			$("#splitNames").empty();
+			let listHTML; "<li class='list-group-item'>" + "</li>";
+			for (let i = 0; i < times.length; i++) {
+				listHTML = "<li class='list-group-item'>" + splitNames[i] + "</li>";
+				$("#splitNames").append(listHTML);
+			}
+		}
+		for (let i = 0; i < times.length; i++) {
+			if (i > splitNames.length-1) {
+				continue;
+			}
+			let t = times[i] / 1000;
+			$("#splitTimes").children()[i].innerHTML = t;
+		}
+		$("#times").children()[0].innerHTML = currentTime;
+	});
+
+
+	setInterval(function() {
+
 		String.prototype.replaceAll = function(search, replacement) {
 			var target = this;
-			return target.replace(new RegExp(search, 'g'), replacement);
+			return target.replace(new RegExp(search, "g"), replacement);
 		};
-		
-		
+
+
 		function msToTime(duration) {
 			var milliseconds = parseInt((duration % 1000) / 100);
 			var seconds = parseInt((duration / 1000) % 60);
@@ -52,30 +215,28 @@
 				seconds = "0" + seconds;
 			}
 			var time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-			time = time.replaceAll("-", "");// remove negative signs
+			time = time.replaceAll("-", ""); // remove negative signs
 			return time;
 		}
-		
-// 		var startDateTime = new Date(Date.UTC(2018, 5, 16, 15, 0, 0, 0));
+
+		// 		var startDateTime = new Date(Date.UTC(2018, 5, 16, 15, 0, 0, 0));
 		var startDateTime = new Date(Date.UTC(2018, 5, 16, 15, 0, 0, 0));
-		
+
 		var now = new Date();
-// 		now = Date.UTC(now);
-		
+		// 		now = Date.UTC(now);
+
 		var timeSinceSpeedRunStart = new Date(now - startDateTime);
-		
-		
+
+
 		var timeSince = msToTime(timeSinceSpeedRunStart);
 		//console.log(timeSince);
-		
+
 		if (timeSinceSpeedRunStart < 0) {
 			timeSince = "T-" + timeSince;
 		}
-		
-		
-		
+
 		//var currentTime = dateFormat(timeSinceSpeedRunStart, "h:MM:ss:L");
-		document.getElementById("time").innerHTML = timeSince;
+		$("#time").innerHTML = timeSince;
 	}, 50);
 </script>
 

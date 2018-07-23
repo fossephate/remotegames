@@ -6,9 +6,12 @@ const port = 8110;
 
 
 
+
+
 const crypto = require("crypto");
 const util = require("util");
 const fs = require("fs");
+const now = require("performance-now");
 
 const WebSocketServer = require("ws").Server;
 const Splitter = require("stream-split");
@@ -69,6 +72,8 @@ let currentTurnUsernames = [null, null, null, null];
 
 let turnTimesLeft = [0, 0, 0, 0];
 let forfeitTimesLeft = [0, 0, 0, 0];
+
+let splitTimer = null;
 
 app.use(session({
 	secret: SESSION_SECRET,
@@ -256,43 +261,10 @@ if (typeof usernameDB == "undefined" || usernameDB === null) {
 console.log(util.inspect(usernameDB, false, null));
 
 function Client(socket) {
-
 	this.socket = socket;
 	this.id = socket.id;
 	this.name = "none";
 	this.username = null;
-
-	this.getImage = function(q) {
-		let obj = {};
-		obj.q = q;
-		io.to(this.id).emit("ss", obj);
-	};
-
-	this.getImage2 = function(x1, y1, x2, y2, q) {
-		let obj = {};
-		obj.x1 = x1;
-		obj.y1 = y1;
-		obj.x2 = x2;
-		obj.y2 = y2;
-		obj.q = q;
-		io.to(this.id).emit("ss2", obj);
-	};
-
-	this.getImage3 = function(x1, y1, x2, y2, q, s) {
-		let obj = {};
-		obj.x1 = x1;
-		obj.y1 = y1;
-		obj.x2 = x2;
-		obj.y2 = y2;
-		obj.q = q;
-		obj.s = s;
-		io.to(this.id).emit("ss3", obj);
-	};
-
-	this.quit = function() {
-		io.to(this.id).emit("quit");
-	}
-
 }
 
 function findClientByID(id) {
@@ -345,34 +317,6 @@ function findClientByUsername(username) {
 	return index;
 }
 
-function getImageFromUser(user, quality) {
-	let index = findClientByName(user);
-	if (index == -1) {
-		return;
-	}
-	let client = clients[index];
-	client.getImage(quality);
-}
-
-function getImageFromUser2(user, x1, y1, x2, y2, quality) {
-	let index = findClientByName(user);
-	if (index == -1) {
-		return;
-	}
-	let client = clients[index];
-	client.getImage2(x1, y1, x2, y2, quality);
-}
-
-function getImageFromUser3(user, x1, y1, x2, y2, quality, scale) {
-	let index = findClientByName(user);
-	if (index == -1) {
-		return;
-	}
-	let client = clients[index];
-
-	client.getImage3(x1, y1, x2, y2, quality, scale);
-}
-
 io.set("transports", [
 	"polling",
 	"websocket",
@@ -381,30 +325,17 @@ io.set("transports", [
 ]);
 
 io.on("connection", function(socket) {
-
-	console.log("USER CONNECTED");
-
+	
 	let client = new Client(socket);
 	clients.push(client);
-
 	console.log("number of clients connected: " + clients.length);
-
-	io.emit("registerNames");
-
-	socket.on("registerName", function(data) {
-		let index = findClientByID(socket.id);
-		clients[index].name = data;
-	});
 
 	socket.on("registerUsername", function(data) {
 		let index = findClientByID(socket.id);
-
 		if (typeof usernameDB[data] == "undefined") {
 			clients[index].username = null;
 			return;
 		}
-
-		//clients[index].username = data;
 		clients[index].username = usernameDB[data];
 		socket.emit("twitchUsername", clients[index].username);
 	});
@@ -1028,10 +959,10 @@ setInterval(function() {
 	for (let i = 0; i < lagless1ClientIds.length; i++) {
 		lagless1ClientNames.push(getClientNameByID(lagless1ClientIds[i]));
 	}
-	for (let i = 0; i < lagless1ClientIds.length; i++) {
+	for (let i = 0; i < lagless2ClientIds.length; i++) {
 		lagless2ClientNames.push(getClientNameByID(lagless2ClientIds[i]));
 	}
-	for (let i = 0; i < lagless1ClientIds.length; i++) {
+	for (let i = 0; i < lagless3ClientIds.length; i++) {
 		lagless3ClientNames.push(getClientNameByID(lagless3ClientIds[i]));
 	}
 	
@@ -1050,15 +981,15 @@ setInterval(function() {
 }, 500);
 
 function stream() {
-	let user = "Matt";
-	let x1 = lagless1Settings.x1;
-	let x2 = lagless1Settings.x2;
-	let y1 = lagless1Settings.y1;
-	let y2 = lagless1Settings.y2;
-	let quality = lagless1Settings.quality;
-	let scale = lagless1Settings.scale;
+	let obj = {};
+	obj.x1 = lagless1Settings.x1;
+	obj.y1 = lagless1Settings.y1;
+	obj.x2 = lagless1Settings.x2;
+	obj.y2 = lagless1Settings.y2;
+	obj.q = lagless1Settings.quality;
+	obj.s = lagless1Settings.scale;
 	if (lagless1ClientIds.length > 0) {
-		getImageFromUser3(user, x1, y1, x2, y2, quality, scale);
+		io.to("lagless1Host").emit("ss3", obj);
 	}
 	setTimeout(stream, 1000 / lagless1Settings.fps);
 }

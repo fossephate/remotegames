@@ -82,12 +82,12 @@
 
 			<div class="tab-content">
 				<div id="lagless1" class="tab-pane active">
-					<div id="lagless1Container">
-						<div id="lagless1View">
+					<div id="lagless1Container"  class="laglessContainer">
+						<div id="lagless1View" class="laglessView">
 							<canvas id="videoCanvas1"></canvas>
 						</div>
-							<div id="lagless1Bar">
-								<div id="lagless1ViewerCount">
+							<div id="lagless1Bar" class="laglessBar">
+								<div id="lagless1ViewerCount" class="laglessViewerCount">
 									X/X Viewers
 								</div>
 								<div id="lagless1VolumeSlider" class="volumeSlider">
@@ -97,15 +97,15 @@
 								</div>
 								<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 <!-- 								<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
+								<button id="lagless1Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+									<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
+								</button>
 							</div>
-						<button id="lagless1Refresh" type="button" class="btn btn-info btn-settings">
-							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
-						</button>
 					</div>
 				</div>
 				<div id="lagless2" class="tab-pane">
-					<div id="lagless2Container">
-						<div id="lagless2View">
+					<div id="lagless2Container" class="laglessContainer">
+						<div id="lagless2View" class="laglessView">
 							<div id="leftJoyCon">
 								<canvas id="leftJoyConCanvas"></canvas>
 								<div id="leftStick"></div>
@@ -142,11 +142,8 @@
 								</div>
 							</div>
 						</div>
-						<!-- 						<button id="lagless2Refresh" type="button" class="btn btn-info btn-settings">
-							<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
-						</button> -->
-						<div id="lagless2Bar">
-							<div id="lagless2ViewerCount">
+						<div id="lagless2Bar" class="laglessBar">
+							<div id="lagless2ViewerCount" class="laglessViewerCount">
 								X/X Viewers
 							</div>
 							<div id="lagless2VolumeSlider" class="volumeSlider">
@@ -154,30 +151,57 @@
 								<div id="lagless2Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div>
+							<button id="lagless2Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+								<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
+							</button>
 							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
 						</div>
 					</div>
 				</div>
 				<div id="lagless3" class="tab-pane">
-					<div id="lagless3Container">
-						<div id="lagless3View">
+					<div id="lagless3Container" class="laglessContainer">
+						<div id="lagless3View" class="laglessView">
 							<canvas id="videoCanvas3"></canvas>
 							<button id="lagless3Refresh" type="button" class="btn btn-info btn-settings">
 								<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
 							</button>
 						</div>
-					</div>
-					<div id="lagless3Bar">
-						<div id="lagless3ViewerCount">
-							X/X Viewers
+						<div id="lagless3Bar" class="laglessBar">
+							<div id="lagless3ViewerCount"  class="laglessViewerCount">
+								X/X Viewers
+							</div>
+							<div id="lagless3VolumeSlider" class="volumeSlider">
+								<i class="fa fa-volume-down"></i>
+								<div id="lagless3Volume" class="volume"></div>
+								<i class="fa fa-volume-up"></i>
+							</div>
+							<button id="lagless3Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+								<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
+							</button>
+							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
+<!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
 						</div>
 					</div>
+					
 				</div>
 				<div id="lagless4" class="tab-pane">
-					<div id="lagless4Container">
-						<div id="lagless4View">
+					<div id="lagless4Container" class="laglessContainer">
+						<div id="lagless4View" class="laglessView">
 							<canvas id="videoCanvas4"></canvas>
+						</div>
+						<div id="lagless4Bar" class="laglessBar">
+							<div id="lagless4ViewerCount"  class="laglessViewerCount">
+								X/X Viewers
+							</div>
+							<div id="lagless4VolumeSlider" class="volumeSlider">
+								<i class="fa fa-volume-down"></i>
+								<div id="lagless4Volume" class="volume"></div>
+								<i class="fa fa-volume-up"></i>
+							</div>
+							<button id="lagless4Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+								<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
+							</button>
 						</div>
 					</div>
 				</div>

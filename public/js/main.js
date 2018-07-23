@@ -1920,6 +1920,7 @@ socket.on("turnTimesLeft", function(data) {
 	
 	lastCurrentTime = Date.now();
 	viewerCounts = data.viewerCounts;
+	viewers = data.viewers;
 	
 	for (let i = 0; i < 4; i++) {
 		let timeLeftMilli = data.turnTimesLeft[i];
