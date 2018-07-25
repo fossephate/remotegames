@@ -76,7 +76,7 @@
 					<a id="tab3" class="nav-link" data-toggle="tab" href="#lagless3">Lagless 3</a>
 				</li>
 				<li class="nav-item">
-					<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">3DS Lagless 2</a>
+					<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">Wii U Lagless 2</a>
 				</li>
 			</ul>
 
@@ -84,7 +84,7 @@
 				<div id="lagless1" class="tab-pane active">
 					<div id="lagless1Container"  class="laglessContainer">
 						<div id="lagless1View" class="laglessView">
-							<canvas id="videoCanvas1"></canvas>
+							<canvas id="videoCanvas1" class="videoCanvas"></canvas>
 						</div>
 							<div id="lagless1Bar" class="laglessBar">
 								<div id="lagless1ViewerCount" class="laglessViewerCount">
@@ -123,7 +123,7 @@
 									<div id="zlButton" class="controllerButton">ZL Button</div>
 								</div>
 							</div>
-							<canvas id="videoCanvas2"></canvas>
+							<canvas id="videoCanvas2" class="videoCanvas"></canvas>
 							<div id="rightJoyCon">
 								<canvas id="rightJoyConCanvas"></canvas>
 								<div id="rightStick"></div>
@@ -162,10 +162,7 @@
 				<div id="lagless3" class="tab-pane">
 					<div id="lagless3Container" class="laglessContainer">
 						<div id="lagless3View" class="laglessView">
-							<canvas id="videoCanvas3"></canvas>
-							<button id="lagless3Refresh" type="button" class="btn btn-info btn-settings">
-								<i class="fas fa-sync-alt" style="font-size: 3em;"></i>
-							</button>
+							<canvas id="videoCanvas3" class="videoCanvas"></canvas>
 						</div>
 						<div id="lagless3Bar" class="laglessBar">
 							<div id="lagless3ViewerCount"  class="laglessViewerCount">
@@ -188,7 +185,7 @@
 				<div id="lagless4" class="tab-pane">
 					<div id="lagless4Container" class="laglessContainer">
 						<div id="lagless4View" class="laglessView">
-							<canvas id="videoCanvas4"></canvas>
+							<canvas id="videoCanvas4" class="videoCanvas"></canvas>
 						</div>
 						<div id="lagless4Bar" class="laglessBar">
 							<div id="lagless4ViewerCount"  class="laglessViewerCount">
@@ -226,7 +223,7 @@
 							</div>
 							<btn id="requestTurn1" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
 							<btn id="cancelTurn1" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
-							<ul id="controlQueue1" class="list-group"></ul>
+							<ul id="controlQueue1" class="controlQueue list-group"></ul>
 						</div>
 						
 						<div id="player2" class="player">
@@ -243,7 +240,7 @@
 							</div>
 							<btn id="requestTurn2" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
 							<btn id="cancelTurn2" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
-							<ul id="controlQueue2" class="list-group"></ul>
+							<ul id="controlQueue2" class="controlQueue list-group"></ul>
 						</div>
 						
 						<div id="player3" class="player">
@@ -260,7 +257,7 @@
 							</div>
 							<btn id="requestTurn3" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
 							<btn id="cancelTurn3" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
-							<ul id="controlQueue3" class="list-group"></ul>
+							<ul id="controlQueue3" class="controlQueue list-group"></ul>
 						</div>
 						
 						<div id="player4" class="player">
@@ -277,7 +274,24 @@
 							</div>
 							<btn id="requestTurn4" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
 							<btn id="cancelTurn4" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
-							<ul id="controlQueue4" class="list-group"></ul>
+							<ul id="controlQueue4" class="controlQueue list-group"></ul>
+						</div>
+						
+						<div id="player5" class="player">
+							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input id="player5Checkbox" type="checkbox" />
+								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								Player 1 WiiU
+							</label>
+							<div id="turnTimerBar5" class="turnTimerBar progress">
+								<div id="turnTimerBarChild5" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<div id="forfeitTimerBar5" class="forfeitTimerBar progress">
+								<div id="forfeitTimerBarChild5" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+							</div>
+							<btn id="requestTurn5" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
+							<btn id="cancelTurn5" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<ul id="controlQueue5" class="controlQueue list-group"></ul>
 						</div>
 					</div>
 
@@ -291,6 +305,13 @@
 										Enable Keyboard / Controller
 									</label>
 								</li>
+<!-- 								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="disableControllerCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Disable Controller
+									</label>
+								</li> -->
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="touchControlsCheckbox" type="checkbox" />
@@ -345,45 +366,74 @@
 						</div>
 
 						<div id="lagless1Settings" class="laglessSettings well">
-							Lagless 1 Settings
-							<div class="sliderContainer">
-								Quality: <span id="quality">70</span>
-								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70" />
+							Lagless 1 Settings<br>
+							Quality: <span id="quality">70</span>
+							<div class="mysliderContainer">								
+								<div id="qualitySlider" class="myslider"></div>
 							</div>
-							<div class="sliderContainer">
-								Scale: <span id="scale">30</span>
-								<input id="scaleSlider" class="slider" type="range" min="10" step="1" max="60" value="30" />
+							Scale: <span id="scale">30</span>
+							<div class="mysliderContainer">
+								<div id="scaleSlider" class="myslider"></div>
 							</div>
-							<div class="sliderContainer">
-								FPS: <span id="fps">15</span>
-								<input id="fpsSlider" class="slider" type="range" min="1" step="1" max="15" value="15" />
+<!-- 							FPS: <span id="fps">15</span>
+							<div class="mysliderContainer">
+								<div id="fpsSlider" class="myslider" type="range" min="1" step="1" max="15" value="15"></div>
+							</div> -->
+							Stick Deadzone: <span id="deadzone">50</span>
+							<div class="mysliderContainer">
+								<div id="deadzoneSlider" class="myslider"></div>
 							</div>
-							<div class="sliderContainer">
-								Stick Deadzone: <span id="threshold">50</span>
-								<input id="thresholdSlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
+							Stick Sensitivity: <span id="sensitivity">1</span>
+							<div class="mysliderContainer">
+								<div id="stickSensitivitySlider" class="myslider"></div>
 							</div>
-							<div class="sliderContainer">
-								Stick Sensitivity: <span id="threshold">50</span>
-								<input id="stickSensitivitySlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
-							</div>
-							<div class="well">
+<!-- 							<div class="well">
 								Ping: <span id="ping"></span>
 							</div>
 							<div class="well">
 								<btn id="replaceWithTwitch" type="button" class="btn btn-primary">Replace With Twitch</btn>
 								<btn id="replaceWithLagless" type="button" class="btn btn-primary">Replace With Lagless</btn>
-							</div>
+							</div> -->
 						</div>
 						
 						<div id="lagless2Settings" class="laglessSettings well">
-							Lagless 2 Settings
-							<div class="sliderContainer">
-								Scale: <span id="scale2">960</span>
-								<input id="scaleSlider2" class="slider" type="range" min="100" step="10" max="960" value="960" />
+							Lagless 2 Settings<br>
+							Scale: <span id="scale2">960</span>
+							<div class="mysliderContainer">
+								<div id="scaleSlider2" class="myslider"></div>
 							</div>
-							<div class="sliderContainer">
-								Bitrate: <span id="bitrate">2</span>
-								<input id="bitrateSlider" class="slider" type="range" min="0" step="0.05" max="2" value="1" />
+							Bitrate: <span id="bitrate2">2</span>
+							<div class="mysliderContainer">
+								<div id="bitrateSlider2" class="myslider"></div>
+							</div>						
+<!-- 							offsetX: <span id="offsetX2">0</span>
+							<div class="mysliderContainer">
+								<div id="offsetXSlider2" class="myslider"></div>
+							</div>
+							offsetY: <span id="offsetY2">0</span>
+							<div class="mysliderContainer">
+								<div id="offsetYSlider2" class="myslider"></div>
+							</div> -->
+						</div>
+						
+						<div id="lagless4Settings" class="laglessSettings well">
+							Lagless 4 Settings<br>
+							Scale: <span id="scale4">960</span>
+							<div class="mysliderContainer">
+								<div id="scaleSlider4" class="myslider"></div>
+							</div>
+							Bitrate: <span id="bitrate4">2</span>
+							<div class="mysliderContainer">
+								<div id="bitrateSlider4" class="myslider"></div>
+							</div>
+							
+							offsetX: <span id="offsetX4">0</span>
+							<div class="mysliderContainer">
+								<div id="offsetXSlider4" class="myslider"></div>
+							</div>
+							offsetY: <span id="offsetY4">0</span>
+							<div class="mysliderContainer">
+								<div id="offsetYSlider4" class="myslider"></div>
 							</div>
 						</div>
 
@@ -482,7 +532,7 @@
 								<li class="list-group-item">skyrim (Skyrim)</li>
 								<li class="list-group-item">pokemonquest (Pokemon Quest)</li>
 								<li class="list-group-item">torquel (TorqueL)</li>
-								<!-- 								<li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
+								<!-- <li class="list-group-item">mario (Super Mario Bros vs.)</li> -->
 								<li class="list-group-item">arms (Arms)</li>
 								<li class="list-group-item">snipperclips (Snipper Clips)</li>
 							</ul>
@@ -490,12 +540,7 @@
 					</div>
 
 				</div>
-
-<!-- 				<iframe id="twitchVideo" class="well" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameborder="0" scrolling="no" allowfullscreen="true"></iframe> -->
-
 			</div>
-
-
 
 		</div>
 
@@ -517,74 +562,221 @@
 				<div class="modal-body">
 
 					<ul class="nav nav-tabs nav-justified">
-						<li class="active"><a href="#keyboardSettingsFrame" data-toggle="tab">keyboard</a></li>
+<!-- 						<li class="active"><a href="#keyboardSettingsFrame" data-toggle="tab">keyboard</a></li> -->
+						<li class="active"><a href="#cssKeyboard" data-toggle="tab">keyboard2</a></li>
 						<!-- 						<li><a href="#soundSettingsFrame" data-toggle="tab">sound</a></li>
 						<li><a href="#videoSettingsFrame" data-toggle="tab">video</a></li> -->
 					</ul>
 
 					<div class="tab-content">
-						<div class="tab-pane active" id="keyboardSettingsFrame">
+<!-- 						<div id="keyboardSettingsFrame" class="tab-pane active">
 
-							<div id="keyboardLayoutConfig">
-								<!-- <tabindex="0"> -->
-								<div class="actionText">Left Stick Up</div>
-								<div class="buttonConfig" id="LYU"></div><br>
-								<div class="actionText">Left Stick Down</div>
-								<div class="buttonConfig" id="LYD"></div><br>
-								<div class="actionText">Left Stick Left</div>
-								<div class="buttonConfig" id="LXL"></div><br>
-								<div class="actionText">Left Stick Right</div>
-								<div class="buttonConfig" id="LXR"></div><br>
-								<div class="actionText">Right Stick Up</div>
-								<div class="buttonConfig" id="RYU"></div><br>
-								<div class="actionText">Right Stick Down</div>
-								<div class="buttonConfig" id="RYD"></div><br>
-								<div class="actionText">Right Stick Left</div>
-								<div class="buttonConfig" id="RXL"></div><br>
-								<div class="actionText">Right Stick Right</div>
-								<div class="buttonConfig" id="RXR"></div><br>
-								<div class="actionText">A</div>
-								<div class="buttonConfig" id="A"></div><br>
-								<div class="actionText">B</div>
-								<div class="buttonConfig" id="B"></div><br>
-								<div class="actionText">X</div>
-								<div class="buttonConfig" id="X"></div><br>
-								<div class="actionText">Y</div>
-								<div class="buttonConfig" id="Y"></div><br>
-								<div class="actionText">DPad Up</div>
-								<div class="buttonConfig" id="DUP"></div><br>
-								<div class="actionText">DPad Down</div>
-								<div class="buttonConfig" id="DDown"></div><br>
-								<div class="actionText">DPad Left</div>
-								<div class="buttonConfig" id="DLeft"></div><br>
-								<div class="actionText">DPad Right</div>
-								<div class="buttonConfig" id="DRight"></div><br>
-								<div class="actionText">LStick Button</div>
-								<div class="buttonConfig" id="LStick"></div><br>
-								<div class="actionText">RStick Button</div>
-								<div class="buttonConfig" id="RStick"></div><br>
-								<div class="actionText">L</div>
-								<div class="buttonConfig" id="L"></div><br>
-								<div class="actionText">ZL</div>
-								<div class="buttonConfig" id="ZL"></div><br>
-								<div class="actionText">R</div>
-								<div class="buttonConfig" id="R"></div><br>
-								<div class="actionText">ZR</div>
-								<div class="buttonConfig" id="ZR"></div><br>
-								<div class="actionText">Minus</div>
-								<div class="buttonConfig" id="Minus"></div><br>
-								<div class="actionText">Plus</div>
-								<div class="buttonConfig" id="Plus"></div><br>
-								<div class="actionText">Capture</div>
-								<div class="buttonConfig" id="Capture"></div><br>
-								<div class="actionText">Home</div>
-								<div class="buttonConfig" id="Home"></div><br>
-								<input type="button" id="resetControls" value="Reset" />
+							<div id="keyboardConfig">
+								<ul id="keyboardActions" class="list-group">
+									<li class="actionText list-group-item">Left Stick Up</li>
+									<li class="actionText list-group-item">Left Stick Down</li>
+									<li class="actionText list-group-item">Left Stick Left</li>
+									<li class="actionText list-group-item">Left Stick Right</li>
+									<li class="actionText list-group-item">Right Stick Up</li>
+									<li class="actionText list-group-item">Right Stick Down</li>
+									<li class="actionText list-group-item">Right Stick Left</li>
+									<li class="actionText list-group-item">Right Stick Right</li>
+									<li class="actionText list-group-item">A</li>
+									<li class="actionText list-group-item">B</li>
+									<li class="actionText list-group-item">X</li>
+									<li class="actionText list-group-item">Y</dliiv>
+									<li class="actionText list-group-item">DPad Up</li>
+									<li class="actionText list-group-item">DPad Down</li>
+									<li class="actionText list-group-item">DPad Left</li>
+									<li class="actionText list-group-item">DPad Right</li>
+									<li class="actionText list-group-item">LStick Button</li>
+									<li class="actionText list-group-item">RStick Button</li>
+									<li class="actionText list-group-item">L</li>
+									<li class="actionText list-group-item">ZL</li>
+									<li class="actionText list-group-item">R</li>
+									<li class="actionText list-group-item">ZR</li>
+									<li class="actionText list-group-item">Minus</li>
+									<li class="actionText list-group-item">Plus</li>
+									<li class="actionText list-group-item">Capture</li>
+									<li class="actionText list-group-item">Home</li>
+								</ul>
+								<ul id="keyboardConfigCodes">
+									<li class="buttonConfig list-group-item" id="LU">W</li>
+									<li class="buttonConfig list-group-item" id="LD">S</li>
+									<li class="buttonConfig list-group-item" id="LL">A</li>
+									<li class="buttonConfig list-group-item" id="LR">D</li>
+									<li class="buttonConfig list-group-item" id="RU">I</li>
+									<li class="buttonConfig list-group-item" id="RD">J</li>
+									<li class="buttonConfig list-group-item" id="RL">K</li>
+									<li class="buttonConfig list-group-item" id="RR">L</li>
+									<li class="buttonConfig list-group-item" id="A">RIGHT</li>
+									<li class="buttonConfig list-group-item" id="B">DOWN</li>
+									<li class="buttonConfig list-group-item" id="X">UP</li>
+									<li class="buttonConfig list-group-item" id="Y">LEFT</li>
+									<li class="buttonConfig list-group-item" id="DUP">T</li>
+									<li class="buttonConfig list-group-item" id="DDown">G</li>
+									<li class="buttonConfig list-group-item" id="DLeft">F</li>
+									<li class="buttonConfig list-group-item" id="DRight">H</li>
+									<li class="buttonConfig list-group-item" id="LStick">R</li>
+									<li class="buttonConfig list-group-item" id="RStick">Y</li>
+									<li class="buttonConfig list-group-item" id="L">U</li>
+									<li class="buttonConfig list-group-item" id="ZL">Q</li>
+									<li class="buttonConfig list-group-item" id="R">O</li>
+									<li class="buttonConfig list-group-item" id="ZR">E</li>
+									<li class="buttonConfig list-group-item" id="Minus">-</li>
+									<li class="buttonConfig list-group-item" id="Plus">=</li>
+									<li class="buttonConfig list-group-item" id="Capture">1</li>
+									<li class="buttonConfig list-group-item" id="Home">2</li>
+								</ul>
+							</div>
+							<input type="button" id="resetKeyboardConfig" value="Reset" />
+						</div> -->
+
+
+						<div id="cssKeyboard" class="tab-pane active">
+							<div id="keyboard">
+								<div id="row1" class="keyboardRow">
+									<li class="" code="esc">esc</li>
+									<li class=" half-letter">&nbsp;</li>
+									<li class="">F1</li>
+									<li class="">F2</li>
+									<li class="">F3</li>
+									<li class="">F4</li>
+									<li class="half-letter">&nbsp;</li>
+									<li class="">F5</li>
+									<li class="">F6</li>
+									<li class="">F7</li>
+									<li class="">F8</li>
+									<li class="half-letter">&nbsp;</li>
+									<li class="">F9</li>
+									<li class="">F10</li>
+									<li class="">F11</li>
+									<li class="">F12</li>
+									<li class="">prt sc</li>
+									<li class="">scr lk</li>
+									<li class="">pause</li>
+								</div>
+								<div id="row2" class="keyboardRow">
+									<li class="">`</li>
+									<li class="">1</li>
+									<li class="">2</li>
+									<li class="">3</li>
+									<li class="">4</li>
+									<li class="">5</li>
+									<li class="">6</li>
+									<li class="">7</li>
+									<li class="">8</li>
+									<li class="">9</li>
+									<li class="">0</li>
+									<li class="">-</li>
+									<li class="">=</li>
+									<li class="delete">backspace</li>
+									<li class="">ins</li>
+									<li class="">home</li>
+									<li class="">pgup</li>
+								</div>
+								<div id="row3" class="keyboardRow">
+									<li class="tab">tab</li>
+									<li id="q" class="letter">q</li>
+									<li id="w" class="letter">w</li>
+									<li id="e" class="letter">e</li>
+									<li id="r" class="letter">r</li>
+									<li id="t" class="letter">t</li>
+									<li id="y" class="letter">y</li>
+									<li id="u" class="letter">u</li>
+									<li id="i" class="letter">i</li>
+									<li id="o" class="letter">o</li>
+									<li id="p" class="letter">p</li>
+									<li class="">[</li>
+									<li class="">]</li>
+									<li class="">\</li>
+									<li class="">del</li>
+									<li class="">end</li>
+									<li class="">pgdn</li>
+								</div>
+								<div id="row4" class="keyboardRow">
+									<li class="capslock disabled" code="caps">caps lock</li>
+									<li id="a" class="letter">a</li>
+									<li id="s" class="letter">s</li>
+									<li id="d" class="letter">d</li>
+									<li id="f" class="letter">f</li>
+									<li id="g" class="letter">g</li>
+									<li id="h" class="letter">h</li>
+									<li id="j"class="letter">j</li>
+									<li id="k" class="letter">k</li>
+									<li id="l" class="letter">l</li>
+									<li class="">;</li>
+									<li class="">'</li>
+									<li class="return">return</li>
+									<li class="empty-letter">&nbsp;</li>
+									<li class="empty-letter">&nbsp;</li>
+									<li class="empty-letter">&nbsp;</li>
+								</div>
+								<div id="row5" class="keyboardRow">
+									<li class="left-shift">shift</li>
+									<li id="z" class="letter">z</li>
+									<li id="x" class="letter">x</li>
+									<li id="c" class="letter">c</li>
+									<li id="v" class="letter">v</li>
+									<li id="b" class="letter">b</li>
+									<li id="n"class="letter">n</li>
+									<li id="m" class="letter">m</li>
+									<li class="">,</li>
+									<li class="">.</li>
+									<li class="">/</li>
+									<li class="right-shift">shift</li>
+									<li class="empty-letter">&nbsp;</li>
+									<li class="" code="up">&uarr;</li>
+									<li class="empty-letter">&nbsp;</li>
+								</div>
+								<div id="row6" class="keyboardRow">
+									<li class="left-control">ctrl</li>
+									<li class="windows disabled">win</li>
+									<li class="left-alt">alt</li>
+									<li class="space" code="space">&nbsp;</li>
+									<li class="right-alt">alt</li>
+									<li class="function disabled">fn</li>
+									<li class="menu">&#9776;</li>
+									<li class="right-control">ctrl</li>
+									<li class="" code="left">&larr;</li>
+									<li class="" code="down">&darr;</li>
+									<li class="" code="right">&rarr;</li>
+								</div>
+							</div>
+							
+							<div>
+								<div id="keyboardConfigCodes2">
+									<li class="buttonConfig list-group-item" id="LU">Left Stick Up</li>
+									<li class="buttonConfig list-group-item" id="LD">Left Stick Down</li>
+									<li class="buttonConfig list-group-item" id="LL">Left Stick Left</li>
+									<li class="buttonConfig list-group-item" id="LR">Left Stick Right</li>
+									<li class="buttonConfig list-group-item" id="RU">Right Stick Up</li>
+									<li class="buttonConfig list-group-item" id="RD">Right Stick Down</li>
+									<li class="buttonConfig list-group-item" id="RL">Right Stick Left</li>
+									<li class="buttonConfig list-group-item" id="RR">Right Stick Right</li>
+									<li class="buttonConfig list-group-item" id="A">A</li>
+									<li class="buttonConfig list-group-item" id="B">B</li>
+									<li class="buttonConfig list-group-item" id="X">X</li>
+									<li class="buttonConfig list-group-item" id="Y">Y</li>
+									<li class="buttonConfig list-group-item" id="DUP">DPad Up</li>
+									<li class="buttonConfig list-group-item" id="DDown">DPad Down</li>
+									<li class="buttonConfig list-group-item" id="DLeft">DPad Left</li>
+									<li class="buttonConfig list-group-item" id="DRight">DPad Right</li>
+									<li class="buttonConfig list-group-item" id="LStick">LStick Button</li>
+									<li class="buttonConfig list-group-item" id="RStick">RStick Button</li>
+									<li class="buttonConfig list-group-item" id="L">L</li>
+									<li class="buttonConfig list-group-item" id="ZL">ZL</li>
+									<li class="buttonConfig list-group-item" id="R">R</li>
+									<li class="buttonConfig list-group-item" id="ZR">ZR</li>
+									<li class="buttonConfig list-group-item" id="Minus">Minus</li>
+									<li class="buttonConfig list-group-item" id="Plus">Plus</li>
+									<li class="buttonConfig list-group-item" id="Capture">Capture</li>
+									<li class="buttonConfig list-group-item" id="Home">Home</li>
+								</div>
 							</div>
 						</div>
-
+					
 					</div>
-
 				</div>
 			</div>
 		</div>

@@ -20,23 +20,37 @@ let controlQueue1 = [];
 let controlQueue2 = [];
 let controlQueue3 = [];
 let controlQueue4 = [];
+let controlQueue5 = [];
 let twitchUsername = null;
 
 // settings:
-let toggleAudio = false;
-let toggleDarkTheme = false;
-let toggleFullscreen = false;
-let audio = true;
-let stickSensitivityX = 1;
-let stickSensitivityY = 1;
+let settings = {
+	audio: false,
+	touchControls: true,
+	mouseControls: false,
+	darkTheme: false,
+	fullscreen: false,
+	disableChat: false,
+	deadzone: 50,
+	stickSensitivityX: 1,
+	stickSensitivityY: 1,
+};
+// let toggleAudio = false;
+// let toggleDarkTheme = false;
+// let toggleFullscreen = false;
+// let stickSensitivityX = 1;
+// let stickSensitivityY = 1;
+
 let lagless1Settings = {};
-let lagless2Settings = {videoBitrate: 1, scale: 960};
+let lagless2Settings = {videoBitrate: 1, scale: 960, offsetX: 0, offsetY: 0};
+let lagless4Settings = {videoBitrate: 1, scale: 960, offsetX: 0, offsetY: 0};
+let disableController = false;
 
 // detect firefox:
 // todo: make user configurable
 if(navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
-	stickSensitivityX = 1.5;
-	stickSensitivityY = 1.5;
+	settings.stickSensitivityX = 1.5;
+	settings.stickSensitivityY = 1.5;
 }
 
 let timeLeft = 30000;
@@ -60,6 +74,7 @@ let stats = new Stats();
 let lagless1Port = 8001;// 8008
 let lagless2Port = 8002;// 8008
 let lagless3Port = 8003;// 8009
+let lagless4Port = 8004;// 8009
 stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
 // document.body.appendChild(stats.dom);
 
@@ -94,14 +109,14 @@ let then = Date.now();
 let startTime = then;
 
 let keyboardLayout = {};
-keyboardLayout.LYU = "W";
-keyboardLayout.LYD = "S";
-keyboardLayout.LXL = "A";
-keyboardLayout.LXR = "D";
-keyboardLayout.RYU = "I";
-keyboardLayout.RYD = "K";
-keyboardLayout.RXL = "J";
-keyboardLayout.RXR = "L";
+keyboardLayout.LU = "W";
+keyboardLayout.LD = "S";
+keyboardLayout.LL = "A";
+keyboardLayout.LR = "D";
+keyboardLayout.RU = "I";
+keyboardLayout.RD = "K";
+keyboardLayout.RL = "J";
+keyboardLayout.RR = "L";
 keyboardLayout.A = "right";
 keyboardLayout.B = "down";
 keyboardLayout.X = "up";
@@ -264,37 +279,11 @@ function sendControllerState() {
 		socket.emit("requestTurn", currentPlayerChosen);
 	}
 	
-	// todo: possibly broken?:
-	if(controlQueues[0][0] != twitchUsername && controlQueues[1][0] != twitchUsername && (controlQueues[0].length > 0 || controlQueues[1].length > 0)) {
+	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) > 0 && controlQueues[currentPlayerChosen].length > 0) {
 		swal("It's not your turn yet!");
-		//$("#turnTimerBar").effect("shake", {direction: "left", distance: 100, times: 2}, 250);
-// 		let timerInterval;
-// 		swal({
-// 			title: "It's not your turn yet!",
-// 			html: "I will close in <strong></strong> seconds.",
-// 			timer: 100,
-// 			onOpen: () => {
-// 				swal.showLoading()
-// 				timerInterval = setInterval(() => {
-// 					swal.getContent().querySelector("strong")
-// 						.textContent = swal.getTimerLeft()
-// 				}, 10)
-// 			},
-// 			onClose: () => {
-// 				clearInterval(timerInterval);
-// 			}
-// 		}).then((result) => {
-// 			if (
-// 				// Read more about handling dismissals
-// 				result.dismiss === swal.DismissReason.timer
-// 			) {
-// 				console.log("I was closed by the timer");
-// 			}
-// 		});
-		return;
 	}
 	
-	console.log(newControllerState);
+// 	console.log(newControllerState);
 	
 	let obj = {state: newControllerState, cNum: 0}
 	
@@ -302,7 +291,14 @@ function sendControllerState() {
 		obj.cNum = 0;
 	} else if (controlQueues[1][0] == twitchUsername) {
 		obj.cNum = 1;
+	} else if (controlQueues[2][0] == twitchUsername) {
+		obj.cNum = 2;
+	} else if (controlQueues[3][0] == twitchUsername) {
+		obj.cNum = 3;
+	} else if (controlQueues[4][0] == twitchUsername) {
+		obj.cNum = 4;
 	}
+	console.log(obj);
 	socket.emit("sendControllerState", obj);
 }
 
@@ -324,24 +320,24 @@ function getKeyboardInput() {
 	
 	//controller.reset();
 
-	if (key.isPressed(keyboardLayout.LYU)) {
+	if (key.isPressed(keyboardLayout.LU)) {
 		controller.LStick.y = 255;
-	} else if(key.wasPressed(keyboardLayout.LYU, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.LU, wasPressedKeyCodes)) {
 		controller.LStick.y = restPos;
 	}
-	if (key.isPressed(keyboardLayout.LYD)) {
+	if (key.isPressed(keyboardLayout.LD)) {
 		controller.LStick.y = 0;
-	} else if(key.wasPressed(keyboardLayout.LYD, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.LD, wasPressedKeyCodes)) {
 		controller.LStick.y = restPos;
 	}
-	if (key.isPressed(keyboardLayout.LXL)) {
+	if (key.isPressed(keyboardLayout.LL)) {
 		controller.LStick.x = 0;
-	} else if(key.wasPressed(keyboardLayout.LXL, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.LL, wasPressedKeyCodes)) {
 		controller.LStick.x = restPos;
 	}
-	if (key.isPressed(keyboardLayout.LXR)) {
+	if (key.isPressed(keyboardLayout.LR)) {
 		controller.LStick.x = 255;
-	} else if(key.wasPressed(keyboardLayout.LXR, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.LR, wasPressedKeyCodes)) {
 		controller.LStick.x = restPos;
 	}
 
@@ -387,24 +383,24 @@ function getKeyboardInput() {
 		controller.btns.right = 0;
 	}
 
-	if (key.isPressed(keyboardLayout.RYU)) {
+	if (key.isPressed(keyboardLayout.RU)) {
 		controller.RStick.y = 255;
-	} else if(key.wasPressed(keyboardLayout.RYU, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.RU, wasPressedKeyCodes)) {
 		controller.RStick.y = restPos;
 	}
-	if (key.isPressed(keyboardLayout.RYD)) {
+	if (key.isPressed(keyboardLayout.RD)) {
 		controller.RStick.y = 0;
-	} else if(key.wasPressed(keyboardLayout.RYD, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.RD, wasPressedKeyCodes)) {
 		controller.RStick.y = restPos;
 	}
-	if (key.isPressed(keyboardLayout.RXL)) {
+	if (key.isPressed(keyboardLayout.RL)) {
 		controller.RStick.x = 0;
-	} else if(key.wasPressed(keyboardLayout.RXL, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.RL, wasPressedKeyCodes)) {
 		controller.RStick.x = restPos;
 	}
-	if (key.isPressed(keyboardLayout.RXR)) {
+	if (key.isPressed(keyboardLayout.RR)) {
 		controller.RStick.x = 255;
-	} else if(key.wasPressed(keyboardLayout.RXR, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.RR, wasPressedKeyCodes)) {
 		controller.RStick.x = restPos;
 	}
 
@@ -657,15 +653,15 @@ gamepad.on("release", "d_pad_right", e => {
 });
 
 gamepad.on("hold", "stick_axis_left", e => {
-	let x = e.value[0]*stickSensitivityX;
-	let y = e.value[1]*stickSensitivityY;
+	let x = e.value[0]*settings.stickSensitivityX;
+	let y = e.value[1]*settings.stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
 	controller.LStick.x = parseInt(x);
 	controller.LStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
+	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
 		controller.LStick.x = restPos;
 	}
@@ -674,15 +670,15 @@ gamepad.on("hold", "stick_axis_left", e => {
 	}
 });
 gamepad.on("press", "stick_axis_left", e => {
-	let x = e.value[0]*stickSensitivityX;
-	let y = e.value[1]*stickSensitivityY;
+	let x = e.value[0]*settings.stickSensitivityX;
+	let y = e.value[1]*settings.stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
 	controller.LStick.x = parseInt(x);
 	controller.LStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
+	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
 		controller.LStick.x = restPos;
 	}
@@ -691,15 +687,15 @@ gamepad.on("press", "stick_axis_left", e => {
 	}
 });
 gamepad.on("release", "stick_axis_left", e => {
-	let x = e.value[0]*stickSensitivityX;
-	let y = e.value[1]*stickSensitivityY;
+	let x = e.value[0]*settings.stickSensitivityX;
+	let y = e.value[1]*settings.stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
 	controller.LStick.x = parseInt(x);
 	controller.LStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
+	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
 		controller.LStick.x = restPos;
 	}
@@ -708,15 +704,15 @@ gamepad.on("release", "stick_axis_left", e => {
 	}
 });
 gamepad.on("hold", "stick_axis_right", e => {
-	let x = e.value[0]*stickSensitivityX;
-	let y = e.value[1]*stickSensitivityY;
+	let x = e.value[0]*settings.stickSensitivityX;
+	let y = e.value[1]*settings.stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
 	controller.RStick.x = parseInt(x);
 	controller.RStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
+	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
 		controller.RStick.x = restPos;
 	}
@@ -725,15 +721,15 @@ gamepad.on("hold", "stick_axis_right", e => {
 	}
 });
 gamepad.on("press", "stick_axis_right", e => {
-	let x = e.value[0]*stickSensitivityX;
-	let y = e.value[1]*stickSensitivityY;
+	let x = e.value[0]*settings.stickSensitivityX;
+	let y = e.value[1]*settings.stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
 	controller.RStick.x = parseInt(x);
 	controller.RStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
+	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
 		controller.RStick.x = restPos;
 	}
@@ -742,15 +738,15 @@ gamepad.on("press", "stick_axis_right", e => {
 	}
 });
 gamepad.on("release", "stick_axis_right", e => {
-	let x = e.value[0]*stickSensitivityX;
-	let y = e.value[1]*stickSensitivityY;
+	let x = e.value[0]*settings.stickSensitivityX;
+	let y = e.value[1]*settings.stickSensitivityY;
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
 	controller.RStick.x = parseInt(x);
 	controller.RStick.y = parseInt(y);
-	let thresh = parseInt($("#threshold").text());
+	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
 		controller.RStick.x = restPos;
 	}
@@ -787,10 +783,6 @@ function getGamepadInput() {
 		}, 2000);
 		return;
 	}
-	//controller.reset();
-// 	if (gamepad._events.gamepad.length > 0) {
-// 		sendControllerState();
-// 	}
 }
 
 
@@ -848,8 +840,6 @@ function getGamepadInput() {
 // 		}
 // 		// Store the preferences (so that the default values get stored)
 // 		localforage.setItem("keyboardLayout", keyboardLayout);
-
-
 // 		// Update the keyboard layout settings window to reflect the stored settings, not the default ones
 // 		for (let i = 0; i < $(".buttonConfig").length; i++) {
 // 			let div = $(".buttonConfig")[i];
@@ -858,44 +848,111 @@ function getGamepadInput() {
 // 		}
 // 	});
 
-//change document to #keyboardLayoutConfig using <tabindex="0">
-$(".buttonConfig").on("click", function(e) {
-	$(document).off("keydown");
-	//window.addEventListener("keydown", handleKey, false);
-	$(document).on("keydown", function(e2) {
-		console.log(e2.key);
-		let keys = [];
-		for (let i in keyboardLayout) {
-			keys.push(keyboardLayout[i]);
-		}
-		//let values = Object.values(preferences.keyboard.layout);
-		if (keys.indexOf(e2.key) == -1) {
-			$("#" + e.target.id).html(String.fromCharCode(e2.which));
-			keyboardLayout[e.target.id] = e2.key;
-			localforage.setItem("keyboardLayout", keyboardLayout);
 
-			$(document).off("keydown");
-			//window.addEventListener("keydown", handleKey, false);
-		} else {
-			$("#" + e.target.id).animate({
-				backgroundColor: "#AC3333"
-			}, "fast");
-			setTimeout(function() {
-				$("#" + e.target.id).animate({
-					backgroundColor: "#888"
-				}, "slow");
-			}, 100);
-		}
-	});
-});
-$("#keyboardLayoutConfig").on("click", function(e) {
-	//console.log(e.target);
-	let isButton = e.target.classList[0] == "buttonConfig";
-	if (!isButton) {
-		$(document).off("keydown");
-		// 			window.addEventListener("keydown", handleKey, false);
+
+/* SAVEABLE SETTINGS */
+
+
+// Get stored preferences
+localforage.getItem("settings").then(function(value) {
+	// If they exist, write them
+	if (value) {
+		settings = Object.assign({}, settings, value);
 	}
+	// Store the preferences (so that the default values get stored)
+	localforage.setItem("settings", settings);
 });
+
+setTimeout(function() {
+	if (settings.darkTheme) {
+		$("#darkThemeCheckbox").trigger("click");
+		$("#darkThemeCheckbox")[0].checked = true;
+	}
+	if (settings.audio) {
+		$("#audioCheckbox").trigger("click");
+		$("#audioCheckbox")[0].checked = true;
+	}
+	setTimeout(function() {
+		if (settings.touchControls) {
+			$("#touchControlsCheckbox").trigger("click");
+			$("#touchControlsCheckbox")[0].checked = true;
+		}
+	}, 1000);
+	if (settings.fullscreen) {
+		$("#fullscreenCheckbox").trigger("click");
+		$("#fullscreenCheckbox")[0].checked = true;
+	}
+	// if (settings.mouseControls) {
+	// 	$("#touchControlsCheckbox").trigger("click");
+	// }
+	
+	$("#deadzoneSlider").slider("value", settings.deadzone);
+	$("#deadzone").text(settings.deadzone);
+	
+	$("#stickSensitivitySlider").slider("value", settings.stickSensitivityX);
+	$("#sensitivity").text(settings.stickSensitivityX);
+	
+}, 3000);
+
+
+$("#keyboard li").on("click", function(event) {
+	if ($(this).hasClass("disabled")) {
+		return;
+	}
+	let keyCode;
+	
+	if ($(this).attr("code")) {
+		keyCode = $(this).attr("code");
+	} else {
+		keyCode = $(this).text();
+	}
+	
+	console.log(keyCode);
+	
+// 	swal("test");
+	$(this).addClass("keySelected");
+	//$("#dataTable").attr('data-timer')
+});
+
+
+//change document to #keyboardLayoutConfig using <tabindex="0">
+// $(".buttonConfig").on("click", function(e) {
+// 	$(document).off("keydown");
+// 	//window.addEventListener("keydown", handleKey, false);
+// 	$(document).on("keydown", function(e2) {
+// 		console.log(e2.key);
+// 		let keys = [];
+// 		for (let i in keyboardLayout) {
+// 			keys.push(keyboardLayout[i]);
+// 		}
+// 		//let values = Object.values(preferences.keyboard.layout);
+// 		if (keys.indexOf(e2.key) == -1) {
+// 			$("#" + e.target.id).html(String.fromCharCode(e2.which));
+// 			keyboardLayout[e.target.id] = e2.key;
+// 			localforage.setItem("keyboardLayout", keyboardLayout);
+
+// 			$(document).off("keydown");
+// 			//window.addEventListener("keydown", handleKey, false);
+// 		} else {
+// 			$("#" + e.target.id).animate({
+// 				backgroundColor: "#AC3333"
+// 			}, "fast");
+// 			setTimeout(function() {
+// 				$("#" + e.target.id).animate({
+// 					backgroundColor: "#888"
+// 				}, "slow");
+// 			}, 100);
+// 		}
+// 	});
+// });
+// $("#keyboardLayoutConfig").on("click", function(e) {
+// 	//console.log(e.target);
+// 	let isButton = e.target.classList[0] == "buttonConfig";
+// 	if (!isButton) {
+// 		$(document).off("keydown");
+// 		// 			window.addEventListener("keydown", handleKey, false);
+// 	}
+// });
 
 // $("#keyboardController").checkboxpicker({
 // 	html: true,
@@ -973,19 +1030,23 @@ function setVideoWidth(width, num) {
 		$("#videoCanvas3")[0].style.width = width + "%";
 		$("#videoCanvas3")[0].style["margin-left"] = ((100-width)/2) + "%";
 	}
+	if (typeof $("#videoCanvas4")[0] != "undefined") {
+		$("#videoCanvas4")[0].style.width = width + "%";
+		$("#videoCanvas4")[0].style["margin-left"] = ((100-width)/2) + "%";
+	}
 	
 	if (typeof $("#twitchVideo")[0] != "undefined") {
 		$("#twitchVideo")[0].style.width = width + "%";
 		$("#twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
 		// calculate height for twitch:
-		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width();
+		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width();
 		$("#twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
 	}
 	if (typeof $(".twitchVideo")[0] != "undefined") {
 		$(".twitchVideo")[0].style.width = width + "%";
 		$(".twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
 		// calculate height for twitch:
-		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width();
+		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width();
 		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
 	}
 	
@@ -1183,6 +1244,9 @@ function onButtonPress(e) {
 // $("#videoCanvas2")[0].style["margin-left"] = "0";
 $("#touchControlsCheckbox").on("click", function() {
 	
+	settings.touchControls = !settings.touchControls;
+	localforage.setItem("settings", settings);
+	
 	let buttonsList = ["#dpadButtons", "#abxyButtons", "#leftJoyConOther", "#rightJoyConOther"];
 	
 	if ($("#touchControlsCheckbox")[0].checked) {
@@ -1228,7 +1292,6 @@ $("#touchControlsCheckbox").on("click", function() {
 // 	$("#leftJoyCon")[0].style.display = "none";
 // 	$("#rightJoyCon")[0].style.display = "none";
 // }, 5000);
-$("#touchControlsCheckbox").trigger("click");
 
 function sendInputs() {
 	if(!isMobile) {
@@ -1261,56 +1324,257 @@ setInterval(function() {
 
 /* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
-$("#qualitySlider").on("input", function(event) {
-	$("#quality").text(this.value);
-	socket.emit("lagless1Settings", {quality: parseInt(this.value)});
+// $("#lagless2Volume").slider({
+//     min: 0,
+//     max: 100,
+//     value: 0,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function(event, ui) {
+// 		player.volume = ui.value / 100;
+//   	}
+// });
+
+$("#qualitySlider").slider({
+    min: 1,
+    max: 80,
+	step: 1,
+    value: 70,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#quality").text(ui.value);
+		socket.emit("lagless1Settings", {quality: parseInt(ui.value)});
+  	},
+	stop: function(event, ui) {
+	}
 });
-$("#scaleSlider").on("input", function(event) {
-	$("#scale").text(this.value);
-	socket.emit("lagless1Settings", {scale: parseInt(this.value)});
+
+$("#scaleSlider").slider({
+    min: 10,
+    max: 80,
+	step: 5,
+    value: 30,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#scale").text(ui.value);
+		socket.emit("lagless1Settings", {scale: parseInt(ui.value)});
+  	},
+	stop: function(event, ui) {
+	}
 });
-$("#fpsSlider").on("input", function(event) {
-	$("#fps").text(this.value);
+
+$("#fpsSlider").slider({
+    min: 1,
+    max: 15,
+	step: 1,
+    value: 15,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+  	},
+	stop: function(event, ui) {
+	}
 });
-$("#thresholdSlider").on("input", function(event) {
-	$("#threshold").text(this.value);
+
+
+$("#deadzoneSlider").slider({
+    min: 1,
+    max: 50,
+	step: 1,
+    value: 50,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#deadzone").text(ui.value);
+  	},
+	stop: function(event, ui) {
+	}
+});
+
+$("#stickSensitivitySlider").slider({
+    min: 0,
+    max: 3,
+	step: 0.01,
+    value: 1,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#sensitivity").text(ui.value);
+		settings.stickSensitivityX = ui.value;
+		settings.stickSensitivityY = ui.value;
+  	},
+	stop: function(event, ui) {
+		localforage.setItem("settings", settings);
+	}
 });
 
 socket.on("lagless1Settings", function(data) {
 	lagless1Settings = Object.assign({}, lagless1Settings, data);
 	$("#scale").text(lagless1Settings.scale);
-	$("#scaleSlider").val(lagless1Settings.scale);
+	$("#scaleSlider").slider("value", lagless1Settings.scale);
 	$("#quality").text(lagless1Settings.quality);
-	$("#qualitySlider").val(lagless1Settings.quality);
+	$("#qualitySlider").slider("value", lagless1Settings.quality);
 });
 
 
 // lagless2:
-$("#scaleSlider2").on("input", function(event) {
-	$("#scale2").text(this.value);
+
+$("#bitrateSlider2").slider({
+    min: 0,
+    max: 2,
+	step: 0.05,
+    value: 1,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#bitrate2").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless2Settings", {videoBitrate: parseFloat(ui.value)});
+	}
 });
-$("#scaleSlider2").on("mouseup", function(event) {
-	$("#scale2").text(this.value);
-	socket.emit("lagless2Settings", {scale: parseInt(this.value)});
+
+$("#scaleSlider2").slider({
+    min: 100,
+    max: 1280,
+	step: 1,
+    value: 960,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#scale2").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless2Settings", {scale: parseInt(ui.value)});
+	}
 });
-$("#bitrateSlider").on("input", function(event) {
-	$("#bitrate").text(this.value);
+
+$("#offsetXSlider2").slider({
+    min:0,
+    max: 600,
+	step: 1,
+    value: 0,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#offsetX2").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless2Settings", {offsetX: parseInt(ui.value)});
+	}
 });
-$("#bitrateSlider").on("mouseup", function(event) {
-	$("#bitrate").text(this.value);
-	socket.emit("lagless2Settings", {videoBitrate: parseFloat(this.value)});
+
+$("#offsetYSlider2").slider({
+    min:0,
+    max: 300,
+	step: 1,
+    value: 0,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#offsetY2").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless2Settings", {offsetY: parseInt(ui.value)});
+	}
 });
 
 socket.on("lagless2Settings", function(data) {
 	lagless2Settings = Object.assign({}, lagless2Settings, data);
 	
 	$("#scale2").text(lagless2Settings.scale);
-	$("#scaleSlider2").val(lagless2Settings.scale);
+	$("#scaleSlider2").slider("value", lagless2Settings.scale);
 	
 	$("#bitrate").text(lagless2Settings.videoBitrate);
-	$("#bitrateSlider").val(lagless2Settings.videoBitrate);
+	$("#bitrateSlider").slider("value", lagless2Settings.videoBitrate);
+	
+	$("#offsetX2").text(lagless2Settings.offsetX);
+	$("#offsetXSlider2").slider("value", lagless2Settings.offsetX);
+
+	$("#offsetY2").text(lagless2Settings.offsetY);
+	$("#offsetYSlider2").slider("value", lagless2Settings.offsetY);
 });
 
+
+// lagless4:
+
+$("#bitrateSlider4").slider({
+    min: 0,
+    max: 2,
+	step: 0.05,
+    value: 1,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#bitrate4").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless4Settings", {videoBitrate: parseFloat(ui.value)});
+	}
+});
+
+$("#scaleSlider4").slider({
+    min: 100,
+    max: 960,
+	step: 1,
+    value: 960,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#scale4").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless4Settings", {scale: parseInt(ui.value)});
+	}
+});
+
+$("#offsetXSlider4").slider({
+    min:0,
+    max: 600,
+	step: 1,
+    value: 0,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#offsetX4").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless4Settings", {offsetX: parseInt(ui.value)});
+	}
+});
+
+$("#offsetYSlider4").slider({
+    min:0,
+    max: 400,
+	step: 1,
+    value: 0,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#offsetY4").text(ui.value);
+  	},
+	stop: function(event, ui) {
+		socket.emit("lagless4Settings", {offsetY: parseInt(ui.value)});
+	}
+});
+
+socket.on("lagless4Settings", function(data) {
+	lagless4Settings = Object.assign({}, lagless4Settings, data);
+	
+	$("#scale4").text(lagless4Settings.scale);
+	$("#scaleSlider4").slider("value", lagless4Settings.scale);
+	
+	$("#bitrate4").text(lagless4Settings.videoBitrate);
+	$("#bitrateSlider4").slider("value", lagless4Settings.videoBitrate);
+	
+	$("#offsetX4").text(lagless4Settings.offsetX);
+	$("#offsetXSlider4").slider("value", lagless4Settings.offsetX);
+
+	$("#offsetY4").text(lagless4Settings.offsetY);
+	$("#offsetYSlider4").slider("value", lagless4Settings.offsetY);
+});
 
 
 
@@ -1347,7 +1611,7 @@ socket2.on("viewImage", function(data) {
 	stats.end();
 });
 $("#lagless1Refresh").on("click", function() {
-	socket.emit("restart");
+	socket.emit("restart1");
 });
 
 /* LAGLESS 2.0 */
@@ -1410,6 +1674,10 @@ socket.on("lagless2SettingsChange", function(data) {
 
 //socket.emit("lagless2Settings", {videoBitrate: "2M", framerate: 20, scale: "640:360"});
 
+$("#lagless2Refresh").on("click", function() {
+	socket.emit("restart2");
+});
+
 
 /* LAGLESS 3.0 */
 let canvas3 = document.getElementById("videoCanvas3");
@@ -1428,18 +1696,26 @@ $("#lagless3Refresh").on("click", function() {
 	wsavc.connect(uri);
 });
 
+$("#lagless3Refresh").on("click", function() {
+	socket.emit("restart3");
+});
+
 
 
 /* LAGLESS 2.0 3DS*/
 // Setup the WebSocket connection and start the player
-let url2 = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
+let url2 = "wss://twitchplaysnintendoswitch.com/" + lagless4Port + "/";
 let canvas4 = document.getElementById("videoCanvas4");
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-let player4 = new JSMpeg.Player(url, {canvas: canvas4, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
+let player4 = new JSMpeg.Player(url2, {canvas: canvas4, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
 player4.maxAudioLag = 0.5;
 player4.stop();
 player4.stats = stats;
+
+$("#lagless3Refresh").on("click", function() {
+	socket.emit("restart4");
+});
 
 // default:
 setTimeout(function() {
@@ -1524,9 +1800,13 @@ setTimeout(function() {
 //   });
 
 
-function addJoyCons(tab) {
+function addJoyCons(tab, actual) {
 	
-	tab = tab + "View";
+	actual = actual || false;
+	
+	if (!actual) {
+		tab = tab + "View";
+	}
 	
 	// delete old joycons:
 	try {
@@ -1661,6 +1941,8 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		// lagless 4:
 		if (contentId == "#lagless4") {
 			
+			socket.emit("joinLagless4");
+			
 			wiiU3DsTab = true;
 			
 			if (typeof player4 != "undefined") {
@@ -1681,7 +1963,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 	window.dispatchEvent(new Event("resize"));
 	setTimeout(function() {
 		window.dispatchEvent(new Event("resize"));
-	}, 2000);
+	}, 5000);
 });
 
 setInterval(function() {
@@ -1691,6 +1973,8 @@ setInterval(function() {
 		socket.emit("joinLagless2");
 	} else if (currentTab == "#lagless3") {
 		socket.emit("joinLagless3");
+	} else if (currentTab == "#lagless4") {
+		socket.emit("joinLagless4");
 	}
 }, 10000);
 
@@ -1737,6 +2021,13 @@ function replaceWithTwitch(tab) {
 		$("#videoCanvas3")[0].style.display = "none";
 		$("#videoCanvas3").after(twitchIFrame);
 	}
+	
+	if (tab == "#lagless4") {
+		player4.stop();
+		$("#videoCanvas4")[0].style.display = "none";
+		$("#videoCanvas4").after(twitchIFrame);
+	}
+	
 	setVideoWidth(73.2);
 	socket.emit("leaveLagless");
 }
@@ -1771,6 +2062,16 @@ function replaceWithLagless(tab) {
 		$("#videoCanvas3")[0].style.display = "";
 		$("#twitchVideo").remove();
 	}
+	
+	if (tab == "#lagless4") {
+		socket.emit("joinLagless4");
+		player.play();
+		
+		$("#videoCanvas4")[0].style.display = "";
+		$("#twitchVideo").remove();
+// 		$("#twitchVideo2")[0].style.display = "none";
+// 		twitchPlayer2.pause();
+	}
 	setVideoWidth(73.2);
 }
 
@@ -1803,7 +2104,8 @@ meeting.openSignalingChannel = function(callback) {
 
 
 $("#audioCheckbox").on("click", function() {
-	toggleAudio = !toggleAudio;
+	settings.audio = !settings.audio;
+	localforage.setItem("settings", settings);
 	if ($("#audioCheckbox")[0].checked) {
 		meeting.check();
 		setTimeout(function() {
@@ -1859,6 +2161,7 @@ socket.on("controlQueues", function(data) {
 	controlQueue2 = controlQueues[1];
 	controlQueue3 = controlQueues[2];
 	controlQueue4 = controlQueues[3];
+	controlQueue5 = controlQueues[4];
 	
 	// todo: for loop this
 	
@@ -1866,7 +2169,7 @@ socket.on("controlQueues", function(data) {
 	for (let i = 0; i < controlQueue1.length; i++) {
 		let username = controlQueue1[i];
 		let html;
-		if (!toggleDarkTheme) {
+		if (!settings.darkTheme) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
@@ -1879,7 +2182,7 @@ socket.on("controlQueues", function(data) {
 	for (let i = 0; i < controlQueue2.length; i++) {
 		let username = controlQueue2[i];
 		let html;
-		if (!toggleDarkTheme) {
+		if (!settings.darkTheme) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
@@ -1891,7 +2194,7 @@ socket.on("controlQueues", function(data) {
 	for (let i = 0; i < controlQueue3.length; i++) {
 		let username = controlQueue3[i];
 		let html;
-		if (!toggleDarkTheme) {
+		if (!settings.darkTheme) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
@@ -1903,12 +2206,24 @@ socket.on("controlQueues", function(data) {
 	for (let i = 0; i < controlQueue4.length; i++) {
 		let username = controlQueue4[i];
 		let html;
-		if (!toggleDarkTheme) {
+		if (!settings.darkTheme) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
 		} 
 		$("#controlQueue4").append(html);
+	}
+	
+	$("#controlQueue5").empty();
+	for (let i = 0; i < controlQueue5.length; i++) {
+		let username = controlQueue5[i];
+		let html;
+		if (!settings.darkTheme) {
+			html = "<li class='list-group-item'>" + username + "</li>";
+		} else {
+			html = "<li class='list-group-item-dark'>" + username + "</li>";
+		} 
+		$("#controlQueue5").append(html);
 	}
 });
 
@@ -1922,7 +2237,7 @@ socket.on("turnTimesLeft", function(data) {
 	viewerCounts = data.viewerCounts;
 	viewers = data.viewers;
 	
-	for (let i = 0; i < 4; i++) {
+	for (let i = 0; i < 5; i++) {
 		let timeLeftMilli = data.turnTimesLeft[i];
 		let timeLeftSec = parseInt(data.turnTimesLeft[i] / 1000);
 		let percent = parseInt((timeLeftMilli / data.turnLengths[i]) * 100);
@@ -1987,6 +2302,12 @@ $("#requestTurn4").on("click", function(event) {
 $("#cancelTurn4").on("click", function(event) {
 	socket.emit("cancelTurn", 3);
 });
+$("#requestTurn5").on("click", function(event) {
+	socket.emit("requestTurn", 4);
+});
+$("#cancelTurn5").on("click", function(event) {
+	socket.emit("cancelTurn", 4);
+});
 
 
 /* MULTIPLAYER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1998,6 +2319,7 @@ $("#player1Checkbox").on("click", function(event) {
 		$("#player2Checkbox").prop("checked", false);
 		$("#player3Checkbox").prop("checked", false);
 		$("#player4Checkbox").prop("checked", false);
+		$("#player5Checkbox").prop("checked", false);
 	} else {
 		// prevent unchecking
 		event.preventDefault();
@@ -2011,6 +2333,7 @@ $("#player2Checkbox").on("click", function(event) {
 		$("#player1Checkbox").prop("checked", false);
 		$("#player3Checkbox").prop("checked", false);
 		$("#player4Checkbox").prop("checked", false);
+		$("#player5Checkbox").prop("checked", false);
 	} else {
 		// prevent unchecking
 		event.preventDefault();
@@ -2024,6 +2347,7 @@ $("#player3Checkbox").on("click", function(event) {
 		$("#player1Checkbox").prop("checked", false);
 		$("#player2Checkbox").prop("checked", false);
 		$("#player4Checkbox").prop("checked", false);
+		$("#player5Checkbox").prop("checked", false);
 	} else {
 		// prevent unchecking
 		event.preventDefault();
@@ -2037,6 +2361,21 @@ $("#player4Checkbox").on("click", function(event) {
 		$("#player1Checkbox").prop("checked", false);
 		$("#player2Checkbox").prop("checked", false);
 		$("#player3Checkbox").prop("checked", false);
+		$("#player5Checkbox").prop("checked", false);
+	} else {
+		// prevent unchecking
+		event.preventDefault();
+	}
+});
+
+$("#player5Checkbox").on("click", function(event) {
+	if ($("#player5Checkbox")[0].checked) {
+		socket.emit("cancelTurn", currentPlayerChosen);
+		currentPlayerChosen = 4;
+		$("#player1Checkbox").prop("checked", false);
+		$("#player2Checkbox").prop("checked", false);
+		$("#player3Checkbox").prop("checked", false);
+		$("#player4Checkbox").prop("checked", false);
 	} else {
 		// prevent unchecking
 		event.preventDefault();
@@ -2047,7 +2386,8 @@ $("#player4Checkbox").on("click", function(event) {
 /* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 $("#darkThemeCheckbox").on("click", function() {
-	toggleDarkTheme = !toggleDarkTheme;
+	settings.darkTheme = !settings.darkTheme;
+	localforage.setItem("settings", settings);
 	if ($("#darkThemeCheckbox")[0].checked) {
 		let icon = $(".glyphicon-fire");
 		icon.removeClass("glyphicon-fire");
@@ -2091,7 +2431,8 @@ $("#darkThemeCheckbox").on("click", function() {
 
 /* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 $("#fullscreenCheckbox").on("click", function() {
-	toggleFullscreen = !toggleFullscreen;
+	settings.fullscreen = !settings.fullscreen;
+	localforage.setItem("settings", settings);
 	if ($("#fullscreenCheckbox")[0].checked) {
 		$("#videoCanvas1")[0].style.width = "100%";
 		$("#videoCanvas1")[0].style["margin-left"] = "0";

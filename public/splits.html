@@ -148,7 +148,9 @@
 // 			if (i > myTimer.splitNames.length-1) {
 // 				continue;
 // 			}
-			let t = myTimer.times[i] / 1000;
+			let seconds = int(myTimer.times[i] / 1000);
+			let rest = (myTimer.times[i] / 1000) - seconds;
+			let t = seconds + ":" + rest;
 			$("#splitTimes").children()[i].innerHTML = t;
 		}
 		$("#times").children()[0].innerHTML = myTimer.getCurrentTime() / 1000;
@@ -178,7 +180,9 @@
 			if (i > splitNames.length-1) {
 				continue;
 			}
-			let t = times[i] / 1000;
+			let seconds = int(times[i] / 1000);
+			let rest = (times[i] / 1000) - seconds;
+			let t = seconds + ":" + rest;
 			$("#splitTimes").children()[i].innerHTML = t;
 		}
 		$("#times").children()[0].innerHTML = currentTime;
