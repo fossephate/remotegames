@@ -30,6 +30,8 @@
 	<script src="js/http-live-player.js"></script>
 	<script src="js/sweetalert2.min.js"></script>
 	<script src="js/meeting-client.js"></script>
+	<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
 <!-- 	<script src="/js/ads.js"></script> -->
 <!-- 	<script src="https://authedmine.com/lib/authedmine.min.js"></script> -->
 	
@@ -40,16 +42,16 @@
 
 
 	<!-- BOOTSTRAP 3 -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+<!-- 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-
+ -->
 
 	<!-- BOOTSTRAP 4 -->
-	<!-- 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"> -->
-	<!-- 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-	<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
-	<!-- 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script> -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+<!-- 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script> -->
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
+	<!-- ADS -->
 	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 	<script>
 		(adsbygoogle = window.adsbygoogle || []).push({
@@ -76,7 +78,7 @@
 					<a id="tab3" class="nav-link" data-toggle="tab" href="#lagless3">Lagless 3</a>
 				</li>
 				<li class="nav-item">
-					<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">Wii U Lagless 2</a>
+					<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">WiiU Lagless</a>
 				</li>
 			</ul>
 
@@ -97,9 +99,22 @@
 								</div>
 								<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 <!-- 								<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
-								<button id="lagless1Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+								<button id="lagless1Refresh" class="laglessRefresh btn btn-info btn-settings">
 									<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
 								</button>
+								<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-info btn-settings">
+									<i class="fas fa-keyboard" style="font-size: 2em;"></i>
+								</button>
+								<div class="dropdown show">
+									<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Dropdown link
+									</a>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+										<a class="dropdown-item" href="#">Action</a>
+										<a class="dropdown-item" href="#">Another action</a>
+										<a class="dropdown-item" href="#">Something else here</a>
+									</div>
+								</div>
 							</div>
 					</div>
 				</div>
@@ -151,8 +166,11 @@
 								<div id="lagless2Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div>
-							<button id="lagless2Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+							<button id="lagless2Refresh" class="laglessRefresh btn btn-info btn-settings">
 								<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
+							</button>
+							<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-info btn-settings">
+								<i class="fas fa-keyboard" style="font-size: 2em;"></i>
 							</button>
 							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
@@ -173,8 +191,11 @@
 								<div id="lagless3Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div>
-							<button id="lagless3Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+							<button id="lagless3Refresh" class="laglessRefresh btn btn-info btn-settings">
 								<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
+							</button>
+							<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-info btn-settings">
+								<i class="fas fa-keyboard" style="font-size: 2em;"></i>
 							</button>
 							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 <!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
@@ -196,7 +217,7 @@
 								<div id="lagless4Volume" class="volume"></div>
 								<i class="fa fa-volume-up"></i>
 							</div>
-							<button id="lagless4Refresh" class="laglessRefresh btn btn-info btn-settings" type="button">
+							<button id="lagless4Refresh" class="laglessRefresh btn btn-info btn-settings">
 								<i class="fas fa-sync-alt" style="font-size: 2em;"></i>
 							</button>
 						</div>
@@ -221,8 +242,8 @@
 							<div id="forfeitTimerBar1" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild1" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<btn id="requestTurn1" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
-							<btn id="cancelTurn1" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<btn id="requestTurn1" class="requestTurn btn btn-primary">Request Turn</btn>
+							<btn id="cancelTurn1" class="cancelTurn btn btn-primary">Cancel Turn</btn>
 							<ul id="controlQueue1" class="controlQueue list-group"></ul>
 						</div>
 						
@@ -238,8 +259,8 @@
 							<div id="forfeitTimerBar2" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild2" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<btn id="requestTurn2" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
-							<btn id="cancelTurn2" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<btn id="requestTurn2" class="requestTurn btn btn-primary">Request Turn</btn>
+							<btn id="cancelTurn2" class="cancelTurn btn btn-primary">Cancel Turn</btn>
 							<ul id="controlQueue2" class="controlQueue list-group"></ul>
 						</div>
 						
@@ -255,8 +276,8 @@
 							<div id="forfeitTimerBar3" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild3" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<btn id="requestTurn3" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
-							<btn id="cancelTurn3" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<btn id="requestTurn3" class="requestTurn btn btn-primary">Request Turn</btn>
+							<btn id="cancelTurn3" class="cancelTurn btn btn-primary">Cancel Turn</btn>
 							<ul id="controlQueue3" class="controlQueue list-group"></ul>
 						</div>
 						
@@ -272,8 +293,8 @@
 							<div id="forfeitTimerBar4" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild4" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<btn id="requestTurn4" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
-							<btn id="cancelTurn4" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<btn id="requestTurn4" class="requestTurn btn btn-primary">Request Turn</btn>
+							<btn id="cancelTurn4" class="cancelTurn btn btn-primary">Cancel Turn</btn>
 							<ul id="controlQueue4" class="controlQueue list-group"></ul>
 						</div>
 						
@@ -289,8 +310,8 @@
 							<div id="forfeitTimerBar5" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild5" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<btn id="requestTurn5" class="requestTurn btn btn-primary" type="button">Request Turn</btn>
-							<btn id="cancelTurn5" class="cancelTurn btn btn-primary" type="button">Cancel Turn</btn>
+							<btn id="requestTurn5" class="requestTurn btn btn-primary">Request Turn</btn>
+							<btn id="cancelTurn5" class="cancelTurn btn btn-primary">Cancel Turn</btn>
 							<ul id="controlQueue5" class="controlQueue list-group"></ul>
 						</div>
 					</div>
@@ -391,8 +412,8 @@
 								Ping: <span id="ping"></span>
 							</div>
 							<div class="well">
-								<btn id="replaceWithTwitch" type="button" class="btn btn-primary">Replace With Twitch</btn>
-								<btn id="replaceWithLagless" type="button" class="btn btn-primary">Replace With Lagless</btn>
+								<btn id="replaceWithTwitch" class="btn btn-primary">Replace With Twitch</btn>
+								<btn id="replaceWithLagless" class="btn btn-primary">Replace With Lagless</btn>
 							</div> -->
 						</div>
 						
@@ -447,29 +468,22 @@
 							Settings:
 						</div>
 						<div id="streamSettings" class="well">
-							<button type="button" data-toggle="modal" data-target="#settingsWindow" class="btn btn-info btn-settings">
-								<i class="fas fa-cogs"></i>
-							</button>
-							<!-- 							<button id="toggleAudio" type="button" data-toggle="modal" class="btn btn-info btn-settings">
+<!-- 							<button data-toggle="modal" data-target="#tutorialWindow" class="btn btn-info btn-settings">
+								<i class="fas fa-settings"></i>
+							</button> -->
+							<!-- 							<button id="toggleAudio" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="fas fa-volume-up"></i>
 							</button>
-							<button id="toggleTheme" type="button" data-toggle="modal" class="btn btn-info btn-settings">
+							<button id="toggleTheme" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="fas fa-moon"></i>
 							</button>
-							<button id="toggleChat" type="button" data-toggle="modal" class="btn btn-info btn-settings">
+							<button id="toggleChat" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="far fa-comment-alt"></i>
 							</button>
-							<button id="toggleFullscreen" type="button" data-toggle="modal" class="btn btn-info btn-settings">
+							<button id="toggleFullscreen" data-toggle="modal" class="btn btn-info btn-settings">
 								<i class="fas fa-expand"></i>
 							</button> -->
 							<a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
-							<div class="sliderContainer">
-<!-- 								<div id="globalVolumeSlider" class="volumeSlider">
-									<i class="fa fa-volume-down"></i>
-									<div id="globalVolume" class="volume"></div>
-									<i class="fa fa-volume-up"></i>
-								</div> -->
-							</div>
 <!-- 							<div class="sliderContainer">
 								Quality: <span id="quality">70</span>
 								<input id="qualitySlider" class="slider" type="range" min="1" step="1" max="85" value="70" />
@@ -490,6 +504,10 @@
 								Stick Sensitivity: <span id="threshold">50</span>
 								<input id="stickSensitivitySlider" class="slider" type="range" min="1" step="1" max="128" value="50" />
 							</div> -->
+							<button id="printKeyboardLayout" class="btn btn-primary">Print Keyboard Layout Config</button>
+							<button id="loadKeyboardLayout" class="btn btn-primary">Load Keyboard Layout Config</button>
+							<textarea id="keyboardLayoutPrintout">
+							</textarea>
 						</div>
 					</div>
 
@@ -547,235 +565,180 @@
 		<iframe id="twitchChat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat" height="500" width="350"></iframe>
 
 	</div>
+	
+	<div id="tutorialWindow" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title text-center">Quick Tutorial</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<!-- 	<div id="popup" class="genericPopup">
+		test
+	</div>
+	<btn id="testButton" class="btn btn-primary">
+		test button
+	</btn> -->
 
 
 
 	<!-- SETTINGS WINDOW ------------------------------------------- -->
-	<div class="modal fade" id="settingsWindow" role="dialog">
+	<div id="keyboardSettings" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 
 				<div class="modal-header">
-					<h3 class="modal-title text-center">Settings</h3>
+					<h3 class="modal-title text-center">Keyboard Reamapper</h3>
 				</div>
 
 				<div class="modal-body">
-
-					<ul class="nav nav-tabs nav-justified">
-<!-- 						<li class="active"><a href="#keyboardSettingsFrame" data-toggle="tab">keyboard</a></li> -->
-						<li class="active"><a href="#cssKeyboard" data-toggle="tab">keyboard2</a></li>
-						<!-- 						<li><a href="#soundSettingsFrame" data-toggle="tab">sound</a></li>
-						<li><a href="#videoSettingsFrame" data-toggle="tab">video</a></li> -->
-					</ul>
-
-					<div class="tab-content">
-<!-- 						<div id="keyboardSettingsFrame" class="tab-pane active">
-
-							<div id="keyboardConfig">
-								<ul id="keyboardActions" class="list-group">
-									<li class="actionText list-group-item">Left Stick Up</li>
-									<li class="actionText list-group-item">Left Stick Down</li>
-									<li class="actionText list-group-item">Left Stick Left</li>
-									<li class="actionText list-group-item">Left Stick Right</li>
-									<li class="actionText list-group-item">Right Stick Up</li>
-									<li class="actionText list-group-item">Right Stick Down</li>
-									<li class="actionText list-group-item">Right Stick Left</li>
-									<li class="actionText list-group-item">Right Stick Right</li>
-									<li class="actionText list-group-item">A</li>
-									<li class="actionText list-group-item">B</li>
-									<li class="actionText list-group-item">X</li>
-									<li class="actionText list-group-item">Y</dliiv>
-									<li class="actionText list-group-item">DPad Up</li>
-									<li class="actionText list-group-item">DPad Down</li>
-									<li class="actionText list-group-item">DPad Left</li>
-									<li class="actionText list-group-item">DPad Right</li>
-									<li class="actionText list-group-item">LStick Button</li>
-									<li class="actionText list-group-item">RStick Button</li>
-									<li class="actionText list-group-item">L</li>
-									<li class="actionText list-group-item">ZL</li>
-									<li class="actionText list-group-item">R</li>
-									<li class="actionText list-group-item">ZR</li>
-									<li class="actionText list-group-item">Minus</li>
-									<li class="actionText list-group-item">Plus</li>
-									<li class="actionText list-group-item">Capture</li>
-									<li class="actionText list-group-item">Home</li>
-								</ul>
-								<ul id="keyboardConfigCodes">
-									<li class="buttonConfig list-group-item" id="LU">W</li>
-									<li class="buttonConfig list-group-item" id="LD">S</li>
-									<li class="buttonConfig list-group-item" id="LL">A</li>
-									<li class="buttonConfig list-group-item" id="LR">D</li>
-									<li class="buttonConfig list-group-item" id="RU">I</li>
-									<li class="buttonConfig list-group-item" id="RD">J</li>
-									<li class="buttonConfig list-group-item" id="RL">K</li>
-									<li class="buttonConfig list-group-item" id="RR">L</li>
-									<li class="buttonConfig list-group-item" id="A">RIGHT</li>
-									<li class="buttonConfig list-group-item" id="B">DOWN</li>
-									<li class="buttonConfig list-group-item" id="X">UP</li>
-									<li class="buttonConfig list-group-item" id="Y">LEFT</li>
-									<li class="buttonConfig list-group-item" id="DUP">T</li>
-									<li class="buttonConfig list-group-item" id="DDown">G</li>
-									<li class="buttonConfig list-group-item" id="DLeft">F</li>
-									<li class="buttonConfig list-group-item" id="DRight">H</li>
-									<li class="buttonConfig list-group-item" id="LStick">R</li>
-									<li class="buttonConfig list-group-item" id="RStick">Y</li>
-									<li class="buttonConfig list-group-item" id="L">U</li>
-									<li class="buttonConfig list-group-item" id="ZL">Q</li>
-									<li class="buttonConfig list-group-item" id="R">O</li>
-									<li class="buttonConfig list-group-item" id="ZR">E</li>
-									<li class="buttonConfig list-group-item" id="Minus">-</li>
-									<li class="buttonConfig list-group-item" id="Plus">=</li>
-									<li class="buttonConfig list-group-item" id="Capture">1</li>
-									<li class="buttonConfig list-group-item" id="Home">2</li>
-								</ul>
+					<btn id="resetBindings" class="btn btn-primary">Reset Keyboard Bindings</btn>
+					<btn id="defaultBindings" class="btn btn-primary">Default Keyboard Bindings</btn>
+					<div id="cssKeyboard" class="">
+						<div id="keyboardRemapperInstructions">
+							To remap keys, click the key you want to bind, THEN click the action you want that key to do.
+						</div>
+						
+						<div id="keyboard">
+							<div id="row1" class="keyboardRow">
+								<li id="escape" class="" code="esc">esc</li>
+								<li class="half-letter">&nbsp;</li>
+								<li class="disabled">F1</li>
+								<li class="disabled">F2</li>
+								<li class="disabled">F3</li>
+								<li class="disabled">F4</li>
+								<li class="half-letter">&nbsp;</li>
+								<li class="disabled">F5</li>
+								<li class="disabled">F6</li>
+								<li class="disabled">F7</li>
+								<li class="disabled">F8</li>
+								<li class="half-letter">&nbsp;</li>
+								<li class="disabled">F9</li>
+								<li class="disabled">F10</li>
+								<li class="disabled">F11</li>
+								<li class="disabled">F12</li>
+								<li class="disabled">prt sc</li>
+								<li class="disabled">scr lk</li>
+								<li class="disabled">pause</li>
 							</div>
-							<input type="button" id="resetKeyboardConfig" value="Reset" />
-						</div> -->
-
-
-						<div id="cssKeyboard" class="tab-pane active">
-							<div id="keyboard">
-								<div id="row1" class="keyboardRow">
-									<li class="" code="esc">esc</li>
-									<li class=" half-letter">&nbsp;</li>
-									<li class="">F1</li>
-									<li class="">F2</li>
-									<li class="">F3</li>
-									<li class="">F4</li>
-									<li class="half-letter">&nbsp;</li>
-									<li class="">F5</li>
-									<li class="">F6</li>
-									<li class="">F7</li>
-									<li class="">F8</li>
-									<li class="half-letter">&nbsp;</li>
-									<li class="">F9</li>
-									<li class="">F10</li>
-									<li class="">F11</li>
-									<li class="">F12</li>
-									<li class="">prt sc</li>
-									<li class="">scr lk</li>
-									<li class="">pause</li>
-								</div>
-								<div id="row2" class="keyboardRow">
-									<li class="">`</li>
-									<li class="">1</li>
-									<li class="">2</li>
-									<li class="">3</li>
-									<li class="">4</li>
-									<li class="">5</li>
-									<li class="">6</li>
-									<li class="">7</li>
-									<li class="">8</li>
-									<li class="">9</li>
-									<li class="">0</li>
-									<li class="">-</li>
-									<li class="">=</li>
-									<li class="delete">backspace</li>
-									<li class="">ins</li>
-									<li class="">home</li>
-									<li class="">pgup</li>
-								</div>
-								<div id="row3" class="keyboardRow">
-									<li class="tab">tab</li>
-									<li id="q" class="letter">q</li>
-									<li id="w" class="letter">w</li>
-									<li id="e" class="letter">e</li>
-									<li id="r" class="letter">r</li>
-									<li id="t" class="letter">t</li>
-									<li id="y" class="letter">y</li>
-									<li id="u" class="letter">u</li>
-									<li id="i" class="letter">i</li>
-									<li id="o" class="letter">o</li>
-									<li id="p" class="letter">p</li>
-									<li class="">[</li>
-									<li class="">]</li>
-									<li class="">\</li>
-									<li class="">del</li>
-									<li class="">end</li>
-									<li class="">pgdn</li>
-								</div>
-								<div id="row4" class="keyboardRow">
-									<li class="capslock disabled" code="caps">caps lock</li>
-									<li id="a" class="letter">a</li>
-									<li id="s" class="letter">s</li>
-									<li id="d" class="letter">d</li>
-									<li id="f" class="letter">f</li>
-									<li id="g" class="letter">g</li>
-									<li id="h" class="letter">h</li>
-									<li id="j"class="letter">j</li>
-									<li id="k" class="letter">k</li>
-									<li id="l" class="letter">l</li>
-									<li class="">;</li>
-									<li class="">'</li>
-									<li class="return">return</li>
-									<li class="empty-letter">&nbsp;</li>
-									<li class="empty-letter">&nbsp;</li>
-									<li class="empty-letter">&nbsp;</li>
-								</div>
-								<div id="row5" class="keyboardRow">
-									<li class="left-shift">shift</li>
-									<li id="z" class="letter">z</li>
-									<li id="x" class="letter">x</li>
-									<li id="c" class="letter">c</li>
-									<li id="v" class="letter">v</li>
-									<li id="b" class="letter">b</li>
-									<li id="n"class="letter">n</li>
-									<li id="m" class="letter">m</li>
-									<li class="">,</li>
-									<li class="">.</li>
-									<li class="">/</li>
-									<li class="right-shift">shift</li>
-									<li class="empty-letter">&nbsp;</li>
-									<li class="" code="up">&uarr;</li>
-									<li class="empty-letter">&nbsp;</li>
-								</div>
-								<div id="row6" class="keyboardRow">
-									<li class="left-control">ctrl</li>
-									<li class="windows disabled">win</li>
-									<li class="left-alt">alt</li>
-									<li class="space" code="space">&nbsp;</li>
-									<li class="right-alt">alt</li>
-									<li class="function disabled">fn</li>
-									<li class="menu">&#9776;</li>
-									<li class="right-control">ctrl</li>
-									<li class="" code="left">&larr;</li>
-									<li class="" code="down">&darr;</li>
-									<li class="" code="right">&rarr;</li>
-								</div>
+							<div id="row2" class="keyboardRow">
+								<li id="`" class="">`</li>
+								<li id="1" class="">1</li>
+								<li id="2" class="">2</li>
+								<li id="3" class="">3</li>
+								<li id="4" class="">4</li>
+								<li id="5" class="">5</li>
+								<li id="6" class="">6</li>
+								<li id="7" class="">7</li>
+								<li id="8" class="">8</li>
+								<li id="9" class="">9</li>
+								<li id="0" class="">0</li>
+								<li id="-" class="">-</li>
+								<li id="=" class="">=</li>
+								<li id="backspace" class="backspace">backspace</li>
+								<li id="ins" class="">ins</li>
+								<li id="home" class="">home</li>
+								<li id="pageup" class="">pgup</li>
 							</div>
-							
-							<div>
-								<div id="keyboardConfigCodes2">
-									<li class="buttonConfig list-group-item" id="LU">Left Stick Up</li>
-									<li class="buttonConfig list-group-item" id="LD">Left Stick Down</li>
-									<li class="buttonConfig list-group-item" id="LL">Left Stick Left</li>
-									<li class="buttonConfig list-group-item" id="LR">Left Stick Right</li>
-									<li class="buttonConfig list-group-item" id="RU">Right Stick Up</li>
-									<li class="buttonConfig list-group-item" id="RD">Right Stick Down</li>
-									<li class="buttonConfig list-group-item" id="RL">Right Stick Left</li>
-									<li class="buttonConfig list-group-item" id="RR">Right Stick Right</li>
-									<li class="buttonConfig list-group-item" id="A">A</li>
-									<li class="buttonConfig list-group-item" id="B">B</li>
-									<li class="buttonConfig list-group-item" id="X">X</li>
-									<li class="buttonConfig list-group-item" id="Y">Y</li>
-									<li class="buttonConfig list-group-item" id="DUP">DPad Up</li>
-									<li class="buttonConfig list-group-item" id="DDown">DPad Down</li>
-									<li class="buttonConfig list-group-item" id="DLeft">DPad Left</li>
-									<li class="buttonConfig list-group-item" id="DRight">DPad Right</li>
-									<li class="buttonConfig list-group-item" id="LStick">LStick Button</li>
-									<li class="buttonConfig list-group-item" id="RStick">RStick Button</li>
-									<li class="buttonConfig list-group-item" id="L">L</li>
-									<li class="buttonConfig list-group-item" id="ZL">ZL</li>
-									<li class="buttonConfig list-group-item" id="R">R</li>
-									<li class="buttonConfig list-group-item" id="ZR">ZR</li>
-									<li class="buttonConfig list-group-item" id="Minus">Minus</li>
-									<li class="buttonConfig list-group-item" id="Plus">Plus</li>
-									<li class="buttonConfig list-group-item" id="Capture">Capture</li>
-									<li class="buttonConfig list-group-item" id="Home">Home</li>
-								</div>
+							<div id="row3" class="keyboardRow">
+								<li id="tab" class="tab">tab</li>
+								<li id="Q" class="letter">q</li>
+								<li id="W" class="letter">w</li>
+								<li id="E" class="letter">e</li>
+								<li id="R" class="letter">r</li>
+								<li id="T" class="letter">t</li>
+								<li id="Y" class="letter">y</li>
+								<li id="U" class="letter">u</li>
+								<li id="I" class="letter">i</li>
+								<li id="O" class="letter">o</li>
+								<li id="P" class="letter">p</li>
+								<li id="[" class="">[</li>
+								<li id="]" class="">]</li>
+								<li id="\" class="">\</li>
+								<li id="delete" class="">del</li>
+								<li id="end" class="">end</li>
+								<li id="pagedown" class="">pgdn</li>
+							</div>
+							<div id="row4" class="keyboardRow">
+								<li id="capslock" class="capslock disabled" code="caps">caps lock</li>
+								<li id="A" class="letter">a</li>
+								<li id="S" class="letter">s</li>
+								<li id="D" class="letter">d</li>
+								<li id="F" class="letter">f</li>
+								<li id="G" class="letter">g</li>
+								<li id="H" class="letter">h</li>
+								<li id="J"class="letter">j</li>
+								<li id="K" class="letter">k</li>
+								<li id="L" class="letter">l</li>
+								<li id=";" class="">;</li>
+								<li id="'" class="">'</li>
+								<li id="return" class="return">return</li>
+								<li class="empty-letter">&nbsp;</li>
+								<li class="empty-letter">&nbsp;</li>
+								<li class="empty-letter">&nbsp;</li>
+							</div>
+							<div id="row5" class="keyboardRow">
+								<li id="shift" class="left-shift">shift</li>
+								<li id="Z" class="letter">z</li>
+								<li id="X" class="letter">x</li>
+								<li id="C" class="letter">c</li>
+								<li id="V" class="letter">v</li>
+								<li id="B" class="letter">b</li>
+								<li id="N"class="letter">n</li>
+								<li id="M" class="letter">m</li>
+								<li id="," class="">,</li>
+								<li id="." class="">.</li>
+								<li id="/" class="">/</li>
+								<li id="shift" class="right-shift">shift</li>
+								<li class="empty-letter">&nbsp;</li>
+								<li id="up" class="" code="up">&uarr;</li>
+								<li class="empty-letter">&nbsp;</li>
+							</div>
+							<div id="row6" class="keyboardRow">
+								<li id="ctrl" class="left-control">ctrl</li>
+								<li id="win" class="windows disabled">win</li>
+								<li id="alt" class="left-alt">alt</li>
+								<li id="space" class="space" code="space">&nbsp;</li>
+								<li id="alt" class="right-alt">alt</li>
+								<li id="function" class="function disabled">fn</li>
+								<li id="option" class="menu">&#9776;</li>
+								<li id="ctrl" class="right-control">ctrl</li>
+								<li id="left" class="" code="left">&larr;</li>
+								<li id="down" class="" code="down">&darr;</li>
+								<li id="right" class="" code="right">&rarr;</li>
 							</div>
 						</div>
-					
+						<div id="keyboardConfigCodes2">
+							<li class="buttonConfig list-group-item" id="LU">Left Stick Up</li>
+							<li class="buttonConfig list-group-item" id="LD">Left Stick Down</li>
+							<li class="buttonConfig list-group-item" id="LL">Left Stick Left</li>
+							<li class="buttonConfig list-group-item" id="LR">Left Stick Right</li>
+							<li class="buttonConfig list-group-item" id="RU">Right Stick Up</li>
+							<li class="buttonConfig list-group-item" id="RD">Right Stick Down</li>
+							<li class="buttonConfig list-group-item" id="RL">Right Stick Left</li>
+							<li class="buttonConfig list-group-item" id="RR">Right Stick Right</li>
+							<li class="buttonConfig list-group-item" id="ABtn">A</li>
+							<li class="buttonConfig list-group-item" id="BBtn">B</li>
+							<li class="buttonConfig list-group-item" id="XBtn">X</li>
+							<li class="buttonConfig list-group-item" id="YBtn">Y</li>
+							<li class="buttonConfig list-group-item" id="DUp">DPad Up</li>
+							<li class="buttonConfig list-group-item" id="DDown">DPad Down</li>
+							<li class="buttonConfig list-group-item" id="DLeft">DPad Left</li>
+							<li class="buttonConfig list-group-item" id="DRight">DPad Right</li>
+							<li class="buttonConfig list-group-item" id="LStick">LStick Button</li>
+							<li class="buttonConfig list-group-item" id="RStick">RStick Button</li>
+							<li class="buttonConfig list-group-item" id="LBtn">L</li>
+							<li class="buttonConfig list-group-item" id="ZL">ZL</li>
+							<li class="buttonConfig list-group-item" id="RBtn">R</li>
+							<li class="buttonConfig list-group-item" id="ZR">ZR</li>
+							<li class="buttonConfig list-group-item" id="Minus">Minus</li>
+							<li class="buttonConfig list-group-item" id="Plus">Plus</li>
+							<li class="buttonConfig list-group-item" id="Capture">Capture</li>
+							<li class="buttonConfig list-group-item" id="Home">Home</li>
+						</div>
 					</div>
 				</div>
 			</div>

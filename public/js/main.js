@@ -109,6 +109,8 @@ let then = Date.now();
 let startTime = then;
 
 let keyboardLayout = {};
+keyboardLayout.tempSelectedAction = "";
+keyboardLayout.tempSelectedKey = "";
 keyboardLayout.LU = "W";
 keyboardLayout.LD = "S";
 keyboardLayout.LL = "A";
@@ -117,19 +119,19 @@ keyboardLayout.RU = "I";
 keyboardLayout.RD = "K";
 keyboardLayout.RL = "J";
 keyboardLayout.RR = "L";
-keyboardLayout.A = "right";
-keyboardLayout.B = "down";
-keyboardLayout.X = "up";
-keyboardLayout.Y = "left";
+keyboardLayout.ABtn = "right";
+keyboardLayout.BBtn = "down";
+keyboardLayout.XBtn = "up";
+keyboardLayout.YBtn = "left";
 keyboardLayout.DUp = "T";
 keyboardLayout.DDown = "G";
 keyboardLayout.DLeft = "F";
 keyboardLayout.DRight = "H";
 keyboardLayout.LStick = "R";
 keyboardLayout.RStick = "Y";
-keyboardLayout.L = "U";
+keyboardLayout.LBtn = "U";
 keyboardLayout.ZL = "Q";
-keyboardLayout.R = "O";
+keyboardLayout.RBtn = "O";
 keyboardLayout.ZR = "E";
 keyboardLayout.Minus = "-";
 keyboardLayout.Plus = "=";
@@ -257,10 +259,10 @@ function sendControllerState() {
 		return;
 	}
 	
-	if (wiiU3DsTab) {
-		socket.emit("sendControllerStateWiiU3Ds", newControllerState);
-		return;
-	}
+// 	if (wiiU3DsTab) {
+// 		socket.emit("sendControllerStateWiiU3Ds", newControllerState);
+// 		return;
+// 	}
 	
 // 	if(controlQueues[0].indexOf(twitchUsername) == -1 && currentPlayerChosen == 0) {
 // 		socket.emit("requestTurn", 0);
@@ -283,8 +285,6 @@ function sendControllerState() {
 		swal("It's not your turn yet!");
 	}
 	
-// 	console.log(newControllerState);
-	
 	let obj = {state: newControllerState, cNum: 0}
 	
 	if (controlQueues[0][0] == twitchUsername) {
@@ -298,7 +298,7 @@ function sendControllerState() {
 	} else if (controlQueues[4][0] == twitchUsername) {
 		obj.cNum = 4;
 	}
-	console.log(obj);
+	console.log(obj.state, obj.cNum);
 	socket.emit("sendControllerState", obj);
 }
 
@@ -341,24 +341,24 @@ function getKeyboardInput() {
 		controller.LStick.x = restPos;
 	}
 
-	if (key.isPressed(keyboardLayout.X)) {
+	if (key.isPressed(keyboardLayout.XBtn)) {
 		controller.btns.x = 1;
-	} else if(key.wasPressed(keyboardLayout.X, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.XBtn, wasPressedKeyCodes)) {
 		controller.btns.x = 0;
 	}
-	if (key.isPressed(keyboardLayout.B)) {
+	if (key.isPressed(keyboardLayout.BBtn)) {
 		controller.btns.b = 1;
-	} else if(key.wasPressed(keyboardLayout.B, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.BBtn, wasPressedKeyCodes)) {
 		controller.btns.b = 0;
 	}
-	if (key.isPressed(keyboardLayout.Y)) {
+	if (key.isPressed(keyboardLayout.YBtn)) {
 		controller.btns.y = 1;
-	} else if(key.wasPressed(keyboardLayout.Y, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.YBtn, wasPressedKeyCodes)) {
 		controller.btns.y = 0;
 	}
-	if (key.isPressed(keyboardLayout.A)) {
+	if (key.isPressed(keyboardLayout.ABtn)) {
 		controller.btns.a = 1;
-	} else if(key.wasPressed(keyboardLayout.A, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.ABtn, wasPressedKeyCodes)) {
 		controller.btns.a = 0;
 	}
 
@@ -426,14 +426,14 @@ function getKeyboardInput() {
 		controller.btns.home = 0;
 	}
 
-	if (key.isPressed(keyboardLayout.L)) {
+	if (key.isPressed(keyboardLayout.LBtn)) {
 		controller.btns.l = 1;
-	} else if(key.wasPressed(keyboardLayout.L, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.LBtn, wasPressedKeyCodes)) {
 		controller.btns.l = 0;
 	}
-	if (key.isPressed(keyboardLayout.R)) {
+	if (key.isPressed(keyboardLayout.RBtn)) {
 		controller.btns.r = 1;
-	} else if(key.wasPressed(keyboardLayout.R, wasPressedKeyCodes)) {
+	} else if(key.wasPressed(keyboardLayout.RBtn, wasPressedKeyCodes)) {
 		controller.btns.r = 0;
 	}
 
@@ -873,7 +873,7 @@ setTimeout(function() {
 		$("#audioCheckbox")[0].checked = true;
 	}
 	setTimeout(function() {
-		if (settings.touchControls) {
+		if (/*settings.touchControls*/true) {
 			$("#touchControlsCheckbox").trigger("click");
 			$("#touchControlsCheckbox")[0].checked = true;
 		}
@@ -899,21 +899,263 @@ $("#keyboard li").on("click", function(event) {
 	if ($(this).hasClass("disabled")) {
 		return;
 	}
-	let keyCode;
 	
-	if ($(this).attr("code")) {
-		keyCode = $(this).attr("code");
-	} else {
-		keyCode = $(this).text();
+	let keyCode;
+	keyCode = $(this).attr("id");
+// 	console.log(keyCode);
+	
+	let that = this;
+	
+	// if we decide to select a new key to pair after selecting a different one, re-pair the original key:
+	if (keyboardLayout.tempSelectedKey !== "" && keyboardLayout.tempSelectedKey != $(that).attr("id")) {
+		keyboardLayout.tempSelectedKey = keyboardLayout.tempSelectedKey.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
+		
+		let element = $("#" + keyboardLayout.tempSelectedKey);
+		if (element.hasClass("keySelected")) {
+			element.removeClass("keySelected");
+		}
+		if (keyboardLayout.tempSelectedAction !== "") {
+			element.addClass("keyPaired");
+			element.attr("data-toggle", "tooltip");
+			element.attr("title", keyboardLayout.tempSelectedAction);
+			element.tooltip();
+			
+			let action = $("#" + keyboardLayout.tempSelectedAction);
+			action.attr("title", element.attr("id"));
+			action.tooltip();
+			action.addClass("actionPaired");
+		}
+		
+		keyboardLayout.tempSelectedKey = "";
+		keyboardLayout.tempSelectedAction = "";
+		
+// 		// new key has been selected:
+// 		if ($(that).hasClass("keyPaired")) {
+// 			$(that).removeClass("keyPaired");
+// 		}
+		
+// 		$(that).addClass("keySelected");
+// 		keyboardLayout.tempSelectedKey = $(that).attr("id");
+// 		return;
 	}
 	
-	console.log(keyCode);
 	
+	// if it's already paired, unpair it:
+	if ($(that).hasClass("keyPaired")) {
+		$(that).removeClass("keyPaired");
+		$(that).addClass("keySelected");
+		// store pair:
+		keyboardLayout.tempSelectedAction = $(that).attr("data-original-title") || $(that).attr("title");
+		keyboardLayout.tempSelectedKey = $(that).attr("id");
+		// delete pair:
+		$(that).attr("title", "");
+		try {
+			$(that).tooltip("destroy");
+			$(that).tooltip("dispose");
+		} catch(e) {}
+		
+		let action = $("#" + keyboardLayout.tempSelectedAction);
+		action.attr("title", "");
+		try {
+			action.tooltip("destroy");
+			action.tooltip("dispose");
+		} catch(e) {}
+		action.removeClass("actionPaired");
+		
+		keyboardLayout[keyboardLayout.tempSelectedAction] = "";
+// 		console.log("remapping old key");
+	} else {
+		// new key has been selected:
+		$(that).addClass("keySelected");
+		keyboardLayout.tempSelectedKey = $(that).attr("id");
+// 		console.log("new key");
+	}
+
 // 	swal("test");
-	$(this).addClass("keySelected");
+// 	$(this).addClass("keySelected");
 	//$("#dataTable").attr('data-timer')
 });
 
+
+
+$("#keyboardConfigCodes2 li").on("click", function(event) {
+// 	if (keyboardLayout.tempSelectedAction == "") {
+// 		return;
+// 	}
+	
+	let action = $(this).attr("id");
+	
+	// if this action is not already bound:
+	if (keyboardLayout.tempSelectedKey !== "" && keyboardLayout[action] === "") {
+		
+		keyboardLayout[action] = keyboardLayout.tempSelectedKey;
+		
+		keyboardLayout.tempSelectedKey = keyboardLayout.tempSelectedKey.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
+		
+		
+		if (!$(this).hasClass("actionPaired")) {
+			$(this).addClass("actionPaired");
+		}
+		$(this).attr("data-toggle", "tooltip");
+		$(this).attr("title", keyboardLayout.tempSelectedKey);
+		$(this).tooltip();
+		
+		// update key as well:
+		let element = $("#" + keyboardLayout.tempSelectedKey);
+		element.addClass("keyPaired");
+		element.attr("data-toggle", "tooltip");
+		element.attr("title", action);
+		element.tooltip();
+		
+		keyboardLayout.tempSelectedKey = "";
+		keyboardLayout.tempSelectedAction = "";
+	}
+	
+	
+	
+});
+
+function setKeyboardMapperClasses() {
+	
+	$("#keyboard li").removeClass("keyPaired");
+	$("#keyboard li").removeClass("keySelected");
+// 	$("#keyboard li").tooltip("destroy");
+	try {
+		$("#keyboard li").tooltip("destroy");
+		$("#keyboard li").tooltip("dispose");
+	} catch(e) {}
+	$("#keyboardConfigCodes2 li").removeClass("actionPaired");
+	$("#keyboardConfigCodes2 li").removeClass("actionSelected");
+// 	$("#keyboardConfigCodes2 li").tooltip("destroy");
+	try {
+		$("#keyboardConfigCodes2 li").tooltip("destroy");
+		$("#keyboardConfigCodes2 li").tooltip("dispose");
+	} catch(e) {}
+
+	for (let key in keyboardLayout) {
+		let prop = keyboardLayout[key];
+		prop = prop.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
+
+		if (prop === "") {
+			continue;
+		}
+
+		let element = $("#" + prop);
+		element.addClass("keyPaired");
+
+		element.attr("data-toggle", "tooltip");
+		element.attr("title", key);
+		element.tooltip();
+	}
+
+	for (let key in keyboardLayout) {
+		let prop = keyboardLayout[key];
+		prop = prop.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
+		if (key == "tempSelectedAction" || key == "tempSelectedKey") {
+			continue;
+		}
+
+// 		console.log(key);
+
+		let element = $("#" + key);
+		element.addClass("actionPaired");
+
+		element.attr("data-toggle", "tooltip");
+		element.attr("title", prop);
+		element.tooltip();
+	}
+}
+
+setKeyboardMapperClasses();
+
+$("#resetBindings").on("click", function(event) {
+	
+	$("#keyboard li").removeClass("keyPaired");
+	$("#keyboard li").removeClass("keySelected");
+// 	$("#keyboard li").tooltip("destroy");
+	try {
+		$("#keyboard li").tooltip("destroy");
+		$("#keyboard li").tooltip("dispose");
+	} catch(e) {}
+
+	$("#keyboardConfigCodes2 li").removeClass("actionPaired");
+	$("#keyboardConfigCodes2 li").removeClass("actionSelected");
+// 	$("#keyboardConfigCodes2 li").tooltip("destroy");
+	try {
+		$("#keyboardConfigCodes2 li").tooltip("destroy");
+		$("#keyboardConfigCodes2 li").tooltip("dispose");
+	} catch(e) {}
+	
+	keyboardLayout.tempSelectedAction = "";
+	keyboardLayout.tempSelectedKey = "";
+	
+	for (let key in keyboardLayout) {
+		let prop = keyboardLayout[key];
+		prop = prop.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
+		if (key == "tempSelectedAction" || key == "tempSelectedKey") {
+			continue;
+		}
+		if (prop === "") {
+			continue;
+		}
+		
+// 		console.log(key);
+// 		console.log(prop);
+		
+		keyboardLayout[key] = "";
+		
+		let element;
+		element = $("#" + key);
+		element.removeClass("actionPaired");
+// 		if (element.attr("data-original-title")) {
+// 			element.tooltip("destroy");
+// 		}
+		
+		element = $("#" + prop);
+		element.removeClass("keyPaired");
+// 		if (element.attr("data-original-title")) {
+// 			element.tooltip("destroy");
+// 		}
+	}
+});
+
+$("#defaultBindings").on("click", function(event) {
+	keyboardLayout.tempSelectedAction = "";
+	keyboardLayout.tempSelectedKey = "";
+	keyboardLayout.LU = "W";
+	keyboardLayout.LD = "S";
+	keyboardLayout.LL = "A";
+	keyboardLayout.LR = "D";
+	keyboardLayout.RU = "I";
+	keyboardLayout.RD = "K";
+	keyboardLayout.RL = "J";
+	keyboardLayout.RR = "L";
+	keyboardLayout.ABtn = "right";
+	keyboardLayout.BBtn = "down";
+	keyboardLayout.XBtn = "up";
+	keyboardLayout.YBtn = "left";
+	keyboardLayout.DUp = "T";
+	keyboardLayout.DDown = "G";
+	keyboardLayout.DLeft = "F";
+	keyboardLayout.DRight = "H";
+	keyboardLayout.LStick = "R";
+	keyboardLayout.RStick = "Y";
+	keyboardLayout.LBtn = "U";
+	keyboardLayout.ZL = "Q";
+	keyboardLayout.RBtn = "O";
+	keyboardLayout.ZR = "E";
+	keyboardLayout.Minus = "-";
+	keyboardLayout.Plus = "=";
+	keyboardLayout.Capture = "1";
+	keyboardLayout.Home = "2";
+	setKeyboardMapperClasses();
+});
+$("#printKeyboardLayout").on("click", function(event) {
+	$("#keyboardLayoutPrintout").text(JSON.stringify(keyboardLayout));
+});
+$("#loadKeyboardLayout").on("click", function(event) {
+	keyboardLayout = JSON.parse($("#keyboardLayoutPrintout").text());
+});
 
 //change document to #keyboardLayoutConfig using <tabindex="0">
 // $(".buttonConfig").on("click", function(e) {
@@ -1438,7 +1680,7 @@ $("#bitrateSlider2").slider({
 
 $("#scaleSlider2").slider({
     min: 100,
-    max: 1280,
+    max: 960,
 	step: 1,
     value: 960,
 	range: "min",
@@ -1487,8 +1729,8 @@ socket.on("lagless2Settings", function(data) {
 	$("#scale2").text(lagless2Settings.scale);
 	$("#scaleSlider2").slider("value", lagless2Settings.scale);
 	
-	$("#bitrate").text(lagless2Settings.videoBitrate);
-	$("#bitrateSlider").slider("value", lagless2Settings.videoBitrate);
+	$("#bitrate2").text(lagless2Settings.videoBitrate);
+	$("#bitrateSlider2").slider("value", lagless2Settings.videoBitrate);
 	
 	$("#offsetX2").text(lagless2Settings.offsetX);
 	$("#offsetXSlider2").slider("value", lagless2Settings.offsetX);
@@ -1602,7 +1844,7 @@ socket2.on("viewImage", function(data) {
 		let ratio = (imgHeight / imgWidth);
 		let canvasRatio = canvasWidth / canvasHeight;
 		let ratioW = 1280 / $("#videoCanvas1").innerWidth();
-		let ratioH = 729 / $("#videoCanvas1").innerHeight();
+		let ratioH = 720 / $("#videoCanvas1").innerHeight();
 		let cWidth = $("#videoCanvas1").innerWidth();
 		videoCanvas1Context.clearRect(0, 0, canvasWidth, canvasHeight);
 		videoCanvas1Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
@@ -1702,20 +1944,62 @@ $("#lagless3Refresh").on("click", function() {
 
 
 
-/* LAGLESS 2.0 3DS*/
+/* LAGLESS 2.0 WiiU*/
 // Setup the WebSocket connection and start the player
-let url2 = "wss://twitchplaysnintendoswitch.com/" + lagless4Port + "/";
-let canvas4 = document.getElementById("videoCanvas4");
-// Default 512*1024 (512kb).
-// Default 128*1024 (128kb)
-let player4 = new JSMpeg.Player(url2, {canvas: canvas4, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
-player4.maxAudioLag = 0.5;
-player4.stop();
-player4.stats = stats;
+// let url2 = "wss://twitchplaysnintendoswitch.com/" + lagless4Port + "/";
+// let canvas4 = document.getElementById("videoCanvas4");
+// // Default 512*1024 (512kb).
+// // Default 128*1024 (128kb)
+// let player4 = new JSMpeg.Player(url2, {canvas: canvas4, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
+// player4.maxAudioLag = 0.5;
+// player4.stop();
+// player4.stats = stats;
 
-$("#lagless3Refresh").on("click", function() {
-	socket.emit("restart4");
+// $("#lagless4Refresh").on("click", function() {
+// 	socket.emit("restart4");
+// });
+
+
+let videoCanvas4 = $("#videoCanvas4")[0];
+let videoCanvas4Context = videoCanvas4.getContext("2d");
+videoCanvas4.width = 1280;
+videoCanvas4.height = 720;
+
+socket2.on("viewImage4", function(data) {
+	console.log("got image");
+	stats.begin();
+	let src = "data:image/jpeg;base64," + data;
+	if(src == "data:image/jpeg;base64,") {
+		console.log("image was empty");
+		socket.emit("restart4");
+		return;
+	}
+	let image = new Image();
+	image.style = "max-width:100%; height:auto;";
+	image.onload = function() {
+		let imgWidth = image.width;
+		let imgHeight = image.height;
+		let canvasWidth = videoCanvas4.width;
+		let canvasHeight = videoCanvas4.height;
+		let ratio = (imgHeight / imgWidth);
+		let canvasRatio = canvasWidth / canvasHeight;
+		let ratioW = 1280 / $("#videoCanvas4").innerWidth();
+		let ratioH = 720 / $("#videoCanvas4").innerHeight();
+		let cWidth = $("#videoCanvas4").innerWidth();
+		videoCanvas4Context.clearRect(0, 0, canvasWidth, canvasHeight);
+		videoCanvas4Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+	};
+	image.src = src;
+	stats.end();
 });
+
+
+
+
+
+
+
+
 
 // default:
 setTimeout(function() {
@@ -1940,17 +2224,24 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		
 		// lagless 4:
 		if (contentId == "#lagless4") {
-			
+			socket2.emit("join", "viewers4");
 			socket.emit("joinLagless4");
 			
 			wiiU3DsTab = true;
 			
 			if (typeof player4 != "undefined") {
-				player4.play();
+				try {
+					player4.play();
+				} catch (e) {
+				}
 			}
 		} else {
+			socket2.emit("leave", "viewers4");
 			if (typeof player4 != "undefined") {
-				player4.stop();
+				try {
+					player4.stop();
+				} catch (e) {
+				}
 			}
 			wiiU3DsTab = false;
 		}
@@ -2609,3 +2900,40 @@ socket.on("pong2", function() {
 // if (!miner.isMobile() && !miner.didOptOut(14400)) {
 // 	miner.start();
 // }
+
+
+
+/* TUTORIAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+function tutorial() {
+	
+	if (typeof tutorial.step == "undefined") {
+		tutorial.step = 0;
+	} else {
+		tutorial.step += 1;
+	}
+	
+	let step = tutorial.step;
+	
+	if (step === 0) {
+		$("#tutorialWindow").modal();
+		swal("tutorial");
+	}
+	
+	
+	if (step === 1) {
+		let popper = new Popper($("#navTabs"), $("#popup"), {
+			placement: "right",
+		});
+	}
+	
+	
+	
+	
+}
+
+function startTutorial() {
+	setTimeout(tutorial, 0);
+	setTimeout(tutorial, 5000);
+	setTimeout(tutorial, 10000);
+}
+

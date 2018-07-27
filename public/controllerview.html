@@ -1,0 +1,554 @@
+<html>
+
+<head>
+	<!-- socket.io -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+	<!-- jquery -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<!-- BOOTSTRAP 3 -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<style>
+		#container {
+			width: 960px;
+			height: 370px;
+/* 			width: 100%;
+			height: 100%; */
+			display: inline-flex;
+			flex-flow: row;
+			justify-content: start;
+			position: relative;
+		}
+		
+		#leftJoyConOther,
+		#rightJoyConOther {
+			color: #FFFFFF;
+			text-shadow: 2px 2px 4px #000000;
+		}
+
+		#leftJoyCon {
+			width: 12.5%;
+			height: 100%;
+			position: absolute;
+		}
+
+		.highlighted {
+			background: rgba(255, 255, 50, 0.2);
+		}
+
+		#leftJoyConCanvas {
+			width: 100%;
+			height: 100%;
+			/*     background: rgba(0, 0, 255, 0.2); */
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		#leftStick {
+			position: absolute;
+			/* 	background: rgba(50, 50, 50, 0.2); */
+			width: 40%;
+			height: 12%;
+			left: 33%;
+			top: 20%;
+		}
+
+		#leftStick2 {
+			position: absolute;
+			background: #FF3C28;
+			/*#bb5050;*/
+			width: 20%;
+			height: 6%;
+			left: 43%;
+			top: 23%;
+			pointer-events: none;
+			border-radius: 50%;
+		}
+
+		.controllerButton {
+			background: rgba(50, 50, 50, 0.2);
+			/*     width: 30px;
+height: 30px; */
+			width: 32%;
+			height: 32%;
+			border: 2px solid #333;
+		}
+
+		#dpadButtons {
+			position: absolute;
+			/* 	background: rgba(50, 50, 50, 0.2); */
+			width: 85.25%;
+			height: 27.75%;
+			left: 10%;
+			top: 39%;
+		}
+
+		#upButton {
+			position: absolute;
+			left: 36%;
+			top: 5%;
+		}
+
+		#downButton {
+			position: absolute;
+			left: 36%;
+			top: 65%;
+		}
+
+		#leftButton {
+			position: absolute;
+			left: 5%;
+			top: 35%;
+		}
+
+		#rightButton {
+			position: absolute;
+			left: 66%;
+			top: 35%;
+		}
+
+		#minusButton {
+			position: absolute;
+			left: 66%;
+			top: 6%;
+			width: 32%;
+			height: 9%;
+		}
+
+		#captureButton {
+			position: absolute;
+			left: 54%;
+			top: 67.5%;
+			width: 32%;
+			height: 9%;
+		}
+
+		#lButton {
+			position: absolute;
+			left: 1%;
+			top: 6%;
+			width: 60%;
+			height: 6%;
+		}
+
+		#zlButton {
+			position: absolute;
+			left: 1%;
+			top: 0%;
+			width: 60%;
+			height: 6%;
+		}
+
+		#rightJoyCon {
+			width: 12.5%;
+			height: 100%;
+			position: absolute;
+/* 			margin-left: 87.5%; */
+			margin-left: 12.5%;
+		}
+
+		#rightJoyConCanvas {
+			width: 100%;
+			height: 100%;
+			/*     background: rgba(255, 0, 0, 0.2); */
+			position: absolute;
+			left: 0;
+			top: 0;
+		}
+
+		#rightStick {
+			position: absolute;
+			/* 	background: rgba(50, 50, 50, 0.2); */
+			width: 40%;
+			height: 12%;
+			left: 26%;
+			top: 47%;
+		}
+
+		#rightStick2 {
+			position: absolute;
+			background: #0AB9E6;
+			/*#5050bb;*/
+			width: 20%;
+			height: 6%;
+			left: 36.5%;
+			top: 50%;
+			pointer-events: none;
+			border-radius: 50%;
+		}
+
+		#abxyButtons {
+			position: absolute;
+			/* 	background: rgba(50, 50, 50, 0.2); */
+			width: 85.25%;
+			height: 27.75%;
+			left: 3%;
+			top: 12%;
+		}
+
+		#xButton {
+			position: absolute;
+			left: 36%;
+			top: 5%;
+		}
+
+		#bButton {
+			position: absolute;
+			left: 36%;
+			top: 65%;
+		}
+
+		#yButton {
+			position: absolute;
+			left: 5%;
+			top: 35%;
+		}
+
+		#aButton {
+			position: absolute;
+			left: 66%;
+			top: 35%;
+		}
+
+		#plusButton {
+			position: absolute;
+			left: 1%;
+			top: 6%;
+			width: 32%;
+			height: 9%;
+		}
+
+		#homeButton {
+			position: absolute;
+			left: 14%;
+			top: 67.5%;
+			width: 32%;
+			height: 9%;
+		}
+
+		#rButton {
+			position: absolute;
+			left: 40%;
+			top: 6%;
+			width: 60%;
+			height: 6%;
+		}
+
+		#zrButton {
+			position: absolute;
+			left: 40%;
+			top: 0%;
+			width: 60%;
+			height: 6%;
+		}
+
+		#touchSticks {
+			width: 90%;
+		}
+
+		#touchButtons {
+			background: rgba(0, 255, 0, 0.2);
+			height: 100px;
+			width: 100%;
+		}
+	</style>
+</head>
+
+<body style="margin: 0; padding: 0;">
+	<div id="container">
+		<div id="leftJoyCon">
+			<canvas id="leftJoyConCanvas"></canvas>
+			<div id="leftStick"></div>
+			<div id="leftStick2"></div>
+			<div id="dpadButtons">
+				<div id="upButton" class="controllerButton"></div>
+				<div id="downButton" class="controllerButton"></div>
+				<div id="leftButton" class="controllerButton"></div>
+				<div id="rightButton" class="controllerButton"></div>
+			</div>
+			<div id="leftJoyConOther">
+				<div id="minusButton" class="controllerButton"></div>
+				<div id="captureButton" class="controllerButton"></div>
+				<div id="lButton" class="controllerButton">L Button</div>
+				<div id="zlButton" class="controllerButton">ZL Button</div>
+			</div>
+		</div>
+		<div id="rightJoyCon">
+			<canvas id="rightJoyConCanvas"></canvas>
+			<div id="rightStick"></div>
+			<div id="rightStick2"></div>
+			<div id="abxyButtons">
+				<div id="xButton" class="controllerButton"></div>
+				<div id="bButton" class="controllerButton"></div>
+				<div id="yButton" class="controllerButton"></div>
+				<div id="aButton" class="controllerButton"></div>
+			</div>
+			<div id="rightJoyConOther">
+				<div id="plusButton" class="controllerButton"></div>
+				<div id="homeButton" class="controllerButton"></div>
+				<div id="rButton" class="controllerButton">R Button</div>
+				<div id="zrButton" class="controllerButton">ZR Button</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	let socket = io("https://twitchplaysnintendoswitch.com", {
+		path: "/8110/socket.io",
+	});
+	let restPos = 128;
+
+
+
+	let leftJoyConImage;
+	let rightJoyConImage;
+
+
+	/* TOUCH CONTROLS */
+	function drawJoyCons() {
+		let leftJoyConCanvas = $("#leftJoyConCanvas")[0];
+		leftJoyConCanvas.width = 500;
+		leftJoyConCanvas.height = 500;
+		let leftJoyConCtx = leftJoyConCanvas.getContext("2d");
+		/*let */
+		leftJoyConImage = new Image();
+		leftJoyConImage.onload = function() {
+			let imgWidth = leftJoyConImage.width;
+			let imgHeight = leftJoyConImage.height;
+			let canvasWidth = leftJoyConCanvas.width;
+			let canvasHeight = leftJoyConCanvas.height;
+			let ratio = (imgHeight / imgWidth);
+			let canvasRatio = canvasWidth / canvasHeight;
+			let ratioW = 500 / $("#leftJoyConCanvas").innerWidth();
+			let ratioH = 500 / $("#leftJoyConCanvas").innerHeight();
+			let cWidth = $("#leftJoyConCanvas").innerWidth();
+			leftJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+			leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+		};
+		setTimeout(function() {
+			leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
+		}, 1000);
+
+
+		let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
+		rightJoyConCanvas.width = 500;
+		rightJoyConCanvas.height = 500;
+		let rightJoyConCtx = rightJoyConCanvas.getContext("2d");
+		/*let */
+		rightJoyConImage = new Image();
+		rightJoyConImage.onload = function() {
+			let imgWidth = rightJoyConImage.width;
+			let imgHeight = rightJoyConImage.height;
+			let canvasWidth = rightJoyConCanvas.width;
+			let canvasHeight = rightJoyConCanvas.height;
+			let ratio = (imgHeight / imgWidth);
+			let canvasRatio = canvasWidth / canvasHeight;
+			let ratioW = 500 / $("#rightJoyConCanvas").innerWidth();
+			let ratioH = 500 / $("#rightJoyConCanvas").innerHeight();
+			let cWidth = $("#rightJoyConCanvas").innerWidth();
+			rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+			rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+		};
+		setTimeout(function() {
+			rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
+		}, 1000);
+	}
+	drawJoyCons();
+
+
+	function addJoyCons(tab, actual) {
+
+		actual = actual || false;
+
+		if (!actual) {
+			tab = tab + "View";
+		}
+
+		// delete old joycons:
+		try {
+			leftStick.destroy();
+			rightStick.destroy();
+		} catch (e) {
+			console.log("JoyCon delete error.");
+		}
+
+		$("#leftJoyCon").remove();
+		$("#rightJoyCon").remove();
+
+
+		let leftJoyConHTML = `
+	<div id="leftJoyCon">
+		<canvas id="leftJoyConCanvas"></canvas>
+		<div id="leftStick"></div>
+		<div id="leftStick2"></div>
+		<div id="dpadButtons">
+			<div id="upButton" class="controllerButton"></div>
+			<div id="downButton" class="controllerButton"></div>
+			<div id="leftButton" class="controllerButton"></div>
+			<div id="rightButton" class="controllerButton"></div>
+		</div>
+		<div id="leftJoyConOther">
+			<div id="minusButton" class="controllerButton"></div>
+			<div id="captureButton" class="controllerButton"></div>
+			<div id="lButton" class="controllerButton">L Button</div>
+			<div id="zlButton" class="controllerButton">ZL Button</div>
+		</div>
+	</div>`;
+
+		let rightJoyConHTML = `
+	<div id="rightJoyCon">
+		<canvas id="rightJoyConCanvas"></canvas>
+		<div id="rightStick"></div>
+		<div id="rightStick2"></div>
+		<div id="abxyButtons">
+			<div id="xButton" class="controllerButton"></div>
+			<div id="bButton" class="controllerButton"></div>
+			<div id="yButton" class="controllerButton"></div>
+			<div id="aButton" class="controllerButton"></div>
+		</div>
+		<div id="rightJoyConOther">
+			<div id="plusButton" class="controllerButton"></div>
+			<div id="homeButton" class="controllerButton"></div>
+			<div id="rButton" class="controllerButton">R Button</div>
+			<div id="zrButton" class="controllerButton">ZR Button</div>
+		</div>
+	</div>`;
+
+		$(tab).prepend(leftJoyConHTML);
+		$(tab).prepend(rightJoyConHTML);
+
+		// rebind touch controls:
+		$("#touchControlsCheckbox").trigger("click");
+		$("#touchControlsCheckbox").trigger("click");
+
+		// redraw joycons:
+		drawJoyCons();
+
+		// resize window:
+		setVideoWidth(73.2);
+
+		// rebind sticks:
+		leftJoyStick.zone = document.querySelector("#leftStick");
+		rightJoyStick.zone = document.querySelector("#rightStick");
+		leftStick = nipplejs.create(leftJoyStick);
+		rightStick = nipplejs.create(rightJoyStick);
+		bindJoysticks();
+	}
+
+
+	socket.on("controllerState1", function(data) {
+
+		let str = data;
+		let dpad = str[0];
+
+		let btns = [];
+		let unpressedBtns = ["upButton", "downButton", "leftButton", "rightButton", "aButton", "bButton", "xButton", "yButton", "lButton", "zlButton", "rButton", "zrButton", "minusButton", "captureButton", "plusButton", "homeButton", "leftStick", "rightStick"];
+
+		if (dpad == "7") {
+			btns.push("upButton");
+			btns.push("leftButton");
+		} else if (dpad == "1") {
+			btns.push("upButton");
+			btns.push("rightButton");
+		} else if (dpad == "5") {
+			btns.push("downButton");
+			btns.push("leftButton");
+		} else if (dpad == "3") {
+			btns.push("downButton");
+			btns.push("rightButton");
+		} else if (dpad == "0") {
+			btns.push("upButton");
+		} else if (dpad == "4") {
+			btns.push("downButton");
+		} else if (dpad == "6") {
+			btns.push("leftButton");
+		} else if (dpad == "2") {
+			btns.push("rightButton");
+		} else if (dpad == "8") {
+			// nothing
+		}
+
+		if (str[6] == "1") {
+			btns.push("aButton");
+		}
+		if (str[7] == "1") {
+			btns.push("bButton");
+		}
+		if (str[8] == "1") {
+			btns.push("xButton");
+		}
+		if (str[9] == "1") {
+			btns.push("yButton");
+		}
+
+
+		if (str[2] == "1") {
+			btns.push("lButton");
+		}
+		if (str[3] == "1") {
+			btns.push("zlButton");
+		}
+
+		if (str[11] == "1") {
+			btns.push("rButton");
+		}
+		if (str[12] == "1") {
+			btns.push("zrButton");
+		}
+
+
+		if (str[4] == "1") {
+			btns.push("minusButton");
+		}
+		if (str[5] == "1") {
+			btns.push("captureButton");
+		}
+
+		if (str[13] == "1") {
+			btns.push("plusButton");
+		}
+		if (str[14] == "1") {
+			btns.push("homeButton");
+		}
+
+		if (str[1] == "1") {
+			btns.push("leftStick");
+		}
+		if (str[10] == "1") {
+			btns.push("rightStick");
+		}
+
+		unpressedBtns = unpressedBtns.filter(function(el) {
+			return !btns.includes(el);
+		});
+
+		for (let i = 0; i < btns.length; i++) {
+			$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)"; //50bb50
+		}
+		for (let i = 0; i < unpressedBtns.length; i++) {
+			$("#" + unpressedBtns[i])[0].style.background = "";
+		}
+
+		let stickPositions = str.substring(16).split(" ");
+
+		let scale = 0.3;
+		let LX = (parseInt(stickPositions[0]) - restPos) * scale;
+		let LY = (parseInt(stickPositions[1]) - restPos) * scale;
+		let RX = (parseInt(stickPositions[2]) - restPos) * scale;
+		let RY = (parseInt(stickPositions[3]) - restPos) * scale;
+
+		LY *= -1;
+		RY *= -1;
+
+		let leftTransform = LX + "px" + "," + LY + "px";
+		let rightTransform = RX + "px" + "," + RY + "px";
+
+		$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
+		$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
+
+	});
+</script>
+
+</html>

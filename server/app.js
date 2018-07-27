@@ -40,7 +40,16 @@ let lagless1Settings = {
 	scale: 30,
 };
 let lagless2Settings = {scale: 960, videoBitrate: 1};
-let lagless4Settings = {scale: 960, videoBitrate: 1};
+// let lagless4Settings = {scale: 960, videoBitrate: 1};
+let lagless4Settings = {
+	x1: 0,
+	y1: 0,
+	x2: 1366,
+	y2: 768,
+	fps: 5,
+	quality: 30,
+	scale: 30,
+};
 
 let lastImage = "";
 let usernameDB;
@@ -394,6 +403,14 @@ io.on("connection", function(socket) {
 		}
 		io.to("viewers").emit("viewImage", data);
 	});
+	
+	socket.on("screenshot4", function(data) {
+		lastImage = data;
+		if (lastImage === "") {
+			io.emit("restart");
+		}
+		io.to("viewers4").emit("viewImage4", data);
+	});
 
 
 	// directed:
@@ -709,7 +726,8 @@ io.on("connection", function(socket) {
 	/* LAGLESS4 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless4Settings", function(data) {
 		currentTurnUsernames[0] = controlQueues[0][0];
-		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0) {
+		currentTurnUsernames[4] = controlQueues[4][0];
+		if (client.username != currentTurnUsernames[4] && controlQueues[4].length > 0) {
 			io.emit("lagless4Settings", lagless4Settings);
 			return;
 		}
@@ -1097,4 +1115,19 @@ function stream() {
 	}
 	setTimeout(stream, 1000 / lagless1Settings.fps);
 }
+
+function stream4() {
+	let obj = {};
+	obj.x1 = lagless4Settings.x1;
+	obj.y1 = lagless4Settings.y1;
+	obj.x2 = lagless4Settings.x2;
+	obj.y2 = lagless4Settings.y2;
+	obj.q = lagless4Settings.quality;
+	obj.s = lagless4Settings.scale;
+	if (lagless4ClientIds.length > 0) {
+		io.to("lagless4Host").emit("ss3", obj);
+	}
+	setTimeout(stream4, 1000 / lagless4Settings.fps);
+}
 stream();
+stream4();
