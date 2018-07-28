@@ -34,6 +34,8 @@ let settings = {
 	deadzone: 50,
 	stickSensitivityX: 1,
 	stickSensitivityY: 1,
+	keyboardProfiles: {},
+	tab: 2,
 };
 // let toggleAudio = false;
 // let toggleDarkTheme = false;
@@ -62,8 +64,6 @@ let turnUsername = null;
 let turnUsername2 = null;
 let lastCurrentTime = 0;
 let lastCurrentTime2 = 0;
-
-let wiiU3DsTab = false;
 
 let mouseMoveTimer = null;
 let isMobile = false;
@@ -101,7 +101,6 @@ if (isMobile) {
 	});
 }
 
-
 let now;
 let elapsed;
 let fpsInterval = 1000 / 10;
@@ -137,6 +136,7 @@ keyboardLayout.Minus = "-";
 keyboardLayout.Plus = "=";
 keyboardLayout.Capture = "1";
 keyboardLayout.Home = "2";
+settings.keyboardProfiles.default = keyboardLayout;
 
 function getMeta(url, callback) {
 	let img = new Image();
@@ -258,11 +258,6 @@ function sendControllerState() {
 		!document.getElementById("mouseControlsCheckbox").checked) {
 		return;
 	}
-	
-// 	if (wiiU3DsTab) {
-// 		socket.emit("sendControllerStateWiiU3Ds", newControllerState);
-// 		return;
-// 	}
 	
 // 	if(controlQueues[0].indexOf(twitchUsername) == -1 && currentPlayerChosen == 0) {
 // 		socket.emit("requestTurn", 0);
@@ -592,7 +587,7 @@ gamepad.on("press", "shoulder_top_right", e => {
 	controller.btns.r = 1;
 });
 gamepad.on("release", "shoulder_top_right", e => {
-	controller.tns.r = 0;
+	controller.btns.r = 0;
 });
 
 gamepad.on("press", "shoulder_bottom_left", e => {
@@ -852,47 +847,50 @@ function getGamepadInput() {
 
 /* SAVEABLE SETTINGS */
 
-
-// Get stored preferences
-localforage.getItem("settings").then(function(value) {
-	// If they exist, write them
-	if (value) {
-		settings = Object.assign({}, settings, value);
-	}
-	// Store the preferences (so that the default values get stored)
-	localforage.setItem("settings", settings);
-});
-
-setTimeout(function() {
-	if (settings.darkTheme) {
-		$("#darkThemeCheckbox").trigger("click");
-		$("#darkThemeCheckbox")[0].checked = true;
-	}
-	if (settings.audio) {
-		$("#audioCheckbox").trigger("click");
-		$("#audioCheckbox")[0].checked = true;
-	}
-	setTimeout(function() {
-		if (/*settings.touchControls*/true) {
-			$("#touchControlsCheckbox").trigger("click");
-			$("#touchControlsCheckbox")[0].checked = true;
+// restore preferences:
+$(document).ready(function() {
+	
+	console.log("restoring preferences");
+	
+	// Get stored preferences
+	localforage.getItem("settings").then(function(value) {
+		// If they exist, write them
+		if (typeof value != "undefined") {
+			console.log(JSON.parse(value));
+			settings = Object.assign({}, settings, JSON.parse(value));
 		}
-	}, 1000);
-	if (settings.fullscreen) {
-		$("#fullscreenCheckbox").trigger("click");
-		$("#fullscreenCheckbox")[0].checked = true;
-	}
-	// if (settings.mouseControls) {
-	// 	$("#touchControlsCheckbox").trigger("click");
-	// }
-	
-	$("#deadzoneSlider").slider("value", settings.deadzone);
-	$("#deadzone").text(settings.deadzone);
-	
-	$("#stickSensitivitySlider").slider("value", settings.stickSensitivityX);
-	$("#sensitivity").text(settings.stickSensitivityX);
-	
-}, 3000);
+		// Store the preferences (so that the default values get stored)
+		localforage.setItem("settings", JSON.stringify(settings));
+		
+		if (settings.darkTheme) {
+			$("#darkThemeCheckbox").trigger("click");
+		}
+		if (settings.audio) {
+			$("#audioCheckbox").trigger("click");
+		}
+		if (settings.touchControls) {
+			$("#touchControlsCheckbox").trigger("click");
+// 			settings.touchControls = true;
+// 			$("#touchControlsCheckbox")[0].checked = true;
+		}
+		if (settings.fullscreen) {
+			$("#fullscreenCheckbox").trigger("click");
+		}
+		// if (settings.mouseControls) {
+		// 	$("#touchControlsCheckbox").trigger("click");
+		// }
+
+		$("#deadzoneSlider").slider("value", settings.deadzone);
+		$("#deadzone").text(settings.deadzone);
+
+		$("#stickSensitivitySlider").slider("value", settings.stickSensitivityX);
+		$("#sensitivity").text(settings.stickSensitivityX);
+		
+		rebindUnbindTouchControls();
+		clearAndReplaceProfiles();
+		setKeyboardMapperClasses();
+	});
+});
 
 
 $("#keyboard li").on("click", function(event) {
@@ -950,15 +948,15 @@ $("#keyboard li").on("click", function(event) {
 		// delete pair:
 		$(that).attr("title", "");
 		try {
-			$(that).tooltip("destroy");
 			$(that).tooltip("dispose");
+			$(that).tooltip("destroy");
 		} catch(e) {}
 		
 		let action = $("#" + keyboardLayout.tempSelectedAction);
 		action.attr("title", "");
 		try {
-			action.tooltip("destroy");
 			action.tooltip("dispose");
+			action.tooltip("destroy");
 		} catch(e) {}
 		action.removeClass("actionPaired");
 		
@@ -1009,7 +1007,33 @@ $("#keyboardConfigCodes2 li").on("click", function(event) {
 		
 		keyboardLayout.tempSelectedKey = "";
 		keyboardLayout.tempSelectedAction = "";
+	
 	}
+	// unbind:
+// 	} else if ($(this).attr("data-original-title") !== "") {
+		
+// 		keyboardLayout[action] = "";
+		
+// 		// unbind key as well:
+// 		let element = $("#" + $(this).attr("title"));
+// 		element.removeClass("keyPaired");
+// 		element.attr("title", "");
+// 		try {
+// 			element.tooltip("dispose");
+// 			element.tooltip("destroy");
+// 		} catch(e) {}
+		
+// 		$(this).attr("title", "");
+// 		$(this).removeClass("actionPaired");
+// 		try {
+// 			$(this).tooltip("dispose");
+// 			$(this).tooltip("destroy");
+// 		} catch(e) {}
+		
+// 		keyboardLayout.tempSelectedKey = "";
+// 		keyboardLayout.tempSelectedAction = "";
+// 		setKeyboardMapperClasses();
+// 	}
 	
 	
 	
@@ -1021,15 +1045,15 @@ function setKeyboardMapperClasses() {
 	$("#keyboard li").removeClass("keySelected");
 // 	$("#keyboard li").tooltip("destroy");
 	try {
-		$("#keyboard li").tooltip("destroy");
 		$("#keyboard li").tooltip("dispose");
+		$("#keyboard li").tooltip("destroy");
 	} catch(e) {}
 	$("#keyboardConfigCodes2 li").removeClass("actionPaired");
 	$("#keyboardConfigCodes2 li").removeClass("actionSelected");
 // 	$("#keyboardConfigCodes2 li").tooltip("destroy");
 	try {
-		$("#keyboardConfigCodes2 li").tooltip("destroy");
 		$("#keyboardConfigCodes2 li").tooltip("dispose");
+		$("#keyboardConfigCodes2 li").tooltip("destroy");
 	} catch(e) {}
 
 	for (let key in keyboardLayout) {
@@ -1040,7 +1064,7 @@ function setKeyboardMapperClasses() {
 			continue;
 		}
 
-		letent = $("#" + prop);
+		let element = $("#" + prop);
 		element.addClass("keyPaired");
 
 		element.attr("data-toggle", "tooltip");
@@ -1066,24 +1090,22 @@ function setKeyboardMapperClasses() {
 	}
 }
 
-setKeyboardMapperClasses();
-
 $("#resetBindings").on("click", function(event) {
 	
 	$("#keyboard li").removeClass("keyPaired");
 	$("#keyboard li").removeClass("keySelected");
 // 	$("#keyboard li").tooltip("destroy");
 	try {
-		$("#keyboard li").tooltip("destroy");
 		$("#keyboard li").tooltip("dispose");
+		$("#keyboard li").tooltip("destroy");
 	} catch(e) {}
 
 	$("#keyboardConfigCodes2 li").removeClass("actionPaired");
 	$("#keyboardConfigCodes2 li").removeClass("actionSelected");
 // 	$("#keyboardConfigCodes2 li").tooltip("destroy");
 	try {
-		$("#keyboardConfigCodes2 li").tooltip("destroy");
 		$("#keyboardConfigCodes2 li").tooltip("dispose");
+		$("#keyboardConfigCodes2 li").tooltip("destroy");
 	} catch(e) {}
 	
 	keyboardLayout.tempSelectedAction = "";
@@ -1157,52 +1179,52 @@ $("#loadKeyboardLayout").on("click", function(event) {
 	keyboardLayout = JSON.parse($("#keyboardLayoutPrintout").text());
 });
 
-//change document to #keyboardLayoutConfig using <tabindex="0">
-// $(".buttonConfig").on("click", function(e) {
-// 	$(document).off("keydown");
-// 	//window.addEventListener("keydown", handleKey, false);
-// 	$(document).on("keydown", function(e2) {
-// 		console.log(e2.key);
-// 		let keys = [];
-// 		for (let i in keyboardLayout) {
-// 			keys.push(keyboardLayout[i]);
-// 		}
-// 		//let values = Object.values(preferences.keyboard.layout);
-// 		if (keys.indexOf(e2.key) == -1) {
-// 			$("#" + e.target.id).html(String.fromCharCode(e2.which));
-// 			keyboardLayout[e.target.id] = e2.key;
-// 			localforage.setItem("keyboardLayout", keyboardLayout);
 
-// 			$(document).off("keydown");
-// 			//window.addEventListener("keydown", handleKey, false);
-// 		} else {
-// 			$("#" + e.target.id).animate({
-// 				backgroundColor: "#AC3333"
-// 			}, "fast");
-// 			setTimeout(function() {
-// 				$("#" + e.target.id).animate({
-// 					backgroundColor: "#888"
-// 				}, "slow");
-// 			}, 100);
-// 		}
-// 	});
-// });
-// $("#keyboardLayoutConfig").on("click", function(e) {
-// 	//console.log(e.target);
-// 	let isButton = e.target.classList[0] == "buttonConfig";
-// 	if (!isButton) {
-// 		$(document).off("keydown");
-// 		// 			window.addEventListener("keydown", handleKey, false);
-// 	}
-// });
+/* KEYBOARD PROFILES */
 
-// $("#keyboardController").checkboxpicker({
-// 	html: true,
-// 	offLabel: '<span class="glyphicon glyphicon-remove">',
-// 	onLabel: '<span class="glyphicon glyphicon-ok">'
-// });
+$("#createProfile").on("click", function(event) {
+	
+	let profileName = $("#profileName").val();
+	
+	if (profileName === "") {
+		swal("The profile name cannot be empty!", "", "error");
+		return;
+	} else {
+		
+		settings.keyboardProfiles[profileName] = keyboardLayout;
+		localforage.setItem("settings", JSON.stringify(settings));
+		
+		clearAndReplaceProfiles();
+		swal("Profile created successfully!", "", "success");
+	}
+	
+	$("#profileName").val("");
+});
 
+$("#deleteProfiles").on("click", function(event) {
+	
+	settings.keyboardProfiles = {};
+	localforage.setItem("settings", JSON.stringify(settings));
+	
+	swal("Profiles deleted successfully!", "", "success");
+});
 
+function clearAndReplaceProfiles() {
+	// clear the dropdown menu
+	$(".dropdown-menu").children().remove();
+	// fill it with profiles:
+	for (let key in settings.keyboardProfiles) {
+		let optionHTML = "<button class='dropdown-item'" + " config='" + JSON.stringify(settings.keyboardProfiles[key]) + "'>" + key + "</button>";
+		$(".dropdown-menu").append(optionHTML);
+	}
+	
+	$(".dropdown-item").on("click", function(event) {
+		let configName = $(event.target).text();
+		$("#dropdownMenuLink").text(configName);
+		keyboardLayout = JSON.parse($(event.target).attr("config"));
+		//console.log(JSON.parse($(event.target).attr("config")));
+	});
+}
 
 
 
@@ -1230,9 +1252,10 @@ function drawJoyCons() {
 		leftJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 		leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
 	};
-	setTimeout(function(){
-		leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
-	}, 3000);
+	// todo: remove:
+	//setTimeout(function(){
+	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
+	//}, 3000);
 
 
 	let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
@@ -1253,11 +1276,10 @@ function drawJoyCons() {
 		rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 		rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
 	};
-	setTimeout(function(){
-		rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
-	}, 3000);
+	//setTimeout(function(){
+	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
+	//}, 3000);
 }
-drawJoyCons();
 
 function setVideoWidth(width, num) {
 	if (typeof $("#videoCanvas1")[0] != "undefined") {
@@ -1289,7 +1311,7 @@ function setVideoWidth(width, num) {
 		$(".twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
 		// calculate height for twitch:
 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width();
-		$(".twitchVideo")[0].style.height = (width/100) * (/16) * containerWidth;
+		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
 	}
 	
 	$("#rightJoyCon")[0].style["margin-left"] = (width) + ((100-width)/2) + "%";
@@ -1300,7 +1322,7 @@ function setVideoWidth(width, num) {
 }
 
 setTimeout(function() {
-	setVideoWidth(73.2);
+	//setVideoWidth(73.2);
 	// 20px is for well class:
 	$("#twitchChat").height( $("#navTabs").height() + $("#videoCanvas1").height() + $("#videoCanvas2").height() + $("#videoCanvas3").height() + 20 );
 }, 2000);
@@ -1481,22 +1503,17 @@ function onButtonPress(e) {
 	
 }
 
-
-// $("#videoCanvas2")[0].style.width = "100%";
-// $("#videoCanvas2")[0].style["margin-left"] = "0";
-$("#touchControlsCheckbox").on("click", function() {
-	
-	settings.touchControls = !settings.touchControls;
-	localforage.setItem("settings", settings);
-	
+function rebindUnbindTouchControls() {
 	let buttonsList = ["#dpadButtons", "#abxyButtons", "#leftJoyConOther", "#rightJoyConOther"];
 	
-	if ($("#touchControlsCheckbox")[0].checked) {
+	if (settings.touchControls) {
 		
-		$("#leftJoyCon")[0].style.display = "";
-		$("#rightJoyCon")[0].style.display = "";
-		
-		setVideoWidth(73.2);
+		try {
+			$("#leftJoyCon")[0].style.display = "";
+			$("#rightJoyCon")[0].style.display = "";
+			setVideoWidth(73.2);
+		} catch(error) {
+		}
 		
 		for (let i = 0; i < buttonsList.length; i++) {
 			$(buttonsList[i]).bind("touchstart", onButtonPress);
@@ -1528,6 +1545,19 @@ $("#touchControlsCheckbox").on("click", function() {
 		}
 		
 	}
+}
+
+
+// $("#videoCanvas2")[0].style.width = "100%";
+// $("#videoCanvas2")[0].style["margin-left"] = "0";
+$("#touchControlsCheckbox").on("click", function() {
+	
+	console.log("checked touch controls")
+	settings.touchControls = $("#touchControlsCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+
+	rebindUnbindTouchControls();
+
 });
 
 // setTimeout(function() {
@@ -1623,7 +1653,7 @@ $("#fpsSlider").slider({
 
 $("#deadzoneSlider").slider({
     min: 1,
-    max: 50,
+    max: 100,
 	step: 1,
     value: 50,
 	range: "min",
@@ -1648,7 +1678,7 @@ $("#stickSensitivitySlider").slider({
 		settings.stickSensitivityY = ui.value;
   	},
 	stop: function(event, ui) {
-		localforage.setItem("settings", settings);
+		localforage.setItem("settings", JSON.stringify(settings));
 	}
 });
 
@@ -1803,7 +1833,7 @@ $("#offsetYSlider4").slider({
 });
 
 socket.on("lagless4Settings", function(data) {
-	lagless4Settingsassign({}, lagless4Settings, data);
+	lagless4Settings = Object.assign({}, lagless4Settings, data);
 	
 	$("#scale4").text(lagless4Settings.scale);
 	$("#scaleSlider4").slider("value", lagless4Settings.scale);
@@ -2003,7 +2033,7 @@ socket2.on("viewImage4", function(data) {
 
 // default:
 setTimeout(function() {
-	$("#tab2").trigger("click");
+	$("#tab" + settings.tab).trigger("click");
 }, 100);
 
 /* RESIZABLE */
@@ -2146,8 +2176,7 @@ function addJoyCons(tab, actual) {
 	$(tab).prepend(rightJoyConHTML);
 	
 	// rebind touch controls:
-	$("#touchControlsCheckbox").trigger("click");
-	$("#touchControlsCheckbox").trigger("click");
+	rebindUnbindTouchControls();
 	
 	// redraw joycons:
 	drawJoyCons();
@@ -2171,83 +2200,76 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
 	let tab = $(e.target);
 	let contentId = tab.attr("href");
+		
+	currentTab = contentId;
 
-	// check if the tab is active
-	if (tab.parent().hasClass("active")) {
-		
-		currentTab = contentId;
-		
-		// lagless 1:
-		if (contentId == "#lagless1") {
+	// lagless 1:
+	if (contentId == "#lagless1") {
+		socket2.emit("join", "viewers");
+		socket.emit("joinLagless1");
+		// todo: fix this:
+		clearInterval(lagless1JoinTimer);
+		lagless1JoinTimer = setInterval(function() {
 			socket2.emit("join", "viewers");
-			socket.emit("joinLagless1");
-			// todo: fix this:
-			clearInterval(lagless1JoinTimer);
-			lagless1JoinTimer = setInterval(function() {
-				socket2.emit("join", "viewers");
-			}, 5000);
-			$("#lagless1Volume").slider("value", 50);
-			audioElem.volume = 0.5;// doesn't update automatically :/
-		} else {
-			clearInterval(lagless1JoinTimer);
-			socket2.emit("leave", "viewers");
-		}
-		
-		// lagless 2:
-		if (contentId == "#lagless2") {
-			socket.emit("joinLagless2");
-			if (typeof player != "undefined") {
-				player.play();
-			}
-			$("#lagless1Volume").slider("value", 0);
-			audioElem.volume = 0;// doesn't update automatically :/
-		} else {
-			if (typeof player != "undefined") {
-				player.stop();
-			}
-		}
-		
-		// lagless 3:
-		if (contentId == "#lagless3") {
-			socket.emit("joinLagless3");
-			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-			wsavc.connect(uri);
-			
-			$("#lagless1Volume").slider("value", 50);
-			audioElem.volume = 0.5;// doesn't update automatically :/
-		} else {
-			try {
-				wsavc.disconnect();
-			} catch(error) {
-			}
-		}
-		
-		// lagless 4:
-		if (contentId == "#lagless4") {
-			socket2.emit("join", "viewers4");
-			socket.emit("joinLagless4");
-			
-			wiiU3DsTab = true;
-			
-			if (typeof player4 != "undefined") {
-				try {
-					player4.play();
-				} catch (e) {
-				}
-			}
-		} else {
-			socket2.emit("leave", "viewers4");
-			if (typeof player4 != "undefined") {
-				try {
-					playep();
-				} catch (e) {
-				}
-			}
-			wiiU3DsTab = false;
-		}
-		
-		addJoyCons(contentId);
+		}, 5000);
+		$("#lagless1Volume").slider("value", 50);
+		audioElem.volume = 0.5;// doesn't update automatically :/
+	} else {
+		clearInterval(lagless1JoinTimer);
+		socket2.emit("leave", "viewers");
 	}
+
+	// lagless 2:
+	if (contentId == "#lagless2") {
+		socket.emit("joinLagless2");
+		if (typeof player != "undefined") {
+			player.play();
+		}
+		$("#lagless1Volume").slider("value", 0);
+		audioElem.volume = 0;// doesn't update automatically :/
+	} else {
+		if (typeof player != "undefined") {
+			player.stop();
+		}
+	}
+
+	// lagless 3:
+	if (contentId == "#lagless3") {
+		socket.emit("joinLagless3");
+		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+		wsavc.connect(uri);
+
+		$("#lagless1Volume").slider("value", 50);
+		audioElem.volume = 0.5;// doesn't update automatically :/
+	} else {
+		try {
+			wsavc.disconnect();
+		} catch(error) {
+		}
+	}
+
+	// lagless 4:
+	if (contentId == "#lagless4") {
+		socket2.emit("join", "viewers4");
+		socket.emit("joinLagless4");
+		if (typeof player4 != "undefined") {
+			try {
+				player4.play();
+			} catch (e) {
+			}
+		}
+	} else {
+		socket2.emit("leave", "viewers4");
+		if (typeof player4 != "undefined") {
+			try {
+				player4.stop();
+			} catch (e) {
+			}
+		}
+	}
+	
+	addJoyCons(contentId);
+	rebindUnbindTouchControls();
 	
 	// https://github.com/yoannmoinet/nipplejs/issues/39
 	// force joysticks to recalculate the center:
@@ -2395,9 +2417,9 @@ meeting.openSignalingChannel = function(callback) {
 
 
 $("#audioCheckbox").on("click", function() {
-	settings.audio = !settings.audio;
-	localforage.setItem("settings", settings);
-	if ($("#audioCheckbox")[0].checked) {
+	settings.audio = $("#audioCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+	if (settings.audio) {
 		meeting.check();
 		setTimeout(function() {
 			audioElem.play();
@@ -2636,7 +2658,7 @@ $("#player3Checkbox").on("click", function(event) {
 		socket.emit("cancelTurn", currentPlayerChosen);
 		currentPlayerChosen = 2;
 		$("#player1Checkbox").prop("checked", false);
-		$("#playckbox").prop("checked", false);
+		$("#player2Checkbox").prop("checked", false);
 		$("#player4Checkbox").prop("checked", false);
 		$("#player5Checkbox").prop("checked", false);
 	} else {
@@ -2677,9 +2699,9 @@ $("#player5Checkbox").on("click", function(event) {
 /* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 $("#darkThemeCheckbox").on("click", function() {
-	settings.darkTheme = !settings.darkTheme;
-	localforage.setItem("settings", settings);
-	if ($("#darkThemeCheckbox")[0].checked) {
+	settings.darkTheme = $("#darkThemeCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+	if (settings.darkTheme) {
 		let icon = $(".glyphicon-fire");
 		icon.removeClass("glyphicon-fire");
 		icon.addClass("glyphicon-certificate");
@@ -2722,9 +2744,9 @@ $("#darkThemeCheckbox").on("click", function() {
 
 /* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 $("#fullscreenCheckbox").on("click", function() {
-	settings.fullscreen = !settings.fullscreen;
-	localforage.setItem("settings", settings);
-	if ($("#fullscreenCheckbox")[0].checked) {
+	settings.fullscreen = $("#fullscreenCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+	if (settings.fullscreen) {
 		$("#videoCanvas1")[0].style.width = "100%";
 		$("#videoCanvas1")[0].style["margin-left"] = "0";
 		$("#videoCanvas2")[0].style.width = "100%";
@@ -2754,14 +2776,13 @@ $("#navCheckbox").on("click", function() {
 
 // start checked:
 $("#chatCheckbox")[0].checked = true;
-
 $("#chatCheckbox").on("click", function() {
-	if (!$("#chatCheckbox")[0].checked) {
-		$("#twitchChat").attr("style", "display: none;");
-		$("#picture").attr("style", "width: 100%;");
-	} else {
+	if ($("#chatCheckbox")[0].checked) {
 		$("#twitchChat").attr("style", "display: visible;");
 		$("#picture").attr("style", "width: 75%;");
+	} else {
+		$("#twitchChat").attr("style", "display: none;");
+		$("#picture").attr("style", "width: 100%;");
 	}
 });
 
@@ -2854,11 +2875,15 @@ socket.on("controllerState1", function(data) {
 		return !btns.includes(el);
 	});
 	
-	for (let i = 0; i < btns.length; i++) {
-		$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)";//50bb50
-	}
-	for (let i = 0; i < unpressedBtns.length; i++) {
-		$("#" + unpressedBtns[i])[0].style.background = "";
+	try {
+		for (let i = 0; i < btns.length; i++) {
+			$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)";//50bb50
+		}
+		for (let i = 0; i < unpressedBtns.length; i++) {
+			$("#" + unpressedBtns[i])[0].style.background = "";
+		}
+	} catch(error) {
+		console.log("buttons missing from DOM");
 	}
 	
 	let stickPositions = str.substring(16).split(" ");
@@ -2875,8 +2900,12 @@ socket.on("controllerState1", function(data) {
 	let leftTransform = LX + "px" + "," + LY + "px";
 	let rightTransform = RX + "px" + "," + RY + "px";
 	
-	$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
-	$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
+	try {
+		$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
+		$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
+	} catch(error) {
+		console.log("sticks missing from DOM");
+	}
 	
 });
 
@@ -2936,5 +2965,4 @@ function startTutorial() {
 	setTimeout(tutorial, 5000);
 	setTimeout(tutorial, 10000);
 }
-
 

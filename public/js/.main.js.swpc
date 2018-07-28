@@ -592,7 +592,7 @@ gamepad.on("press", "shoulder_top_right", e => {
 	controller.btns.r = 1;
 });
 gamepad.on("release", "shoulder_top_right", e => {
-	controller.tns.r = 0;
+	controller.btns.r = 0;
 });
 
 gamepad.on("press", "shoulder_bottom_left", e => {
@@ -746,7 +746,7 @@ gamepad.on("release", "stick_axis_right", e => {
 	y *= 255;
 	controller.RStick.x = parseInt(x);
 	controller.RStick.y = parseInt(y);
-	let thresh = parseInt($("#deadzone")text());
+	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
 		controller.RStick.x = restPos;
 	}
@@ -1187,7 +1187,7 @@ $("#loadKeyboardLayout").on("click", function(event) {
 // 		}
 // 	});
 // });
-// $(ardLayoutConfig").on("click", function(e) {
+// $("#keyboardLayoutConfig").on("click", function(e) {
 // 	//console.log(e.target);
 // 	let isButton = e.target.classList[0] == "buttonConfig";
 // 	if (!isButton) {
@@ -1601,7 +1601,7 @@ $("#scaleSlider").slider({
 	animate: true,
 	slide: function(event, ui) {
 		$("#scale").text(ui.value);
-		socket.emit("lagless1Settings", {scarseInt(ui.value)});
+		socket.emit("lagless1Settings", {scale: parseInt(ui.value)});
   	},
 	stop: function(event, ui) {
 	}
@@ -2079,7 +2079,7 @@ setTimeout(function() {
 //         y = (parseFloat(target.getAttribute("data-y")) || 0);
 
 //     // update the element's style
-//     target.style.widevent.rect.width + "px";
+//     target.style.width  = event.rect.width + "px";
 //     target.style.height = event.rect.height + "px";
 //   });
 
@@ -2520,7 +2520,9 @@ socket.on("controlQueues", function(data) {
 
 socket.on("twitchUsername", function(data) {
 	twitchUsername = data;
-cket.on("turnTimesLeft", function(data) {
+});
+
+socket.on("turnTimesLeft", function(data) {
 	
 	lastCurrentTime = Date.now();
 	viewerCounts = data.viewerCounts;
@@ -2934,5 +2936,4 @@ function startTutorial() {
 	setTimeout(tutorial, 5000);
 	setTimeout(tutorial, 10000);
 }
-
 
