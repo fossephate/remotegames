@@ -98,6 +98,16 @@
 								<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
 									<i class="fas fa-keyboard" style="font-size: 25px;"></i>
 								</button>
+								<div class="keyboardDropdown dropdown show">
+									<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Keyboard Profiles
+									</a>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+										<button class="dropdown-item">default</button>
+										<button class="dropdown-item">Custom 1</button>
+										<button class="dropdown-item">Custom 2</button>
+									</div>
+								</div>
 							</div>
 					</div>
 				</div>
@@ -156,6 +166,16 @@
 							<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
 								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
 							</button>
+							<div class="keyboardDropdown dropdown show">
+								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Keyboard Profiles
+								</a>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+									<button class="dropdown-item">default</button>
+									<button class="dropdown-item">Custom 1</button>
+									<button class="dropdown-item">Custom 2</button>
+								</div>
+							</div>
 							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 <!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
 						</div>
@@ -256,8 +276,7 @@
 							<button id="cancelTurn4" class="cancelTurn btn btn-secondary">Cancel Turn</button>
 							<ul id="controlQueue4" class="controlQueue list-group"></ul>
 						</div>
-						
-						<div id="player5" class="player">
+<!-- 						<div id="player5" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player5Checkbox" type="checkbox" />
 								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
@@ -272,6 +291,26 @@
 							<button id="requestTurn5" class="requestTurn btn btn-secondary">Request Turn</button>
 							<button id="cancelTurn5" class="cancelTurn btn btn-secondary">Cancel Turn</button>
 							<ul id="controlQueue5" class="controlQueue list-group"></ul>
+						</div> -->
+						<div id="splits">
+							<div id="splitMetaContainer">
+								<div id="splitContainer">
+									<ul id="splitNames" class="list-group">
+										<li class="list-group-item">Great Plateau</li>
+										<li class="list-group-item">Enter Hyrule Castle</li>
+										<li class="list-group-item">Enter Sanctum</li>
+										<li class="list-group-item">Blights</li>
+										<li class="list-group-item">Calamity Ganon</li>
+										<li class="list-group-item">Dark Beast</li>
+									</ul>
+									<ul id="splitTimes" class="list-group"></ul>
+								</div>
+								<ul id="times" class="list-group">
+									<li class="list-group-item"></li>
+								</ul>
+							</div>
+							<btn id="moveToNextSplit" class="btn btn-primary">Split</btn>
+							<btn id="removeLastSplit" class="btn btn-primary">Remove Last Split</btn>
 						</div>
 					</div>
 

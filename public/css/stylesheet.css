@@ -1318,3 +1318,26 @@ clear: left;
     -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
     box-shadow: inset 0 1px 1px rgba(0,0,0,.05);
 }
+
+
+/* SPLITS */
+#splitMetaContainer {
+	display: flex;
+	flex-direction: column;
+	width: max-content;
+}
+#splitContainer {
+	display: flex;
+	flex-direction: row;
+	width: max-content;
+}
+#splitNames {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+}
+#splitTimes {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+}

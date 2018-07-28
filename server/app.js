@@ -325,6 +325,36 @@ function findClientByUsername(username) {
 	return index;
 }
 
+function SplitTimer(startTime, splitNames, name) {
+	//this.startTime = startTime;
+	this.startTime = new Date();
+	this.splitNames = splitNames;
+	this.name = name;
+	this.currentSplit = 0;
+	this.currentTime = 0;
+	this.times = [];
+
+	this.addSplit = function(splitName) {
+		this.splitNames.push(splitName);
+	}
+	this.moveToNextSplit = function() {
+		this.currentSplit += 1;
+		let time = (new Date()) - this.startTime;
+		this.times.push(time);
+		this.currentTime = time;
+	}
+	this.removeLastSplit = function() {
+		this.currentSplit -= 1;
+		this.times.pop();
+	}
+	this.getCurrentTime = function() {
+		let time = (new Date() - this.startTime);
+		this.currentTime = time;
+		return time;
+	}
+	return this;
+}
+
 io.set("transports", [
 	"polling",
 	"websocket",
@@ -917,6 +947,56 @@ io.on("connection", function(socket) {
 			lagless4ClientIds.splice(index, 1);
 		}
 	});
+	
+	
+	/* SPLIT TIMER */
+	socket.on("createSplitTimer", function(data) {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		let client = clients[index];
+		// todo: improve this:
+		if (client.username != "harmjan387" && client.username != "twitchplaysconsoles") {
+			return;
+		}
+		splitTimer = SplitTimer(data.startTime, data.splitNames, data.name);
+	});
+	
+	socket.on("moveToNextSplit", function(data) {
+		//harmjan387
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		let client = clients[index];
+		// todo: improve this:
+		if (client.username != "harmjan387" && client.username != "twitchplaysconsoles") {
+			return;
+		}
+		try {
+			splitTimer.moveToNextSplit();
+		} catch(error) {
+		}
+	});
+	
+	socket.on("removeLastSplit", function(data) {
+		//harmjan387
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		let client = clients[index];
+		// todo: improve this:
+		if (client.username != "harmjan387" && client.username != "twitchplaysconsoles") {
+			return;
+		}
+		try {
+			splitTimer.removeLastSplit();
+		} catch(error) {
+		}
+		io.emit("clearSplitTimes");
+	});
 
 });
 
@@ -1096,16 +1176,28 @@ setInterval(function() {
 	io.emit("controlQueues", {
 		queues: controlQueues
 	});
+	
+	if (splitTimer != null) {
+		splitTimer.getCurrentTime();
+		let obj = {
+			times: splitTimer.times,
+			splitNames: splitTimer.splitNames,
+			currentTime: splitTimer.getCurrentTime(),
+		};
+		io.emit("splitTimes", obj);
+	}
+	
 }, 500);
 
 function stream() {
-	let obj = {};
-	obj.x1 = lagless1Settings.x1;
-	obj.y1 = lagless1Settings.y1;
-	obj.x2 = lagless1Settings.x2;
-	obj.y2 = lagless1Settings.y2;
-	obj.q = lagless1Settings.quality;
-	obj.s = lagless1Settings.scale;
+	let obj = {
+		x1: lagless1Settings.x1,
+		y1: lagless1Settings.y1,
+		x2: lagless1Settings.x2,
+		y2: lagless1Settings.y2,
+		q: lagless1Settings.quality,
+		s: lagless1Settings.scale,
+	};
 	if (lagless1ClientIds.length > 0) {
 		io.to("lagless1Host").emit("ss3", obj);
 	}
@@ -1113,13 +1205,14 @@ function stream() {
 }
 
 function stream4() {
-	let obj = {};
-	obj.x1 = lagless4Settings.x1;
-	obj.y1 = lagless4Settings.y1;
-	obj.x2 = lagless4Settings.x2;
-	obj.y2 = lagless4Settings.y2;
-	obj.q = lagless4Settings.quality;
-	obj.s = lagless4Settings.scale;
+	let obj = {
+		x1: lagless4Settings.x1,
+		y1: lagless4Settings.y1,
+		x2: lagless4Settings.x2,
+		y2: lagless4Settings.y2,
+		q: lagless4Settings.quality,
+		s: lagless4Settings.scale,
+	};
 	if (lagless4ClientIds.length > 0) {
 		io.to("lagless4Host").emit("ss3", obj);
 	}

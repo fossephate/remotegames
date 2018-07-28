@@ -14,6 +14,8 @@ let currentPlayerChosen = 0;
 let wasPressedKeyCodes = [];
 let viewerCounts = [];
 let viewers = [];
+let lastSplitTime = 0;
+let lastSplitTimeMS = 0;
 
 let controlQueues = [];
 let controlQueue1 = [];
@@ -856,7 +858,6 @@ $(document).ready(function() {
 	localforage.getItem("settings").then(function(value) {
 		// If they exist, write them
 		if (typeof value != "undefined") {
-			console.log(JSON.parse(value));
 			settings = Object.assign({}, settings, JSON.parse(value));
 		}
 		// Store the preferences (so that the default values get stored)
@@ -1172,40 +1173,27 @@ $("#defaultBindings").on("click", function(event) {
 	keyboardLayout.Home = "2";
 	setKeyboardMapperClasses();
 });
-$("#printKeyboardLayout").on("click", function(event) {
-	$("#keyboardLayoutPrintout").text(JSON.stringify(keyboardLayout));
-});
-$("#loadKeyboardLayout").on("click", function(event) {
-	keyboardLayout = JSON.parse($("#keyboardLayoutPrintout").text());
-});
 
 
 /* KEYBOARD PROFILES */
 
 $("#createProfile").on("click", function(event) {
-	
 	let profileName = $("#profileName").val();
-	
 	if (profileName === "") {
 		swal("The profile name cannot be empty!", "", "error");
 		return;
 	} else {
-		
 		settings.keyboardProfiles[profileName] = keyboardLayout;
 		localforage.setItem("settings", JSON.stringify(settings));
-		
 		clearAndReplaceProfiles();
 		swal("Profile created successfully!", "", "success");
 	}
-	
 	$("#profileName").val("");
 });
 
 $("#deleteProfiles").on("click", function(event) {
-	
 	settings.keyboardProfiles = {};
 	localforage.setItem("settings", JSON.stringify(settings));
-	
 	swal("Profiles deleted successfully!", "", "success");
 });
 
@@ -1222,7 +1210,7 @@ function clearAndReplaceProfiles() {
 		let configName = $(event.target).text();
 		$("#dropdownMenuLink").text(configName);
 		keyboardLayout = JSON.parse($(event.target).attr("config"));
-		//console.log(JSON.parse($(event.target).attr("config")));
+		setKeyboardMapperClasses();
 	});
 }
 
@@ -2965,4 +2953,93 @@ function startTutorial() {
 	setTimeout(tutorial, 5000);
 	setTimeout(tutorial, 10000);
 }
+
+/* SPLITS */
+
+function speedrunWeekendBOTW() {
+	let startTime = new Date();
+	let splitNames = ["Great Plateau", "Enter Hyrule Castle", "Enter Sanctum", "Blights", "Calamity Ganon", "Dark Beast"];
+	let name = "BOTWTimer";
+	
+	let data = {
+		startTime: startTime,
+		splitNames: splitNames,
+		name: name,
+	};
+	socket.emit("createSplitTimer", data);
+}
+
+
+$("#moveToNextSplit").on("click", function(event) {
+	socket.emit("moveToNextSplit");
+});
+$("#removeLastSplit").on("click", function(event) {
+	socket.emit("removeLastSplit");
+});
+
+socket.on("splitTimes", function(data) {
+	let times = data.times;
+	let splitNames = data.splitNames;
+	let currentTime = data.currentTime;
+
+	if ($("#splitTimes").children().length != splitNames.length) {
+		$("#splitTimes").empty();
+		let listHTML;
+		if (settings.darkTheme) {
+			listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
+		} else {
+			listHTML = "<li class='list-group-item'>&nbsp;</li>";
+		}
+		for (let i = 0; i < splitNames.length; i++) {
+			$("#splitTimes").append(listHTML);
+		}
+	}
+	if ($("#splitNames").children().length != splitNames.length) {
+		$("#splitNames").empty();
+		let listHTML;
+		for (let i = 0; i < times.length; i++) {
+			if (settings.darkTheme) {
+				listHTML = "<li class='list-group-item-dark'>" + splitNames[i] + "</li>";
+			} else {
+				listHTML = "<li class='list-group-item'>" + splitNames[i] + "</li>";
+			}
+			$("#splitNames").append(listHTML);
+		}
+	}
+	for (let i = 0; i < times.length; i++) {
+		if (i > splitNames.length-1) {
+			continue;
+		}
+		$("#splitTimes").children()[i].innerHTML = msToTime(times[i]);
+	}
+	let t = (currentTime / 1000);
+	//t.toFixed(3)
+	$("#times").children()[0].innerHTML = msToTime(currentTime);
+	lastSplitTime = new Date();
+	lastSplitTimeMS = currentTime;
+});
+
+socket.on("clearSplitTimes", function(data) {
+// 	$("#splitTimes").empty();
+	let listHTML;
+	if (settings.darkTheme) {
+		listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
+	} else {
+		listHTML = "<li class='list-group-item'>&nbsp;</li>";
+	}
+// 	for (let i = 0; i < splitNames.length; i++) {
+// 		$("#splitTimes").children()[i].replaceWith(listHTML);
+// 	}
+	$("#splitTimes").children().each(function() {
+		$(this).replaceWith(listHTML);
+	});
+});
+
+setInterval(function() {
+	let now = new Date();
+	let timePassed = now - lastSplitTime;
+	let currentTime = lastSplitTimeMS + timePassed;
+	$("#times").children()[0].innerHTML = msToTime(currentTime);
+}, 50);
+
 

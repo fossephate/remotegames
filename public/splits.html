@@ -52,7 +52,6 @@
 
 <body style="margin: 0; padding: 0;">
 	<div id="splitMetaContainer">
-		
 		<div id="splitContainer">
 			<ul id="splitNames" class="list-group">
 				<li class="list-group-item">Great Plateau</li>
@@ -64,7 +63,6 @@
 			</ul>
 			<ul id="splitTimes" class="list-group"></ul>
 		</div>
-		
 		<ul id="times" class="list-group">
 			<li class="list-group-item"></li>
 		</ul>
@@ -76,6 +74,42 @@
 	let socket = io("https://twitchplaysnintendoswitch.com", {
 		path: "/8110/socket.io",
 	});
+	
+	function round(value, precision) {
+		var multiplier = Math.pow(10, precision || 0);
+		return Math.round(value * multiplier) / multiplier;
+	}
+	
+	String.prototype.replaceAll = function(search, replacement) {
+		var target = this;
+		return target.replace(new RegExp(search, "g"), replacement);
+	};
+	
+	function msToTime(duration) {
+		var milliseconds = parseInt((duration % 1000) / 100);
+		var seconds = parseInt((duration / 1000) % 60);
+		var minutes = parseInt((duration / (1000 * 60)) % 60);
+		var hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+		hours = (hours < 10) ? "0" + hours : hours;
+		if (hours.length == 2 || hours.length == 3 && hours[0] == "0") {
+			hours = hours.substr(1);
+		}
+		minutes = (minutes < 10) ? "0" + minutes : minutes;
+		if (minutes.length == 3 || minutes.length == 4) {
+			minutes = minutes.substr(1);
+		}
+		seconds = (seconds < 10) ? "0" + seconds : seconds;
+		if (seconds.length == 3 || seconds.length == 4) {
+			seconds = seconds.substr(1);
+		}
+		//seconds = seconds.replaceAll("-", "");
+		if (seconds.length < 2) {
+			seconds = "0" + seconds;
+		}
+		var time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+		time = time.replaceAll("-", ""); // remove negative signs
+		return time;
+	}
 
 	function createSplitTimer(startTime, splitNames, name) {
 		let obj = {
@@ -100,7 +134,7 @@
 		}
 		this.moveToNextSplit = function() {
 			this.currentSplit += 1;
-			let time = (new Date()) - startTime;
+			let time = (new Date()) - this.startTime;
 			this.times.push(time);
 			this.currentTime = time;
 		}
@@ -109,7 +143,7 @@
 			this.times.pop();
 		}
 		this.getCurrentTime = function() {
-			let time = (new Date()) - startTime;
+			let time = (new Date()) - this.startTime;
 			this.currentTime = time;
 			return time;
 		}
@@ -129,10 +163,10 @@
 		let splitNames = myTimer.splitNames;
 		let currentTime = myTimer.currentTime;
 		
-		if ($("#splitTimes").children().length != times.length) {
+		if ($("#splitTimes").children().length != splitNames.length) {
 			$("#splitTimes").empty();
-			let listHTML = "<li class='list-group-item'>" + "</li>";
-			for (let i = 0; i < times.length; i++) {
+			let listHTML = "<li class='list-group-item'>&nbsp;</li>";
+			for (let i = 0; i < splitNames.length; i++) {
 				$("#splitTimes").append(listHTML);
 			}
 		}
@@ -148,10 +182,10 @@
 // 			if (i > myTimer.splitNames.length-1) {
 // 				continue;
 // 			}
-			let seconds = int(myTimer.times[i] / 1000);
-			let rest = (myTimer.times[i] / 1000) - seconds;
-			let t = seconds + ":" + rest;
-			$("#splitTimes").children()[i].innerHTML = t;
+// 			let seconds = parseInt(myTimer.times[i] / 1000);
+// 			let rest = (myTimer.times[i] / 1000) - seconds;
+// 			let t = seconds + ":" + rest;
+			$("#splitTimes").children()[i].innerHTML = msToTime(myTimer.times[i]);
 		}
 		$("#times").children()[0].innerHTML = myTimer.getCurrentTime() / 1000;
 	}, 50);
@@ -161,16 +195,16 @@
 		let splitNames = data.splitNames;
 		let currentTime = data.currentTime;
 		
-		if ($("#splitTimes").children().length != times.length) {
+		if ($("#splitTimes").children().length != splitNames.length) {
 			$("#splitTimes").empty();
-			let listHTML = "<li class='list-group-item'>" + "</li>";
-			for (let i = 0; i < times.length; i++) {
+			let listHTML = "<li class='list-group-item'>&nbsp;</li>";
+			for (let i = 0; i < splitNames.length; i++) {
 				$("#splitTimes").append(listHTML);
 			}
 		}
 		if ($("#splitNames").children().length != splitNames.length) {
 			$("#splitNames").empty();
-			let listHTML; "<li class='list-group-item'>" + "</li>";
+			let listHTML;
 			for (let i = 0; i < times.length; i++) {
 				listHTML = "<li class='list-group-item'>" + splitNames[i] + "</li>";
 				$("#splitNames").append(listHTML);
@@ -180,48 +214,13 @@
 			if (i > splitNames.length-1) {
 				continue;
 			}
-			let seconds = int(times[i] / 1000);
-			let rest = (times[i] / 1000) - seconds;
-			let t = seconds + ":" + rest;
-			$("#splitTimes").children()[i].innerHTML = t;
+			$("#splitTimes").children()[i].innerHTML = msToTime(times[i]);
 		}
-		$("#times").children()[0].innerHTML = currentTime;
+		$("#times").children()[0].innerHTML = currentTime / 1000;
 	});
 
 
 	setInterval(function() {
-
-		String.prototype.replaceAll = function(search, replacement) {
-			var target = this;
-			return target.replace(new RegExp(search, "g"), replacement);
-		};
-
-
-		function msToTime(duration) {
-			var milliseconds = parseInt((duration % 1000) / 100);
-			var seconds = parseInt((duration / 1000) % 60);
-			var minutes = parseInt((duration / (1000 * 60)) % 60);
-			var hours = parseInt((duration / (1000 * 60 * 60)) % 24);
-			hours = (hours < 10) ? "0" + hours : hours;
-			if (hours.length == 2 || hours.length == 3 && hours[0] == "0") {
-				hours = hours.substr(1);
-			}
-			minutes = (minutes < 10) ? "0" + minutes : minutes;
-			if (minutes.length == 3 || minutes.length == 4) {
-				minutes = minutes.substr(1);
-			}
-			seconds = (seconds < 10) ? "0" + seconds : seconds;
-			if (seconds.length == 3 || seconds.length == 4) {
-				seconds = seconds.substr(1);
-			}
-			//seconds = seconds.replaceAll("-", "");
-			if (seconds.length < 2) {
-				seconds = "0" + seconds;
-			}
-			var time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-			time = time.replaceAll("-", ""); // remove negative signs
-			return time;
-		}
 
 		// 		var startDateTime = new Date(Date.UTC(2018, 5, 16, 15, 0, 0, 0));
 		var startDateTime = new Date(Date.UTC(2018, 5, 16, 15, 0, 0, 0));
