@@ -38,6 +38,7 @@ let settings = {
 	stickSensitivityY: 1,
 	keyboardProfiles: {},
 	tab: 2,
+	dpadSwap: false,
 };
 // let toggleAudio = false;
 // let toggleDarkTheme = false;
@@ -61,7 +62,7 @@ let timeLeft = 30000;
 let timeLeft2 = 30000;
 let turnLength = 30000;
 let timeTillForfeit = 15000;
-let timeTillForfeit2 = 15000;// todo: remove
+let timeTillForfeit2 = timeTillForfeit;// todo: remove
 let turnUsername = null;
 let turnUsername2 = null;
 let lastCurrentTime = 0;
@@ -622,17 +623,33 @@ gamepad.on("release", "start", e => {
 
 
 gamepad.on("press", "d_pad_up", e => {
-	controller.btns.up = 1;
+	if (settings.dpadSwap) {
+		controller.btns.left = 1;
+	} else {
+		controller.btns.up = 1;
+	}
 });
 gamepad.on("release", "d_pad_up", e => {
-	controller.btns.up = 0;
+	if (settings.dpadSwap) {
+		controller.btns.left = 0;
+	} else {
+		controller.btns.up = 0;
+	}
 });
 
 gamepad.on("press", "d_pad_down", e => {
-	controller.btns.down = 1;
+	if (settings.dpadSwap) {
+		controller.btns.right = 1;
+	} else {
+		controller.btns.down = 1;
+	}
 });
 gamepad.on("release", "d_pad_down", e => {
-	controller.btns.down = 0;
+	if (settings.dpadSwap) {
+		controller.btns.right = 0;
+	} else {
+		controller.btns.down = 0;
+	}
 });
 
 gamepad.on("press", "d_pad_left", e => {
@@ -890,6 +907,7 @@ $(document).ready(function() {
 		rebindUnbindTouchControls();
 		clearAndReplaceProfiles();
 		setKeyboardMapperClasses();
+		setTimeout(drawJoyCons, 1000);
 	});
 });
 
@@ -1178,6 +1196,7 @@ $("#defaultBindings").on("click", function(event) {
 /* KEYBOARD PROFILES */
 
 $("#createProfile").on("click", function(event) {
+	event.preventDefault();
 	let profileName = $("#profileName").val();
 	if (profileName === "") {
 		swal("The profile name cannot be empty!", "", "error");
@@ -1192,6 +1211,7 @@ $("#createProfile").on("click", function(event) {
 });
 
 $("#deleteProfiles").on("click", function(event) {
+	event.preventDefault();
 	settings.keyboardProfiles = {};
 	localforage.setItem("settings", JSON.stringify(settings));
 	swal("Profiles deleted successfully!", "", "success");
@@ -1240,10 +1260,7 @@ function drawJoyCons() {
 		leftJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 		leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
 	};
-	// todo: remove:
-	//setTimeout(function(){
 	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
-	//}, 3000);
 
 
 	let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
@@ -1264,9 +1281,7 @@ function drawJoyCons() {
 		rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
 		rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
 	};
-	//setTimeout(function(){
 	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
-	//}, 3000);
 }
 
 function setVideoWidth(width, num) {
@@ -1540,12 +1555,10 @@ function rebindUnbindTouchControls() {
 // $("#videoCanvas2")[0].style["margin-left"] = "0";
 $("#touchControlsCheckbox").on("click", function() {
 	
-	console.log("checked touch controls")
+// 	console.log("checked touch controls")
 	settings.touchControls = $("#touchControlsCheckbox")[0].checked;
 	localforage.setItem("settings", JSON.stringify(settings));
-
 	rebindUnbindTouchControls();
-
 });
 
 // setTimeout(function() {
@@ -1596,7 +1609,7 @@ setInterval(function() {
 // });
 
 $("#qualitySlider").slider({
-    min: 1,
+    min: 20,
     max: 80,
 	step: 1,
     value: 70,
@@ -2257,6 +2270,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 	}
 	
 	addJoyCons(contentId);
+	setTimeout(drawJoyCons, 1000);// todo: find a solution link onload, but for tab changes
 	rebindUnbindTouchControls();
 	
 	// https://github.com/yoannmoinet/nipplejs/issues/39
@@ -2474,7 +2488,7 @@ socket.on("controlQueues", function(data) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		} 
+		}
 		$("#controlQueue1").append(html);
 	}
 	
@@ -2487,7 +2501,7 @@ socket.on("controlQueues", function(data) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		} 
+		}
 		$("#controlQueue2").append(html);
 	}
 	
@@ -2499,7 +2513,7 @@ socket.on("controlQueues", function(data) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		} 
+		}
 		$("#controlQueue3").append(html);
 	}
 	
@@ -2511,7 +2525,7 @@ socket.on("controlQueues", function(data) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		} 
+		}
 		$("#controlQueue4").append(html);
 	}
 	
@@ -2523,9 +2537,32 @@ socket.on("controlQueues", function(data) {
 			html = "<li class='list-group-item'>" + username + "</li>";
 		} else {
 			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		} 
+		}
 		$("#controlQueue5").append(html);
 	}
+	
+	let html;
+	if (!settings.darkTheme) {
+		html = "<li class='list-group-item'>The queue is empty.</li>";
+	} else {
+		html = "<li class='list-group-item-dark'>The queue is empty.</li>";
+	}
+	if (controlQueue1.length === 0) {
+		$("#controlQueue1").append(html);
+	}
+	if (controlQueue2.length === 0) {
+		$("#controlQueue2").append(html);
+	}
+	if (controlQueue3.length === 0) {
+		$("#controlQueue3").append(html);
+	}
+	if (controlQueue4.length === 0) {
+		$("#controlQueue4").append(html);
+	}
+	if (controlQueue5.length === 0) {
+		$("#controlQueue5").append(html);
+	}
+	
 });
 
 socket.on("twitchUsername", function(data) {
@@ -2563,9 +2600,6 @@ socket.on("turnTimesLeft", function(data) {
 	$("#lagless2ViewerCount").text(data.viewerCounts[1] + "/" + totalViewers + " Viewers");
 	$("#lagless3ViewerCount").text(data.viewerCounts[2] + "/" + totalViewers + " Viewers");
 	//console.log(data.viewerCounts);
-});
-
-socket.on("turnTimeLeft2", function(data) {
 });
 
 
@@ -2704,6 +2738,11 @@ $("#darkThemeCheckbox").on("click", function() {
 			$(this).addClass("list-group-item-dark");
 		});
 		
+		$(".nav-link").each(function() {
+			$(this).removeClass("nav-link");
+			$(this).addClass("nav-link-dark");
+		});
+		
 		$("body").addClass("dark");
 		
 		$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
@@ -2721,6 +2760,11 @@ $("#darkThemeCheckbox").on("click", function() {
 		$(".list-group-item-dark").each(function() {
 			$(this).removeClass("list-group-item-dark");
 			$(this).addClass("list-group-item");
+		});
+		
+		$(".nav-link-dark").each(function() {
+			$(this).removeClass("nav-link-dark");
+			$(this).addClass("nav-link");
 		});
 		
 		$("body").removeClass("dark");
@@ -2757,6 +2801,12 @@ $("#navCheckbox").on("click", function() {
 	} else {
 		$(".nav")[0].style.display = ""
 	}
+});
+
+/* TOGGLE DPAD SWAP @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#dpadCheckbox").on("click", function() {
+	settings.dpadSwap = $("#dpadCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
 });
 
 
@@ -2918,6 +2968,105 @@ socket.on("pong2", function() {
 // 	miner.start();
 // }
 
+/* SPLITS */
+
+// function speedrunWeekendBOTW() {
+// 	let startTime = new Date();
+// 	let splitNames = ["Great Plateau", "Enter Hyrule Castle", "Enter Sanctum", "Blights", "Calamity Ganon", "Dark Beast"];
+// 	let name = "BOTWTimer";
+	
+// 	let data = {
+// 		startTime: startTime,
+// 		splitNames: splitNames,
+// 		name: name,
+// 	};
+// 	socket.emit("createSplitTimer", data);
+// }
+
+
+// $("#moveToNextSplit").on("click", function(event) {
+// 	socket.emit("moveToNextSplit");
+// });
+// $("#removeLastSplit").on("click", function(event) {
+// 	socket.emit("removeLastSplit");
+// });
+// $("#BOTWSpeedrun").on("click", function(event) {
+// 	speedrunWeekendBOTW();
+// });
+
+// socket.on("splitTimes", function(data) {
+// 	let times = data.times;
+// 	let splitNames = data.splitNames;
+// 	let currentTime = data.currentTime;
+
+// 	if ($("#splitTimes").children().length != splitNames.length) {
+// 		$("#splitTimes").empty();
+// 		let listHTML;
+// 		if (settings.darkTheme) {
+// 			listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
+// 		} else {
+// 			listHTML = "<li class='list-group-item'>&nbsp;</li>";
+// 		}
+// 		for (let i = 0; i < splitNames.length; i++) {
+// 			$("#splitTimes").append(listHTML);
+// 		}
+// 	}
+// 	if ($("#splitNames").children().length != splitNames.length) {
+// 		$("#splitNames").empty();
+// 		let listHTML;
+// 		for (let i = 0; i < times.length; i++) {
+// 			if (settings.darkTheme) {
+// 				listHTML = "<li class='list-group-item-dark'>" + splitNames[i] + "</li>";
+// 			} else {
+// 				listHTML = "<li class='list-group-item'>" + splitNames[i] + "</li>";
+// 			}
+// 			$("#splitNames").append(listHTML);
+// 		}
+// 	}
+// 	for (let i = 0; i < times.length; i++) {
+// 		if (i > splitNames.length-1) {
+// 			continue;
+// 		}
+// 		$("#splitTimes").children()[i].innerHTML = msToTime(times[i]);
+// 	}
+// 	let t = (currentTime / 1000);
+// 	//t.toFixed(3)
+// 	$("#times").children()[0].innerHTML = msToTime(currentTime);
+// 	lastSplitTime = new Date();
+// 	lastSplitTimeMS = currentTime;
+// });
+
+// socket.on("clearSplitTimes", function(data) {
+// // 	$("#splitTimes").empty();
+// 	let listHTML;
+// 	if (settings.darkTheme) {
+// 		listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
+// 	} else {
+// 		listHTML = "<li class='list-group-item'>&nbsp;</li>";
+// 	}
+// // 	for (let i = 0; i < splitNames.length; i++) {
+// // 		$("#splitTimes").children()[i].replaceWith(listHTML);
+// // 	}
+// 	$("#splitTimes").children().each(function() {
+// 		$(this).replaceWith(listHTML);
+// 	});
+// });
+
+// setInterval(function() {
+// 	let now = new Date();
+// 	let timePassed = now - lastSplitTime;
+// 	let currentTime = lastSplitTimeMS + timePassed;
+// 	$("#times").children()[0].innerHTML = msToTime(currentTime);
+// }, 50);
+
+// // easily split:
+// window.addEventListener("keydown", function(e) {
+// 	// space, numpad3
+// 	if ([32, 99].indexOf(e.keyCode) > -1) {
+// 		e.preventDefault();
+// 		socket.emit("moveToNextSplit");
+// 	}
+// }, false);
 
 
 /* TUTORIAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -2930,17 +3079,287 @@ function tutorial() {
 	}
 	
 	let step = tutorial.step;
+	let c = -1;
 	
-	if (step === 0) {
-		$("#tutorialWindow").modal();
-		swal("tutorial");
+	if (step === ++c) {
+// 		$(document).scrollTop(0);
+		$("html, body").animate({
+			scrollTop: 0,
+		}, 500);
+		
+		
+// 		$("#tutorialWindow").modal();
+// 		swal("tutorial");
+		$(document).on("click", function(event) {
+			event.preventDefault();
+			tutorial();
+		});
+	}
+	
+	// nav tabs:
+	if (step === ++c) {
+		$("#navTabs").effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="navTabsPopup" class="genericPopup"><span class="tooltipArrowUp"></span>This lets you navigate to the different Lagless Tabs</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($("#navTabs"), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		$("#navTabsPopup").remove();
+		let div = "#tab1";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="tab1Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>The fastest, but siginificantly lower quality, no sound unless manually turned on.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		let div = "#tab2";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="tab2Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Slightly slower, but siginificantly higher quality, built in sound.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		let div = "#tab3";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="tab3Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Don\'t use this, probably.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		let div = "#tab4";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="tab4Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Twitch Plays Wii U</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	
+	// lagless view:
+	if (step === ++c) {
+		$("#tab1Popup").remove();
+		$("#tab2Popup").remove();
+		$("#tab3Popup").remove();
+		$("#tab4Popup").remove();
+		let div = "#leftJoyConCanvas";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="leftJoyConPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This is the controller view, it shows the buttons currently being pressed by Player 1.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "right",
+		});
+	}
+	if (step === ++c) {
+		let div = "#rightJoyConCanvas";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="rightJoyConPopup" class="largerPopup"><span class="tooltipArrowRight"></span>It also doubles as touch controls, currently, only the sticks work on IOS, but everything works on android.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "left",
+		});
+	}
+	
+	// lagless bar:
+	if (step === ++c) {
+		$("#leftJoyConPopup").remove();
+		$("#rightJoyConPopup").remove();
+		
+		$("html, body").animate({
+			scrollTop: $("#lagless2Bar").offset().top
+		}, 500);
+		
+		let div = "#lagless2Bar";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="laglessBarPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Todo: fill this in with helpful info, or just delete it.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	
+	if (step === ++c) {
+		$("#laglessBarPopup").remove();
+		
+		let div = "#lagless2ViewerCount";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="laglessViewerCountPopup" class="largerPopup"><span class="tooltipArrowUp"></span>The first number is the number of people on this tab, the second is the total number of people on the site.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		$("#laglessViewerCountPopup").remove();
+		
+		let div = "#lagless2VolumeSlider";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="laglessVolumeSliderPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Controls the volume of Lagless2.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		$("#laglessVolumeSliderPopup").remove();
+		
+		let div = "#lagless2Refresh";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="laglessRefreshPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Restarts this specific stream.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		$("#laglessRefreshPopup").remove();
+		
+		let div = "#lagless2KeyboardSettings";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="laglessKeyboardSettingsPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to configure keyboard settings profiles.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		$("#laglessKeyboardSettingsPopup").remove();
+		
+		let div = "#lagless2KeyboardDropdown";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="laglessKeyboardDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this change between keyboard profiles.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		$("#laglessKeyboardDropdownPopup").remove();
+		
+		let div = "#timer";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="timerPopup" class="genericPopup"><span class="tooltipArrowUp"></span>The current local time.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	
+	// players section
+	if (step === ++c) {
+		$("#timerPopup").remove();
+// 		$("#rightJoyConPopup").remove();
+		
+		$("html, body").animate({
+			scrollTop: $("#players").offset().top
+		}, 500);
+		let div = "#players";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="playersPopup" class="genericPopup"><span class="tooltipArrowUp"></span>This is where you can see who\'s playing, and who\'s turn is next.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		$("#playersPopup").remove();
+		let div = "#turnTimerBar1";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="turnTimerBarPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This bar shows who\'s playing, and how much time is left on their turn.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "right",
+		});
+	}
+	if (step === ++c) {
+		$("#turnTimerBarPopup").remove();
+		let div = "#forfeitTimerBar1";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="forfeitTimerBarPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>After being AFK for a while, you give up your turn, the time until turn forefeit is displayed here.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "right",
+		});
+	}
+	if (step === ++c) {
+		$("#turnTimerBarPopup").remove();
+		$("#forfeitTimerBarPopup").remove();
+		
+		let div = "#requestTurn1";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="requestTurnPopup" class="largerPopup"><span class="tooltipArrowUp"></span>Use this to manually request a turn, turns are automatically requested for you if you try to send any input though.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	if (step === ++c) {
+		let div = "#cancelTurn1";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue, or end your turn early.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
+		});
+	}
+	
+	// checkbox settings:
+	if (step === ++c) {
+		$("#requestTurnPopup").remove();
+		$("#cancelTurnPopup").remove();
+		
+		let div = "#keyboardControllerCheckbox";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="keyboardControllerCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables the use of a keyboard or controller to play, don\'t forget to check this!</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($("#checkboxSettings").children().children()[0], popupHTML, {
+			placement: "right",
+		});
+	}
+	if (step === ++c) {
+		$("#keyboardControllerCheckboxPopup").remove();
+		
+		let div = "#dpadCheckbox";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="dpadCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Swaps DPAD Up/Down with Left/Right only useful if you\'re using a Pro Controller on Firefox.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($("#checkboxSettings").children().children()[1], popupHTML, {
+			placement: "right",
+		});
+	}
+	if (step === ++c) {
+		$("#dpadCheckboxPopup").remove();
+		
+		let div = "#touchControlsCheckbox";
+		$(div).effect("highlight", {}, 3000);
+		let popupHTML = $('<div id="touchControlsCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables and Disables the Touch Controls.</div>');
+		$("#container").append(popupHTML);
+		let popper = new Popper($("#checkboxSettings").children().children()[2], popupHTML, {
+			placement: "right",
+		});
 	}
 	
 	
-	if (step === 1) {
-		let popper = new Popper($("#navTabs"), $("#popup"), {
-			placement: "right",
-		});
+	if (step === ++c) {
+		$("#touchControlsCheckboxPopup").remove();
+		
+// 		$("#cancelTurn1").effect("highlight", {}, 3000);
+// 		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue or end your turn early.</div>');
+// 		$("#container").append(popupHTML);
+// 		let popper = new Popper($("#cancelTurn1"), popupHTML, {
+// 			placement: "bottom",
+// 		});
+	}
+	
+	if (step === ++c) {
+		$(document).unbind("click");
 	}
 	
 	
@@ -2949,97 +3368,18 @@ function tutorial() {
 }
 
 function startTutorial() {
+	$(document).unbind("click");
+	tutorial.step = undefined;
 	setTimeout(tutorial, 0);
-	setTimeout(tutorial, 5000);
-	setTimeout(tutorial, 10000);
+// 	setTimeout(tutorial, 2000);
+// 	setTimeout(tutorial, 4000);
+// 	setTimeout(tutorial, 6000);
+// 	setTimeout(tutorial, 8000);
+// 	setTimeout(tutorial, 10000);
+// 	setTimeout(tutorial, 12000);
 }
 
-/* SPLITS */
-
-function speedrunWeekendBOTW() {
-	let startTime = new Date();
-	let splitNames = ["Great Plateau", "Enter Hyrule Castle", "Enter Sanctum", "Blights", "Calamity Ganon", "Dark Beast"];
-	let name = "BOTWTimer";
-	
-	let data = {
-		startTime: startTime,
-		splitNames: splitNames,
-		name: name,
-	};
-	socket.emit("createSplitTimer", data);
-}
-
-
-$("#moveToNextSplit").on("click", function(event) {
-	socket.emit("moveToNextSplit");
+$("#startTutorial").on("click", function(event) {
+	event.preventDefault();
+	startTutorial();
 });
-$("#removeLastSplit").on("click", function(event) {
-	socket.emit("removeLastSplit");
-});
-
-socket.on("splitTimes", function(data) {
-	let times = data.times;
-	let splitNames = data.splitNames;
-	let currentTime = data.currentTime;
-
-	if ($("#splitTimes").children().length != splitNames.length) {
-		$("#splitTimes").empty();
-		let listHTML;
-		if (settings.darkTheme) {
-			listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
-		} else {
-			listHTML = "<li class='list-group-item'>&nbsp;</li>";
-		}
-		for (let i = 0; i < splitNames.length; i++) {
-			$("#splitTimes").append(listHTML);
-		}
-	}
-	if ($("#splitNames").children().length != splitNames.length) {
-		$("#splitNames").empty();
-		let listHTML;
-		for (let i = 0; i < times.length; i++) {
-			if (settings.darkTheme) {
-				listHTML = "<li class='list-group-item-dark'>" + splitNames[i] + "</li>";
-			} else {
-				listHTML = "<li class='list-group-item'>" + splitNames[i] + "</li>";
-			}
-			$("#splitNames").append(listHTML);
-		}
-	}
-	for (let i = 0; i < times.length; i++) {
-		if (i > splitNames.length-1) {
-			continue;
-		}
-		$("#splitTimes").children()[i].innerHTML = msToTime(times[i]);
-	}
-	let t = (currentTime / 1000);
-	//t.toFixed(3)
-	$("#times").children()[0].innerHTML = msToTime(currentTime);
-	lastSplitTime = new Date();
-	lastSplitTimeMS = currentTime;
-});
-
-socket.on("clearSplitTimes", function(data) {
-// 	$("#splitTimes").empty();
-	let listHTML;
-	if (settings.darkTheme) {
-		listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
-	} else {
-		listHTML = "<li class='list-group-item'>&nbsp;</li>";
-	}
-// 	for (let i = 0; i < splitNames.length; i++) {
-// 		$("#splitTimes").children()[i].replaceWith(listHTML);
-// 	}
-	$("#splitTimes").children().each(function() {
-		$(this).replaceWith(listHTML);
-	});
-});
-
-setInterval(function() {
-	let now = new Date();
-	let timePassed = now - lastSplitTime;
-	let currentTime = lastSplitTimeMS + timePassed;
-	$("#times").children()[0].innerHTML = msToTime(currentTime);
-}, 50);
-
-

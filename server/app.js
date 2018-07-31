@@ -957,10 +957,11 @@ io.on("connection", function(socket) {
 		}
 		let client = clients[index];
 		// todo: improve this:
-		if (client.username != "harmjan387" && client.username != "twitchplaysconsoles") {
+		if (client.username != "Harmjan387" && client.username != "twitchplaysconsoles") {
 			return;
 		}
 		splitTimer = SplitTimer(data.startTime, data.splitNames, data.name);
+		io.emit("clearSplitTimes");
 	});
 	
 	socket.on("moveToNextSplit", function(data) {
@@ -971,7 +972,7 @@ io.on("connection", function(socket) {
 		}
 		let client = clients[index];
 		// todo: improve this:
-		if (client.username != "harmjan387" && client.username != "twitchplaysconsoles") {
+		if (client.username != "Harmjan387" && client.username != "twitchplaysconsoles") {
 			return;
 		}
 		try {
@@ -988,7 +989,7 @@ io.on("connection", function(socket) {
 		}
 		let client = clients[index];
 		// todo: improve this:
-		if (client.username != "harmjan387" && client.username != "twitchplaysconsoles") {
+		if (client.username != "Harmjan387" && client.username != "twitchplaysconsoles") {
 			return;
 		}
 		try {

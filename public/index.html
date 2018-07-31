@@ -95,10 +95,10 @@
 								<button id="lagless1Refresh" class="laglessRefresh btn btn-primary btn-settings">
 									<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
 								</button>
-								<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
+								<button id="lagless1KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
 									<i class="fas fa-keyboard" style="font-size: 25px;"></i>
 								</button>
-								<div class="keyboardDropdown dropdown show">
+								<div id="lagless1KeyboardDropdown" class="keyboardDropdown dropdown show">
 									<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										Keyboard Profiles
 									</a>
@@ -128,10 +128,10 @@
 							<button id="lagless2Refresh" class="laglessRefresh btn btn-primary btn-settings">
 								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
 							</button>
-							<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
+							<button id="lagless2KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
 								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
 							</button>
-							<div class="keyboardDropdown dropdown show">
+							<div id="lagless2KeyboardDropdown" class="keyboardDropdown dropdown show">
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Keyboard Profiles
 								</a>
@@ -163,10 +163,10 @@
 							<button id="lagless3Refresh" class="laglessRefresh btn btn-primary btn-settings">
 								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
 							</button>
-							<button data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
+							<button id="lagless3KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
 								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
 							</button>
-							<div class="keyboardDropdown dropdown show">
+							<div id="lagless3KeyboardDropdown" class="keyboardDropdown dropdown show">
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Keyboard Profiles
 								</a>
@@ -260,7 +260,7 @@
 							<ul id="controlQueue3" class="controlQueue list-group"></ul>
 						</div>
 						
-						<div id="player4" class="player">
+<!-- 						<div id="player4" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player4Checkbox" type="checkbox" />
 								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
@@ -275,7 +275,7 @@
 							<button id="requestTurn4" class="requestTurn btn btn-secondary">Request Turn</button>
 							<button id="cancelTurn4" class="cancelTurn btn btn-secondary">Cancel Turn</button>
 							<ul id="controlQueue4" class="controlQueue list-group"></ul>
-						</div>
+						</div> -->
 <!-- 						<div id="player5" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player5Checkbox" type="checkbox" />
@@ -292,7 +292,7 @@
 							<button id="cancelTurn5" class="cancelTurn btn btn-secondary">Cancel Turn</button>
 							<ul id="controlQueue5" class="controlQueue list-group"></ul>
 						</div> -->
-						<div id="splits">
+<!-- 						<div id="splits">
 							<div id="splitMetaContainer">
 								<div id="splitContainer">
 									<ul id="splitNames" class="list-group">
@@ -309,9 +309,10 @@
 									<li class="list-group-item"></li>
 								</ul>
 							</div>
-							<btn id="moveToNextSplit" class="btn btn-primary">Split</btn>
-							<btn id="removeLastSplit" class="btn btn-primary">Remove Last Split</btn>
-						</div>
+							<button id="moveToNextSplit" class="btn btn-primary">Split</button>
+							<button id="removeLastSplit" class="btn btn-primary">Remove Last Split</button>
+							<button id="BOTWSpeedrun" class="btn btn-primary">Start Speed Run</button>
+						</div> -->
 					</div>
 
 					<div class="container4">
@@ -322,6 +323,13 @@
 										<input id="keyboardControllerCheckbox" type="checkbox" />
 										<span class="checkbox-placeholder"></span>
 										Enable Keyboard / Controller
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="dpadCheckbox" type="checkbox" />
+										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+										DPad Swap
 									</label>
 								</li>
 <!-- 								<li class="list-group-item">
@@ -467,6 +475,7 @@
 						</div>
 						<div id="streamSettings" class="well">
 							<a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
+							<button id="startTutorial" class="btn btn-secondary">Start Tutorial</button>
 						</div>
 					</div>
 
