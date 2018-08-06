@@ -6,7 +6,9 @@
 	<link rel="icon" href="images/TwitchPlaysNintendoSwitch.png">
 
 	<!-- CSS -->
+	<link href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono" rel="stylesheet">
 	<link rel="stylesheet" href="css/stylesheet.css">
+	<link rel="stylesheet" href="css/preloader.css">
 
 	<!-- Font Awesome	 -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
@@ -24,7 +26,8 @@
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
 	<!-- 	<script src="js/chillout.min.js"></script> -->
-	<script src="js/interact.min.js"></script>
+<!-- 	<script src="js/interact.min.js"></script> -->
+<!-- 	<script src="js/fitty.min.js"></script> -->
 
 	<script src="js/jsmpg.js"></script>
 	<script src="js/http-live-player.js"></script>
@@ -55,6 +58,12 @@
 </head>
 
 <body>
+	
+	<div id="loader-wrapper">
+		<div id="loader"></div>
+		<div class="loader-section section-left"></div>
+		<div class="loader-section section-right"></div>
+	</div>
 
 	<div id="container">
 
@@ -82,8 +91,14 @@
 							<canvas id="videoCanvas1" class="videoCanvas"></canvas>
 						</div>
 							<div id="lagless1Bar" class="laglessBar">
-								<div id="lagless1ViewerCount" class="laglessViewerCount">
+<!-- 								<div id="lagless1ViewerCount" class="laglessViewerCount">
 									X/X Viewers
+								</div> -->
+								<div id="lagless1ViewerDropdown" class="viewerDropdown dropdown show">
+									<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										Viewers
+									</a>
+									<div id="lagless1ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 								</div>
 								<div id="lagless1VolumeSlider" class="volumeSlider">
 									<i class="fa fa-volume-down"></i>
@@ -102,11 +117,7 @@
 									<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 										Keyboard Profiles
 									</a>
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-										<button class="dropdown-item">default</button>
-										<button class="dropdown-item">Custom 1</button>
-										<button class="dropdown-item">Custom 2</button>
-									</div>
+									<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 								</div>
 							</div>
 					</div>
@@ -117,8 +128,14 @@
 							<canvas id="videoCanvas2" class="videoCanvas"></canvas>
 						</div>
 						<div id="lagless2Bar" class="laglessBar">
-							<div id="lagless2ViewerCount" class="laglessViewerCount">
+<!-- 							<div id="lagless2ViewerCount" class="laglessViewerCount">
 								X/X Viewers
+							</div> -->
+							<div id="lagless2ViewerDropdown" class="viewerDropdown dropdown show">
+								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Viewers
+								</a>
+								<div id="lagless2ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 							<div id="lagless2VolumeSlider" class="volumeSlider">
 								<i class="fa fa-volume-down"></i>
@@ -135,11 +152,7 @@
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Keyboard Profiles
 								</a>
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-									<button class="dropdown-item">default</button>
-									<button class="dropdown-item">Custom 1</button>
-									<button class="dropdown-item">Custom 2</button>
-								</div>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
@@ -152,8 +165,14 @@
 							<canvas id="videoCanvas3" class="videoCanvas"></canvas>
 						</div>
 						<div id="lagless3Bar" class="laglessBar">
-							<div id="lagless3ViewerCount"  class="laglessViewerCount">
+<!-- 							<div id="lagless3ViewerCount"  class="laglessViewerCount">
 								X/X Viewers
+							</div> -->
+							<div id="lagless3ViewerDropdown" class="viewerDropdown dropdown show">
+								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Viewers
+								</a>
+								<div id="lagless3ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 							<div id="lagless3VolumeSlider" class="volumeSlider">
 								<i class="fa fa-volume-down"></i>
@@ -170,11 +189,7 @@
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Keyboard Profiles
 								</a>
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-									<button class="dropdown-item">default</button>
-									<button class="dropdown-item">Custom 1</button>
-									<button class="dropdown-item">Custom 2</button>
-								</div>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
 <!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
@@ -188,8 +203,14 @@
 							<canvas id="videoCanvas4" class="videoCanvas"></canvas>
 						</div>
 						<div id="lagless4Bar" class="laglessBar">
-							<div id="lagless4ViewerCount"  class="laglessViewerCount">
+<!-- 							<div id="lagless4ViewerCount"  class="laglessViewerCount">
 								X/X Viewers
+							</div> -->
+							<div id="lagless4ViewerDropdown" class="viewerDropdown dropdown show">
+								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Viewers
+								</a>
+								<div id="lagless4ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 							<div id="lagless4VolumeSlider" class="volumeSlider">
 								<i class="fa fa-volume-down"></i>
@@ -208,7 +229,9 @@
 
 				<div id="barUnderTheStream" class="well">
 					
-					<div id="players">
+					<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#players">Collapse</button>
+					
+					<div id="players" class="collapse show">
 						<div id="player1" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player1Checkbox" type="checkbox" />
@@ -216,10 +239,10 @@
 								Player 1
 							</label>
 							<div id="turnTimerBar1" class="turnTimerBar progress">
-								<div id="turnTimerBarChild1" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="turnTimerBarChild1" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<div id="forfeitTimerBar1" class="forfeitTimerBar progress">
-								<div id="forfeitTimerBarChild1" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="forfeitTimerBarChild1" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<button id="requestTurn1" class="requestTurn btn btn-secondary">Request Turn</button>
 							<button id="cancelTurn1" class="cancelTurn btn btn-secondary">Cancel Turn</button>
@@ -233,10 +256,10 @@
 								Player 2
 							</label>
 							<div id="turnTimerBar2" class="turnTimerBar progress">
-								<div id="turnTimerBarChild2" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="turnTimerBarChild2" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<div id="forfeitTimerBar2" class="forfeitTimerBar progress">
-								<div id="forfeitTimerBarChild2" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="forfeitTimerBarChild2" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<button id="requestTurn2" class="requestTurn btn btn-secondary">Request Turn</button>
 							<button id="cancelTurn2" class="cancelTurn btn btn-secondary">Cancel Turn</button>
@@ -250,32 +273,32 @@
 								Player 3
 							</label>
 							<div id="turnTimerBar3" class="turnTimerBar progress">
-								<div id="turnTimerBarChild3" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="turnTimerBarChild3" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<div id="forfeitTimerBar3" class="forfeitTimerBar progress">
-								<div id="forfeitTimerBarChild3" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="forfeitTimerBarChild3" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<button id="requestTurn3" class="requestTurn btn btn-secondary">Request Turn</button>
 							<button id="cancelTurn3" class="cancelTurn btn btn-secondary">Cancel Turn</button>
 							<ul id="controlQueue3" class="controlQueue list-group"></ul>
 						</div>
 						
-<!-- 						<div id="player4" class="player">
+						<div id="player4" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player4Checkbox" type="checkbox" />
 								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
 								Player 4
 							</label>
 							<div id="turnTimerBar4" class="turnTimerBar progress">
-								<div id="turnTimerBarChild4" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="turnTimerBarChild4" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<div id="forfeitTimerBar4" class="forfeitTimerBar progress">
-								<div id="forfeitTimerBarChild4" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="forfeitTimerBarChild4" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<button id="requestTurn4" class="requestTurn btn btn-secondary">Request Turn</button>
 							<button id="cancelTurn4" class="cancelTurn btn btn-secondary">Cancel Turn</button>
 							<ul id="controlQueue4" class="controlQueue list-group"></ul>
-						</div> -->
+						</div>
 <!-- 						<div id="player5" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player5Checkbox" type="checkbox" />
@@ -283,10 +306,10 @@
 								Player 1 WiiU
 							</label>
 							<div id="turnTimerBar5" class="turnTimerBar progress">
-								<div id="turnTimerBarChild5" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="turnTimerBarChild5" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<div id="forfeitTimerBar5" class="forfeitTimerBar progress">
-								<div id="forfeitTimerBarChild5" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animated active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
+								<div id="forfeitTimerBarChild5" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
 							<button id="requestTurn5" class="requestTurn btn btn-secondary">Request Turn</button>
 							<button id="cancelTurn5" class="cancelTurn btn btn-secondary">Cancel Turn</button>
@@ -314,22 +337,24 @@
 							<button id="BOTWSpeedrun" class="btn btn-primary">Start Speed Run</button>
 						</div> -->
 					</div>
-
-					<div class="container4">
+					
+					<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#settingsContainer">Collapse</button>
+					
+					<div id="settingsContainer" class="container4 collapse show">
 						<div id="checkboxSettings" class="five">
 							<ul class="list-group">
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-										<input id="keyboardControllerCheckbox" type="checkbox" />
+										<input id="keyboardControlsCheckbox" type="checkbox" />
 										<span class="checkbox-placeholder"></span>
-										Enable Keyboard / Controller
+										Enable Keyboard Controls
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-										<input id="dpadCheckbox" type="checkbox" />
-										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
-										DPad Swap
+										<input id="controllerControlsCheckbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Enable Controller Controls
 									</label>
 								</li>
 <!-- 								<li class="list-group-item">
@@ -355,6 +380,13 @@
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="dpadCheckbox" type="checkbox" />
+										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+										DPad Swap
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="audioCheckbox" type="checkbox" />
 										<span class="ifas ifa-volume-up checkbox-placeholder"></span>
 										Enable Audio 1.0
@@ -369,16 +401,23 @@
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-										<input id="chatCheckbox" type="checkbox" />
-										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
-										Enable Chat
+										<input id="fullscreenCheckbox" type="checkbox" />
+										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										Enable Fullscreen Mode
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-										<input id="fullscreenCheckbox" type="checkbox" />
+										<input id="largescreenCheckbox" type="checkbox" />
 										<span class="ifas ifa-expand checkbox-placeholder"></span>
-										Enable Fullscreen Mode
+										Enable Large Screen Mode
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="chatCheckbox" type="checkbox" />
+										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+										Hide Chat
 									</label>
 								</li>
 								<li class="list-group-item">
@@ -414,6 +453,10 @@
 							<div class="mysliderContainer">
 								<div id="stickSensitivitySlider" class="myslider"></div>
 							</div>
+<!-- 							video width ratio: <span id="videoWidth">73.2</span>
+							<div class="mysliderContainer">
+								<div id="videoWidthSlider" class="myslider"></div>
+							</div> -->
 <!-- 							<div class="well">
 								Ping: <span id="ping"></span>
 							</div>
@@ -468,7 +511,6 @@
 				</div>
 
 				<div class="container3 well">
-
 					<div class="three">
 						<div id="settingsLabel" class="well">
 							Settings:
@@ -476,6 +518,7 @@
 						<div id="streamSettings" class="well">
 							<a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
 							<button id="startTutorial" class="btn btn-secondary">Start Tutorial</button>
+							<button id="resetSettings" class="btn btn-secondary">Reset Settings</button>
 						</div>
 					</div>
 
@@ -538,7 +581,21 @@
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h3 class="modal-title text-center">Quick Tutorial</h3>
+					<h3 class="modal-title text-center">Tutorial</h3>
+				</div>
+				<div class="modal-body">
+					
+					<h5>
+						To advance through the tutorial, click anywhere on screen.
+					</h5>
+					
+					<h5>
+						For security reasons, home, plus, capture, as well as internet access, are disabled by default, but can be used by mods and certain groups, contact a mod on the discord server if you need help.
+					</h5>
+					
+					<h4>
+						Join the discord server! <a href="https://discord.gg/ARTbddH">https://discord.gg/ARTbddH</a>
+					</h4>
 				</div>
 			</div>
 		</div>
@@ -612,7 +669,7 @@
 								<li id="0" class="">0</li>
 								<li id="-" class="">-</li>
 								<li id="=" class="">=</li>
-								<li id="backspace" class="backspace">backspace</li>
+								<li id="backspace" class="backspace">back</li>
 								<li id="ins" class="">ins</li>
 								<li id="home" class="">home</li>
 								<li id="pageup" class="">pgup</li>
@@ -655,7 +712,7 @@
 								<li class="empty-letter">&nbsp;</li>
 							</div>
 							<div id="row5" class="keyboardRow">
-								<li id="shift" class="left-shift">shift</li>
+								<li id="shift" class="left-shift" code="shift">shift</li>
 								<li id="Z" class="letter">z</li>
 								<li id="X" class="letter">x</li>
 								<li id="C" class="letter">c</li>
@@ -666,7 +723,7 @@
 								<li id="," class="">,</li>
 								<li id="." class="">.</li>
 								<li id="/" class="">/</li>
-								<li id="shift" class="right-shift">shift</li>
+								<li id="shift" class="right-shift disabled">shift</li>
 								<li class="empty-letter">&nbsp;</li>
 								<li id="up" class="" code="up">&uarr;</li>
 								<li class="empty-letter">&nbsp;</li>
@@ -676,10 +733,10 @@
 								<li id="win" class="windows disabled">win</li>
 								<li id="alt" class="left-alt">alt</li>
 								<li id="space" class="space" code="space">&nbsp;</li>
-								<li id="alt" class="right-alt">alt</li>
+								<li id="alt" class="right-alt disabled">alt</li>
 								<li id="function" class="function disabled">fn</li>
 								<li id="option" class="menu">&#9776;</li>
-								<li id="ctrl" class="right-control">ctrl</li>
+								<li id="ctrl" class="right-control disabled">ctrl</li>
 								<li id="left" class="" code="left">&larr;</li>
 								<li id="down" class="" code="down">&darr;</li>
 								<li id="right" class="" code="right">&rarr;</li>

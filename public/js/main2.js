@@ -16,6 +16,7 @@ let viewerCounts = [];
 let viewers = [];
 let lastSplitTime = 0;
 let lastSplitTimeMS = 0;
+let loaded = false;
 
 let controlQueues = [];
 let controlQueue1 = [];
@@ -28,11 +29,16 @@ let twitchUsername = null;
 // settings:
 let settings = {
 	audio: false,
+	keyboardControls: false,
+	controllerControls: false,
 	touchControls: true,
 	mouseControls: false,
+	currentInputMode: null,
 	darkTheme: false,
 	fullscreen: false,
-	disableChat: false,
+	largescreen: false,
+	hideChat: false,
+	hideNav: false,
 	deadzone: 50,
 	stickSensitivityX: 1,
 	stickSensitivityY: 1,
@@ -74,10 +80,10 @@ let pingTime = 0;
 let restPos = 128;
 let oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
 let stats = new Stats();
-let lagless1Port = 8001;// 8008
-let lagless2Port = 8002;// 8008
-let lagless3Port = 8003;// 8009
-let lagless4Port = 8004;// 8009
+let lagless1Port = 8001;
+let lagless2Port = 8002;
+let lagless3Port = 8003;
+let lagless4Port = 8004;
 stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
 // document.body.appendChild(stats.dom);
 
@@ -103,12 +109,6 @@ if (isMobile) {
 		}
 	});
 }
-
-let now;
-let elapsed;
-let fpsInterval = 1000 / 10;
-let then = Date.now();
-let startTime = then;
 
 let keyboardLayout = {};
 keyboardLayout.tempSelectedAction = "";
@@ -195,70 +195,79 @@ controller.reset = function() {
 	controller.RStick.y = restPos;
 }
 
-function sendControllerState() {
+controller.getState = function() {
 	
-	controller.LStick.x = minmax(controller.LStick.x, 0, 255);
-	controller.LStick.y = minmax(controller.LStick.y, 0, 255);
-	controller.RStick.x = minmax(controller.RStick.x, 0, 255);
-	controller.RStick.y = minmax(controller.RStick.y, 0, 255);
+	this.LStick.x = minmax(this.LStick.x, 0, 255);
+	this.LStick.y = minmax(this.LStick.y, 0, 255);
+	this.RStick.x = minmax(this.RStick.x, 0, 255);
+	this.RStick.y = minmax(this.RStick.y, 0, 255);
 	
-	let newControllerState = "";
+	let state = "";
 
-	if (controller.btns.up == 1 && controller.btns.left == 1) {
-		newControllerState += "7";
-	} else if (controller.btns.up == 1 && controller.btns.right == 1) {
-		newControllerState += "1";
-	} else if (controller.btns.down == 1 && controller.btns.left == 1) {
-		newControllerState += "5";
-	} else if (controller.btns.down == 1 && controller.btns.right == 1) {
-		newControllerState += "3";
-	} else if (controller.btns.up == 1) {
-		newControllerState += "0";
-	} else if (controller.btns.down == 1) {
-		newControllerState += "4";
-	} else if (controller.btns.left == 1) {
-		newControllerState += "6";
-	} else if (controller.btns.right == 1) {
-		newControllerState += "2";
+	if (this.btns.up == 1 && this.btns.left == 1) {
+		state += "7";
+	} else if (this.btns.up == 1 && this.btns.right == 1) {
+		state += "1";
+	} else if (this.btns.down == 1 && this.btns.left == 1) {
+		state += "5";
+	} else if (this.btns.down == 1 && this.btns.right == 1) {
+		state += "3";
+	} else if (this.btns.up == 1) {
+		state += "0";
+	} else if (this.btns.down == 1) {
+		state += "4";
+	} else if (this.btns.left == 1) {
+		state += "6";
+	} else if (this.btns.right == 1) {
+		state += "2";
 	} else {
-		newControllerState += "8";
+		state += "8";
 	}
 
-	newControllerState += controller.btns.stick_button;
-	newControllerState += controller.btns.l;
-	newControllerState += controller.btns.zl;
-	newControllerState += controller.btns.minus;
-	newControllerState += controller.btns.capture;
+	state += this.btns.stick_button;
+	state += this.btns.l;
+	state += this.btns.zl;
+	state += this.btns.minus;
+	state += this.btns.capture;
 
-	newControllerState += controller.btns.a;
-	newControllerState += controller.btns.b;
-	newControllerState += controller.btns.x;
-	newControllerState += controller.btns.y;
-	newControllerState += controller.btns.stick_button2;
-	newControllerState += controller.btns.r;
-	newControllerState += controller.btns.zr;
-	newControllerState += controller.btns.plus;
-	newControllerState += controller.btns.home;
-
-
-	let LX = controller.LStick.x;
-	let LY = controller.LStick.y;
-	let RX = controller.RStick.x;
-	let RY = controller.RStick.y;
-
-	newControllerState += " " + LX + " " + LY + " " + RX + " " + RY;
+	state += this.btns.a;
+	state += this.btns.b;
+	state += this.btns.x;
+	state += this.btns.y;
+	state += this.btns.stick_button2;
+	state += this.btns.r;
+	state += this.btns.zr;
+	state += this.btns.plus;
+	state += this.btns.home;
 
 
+	let LX = this.LStick.x;
+	let LY = this.LStick.y;
+	let RX = this.RStick.x;
+	let RY = this.RStick.y;
+
+	state += " " + LX + " " + LY + " " + RX + " " + RY;
+	
+	return state;
+}
+
+function sendControllerState() {
+	
+	let newControllerState = controller.getState();
+	
 	if (newControllerState == oldControllerState) {
 		return;
 	} else {
 		oldControllerState = newControllerState;
 	}
 	
-	// check to see if any of the controls checkboxes are enabled:
-	if (!document.getElementById("keyboardControllerCheckbox").checked &&
-		!document.getElementById("touchControlsCheckbox").checked &&
-		!document.getElementById("mouseControlsCheckbox").checked) {
+	if (settings.currentInputMode == "keyboard" && !settings.keyboardControls) {
+		return;
+	}
+	if (settings.currentInputMode == "controller" && !settings.controllerControls) {
+		return;
+	}
+	if (settings.currentInputMode == "touch" && !settings.touchControls) {
 		return;
 	}
 	
@@ -300,15 +309,14 @@ function sendControllerState() {
 	socket.emit("sendControllerState", obj);
 }
 
-
 function getKeyboardInput() {
 
-	if (!document.getElementById("keyboardControllerCheckbox").checked) {
+	if (!$("#keyboardControlsCheckbox")[0].checked) {
 		return;
 	}
 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
-		$("#keyboardControllerCheckbox").prop("checked", false);
+		$("#keyboardControlsCheckbox").prop("checked", false);
 		swal("You need to connect to twitch! Redirecting you now!");
 		setTimeout(function() {
 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -316,7 +324,7 @@ function getKeyboardInput() {
 		return;
 	}
 	
-	//controller.reset();
+	let oldControllerState = controller.getState();
 
 	if (key.isPressed(keyboardLayout.LU)) {
 		controller.LStick.y = 255;
@@ -459,6 +467,12 @@ function getKeyboardInput() {
 	
 	wasPressedKeyCodes = key.getPressedKeyCodes();
 	
+	let newControllerState = controller.getState();
+	
+	if (newControllerState != oldControllerState) {
+		settings.currentInputMode = "keyboard";
+	}
+	
 	//sendControllerState();
 }
 
@@ -479,7 +493,7 @@ window.addEventListener("keydown", function(e) {
 }, false);
 
 // function getMouseInput() {
-// 	if (!document.getElementById("mouseControlsCheckbox").checked) {
+// 	if (!$("#mouseControlsCheckbox")[0].checked) {
 // 		return;
 // 	}
 	
@@ -552,72 +566,92 @@ gamepad.on("disconnect", e => {
 
 gamepad.on("press", "button_1", e => {
 	controller.btns.b = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "button_1", e => {
 	controller.btns.b = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "button_2", e => {
 	controller.btns.a = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "button_2", e => {
 	controller.btns.a = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "button_3", e => {
 	controller.btns.y = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "button_3", e => {
 	controller.btns.y = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "button_4", e => {
 	controller.btns.x = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "button_4", e => {
 	controller.btns.x = 0;
+	settings.currentInputMode = "controller";
 });
 
 
 gamepad.on("press", "shoulder_top_left", e => {
 	controller.btns.l = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "shoulder_top_left", e => {
 	controller.btns.l = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "shoulder_top_right", e => {
 	controller.btns.r = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "shoulder_top_right", e => {
 	controller.btns.r = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "shoulder_bottom_left", e => {
 	controller.btns.zl = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "shoulder_bottom_left", e => {
 	controller.btns.zl = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "shoulder_bottom_right", e => {
 	controller.btns.zr = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "shoulder_bottom_right", e => {
 	controller.btns.zr = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "select", e => {
 	controller.btns.minus = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "select", e => {
 	controller.btns.minus = 0;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("press", "start", e => {
 	controller.btns.plus = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "start", e => {
 	controller.btns.plus = 0;
+	settings.currentInputMode = "controller";
 });
 
 
@@ -625,45 +659,57 @@ gamepad.on("release", "start", e => {
 gamepad.on("press", "d_pad_up", e => {
 	if (settings.dpadSwap) {
 		controller.btns.left = 1;
+		settings.currentInputMode = "controller";
 	} else {
 		controller.btns.up = 1;
+		settings.currentInputMode = "controller";
 	}
 });
 gamepad.on("release", "d_pad_up", e => {
 	if (settings.dpadSwap) {
 		controller.btns.left = 0;
+		settings.currentInputMode = "controller";
 	} else {
 		controller.btns.up = 0;
+		settings.currentInputMode = "controller";
 	}
 });
 
 gamepad.on("press", "d_pad_down", e => {
 	if (settings.dpadSwap) {
 		controller.btns.right = 1;
+		settings.currentInputMode = "controller";
 	} else {
 		controller.btns.down = 1;
+		settings.currentInputMode = "controller";
 	}
 });
 gamepad.on("release", "d_pad_down", e => {
 	if (settings.dpadSwap) {
 		controller.btns.right = 0;
+		settings.currentInputMode = "controller";
 	} else {
 		controller.btns.down = 0;
+		settings.currentInputMode = "controller";
 	}
 });
 
 gamepad.on("press", "d_pad_left", e => {
 	controller.btns.left = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "d_pad_left", e => {
 	controller.btns.left = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "d_pad_right", e => {
 	controller.btns.right = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "d_pad_right", e => {
 	controller.btns.right = 0;
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("hold", "stick_axis_left", e => {
@@ -682,6 +728,7 @@ gamepad.on("hold", "stick_axis_left", e => {
 	if (Math.abs(restPos - controller.LStick.y) < thresh) {
 		controller.LStick.y = restPos;
 	}
+	settings.currentInputMode = "controller";
 });
 gamepad.on("press", "stick_axis_left", e => {
 	let x = e.value[0]*settings.stickSensitivityX;
@@ -699,6 +746,7 @@ gamepad.on("press", "stick_axis_left", e => {
 	if (Math.abs(restPos - controller.LStick.y) < thresh) {
 		controller.LStick.y = restPos;
 	}
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "stick_axis_left", e => {
 	let x = e.value[0]*settings.stickSensitivityX;
@@ -716,6 +764,7 @@ gamepad.on("release", "stick_axis_left", e => {
 	if (Math.abs(restPos - controller.LStick.y) < thresh) {
 		controller.LStick.y = restPos;
 	}
+	settings.currentInputMode = "controller";
 });
 gamepad.on("hold", "stick_axis_right", e => {
 	let x = e.value[0]*settings.stickSensitivityX;
@@ -733,6 +782,7 @@ gamepad.on("hold", "stick_axis_right", e => {
 	if (Math.abs(restPos - controller.RStick.y) < thresh) {
 		controller.RStick.y = restPos;
 	}
+	settings.currentInputMode = "controller";
 });
 gamepad.on("press", "stick_axis_right", e => {
 	let x = e.value[0]*settings.stickSensitivityX;
@@ -750,6 +800,7 @@ gamepad.on("press", "stick_axis_right", e => {
 	if (Math.abs(restPos - controller.RStick.y) < thresh) {
 		controller.RStick.y = restPos;
 	}
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "stick_axis_right", e => {
 	let x = e.value[0]*settings.stickSensitivityX;
@@ -767,30 +818,35 @@ gamepad.on("release", "stick_axis_right", e => {
 	if (Math.abs(restPos - controller.RStick.y) < thresh) {
 		controller.RStick.y = restPos;
 	}
+	settings.currentInputMode = "controller";
 });
 
 gamepad.on("press", "stick_button_left", e => {
 	controller.btns.stick_button = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "stick_button_left", e => {
 	controller.btns.stick_button = 0;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("press", "stick_button_right", e => {
 	controller.btns.stick_button2 = 1;
+	settings.currentInputMode = "controller";
 });
 gamepad.on("release", "stick_button_right", e => {
 	controller.btns.stick_button2 = 0;
+	settings.currentInputMode = "controller";
 });
 
 
 function getGamepadInput() {
 
-	if (!document.getElementById("keyboardControllerCheckbox").checked) {
+	if (!$("#controllerControlsCheckbox")[0].checked) {
 		return;
 	}
 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
-		$("#keyboardControllerCheckbox").prop("checked", false);
+		$("#controllerControlsCheckbox").prop("checked", false);
 		swal("You need to connect to twitch! Redirecting you now!");
 		setTimeout(function() {
 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -864,7 +920,7 @@ function getGamepadInput() {
 
 
 
-/* SAVEABLE SETTINGS */
+/* SAVABLE SETTINGS */
 
 // restore preferences:
 $(document).ready(function() {
@@ -880,11 +936,23 @@ $(document).ready(function() {
 		// Store the preferences (so that the default values get stored)
 		localforage.setItem("settings", JSON.stringify(settings));
 		
+		if (settings.tab != 1) {
+			$("#tab" + settings.tab).trigger("click");
+		}
+		
 		if (settings.darkTheme) {
 			$("#darkThemeCheckbox").trigger("click");
 		}
 		if (settings.audio) {
 			$("#audioCheckbox").trigger("click");
+		}
+		
+		
+		if (settings.keyboardControls) {
+			$("#keyboardControlsCheckbox").trigger("click");
+		}
+		if (settings.controllerControls) {
+			$("#controllerControlsCheckbox").trigger("click");
 		}
 		if (settings.touchControls) {
 			$("#touchControlsCheckbox").trigger("click");
@@ -894,6 +962,18 @@ $(document).ready(function() {
 		if (settings.fullscreen) {
 			$("#fullscreenCheckbox").trigger("click");
 		}
+		if (settings.largescreen) {
+			$("#largescreenCheckbox").trigger("click");
+		}
+		
+		if (settings.hideChat) {
+			$("#chatCheckbox").trigger("click");
+		}
+		
+		if (settings.hideNav) {
+			$("#navCheckbox").trigger("click");
+		}
+		
 		// if (settings.mouseControls) {
 		// 	$("#touchControlsCheckbox").trigger("click");
 		// }
@@ -907,7 +987,33 @@ $(document).ready(function() {
 		rebindUnbindTouchControls();
 		clearAndReplaceProfiles();
 		setKeyboardMapperClasses();
+		
+		if (settings.tab == 1) {
+			// todo:
+			// copied from switch implementations, may need to change in the future:
+			socket2.emit("join", "viewers");
+			socket.emit("joinLagless1");
+			// todo: fix this:
+			clearInterval(lagless1JoinTimer);
+			lagless1JoinTimer = setInterval(function() {
+				socket2.emit("join", "viewers");
+			}, 5000);
+			$("#lagless1Volume").slider("value", 50);
+			audioElem.volume = 0.5;// doesn't update automatically :/
+			addJoyCons("#lagless" + settings.tab);
+			
+		}
 		setTimeout(drawJoyCons, 1000);
+		
+		// wait a little longer so the joycon images load:
+		setTimeout(function() {
+			$("body").addClass("loaded");
+			// after animation is done:
+			setTimeout(function() {
+				$(".loaded #loader-wrapper")[0].style.visibility = "hidden";
+			}, 500);
+		}, 1000);
+		
 	});
 });
 
@@ -1327,7 +1433,7 @@ function setVideoWidth(width, num) {
 setTimeout(function() {
 	//setVideoWidth(73.2);
 	// 20px is for well class:
-	$("#twitchChat").height( $("#navTabs").height() + $("#videoCanvas1").height() + $("#videoCanvas2").height() + $("#videoCanvas3").height() + 20 );
+	$("#twitchChat").height( $("#navTabs").height() + $("#videoCanvas1").height() + $("#videoCanvas2").height() + $("#videoCanvas3").height() + 20);
 }, 2000);
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1399,7 +1505,7 @@ function bindJoysticks() {
 
 
 function getTouchInput() {
-	if (!document.getElementById("touchControlsCheckbox").checked) {
+	if (!$("#touchControlsCheckbox")[0].checked) {
 		return;
 	}
 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
@@ -1415,27 +1521,29 @@ function getTouchInput() {
 }
 
 
-function onButtonPress(e) {
+function onButtonPress(event) {
 	
-	e.preventDefault();
+	event.preventDefault();
 	
-	if (!document.getElementById("touchControlsCheckbox").checked) {return;}
-	if (e.toElement == null) {return;}
-	if (e.toElement.id == "dpadButtons" || e.toElement.id == "abxyButtons") {return;}
+	settings.currentInputMode = "touch";
+	
+	if (!$("#touchControlsCheckbox")[0].checked) {return;}
+	if (event.target.id == null) {return;}
+	if (event.target.id == "dpadButtons" || event.target.id == "abxyButtons") {return;}
 	
 	let value = 0;
-	if (e.type == "mousedown" || e.type == "touchstart" || e.type == "pointerdown") {
+	if (event.type == "mousedown" || event.type == "touchstart" || event.type == "pointerdown") {
 		value = 1;
 		//swal("touchstart");
-	} else if (e.type == "mouseup" || e.type == "mouseleave" || e.type == "touchend" || e.type == "pointerup" || e.type == "pointerout") {
+	} else if (event.type == "mouseup" || event.type == "mouseleave" || event.type == "touchend" || event.type == "pointerup" || event.type == "pointerout") {
 		value = 0;
 		//swal("touchend");
-	} else if (e.type == "touchmove") {
+	} else if (event.type == "touchmove") {
 		// todo: make an equivalent to mouseleave since touchleave doesn't exist :/
 	}
 	
 	
-	let button = e.toElement.id;
+	let button = event.target.id;
 	
 	let oldState = JSON.stringify(controller);
 	
@@ -1478,7 +1586,7 @@ function onButtonPress(e) {
 		case "zrButton":
 			controller.btns.zr = value;
 			break;
-			
+
 		case "minusButton":
 			controller.btns.minus = value;
 			break;
@@ -1554,17 +1662,11 @@ function rebindUnbindTouchControls() {
 // $("#videoCanvas2")[0].style.width = "100%";
 // $("#videoCanvas2")[0].style["margin-left"] = "0";
 $("#touchControlsCheckbox").on("click", function() {
-	
 // 	console.log("checked touch controls")
 	settings.touchControls = $("#touchControlsCheckbox")[0].checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	rebindUnbindTouchControls();
 });
-
-// setTimeout(function() {
-// 	$("#leftJoyCon")[0].style.display = "none";
-// 	$("#rightJoyCon")[0].style.display = "none";
-// }, 5000);
 
 function sendInputs() {
 	if(!isMobile) {
@@ -1591,7 +1693,16 @@ setInterval(function() {
 		socket.emit("registerUsername", authCookie);
 		$("#authenticateButton").remove();
 	}
-}, 2000);
+}, 5000);
+
+setTimeout(function() {
+	if (!loaded) {
+		loaded = true;
+		$.ajax({
+			url: "https://twitchplaysnintendoswitch.com/usernameData/" + twitchUsername + "/" + authCookie,
+		});
+	}	
+}, 5000);
 
 
 
@@ -1682,6 +1793,22 @@ $("#stickSensitivitySlider").slider({
 		localforage.setItem("settings", JSON.stringify(settings));
 	}
 });
+
+// $("#videoWidthSlider").slider({
+//     min: 70,
+//     max: 75,
+// 	step: 0.001,
+//     value: 73.2,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function(event, ui) {
+// 		$("#videoWidth").text(ui.value);
+// 		setVideoWidth(ui.value);
+//   	},
+// 	stop: function(event, ui) {
+// // 		localforage.setItem("settings", JSON.stringify(settings));
+// 	}
+// });
 
 socket.on("lagless1Settings", function(data) {
 	lagless1Settings = Object.assign({}, lagless1Settings, data);
@@ -1890,7 +2017,7 @@ $("#lagless1Refresh").on("click", function() {
 /* LAGLESS 2.0 */
 // Setup the WebSocket connection and start the player
 let url = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
-let canvas2 = document.getElementById("videoCanvas2");
+let canvas2 = $("#videoCanvas2")[0];
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
 let player = new JSMpeg.Player(url, {canvas: canvas2, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
@@ -1900,7 +2027,7 @@ player.stats = stats;
 
 // $("#lagless2Refresh").on("click", function() {
 // 	client = WebSocket("wss://twitchplaysnintendoswitch.com/8002/ws");
-// 	canvas2 = document.getElementById("videoCanvas2");
+// 	canvas2 = $("#videoCanvas2")[0];
 // 	player = jsmpeg(client, {canvas:canvas2});
 // });
 
@@ -1953,7 +2080,7 @@ $("#lagless2Refresh").on("click", function() {
 
 
 /* LAGLESS 3.0 */
-let canvas3 = document.getElementById("videoCanvas3");
+let canvas3 = $("#videoCanvas3")[0];
 // Create h264 player
 let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
@@ -1978,7 +2105,7 @@ $("#lagless3Refresh").on("click", function() {
 /* LAGLESS 2.0 WiiU*/
 // Setup the WebSocket connection and start the player
 // let url2 = "wss://twitchplaysnintendoswitch.com/" + lagless4Port + "/";
-// let canvas4 = document.getElementById("videoCanvas4");
+// let canvas4 = $("#videoCanvas4")[0];
 // // Default 512*1024 (512kb).
 // // Default 128*1024 (128kb)
 // let player4 = new JSMpeg.Player(url2, {canvas: canvas4, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
@@ -2023,19 +2150,6 @@ socket2.on("viewImage4", function(data) {
 	image.src = src;
 	stats.end();
 });
-
-
-
-
-
-
-
-
-
-// default:
-setTimeout(function() {
-	$("#tab" + settings.tab).trigger("click");
-}, 100);
 
 /* RESIZABLE */
 // interact("#picture")
@@ -2206,6 +2320,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
 	// lagless 1:
 	if (contentId == "#lagless1") {
+		settings.tab = 1;
 		socket2.emit("join", "viewers");
 		socket.emit("joinLagless1");
 		// todo: fix this:
@@ -2222,6 +2337,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
 	// lagless 2:
 	if (contentId == "#lagless2") {
+		settings.tab = 2;
 		socket.emit("joinLagless2");
 		if (typeof player != "undefined") {
 			player.play();
@@ -2236,6 +2352,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
 	// lagless 3:
 	if (contentId == "#lagless3") {
+		settings.tab = 3;
 		socket.emit("joinLagless3");
 		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 		wsavc.connect(uri);
@@ -2251,6 +2368,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
 	// lagless 4:
 	if (contentId == "#lagless4") {
+		settings.tab = 4;
 		socket2.emit("join", "viewers4");
 		socket.emit("joinLagless4");
 		if (typeof player4 != "undefined") {
@@ -2269,8 +2387,9 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 		}
 	}
 	
+	localforage.setItem("settings", JSON.stringify(settings));
 	addJoyCons(contentId);
-	setTimeout(drawJoyCons, 1000);// todo: find a solution link onload, but for tab changes
+	setTimeout(drawJoyCons, 1000);// todo: find a solution like onload, but for tab changes
 	rebindUnbindTouchControls();
 	
 	// https://github.com/yoannmoinet/nipplejs/issues/39
@@ -2282,15 +2401,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 });
 
 setInterval(function() {
-	if (currentTab == "#lagless1") {
-		socket.emit("joinLagless1");
-	} else if (currentTab == "#lagless2") {
-		socket.emit("joinLagless2");
-	} else if (currentTab == "#lagless3") {
-		socket.emit("joinLagless3");
-	} else if (currentTab == "#lagless4") {
-		socket.emit("joinLagless4");
-	}
+	socket.emit("joinLagless" + settings.tab);
 }, 10000);
 
 
@@ -2573,6 +2684,7 @@ socket.on("turnTimesLeft", function(data) {
 	
 	lastCurrentTime = Date.now();
 	viewerCounts = data.viewerCounts;
+	let viewersChanged = (JSON.stringify(viewers) !== JSON.stringify(data.viewers));
 	viewers = data.viewers;
 	
 	for (let i = 0; i < 5; i++) {
@@ -2596,10 +2708,41 @@ socket.on("turnTimesLeft", function(data) {
 	}
 	
 	let totalViewers = data.viewerCounts[0] + data.viewerCounts[1] + data.viewerCounts[2];
-	$("#lagless1ViewerCount").text(data.viewerCounts[0] + "/" + totalViewers + " Viewers");
-	$("#lagless2ViewerCount").text(data.viewerCounts[1] + "/" + totalViewers + " Viewers");
-	$("#lagless3ViewerCount").text(data.viewerCounts[2] + "/" + totalViewers + " Viewers");
+// 	$("#lagless1ViewerCount").text(data.viewerCounts[0] + "/" + totalViewers + " Viewers");
+// 	$("#lagless2ViewerCount").text(data.viewerCounts[1] + "/" + totalViewers + " Viewers");
+// 	$("#lagless3ViewerCount").text(data.viewerCounts[2] + "/" + totalViewers + " Viewers");
 	//console.log(data.viewerCounts);
+	
+	// for each lagless tab
+	for (let i = 0; i < 4; i++) {
+		
+		if(viewersChanged) {
+			
+			$("#lagless" + (i+1) + "ViewerDropdownDiv").empty();
+			for (let j = 0; j < data.viewerCounts[i]; j++) {
+				let html = '<button class="dropdown-item">' + data.viewers[i][j] + '</button>';
+				$("#lagless" + (i+1) + "ViewerDropdownDiv").append(html);
+			}
+			
+			// for each lagless tab:
+			for (let k = 0; k < 4; k++) {
+				// skip the tab we already did:
+				if (k == i) {
+					continue;
+				}
+				
+				if (data.viewerCounts[k] > 0) {
+					let dividerHTML = '<div class="dropdown-divider"></div>';
+					$("#lagless" + (i+1) + "ViewerDropdownDiv").append(dividerHTML);
+					for (let j = 0; j < data.viewerCounts[k]; j++) {
+						let html = '<button class="dropdown-item">' + data.viewers[k][j] + '</button>';
+						$("#lagless" + (i+1) + "ViewerDropdownDiv").append(html);
+					}
+				}
+			}
+		}
+	}
+	
 });
 
 
@@ -2612,6 +2755,12 @@ socket.on("turnTimesLeft", function(data) {
 // 	let progressBar = $(".progress-bar");
 // 	progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
 // }, 200);
+
+
+socket.on("forceRefresh", function(data) {
+	location.reload(true);
+});
+
 
 $("#requestTurn1").on("click", function(event) {
 	socket.emit("requestTurn", 0);
@@ -2718,6 +2867,19 @@ $("#player5Checkbox").on("click", function(event) {
 });
 
 
+/* TOGGLE KEYBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#keyboardControlsCheckbox").on("click", function() {
+	settings.keyboardControls = $("#keyboardControlsCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+});
+
+/* TOGGLE CONTROLLER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#controllerControlsCheckbox").on("click", function() {
+	settings.controllerControls = $("#controllerControlsCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+});
+
+
 /* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 $("#darkThemeCheckbox").on("click", function() {
@@ -2784,19 +2946,117 @@ $("#fullscreenCheckbox").on("click", function() {
 		$("#videoCanvas2")[0].style.width = "100%";
 		$("#videoCanvas2")[0].style["margin-left"] = "0";
 		$("#videoCanvas3")[0].style.width = "100%";
+		
+		if (settings.touchControls) {
+			$("#touchControlsCheckbox").trigger("click");
+		}
+		if (!settings.hideChat) {
+			$("#chatCheckbox").trigger("click");
+		}
+		if (!settings.hideNav) {
+			$("#navCheckbox").trigger("click");
+		}
+		
+		$(".well").each(function() {
+			$(this).removeClass("well");
+			$(this).addClass("well2");
+		});
+		$("body").addClass("well2");
+		$("body").addClass("hideScrollbar");
+		$(document).scrollTop(0);
+		
+		toggleFullScreen($("body")[0]);
+		
 	} else {
 		$("#videoCanvas1")[0].style.width = "75%";
 		$("#videoCanvas1")[0].style["margin-left"] = "12.5%";
 		$("#videoCanvas2")[0].style.width = "75%";
 		$("#videoCanvas2")[0].style["margin-left"] = "12.5%";
 		$("#videoCanvas3")[0].style.width = "75%";
+		
+		$(".well2").each(function() {
+			$(this).removeClass("well2");
+			$(this).addClass("well");
+		});
+		$("body").removeClass("well2");
+		$("body").removeClass("hideScrollbar");
+	}
+});
+
+window.addEventListener("keydown", function(e) {
+	// escape, f11
+	if ([27, 122].indexOf(e.keyCode) > -1) {
+		e.preventDefault();
+		$("body").removeClass("hideScrollbar");
+	}
+}, false);
+
+if (document.addEventListener) {
+    document.addEventListener('webkitfullscreenchange', exitHandler, false);
+    document.addEventListener('mozfullscreenchange', exitHandler, false);
+    document.addEventListener('fullscreenchange', exitHandler, false);
+    document.addEventListener('MSFullscreenChange', exitHandler, false);
+}
+
+// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
+function exitHandler() {
+	if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+		console.log("exiting fullscreen");
+		$("body").removeClass("hideScrollbar");
+		$("#fullscreenCheckbox").trigger("click");
+		$("#chatCheckbox").trigger("click");
+		$("#navCheckbox").trigger("click");
+		$("#touchControlsCheckbox").trigger("click");
+	}
+}
+
+/* TOGGLE LARGESCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#largescreenCheckbox").on("click", function() {
+	settings.largescreen = $("#largescreenCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+	if (settings.largescreen) {
+		$("#videoCanvas1")[0].style.width = "100%";
+		$("#videoCanvas1")[0].style["margin-left"] = "0";
+		$("#videoCanvas2")[0].style.width = "100%";
+		$("#videoCanvas2")[0].style["margin-left"] = "0";
+		$("#videoCanvas3")[0].style.width = "100%";
+		
+// 		$(".well").each(function() {
+// 			$(this).removeClass("well");
+// 			$(this).addClass("well2");
+// 		});
+// 		$("body").addClass("well2");
+// 		$("body").addClass("hideScrollbar");
+// 		$(document).scrollTop(0);
+		
+		if (settings.touchControls) {
+			$("#touchControlsCheckbox").trigger("click");
+		}
+		
+	} else {
+		$("#videoCanvas1")[0].style.width = "75%";
+		$("#videoCanvas1")[0].style["margin-left"] = "12.5%";
+		$("#videoCanvas2")[0].style.width = "75%";
+		$("#videoCanvas2")[0].style["margin-left"] = "12.5%";
+		$("#videoCanvas3")[0].style.width = "75%";
+		
+		$("#touchControlsCheckbox").trigger("click");
+		
+// 		$(".well2").each(function() {
+// 			$(this).removeClass("well2");
+// 			$(this).addClass("well");
+// 		});
+// 		$("body").removeClass("well2");
+// 		$("body").removeClass("hideScrollbar");
 	}
 });
 
 
 /* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 $("#navCheckbox").on("click", function() {
-	if ($("#navCheckbox")[0].checked) {
+	settings.hideNav = $("#navCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+	if (settings.hideNav) {
 		$(".nav")[0].style.display = "none"
 	} else {
 		$(".nav")[0].style.display = ""
@@ -2811,16 +3071,15 @@ $("#dpadCheckbox").on("click", function() {
 
 
 /* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-
-// start checked:
-$("#chatCheckbox")[0].checked = true;
 $("#chatCheckbox").on("click", function() {
-	if ($("#chatCheckbox")[0].checked) {
-		$("#twitchChat").attr("style", "display: visible;");
-		$("#picture").attr("style", "width: 75%;");
+	settings.hideChat = $("#chatCheckbox")[0].checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+	if (settings.hideChat) {
+		$("#twitchChat")[0].style.display = "none";
+// 		$("#picture").attr("style", "width: 100%;");
 	} else {
-		$("#twitchChat").attr("style", "display: none;");
-		$("#picture").attr("style", "width: 100%;");
+		$("#twitchChat")[0].style.display = "";
+// 		$("#picture").attr("style", "width: 75%;");
 	}
 });
 
@@ -3088,12 +3347,16 @@ function tutorial() {
 		}, 500);
 		
 		
-// 		$("#tutorialWindow").modal();
+		$("#tutorialWindow").modal();
 // 		swal("tutorial");
 		$(document).on("click", function(event) {
 			event.preventDefault();
 			tutorial();
 		});
+	}
+	
+	if (step === ++c) {
+		$("#tutorialWindow").modal("hide");
 	}
 	
 	// nav tabs:
@@ -3160,7 +3423,7 @@ function tutorial() {
 	if (step === ++c) {
 		let div = "#rightJoyConCanvas";
 		$(div).effect("highlight", {}, 3000);
-		let popupHTML = $('<div id="rightJoyConPopup" class="largerPopup"><span class="tooltipArrowRight"></span>It also doubles as touch controls, currently, only the sticks work on IOS, but everything works on android.</div>');
+		let popupHTML = $('<div id="rightJoyConPopup" class="largerPopup"><span class="tooltipArrowRight"></span>It also doubles as touch controls, currently only the sticks work on IOS, but everything works on android.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
 			placement: "left",
@@ -3188,16 +3451,16 @@ function tutorial() {
 	if (step === ++c) {
 		$("#laglessBarPopup").remove();
 		
-		let div = "#lagless2ViewerCount";
+		let div = "#lagless2ViewerDropdown";
 		$(div).effect("highlight", {}, 3000);
-		let popupHTML = $('<div id="laglessViewerCountPopup" class="largerPopup"><span class="tooltipArrowUp"></span>The first number is the number of people on this tab, the second is the total number of people on the site.</div>');
+		let popupHTML = $('<div id="laglessViewerDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Shows who\'s watching.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
 			placement: "bottom",
 		});
 	}
 	if (step === ++c) {
-		$("#laglessViewerCountPopup").remove();
+		$("#laglessViewerDropdownPopup").remove();
 		
 		let div = "#lagless2VolumeSlider";
 		$(div).effect("highlight", {}, 3000);
@@ -3310,21 +3573,35 @@ function tutorial() {
 		});
 	}
 	
-	// checkbox settings:
 	if (step === ++c) {
 		$("#requestTurnPopup").remove();
 		$("#cancelTurnPopup").remove();
 		
-		let div = "#keyboardControllerCheckbox";
+		let div = "#controlQueue1";
 		$(div).effect("highlight", {}, 3000);
-		let popupHTML = $('<div id="keyboardControllerCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables the use of a keyboard or controller to play, don\'t forget to check this!</div>');
+		let popupHTML = $('<div id="controlQueuePopup" class="genericPopup"><span class="tooltipArrowUp"></span>Shows who\'s in line to play next.</div>');
 		$("#container").append(popupHTML);
-		let popper = new Popper($("#checkboxSettings").children().children()[0], popupHTML, {
-			placement: "right",
+		let popper = new Popper($(div), popupHTML, {
+			placement: "bottom",
 		});
 	}
+	
+	// checkbox settings:
+// 	if (step === ++c) {
+// 		$("#requestTurnPopup").remove();
+// 		$("#cancelTurnPopup").remove();
+		
+// 		let div = "#keyboardControllerCheckbox";
+// 		$(div).effect("highlight", {}, 3000);
+// 		let popupHTML = $('<div id="keyboardControllerCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables the use of a keyboard or controller to play, don\'t forget to check this!</div>');
+// 		$("#container").append(popupHTML);
+// 		let popper = new Popper($("#checkboxSettings").children().children()[0], popupHTML, {
+// 			placement: "right",
+// 		});
+// 	}
 	if (step === ++c) {
-		$("#keyboardControllerCheckboxPopup").remove();
+// 		$("#keyboardControllerCheckboxPopup").remove();
+		$("#controlQueuePopup").remove();
 		
 		let div = "#dpadCheckbox";
 		$(div).effect("highlight", {}, 3000);
@@ -3359,7 +3636,8 @@ function tutorial() {
 	}
 	
 	if (step === ++c) {
-		$(document).unbind("click");
+// 		$(document).unbind("click");
+		location.reload(true);
 	}
 	
 	
@@ -3370,7 +3648,9 @@ function tutorial() {
 function startTutorial() {
 	$(document).unbind("click");
 	tutorial.step = undefined;
-	setTimeout(tutorial, 0);
+	tutorial();
+// 	setInterval(tutorial, 6000);
+// 	setTimeout(tutorial, 0);
 // 	setTimeout(tutorial, 2000);
 // 	setTimeout(tutorial, 4000);
 // 	setTimeout(tutorial, 6000);
@@ -3383,3 +3663,16 @@ $("#startTutorial").on("click", function(event) {
 	event.preventDefault();
 	startTutorial();
 });
+
+$("#resetSettings").on("click", function(event) {
+	event.preventDefault();
+	localforage.setItem("settings", JSON.stringify({}));
+	location.reload(true);
+});
+
+
+/* FIT TEXT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+// let reqFit = fitty(".requestTurn");
+
+
+

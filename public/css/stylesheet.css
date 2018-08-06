@@ -1,11 +1,20 @@
 body {
-	font: 13px Helvetica, Arial;
-	padding: 1%;
-	/* 	position: fixed; */
+/* 	font: 13px Helvetica, Arial; */
+	font-family: "Roboto", sans-serif !important;
 	margin: 0;
-	/* 	overflow: hidden; */
+	padding: 1%;
+/* 	overflow: hidden; */
 	width: 100%;
 	height: 100%;
+}
+
+/* hide the scrollbar */
+/* ::-webkit-scrollbar { 
+    display: none; 
+} */
+
+.hideScrollbar {
+	overflow: hidden;
 }
 
 html {
@@ -55,6 +64,7 @@ margin-right: auto; */
 	flex-wrap: wrap;
 	width: 30%;
 	height: min-content;
+	padding: 0.2%;
 }
 
 .turnTimerBar {
@@ -82,7 +92,7 @@ margin-right: auto; */
 }
 
 #barUnderTheStream {
-	display: inline-flex;
+	display: flex;
 	flex-direction: column;
 	min-height: 125px;
 	padding: 20px;
@@ -95,21 +105,19 @@ margin-right: auto; */
 }
 
 #timer {
-	padding: 0;
 	margin: 0;
-	width: 190px;
-	height: 50px;
+	padding: 0;
+	height: 30px;
 	overflow: hidden;
-	/* 	margin-left: auto; */
+	align-self: center;
 }
 
 #speedrunTimer {
-	padding: 0;
 	margin: 0;
-	width: 190px;
-	height: 50px;
+	padding: 0;
+	height: 30px;
 	overflow: hidden;
-	/* 	margin-left: auto; */
+	align-self: center;
 }
 
 /* tabs */
@@ -198,7 +206,7 @@ max-width: 500px; */
 	width: 100%;
 	margin: auto;
 	padding: 0;
-	flex-wrap: wrap;
+/* 	flex-wrap: wrap; */
 }
 
 #description {
@@ -207,17 +215,14 @@ max-width: 500px; */
 }
 
 #picture {
-	width: 80%;
+	width: 100%;
+/* 	flex-grow: 1; */
 	padding: 0;
 	margin: 0;
 }
 
 #twitchChat {
-	height: 100%;
-	min-height: 500px;
-	/* 	width: 25%; */
-	/* 	flex-grow: 1; */
-	width: 20%;
+	width: 25%;
 }
 
 /* VIDEO CONTAINERS */
@@ -237,7 +242,7 @@ flex-direction: column;
 }
 
 .laglessView {
-	display: inline-flex;
+	display: flex;
 	flex-direction: row;
 	justify-content: start;
 	position: relative;
@@ -599,6 +604,7 @@ height: 30px; */
 	width: 32%;
 	height: 32%;
 	border: 2px solid #333;
+	border-radius: 20px;
 }
 
 #dpadButtons {
@@ -612,26 +618,26 @@ height: 30px; */
 
 #upButton {
 	position: absolute;
-	left: 36%;
-	top: 5%;
+	left: 35%;
+	top: 9%;
 }
 
 #downButton {
 	position: absolute;
-	left: 36%;
-	top: 65%;
+	left: 35%;
+	top: 63%;
 }
 
 #leftButton {
 	position: absolute;
-	left: 5%;
-	top: 35%;
+	left: 7%;
+	top: 36%;
 }
 
 #rightButton {
 	position: absolute;
-	left: 66%;
-	top: 35%;
+	left: 63%;
+	top: 36%;
 }
 
 #minusButton {
@@ -714,26 +720,26 @@ height: 30px; */
 
 #xButton {
 	position: absolute;
-	left: 36%;
-	top: 5%;
+	left: 35%;
+	top: 8%;
 }
 
 #bButton {
 	position: absolute;
-	left: 36%;
-	top: 65%;
+	left: 35%;
+	top: 61%;
 }
 
 #yButton {
 	position: absolute;
-	left: 5%;
+	left: 7%;
 	top: 35%;
 }
 
 #aButton {
 	position: absolute;
-	left: 66%;
-	top: 35%;
+	left: 63%;
+	top: 34%;
 }
 
 #plusButton {
@@ -1010,6 +1016,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	cursor: pointer;
 }
 
+.fa.fa-volume-down {
+	padding-left: 6px;
+	padding-right: 6px;
+}
+
 .volume {
 	height: 5px;
 	width: 70%;
@@ -1143,6 +1154,15 @@ color: #333; */
 .keyboardDropdown {
 	align-self: center;
 }
+
+.viewerDropdown {
+	align-self: center;
+}
+
+/* https://stackoverflow.com/questions/42183672/bootstrap-v4-navbar-dropdown-hover */
+/* .dropdown:hover > .dropdown-menu {
+	display: block;
+} */
 
 #profileCreator {
 	margin-top: 10px;
@@ -1450,4 +1470,28 @@ visibility: visible;
 	display: flex;
 	flex-direction: column;
 	margin: 0;
+}
+
+
+
+/* MISC */
+.collapse:not(.show) {
+	display: none !important;
+}
+
+.well2 {
+	padding: 0 !important;
+	margin: 0 !important;
+}
+
+/* @include media-breakpoint-between(xs,sm) {
+  .btn {
+      @include button-size($input-btn-padding-y-sm, $input-btn-padding-x-sm, $font-size-sm, $line-height-sm, $btn-border-radius-sm);
+  }
+} */
+
+.collapseButton {
+	height: 30px;
+	line-height: 15px;
+	margin-bottom: 10px;
 }

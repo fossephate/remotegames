@@ -49,7 +49,7 @@ String.prototype.replaceAll = function(search, replacement) {
 };
 
 function msToTime(duration) {
-// 	var milliseconds = parseInt((duration % 1000) / 100);
+	// 	var milliseconds = parseInt((duration % 1000) / 100);
 	var milliseconds = parseInt((((duration / 1000) % 60) % 1) * 1000);
 	var seconds = parseInt((duration / 1000) % 60);
 	var minutes = parseInt((duration / (1000 * 60)) % 60);
@@ -73,4 +73,36 @@ function msToTime(duration) {
 	var time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 	time = time.replaceAll("-", ""); // remove negative signs
 	return time;
+}
+
+function toggleFullScreen(elem) {
+	// ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+	if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+		if (elem.requestFullScreen) {
+			elem.requestFullScreen();
+		} else if (elem.mozRequestFullScreen) {
+			elem.mozRequestFullScreen();
+		} else if (elem.webkitRequestFullScreen) {
+			elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+		} else if (elem.msRequestFullscreen) {
+			elem.msRequestFullscreen();
+		}
+	} else {
+		if (document.cancelFullScreen) {
+			document.cancelFullScreen();
+		} else if (document.mozCancelFullScreen) {
+			document.mozCancelFullScreen();
+		} else if (document.webkitCancelFullScreen) {
+			document.webkitCancelFullScreen();
+		} else if (document.msExitFullscreen) {
+			document.msExitFullscreen();
+		}
+	}
+}
+
+function setToPercentParent(elem, percent) {
+	$(elem).height(0);
+	let parentHeight = $(elem).parent().height();
+	let newHeight = (percent / 100) * parentHeight;
+	$(elem).height(newHeight);
 }

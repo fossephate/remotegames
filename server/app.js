@@ -9,10 +9,6 @@ const util = require("util");
 const fs = require("fs");
 const now = require("performance-now");
 
-const WebSocketServer = require("ws").Server;
-const Splitter = require("stream-split");
-const NALseparator = new Buffer([0, 0, 0, 1]); //NAL break
-
 const session = require("express-session");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
@@ -58,7 +54,9 @@ let lagless2ChangeAvailable = true;
 let controlQueues = [[],[],[],[],[]];
 
 let banlist = [];
-let twitch_subscribers = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
+let modlist = [];
+let pluslist = [];
+let sublist = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
 
 let lagless1ClientIds = [];
 let lagless2ClientIds = [];
@@ -231,7 +229,7 @@ let helpSite = `
 			.custom {
 				font-family: comic sans ms;
 				color: white;
-				font-size: 50px;
+				font-size: 35px;
 				text-align: center;
 				vertical-align: middle;
 				/*text-shadow: 2px 2px #000000;*/
@@ -266,7 +264,7 @@ if (typeof usernameDB == "undefined" || usernameDB === null) {
 	usernameDB = {};
 }
 
-console.log(util.inspect(usernameDB, false, null));
+//console.log(util.inspect(usernameDB, false, null));
 
 function Client(socket) {
 	this.socket = socket;
@@ -491,35 +489,6 @@ io.on("connection", function(socket) {
 		io.emit("controllerState" + cNum, controllerState);
 // 		io.emit("currentPlayers", currentTurnUsernames);
 	});
-	
-	
-// 	socket.on("sendControllerStateWiiU3Ds", function(data) {
-
-// // 		let index = findClientByID(socket.id);
-// // 		if (index == -1) {
-// // 			return;
-// // 		}
-// // 		let client = clients[index];
-// // 		if (client.username == null) {
-// // 			return;
-// // 		}
-		
-// // 		if (controlQueue2.length === 0) {
-// // 			return;
-// // 		}
-// // 		currentTurnUsername2 = controlQueue2[0];
-// // 		if (client.username != currentTurnUsername2) {
-// // 			return;
-// // 		}
-
-// 		// forfeit timer:
-// 		clearTimeout(forfeitTimer2);
-// 		forfeitTimer2 = setTimeout(forfeitTurn2, timeTillForfeit2, client.username);
-// 		forfeitStartTime2 = Date.now();
-
-// 		io.to("wiiu3dscontroller").emit("controllerState", data);
-// // 		io.emit("currentPlayer2", client.username);
-// 	});
 
 	socket.on("directedGetImage", function(data) {
 		let index = findClientByName(data.user);
@@ -665,8 +634,21 @@ io.on("connection", function(socket) {
 		process.exit();
 	});
 	
+	
+	/* LISTS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+	
+	// todo: secure this:
 	socket.on("banlist", function(data) {
 		banlist = data;
+	});
+	socket.on("pluslist", function(data) {
+		pluslist = data;
+	});
+	socket.on("modlist", function(data) {
+		modlist = data;
+	});
+	socket.on("sublist", function(data) {
+		sublist = data;
 	});
 
 	socket.on("disconnect", function() {
@@ -794,6 +776,17 @@ io.on("connection", function(socket) {
 	io.emit("lagless1Settings", lagless1Settings);
 	io.emit("lagless2Settings", lagless2Settings);
 	io.emit("lagless4Settings", lagless4Settings);
+	
+	/* Other Commands @@@@@@@@@@@@@@@@@@@@@@@@ */
+	socket.on("forceRefresh", function(channel) {
+		io.emit("forceRefresh");
+	});
+	socket.on("disableInternet", function(channel) {
+		io.to("proxy").emit("disableInternet");
+	});
+	socket.on("enableInternet", function(channel) {
+		io.to("proxy").emit("enableInternet");
+	});
 
 	/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -1132,8 +1125,8 @@ setInterval(function() {
 		turnTimesLeft[i] = timeLeft;
 		forfeitTimesLeft[i] = timeLeftForfeit;
 		
-		if(timeLeftForfeit < 0) {
-			console.log("forfeit system screwed up somehow");
+		if(timeLeftForfeit < -50) {
+			console.log("forfeit system screwed up somehow by: " + timeLeftForfeit);
 			// reset forfeit timer:
 			forfeitStartTimes[i] = Date.now();
 			clearTimeout(forfeitTimers[i]);
