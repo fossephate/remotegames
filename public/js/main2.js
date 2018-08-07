@@ -271,19 +271,6 @@ function sendControllerState() {
 		return;
 	}
 	
-// 	if(controlQueues[0].indexOf(twitchUsername) == -1 && currentPlayerChosen == 0) {
-// 		socket.emit("requestTurn", 0);
-// 	}
-// 	if(controlQueues[1].indexOf(twitchUsername) == -1 && currentPlayerChosen == 1) {
-// 		socket.emit("requestTurn", 1);
-// 	}
-// 	if(controlQueues[2].indexOf(twitchUsername) == -1 && currentPlayerChosen == 2) {
-// 		socket.emit("requestTurn", 1);
-// 	}
-// 	if(controlQueues[3].indexOf(twitchUsername) == -1 && currentPlayerChosen == 3) {
-// 		socket.emit("requestTurn", 1);
-// 	}
-	
 	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) == -1) {
 		socket.emit("requestTurn", currentPlayerChosen);
 	}
@@ -1823,7 +1810,7 @@ socket.on("lagless1Settings", function(data) {
 
 $("#bitrateSlider2").slider({
     min: 0,
-    max: 2,
+    max: 3,
 	step: 0.05,
     value: 1,
 	range: "min",
@@ -2582,98 +2569,54 @@ $("#lagless1VolumeSlider").children().next().on("click", function(){
 
 /* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 socket.on("controlQueues", function(data) {
+	
+	let sameQueues = [];
+	for (let i = 0; i < data.queues.length; i++) {
+		sameQueues.push(JSON.stringify(controlQueues[i]) === JSON.stringify(data.queues[i]))
+	}
 	controlQueues = data.queues;
-	controlQueue1 = controlQueues[0];
-	controlQueue2 = controlQueues[1];
-	controlQueue3 = controlQueues[2];
-	controlQueue4 = controlQueues[3];
-	controlQueue5 = controlQueues[4];
 	
 	// todo: for loop this
 	
-	$("#controlQueue1").empty();
-	for (let i = 0; i < controlQueue1.length; i++) {
-		let username = controlQueue1[i];
+	for (let i = 0; i < data.queues.length; i++) {
+		
+		// don't do anything if it hasn't changed:
+		if (sameQueues[i]) {
+			continue;
+		}
+		
+		$("#controlQueue" + (i + 1)).empty();
+		for (let j = 0; j < data.queues[i].length; j++) {
+			let username = data.queues[i][j];
+			let html;
+			if (!settings.darkTheme) {
+				html = "<li class='queueItem list-group-item'>" + username + "</li>";
+			} else {
+				html = "<li class='queueItem list-group-item-dark'>" + username + "</li>";
+			}
+			$("#controlQueue" + (i + 1)).append(html);
+		}
+		
 		let html;
 		if (!settings.darkTheme) {
-			html = "<li class='list-group-item'>" + username + "</li>";
+			html = "<li class='list-group-item'>The queue is empty.</li>";
 		} else {
-			html = "<li class='list-group-item-dark'>" + username + "</li>";
+			html = "<li class='list-group-item-dark'>The queue is empty.</li>";
 		}
-		$("#controlQueue1").append(html);
-	}
-	
-	
-	$("#controlQueue2").empty();
-	for (let i = 0; i < controlQueue2.length; i++) {
-		let username = controlQueue2[i];
-		let html;
-		if (!settings.darkTheme) {
-			html = "<li class='list-group-item'>" + username + "</li>";
-		} else {
-			html = "<li class='list-group-item-dark'>" + username + "</li>";
+		if (data.queues[i].length === 0) {
+			$("#controlQueue" + (i + 1)).append(html);
 		}
-		$("#controlQueue2").append(html);
+		
 	}
 	
-	$("#controlQueue3").empty();
-	for (let i = 0; i < controlQueue3.length; i++) {
-		let username = controlQueue3[i];
-		let html;
-		if (!settings.darkTheme) {
-			html = "<li class='list-group-item'>" + username + "</li>";
-		} else {
-			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		}
-		$("#controlQueue3").append(html);
-	}
-	
-	$("#controlQueue4").empty();
-	for (let i = 0; i < controlQueue4.length; i++) {
-		let username = controlQueue4[i];
-		let html;
-		if (!settings.darkTheme) {
-			html = "<li class='list-group-item'>" + username + "</li>";
-		} else {
-			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		}
-		$("#controlQueue4").append(html);
-	}
-	
-	$("#controlQueue5").empty();
-	for (let i = 0; i < controlQueue5.length; i++) {
-		let username = controlQueue5[i];
-		let html;
-		if (!settings.darkTheme) {
-			html = "<li class='list-group-item'>" + username + "</li>";
-		} else {
-			html = "<li class='list-group-item-dark'>" + username + "</li>";
-		}
-		$("#controlQueue5").append(html);
-	}
-	
-	let html;
-	if (!settings.darkTheme) {
-		html = "<li class='list-group-item'>The queue is empty.</li>";
-	} else {
-		html = "<li class='list-group-item-dark'>The queue is empty.</li>";
-	}
-	if (controlQueue1.length === 0) {
-		$("#controlQueue1").append(html);
-	}
-	if (controlQueue2.length === 0) {
-		$("#controlQueue2").append(html);
-	}
-	if (controlQueue3.length === 0) {
-		$("#controlQueue3").append(html);
-	}
-	if (controlQueue4.length === 0) {
-		$("#controlQueue4").append(html);
-	}
-	if (controlQueue5.length === 0) {
-		$("#controlQueue5").append(html);
-	}
-	
+});
+
+// selects elements in the future:
+// https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
+$(document).on("click", ".queueItem", function(event) {
+	let username = event.target.innerHTML;
+	$(this).effect("highlight", {}, 2000);
+	socket.emit("kickFromQueue", username);
 });
 
 socket.on("twitchUsername", function(data) {
@@ -2708,10 +2651,6 @@ socket.on("turnTimesLeft", function(data) {
 	}
 	
 	let totalViewers = data.viewerCounts[0] + data.viewerCounts[1] + data.viewerCounts[2];
-// 	$("#lagless1ViewerCount").text(data.viewerCounts[0] + "/" + totalViewers + " Viewers");
-// 	$("#lagless2ViewerCount").text(data.viewerCounts[1] + "/" + totalViewers + " Viewers");
-// 	$("#lagless3ViewerCount").text(data.viewerCounts[2] + "/" + totalViewers + " Viewers");
-	//console.log(data.viewerCounts);
 	
 	// for each lagless tab
 	for (let i = 0; i < 4; i++) {

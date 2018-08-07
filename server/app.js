@@ -271,6 +271,7 @@ function Client(socket) {
 	this.id = socket.id;
 	this.name = "none";
 	this.username = null;
+	this.rooms = [];
 }
 
 function findClientByID(id) {
@@ -321,6 +322,19 @@ function findClientByUsername(username) {
 		}
 	}
 	return index;
+}
+
+function checkIfClientIsInRoomByID(id, room) {
+	let index = findClientByID(id);
+	if (index == -1) {
+		return false;
+	}
+	let client = clients[index];
+	if (client.rooms.indexOf(room) > -1) {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 function SplitTimer(startTime, splitNames, name) {
@@ -637,18 +651,29 @@ io.on("connection", function(socket) {
 	
 	/* LISTS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	
-	// todo: secure this:
 	socket.on("banlist", function(data) {
-		banlist = data;
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			banlist = data;
+		}
 	});
 	socket.on("pluslist", function(data) {
-		pluslist = data;
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			pluslist = data;
+		}
 	});
 	socket.on("modlist", function(data) {
-		modlist = data;
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			modlist = data;
+		}
 	});
 	socket.on("sublist", function(data) {
-		sublist = data;
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			sublist = data;
+		}
 	});
 
 	socket.on("disconnect", function() {
@@ -661,6 +686,14 @@ io.on("connection", function(socket) {
 	
 	/* LAGLESS 1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless1Settings", function(data) {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.username == null) {
+			return;
+		}
 		currentTurnUsernames[0] = controlQueues[0][0];
 		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0) {
 			io.emit("lagless1Settings", lagless1Settings);
@@ -693,6 +726,14 @@ io.on("connection", function(socket) {
 	
 	/* LAGLESS2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless2Settings", function(data) {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.username == null) {
+			return;
+		}
 		currentTurnUsernames[0] = controlQueues[0][0];
 		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0) {
 			io.emit("lagless2Settings", lagless2Settings);
@@ -733,6 +774,14 @@ io.on("connection", function(socket) {
 	
 	/* LAGLESS4 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless4Settings", function(data) {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.username == null) {
+			return;
+		}
 		currentTurnUsernames[0] = controlQueues[0][0];
 		currentTurnUsernames[4] = controlQueues[4][0];
 		if (client.username != currentTurnUsernames[4] && controlQueues[4].length > 0) {
@@ -779,14 +828,46 @@ io.on("connection", function(socket) {
 	
 	/* Other Commands @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("forceRefresh", function(channel) {
-		io.emit("forceRefresh");
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			io.emit("forceRefresh");
+		} else {
+			console.log("something bad happened 1.");
+		}
 	});
 	socket.on("disableInternet", function(channel) {
-		io.to("proxy").emit("disableInternet");
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			io.to("proxy").emit("disableInternet");
+		} else {
+			console.log("something bad happened 2.");
+		}
 	});
 	socket.on("enableInternet", function(channel) {
-		io.to("proxy").emit("enableInternet");
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			io.to("proxy").emit("enableInternet");
+		} else {
+			console.log("something bad happened 3.");
+		}
 	});
+	socket.on("kickFromQueue", function(data) {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.username == null) {
+			return;
+		}
+		
+		if (modlist.indexOf(client.username) > -1) {
+			for (let i = 0; i < controlQueues.length; i++) {
+				forfeitTurn(data, i);
+			}
+		}
+	});
+	
 
 	/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -826,9 +907,52 @@ io.on("connection", function(socket) {
 
 	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("join", function(room) {
+		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "controller"];
+		if (secureList.indexOf(room) > -1) {
+			return;
+		}
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		let client = clients[index];
+		client.rooms.push(room);
 		socket.join(room);
 	});
+	
+	socket.on("joinSecure", function(data, password) {
+		
+		let myData = {room: "", password: ""};
+		
+		if (typeof password == "undefined") {
+			myData.room = data.room;
+			myData.password = data.password;
+		} else if (typeof password != "undefined") {
+			myData.room = data;
+			myData.password = password;
+		}
+		
+		if (myData.password === config.ROOM_SECRET) {
+			let index = findClientByID(socket.id);
+			if (index == -1) {
+				return;
+			}
+			let client = clients[index];
+			if (client.rooms.indexOf(myData.room) == -1) {
+				client.rooms.push(myData.room);
+			}
+			socket.join(myData.room);
+		}
+	});
+	
 	socket.on("leave", function(room) {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		let client = clients[index];
+		index = client.rooms.indexOf(room);
+		client.rooms.splice(index, 1);
 		socket.leave(room);
 	});
 	
@@ -1126,7 +1250,7 @@ setInterval(function() {
 		forfeitTimesLeft[i] = timeLeftForfeit;
 		
 		if(timeLeftForfeit < -50) {
-			console.log("forfeit system screwed up somehow by: " + timeLeftForfeit);
+// 			console.log("forfeit system screwed up somehow by: " + timeLeftForfeit);
 			// reset forfeit timer:
 			forfeitStartTimes[i] = Date.now();
 			clearTimeout(forfeitTimers[i]);

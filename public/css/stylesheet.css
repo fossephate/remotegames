@@ -258,7 +258,7 @@ flex-direction: column;
 	display: flex;
 	justify-content: space-evenly;
 	align-self: center;
-	width: 75%;
+	width: 82%;
 	padding-top: 0px;
 	padding-bottom: 0px;
 	margin: 5px;
@@ -625,7 +625,7 @@ height: 30px; */
 #downButton {
 	position: absolute;
 	left: 35%;
-	top: 63%;
+	top: 62%;
 }
 
 #leftButton {
@@ -810,6 +810,14 @@ width: 40%; */
 	text-align: center;
 	margin-top: 5px;
 	flex-grow: 1;
+}
+
+.queueItem {
+	cursor: pointer;
+	-webkit-user-select: none; /* Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
 }
 
 #controlQueue1 {}
@@ -1017,8 +1025,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 }
 
 .fa.fa-volume-down {
-	padding-left: 6px;
-	padding-right: 6px;
+	padding-left: 7px;
+	padding-right: 7px;
 }
 
 .volume {
