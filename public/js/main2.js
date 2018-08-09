@@ -17,6 +17,8 @@ let viewers = [];
 let lastSplitTime = 0;
 let lastSplitTimeMS = 0;
 let loaded = false;
+let player;
+let player4;
 
 let controlQueues = [];
 let controlQueue1 = [];
@@ -277,6 +279,19 @@ function sendControllerState() {
 	
 	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) > 0 && controlQueues[currentPlayerChosen].length > 0) {
 		swal("It's not your turn yet!");
+		return;
+	}
+	
+	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
+	if (authCookie == null) {
+		swal({
+			title: "You need to connect to twitch! Redirecting you now!",
+		}).then((result) => {
+			if (result.value) {
+				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+			}
+		});
+		return;
 	}
 	
 	let obj = {state: newControllerState, cNum: 0}
@@ -291,6 +306,8 @@ function sendControllerState() {
 		obj.cNum = 3;
 	} else if (controlQueues[4][0] == twitchUsername) {
 		obj.cNum = 4;
+	} else {
+		return;
 	}
 	console.log(obj.state, obj.cNum);
 	socket.emit("sendControllerState", obj);
@@ -304,10 +321,13 @@ function getKeyboardInput() {
 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
 		$("#keyboardControlsCheckbox").prop("checked", false);
-		swal("You need to connect to twitch! Redirecting you now!");
-		setTimeout(function() {
-			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-		}, 2000);
+		swal({
+			title: "You need to connect to twitch! Redirecting you now!",
+		}).then((result) => {
+			if (result.value) {
+				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+			}
+		});
 		return;
 	}
 	
@@ -834,10 +854,13 @@ function getGamepadInput() {
 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
 		$("#controllerControlsCheckbox").prop("checked", false);
-		swal("You need to connect to twitch! Redirecting you now!");
-		setTimeout(function() {
-			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-		}, 2000);
+		swal({
+			title: "You need to connect to twitch! Redirecting you now!",
+		}).then((result) => {
+			if (result.value) {
+				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+			}
+		});
 		return;
 	}
 }
@@ -971,25 +994,16 @@ $(document).ready(function() {
 		$("#stickSensitivitySlider").slider("value", settings.stickSensitivityX);
 		$("#sensitivity").text(settings.stickSensitivityX);
 		
+		if (settings.tab == 1) {
+			switchTabs("#lagless1");
+		}
+		
+		addJoyCons("#lagless" + settings.tab);
+		
 		rebindUnbindTouchControls();
 		clearAndReplaceProfiles();
 		setKeyboardMapperClasses();
 		
-		if (settings.tab == 1) {
-			// todo:
-			// copied from switch implementations, may need to change in the future:
-			socket2.emit("join", "viewers");
-			socket.emit("joinLagless1");
-			// todo: fix this:
-			clearInterval(lagless1JoinTimer);
-			lagless1JoinTimer = setInterval(function() {
-				socket2.emit("join", "viewers");
-			}, 5000);
-			$("#lagless1Volume").slider("value", 50);
-			audioElem.volume = 0.5;// doesn't update automatically :/
-			addJoyCons("#lagless" + settings.tab);
-			
-		}
 		setTimeout(drawJoyCons, 1000);
 		
 		// wait a little longer so the joycon images load:
@@ -1495,15 +1509,18 @@ function getTouchInput() {
 	if (!$("#touchControlsCheckbox")[0].checked) {
 		return;
 	}
-	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
-	if (authCookie == null) {
-		$("#touchControlsCheckbox").prop("checked", false);
-		swal("You need to connect to twitch! Redirecting you now!");
-		setTimeout(function() {
-			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-		}, 2000);
-		return;
-	}
+// 	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
+// 	if (authCookie == null) {
+// 		$("#touchControlsCheckbox").prop("checked", false);
+// 		swal({
+// 			title: "You need to connect to twitch! Redirecting you now!",
+// 		}).then((result) => {
+// 			if (result.value) {
+// 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+// 			}
+// 		});
+// 		return;
+// 	}
 	//controller.reset();
 }
 
@@ -2007,16 +2024,10 @@ let url = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
 let canvas2 = $("#videoCanvas2")[0];
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-let player = new JSMpeg.Player(url, {canvas: canvas2, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
-player.maxAudioLag = 0.5;
-player.stop();
-player.stats = stats;
-
-// $("#lagless2Refresh").on("click", function() {
-// 	client = WebSocket("wss://twitchplaysnintendoswitch.com/8002/ws");
-// 	canvas2 = $("#videoCanvas2")[0];
-// 	player = jsmpeg(client, {canvas:canvas2});
-// });
+// let player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
+// player.maxAudioLag = 0.5;
+// player.stop();
+// player.stats = stats;
 
 $("#lagless2Volume").slider({
     min: 0,
@@ -2029,7 +2040,7 @@ $("#lagless2Volume").slider({
   	}
 });
 $("#lagless2Volume").slider("value", 50);
-player.volume = 0.5;// doesn't update automatically :/
+// player.volume = 0.5;// doesn't update automatically :/
 
 
 $("#lagless2VolumeSlider").children().on("click", function(){
@@ -2056,7 +2067,7 @@ function resizeVideo2(scale) {
 // on settings change:
 socket.on("lagless2SettingsChange", function(data) {
 	player.destroy();
-	player = new JSMpeg.Player(url, {canvas: canvas2, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
+	player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
 });
 
 //socket.emit("lagless2Settings", {videoBitrate: "2M", framerate: 20, scale: "640:360"});
@@ -2095,7 +2106,7 @@ $("#lagless3Refresh").on("click", function() {
 // let canvas4 = $("#videoCanvas4")[0];
 // // Default 512*1024 (512kb).
 // // Default 128*1024 (128kb)
-// let player4 = new JSMpeg.Player(url2, {canvas: canvas4, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
+// let player4 = new JSMpeg.Player(url2, {canvas: canvas4, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024});
 // player4.maxAudioLag = 0.5;
 // player4.stop();
 // player4.stats = stats;
@@ -2250,8 +2261,8 @@ function addJoyCons(tab, actual) {
 		<div id="leftJoyConOther">
 			<div id="minusButton" class="controllerButton"></div>
 			<div id="captureButton" class="controllerButton"></div>
-			<div id="lButton" class="controllerButton">L Button</div>
-			<div id="zlButton" class="controllerButton">ZL Button</div>
+			<div id="lButton" class="controllerButton">L</div>
+			<div id="zlButton" class="controllerButton">ZL</div>
 		</div>
 	</div>`;
 	
@@ -2269,8 +2280,8 @@ function addJoyCons(tab, actual) {
 		<div id="rightJoyConOther">
 			<div id="plusButton" class="controllerButton"></div>
 			<div id="homeButton" class="controllerButton"></div>
-			<div id="rButton" class="controllerButton">R Button</div>
-			<div id="zrButton" class="controllerButton">ZR Button</div>
+			<div id="rButton" class="controllerButton">R</div>
+			<div id="zrButton" class="controllerButton">ZR</div>
 		</div>
 	</div>`;
 	
@@ -2298,15 +2309,9 @@ function addJoyCons(tab, actual) {
 
 /* SWITCH IMPLEMENTATIONS */
 
-$(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
-
-	let tab = $(e.target);
-	let contentId = tab.attr("href");
-		
-	currentTab = contentId;
-
+function switchTabs(tab) {
 	// lagless 1:
-	if (contentId == "#lagless1") {
+	if (tab == "#lagless1") {
 		settings.tab = 1;
 		socket2.emit("join", "viewers");
 		socket.emit("joinLagless1");
@@ -2323,22 +2328,30 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 	}
 
 	// lagless 2:
-	if (contentId == "#lagless2") {
+	if (tab == "#lagless2") {
 		settings.tab = 2;
 		socket.emit("joinLagless2");
-		if (typeof player != "undefined") {
-			player.play();
+		//player.play();
+		try {
+			player.destroy();
+		} catch (error) {
 		}
+		player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
+		player.maxAudioLag = 0.5;
+		player.volume = 0.5;
 		$("#lagless1Volume").slider("value", 0);
 		audioElem.volume = 0;// doesn't update automatically :/
 	} else {
-		if (typeof player != "undefined") {
-			player.stop();
+// 			player.stop();
+		try {
+			player.destroy();
+		} catch (error) {
 		}
+		player = new JSMpeg.Player(url, {canvas: canvas2, video: false, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
 	}
 
 	// lagless 3:
-	if (contentId == "#lagless3") {
+	if (tab == "#lagless3") {
 		settings.tab = 3;
 		socket.emit("joinLagless3");
 		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
@@ -2354,7 +2367,7 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 	}
 
 	// lagless 4:
-	if (contentId == "#lagless4") {
+	if (tab == "#lagless4") {
 		settings.tab = 4;
 		socket2.emit("join", "viewers4");
 		socket.emit("joinLagless4");
@@ -2373,6 +2386,16 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 			}
 		}
 	}
+}
+
+$(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
+
+	let tab = $(e.target);
+	let contentId = tab.attr("href");
+		
+	currentTab = contentId;
+
+	switchTabs(contentId);
 	
 	localforage.setItem("settings", JSON.stringify(settings));
 	addJoyCons(contentId);
@@ -2529,18 +2552,6 @@ $("#audioCheckbox").on("click", function() {
 	}
 });
 
-$("#globalVolume").slider({
-    min: 0,
-    max: 100,
-    value: 0,
-		range: "min",
-		animate: true,
-	slide: function(event, ui) {
-		audioElem.volume = ui.value / 100;
-  	}
-});
-//audioElem.volume = 0;
-
 $("#lagless1Volume").slider({
     min: 0,
     max: 100,
@@ -2548,7 +2559,8 @@ $("#lagless1Volume").slider({
 	range: "min",
 	animate: true,
 	slide: function(event, ui) {
-		audioElem.volume = ui.value / 100;
+// 		audioElem.volume = ui.value / 100;
+		player.volume = ui.value / 100;
   	}
 });
 // $("#lagless1Volume").slider("value", 50);
@@ -2558,12 +2570,14 @@ $("#lagless1Volume").slider({
 
 $("#lagless1VolumeSlider").children().on("click", function(){
 	$("#lagless1Volume").slider("value", 0);
-	audioElem.volume = 0;// doesn't update automatically :/
+// 	audioElem.volume = 0;// doesn't update automatically :/
+	player.volume = 0;// doesn't update automatically :/
 });
 
 $("#lagless1VolumeSlider").children().next().on("click", function(){
 	$("#lagless1Volume").slider("value", 100);
-	audioElem.volume = 1;// doesn't update automatically :/
+// 	audioElem.volume = 1;// doesn't update automatically :/
+	player.volume = 1;// doesn't update automatically :/
 });
 
 
@@ -2621,6 +2635,7 @@ $(document).on("click", ".queueItem", function(event) {
 
 socket.on("twitchUsername", function(data) {
 	twitchUsername = data;
+	$("#loggedInIndicator").html("Logged in as: " + twitchUsername);
 });
 
 socket.on("turnTimesLeft", function(data) {
@@ -2671,7 +2686,7 @@ socket.on("turnTimesLeft", function(data) {
 				}
 				
 				if (data.viewerCounts[k] > 0) {
-					let dividerHTML = '<div class="dropdown-divider"></div>';
+					let dividerHTML = '<div class="dropdown-divider">' + (k + 1) + '</div>';
 					$("#lagless" + (i+1) + "ViewerDropdownDiv").append(dividerHTML);
 					for (let j = 0; j < data.viewerCounts[k]; j++) {
 						let html = '<button class="dropdown-item">' + data.viewers[k][j] + '</button>';

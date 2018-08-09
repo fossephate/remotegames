@@ -120,3 +120,7 @@ dateFormat.i18n = {
 Date.prototype.format = function(mask, utc) {
 	return dateFormat(this, mask, utc);
 };
+
+function getPosition(string, subString, index) {
+	return string.split(subString, index).join(subString).length;
+}

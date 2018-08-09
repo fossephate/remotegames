@@ -266,6 +266,9 @@ JSMpeg.Player = function() {
         this.startTime = JSMpeg.Now() - time
     };
     Player.prototype.getCurrentTime = function() {
+		if (typeof this.video == "undefined") {
+			return 0;
+		}
         return this.audio && this.audio.canPlay ? this.audio.currentTime - this.audio.startTime : this.video.currentTime - this.video.startTime
     };
     Player.prototype.setCurrentTime = function(time) {

@@ -107,6 +107,7 @@ margin-right: auto; */
 #timer {
 	margin: 0;
 	padding: 0;
+	width: 185px;
 	height: 30px;
 	overflow: hidden;
 	align-self: center;
@@ -222,7 +223,19 @@ max-width: 500px; */
 }
 
 #twitchChat {
+/* 	width: 25%; */
+}
+#twitchChatContainer {
 	width: 25%;
+	display: flex;
+	flex-direction: column;
+}
+
+/* LOGGED IN INDICATOR */
+#loggedInindicator {
+	border: 1px solid #333;
+	border-radius: 4px;
+	text-align: center;
 }
 
 /* VIDEO CONTAINERS */
@@ -1165,6 +1178,12 @@ color: #333; */
 
 .viewerDropdown {
 	align-self: center;
+}
+
+.dropdown-divider {
+	height: unset !important;
+	border-bottom: 1px solid #e9ecef;
+	text-align: center;
 }
 
 /* https://stackoverflow.com/questions/42183672/bootstrap-v4-navbar-dropdown-hover */
