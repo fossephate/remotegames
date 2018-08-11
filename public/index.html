@@ -155,7 +155,7 @@
 								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 							<!-- 							<iframe id="speedrunTimer" src="https://twitchplaysnintendoswitch.com/speedrun.html" frameBorder="0"></iframe> -->
-							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe>
+<!-- 							<iframe id="timer" src="https://twitchplaysnintendoswitch.com/time.html" frameBorder="0"></iframe> -->
 						</div>
 					</div>
 				</div>
@@ -229,13 +229,13 @@
 
 				<div id="barUnderTheStream" class="well">
 					
-					<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#players">Collapse</button>
+					<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#players">Collapse Queues</button>
 					
 					<div id="players" class="collapse show">
 						<div id="player1" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player1Checkbox" type="checkbox" />
-								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								<span class="checkbox-placeholder"></span>
 								Player 1
 							</label>
 							<div id="turnTimerBar1" class="turnTimerBar progress">
@@ -244,15 +244,15 @@
 							<div id="forfeitTimerBar1" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild1" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<button id="requestTurn1" class="requestTurn btn btn-secondary">Request Turn</button>
-							<button id="cancelTurn1" class="cancelTurn btn btn-secondary">Cancel Turn</button>
+							<button id="requestTurn1" class="requestTurn btn btn-secondary" code="0">Join Queue</button>
+<!-- 							<button id="cancelTurn1" class="cancelTurn btn btn-secondary">Leave Queue</button> -->
 							<ul id="controlQueue1" class="controlQueue list-group"></ul>
 						</div>
 						
 						<div id="player2" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player2Checkbox" type="checkbox" />
-								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								<span class="checkbox-placeholder"></span>
 								Player 2
 							</label>
 							<div id="turnTimerBar2" class="turnTimerBar progress">
@@ -261,15 +261,15 @@
 							<div id="forfeitTimerBar2" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild2" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<button id="requestTurn2" class="requestTurn btn btn-secondary">Request Turn</button>
-							<button id="cancelTurn2" class="cancelTurn btn btn-secondary">Cancel Turn</button>
+							<button id="requestTurn2" class="requestTurn btn btn-secondary" code="1">Join Queue</button>
+<!-- 							<button id="cancelTurn2" class="cancelTurn btn btn-secondary">Leave Queue</button> -->
 							<ul id="controlQueue2" class="controlQueue list-group"></ul>
 						</div>
 						
 						<div id="player3" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player3Checkbox" type="checkbox" />
-								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								<span class="checkbox-placeholder"></span>
 								Player 3
 							</label>
 							<div id="turnTimerBar3" class="turnTimerBar progress">
@@ -278,15 +278,15 @@
 							<div id="forfeitTimerBar3" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild3" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<button id="requestTurn3" class="requestTurn btn btn-secondary">Request Turn</button>
-							<button id="cancelTurn3" class="cancelTurn btn btn-secondary">Cancel Turn</button>
+							<button id="requestTurn3" class="requestTurn btn btn-secondary" code="2">Join Queue</button>
+<!-- 							<button id="cancelTurn3" class="cancelTurn btn btn-secondary">Leave Queue</button> -->
 							<ul id="controlQueue3" class="controlQueue list-group"></ul>
 						</div>
 						
 						<div id="player4" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player4Checkbox" type="checkbox" />
-								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								<span class="checkbox-placeholder"></span>
 								Player 4
 							</label>
 							<div id="turnTimerBar4" class="turnTimerBar progress">
@@ -295,14 +295,14 @@
 							<div id="forfeitTimerBar4" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild4" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<button id="requestTurn4" class="requestTurn btn btn-secondary">Request Turn</button>
-							<button id="cancelTurn4" class="cancelTurn btn btn-secondary">Cancel Turn</button>
+							<button id="requestTurn4" class="requestTurn btn btn-secondary" code="3">Join Queue</button>
+<!-- 							<button id="cancelTurn4" class="cancelTurn btn btn-secondary">Leave Queue</button> -->
 							<ul id="controlQueue4" class="controlQueue list-group"></ul>
 						</div>
 <!-- 						<div id="player5" class="player">
 							<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 								<input id="player5Checkbox" type="checkbox" />
-								<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+								<span class="checkbox-placeholder"></span>
 								Player 1 WiiU
 							</label>
 							<div id="turnTimerBar5" class="turnTimerBar progress">
@@ -311,8 +311,8 @@
 							<div id="forfeitTimerBar5" class="forfeitTimerBar progress">
 								<div id="forfeitTimerBarChild5" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 							</div>
-							<button id="requestTurn5" class="requestTurn btn btn-secondary">Request Turn</button>
-							<button id="cancelTurn5" class="cancelTurn btn btn-secondary">Cancel Turn</button>
+							<button id="requestTurn5" class="requestTurn btn btn-secondary">Join Queue</button>
+							<button id="cancelTurn5" class="cancelTurn btn btn-secondary">Leave Queue</button>
 							<ul id="controlQueue5" class="controlQueue list-group"></ul>
 						</div> -->
 <!-- 						<div id="splits">
@@ -338,7 +338,7 @@
 						</div> -->
 					</div>
 					
-					<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#settingsContainer">Collapse</button>
+					<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#settingsContainer">Collapse Settings</button>
 					
 					<div id="settingsContainer" class="container4 collapse show">
 						<div id="checkboxSettings" class="five">
@@ -357,13 +357,6 @@
 										Enable Controller Controls
 									</label>
 								</li>
-<!-- 								<li class="list-group-item">
-									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-										<input id="disableControllerCheckbox" type="checkbox" />
-										<span class="checkbox-placeholder"></span>
-										Disable Controller
-									</label>
-								</li> -->
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="touchControlsCheckbox" type="checkbox" />
@@ -371,59 +364,59 @@
 										Enable Touch Controls
 									</label>
 								</li>
-								<li class="list-group-item">
+<!-- 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="mouseControlsCheckbox" type="checkbox" />
 										<span class="checkbox-placeholder"></span>
 										Enable Mouse Controls
 									</label>
-								</li>
+								</li> -->
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="dpadCheckbox" type="checkbox" />
-										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+										<span class="checkbox-placeholder"></span>
 										DPad Swap
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="audioCheckbox" type="checkbox" />
-										<span class="ifas ifa-volume-up checkbox-placeholder"></span>
+										<span class="checkbox-placeholder"></span>
 										Enable Audio 1.0
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="darkThemeCheckbox" type="checkbox" />
-										<span class="ifas ifa-moon checkbox-placeholder"></span>
+										<span class="checkbox-placeholder"></span>
 										Enable Dark Theme
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="fullscreenCheckbox" type="checkbox" />
-										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										<span class="checkbox-placeholder"></span>
 										Enable Fullscreen Mode
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="largescreenCheckbox" type="checkbox" />
-										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										<span class="checkbox-placeholder"></span>
 										Enable Large Screen Mode
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="chatCheckbox" type="checkbox" />
-										<span class="ifar ifa-comment-alt checkbox-placeholder"></span>
+										<span class="checkbox-placeholder"></span>
 										Hide Chat
 									</label>
 								</li>
 								<li class="list-group-item">
 									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 										<input id="navCheckbox" type="checkbox" />
-										<span class="ifas ifa-expand checkbox-placeholder"></span>
+										<span class="checkbox-placeholder"></span>
 										Hide Nav Bar
 									</label>
 								</li>
@@ -472,6 +465,12 @@
 							<div class="mysliderContainer">
 								<div id="scaleSlider2" class="myslider"></div>
 							</div>
+							<div id="resolutionButtons">
+								<button id="240p" class="resolution btn btn-secondary">240p</button>
+								<button id="360p" class="resolution btn btn-secondary">360p</button>
+								<button id="720p" class="resolution btn btn-secondary">720p</button>
+								<button id="960p" class="resolution btn btn-secondary">960p</button>
+							</div>
 							Bitrate: <span id="bitrate2">2</span>
 							<div class="mysliderContainer">
 								<div id="bitrateSlider2" class="myslider"></div>
@@ -486,7 +485,7 @@
 							</div> -->
 						</div>
 						
-						<div id="lagless4Settings" class="laglessSettings well">
+<!-- 						<div id="lagless4Settings" class="laglessSettings well">
 							Lagless 4 Settings<br>
 							Scale: <span id="scale4">960</span>
 							<div class="mysliderContainer">
@@ -505,7 +504,44 @@
 							<div class="mysliderContainer">
 								<div id="offsetYSlider4" class="myslider"></div>
 							</div>
-						</div>
+						</div> -->
+						
+<!-- 						<div id="checkboxSettings2" class="five">
+							<ul class="list-group">
+								<li style="text-align: center; border: 1px solid #333; border-radius: 4px;">Default Player Queue</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="player1Checkbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Player 1
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="player2Checkbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Player 2
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="player3Checkbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Player 3
+									</label>
+								</li>
+								<li class="list-group-item">
+									<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+										<input id="player4Checkbox" type="checkbox" />
+										<span class="checkbox-placeholder"></span>
+										Player 4
+									</label>
+								</li>
+							</ul>
+
+						</div> -->
+						
+
 
 					</div>
 				</div>
@@ -576,6 +612,9 @@
 		<div id="twitchChatContainer">
 			<div id="loggedInIndicator">Sign in with twitch <a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></div>
 			<iframe id="twitchChat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat"></iframe>
+			<ul id="waitlist" class="list-group">
+				<li class="list-group-item">The waitlist is empty right now</li>
+			</ul>
 		</div>
 	</div>
 	
@@ -606,6 +645,33 @@
 					<h4>
 						Join the discord server! <a href="https://discord.gg/ARTbddH">https://discord.gg/ARTbddH</a>
 					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	<div id="serverOverloadWindow" class="modal fade" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title text-center">Server Load</h3>
+				</div>
+				<div class="modal-body">
+					
+					<h2>
+						It looks like the server is having a hard time right now
+					</h2>
+					<h3>
+						You can still view the site, but until any of these criteria are met, you will be put onto twitch.
+					</h3>
+					<ul>
+						<li>If your position in any of the queues is &lt; 5</li>
+						<li>You've been on the site longer than XX and are signed in.</li>
+					</ul>
+					
 				</div>
 			</div>
 		</div>

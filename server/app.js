@@ -16,6 +16,7 @@ const request = require("request");
 const handlebars = require("handlebars");
 
 const config = require("./config.js");
+const insertionSort = require("./tools.js").insertionSort;
 
 const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
 const TWITCH_SECRET = config.TWITCH_SECRET;
@@ -52,6 +53,9 @@ let restartAvailable = true;
 let lagless2ChangeAvailable = true;
 
 let controlQueues = [[],[],[],[],[]];
+let waitlists = [[], [], [], [], []];
+let waitlistMaxes = [10, 10, 10, 10];
+
 
 let banlist = [];
 let modlist = [];
@@ -150,7 +154,7 @@ app.get("/", function(req, res) {
 	if (req.session && req.session.passport && req.session.passport.user) {
 		console.log(req.session.passport.user);
 		console.log(req.user);
-		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
+		let time = 70 * 60 * 24 * 60 * 1000; // 70 days
 		//let time = 15*60*1000;// 15 minutes
 		let username = req.session.passport.user.display_name;
 		let secret = config.HASH_SECRET;
@@ -272,6 +276,7 @@ function Client(socket) {
 	this.name = "none";
 	this.username = null;
 	this.rooms = [];
+	this.joinTime = new Date();
 }
 
 function findClientByID(id) {
@@ -607,8 +612,8 @@ io.on("connection", function(socket) {
 				forfeitTimesLeft: forfeitTimesLeft,
 				usernames: currentTurnUsernames,
 				turnLengths: turnDurations,
-				viewerCounts: [lagless1ClientIds.length, lagless2ClientIds.length, lagless3ClientIds.length],// todo: remove
-				viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames],
+				viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames, lagless4ClientNames],
+				waitlists: waitlists,
 			});
 		}
 	});
@@ -677,8 +682,8 @@ io.on("connection", function(socket) {
 	});
 
 	socket.on("disconnect", function() {
-		console.log("disconnected")
-		let i = findClientByID(socket.id)
+		console.log("disconnected");
+		let i = findClientByID(socket.id);
 		clients.splice(i, 1);
 	});
 
@@ -1151,6 +1156,14 @@ setInterval(function() {
 
 
 function forfeitTurn(username, cNum) {
+	// change leave queue to join queue
+	let index2 = findClientByUsername(username);
+	if (index2 > -1) {
+		io.to(clients[index2].id).emit("turnOver");
+	}
+	
+	
+	// forfeit turn:
 	let index = controlQueues[cNum].indexOf(username);
 	if (index > -1) {
 		controlQueues[cNum].splice(index, 1);
@@ -1182,8 +1195,7 @@ function forfeitTurn(username, cNum) {
 			forfeitTimesLeft: forfeitTimesLeft,
 			usernames: currentTurnUsernames,
 			turnLengths: turnDurations,
-			viewerCounts: [lagless1ClientIds.length, lagless2ClientIds.length, lagless3ClientIds.length],
-			viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames],
+			viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames, lagless4ClientNames],
 		});
 	}
 }
@@ -1202,6 +1214,13 @@ function resetTimers(username, cNum) {
 
 function moveLine(cNum) {
 	if (controlQueues[cNum].length > 1) {
+		
+		// change leave queue to join queue
+		let index2 = findClientByUsername(controlQueues[cNum][0]);
+		if (index2 > -1) {
+			io.to(clients[index2].id).emit("turnOver");
+		}
+		
 		controlQueues[cNum].shift();
 		currentTurnUsernames[cNum] = controlQueues[cNum][0];
 		// stop the controller
@@ -1288,7 +1307,6 @@ setInterval(function() {
 		forfeitTimesLeft: forfeitTimesLeft,
 		usernames: currentTurnUsernames,
 		turnLengths: turnDurations,
-		viewerCounts: [lagless1ClientIds.length, lagless2ClientIds.length, lagless3ClientIds.length, lagless4ClientIds.length],// todo: remove
 		viewers: [lagless1ClientNames, lagless2ClientNames, lagless3ClientNames, lagless4ClientNames],
 	});
 	io.emit("controlQueues", {

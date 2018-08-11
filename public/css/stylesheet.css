@@ -48,15 +48,17 @@ margin-right: auto; */
 }
 
 .requestTurn {
-	width: 48%;
+/* 	width: 48%; */
+	width: 100%;
 	height: fit-content;
-	margin-right: 2%;
+/* 	margin-right: 2%; */
 }
 
 .cancelTurn {
-	width: 48%;
+/* 	width: 48%; */
+	width: 100%;
 	height: fit-content;
-	margin-left: 2%;
+/* 	margin-left: 2%; */
 }
 
 .player {
@@ -444,6 +446,16 @@ ul {
 	padding-left: 35px;
 }
 
+#checkboxSettings2 {
+	width: 25%;
+	padding: 0;
+}
+
+#checkboxSettings2 li {
+	padding-left: 35px;
+	list-style-type: none;
+}
+
 .laglessSettings {
 	width: 25%;
 }
@@ -618,6 +630,10 @@ height: 30px; */
 	height: 32%;
 	border: 2px solid #333;
 	border-radius: 20px;
+}
+
+.lessRound {
+	border-radius: 10px !important;
 }
 
 #dpadButtons {
@@ -819,7 +835,7 @@ width: 40%; */
 
 .controlQueue {
 	overflow-y: auto;
-	max-height: 200px;
+	max-height: 100px;
 	text-align: center;
 	margin-top: 5px;
 	flex-grow: 1;
@@ -1522,3 +1538,12 @@ visibility: visible;
 	line-height: 15px;
 	margin-bottom: 10px;
 }
+
+
+#resolutionButtons {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+
+

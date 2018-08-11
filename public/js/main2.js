@@ -12,15 +12,20 @@ let lagless1JoinTimer;
 let currentTab = "#lagless1";
 let currentPlayerChosen = 0;
 let wasPressedKeyCodes = [];
-let viewerCounts = [];
-let viewers = [];
 let lastSplitTime = 0;
 let lastSplitTimeMS = 0;
 let loaded = false;
 let player;
 let player4;
 
-let controlQueues = [];
+// twitch lagless swap settings
+let isExempt = false;
+let minQueuePos = 5;
+let tabSwappedWithTwitch = [false, false, false];
+let maxViewersOnTab = [10, 10, 10];
+
+let viewers = [[], [], [], []];
+let controlQueues = [["The queue is empty."], ["The queue is empty."], ["The queue is empty."],["The queue is empty."], ["The queue is empty."]];
 let controlQueue1 = [];
 let controlQueue2 = [];
 let controlQueue3 = [];
@@ -60,21 +65,16 @@ let lagless4Settings = {videoBitrate: 1, scale: 960, offsetX: 0, offsetY: 0};
 let disableController = false;
 
 // detect firefox:
-// todo: make user configurable
 if(navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
 	settings.stickSensitivityX = 1.5;
 	settings.stickSensitivityY = 1.5;
 }
 
 let timeLeft = 30000;
-let timeLeft2 = 30000;
 let turnLength = 30000;
 let timeTillForfeit = 15000;
-let timeTillForfeit2 = timeTillForfeit;// todo: remove
 let turnUsername = null;
-let turnUsername2 = null;
 let lastCurrentTime = 0;
-let lastCurrentTime2 = 0;
 
 let mouseMoveTimer = null;
 let isMobile = false;
@@ -273,8 +273,14 @@ function sendControllerState() {
 		return;
 	}
 	
+	if (/*settings.currentInputMode == "keyboard" && */ ($("#keyboardSettings").data("bs.modal") || {})._isShown) {
+		return;
+	}
+	
 	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) == -1) {
 		socket.emit("requestTurn", currentPlayerChosen);
+		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
+		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
 	}
 	
 	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) > 0 && controlQueues[currentPlayerChosen].length > 0) {
@@ -1613,7 +1619,9 @@ function onButtonPress(event) {
 	}
 	
 	if(controlQueue1.indexOf(twitchUsername) == -1) {
-		socket.emit("requestTurn", 0);
+		socket.emit("requestTurn", currentPlayerChosen);
+		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
+		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
 	}
 	
 }
@@ -1689,7 +1697,7 @@ let authCookie = getCookie("TwitchPlaysNintendoSwitch");
 
 if (authCookie != null) {
 	socket.emit("registerUsername", authCookie);
-	$("#authenticateButton").remove();
+// 	$("#authenticateButton").remove();
 }
 
 setInterval(function() {
@@ -1854,6 +1862,29 @@ $("#scaleSlider2").slider({
 		socket.emit("lagless2Settings", {scale: parseInt(ui.value)});
 	}
 });
+
+$("#240p").on("click", function(event) {
+	$("#scale2").text(240);
+	$("#scaleSlider2").slider("value", 240);
+	socket.emit("lagless2Settings", {scale: 240});
+});
+$("#360p").on("click", function(event) {
+	$("#scale2").text(360);
+	$("#scaleSlider2").slider("value", 360);
+	socket.emit("lagless2Settings", {scale: 360});
+});
+$("#720p").on("click", function(event) {
+	$("#scale2").text(720);
+	$("#scaleSlider2").slider("value", 720);
+	socket.emit("lagless2Settings", {scale: 720});
+});
+$("#960p").on("click", function(event) {
+	$("#scale2").text(960);
+	$("#scaleSlider2").slider("value", 960);
+	socket.emit("lagless2Settings", {scale: 960});
+});
+
+
 
 $("#offsetXSlider2").slider({
     min:0,
@@ -2259,10 +2290,10 @@ function addJoyCons(tab, actual) {
 			<div id="rightButton" class="controllerButton"></div>
 		</div>
 		<div id="leftJoyConOther">
-			<div id="minusButton" class="controllerButton"></div>
-			<div id="captureButton" class="controllerButton"></div>
-			<div id="lButton" class="controllerButton">L</div>
-			<div id="zlButton" class="controllerButton">ZL</div>
+			<div id="minusButton" class="controllerButton lessRound"></div>
+			<div id="captureButton" class="controllerButton lessRound"></div>
+			<div id="lButton" class="controllerButton lessRound">L</div>
+			<div id="zlButton" class="controllerButton lessRound">ZL</div>
 		</div>
 	</div>`;
 	
@@ -2278,10 +2309,10 @@ function addJoyCons(tab, actual) {
 			<div id="aButton" class="controllerButton"></div>
 		</div>
 		<div id="rightJoyConOther">
-			<div id="plusButton" class="controllerButton"></div>
-			<div id="homeButton" class="controllerButton"></div>
-			<div id="rButton" class="controllerButton">R</div>
-			<div id="zrButton" class="controllerButton">ZR</div>
+			<div id="plusButton" class="controllerButton lessRound"></div>
+			<div id="homeButton" class="controllerButton lessRound"></div>
+			<div id="rButton" class="controllerButton lessRound">R</div>
+			<div id="zrButton" class="controllerButton lessRound">ZR</div>
 		</div>
 	</div>`;
 	
@@ -2342,7 +2373,7 @@ function switchTabs(tab) {
 		$("#lagless1Volume").slider("value", 0);
 		audioElem.volume = 0;// doesn't update automatically :/
 	} else {
-// 			player.stop();
+// 		player.stop();
 		try {
 			player.destroy();
 		} catch (error) {
@@ -2368,23 +2399,30 @@ function switchTabs(tab) {
 
 	// lagless 4:
 	if (tab == "#lagless4") {
-		settings.tab = 4;
-		socket2.emit("join", "viewers4");
-		socket.emit("joinLagless4");
-		if (typeof player4 != "undefined") {
-			try {
-				player4.play();
-			} catch (e) {
+// 		settings.tab = 4;
+// 		socket2.emit("join", "viewers4");
+// 		socket.emit("joinLagless4");
+// 		if (typeof player4 != "undefined") {
+// 			try {
+// 				player4.play();
+// 			} catch (e) {
+// 			}
+// 		}
+		swal({
+			title: "Twitch Plays Wii U is still in beta!",
+		}).then((result) => {
+			if (result.value) {
+				$("#tab2").trigger("click");
 			}
-		}
+		});
 	} else {
-		socket2.emit("leave", "viewers4");
-		if (typeof player4 != "undefined") {
-			try {
-				player4.stop();
-			} catch (e) {
-			}
-		}
+// 		socket2.emit("leave", "viewers4");
+// 		if (typeof player4 != "undefined") {
+// 			try {
+// 				player4.stop();
+// 			} catch (e) {
+// 			}
+// 		}
 	}
 }
 
@@ -2439,29 +2477,42 @@ function replaceWithTwitch(tab) {
 	let twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
 
 	if (tab == "#lagless1") {
+		clearInterval(lagless1JoinTimer);
 		socket2.emit("leave", "viewers");
 		$("#videoCanvas1")[0].style.display = "none";
 		$("#videoCanvas1").after(twitchIFrame);
+	} else {
+// 		$("#tab1").addClass("disabled");
 	}
 	
 	if (tab == "#lagless2") {
-		player.stop();
+		try {
+			player.stop();
+		} catch(error) {
+			console.log("player not defined");
+		}
 		$("#videoCanvas2")[0].style.display = "none";
 		$("#videoCanvas2").after(twitchIFrame);
 // 		$("#twitchVideo2")[0].style.display = "";
 // 		twitchPlayer2.play();
+	} else {
+// 		$("#tab2").addClass("disabled");
 	}
 	
 	if (tab == "#lagless3") {
 		wsavc.disconnect();
 		$("#videoCanvas3")[0].style.display = "none";
 		$("#videoCanvas3").after(twitchIFrame);
+	} else {
+// 		$("#tab3").addClass("disabled");
 	}
 	
 	if (tab == "#lagless4") {
 		player4.stop();
 		$("#videoCanvas4")[0].style.display = "none";
 		$("#videoCanvas4").after(twitchIFrame);
+	} else {
+// 		$("#tab4").addClass("disabled");
 	}
 	
 	setVideoWidth(73.2);
@@ -2478,6 +2529,8 @@ function replaceWithLagless(tab) {
 		
 		$("#videoCanvas1")[0].style.display = "";
 		$("#twitchVideo").remove();
+	} else {
+// 		$("#tab1").removeClass("disabled");
 	}
 	
 	if (tab == "#lagless2") {
@@ -2488,6 +2541,8 @@ function replaceWithLagless(tab) {
 		$("#twitchVideo").remove();
 // 		$("#twitchVideo2")[0].style.display = "none";
 // 		twitchPlayer2.pause();
+	} else {
+// 		$("#tab2").removeClass("disabled");
 	}
 	
 	if (tab == "#lagless3") {
@@ -2497,6 +2552,8 @@ function replaceWithLagless(tab) {
 		
 		$("#videoCanvas3")[0].style.display = "";
 		$("#twitchVideo").remove();
+	} else {
+// 		$("#tab3").removeClass("disabled");
 	}
 	
 	if (tab == "#lagless4") {
@@ -2507,7 +2564,10 @@ function replaceWithLagless(tab) {
 		$("#twitchVideo").remove();
 // 		$("#twitchVideo2")[0].style.display = "none";
 // 		twitchPlayer2.pause();
+	} else {
+// 		$("#tab4").removeClass("disabled");
 	}
+	
 	setVideoWidth(73.2);
 }
 
@@ -2518,6 +2578,15 @@ $("#replaceWithTwitch").on("click", function() {
 $("#replaceWithLagless").on("click", function() {
 	replaceWithLagless();
 });
+
+socket.on("replaceWithTwitch", function() {
+	replaceWithTwitch();
+});
+
+socket.on("replaceWithLagless", function() {
+	replaceWithTwitch();
+});
+
 
 /* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 let hash = window.location.hash.replace("#", "");
@@ -2641,9 +2710,34 @@ socket.on("twitchUsername", function(data) {
 socket.on("turnTimesLeft", function(data) {
 	
 	lastCurrentTime = Date.now();
-	viewerCounts = data.viewerCounts;
 	let viewersChanged = (JSON.stringify(viewers) !== JSON.stringify(data.viewers));
 	viewers = data.viewers;
+	
+// 	isExempt = false;
+// 	for (let i = 0; i < 5; i++) {
+// 		let index = controlQueues[i].indexOf(twitchUsername);
+// 		if (index < minQueuePos && index > -1) {
+// 			isExempt = true;
+// 		}
+// 	}
+	
+// 	if (!isExempt && viewers[settings.tab-1].length > maxViewersOnTab[settings.tab-1] && tabSwappedWithTwitch[settings.tab-1] === false) {
+// 		tabSwappedWithTwitch[settings.tab-1] = true;
+// 		setTimeout(function() {
+// 			replaceWithTwitch("#lagless" + settings.tab);
+// 			setTimeout(function() {
+// 				socket.emit("leaveLagless");
+// 			}, 4000);
+// 			swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
+// 		}, 2000);
+// 	}
+	
+// 	// check if exempt, replace any twitch streams with lagless:
+// 	if (isExempt) {
+// 		//for (let i = 0; i < 5; i++) {
+// 		replaceWithLagless("#lagless" + settings.tab);
+// 		//}
+// 	}
 	
 	for (let i = 0; i < 5; i++) {
 		let timeLeftMilli = data.turnTimesLeft[i];
@@ -2655,7 +2749,7 @@ socket.on("turnTimesLeft", function(data) {
 		let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
 		
 		let n = i+1;
-
+		
 		if (data.usernames[i] == null) {
 			$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 			$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
@@ -2665,7 +2759,7 @@ socket.on("turnTimesLeft", function(data) {
 		}
 	}
 	
-	let totalViewers = data.viewerCounts[0] + data.viewerCounts[1] + data.viewerCounts[2];
+	let totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length;
 	
 	// for each lagless tab
 	for (let i = 0; i < 4; i++) {
@@ -2673,7 +2767,7 @@ socket.on("turnTimesLeft", function(data) {
 		if(viewersChanged) {
 			
 			$("#lagless" + (i+1) + "ViewerDropdownDiv").empty();
-			for (let j = 0; j < data.viewerCounts[i]; j++) {
+			for (let j = 0; j < data.viewers[i].length; j++) {
 				let html = '<button class="dropdown-item">' + data.viewers[i][j] + '</button>';
 				$("#lagless" + (i+1) + "ViewerDropdownDiv").append(html);
 			}
@@ -2685,10 +2779,10 @@ socket.on("turnTimesLeft", function(data) {
 					continue;
 				}
 				
-				if (data.viewerCounts[k] > 0) {
+				if (data.viewers[k].length > 0) {
 					let dividerHTML = '<div class="dropdown-divider">' + (k + 1) + '</div>';
 					$("#lagless" + (i+1) + "ViewerDropdownDiv").append(dividerHTML);
-					for (let j = 0; j < data.viewerCounts[k]; j++) {
+					for (let j = 0; j < data.viewers[k].length; j++) {
 						let html = '<button class="dropdown-item">' + data.viewers[k][j] + '</button>';
 						$("#lagless" + (i+1) + "ViewerDropdownDiv").append(html);
 					}
@@ -2712,39 +2806,62 @@ socket.on("turnTimesLeft", function(data) {
 
 
 socket.on("forceRefresh", function(data) {
-	location.reload(true);
+	swal({
+		title: "There has been a force refresh!",
+	}).then((result) => {
+		if (result.value) {
+			location.reload(true);
+		}
+	});
+	
 });
 
+$(document).on("click", ".requestTurn", function(event) {
+	let cNum = parseInt($(this).attr("code"));
+	for (let i = 0; i < 5; i++) {
+		if (i == cNum) {
+			continue;
+		}
+		socket.emit("cancelTurn", i);
+	}
+	socket.emit("requestTurn", cNum);
+	
+	$(".cancelTurn").each(function() {
+		let cNum = parseInt($(this).attr("code"));
+		let html = '<button id="requestTurn' + (cNum + 1) + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
+		$(this).replaceWith(html);
+	});
+	
+	//$(".requestTurn").each(function() {
+		cNum = parseInt($(this).attr("code"));
+		let html = '<button id="cancelTurn' + (cNum + 1) + '" class="cancelTurn btn btn-secondary" code="'+ cNum +'">Leave Queue</button>';
+		$(this).replaceWith(html);
+	//});
+});
 
-$("#requestTurn1").on("click", function(event) {
-	socket.emit("requestTurn", 0);
+$(document).on("click", ".cancelTurn", function(event) {
+	let cNum = parseInt($(this).attr("code"));
+	socket.emit("cancelTurn", cNum);
+	
+// 	$(".requestTurn").each(function() {
+// 		cNum = $(this).attr("code");
+// 		let html = '<button class="rTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
+// 		$(this).replaceWith(html);
+// 	});
+	
+	//$(".requestTurn").each(function() {
+		cNum = parseInt($(this).attr("code"));
+		let html = '<button id="requestTurn' + (cNum + 1) + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
+		$(this).replaceWith(html);
+	//});
 });
-$("#cancelTurn1").on("click", function(event) {
-	socket.emit("cancelTurn", 0);
-});
-$("#requestTurn2").on("click", function(event) {
-	socket.emit("requestTurn", 1);
-});
-$("#cancelTurn2").on("click", function(event) {
-	socket.emit("cancelTurn", 1);
-});
-$("#requestTurn3").on("click", function(event) {
-	socket.emit("requestTurn", 2);
-});
-$("#cancelTurn3").on("click", function(event) {
-	socket.emit("cancelTurn", 2);
-});
-$("#requestTurn4").on("click", function(event) {
-	socket.emit("requestTurn", 3);
-});
-$("#cancelTurn4").on("click", function(event) {
-	socket.emit("cancelTurn", 3);
-});
-$("#requestTurn5").on("click", function(event) {
-	socket.emit("requestTurn", 4);
-});
-$("#cancelTurn5").on("click", function(event) {
-	socket.emit("cancelTurn", 4);
+
+socket.on("turnOver", function(data) {
+	$(".cancelTurn").each(function() {
+		cNum = $(this).attr("code");
+		let html = '<button class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
+		$(this).replaceWith(html);
+	});
 });
 
 
@@ -3029,10 +3146,10 @@ $("#chatCheckbox").on("click", function() {
 	settings.hideChat = $("#chatCheckbox")[0].checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.hideChat) {
-		$("#twitchChat")[0].style.display = "none";
+		$("#twitchChatContainer")[0].style.display = "none";
 // 		$("#picture").attr("style", "width: 100%;");
 	} else {
-		$("#twitchChat")[0].style.display = "";
+		$("#twitchChatContainer")[0].style.display = "";
 // 		$("#picture").attr("style", "width: 75%;");
 	}
 });
@@ -3457,21 +3574,22 @@ function tutorial() {
 			placement: "bottom",
 		});
 	}
-	if (step === ++c) {
-		$("#laglessKeyboardDropdownPopup").remove();
+// 	if (step === ++c) {
+// 		$("#laglessKeyboardDropdownPopup").remove();
 		
-		let div = "#timer";
-		$(div).effect("highlight", {}, 3000);
-		let popupHTML = $('<div id="timerPopup" class="genericPopup"><span class="tooltipArrowUp"></span>The current local time.</div>');
-		$("#container").append(popupHTML);
-		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
-		});
-	}
+// 		let div = "#timer";
+// 		$(div).effect("highlight", {}, 3000);
+// 		let popupHTML = $('<div id="timerPopup" class="genericPopup"><span class="tooltipArrowUp"></span>The current local time.</div>');
+// 		$("#container").append(popupHTML);
+// 		let popper = new Popper($(div), popupHTML, {
+// 			placement: "bottom",
+// 		});
+// 	}
 	
 	// players section
 	if (step === ++c) {
-		$("#timerPopup").remove();
+// 		$("#timerPopup").remove();
+		$("#laglessKeyboardDropdownPopup").remove();
 // 		$("#rightJoyConPopup").remove();
 		
 		$("html, body").animate({
@@ -3629,4 +3747,9 @@ $("#resetSettings").on("click", function(event) {
 // let reqFit = fitty(".requestTurn");
 
 
-
+/* ON CLOSE */
+window.onbeforeunload = closingCode;
+function closingCode() {
+	socket.emit("leaveLagless");
+	return null;
+}
