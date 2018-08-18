@@ -106,3 +106,44 @@ function setToPercentParent(elem, percent) {
 	let newHeight = (percent / 100) * parentHeight;
 	$(elem).height(newHeight);
 }
+
+// like sleep, but worse:
+function wait(ms) {
+	var start = new Date().getTime();
+	var end = start;
+	while (end < start + ms) {
+		end = new Date().getTime();
+	}
+}
+
+// brings number closer to target by accel
+function mathZoom(current, target, accel) {
+	if (current == target) {
+		return current;
+	}
+	if (Math.abs(current - target) < accel) {
+		return target;
+	}
+	if (current < target) {
+		return current + accel;
+	} else {
+		return current - accel;
+	}
+}
+
+
+// jquery sum heights:
+(function($) {
+	$.fn.sumHeights = function() {
+		var h = 0;
+		this.each(function() {
+			h += $(this).outerHeight();
+		});
+		return h;
+	};
+	$.fn.addUp = function(getter) {
+		return Array.prototype.reduce.call(this, function(a, b) {
+			return a + getter.call($(b));
+		}, 0);
+	}
+})(jQuery);

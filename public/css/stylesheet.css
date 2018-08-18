@@ -29,11 +29,23 @@ html {
 	margin-left: 13.4%;
 }
 
+#playersContainer {
+	margin-bottom: 10px;
+}
+
 #players {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
-	margin-bottom: 20px;
+/* 	margin-bottom: 20px; */
+}
+
+.collapsibleContainer {
+    display: flex;
+    flex-direction: column;
+	border: 1px solid #333;
+	border-radius: 4px;
+	min-height: 37px;
 }
 
 .progress {
@@ -226,6 +238,7 @@ max-width: 500px; */
 
 #twitchChat {
 /* 	width: 25%; */
+	height: 500px;
 }
 #twitchChatContainer {
 	width: 25%;
@@ -254,6 +267,9 @@ flex-direction: column;
 	display: flex;
 	justify-content: center;
 	flex-direction: column;
+/* 	border: 2px solid #333; */
+/* 	border: 1px solid #e3e3e3; */
+/* 	border-radius: 4px; */
 }
 
 .laglessView {
@@ -274,8 +290,8 @@ flex-direction: column;
 	justify-content: space-evenly;
 	align-self: center;
 	width: 82%;
-	padding-top: 0px;
-	padding-bottom: 0px;
+	padding-top: 2px;
+	padding-bottom: 2px;
 	margin: 5px;
 	border: 2px solid #333;
 	border-radius: 4px;
@@ -428,17 +444,21 @@ ul {
 	/* 	height: 100%; */
 }
 
-.container4 {
+#settings {
 	width: 100%;
 	margin: auto;
 	padding: 0;
 	overflow-y: hidden;
 	display: flex;
 	justify-content: space-evenly;
+	padding-top: 20px;
+/* 	padding-top: 40px; */
+	padding-bottom: 20px;
 }
 
 #checkboxSettings {
-	width: 25%;
+/* 	width: 25%; */
+	min-width: 250px;
 	padding: 0;
 }
 
@@ -457,7 +477,7 @@ ul {
 }
 
 .laglessSettings {
-	width: 25%;
+	width: 31%;
 }
 
 /* .five {
@@ -630,6 +650,10 @@ height: 30px; */
 	height: 32%;
 	border: 2px solid #333;
 	border-radius: 20px;
+	
+	display: flex;
+    justify-content: space-evenly;
+    flex-direction: column;
 }
 
 .lessRound {
@@ -647,14 +671,14 @@ height: 30px; */
 
 #upButton {
 	position: absolute;
-	left: 35%;
-	top: 9%;
+	left: 34.8%;
+	top: 9.5%;
 }
 
 #downButton {
 	position: absolute;
-	left: 35%;
-	top: 62%;
+	left: 34.8%;
+	top: 62.5%;
 }
 
 #leftButton {
@@ -749,26 +773,26 @@ height: 30px; */
 
 #xButton {
 	position: absolute;
-	left: 35%;
+	left: 35.2%;
 	top: 8%;
 }
 
 #bButton {
 	position: absolute;
-	left: 35%;
+	left: 35.2%;
 	top: 61%;
 }
 
 #yButton {
 	position: absolute;
-	left: 7%;
-	top: 35%;
+	left: 7.2%;
+	top: 34.5%;
 }
 
 #aButton {
 	position: absolute;
-	left: 63%;
-	top: 34%;
+	left: 63.2%;
+	top: 34.5%;
 }
 
 #plusButton {
@@ -882,7 +906,7 @@ width: 40%; */
 	border-radius: 4px;
 	min-height: 20px;
 	box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
-	padding: 19px;
+	padding: 8px;
 	/* 	margin-bottom: 20px; */
 }
 
@@ -910,6 +934,7 @@ width: 40%; */
 border: 1px solid #ddd; */
 	background-color: #212121;
 	border: 2px solid #404040;
+	border-radius: 4px;
 }
 
 .list-group-item-dark:last-child {
@@ -919,6 +944,29 @@ border: 1px solid #ddd; */
 }
 
 .list-group-item-dark:first-child {
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+
+.list-group-item-highlight {
+	position: relative;
+	display: block;
+	padding: 10px 15px;
+	margin-bottom: -1px;
+	/*     background-color: #fff;
+border: 1px solid #ddd; */
+	background-color: #c6c6c6;
+	border: 2px solid #404040;
+	border-radius: 4px;
+}
+
+.list-group-item-highlight:last-child {
+	margin-bottom: 0;
+	border-bottom-right-radius: 4px;
+	border-bottom-left-radius: 4px;
+}
+
+.list-group-item-highlight:first-child {
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 }
@@ -1036,12 +1084,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	display: flex;
 	justify-content: space-evenly;
 	width: 30%;
-	height: 50px;
-	
     border: 2px solid #333;
     border-radius: 10px;
-    margin-top: 2px;
-    margin-bottom: 2px;	
+/*     margin-top: 2px; */
+/*     margin-bottom: 2px; */
+/* 	padding-top: 2px; */
+/* 	padding-bottom: 2px; */
 }
 
 .volumeSlider i {
@@ -1104,7 +1152,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 .myslider {
 	height: 5px;
-	width: 70%;
+	width: 80%;
 	position: relative;
 	background: #555;
 	border-radius: 15px;
@@ -1194,6 +1242,7 @@ color: #333; */
 
 .viewerDropdown {
 	align-self: center;
+/* 	width: 100px; */
 }
 
 .dropdown-divider {
@@ -1480,7 +1529,7 @@ visibility: visible;
 
 .well {
 	min-height: 20px;
-	padding: 19px;
+	padding: 8px;
 	/*     margin-bottom: 20px; */
 	background-color: #f5f5f5;
 	border: 1px solid #e3e3e3;
@@ -1533,17 +1582,38 @@ visibility: visible;
   }
 } */
 
+/* .collapseButtonContainer {
+	width: min-content;
+	align-self: center;
+} */
+
 .collapseButton {
+	width: min-content;
 	height: 30px;
-	line-height: 15px;
+	line-height: 15px !important;
+	font-size: 20px !important;
+	position: absolute;
+	margin-top: 2px;
+	margin-left: 5px;
 	margin-bottom: 10px;
 }
 
 
-#resolutionButtons {
+.buttonSettings {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
 }
 
+
+
+/* scale font size */
+/* https://stackoverflow.com/questions/14431411/pure-css-to-make-font-size-responsive-based-on-dynamic-amount-of-characters */
+.btn {
+/* 	font-size: 1.0vw !important; */
+/* 	font-size: calc(100% + 2vw) !important; */
+}
+body {
+/* 	font-size: 1.0vw !important; */
+}
 
