@@ -141,6 +141,10 @@ margin-right: auto; */
 	/* 	background-color: #cccccc; */
 }
 
+.nav-tabs {
+	border: none !important;
+}
+
 #currentPlayer {
 	padding-top: 10px;
 	padding-bottom: 20px;
@@ -289,7 +293,7 @@ flex-direction: column;
 	display: flex;
 	justify-content: space-evenly;
 	align-self: center;
-	width: 82%;
+	width: 80%;
 	padding-top: 2px;
 	padding-bottom: 2px;
 	margin: 5px;
@@ -476,18 +480,18 @@ ul {
 	list-style-type: none;
 }
 
-.laglessSettings {
+.settingsPanel {
 	width: 31%;
+/* 	padding: 5px !important; */
 }
 
-/* .five {
-width: 25%;
-padding: 0;
+.laglessSettings {
+	
 }
 
-.six {
-width: 60%;
-} */
+#lagless2Settings {
+	margin-top: 10px;
+}
 
 #controlsLabel {
 	margin-bottom: 10px;
@@ -624,20 +628,21 @@ width: 60%;
 #leftStick {
 	position: absolute;
 	/* 	background: rgba(50, 50, 50, 0.2); */
-	width: 40%;
+	width: 37%;
 	height: 12%;
-	left: 33%;
-	top: 20%;
+	left: 34.9%;
+	top: 19.8%;
+	border-radius: 50%;
 }
 
 #leftStick2 {
 	position: absolute;
 	background: #FF3C28;
 	/*#bb5050;*/
-	width: 20%;
-	height: 6%;
-	left: 43%;
-	top: 23%;
+	width: 50%;
+	height: 50%;
+	left: 25%;
+	top: 25%;
 	pointer-events: none;
 	border-radius: 50%;
 }
@@ -649,7 +654,7 @@ height: 30px; */
 	width: 32%;
 	height: 32%;
 	border: 2px solid #333;
-	border-radius: 20px;
+	border-radius: 50%;
 	
 	display: flex;
     justify-content: space-evenly;
@@ -744,20 +749,21 @@ height: 30px; */
 #rightStick {
 	position: absolute;
 	/* 	background: rgba(50, 50, 50, 0.2); */
-	width: 40%;
+	width: 37%;
 	height: 12%;
-	left: 26%;
-	top: 47%;
+	left: 28%;
+	top: 47.2%;
+	border-radius: 50%;
 }
 
 #rightStick2 {
 	position: absolute;
 	background: #0AB9E6;
 	/*#5050bb;*/
-	width: 20%;
-	height: 6%;
-	left: 36.5%;
-	top: 50%;
+	width: 50%;
+	height: 50%;
+	left: 25%;
+	top: 25%;
 	pointer-events: none;
 	border-radius: 50%;
 }
@@ -1432,11 +1438,20 @@ clear: left;
 
 /* TUTORIAL */
 
-#navTabs {}
+#navTabs {
+}
 
-#navTabs * {
+.nav-tabs .nav-item {
 	width: 150px;
 	text-align: center;
+	margin-bottom: 0 !important;
+}
+
+.nav-tabs .nav-item :not(active) {
+	border: 1px solid #333;
+	border-top-left-radius: .25rem;
+	border-top-right-radius: .25rem;
+	border-bottom: 0;
 }
 
 .genericPopup {
@@ -1588,10 +1603,10 @@ visibility: visible;
 } */
 
 .collapseButton {
-	width: min-content;
+	width: 5%;
 	height: 30px;
 	line-height: 15px !important;
-	font-size: 20px !important;
+/* 	font-size: 20px !important; */
 	position: absolute;
 	margin-top: 2px;
 	margin-left: 5px;
@@ -1603,6 +1618,7 @@ visibility: visible;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
+/* 	font-size: 13px; */
 }
 
 
@@ -1616,4 +1632,3 @@ visibility: visible;
 body {
 /* 	font-size: 1.0vw !important; */
 }
-

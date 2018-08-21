@@ -567,7 +567,7 @@ io.on("connection", function(socket) {
 			controlQueues[cNum].push(client.username);
 			currentTurnUsernames[cNum] = controlQueues[cNum][0];// todo: delete this
 			io.emit("controlQueues", {
-				queues: controlQueues
+				controlQueues: controlQueues
 			});
 			
 			
@@ -594,7 +594,7 @@ io.on("connection", function(socket) {
 		if (index > -1) {
 			controlQueues[cNum].splice(index, 1);
 			io.emit("controlQueues", {
-				queues: controlQueues
+				controlQueues: controlQueues
 			});
 			
 			if (controlQueues[cNum].length >= 1) {
@@ -978,7 +978,7 @@ io.on("connection", function(socket) {
 
 	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("join", function(room) {
-		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "controller"];
+		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "lagless5Host", "controller", "controller2"];
 		if (secureList.indexOf(room) > -1) {
 			return;
 		}
@@ -1234,7 +1234,7 @@ function forfeitTurn(username, cNum) {
 	if (index > -1) {
 		controlQueues[cNum].splice(index, 1);
 		io.emit("controlQueues", {
-			queues: controlQueues
+			controlQueues: controlQueues
 		});
 		// stop the controller
 		io.to("controller").emit("controllerState", "800000000000000 128 128 128 128");// update this to use restPos
@@ -1294,7 +1294,7 @@ function moveLine(cNum) {
 		io.to("controller").emit("controllerState", "800000000000000 128 128 128 128");
 	}
 	io.emit("controlQueues", {
-		queues: controlQueues
+		controlQueues: controlQueues
 	});
 	
 	turnStartTimes[cNum] = Date.now();
@@ -1462,7 +1462,7 @@ setInterval(function() {
 		waitlists: waitlists,
 	});
 	io.emit("controlQueues", {
-		queues: controlQueues
+		controlQueues: controlQueues
 	});
 	
 	if (splitTimer != null) {

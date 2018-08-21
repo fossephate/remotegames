@@ -25,9 +25,7 @@
 	<script src="js/tools.js"></script>
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
-	<!-- 	<script src="js/chillout.min.js"></script> -->
 <!-- 	<script src="js/interact.min.js"></script> -->
-<!-- 	<script src="js/fitty.min.js"></script> -->
 	<script src="js/jquery.fittext.js"></script>
 
 	<script src="js/jsmpg.js"></script>
@@ -231,7 +229,7 @@
 				<div id="barUnderTheStream">
 					
 					<div id="playersContainer" class="collapsibleContainer">
-							<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#players">Hide</button>
+						<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#players">Hide</button>
 						<div id="players" class="collapse show collapsible">
 							<div id="player1" class="player">
 								<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
@@ -343,7 +341,8 @@
 					<div id="settingsContainer" class="collapsibleContainer">
 <!-- 						<button class="btn btn-secondary collapseButton" data-toggle="collapse" data-target="#settings">Hide</button> -->
 						<div id="settings" class="collapse show collapsible">
-							<div id="checkboxSettings" class="laglessSettings">
+							
+							<div id="checkboxSettings" class="settingsPanel">
 								<ul class="list-group">
 									<li class="list-group-item">
 										<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
@@ -377,7 +376,7 @@
 										<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
 											<input id="analogStickCheckbox" type="checkbox" />
 											<span class="checkbox-placeholder"></span>
-											Analog Stick Keyboard Mode
+											Analog Stick Mode
 										</label>
 									</li>
 									<li class="list-group-item">
@@ -432,21 +431,12 @@
 								</ul>
 
 							</div>
-
-							<div id="lagless1Settings" class="laglessSettings well">
-								Lagless 1 Settings<br>
-								Quality: <span id="quality">70</span>
-								<div class="mysliderContainer">								
-									<div id="qualitySlider" class="myslider"></div>
-								</div>
-								Scale: <span id="scale">30</span>
-								<div class="mysliderContainer">
-									<div id="scaleSlider" class="myslider"></div>
-								</div>
-	<!-- 							FPS: <span id="fps">15</span>
-								<div class="mysliderContainer">
-									<div id="fpsSlider" class="myslider" type="range" min="1" step="1" max="15" value="15"></div>
-								</div> -->
+							
+							
+							<div id="generalSettings" class="settingsPanel well">
+								Settings<br>
+								<hr>
+								
 								Stick Deadzone: <span id="deadzone">50</span>
 								<div class="mysliderContainer">
 									<div id="deadzoneSlider" class="myslider"></div>
@@ -455,124 +445,98 @@
 								<div class="mysliderContainer">
 									<div id="stickSensitivitySlider" class="myslider"></div>
 								</div>
-	<!-- 							video width ratio: <span id="videoWidth">73.2</span>
+								Analog Stick Attack: <span id="attack">20</span>
 								<div class="mysliderContainer">
-									<div id="videoWidthSlider" class="myslider"></div>
-								</div> -->
-	<!-- 							<div class="well">
-									Ping: <span id="ping"></span>
-								</div> -->
-	<!-- 							<div class="well">
-									<button id="replaceWithTwitch" class="btn btn-primary">Replace With Twitch</button>
-									<button id="replaceWithLagless" class="btn btn-primary">Replace With Lagless</button>
-								</div> -->
+									<div id="stickAttackSlider" class="myslider"></div>
+								</div>
+								Analog Stick Return: <span id="return">20</span>
+								<div class="mysliderContainer">
+									<div id="stickReturnSlider" class="myslider"></div>
+								</div>
+								
+		<!-- 							video width ratio: <span id="videoWidth">73.2</span>
+									<div class="mysliderContainer">
+										<div id="videoWidthSlider" class="myslider"></div>
+									</div> -->
+		<!-- 							<div class="well">
+										Ping: <span id="ping"></span>
+									</div> -->
+		<!-- 							<div class="well">
+										<button id="replaceWithTwitch" class="btn btn-primary">Replace With Twitch</button>
+										<button id="replaceWithLagless" class="btn btn-primary">Replace With Lagless</button>
+									</div> -->
+								<button id="resetSettings" class="btn btn-secondary">Reset All Settings</button>
 							</div>
+							
+							<div id="metaLaglessSettings" class="settingsPanel">
+							
+								<div id="lagless1Settings" class="laglessSettings well">
+									Lagless 1 Settings<br>
+									<hr>
 
-							<div id="lagless2Settings" class="laglessSettings well">
-								Lagless 2 Settings<br>
+									Quality: <span id="quality">70</span>
+									<div class="mysliderContainer">								
+										<div id="qualitySlider" class="myslider"></div>
+									</div>
+									Scale: <span id="scale">30</span>
+									<div class="mysliderContainer">
+										<div id="scaleSlider" class="myslider"></div>
+									</div>
+		<!-- 							FPS: <span id="fps">15</span>
+									<div class="mysliderContainer">
+										<div id="fpsSlider" class="myslider" type="range" min="1" step="1" max="15" value="15"></div>
+									</div> -->
+								</div>
 
-								FPS: <span id="fps2">30</span>
-								<div class="buttonSettings">
-									<button id="20fps" class="resolution btn btn-secondary">20FPS</button>
-									<button id="30fps" class="resolution btn btn-secondary">30FPS</button>
-									<button id="45fps" class="resolution btn btn-secondary">45FPS</button>
-									<button id="60fps" class="resolution btn btn-secondary">60FPS</button>
+								<div id="lagless2Settings" class="laglessSettings well">
+									Lagless 2 Settings<br>
+									<hr>
+
+									FPS: <span id="fps2">30</span>
+									<div class="buttonSettings">
+										<button id="20fps" class="fpsButton btn btn-secondary">20FPS</button>
+										<button id="30fps" class="fpsButton btn btn-secondary">30FPS</button>
+										<button id="45fps" class="fpsButton btn btn-secondary">45FPS</button>
+										<button id="60fps" class="fpsButton btn btn-secondary">60FPS</button>
+									</div>
+									Bitrate: <span id="bitrate2">1</span>
+									<div class="mysliderContainer">
+										<div id="bitrateSlider2" class="myslider"></div>
+									</div>
+									Scale: <span id="scale2">960</span>
+									<div class="mysliderContainer">
+										<div id="scaleSlider2" class="myslider"></div>
+									</div>
+									<div class="buttonSettings">
+										<button id="240p" class="resolutionButton btn btn-secondary">240p</button>
+										<button id="360p" class="resolutionButton btn btn-secondary">360p</button>
+										<button id="720p" class="resolutionButton btn btn-secondary">720p</button>
+										<button id="960p" class="resolutionButton btn btn-secondary">960p</button>
+									</div>		
+		<!-- 							offsetX: <span id="offsetX2">0</span>
+									<div class="mysliderContainer">
+										<div id="offsetXSlider2" class="myslider"></div>
+									</div>
+									offsetY: <span id="offsetY2">0</span>
+									<div class="mysliderContainer">
+										<div id="offsetYSlider2" class="myslider"></div>
+									</div> -->
 								</div>
-								Bitrate: <span id="bitrate2">1</span>
-								<div class="mysliderContainer">
-									<div id="bitrateSlider2" class="myslider"></div>
-								</div>
-								Scale: <span id="scale2">960</span>
-								<div class="mysliderContainer">
-									<div id="scaleSlider2" class="myslider"></div>
-								</div>
-								<div class="buttonSettings">
-									<button id="240p" class="resolution btn btn-secondary">240p</button>
-									<button id="360p" class="resolution btn btn-secondary">360p</button>
-									<button id="720p" class="resolution btn btn-secondary">720p</button>
-									<button id="960p" class="resolution btn btn-secondary">960p</button>
-								</div>		
-	<!-- 							offsetX: <span id="offsetX2">0</span>
-								<div class="mysliderContainer">
-									<div id="offsetXSlider2" class="myslider"></div>
-								</div>
-								offsetY: <span id="offsetY2">0</span>
-								<div class="mysliderContainer">
-									<div id="offsetYSlider2" class="myslider"></div>
-								</div> -->
+							
 							</div>
-
-	<!-- 						<div id="lagless4Settings" class="laglessSettings well">
-								Lagless 4 Settings<br>
-								Scale: <span id="scale4">960</span>
-								<div class="mysliderContainer">
-									<div id="scaleSlider4" class="myslider"></div>
-								</div>
-								Bitrate: <span id="bitrate4">2</span>
-								<div class="mysliderContainer">
-									<div id="bitrateSlider4" class="myslider"></div>
-								</div>
-
-								offsetX: <span id="offsetX4">0</span>
-								<div class="mysliderContainer">
-									<div id="offsetXSlider4" class="myslider"></div>
-								</div>
-								offsetY: <span id="offsetY4">0</span>
-								<div class="mysliderContainer">
-									<div id="offsetYSlider4" class="myslider"></div>
-								</div>
-							</div> -->
-
-	<!-- 						<div id="checkboxSettings2" class="five">
-								<ul class="list-group">
-									<li style="text-align: center; border: 1px solid #333; border-radius: 4px;">Default Player Queue</li>
-									<li class="list-group-item">
-										<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="player1Checkbox" type="checkbox" />
-											<span class="checkbox-placeholder"></span>
-											Player 1
-										</label>
-									</li>
-									<li class="list-group-item">
-										<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="player2Checkbox" type="checkbox" />
-											<span class="checkbox-placeholder"></span>
-											Player 2
-										</label>
-									</li>
-									<li class="list-group-item">
-										<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="player3Checkbox" type="checkbox" />
-											<span class="checkbox-placeholder"></span>
-											Player 3
-										</label>
-									</li>
-									<li class="list-group-item">
-										<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-											<input id="player4Checkbox" type="checkbox" />
-											<span class="checkbox-placeholder"></span>
-											Player 4
-										</label>
-									</li>
-								</ul>
-
-							</div> -->
-
-
-
 						</div>	
 					</div>
 				</div>
 
 				<div class="container3 well">
-					<div class="three">
+<!-- 					<div class="three">
 						<div id="settingsLabel" class="well">
 							Settings:
 						</div>
 						<div id="streamSettings" class="well">
 							<button id="resetSettings" class="btn btn-secondary">Reset Settings</button>
 						</div>
-					</div>
+					</div> -->
 
 					<div class="four">
 						<div id="controlsLabel" class="well">

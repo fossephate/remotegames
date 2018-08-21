@@ -52,12 +52,12 @@ let settings = {
 	deadzone: 50,
 	stickSensitivityX: 1,
 	stickSensitivityY: 1,
+	stickAttack: 20,
+	stickReturn: 20,
 	keyboardProfiles: {},
 	tab: 2,
 	dpadSwap: false,
 };
-let accel = 20;
-let accelReturn = 20;
 
 let lagless1Settings = {};
 let lagless2Settings = {framerate: 30, videoBitrate: 1, scale: 960, offsetX: 0, offsetY: 0};
@@ -424,31 +424,27 @@ function getKeyboardInput() {
 		let upDown = false;
 		
 		if (key.isPressed(keyboardLayout.LU)) {
-			controller.LStick.y = parseInt(controller.LStick.y) + accel;
-		} else if(/*key.wasPressed(keyboardLayout.LU, wasPressedKeyCodes)*/true) {
+			controller.LStick.y = Math.round(parseInt(controller.LStick.y) + settings.stickAttack);
 		}
 		if (key.isPressed(keyboardLayout.LD)) {
-			controller.LStick.y = parseInt(controller.LStick.y) - accel;
-		} else if(/*key.wasPressed(keyboardLayout.LD, wasPressedKeyCodes)*/true) {
+			controller.LStick.y = Math.round(parseInt(controller.LStick.y) - settings.stickAttack);
 		}
 		if (key.isPressed(keyboardLayout.LL)) {
-			controller.LStick.x = parseInt(controller.LStick.x) - accel;
-		} else if(/*key.wasPressed(keyboardLayout.LL, wasPressedKeyCodes)*/true) {
+			controller.LStick.x = Math.round(parseInt(controller.LStick.x) - settings.stickAttack);
 		}
 		if (key.isPressed(keyboardLayout.LR)) {
-			controller.LStick.x = parseInt(controller.LStick.x) + accel;
-		} else if(/*key.wasPressed(keyboardLayout.LR, wasPressedKeyCodes)*/true) {
+			controller.LStick.x = Math.round(parseInt(controller.LStick.x) + settings.stickAttack);
 		}
 		
 		upDown = key.isPressed(keyboardLayout.LU) || key.isPressed(keyboardLayout.LD);
 		leftRight = key.isPressed(keyboardLayout.LL) || key.isPressed(keyboardLayout.LR);
 		
 		if (!upDown) {
-			controller.LStick.y = mathZoom(parseInt(controller.LStick.y), restPos, accelReturn);
+			controller.LStick.y = Math.round(mathZoom(parseInt(controller.LStick.y), restPos, settings.stickReturn));
 		}
 		
 		if (!leftRight) {
-			controller.LStick.x = mathZoom(parseInt(controller.LStick.x), restPos, accelReturn);
+			controller.LStick.x = Math.round(mathZoom(parseInt(controller.LStick.x), restPos, settings.stickReturn));
 		}
 	}
 
@@ -494,25 +490,54 @@ function getKeyboardInput() {
 		controller.btns.right = 0;
 	}
 
-	if (key.isPressed(keyboardLayout.RU)) {
-		controller.RStick.y = 255;
-	} else if(key.wasPressed(keyboardLayout.RU, wasPressedKeyCodes)) {
-		controller.RStick.y = restPos;
-	}
-	if (key.isPressed(keyboardLayout.RD)) {
-		controller.RStick.y = 0;
-	} else if(key.wasPressed(keyboardLayout.RD, wasPressedKeyCodes)) {
-		controller.RStick.y = restPos;
-	}
-	if (key.isPressed(keyboardLayout.RL)) {
-		controller.RStick.x = 0;
-	} else if(key.wasPressed(keyboardLayout.RL, wasPressedKeyCodes)) {
-		controller.RStick.x = restPos;
-	}
-	if (key.isPressed(keyboardLayout.RR)) {
-		controller.RStick.x = 255;
-	} else if(key.wasPressed(keyboardLayout.RR, wasPressedKeyCodes)) {
-		controller.RStick.x = restPos;
+	if (!settings.analogStickMode) {
+		if (key.isPressed(keyboardLayout.RU)) {
+			controller.RStick.y = 255;
+		} else if(key.wasPressed(keyboardLayout.RU, wasPressedKeyCodes)) {
+			controller.RStick.y = restPos;
+		}
+		if (key.isPressed(keyboardLayout.RD)) {
+			controller.RStick.y = 0;
+		} else if(key.wasPressed(keyboardLayout.RD, wasPressedKeyCodes)) {
+			controller.RStick.y = restPos;
+		}
+		if (key.isPressed(keyboardLayout.RL)) {
+			controller.RStick.x = 0;
+		} else if(key.wasPressed(keyboardLayout.RL, wasPressedKeyCodes)) {
+			controller.RStick.x = restPos;
+		}
+		if (key.isPressed(keyboardLayout.RR)) {
+			controller.RStick.x = 255;
+		} else if(key.wasPressed(keyboardLayout.RR, wasPressedKeyCodes)) {
+			controller.RStick.x = restPos;
+		}
+	} else {
+		let leftRight = false;
+		let upDown = false;
+		
+		if (key.isPressed(keyboardLayout.RU)) {
+			controller.RStick.y = Math.round(parseInt(controller.RStick.y) + settings.stickAttack);
+		}
+		if (key.isPressed(keyboardLayout.RD)) {
+			controller.RStick.y = Math.round(parseInt(controller.RStick.y) - settings.stickAttack);
+		}
+		if (key.isPressed(keyboardLayout.RL)) {
+			controller.RStick.x = Math.round(parseInt(controller.RStick.x) - settings.stickAttack);
+		}
+		if (key.isPressed(keyboardLayout.RR)) {
+			controller.RStick.x = Math.round(parseInt(controller.RStick.x) + settings.stickAttack);
+		}
+		
+		upDown = key.isPressed(keyboardLayout.RU) || key.isPressed(keyboardLayout.RD);
+		leftRight = key.isPressed(keyboardLayout.RL) || key.isPressed(keyboardLayout.RR);
+		
+		if (!upDown) {
+			controller.RStick.y = Math.round(mathZoom(parseInt(controller.RStick.y), restPos, settings.stickReturn));
+		}
+		
+		if (!leftRight) {
+			controller.RStick.x = Math.round(mathZoom(parseInt(controller.RStick.x), restPos, settings.stickReturn));
+		}
 	}
 
 	if (key.isPressed(keyboardLayout.Minus)) {
@@ -1066,6 +1091,17 @@ $(document).ready(function() {
 		if (settings.tab != 1) {
 			$("#tab" + settings.tab).trigger("click");
 		}
+		if (settings.tab == 1) {
+			switchTabs("#lagless1");
+		}
+		addJoyCons("#lagless" + settings.tab);
+		
+		rebindUnbindTouchControls();
+		clearAndReplaceProfiles();
+		setKeyboardMapperClasses();
+		
+		setTimeout(drawJoyCons, 1000);
+		
 		
 		if (settings.darkTheme) {
 			$("#darkThemeCheckbox").trigger("click");
@@ -1073,7 +1109,6 @@ $(document).ready(function() {
 		if (settings.audio) {
 			$("#audioCheckbox").trigger("click");
 		}
-		
 		
 		if (settings.keyboardControls) {
 			$("#keyboardControlsCheckbox").trigger("click");
@@ -1083,50 +1118,37 @@ $(document).ready(function() {
 		}
 		if (settings.touchControls) {
 			$("#touchControlsCheckbox").trigger("click");
-// 			settings.touchControls = true;
-// 			$("#touchControlsCheckbox")[0].checked = true;
 		}
+		// if (settings.mouseControls) {
+		// 	$("#touchControlsCheckbox").trigger("click");
+		// }
 		if (settings.fullscreen) {
 			$("#fullscreenCheckbox").trigger("click");
 		}
 		if (settings.largescreen) {
 			$("#largescreenCheckbox").trigger("click");
 		}
-		
 		if (settings.hideChat) {
 			$("#chatCheckbox").trigger("click");
 		}
-		
 		if (settings.hideNav) {
 			$("#navCheckbox").trigger("click");
 		}
-		
-		
 		if (settings.analogStickMode) {
 			$("#analogStickCheckbox").trigger("click");
 		}
 		
-		// if (settings.mouseControls) {
-		// 	$("#touchControlsCheckbox").trigger("click");
-		// }
-
 		$("#deadzoneSlider").slider("value", settings.deadzone);
 		$("#deadzone").text(settings.deadzone);
 
 		$("#stickSensitivitySlider").slider("value", settings.stickSensitivityX);
 		$("#sensitivity").text(settings.stickSensitivityX);
 		
-		if (settings.tab == 1) {
-			switchTabs("#lagless1");
-		}
+		$("#stickAttackSlider").slider("value", settings.stickAttack);
+		$("#attack").text(settings.stickAttack);
 		
-		addJoyCons("#lagless" + settings.tab);
-		
-		rebindUnbindTouchControls();
-		clearAndReplaceProfiles();
-		setKeyboardMapperClasses();
-		
-		setTimeout(drawJoyCons, 1000);
+		$("#stickReturnSlider").slider("value", settings.stickReturn);
+		$("#return").text(settings.stickReturn);
 		
 		// wait a little longer so the joycon images load:
 		setTimeout(function() {
@@ -1136,8 +1158,6 @@ $(document).ready(function() {
 				$(".loaded #loader-wrapper")[0].style.visibility = "hidden";
 			}, 500);
 		}, 1000);
-		
-		
 		
 		/* AUTH  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 		authCookie = getCookie("TwitchPlaysNintendoSwitch");
@@ -1153,16 +1173,20 @@ $(document).ready(function() {
 		}
 		
 		// fit text:
-		$(".requestTurn").fitText(1.5, { minFontSize: "10px", maxFontSize: "40px" });
-		$(".cancelTurn").fitText(1.5, { minFontSize: "10px", maxFontSize: "40px" });
-		$(".list-group-item").fitText(1.5, { minFontSize: "10px", maxFontSize: "40px" });
-		$("#loggedInIndicator").fitText(1.8, { minFontSize: "10px", maxFontSize: "40px" });
+		fitText(".requestTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
+		fitText(".cancelTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
+		fitText(".list-group-item", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
+		fitText("#loggedInIndicator", 2.5, { minFontSize: "10px", maxFontSize: "20px" });
 		
-		$("#lButton").fitText(0.5, { minFontSize: "10px", maxFontSize: "40px" });
-		$("#zlButton").fitText(0.5, { minFontSize: "10px", maxFontSize: "40px" });
-		$("#rButton").fitText(0.5, { minFontSize: "10px", maxFontSize: "40px" });
-		$("#zrButton").fitText(0.5, { minFontSize: "10px", maxFontSize: "40px" });
+		fitText("#lButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
+		fitText("#zlButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
+		fitText("#rButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
+		fitText("#zrButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
 		
+		fitText(".collapseButton", 0.2, { minFontSize: "10px", maxFontSize: "16px" });
+		
+		fitText(".resolutionButton", 0.2, { minFontSize: "8px", maxFontSize: "16px" });
+		fitText(".fpsButton", 0.25, { minFontSize: "8px", maxFontSize: "16px" });
 		
 		setTimeout(resizeChat, 2000);
 		
@@ -1958,6 +1982,38 @@ $("#stickSensitivitySlider").slider({
 	}
 });
 
+$("#stickAttackSlider").slider({
+    min: 0,
+    max: 40,
+	step: 0.1,
+    value: 20,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#attack").text(ui.value);
+		settings.stickAttack = ui.value;
+  	},
+	stop: function(event, ui) {
+		localforage.setItem("settings", JSON.stringify(settings));
+	}
+});
+
+$("#stickReturnSlider").slider({
+    min: 0,
+    max: 40,
+	step: 0.1,
+    value: 20,
+	range: "min",
+	animate: true,
+	slide: function(event, ui) {
+		$("#return").text(ui.value);
+		settings.stickReturn = ui.value;
+  	},
+	stop: function(event, ui) {
+		localforage.setItem("settings", JSON.stringify(settings));
+	}
+});
+
 // $("#videoWidthSlider").slider({
 //     min: 70,
 //     max: 75,
@@ -2455,8 +2511,10 @@ function addJoyCons(tab, actual) {
 	let leftJoyConHTML = `
 	<div id="leftJoyCon">
 		<canvas id="leftJoyConCanvas"></canvas>
-		<div id="leftStick"></div>
-		<div id="leftStick2"></div>
+		<div id="leftStick">
+			<div id="leftStick2"></div>
+		</div>
+		
 		<div id="dpadButtons">
 			<div id="upButton" class="controllerButton"></div>
 			<div id="downButton" class="controllerButton"></div>
@@ -2474,8 +2532,9 @@ function addJoyCons(tab, actual) {
 	let rightJoyConHTML = `
 	<div id="rightJoyCon">
 		<canvas id="rightJoyConCanvas"></canvas>
-		<div id="rightStick"></div>
-		<div id="rightStick2"></div>
+		<div id="rightStick">
+			<div id="rightStick2"></div>
+		</div>
 		<div id="abxyButtons">
 			<div id="xButton" class="controllerButton"></div>
 			<div id="bButton" class="controllerButton"></div>
@@ -2833,14 +2892,14 @@ $("#lagless1VolumeSlider").children().next().on("click", function(){
 socket.on("controlQueues", function(data) {
 	
 	let sameQueues = [];
-	for (let i = 0; i < data.queues.length; i++) {
-		sameQueues.push(JSON.stringify(controlQueues[i]) === JSON.stringify(data.queues[i]))
+	for (let i = 0; i < data.controlQueues.length; i++) {
+		sameQueues.push(JSON.stringify(controlQueues[i]) === JSON.stringify(data.controlQueues[i]))
 	}
-	controlQueues = data.queues;
 	
-	// todo: for loop this
+	let controlQueuesChanged = (JSON.stringify(controlQueues) !== JSON.stringify(data.controlQueues));
+	controlQueues = data.controlQueues;
 	
-	for (let i = 0; i < data.queues.length; i++) {
+	for (let i = 0; i < data.controlQueues.length; i++) {
 		
 		// don't do anything if it hasn't changed:
 		if (sameQueues[i]) {
@@ -2848,8 +2907,8 @@ socket.on("controlQueues", function(data) {
 		}
 		
 		$("#controlQueue" + (i + 1)).empty();
-		for (let j = 0; j < data.queues[i].length; j++) {
-			let username = data.queues[i][j];
+		for (let j = 0; j < data.controlQueues[i].length; j++) {
+			let username = data.controlQueues[i][j];
 			let html;
 			if (!settings.darkTheme) {
 				html = "<li class='queueItem list-group-item'>" + username + "</li>";
@@ -2865,10 +2924,14 @@ socket.on("controlQueues", function(data) {
 		} else {
 			html = "<li class='list-group-item-dark'>The queue is empty.</li>";
 		}
-		if (data.queues[i].length === 0) {
+		if (data.controlQueues[i].length === 0) {
 			$("#controlQueue" + (i + 1)).append(html);
 		}
 		
+	}
+	
+	if (controlQueuesChanged) {
+		$(window).trigger("resize.fittext");
 	}
 	
 });
@@ -2942,10 +3005,13 @@ socket.on("turnTimesLeft", function(data) {
 	
 	let totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length;
 	
-	// for each lagless tab
-	for (let i = 0; i < 4; i++) {
+	
+	if(viewersChanged) {
 		
-		if(viewersChanged) {
+		$(window).trigger("resize.fittext");
+		
+		// for each lagless tab
+		for (let i = 0; i < 4; i++) {
 			
 			$("#lagless" + (i+1) + "ViewerDropdownDiv").empty();
 			for (let j = 0; j < data.viewers[i].length; j++) {
@@ -3080,12 +3146,14 @@ $(document).on("click", ".requestTurn", function(event) {
 		let cNum = parseInt($(this).attr("code"));
 		let html = '<button id="requestTurn' + (cNum + 1) + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
 		$(this).replaceWith(html);
+		$(window).trigger("resize.fittext");
 	});
 	
 	//$(".requestTurn").each(function() {
 		cNum = parseInt($(this).attr("code"));
 		let html = '<button id="cancelTurn' + (cNum + 1) + '" class="cancelTurn btn btn-secondary" code="'+ cNum +'">Leave Queue</button>';
 		$(this).replaceWith(html);
+		$(window).trigger("resize.fittext");
 	//});
 });
 
@@ -3103,6 +3171,7 @@ $(document).on("click", ".cancelTurn", function(event) {
 		cNum = parseInt($(this).attr("code"));
 		let html = '<button id="requestTurn' + (cNum + 1) + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
 		$(this).replaceWith(html);
+		$(window).trigger("resize.fittext");
 	//});
 });
 
@@ -3514,14 +3583,32 @@ socket.on("controllerState1", function(data) {
 	
 	let stickPositions = str.substring(16).split(" ");
 	
-	let scale = 0.3;
-	let LX = (parseInt(stickPositions[0]) - restPos) * scale;
-	let LY = (parseInt(stickPositions[1]) - restPos) * scale;
-	let RX = (parseInt(stickPositions[2]) - restPos) * scale;
-	let RY = (parseInt(stickPositions[3]) - restPos) * scale;
+	
+	let LX = (parseInt(stickPositions[0]) - restPos);
+	let LY = (parseInt(stickPositions[1]) - restPos);
+	let RX = (parseInt(stickPositions[2]) - restPos);
+	let RY = (parseInt(stickPositions[3]) - restPos);
 	
 	LY *= -1;
 	RY *= -1;
+	
+	
+	// normalize:
+	let scale = 0.25;
+	let LMagnitude = Math.sqrt((LX * LX) + (LY * LY));
+	let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
+	
+	let max = 120;
+	LMagnitude = minmax(LMagnitude, -max, max);
+	RMagnitude = minmax(RMagnitude, -max, max);
+	
+	let LStick = normalizeVector({x: LX, y: LY}, LMagnitude);
+	let RStick = normalizeVector({x: RX, y: RY}, RMagnitude);
+	
+	LX = parseInt(LStick.x * scale);
+	LY = parseInt(LStick.y * scale);
+	RX = parseInt(RStick.x * scale);
+	RY = parseInt(RStick.y * scale);
 	
 	let leftTransform = LX + "px" + "," + LY + "px";
 	let rightTransform = RX + "px" + "," + RY + "px";
@@ -4047,10 +4134,12 @@ function closingCode() {
 
 $(".collapsible").on("show.bs.collapse", function() {
 	
+// 	$(this).parent().css("margin-top", "");
+	$(this).parent().animate({"margin-top": "0px"});
 	$(this).parent().css("width", "");
 	$(this).parent().css("height", "");
+
 // 	$(this).parent().animate({"width": "", "height": ""});
-	
 	let thisId = "#" + $(this).attr("id");
 	let button = $('[data-target="' + thisId + '"]');
 	button.css("align-self", "");
@@ -4078,6 +4167,8 @@ $(".collapsible").on("hidden.bs.collapse", function() {
 	let width = button.outerWidth() + 10;
 	button.parent().width(width);
 	
+	button.parent().animate({"margin-top": "-60px"});
+	
 // 	button.parent().animate({"height" : height});
 // 	button.parent().animate({"width": width, "height": height});
 	
@@ -4087,5 +4178,10 @@ $(".collapsible").on("hidden.bs.collapse", function() {
 })
 
 
-
-
+// on blur, reset the controller state,
+// to prevent keys from getting stuck:
+$(document).blur(function() {
+	console.log("lost focus");
+	controller.reset();
+	sendControllerState();
+});

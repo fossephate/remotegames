@@ -1,8 +1,8 @@
 function getCookie(name) {
-	var dc = document.cookie;
-	var prefix = name + "=";
-	var begin = dc.indexOf("; " + prefix);
-	var end;
+	let dc = document.cookie;
+	let prefix = name + "=";
+	let begin = dc.indexOf("; " + prefix);
+	let end;
 	if (begin == -1) {
 		begin = dc.indexOf(prefix);
 		if (begin !== 0) return null;
@@ -19,9 +19,9 @@ function getCookie(name) {
 }
 
 function setCookie(name, value, seconds) {
-	var expires = "";
+	let expires = "";
 	if (seconds) {
-		var date = new Date();
+		let date = new Date();
 		date.setTime(date.getTime() + (seconds * 1000));
 		expires = "; expires=" + date.toUTCString();
 	}
@@ -39,21 +39,21 @@ function minmax(num, min, max) {
 }
 
 function round(value, precision) {
-	var multiplier = Math.pow(10, precision || 0);
+	let multiplier = Math.pow(10, precision || 0);
 	return Math.round(value * multiplier) / multiplier;
 }
 
 String.prototype.replaceAll = function(search, replacement) {
-	var target = this;
+	let target = this;
 	return target.replace(new RegExp(search, "g"), replacement);
 };
 
 function msToTime(duration) {
 	// 	var milliseconds = parseInt((duration % 1000) / 100);
-	var milliseconds = parseInt((((duration / 1000) % 60) % 1) * 1000);
-	var seconds = parseInt((duration / 1000) % 60);
-	var minutes = parseInt((duration / (1000 * 60)) % 60);
-	var hours = parseInt((duration / (1000 * 60 * 60)) % 24);
+	let milliseconds = parseInt((((duration / 1000) % 60) % 1) * 1000);
+	let seconds = parseInt((duration / 1000) % 60);
+	let minutes = parseInt((duration / (1000 * 60)) % 60);
+	let hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 	hours = (hours < 10) ? "0" + hours : hours;
 	if (hours.length == 2 || hours.length == 3 && hours[0] == "0") {
 		hours = hours.substr(1);
@@ -70,7 +70,7 @@ function msToTime(duration) {
 	if (seconds.length < 2) {
 		seconds = "0" + seconds;
 	}
-	var time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+	let time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 	time = time.replaceAll("-", ""); // remove negative signs
 	return time;
 }
@@ -132,10 +132,33 @@ function mathZoom(current, target, accel) {
 }
 
 
+function normalizeVector(vector, scale) {
+	let norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+	if (norm !== 0) {
+		vector.x = scale * vector.x / norm;
+		vector.y = scale * vector.y / norm;
+	}
+	return vector;
+}
+
+// function normalizeVector(p, len) {
+// 	if((p.x === 0 && p.y === 0) || len === 0) {
+// 		return {x: 0, y: 0};
+// 	}    
+// 	let angle = Math.atan2(p.y, p.x);
+// 	let nx = Math.cos(angle) * len;
+// 	let ny = Math.sin(angle) * len;
+// 	return {x:nx, y:ny};
+// }
+
+function abs(n) {
+	return Math.abs(n);
+}
+
 // jquery sum heights:
 (function($) {
 	$.fn.sumHeights = function() {
-		var h = 0;
+		let h = 0;
 		this.each(function() {
 			h += $(this).outerHeight();
 		});
