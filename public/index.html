@@ -298,7 +298,7 @@
 	<!-- 							<button id="cancelTurn4" class="cancelTurn btn btn-secondary">Leave Queue</button> -->
 								<ul id="controlQueue4" class="controlQueue list-group"></ul>
 							</div>
-	<!-- 						<div id="player5" class="player">
+							<div id="player5" class="player">
 								<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 									<input id="player5Checkbox" type="checkbox" />
 									<span class="checkbox-placeholder"></span>
@@ -310,10 +310,10 @@
 								<div id="forfeitTimerBar5" class="forfeitTimerBar progress">
 									<div id="forfeitTimerBarChild5" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
 								</div>
-								<button id="requestTurn5" class="requestTurn btn btn-secondary">Join Queue</button>
-								<button id="cancelTurn5" class="cancelTurn btn btn-secondary">Leave Queue</button>
+								<button id="requestTurn5" class="requestTurn btn btn-secondary" code="4">Join Queue</button>
+<!-- 								<button id="cancelTurn5" class="cancelTurn btn btn-secondary">Leave Queue</button> -->
 								<ul id="controlQueue5" class="controlQueue list-group"></ul>
-							</div> -->
+							</div>
 	<!-- 						<div id="splits">
 								<div id="splitMetaContainer">
 									<div id="splitContainer">
@@ -581,7 +581,10 @@
 		</div>
 		
 		<div id="twitchChatContainer">
-			<div id="loggedInIndicator">Sign in with twitch <a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></div>
+			<div id="loggedInContainer">
+				<div id="loggedInIndicator"><a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></div>
+				<button id="logout" class="btn btn-secondary">Logout</button>
+			</div>
 			<iframe id="twitchChat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat"></iframe>
 			<ul id="waitlist" class="list-group">
 				<li class="list-group-item">The waitlist is empty right now</li>
@@ -656,15 +659,6 @@
 		</div>
 	</div>
 	
-<!-- 	<div id="popup" class="genericPopup">
-		test
-	</div>
-	<button id="testButton" class="btn btn-primary">
-		test button
-	</button> -->
-
-
-
 	<!-- SETTINGS WINDOW ------------------------------------------- -->
 	<div id="keyboardSettings" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-lg">

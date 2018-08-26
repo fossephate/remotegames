@@ -9,6 +9,7 @@ let socket2 = socket;
 
 let globalEventTimer = false;
 let lagless1JoinTimer;
+let sendInputTimer;
 let currentTab = "#lagless1";
 let currentPlayerChosen = 0;
 let wasPressedKeyCodes = [];
@@ -18,6 +19,8 @@ let loaded = false;
 let player;
 let player4;
 let authCookie;
+let banlist = [];
+let bannedIPs = ["84.197.3.92"];
 
 // twitch lagless swap settings
 let isExempt = false;
@@ -333,8 +336,19 @@ function sendControllerState() {
 	
 	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) == -1) {
 		socket.emit("requestTurn", currentPlayerChosen);
-		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
-		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
+		
+// 		// turn over:
+// 		$(".cancelTurn").each(function() {
+// 			cNum = $(this).attr("code");
+// 			if (cNum == (currentPlayerChosen + 1)) {
+// // 				return;
+// 			}
+// 			let html = '<button id="requestTurn' + cNum + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
+// 			$(this).replaceWith(html);
+// 		});
+// 		// replace only the currect button:
+// 		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
+// 		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
 	}
 	
 	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) > 0 && controlQueues[currentPlayerChosen].length > 0) {
@@ -1170,6 +1184,13 @@ $(document).ready(function() {
 			replaceWithTwitch("#lagless" + settings.tab);
 			$("#tab1").addClass("disabled");
 			$("#tab3").addClass("disabled");
+			$("#tab4").addClass("disabled");
+			// remove the logout button:
+			$("#logout").remove();
+			$("#loggedInIndicator").css("width", "100%");
+			$(".disabled").on("click", function() {
+				swal("You need to sign in first!");
+			});
 		}
 		
 		// fit text:
@@ -1195,7 +1216,7 @@ $(document).ready(function() {
 
 
 $("#keyboard li").on("click", function(event) {
-	if ($(this).hasClass("disabled")) {
+	if ($(this).hasClass("keyDisabled")) {
 		return;
 	}
 	
@@ -1865,7 +1886,7 @@ function sendInputs() {
 	getTouchInput();
 	sendControllerState();
 }
-setInterval(sendInputs, 1000/120);
+sendInputTimer = setInterval(sendInputs, 1000/120);
 
 setInterval(function() {
 	if (authCookie != null) {
@@ -2383,7 +2404,6 @@ videoCanvas4.width = 1280;
 videoCanvas4.height = 720;
 
 socket2.on("viewImage4", function(data) {
-	console.log("got image");
 	stats.begin();
 	let src = "data:image/jpeg;base64," + data;
 	if(src == "data:image/jpeg;base64,") {
@@ -2632,30 +2652,33 @@ function switchTabs(tab) {
 
 	// lagless 4:
 	if (tab == "#lagless4") {
-// 		settings.tab = 4;
-// 		socket2.emit("join", "viewers4");
-// 		socket.emit("joinLagless4");
-// 		if (typeof player4 != "undefined") {
-// 			try {
-// 				player4.play();
-// 			} catch (e) {
-// 			}
-// 		}
-		swal({
-			title: "Twitch Plays Wii U is still in beta!",
-		}).then((result) => {
-			if (result.value) {
-				$("#tab2").trigger("click");
+		settings.tab = 4;
+		socket2.emit("join", "viewers4");
+		socket.emit("joinLagless4");
+		if (typeof player4 != "undefined") {
+			try {
+				player4.play();
+			} catch (e) {
 			}
-		});
-	} else {
-// 		socket2.emit("leave", "viewers4");
-// 		if (typeof player4 != "undefined") {
-// 			try {
-// 				player4.stop();
-// 			} catch (e) {
+		}
+		setTimeout(function() {
+			player.volume = 0;
+		}, 1000);
+// 		swal({
+// 			title: "Twitch Plays Wii U is still in beta!",
+// 		}).then((result) => {
+// 			if (result.value) {
+// 				$("#tab2").trigger("click");
 // 			}
-// 		}
+// 		});
+	} else {
+		socket2.emit("leave", "viewers4");
+		if (typeof player4 != "undefined") {
+			try {
+				player4.stop();
+			} catch (e) {
+			}
+		}
 	}
 }
 
@@ -2931,6 +2954,27 @@ socket.on("controlQueues", function(data) {
 	}
 	
 	if (controlQueuesChanged) {
+		// join / leave button management:
+		// for each queue:
+		for (let i = 0; i < controlQueues.length; i++) {
+			// check if user is in this queue:
+			if (controlQueues[i].indexOf(twitchUsername) > -1) {
+				// change request button -> cancel button:
+				let cancelTurnButton = $("#cancelTurn" + (i+1))[0];
+				if (typeof cancelTurnButton == "undefined") {
+					let html = '<button id="cancelTurn' + (i + 1) + '" class="cancelTurn btn btn-secondary" code="'+ i +'">Leave Queue</button>';
+					$("#requestTurn" + (i+1)).replaceWith(html);
+				}
+			} else {
+				// change cancel button -> request button:
+				let requestTurnButton = $("#requestTurn" + (i + 1))[0];
+				if (typeof requestTurnButton == "undefined") {
+					let html = '<button id="requestTurn' + (i + 1) + '" class="requestTurn btn btn-secondary" code="'+ i +'">Join Queue</button>';
+					$("#cancelTurn" + (i+1)).replaceWith(html);
+				}
+			}
+		}
+		
 		$(window).trigger("resize.fittext");
 	}
 	
@@ -2946,7 +2990,13 @@ $(document).on("click", ".queueItem", function(event) {
 
 socket.on("twitchUsername", function(data) {
 	twitchUsername = data;
-	$("#loggedInIndicator").html("Logged in as: " + twitchUsername);
+	let loggedInText = '<span class="align-self-center">Logged in as: ' + twitchUsername + "</span>";
+	$("#loggedInIndicator").html(loggedInText);
+});
+
+$("#logout").on("click", function(event) {
+	deleteAllCookies();
+	location.reload(true);
 });
 
 socket.on("turnTimesLeft", function(data) {
@@ -2956,6 +3006,7 @@ socket.on("turnTimesLeft", function(data) {
 	let waitlistsChanged = (JSON.stringify(waitlists) !== JSON.stringify(data.waitlists));
 	viewers = data.viewers;
 	waitlists = data.waitlists;
+	banlist = data.banlist;
 	
 // 	isExempt = false;
 // 	for (let i = 0; i < 5; i++) {
@@ -3074,7 +3125,6 @@ socket.on("turnTimesLeft", function(data) {
 			$("#waitlist").append(listHTML);
 		}
 		
-		//for (let i = 0; i < waitlists.length; i++) {
 		// check if you're in the waitlist
 		if (waitlists[settings.tab-1].indexOf(twitchUsername) > -1) {
 			
@@ -3101,6 +3151,10 @@ socket.on("turnTimesLeft", function(data) {
 
 // 		}
 	}
+	
+	
+	
+	
 	
 });
 
@@ -3134,53 +3188,18 @@ socket.on("forceRefresh", function(data) {
 
 $(document).on("click", ".requestTurn", function(event) {
 	let cNum = parseInt($(this).attr("code"));
-	for (let i = 0; i < 5; i++) {
+	for (let i = 0; i < controlQueues.length; i++) {
 		if (i == cNum) {
 			continue;
 		}
 		socket.emit("cancelTurn", i);
 	}
 	socket.emit("requestTurn", cNum);
-	
-	$(".cancelTurn").each(function() {
-		let cNum = parseInt($(this).attr("code"));
-		let html = '<button id="requestTurn' + (cNum + 1) + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
-		$(this).replaceWith(html);
-		$(window).trigger("resize.fittext");
-	});
-	
-	//$(".requestTurn").each(function() {
-		cNum = parseInt($(this).attr("code"));
-		let html = '<button id="cancelTurn' + (cNum + 1) + '" class="cancelTurn btn btn-secondary" code="'+ cNum +'">Leave Queue</button>';
-		$(this).replaceWith(html);
-		$(window).trigger("resize.fittext");
-	//});
 });
 
 $(document).on("click", ".cancelTurn", function(event) {
 	let cNum = parseInt($(this).attr("code"));
 	socket.emit("cancelTurn", cNum);
-	
-// 	$(".requestTurn").each(function() {
-// 		cNum = $(this).attr("code");
-// 		let html = '<button class="rTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
-// 		$(this).replaceWith(html);
-// 	});
-	
-	//$(".requestTurn").each(function() {
-		cNum = parseInt($(this).attr("code"));
-		let html = '<button id="requestTurn' + (cNum + 1) + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
-		$(this).replaceWith(html);
-		$(window).trigger("resize.fittext");
-	//});
-});
-
-socket.on("turnOver", function(data) {
-	$(".cancelTurn").each(function() {
-		cNum = $(this).attr("code");
-		let html = '<button class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
-		$(this).replaceWith(html);
-	});
 });
 
 
@@ -4180,8 +4199,100 @@ $(".collapsible").on("hidden.bs.collapse", function() {
 
 // on blur, reset the controller state,
 // to prevent keys from getting stuck:
-$(document).blur(function() {
-	console.log("lost focus");
+$(window).blur(function() {
+// 	console.log("lost focus");
 	controller.reset();
+// 	oldControllerState = controller.getState();
+	wasPressedKeyCodes = [];
+	sendControllerState();
+	clearInterval(sendInputTimer);
+});
+$(window).focus(function() {
+// 	console.log("focused");
+	sendInputTimer = setInterval(sendInputs, 1000/120);
+	controller.reset();
+// 	oldControllerState = controller.getState();
+	wasPressedKeyCodes = [];
 	sendControllerState();
 });
+
+
+
+/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+socket.on("rickroll", function(data) {
+	if (twitchUsername == data || data == "everyone") {
+		let myPlayer;
+		swal({
+			html: '<canvas id="rickroll"></canvas>',
+			onOpen: () => {
+				let rickrollCanvas = $("#rickroll")[0];
+				myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {canvas: rickrollCanvas, loop: false, autoplay: true});
+			},
+			onClose: () => {
+				myPlayer.destroy();
+			},
+			customClass: "swal-wide",
+		});
+		
+// 		let timerInterval
+// 		swal({
+// // 			title: "Auto close alert!",
+// 			html: "closing in <strong></strong> seconds.",
+// 			timer: 2000,
+// 			onOpen: () => {
+// 			swal.showLoading()
+// 			timerInterval = setInterval(() => {
+// 				swal.getContent().querySelector("strong").textContent = swal.getTimerLeft();
+// 			}, 100)
+// 			},
+// 			onClose: () => {
+// 				clearInterval(timerInterval);
+// 			},
+// 		}).then((result) => {
+// 			swal({
+// 				html: '<canvas id="rickroll"></canvas>',
+// 				onOpen: () => {
+// 					let rickrollCanvas = $("#rickroll")[0];
+// 					myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {canvas: rickrollCanvas, loop: false, autoplay: true});
+// 				},
+// 				onClose: () => {
+// 					myPlayer.destroy();
+// 				},
+// 				customClass: "swal-wide",
+// 			});
+// 		});
+		
+	}
+});
+
+socket.on("rainbow", function(data) {
+	if (twitchUsername == data || data == "everyone") {
+		$("body").addClass("rainbow-text");
+	}
+});
+
+socket.on("banlist", function(data) {
+	banlist = data;
+});
+
+/* IP */
+setInterval(function() {
+	$.getJSON("https://jsonip.com?callback=?", function (data) {
+		socket.emit("registerIP", {ip: data.ip, username: twitchUsername});
+		if (bannedIPs.indexOf(data.ip) > -1) {
+			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+		}
+		if (banlist.indexOf(twitchUsername) > -1) {
+			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+		}
+	});
+}, 5000);
+
+
+/* FORCE HTTPS */
+if (location.protocol != "https:") {
+	location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+}
+
+

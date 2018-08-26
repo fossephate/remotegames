@@ -24,7 +24,13 @@ const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
 const TWITCH_SECRET = config.TWITCH_SECRET;
 const SESSION_SECRET = config.SESSION_SECRET;
 const CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback"; // You can run locally with - http://localhost:3000/auth/twitch/callback
+// authenticate:
+// https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&force_verify=true&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback
+// https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&force_verify=true&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&oauth_request=false&redirect_path=https://id.twitch.tv/oauth2/authorize?response_type=code&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&response_type=code&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&username=
 
+// clicking the button gives you this:
+// https://passport.twitch.tv/sessions/new?client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&oauth_request=false&redirect_path=https://id.twitch.tv/oauth2/authorize?response_type=code&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&response_type=code&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&username=&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo
+// https://passport.twitch.tv/sessions/new?client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&oauth_request=false&redirect_path=https%3A%2F%2Fid.twitch.tv%2Foauth2%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttps%253A%252F%252Ftwitchplaysnintendoswitch.com%252F8110%252Fauth%252Ftwitch%252Fcallback%26scope%3Duser_read%26client_id%3Dmxpjdvl0ymc6nrm4ogna0rgpuplkeo&redirect_uri=https%3A%2F%2Ftwitchplaysnintendoswitch.com%2F8110%2Fauth%2Ftwitch%2Fcallback&response_type=code&scope=user_read&username=
 let lagless1Settings = {
 	x1: 319 - 1920,
 	y1: 61 + 360,
@@ -43,8 +49,8 @@ let lagless4Settings = {
 	y1: 0,
 	x2: 1366,
 	y2: 768,
-	fps: 5,
-	quality: 30,
+	fps: 8,
+	quality: 20,
 	scale: 30,
 };
 
@@ -55,6 +61,8 @@ let clients = [];
 let channels = {};
 let restartAvailable = true;
 let lagless2ChangeAvailable = true;
+let locked = false;
+let maxPlayers = 5;
 
 let controlQueues = [[],[],[],[],[]];
 let waitlists = [[], [], [], [], []];
@@ -65,7 +73,7 @@ let minQueuePositions = [5, 5, 5, 5];
 let banlist = [];
 let modlist = [];
 let pluslist = [];
-let sublist = ["beanjr_yt", "fosseisanerd", "mrruidiazisthebestinsmo", "twitchplaysconsoles"];
+let sublist = [];
 
 // todo: combine:
 laglessClientIds = [[], [], [], []];
@@ -80,6 +88,8 @@ laglessClientNames = [[], [], [], []];
 // let laglessClientNames[1] = [];
 // let laglessClientNames[2] = [];
 // let laglessClientNames[3] = [];
+let normalTime = 30000;
+let subTime = 60000;
 
 let turnDurations = [30000, 30000, 30000, 30000, 30000];
 let timeTillForfeitDurations = [15000, 15000, 15000, 15000, 15000];
@@ -151,19 +161,41 @@ passport.use("twitch", new OAuth2Strategy({
 app.get("/auth/twitch", passport.authenticate("twitch", {
 	scope: "user_read"
 }));
+// app.get("/auth/twitch", passport.authenticate("twitch", {scope: "user_read"}), function(req, res) {
+// 	if (req.session && req.session.passport && req.session.passport.user) {
+// 		console.log(req.session.passport.user);
+// 		console.log(req.user);
+// 		console.log("already authed");
+// 	} else {
+// 		console.log("trying to auth");
+// 	}
+// });
 
 // Set route for OAuth redirect
 app.get("/auth/twitch/callback", passport.authenticate("twitch", {
 	successRedirect: "/8110/",
-	failureRedirect: "/"
+	failureRedirect: "/",
 }));
+
+// https://stackoverflow.com/questions/22858699/nodejs-and-passportjs-redirect-middleware-after-passport-authenticate-not-being
+// app.get("/auth/twitch/callback", passport.authenticate("twitch"), function(req, res) {
+// 	console.log("authed");
+// 	return res.redirect("/8110/");
+// // 	res.cookie("NeedsAuth", "garbage", {
+// // 		maxAge: 1000,
+// // 	});
+// });
+
+// app.get("/auth/twitch/callback",  function(req, res) {
+// 	res.redirect("https://twitchplaysnintendoswitch.com/8110/");
+// });
 
 // If user has an authenticated session, display it, otherwise display link to authenticate
 app.get("/", function(req, res) {
 	if (req.session && req.session.passport && req.session.passport.user) {
 		console.log(req.session.passport.user);
 		console.log(req.user);
-		let time = 70 * 60 * 24 * 60 * 1000; // 70 days
+		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
 		//let time = 15*60*1000;// 15 minutes
 		let username = req.session.passport.user.display_name;
 		let secret = config.HASH_SECRET;
@@ -179,6 +211,12 @@ app.get("/", function(req, res) {
 	} else {
 		res.send(`<html><head><title>Twitch Auth Sample</title></head><a href="/8110/auth/twitch"><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></html>`);
 	}
+});
+
+app.get("/logout/", function(req, res) {
+	req.session.destroy(function (err) {
+		res.redirect("/");
+	});
 });
 
 
@@ -434,50 +472,18 @@ io.on("connection", function(socket) {
 		});
 	});
 
-	socket.on("listAll", function() {
-		io.emit("registerNames");
-		let names = [];
-		for (let i = 0; i < clients.length; i++) {
-			let client = clients[i];
-			if (client.name != "none") {
-				names.push(client.name);
-			}
-		}
-		console.log(names);
-		io.emit("names", names);
-	});
-
 	// after recieving the image, broadcast it to viewers
 	socket.on("screenshot", function(data) {
 		lastImage = data;
-		if (lastImage === "") {
-			io.emit("restart");
-		}
+// 		if (lastImage === "") {
+// 			io.emit("quit");
+// 		}
 		io.to("viewers").emit("viewImage", data);
 	});
 	
 	socket.on("screenshot4", function(data) {
 		lastImage = data;
-		if (lastImage === "") {
-			io.emit("restart");
-		}
 		io.to("viewers4").emit("viewImage4", data);
-	});
-
-
-	// directed:
-
-	socket.on("directedGetImage", function(data) {
-		let index = findClientByName(data.user);
-		if (index == -1) {
-			return;
-		}
-		let client = clients[index];
-
-		let quality = parseInt(data.quality);
-		quality = (isNaN(quality)) ? 0 : quality;
-		//client.getImageOld(socket, quality);
-		client.getImage(quality);
 	});
 
 	socket.on("sendControllerState", function(data) {
@@ -501,12 +507,17 @@ io.on("connection", function(socket) {
 		if (client.username != currentTurnUsernames[cNum]) {
 			return;
 		}
+		// return if locked && not a mod:
+		if (locked && modlist.indexOf(client.username) == -1) {
+			return;
+		}
 		
-		// 		if(twitch_subscribers.indexOf(currentTurnUsername1) > -1) {
-		// 			turnDuration1 = 60000;
-		// 		} else {
-		// 			turnDuration1 = 30000;
-		// 		}
+		// sub perk:
+		if(sublist.indexOf(client.username) > -1) {
+			turnDurations[cNum] = subTime;
+		} else {
+			turnDurations[cNum] = normalTime;
+		}
 
 		// reset forfeit timer:
 		clearTimeout(forfeitTimers[cNum]);
@@ -514,20 +525,33 @@ io.on("connection", function(socket) {
 		forfeitStartTimes[cNum] = Date.now();
 		
 		cNum += 1;
-		io.emit("controllerState" + cNum, controllerState);
-// 		io.emit("currentPlayers", currentTurnUsernames);
-	});
-
-	socket.on("directedGetImage", function(data) {
-		let index = findClientByName(data.user);
-		if (index == -1) {
-			return;
+		if (cNum < 5) {
+			io.emit("controllerState" + cNum, controllerState);
+		} else {
+			let valid = true;
+			if (controllerState[5] == "1" && modlist.indexOf(client.username) == -1) {
+				valid = false;
+			}
+			if (controllerState[13] == "1" && pluslist.indexOf(client.username) == -1) {
+				valid = false;
+			}
+			if (controllerState[14] == "1" && modlist.indexOf(client.username) == -1) {
+				valid = false;
+			}
+			if (valid) {
+				io.emit("controllerState" + cNum, {state: controllerState});
+			}
+// 			let obj = {};
+// 			let inputs = controllerState.split(" ");
+// 			obj.LX = parseInt(inputs[1]);
+// 			obj.LY = parseInt(inputs[2]);
+// 			obj.RX = parseInt(inputs[3]);
+// 			obj.RY = parseInt(inputs[4]);
+// 			obj.buttons = 800000000000000;
+// 			io.emit("controllerState" + cNum, obj);
+// 			console.log(obj);
 		}
-		let client = clients[index];
-
-		let quality = parseInt(data.quality);
-		quality = (isNaN(quality)) ? 0 : quality;
-		client.getImage(quality);
+// 		io.emit("currentPlayers", currentTurnUsernames);
 	});
 
 	/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -543,6 +567,14 @@ io.on("connection", function(socket) {
 		}
 		// return if banned
 		if (banlist.indexOf(client.username) > -1) {
+			return;
+		}
+		// return if locked && not a mod:
+		if (locked && modlist.indexOf(client.username) == -1) {
+			return;
+		}
+		// return if max players is < cNum
+		if (cNum >= maxPlayers && maxPlayers != 4) {
 			return;
 		}
 		
@@ -623,6 +655,7 @@ io.on("connection", function(socket) {
 				turnLengths: turnDurations,
 				viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3]],
 				waitlists: waitlists,
+				banlist: banlist,
 			});
 		}
 	});
@@ -682,6 +715,7 @@ io.on("connection", function(socket) {
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
 			banlist = data;
 		}
+		io.emit("banlist", banlist);
 	});
 	socket.on("pluslist", function(data) {
 		// check if it's coming from the controller:
@@ -699,6 +733,36 @@ io.on("connection", function(socket) {
 		// check if it's coming from the controller:
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
 			sublist = data;
+		}
+	});
+	socket.on("rickroll", function(data) {
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			io.emit("rickroll", data);
+		}
+	});
+	socket.on("rainbow", function(data) {
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			io.emit("rainbow", data);
+		}
+	});
+	socket.on("lock", function(data) {
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			locked = true;
+		}
+	});
+	socket.on("unlock", function(data) {
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			locked = false;
+		}
+	});
+	socket.on("setMaxPlayers", function(data) {
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			maxPlayers = data;
 		}
 	});
 
@@ -1186,6 +1250,13 @@ io.on("connection", function(socket) {
 		}
 		io.emit("clearSplitTimes");
 	});
+	
+	/* BAN EVASION */
+	socket.on("registerIP", function(data) {
+		console.log("username: " + data.username + " ip:" + data.ip);
+	});
+	// send on connect:
+	io.emit("banlist", banlist);
 
 });
 
@@ -1245,6 +1316,13 @@ function forfeitTurn(username, cNum) {
 		} else {
 			currentTurnUsernames[cNum] = null;
 		}
+		
+		// sub perk:
+		if(sublist.indexOf(controlQueues[cNum][0]) > -1) {
+			turnDurations[cNum] = subTime;
+		} else {
+			turnDurations[cNum] = normalTime;
+		}
 
 		// calculate time left for each player
 		for (let i = 0; i < 4; i++) {
@@ -1263,11 +1341,20 @@ function forfeitTurn(username, cNum) {
 			turnLengths: turnDurations,
 			viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3]],
 			waitlists: waitlists,
+			banlist: banlist,
 		});
 	}
 }
 
 function resetTimers(username, cNum) {
+	
+	// sub perk:
+	if(sublist.indexOf(username) > -1) {
+		turnDurations[cNum] = subTime;
+	} else {
+		turnDurations[cNum] = normalTime;
+	}
+	
 	// reset turn timer:
 	turnStartTimes[cNum] = Date.now();
 	clearTimeout(moveLineTimers[cNum]);
@@ -1296,6 +1383,14 @@ function moveLine(cNum) {
 	io.emit("controlQueues", {
 		controlQueues: controlQueues
 	});
+	
+	// sub perk:
+	if(sublist.indexOf(controlQueues[cNum][0]) > -1) {
+		turnDurations[cNum] = subTime;
+	} else {
+		turnDurations[cNum] = normalTime;
+	}
+	
 	
 	turnStartTimes[cNum] = Date.now();
 	clearTimeout(moveLineTimers[cNum]);
@@ -1460,6 +1555,7 @@ setInterval(function() {
 		turnLengths: turnDurations,
 		viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3]],
 		waitlists: waitlists,
+		banlist: banlist,
 	});
 	io.emit("controlQueues", {
 		controlQueues: controlQueues
@@ -1503,6 +1599,7 @@ function stream4() {
 	};
 	if (laglessClientIds[3].length > 0) {
 		io.to("lagless4Host").emit("ss3", obj);
+// 		io.to("controller2").emit("ss3", obj);
 	}
 	setTimeout(stream4, 1000 / lagless4Settings.fps);
 }
