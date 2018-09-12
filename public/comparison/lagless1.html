@@ -54,7 +54,7 @@
 		videoCanvas1.height = 720;
 
 		socket.on("viewImage", function(data) {
-			let src = "data:image/jpeg;base64," + data.src;
+			let src = "data:image/jpeg;base64," + data;
 			if(src == "data:image/jpeg;base64,") {
 				socket.emit("restart");
 				return;
@@ -69,7 +69,7 @@
 				let ratio = (imgHeight / imgWidth);
 				let canvasRatio = canvasWidth / canvasHeight;
 				let ratioW = 1280 / $("#videoCanvas1").innerWidth();
-				let ratioH = 729 / $("#videoCanvas1").innerHeight();
+				let ratioH = 720 / $("#videoCanvas1").innerHeight();
 				let cWidth = $("#videoCanvas1").innerWidth();
 				videoCanvas1Context.clearRect(0, 0, canvasWidth, canvasHeight);
 				videoCanvas1Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);

@@ -12,6 +12,7 @@ const now = require("performance-now");
 const session = require("express-session");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
+const twitchStrategy = require("passport-twitch").Strategy;
 const request = require("request");
 const handlebars = require("handlebars");
 
@@ -21,16 +22,10 @@ const insertionSort = require("./tools.js").insertionSort;
 const _ = require("lodash");
 
 const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
-const TWITCH_SECRET = config.TWITCH_SECRET;
+const TWITCH_CLIENT_SECRET = config.TWITCH_CLIENT_SECRET;
 const SESSION_SECRET = config.SESSION_SECRET;
-const CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback"; // You can run locally with - http://localhost:3000/auth/twitch/callback
-// authenticate:
-// https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&force_verify=true&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback
-// https://id.twitch.tv/oauth2/authorize?response_type=token&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&force_verify=true&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&oauth_request=false&redirect_path=https://id.twitch.tv/oauth2/authorize?response_type=code&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&response_type=code&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&username=
+const TWITCH_CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback";
 
-// clicking the button gives you this:
-// https://passport.twitch.tv/sessions/new?client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&oauth_request=false&redirect_path=https://id.twitch.tv/oauth2/authorize?response_type=code&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&redirect_uri=https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback&response_type=code&scope=user_read&state=POVQlNcO3zzXxwkCBDWgJldd&username=&client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo
-// https://passport.twitch.tv/sessions/new?client_id=mxpjdvl0ymc6nrm4ogna0rgpuplkeo&oauth_request=false&redirect_path=https%3A%2F%2Fid.twitch.tv%2Foauth2%2Fauthorize%3Fresponse_type%3Dcode%26redirect_uri%3Dhttps%253A%252F%252Ftwitchplaysnintendoswitch.com%252F8110%252Fauth%252Ftwitch%252Fcallback%26scope%3Duser_read%26client_id%3Dmxpjdvl0ymc6nrm4ogna0rgpuplkeo&redirect_uri=https%3A%2F%2Ftwitchplaysnintendoswitch.com%2F8110%2Fauth%2Ftwitch%2Fcallback&response_type=code&scope=user_read&username=
 let lagless1Settings = {
 	x1: 319 - 1920,
 	y1: 61 + 360,
@@ -42,9 +37,9 @@ let lagless1Settings = {
 };
 let lagless2Settings = {framerate: 30, videoBitrate: 1, scale: 960};
 let currentLagless2Settings;
-// let lagless4Settings = {framerate: 30, scale: 960, videoBitrate: 1};
-let currentLagless4Settings;
-let lagless4Settings = {
+// let lagless5Settings = {framerate: 30, scale: 960, videoBitrate: 1};
+let currentLagless5Settings;
+let lagless5Settings = {
 	x1: 0,
 	y1: 0,
 	x2: 1366,
@@ -62,12 +57,13 @@ let channels = {};
 let restartAvailable = true;
 let lagless2ChangeAvailable = true;
 let locked = false;
+let wifiEnabled = false;
 let maxPlayers = 5;
 
-let controlQueues = [[],[],[],[],[]];
+let controlQueues = [[], [], [], [], []];
 let waitlists = [[], [], [], [], []];
-let waitlistMaxes = [10, 10, 10, 10];
-let minQueuePositions = [5, 5, 5, 5];
+let waitlistMaxes = [10, 10, 10, 10, 10];
+let minQueuePositions = [5, 5, 5, 5, 5];
 
 
 let banlist = [];
@@ -76,18 +72,9 @@ let pluslist = [];
 let sublist = [];
 
 // todo: combine:
-laglessClientIds = [[], [], [], []];
-laglessClientNames = [[], [], [], []];
+laglessClientIds = [[], [], [], [], []];
+laglessClientNames = [[], [], [], [], []];
 
-// let laglessClientIds[0] = [];
-// let laglessClientIds[1] = [];
-// let laglessClientIds[2] = [];
-// let laglessClientIds[3] = [];
-
-// let laglessClientNames[0] = [];
-// let laglessClientNames[1] = [];
-// let laglessClientNames[2] = [];
-// let laglessClientNames[3] = [];
 let normalTime = 30000;
 let subTime = 60000;
 
@@ -103,6 +90,8 @@ let turnTimesLeft = [0, 0, 0, 0, 0];
 let forfeitTimesLeft = [0, 0, 0, 0, 0];
 
 let splitTimer = null;
+let afkTimer = Date.now();
+let afkTime = 1000 * 60 * 30;// 30 minutes
 
 app.use(session({
 	secret: SESSION_SECRET,
@@ -113,42 +102,11 @@ app.use(express.static("public"));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Override passport profile function to get user profile from Twitch API
-OAuth2Strategy.prototype.userProfile = function(accessToken, done) {
-	let options = {
-		url: "https://api.twitch.tv/kraken/user",
-		method: "GET",
-		headers: {
-			"Client-ID": TWITCH_CLIENT_ID,
-			"Accept": "application/vnd.twitchtv.v5+json",
-			"Authorization": "OAuth " + accessToken
-		}
-	};
-
-	request(options, function(error, response, body) {
-		if (response && response.statusCode == 200) {
-			done(null, JSON.parse(body));
-		} else {
-			done(JSON.parse(body));
-		}
-	});
-}
-
-passport.serializeUser(function(user, done) {
-	done(null, user);
-});
-
-passport.deserializeUser(function(user, done) {
-	done(null, user);
-});
-
-passport.use("twitch", new OAuth2Strategy({
-		authorizationURL: "https://api.twitch.tv/kraken/oauth2/authorize",
-		tokenURL: "https://api.twitch.tv/kraken/oauth2/token",
+passport.use(new twitchStrategy({
 		clientID: TWITCH_CLIENT_ID,
-		clientSecret: TWITCH_SECRET,
-		callbackURL: CALLBACK_URL,
-		state: true
+		clientSecret: TWITCH_CLIENT_SECRET,
+		callbackURL: TWITCH_CALLBACK_URL,
+		scope: "user:read:email analytics:read:games",
 	},
 	function(accessToken, refreshToken, profile, done) {
 		profile.accessToken = accessToken;
@@ -156,48 +114,26 @@ passport.use("twitch", new OAuth2Strategy({
 		done(null, profile);
 	}
 ));
+passport.serializeUser(function(user, done) {
+	done(null, user);
+});
+passport.deserializeUser(function(user, done) {
+	done(null, user);
+});
 
-// Set route to start OAuth link, this is where you define scopes to request
-app.get("/auth/twitch", passport.authenticate("twitch", {
-	scope: "user_read"
-}));
-// app.get("/auth/twitch", passport.authenticate("twitch", {scope: "user_read"}), function(req, res) {
-// 	if (req.session && req.session.passport && req.session.passport.user) {
-// 		console.log(req.session.passport.user);
-// 		console.log(req.user);
-// 		console.log("already authed");
-// 	} else {
-// 		console.log("trying to auth");
-// 	}
-// });
-
-// Set route for OAuth redirect
-app.get("/auth/twitch/callback", passport.authenticate("twitch", {
-	successRedirect: "/8110/",
-	failureRedirect: "/",
-}));
-
-// https://stackoverflow.com/questions/22858699/nodejs-and-passportjs-redirect-middleware-after-passport-authenticate-not-being
-// app.get("/auth/twitch/callback", passport.authenticate("twitch"), function(req, res) {
-// 	console.log("authed");
-// 	return res.redirect("/8110/");
-// // 	res.cookie("NeedsAuth", "garbage", {
-// // 		maxAge: 1000,
-// // 	});
-// });
-
-// app.get("/auth/twitch/callback",  function(req, res) {
-// 	res.redirect("https://twitchplaysnintendoswitch.com/8110/");
-// });
+app.get("/auth/twitch", passport.authenticate("twitch", {forceVerify: true}));
+app.get("/auth/twitch/callback", passport.authenticate("twitch", { failureRedirect: "/" }), function(req, res) {
+	// Successful authentication, redirect home.
+	res.redirect("/8110/");
+});
 
 // If user has an authenticated session, display it, otherwise display link to authenticate
 app.get("/", function(req, res) {
 	if (req.session && req.session.passport && req.session.passport.user) {
-		console.log(req.session.passport.user);
 		console.log(req.user);
 		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
 		//let time = 15*60*1000;// 15 minutes
-		let username = req.session.passport.user.display_name;
+		let username = req.user.username;
 		let secret = config.HASH_SECRET;
 		let hashedUsername = crypto.createHmac("sha256", secret).update(username).digest("hex");
 
@@ -213,11 +149,6 @@ app.get("/", function(req, res) {
 	}
 });
 
-app.get("/logout/", function(req, res) {
-	req.session.destroy(function (err) {
-		res.redirect("/");
-	});
-});
 
 
 app.get("/stats/", function(req, res) {});
@@ -483,7 +414,8 @@ io.on("connection", function(socket) {
 	
 	socket.on("screenshot4", function(data) {
 		lastImage = data;
-		io.to("viewers4").emit("viewImage4", data);
+		// todo: replace the viewers5 room with "joinLaglessX" rooms
+		io.to("viewers5").emit("viewImage5", data);
 	});
 
 	socket.on("sendControllerState", function(data) {
@@ -511,6 +443,9 @@ io.on("connection", function(socket) {
 		if (locked && modlist.indexOf(client.username) == -1) {
 			return;
 		}
+		
+		// reset afkTimer:
+		afkTimer = Date.now();
 		
 		// sub perk:
 		if(sublist.indexOf(client.username) > -1) {
@@ -639,7 +574,7 @@ io.on("connection", function(socket) {
 			}
 
 			// calculate time left for each player
-			for (let i = 0; i < 4; i++) {
+			for (let i = 0; i < turnDurations.length; i++) {
 				let currentTime = Date.now();
 				let elapsedTime = currentTime - turnStartTimes[i];
 				let timeLeft = turnDurations[i] - elapsedTime;
@@ -653,9 +588,11 @@ io.on("connection", function(socket) {
 				forfeitTimesLeft: forfeitTimesLeft,
 				usernames: currentTurnUsernames,
 				turnLengths: turnDurations,
-				viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3]],
+				viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3], laglessClientNames[4]],
 				waitlists: waitlists,
 				banlist: banlist,
+				locked: locked,
+				wifiEnabled: wifiEnabled,
 			});
 		}
 	});
@@ -664,13 +601,17 @@ io.on("connection", function(socket) {
 
 	/* STREAM COMMANDS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("restart1", function() {
-		if (restartAvailable) {
-			restartAvailable = false;
-			console.log("restarting");
-			io.emit("quit");
+		if (!restartAvailable) {
+			return;
 		}
+		restartAvailable = false;
+		console.log("restarting");
+		io.emit("quit");
 	});
 	socket.on("restart2", function() {
+		if (!restartAvailable) {
+			return;
+		}
 		restartAvailable = false;
 		console.log("restarting lagless2");
 		io.to("lagless2Host").emit("restart");
@@ -684,25 +625,34 @@ io.on("connection", function(socket) {
 		io.emit("lagless2SettingsChange");
 	});
 	socket.on("restart3", function() {
+		if (!restartAvailable) {
+			return;
+		}
 		restartAvailable = false;
 		console.log("restarting lagless3");
 		io.to("lagless3Host").emit("restart");
 	});
-// 	socket.on("restart4", function() {
+// 	socket.on("restart5", function() {
+// 		if (!restartAvailable) {
+// 			return;
+// 		}
 // 		restartAvailable = false;
-// 		console.log("restarting lagless4");
-// 		io.to("lagless4Host").emit("restart");
+// 		console.log("restarting lagless5");
+// 		io.to("lagless5Host").emit("restart");
 		
 // 		// todo: resend settings
-// 		io.to("lagless4Host").emit("settings", currentLagless4Settings);
+// 		io.to("lagless5Host").emit("settings", currentLagless5Settings);
 		
 // 		// notify client to restart:
-// 		io.emit("lagless4SettingsChange");
+// 		io.emit("lagless5SettingsChange");
 // 	});
 	
 	socket.on("restart server", function() {
+		if (!restartAvailable) {
+			return;
+		}
 		restartAvailable = false;
-		console.log("server restarting");
+		console.log("restarting server");
 		io.emit("quit");
 		process.exit();
 	});
@@ -747,25 +697,12 @@ io.on("connection", function(socket) {
 			io.emit("rainbow", data);
 		}
 	});
-	socket.on("lock", function(data) {
-		// check if it's coming from the controller:
-		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
-			locked = true;
-		}
-	});
-	socket.on("unlock", function(data) {
-		// check if it's coming from the controller:
-		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
-			locked = false;
-		}
-	});
 	socket.on("setMaxPlayers", function(data) {
 		// check if it's coming from the controller:
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
 			maxPlayers = data;
 		}
 	});
-
 	socket.on("disconnect", function() {
 		console.log("disconnected");
 		let i = findClientByID(socket.id);
@@ -785,7 +722,7 @@ io.on("connection", function(socket) {
 			return;
 		}
 		currentTurnUsernames[0] = controlQueues[0][0];
-		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0) {
+		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0 && modlist.indexOf(client.username) == -1) {
 			io.emit("lagless1Settings", lagless1Settings);
 			return;
 		}
@@ -799,6 +736,11 @@ io.on("connection", function(socket) {
 		if (typeof data.quality != "undefined") {
 			if (typeof data.quality == "number") {
 				obj.quality = data.quality;
+			}
+		}
+		if (typeof data.fps != "undefined") {
+			if (typeof data.fps == "number") {
+				obj.fps = data.fps;
 			}
 		}
 		
@@ -825,7 +767,7 @@ io.on("connection", function(socket) {
 			return;
 		}
 		currentTurnUsernames[0] = controlQueues[0][0];
-		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0) {
+		if (client.username != currentTurnUsernames[0] && controlQueues[0].length > 0 && modlist.indexOf(client.username) == -1) {
 			io.emit("lagless2Settings", lagless2Settings);
 			return;
 		}
@@ -870,8 +812,8 @@ io.on("connection", function(socket) {
 		io.emit("lagless2Settings", data);
 	});
 	
-	/* LAGLESS4 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-	socket.on("lagless4Settings", function(data) {
+	/* LAGLESS5 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+	socket.on("lagless5Settings", function(data) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
 			return;
@@ -880,59 +822,58 @@ io.on("connection", function(socket) {
 		if (client.username == null) {
 			return;
 		}
-		currentTurnUsernames[0] = controlQueues[0][0];
 		currentTurnUsernames[4] = controlQueues[4][0];
 		if (client.username != currentTurnUsernames[4] && controlQueues[4].length > 0) {
-			io.emit("lagless4Settings", lagless4Settings);
+			io.emit("lagless5Settings", lagless5Settings);
 			return;
 		}
 		
-		lagless4Settings = Object.assign({}, lagless4Settings, data);
+		lagless5Settings = Object.assign({}, lagless5Settings, data);
 		
 		let obj = {};
 		if (typeof data.framerate != "undefined") {
-			io.emit("lagless4SettingsChange");
+			io.emit("lagless5SettingsChange");
 			if (typeof data.framerate == "number") {
 				obj.framerate = data.framerate;
 			}
 		}
 		if (typeof data.videoBitrate != "undefined") {
-			io.emit("lagless4SettingsChange");
+			io.emit("lagless5SettingsChange");
 			if (typeof data.videoBitrate == "number") {
 				obj.videoBitrate = data.videoBitrate + "M";
 			}
 		}
 		if (typeof data.scale != "undefined") {
-			io.emit("lagless4SettingsChange");
+			io.emit("lagless5SettingsChange");
 			if (typeof data.scale == "number") {
 				obj.scale = data.scale + ":" + (data.scale * (9/16));
 			}
 		}
 		if (typeof data.offsetX != "undefined") {
-			io.emit("lagless4SettingsChange");
+			io.emit("lagless5SettingsChange");
 			if (typeof data.offsetX == "number") {
 				obj.offsetX = data.offsetX;
 			}
 		}
 		if (typeof data.offsetY != "undefined") {
-			io.emit("lagless4SettingsChange");
+			io.emit("lagless5SettingsChange");
 			if (typeof data.offsetY == "number") {
 				obj.offsetY = data.offsetY;
 			}
 		}
 		
-		currentLagless4Settings = obj;
+		currentLagless5Settings = obj;
 		
-		io.to("lagless4Host").emit("settings", obj);
-		io.emit("lagless4Settings", data);
+		io.to("lagless5Host").emit("settings", obj);
+		io.emit("lagless5Settings", data);
 	});
 	
 	// broadcast settings when someone joins:
-	io.emit("lagless1Settings", lagless1Settings);
-	io.emit("lagless2Settings", lagless2Settings);
-	io.emit("lagless4Settings", lagless4Settings);
+	socket.emit("lagless1Settings", lagless1Settings);
+	socket.emit("lagless2Settings", lagless2Settings);
+	socket.emit("lagless5Settings", lagless5Settings);
 	
-	/* Other Commands @@@@@@@@@@@@@@@@@@@@@@@@ */
+	/* OTHER COMMANDS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("forceRefresh", function(channel) {
 		// check if it's coming from the controller:
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -942,19 +883,94 @@ io.on("connection", function(socket) {
 		}
 	});
 	socket.on("disableInternet", function(channel) {
+		let legit = false;
 		// check if it's coming from the controller:
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			legit = true;
+		}
+		let index = findClientByID(socket.id);
+		if (index > -1) {
+			client = clients[index];
+			if (client.username != null) {
+				if (modlist.indexOf(client.username) > -1) {
+					legit = true;
+				}
+			}
+		}
+		if (legit) {
 			io.to("proxy").emit("disableInternet");
-		} else {
-			console.log("something bad happened 2.");
+			wifiEnabled = false;
 		}
 	});
 	socket.on("enableInternet", function(channel) {
+		let legit = false;
 		// check if it's coming from the controller:
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			legit = true;
+		}
+		let index = findClientByID(socket.id);
+		if (index > -1) {
+			client = clients[index];
+			if (client.username != null) {
+				if (modlist.indexOf(client.username) > -1) {
+					legit = true;
+				}
+			}
+		}
+		if (legit) {
 			io.to("proxy").emit("enableInternet");
-		} else {
-			console.log("something bad happened 3.");
+			wifiEnabled = true;
+		}
+	});
+	socket.on("getInternetStatus", function(data) {
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			io.to("proxy").emit("getInternetStatus");
+		}
+	});
+	socket.on("internetStatus", function(data) {
+		// check if it's coming from the proxy:
+		if(checkIfClientIsInRoomByID(socket.id, "proxy")) {
+			wifiEnabled = data;
+			io.to("controller").emit("internetStatus", data);
+		}
+	});
+	socket.on("lock", function(data) {
+		let legit = false;
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			legit = true;
+		}
+		let index = findClientByID(socket.id);
+		if (index > -1) {
+			client = clients[index];
+			if (client.username != null) {
+				if (modlist.indexOf(client.username) > -1) {
+					legit = true;
+				}
+			}
+		}
+		if (legit) {
+			locked = true;
+		}
+	});
+	socket.on("unlock", function(data) {
+		let legit = false;
+		// check if it's coming from the controller:
+		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
+			legit = true;
+		}
+		let index = findClientByID(socket.id);
+		if (index > -1) {
+			client = clients[index];
+			if (client.username != null) {
+				if (modlist.indexOf(client.username) > -1) {
+					legit = true;
+				}
+			}
+		}
+		if (legit) {
+			locked = false;
 		}
 	});
 	socket.on("kickFromQueue", function(data) {
@@ -1005,34 +1021,34 @@ io.on("connection", function(socket) {
 	
 
 	/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
-
-	socket.on("message", function(data) {
-		socket.broadcast.emit("message", data);
+	/* SIMPLEPEER */
+	socket.on("hostPeerSignal", function(data) {
+		io.emit("hostPeerSignal", data);
 	});
-
-	let initiatorChannel = "";
-	if (!io.isConnected) {
-		io.isConnected = true;
-	}
-
-	socket.on("new-channel", function(data) {
-		if (!channels[data.channel]) {
-			initiatorChannel = data.channel;
-		}
-
-		channels[data.channel] = data.channel;
-		onNewNamespace(data.channel, data.sender);
+	socket.on("clientPeerSignal", function(data) {
+		io.emit("clientPeerSignal", {id: socket.id, data: data});
 	});
-
-	socket.on("presence", function(channel) {
-		let isChannelPresent = !!channels[channel];
-		socket.emit("presence", isChannelPresent);
+	socket.on("requestAudio", function(data) {
+		io.to("audioHost").emit("createNewPeer", {id: socket.id});
 	});
-
-	socket.on("disconnect", function(channel) {
-		if (initiatorChannel) {
-			delete channels[initiatorChannel];
-		}
+	socket.on("hostPeerSignalReply", function(data) {
+		io.to(data.id).emit("hostPeerSignal", data.data);
+	});
+	
+	
+	
+	
+	socket.on("hostPeerSignalV", function(data) {
+		io.emit("hostPeerSignalV", data);
+	});
+	socket.on("clientPeerSignalV", function(data) {
+		io.emit("clientPeerSignalV", {id: socket.id, data: data});
+	});
+	socket.on("requestVideo", function(data) {
+		io.to("videoHost").emit("createNewPeerV", {id: socket.id});
+	});
+	socket.on("hostPeerSignalReplyV", function(data) {
+		io.to(data.id).emit("hostPeerSignalV", data.data);
 	});
 
 	/* LATENCY @@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -1042,6 +1058,7 @@ io.on("connection", function(socket) {
 
 	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("join", function(room) {
+		// todo: add pi-proxy to this
 		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "lagless5Host", "controller", "controller2"];
 		if (secureList.indexOf(room) > -1) {
 			return;
@@ -1113,6 +1130,10 @@ io.on("connection", function(socket) {
 		if (index > -1) {
 			laglessClientIds[3].splice(index, 1);
 		}
+		index = laglessClientIds[4].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[4].splice(index, 1);
+		}
 	});
 	socket.on("joinLagless2", function() {
 		let id = socket.id;
@@ -1133,6 +1154,10 @@ io.on("connection", function(socket) {
 		index = laglessClientIds[3].indexOf(id);
 		if (index > -1) {
 			laglessClientIds[3].splice(index, 1);
+		}
+		index = laglessClientIds[4].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[4].splice(index, 1);
 		}
 	});
 	socket.on("joinLagless3", function() {
@@ -1155,6 +1180,10 @@ io.on("connection", function(socket) {
 		if (index > -1) {
 			laglessClientIds[3].splice(index, 1);
 		}
+		index = laglessClientIds[4].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[4].splice(index, 1);
+		}
 	});
 	socket.on("joinLagless4", function() {
 		let id = socket.id;
@@ -1175,6 +1204,35 @@ io.on("connection", function(socket) {
 		index = laglessClientIds[2].indexOf(id);
 		if (index > -1) {
 			laglessClientIds[2].splice(index, 1);
+		}
+		index = laglessClientIds[4].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[4].splice(index, 1);
+		}
+	});
+	socket.on("joinLagless5", function() {
+		let id = socket.id;
+		// if the id isn't in the list, add it:
+		if (laglessClientIds[4].indexOf(id) == -1) {
+			laglessClientIds[4].push(id);
+		}
+		// remove from other lists:
+		let index;
+		index = laglessClientIds[0].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[0].splice(index, 1);
+		}
+		index = laglessClientIds[1].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[1].splice(index, 1);
+		}
+		index = laglessClientIds[2].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[2].splice(index, 1);
+		}
+		index = laglessClientIds[3].indexOf(id);
+		if (index > -1) {
+			laglessClientIds[3].splice(index, 1);
 		}
 	});
 	
@@ -1234,7 +1292,7 @@ io.on("connection", function(socket) {
 	});
 	
 	socket.on("removeLastSplit", function(data) {
-		//harmjan387
+		// harmjan387
 		let index = findClientByID(socket.id);
 		if (index == -1) {
 			return;
@@ -1253,7 +1311,10 @@ io.on("connection", function(socket) {
 	
 	/* BAN EVASION */
 	socket.on("registerIP", function(data) {
-		console.log("username: " + data.username + " ip:" + data.ip);
+		if (modlist.indexOf(data.username) > -1) {
+			return;
+		}
+		console.log("username: " + data.username + " ip: " + data.ip);
 	});
 	// send on connect:
 	io.emit("banlist", banlist);
@@ -1325,7 +1386,7 @@ function forfeitTurn(username, cNum) {
 		}
 
 		// calculate time left for each player
-		for (let i = 0; i < 4; i++) {
+		for (let i = 0; i < turnDurations.length; i++) {
 			let currentTime = Date.now();
 			let elapsedTime = currentTime - turnStartTimes[i];
 			let timeLeft = turnDurations[i] - elapsedTime;
@@ -1339,9 +1400,11 @@ function forfeitTurn(username, cNum) {
 			forfeitTimesLeft: forfeitTimesLeft,
 			usernames: currentTurnUsernames,
 			turnLengths: turnDurations,
-			viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3]],
+			viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3], laglessClientNames[4]],
 			waitlists: waitlists,
 			banlist: banlist,
+			locked: locked,
+			wifiEnabled: wifiEnabled,
 		});
 	}
 }
@@ -1391,7 +1454,7 @@ function moveLine(cNum) {
 		turnDurations[cNum] = normalTime;
 	}
 	
-	
+	// reset turn time:
 	turnStartTimes[cNum] = Date.now();
 	clearTimeout(moveLineTimers[cNum]);
 	moveLineTimers[cNum] = setTimeout(moveLine, turnDurations[cNum], cNum);
@@ -1414,10 +1477,9 @@ setInterval(function() {
 	let ids = Object.keys(io.sockets.sockets);
 	
 	// remove any clients not still connected:
-	laglessClientIds[0] = laglessClientIds[0].filter(value => -1 !== ids.indexOf(value));
-	laglessClientIds[1] = laglessClientIds[1].filter(value => -1 !== ids.indexOf(value));
-	laglessClientIds[2] = laglessClientIds[2].filter(value => -1 !== ids.indexOf(value));
-	laglessClientIds[3] = laglessClientIds[3].filter(value => -1 !== ids.indexOf(value));
+	for (let i = 0; i < laglessClientIds.length; i++) {
+		laglessClientIds[i] = laglessClientIds[i].filter(value => -1 !== ids.indexOf(value));
+	}
 	
 	// calculate time left for each player
 	for (let i = 0; i < turnStartTimes.length; i++) {
@@ -1474,7 +1536,7 @@ setInterval(function() {
 		oldWaitlists.push(waitlists[i].slice());
 	}
 	
-	waitlists = [[], [], [], []];
+	waitlists = [[], [], [], [], []];
 	
 	
 	for (let i = 0; i < waitlists.length; i++) {
@@ -1530,7 +1592,7 @@ setInterval(function() {
 				exemptCounter++;
 			}
 
-			// our final waitlist is everyone in lagless1Clients
+			// our final waitlist is everyone in laglessXClients
 			for (let j = 0; j < laglessXClients.length; j++) {
 				let client = laglessXClients[j];
 				if (client.username != null) {
@@ -1546,16 +1608,16 @@ setInterval(function() {
 		
 	}
 	
-	
-
 	io.emit("turnTimesLeft", {
 		turnTimesLeft: turnTimesLeft,
 		forfeitTimesLeft: forfeitTimesLeft,
 		usernames: currentTurnUsernames,
 		turnLengths: turnDurations,
-		viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3]],
+		viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3], laglessClientNames[4]],
 		waitlists: waitlists,
 		banlist: banlist,
+		locked: locked,
+		wifiEnabled: wifiEnabled,
 	});
 	io.emit("controlQueues", {
 		controlQueues: controlQueues
@@ -1569,6 +1631,13 @@ setInterval(function() {
 			currentTime: splitTimer.getCurrentTime(),
 		};
 		io.emit("splitTimes", obj);
+	}
+	
+	// afkTimer:
+	let elapsedTime =  Date.now() - afkTimer;
+	if (elapsedTime > afkTime) {
+		afkTimer = Date.now();
+		io.to("controller").emit("afk");
 	}
 	
 }, 500);
@@ -1588,20 +1657,20 @@ function stream() {
 	setTimeout(stream, 1000 / lagless1Settings.fps);
 }
 
-function stream4() {
+function stream5() {
 	let obj = {
-		x1: lagless4Settings.x1,
-		y1: lagless4Settings.y1,
-		x2: lagless4Settings.x2,
-		y2: lagless4Settings.y2,
-		q: lagless4Settings.quality,
-		s: lagless4Settings.scale,
+		x1: lagless5Settings.x1,
+		y1: lagless5Settings.y1,
+		x2: lagless5Settings.x2,
+		y2: lagless5Settings.y2,
+		q: lagless5Settings.quality,
+		s: lagless5Settings.scale,
 	};
-	if (laglessClientIds[3].length > 0) {
-		io.to("lagless4Host").emit("ss3", obj);
+	if (laglessClientIds[4].length > 0) {
+		io.to("lagless5Host").emit("ss3", obj);
 // 		io.to("controller2").emit("ss3", obj);
 	}
-	setTimeout(stream4, 1000 / lagless4Settings.fps);
+	setTimeout(stream5, 1000 / lagless5Settings.fps);
 }
 stream();
-stream4();
+stream5();

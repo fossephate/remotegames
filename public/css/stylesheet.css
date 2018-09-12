@@ -57,6 +57,12 @@ html {
 	/* 	margin-left: auto;
 margin-right: auto; */
 	margin-left: 50%;
+	margin-bottom: 8px;
+}
+
+/* .playerCheckbox:last-of-type { */
+#wiiUPlayerCheckbox {
+	margin-left: 40%;
 }
 
 .requestTurn {
@@ -285,6 +291,8 @@ flex-direction: column;
 /* 	border: 2px solid #333; */
 /* 	border: 1px solid #e3e3e3; */
 /* 	border-radius: 4px; */
+	padding-left: 20px;
+	padding-right: 20px;
 }
 
 .laglessView {
@@ -340,17 +348,6 @@ flex-direction: column;
 #lagless1Refresh {}
 
 #lagless1ViewerCount {}
-
-#screen {
-	width: 75%;
-	margin-left: 12.5%;
-}
-
-#screenshot {
-	/* 	width: 75%; */
-	width: 100%;
-	/* 	height: auto; */
-}
 
 /* LAGLESS2 */
 
@@ -1449,7 +1446,10 @@ clear: left;
 
 /* TUTORIAL */
 
+/* NAV TABS */
 #navTabs {
+	justify-content: center;
+	flex-wrap: nowrap;
 }
 
 .nav-tabs .nav-item {
@@ -1467,6 +1467,28 @@ clear: left;
 
 .nav-tabs .nav-item {
 	
+}
+
+/* STATUS BAR */
+#statusContainer {
+	display: flex;
+	justify-content: space-evenly;
+	border: 2px solid #333;
+	border-radius: 4px;
+	width: 200px;
+	margin: 3px;
+}
+
+#statusContainer > * {
+	align-self: center;
+	border: 2px solid #333;
+	border-radius: 4px;
+/* 	padding: 3px; */
+	cursor: pointer;
+	-webkit-user-select: none; /* Safari */        
+	-moz-user-select: none; /* Firefox */
+	-ms-user-select: none; /* IE10+/Edge */
+	user-select: none; /* Standard */
 }
 
 .genericPopup {
@@ -1606,6 +1628,10 @@ visibility: visible;
 	margin: 0 !important;
 }
 
+.click-passthrough {
+	pointer-events: none;
+}
+
 /* @include media-breakpoint-between(xs,sm) {
   .btn {
       @include button-size($input-btn-padding-y-sm, $input-btn-padding-x-sm, $font-size-sm, $line-height-sm, $btn-border-radius-sm);
@@ -1636,6 +1662,17 @@ visibility: visible;
 /* 	font-size: 13px; */
 }
 
+label {
+/* 	display: flex !important; */
+/* 	margin-bottom: 0; */
+}
+
+.laglessBar > .checkbox-inline {
+	margin-bottom: 0;
+    display: flex;
+    align-self: center;
+}
+
 
 
 /* scale font size */
@@ -1653,8 +1690,6 @@ body {
 .swal-wide {
 	width: 1000px !important;
 }
-
-
 
 /* RAINBOW TEXT */
 @keyframes rainbow-text {
@@ -1827,3 +1862,4 @@ body {
   top: 50%;
   transform: translateY(-50%);
 }
+

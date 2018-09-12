@@ -1,7 +1,8 @@
 // 2013, @muazkh - https://github.com/muaz-khan
 // MIT License   - https://www.webrtc-experiment.com/licence/
 // Documentation - https://github.com/muaz-khan/WebRTC-Experiment/tree/master/audio-broadcast
-var audioElem = 0;
+let audioElem = 0;
+// let audioConnected = false;
 (function() {
 
 	// a middle-agent between public API and the Signaler object
@@ -18,6 +19,7 @@ var audioElem = 0;
 		};
 
 		function initSignaler() {
+// 			audioConnected = true;
 			signaler = new Signaler(self);
 		}
 
@@ -37,7 +39,7 @@ var audioElem = 0;
 
 				var audio = document.createElement('audio');
 				audioElem = audio;
-				audioElem.volume = 0;// set volume to 0
+// 				audioElem.volume = 0;// set volume to 0
 				audio.id = 'self';
 				//                 audio[isFirefox ? 'mozSrcObject' : 'src'] = isFirefox ? stream : window.URL.createObjectURL(stream);
 				// 				audio[isFirefox ? 'mozSrcObject' : 'src'] = stream;

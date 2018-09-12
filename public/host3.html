@@ -1,13 +1,17 @@
 <html>
 
 <head>
-	<title>Lagless audio host</title>
+	<title>Lagless 4 video host</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
 	<script src="js/simplepeer.min.js"></script>
+
+	<script src="https://cdn.WebRTC-Experiment.com/getScreenId.js"></script>
+	<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
 </head>
 
 <body>
-
+	<video id="localVideo"></video>
+	<canvas id="localCanvas" width="1280" height="720"></canvas>
 	<script>
 		// https://stackoverflow.com/questions/16712224/how-to-control-bandwidth-in-webrtc-video-call
 		var BandwidthHandler = (function() {
@@ -181,50 +185,50 @@
 			};
 		})();
 
-		
-		// example:
-// 		var bandwidth = {
-// 			screen: 300, // 300kbits minimum
-// 			audio: 50,   // 50kbits  minimum
-// 			video: 256   // 256kbits (both min-max)
-// 		};
-// 		var isScreenSharing = false;
 
-// 		sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
-// 		sdp = BandwidthHandler.setVideoBitrates(sdp, {
-// 			min: bandwidth.video,
-// 			max: bandwidth.video
-// 		});
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp);
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 			'stereo': 0, // to disable stereo (to force mono audio)
-// 			'sprop-stereo': 1,
-// 			'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 			'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 			'cbr': 0, // disable cbr
-// 			'useinbandfec': 1, // use inband fec
-// 			'usedtx': 1, // use dtx
-// 			'maxptime': 3
-// 		});
-		
+		// example:
+		// 		var bandwidth = {
+		// 			screen: 300, // 300kbits minimum
+		// 			audio: 50,   // 50kbits  minimum
+		// 			video: 256   // 256kbits (both min-max)
+		// 		};
+		// 		var isScreenSharing = false;
+
+		// 		sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
+		// 		sdp = BandwidthHandler.setVideoBitrates(sdp, {
+		// 			min: bandwidth.video,
+		// 			max: bandwidth.video
+		// 		});
+		// 		sdp = BandwidthHandler.setOpusAttributes(sdp);
+		// 		sdp = BandwidthHandler.setOpusAttributes(sdp, {
+		// 			'stereo': 0, // to disable stereo (to force mono audio)
+		// 			'sprop-stereo': 1,
+		// 			'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
+		// 			'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
+		// 			'cbr': 0, // disable cbr
+		// 			'useinbandfec': 1, // use inband fec
+		// 			'usedtx': 1, // use dtx
+		// 			'maxptime': 3
+		// 		});
+
 		function mySDPTransform(sdp) {
-// 			sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 				'stereo': 0, // to disable stereo (to force mono audio)
-// 				'sprop-stereo': 1,
-// 				'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 				'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 				'cbr': 0, // disable cbr
-// 				'useinbandfec': 1, // use inband fec
-// 				'usedtx': 1, // use dtx
-// 				'maxptime': 3
-// 			});
-			
+			// 			sdp = BandwidthHandler.setOpusAttributes(sdp, {
+			// 				'stereo': 0, // to disable stereo (to force mono audio)
+			// 				'sprop-stereo': 1,
+			// 				'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
+			// 				'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
+			// 				'cbr': 0, // disable cbr
+			// 				'useinbandfec': 1, // use inband fec
+			// 				'usedtx': 1, // use dtx
+			// 				'maxptime': 3
+			// 			});
+
 			var bandwidth = {
 				screen: 300, // 300kbits minimum
-				audio: 500,   // 500kbits  minimum
-				video: 256   // 256kbits (both min-max)
+				audio: 500, // 500kbits  minimum
+				video: 256 // 256kbits (both min-max)
 			};
-			var isScreenSharing = false;
+			var isScreenSharing = true;
 
 			sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
 			sdp = BandwidthHandler.setVideoBitrates(sdp, {
@@ -232,17 +236,27 @@
 				max: bandwidth.video
 			});
 			sdp = BandwidthHandler.setOpusAttributes(sdp);
-			
+
 			return sdp;
 		}
+
+
+
+		// 		navigator.mediaDevices.getUserMedia({video: {mediaSource: "screen"}}).then(stream => {
+		// 			// we have a stream, attach it to a feedback video element
+		// 			videoElement.srcObject = stream;
+		// 		}, error => {
+		// 			console.log("Unable to acquire screen capture", error);
+		// 		});
+
 
 		let socket = io("https://twitchplaysnintendoswitch.com", {
 			path: "/8110/socket.io/",
 		});
 
-		socket.emit("join", "audioHost");
+		socket.emit("join", "videoHost");
 		setInterval(function() {
-			socket.emit("join", "audioHost");
+			socket.emit("join", "videoHost");
 		}, 5000);
 
 		let clients = [];
@@ -267,17 +281,72 @@
 
 
 		// get video/voice stream
-		navigator.getUserMedia({
-			video: false,
-			audio: true
-		}, gotMedia, function() {});
+		
+		let scale = 50;
+		let fps = 20;
 
-		function gotMedia(stream) {
-			localStream = stream;
+// 		let canvas = document.querySelector("canvas");
+// 		let localVideo = document.querySelector("video");
+		let localVideo = document.createElement("video");
+		let canvas = document.createElement("canvas");
+		canvas.width = 1280 * (scale / 100);
+		canvas.height = 720 * (scale / 100);
+		let ctx = canvas.getContext("2d");
+		
+		function drawToCanvas() {
+			// draw the current frame of localVideo onto the canvas,
+			// starting at 0, 0 (top-left corner)
+			let sx = 320;
+			let sy = 65;
+			let swidth = 1280;
+			let sheight = 720;
+			let dx = 0;
+			let dy = 0;
+			let dwidth = 1280 * (scale / 100);
+			let dheight = 720 * (scale / 100);
+			ctx.drawImage(localVideo, sx, sy, swidth, sheight, dx, dy, dwidth, dheight);
+
+			//repeat this every time a new frame becomes available using
+			//the browser's build-in requestAnimationFrame method
+			requestAnimationFrame(drawToCanvas);
 		}
 
+		getScreenId(function(error, sourceId, screen_constraints) {
+			// error    == null || 'permission-denied' || 'not-installed' || 'installed-disabled' || 'not-chrome'
+			// sourceId == null || 'string' || 'firefox'
 
-		socket.on("createNewPeer", function(data) {
+			if (navigator.userAgent.indexOf("Edge") !== -1 && (!!navigator.msSaveOrOpenBlob || !!navigator.msSaveBlob)) {
+				navigator.getDisplayMedia(screen_constraints).then(stream => {
+					localVideo.srcObject = stream;
+				}, error => {
+					alert("Please make sure to use Edge 17 or higher.");
+				});
+				return;
+			}
+
+			if (error == "not-installed") {
+				alert("Please install the Chrome extension.");
+				return;
+			}
+
+			navigator.mediaDevices.getUserMedia(screen_constraints).then(function(stream) {
+				localVideo.srcObject = stream;
+				localVideo.play();
+// 				localStream = stream;
+				drawToCanvas();
+				localStream = canvas.captureStream(fps);
+				// share this "MediaStream" object using RTCPeerConnection API
+			}).catch(function(error) {
+				console.error("getScreenId error", error);
+				alert("Failed to capture your screen. Please check Chrome console logs for further information.");
+			});
+		});
+
+
+
+
+
+		socket.on("createNewPeerV", function(data) {
 
 			let id = data.id;
 
@@ -285,7 +354,7 @@
 				initiator: true,
 				trickle: true,
 				stream: localStream,
-				sdpTransform: mySDPTransform,
+				// 				sdpTransform: mySDPTransform,
 			});
 
 			peer.on("error", function(err) {
@@ -299,7 +368,7 @@
 					id: id,
 					data: JSON.stringify(data)
 				};
-				socket.emit("hostPeerSignalReply", obj);
+				socket.emit("hostPeerSignalReplyV", obj);
 			});
 
 			peer.on("connect", function() {
@@ -315,7 +384,7 @@
 			clients.push(client);
 		});
 
-		socket.on("clientPeerSignal", function(data) {
+		socket.on("clientPeerSignalV", function(data) {
 			let index = findClientByID(data.id);
 			if (index == -1) {
 				return;

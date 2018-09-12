@@ -1,0 +1,20 @@
+form {
+	display: flex;
+	/* 	width: 50%; */
+	border: 2px solid #333;
+	border-radius: 10px;
+	width: max-content;
+}
+
+#formContainer {
+	display: flex;
+/* 	width: 50%; */
+/* 	border: 2px solid #333; */
+/* 	border-radius: 10px; */
+	justify-content: center;
+}
+
+label {
+/* 	padding-left: 50px; */
+/* 	padding-top: 4px; */
+}

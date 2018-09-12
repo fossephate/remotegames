@@ -7,7 +7,7 @@
 </head>
 
 <body>
-
+	<video id="localvideo"></video>
 	<script>
 		// https://stackoverflow.com/questions/16712224/how-to-control-bandwidth-in-webrtc-video-call
 		var BandwidthHandler = (function() {
@@ -181,48 +181,48 @@
 			};
 		})();
 
-		
-		// example:
-// 		var bandwidth = {
-// 			screen: 300, // 300kbits minimum
-// 			audio: 50,   // 50kbits  minimum
-// 			video: 256   // 256kbits (both min-max)
-// 		};
-// 		var isScreenSharing = false;
 
-// 		sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
-// 		sdp = BandwidthHandler.setVideoBitrates(sdp, {
-// 			min: bandwidth.video,
-// 			max: bandwidth.video
-// 		});
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp);
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 			'stereo': 0, // to disable stereo (to force mono audio)
-// 			'sprop-stereo': 1,
-// 			'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 			'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 			'cbr': 0, // disable cbr
-// 			'useinbandfec': 1, // use inband fec
-// 			'usedtx': 1, // use dtx
-// 			'maxptime': 3
-// 		});
-		
+		// example:
+		// 		var bandwidth = {
+		// 			screen: 300, // 300kbits minimum
+		// 			audio: 50,   // 50kbits  minimum
+		// 			video: 256   // 256kbits (both min-max)
+		// 		};
+		// 		var isScreenSharing = false;
+
+		// 		sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
+		// 		sdp = BandwidthHandler.setVideoBitrates(sdp, {
+		// 			min: bandwidth.video,
+		// 			max: bandwidth.video
+		// 		});
+		// 		sdp = BandwidthHandler.setOpusAttributes(sdp);
+		// 		sdp = BandwidthHandler.setOpusAttributes(sdp, {
+		// 			'stereo': 0, // to disable stereo (to force mono audio)
+		// 			'sprop-stereo': 1,
+		// 			'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
+		// 			'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
+		// 			'cbr': 0, // disable cbr
+		// 			'useinbandfec': 1, // use inband fec
+		// 			'usedtx': 1, // use dtx
+		// 			'maxptime': 3
+		// 		});
+
 		function mySDPTransform(sdp) {
-// 			sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 				'stereo': 0, // to disable stereo (to force mono audio)
-// 				'sprop-stereo': 1,
-// 				'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 				'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 				'cbr': 0, // disable cbr
-// 				'useinbandfec': 1, // use inband fec
-// 				'usedtx': 1, // use dtx
-// 				'maxptime': 3
-// 			});
-			
+			// 			sdp = BandwidthHandler.setOpusAttributes(sdp, {
+			// 				'stereo': 0, // to disable stereo (to force mono audio)
+			// 				'sprop-stereo': 1,
+			// 				'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
+			// 				'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
+			// 				'cbr': 0, // disable cbr
+			// 				'useinbandfec': 1, // use inband fec
+			// 				'usedtx': 1, // use dtx
+			// 				'maxptime': 3
+			// 			});
+
 			var bandwidth = {
 				screen: 300, // 300kbits minimum
-				audio: 500,   // 500kbits  minimum
-				video: 256   // 256kbits (both min-max)
+				audio: 500, // 500kbits  minimum
+				video: 256 // 256kbits (both min-max)
 			};
 			var isScreenSharing = false;
 
@@ -232,17 +232,127 @@
 				max: bandwidth.video
 			});
 			sdp = BandwidthHandler.setOpusAttributes(sdp);
-			
+
 			return sdp;
 		}
+		
+		var localvid = document.getElementById('localvideo');
+		var localStream2 = null;
+		var pc = null;
+		var mediaFlowing = false;
+		var useH264 = true;
+
+		// Detect browser
+		var userAgent = navigator.userAgent.toLowerCase();
+		var browserM = userAgent.match(/(opera|chrome|safari|firefox|msie)[\/\s]*([\d\.]+)/);
+		var browser = navigator.appName.toLowerCase();
+		if (browserM)
+			browser = browserM[1];
+		var isChrome = (browser === "chrome");
+		var isFirefox = (browser === "firefox");
+		var screen_constraints = null;
+
+		if (isChrome) {
+			screen_constraints = {
+				video: {
+					mandatory: {
+						chromeMediaSource: "screen",
+// 						maxWidth: 1280,
+// 						maxHeight: 720,
+// 						width: {max: 1280},
+// 						height: {max: 720},
+						minFrameRate: 1,
+						maxFrameRate: 5
+					},
+					optional: []
+				}
+// 				video: {
+// 					width: {max: 1280},
+// 					height: {max: 720},
+// 					frameRate: {max: 10},
+// // 					deviceId: {exact: [sourceId]},
+// // 					mediaStreamSource: {exact: ['desktop']},
+// 					chromeMediaSource: "screen",
+// 				},
+			};
+		} else {
+			selector.disabled = false;
+			screen_constraints = {
+				video: {
+					mediaSource: "screen"
+				}
+			};
+		}
+
+
+
+		function startMedia() {
+			var promisifiedOldGUM = function(constraints, successCallback, errorCallback) {
+
+				// First get ahold of getUserMedia, if present
+				var getUserMedia = (navigator.getUserMedia ||
+					navigator.webkitGetUserMedia ||
+					navigator.mozGetUserMedia);
+
+				// Some browsers just don't implement it - return a rejected promise with an error
+				// to keep a consistent interface
+				if (!getUserMedia) {
+					return Promise.reject(new Error('getUserMedia is not implemented in this browser'));
+				}
+
+				// Otherwise, wrap the call to the old navigator.getUserMedia with a Promise
+				return new Promise(function(successCallback, errorCallback) {
+					getUserMedia.call(navigator, constraints, successCallback, errorCallback);
+				});
+			}
+
+			// Older browsers might not implement mediaDevices at all, so we set an empty object first
+			if (navigator.mediaDevices === undefined) {
+				navigator.mediaDevices = {};
+			}
+
+			// Some browsers partially implement mediaDevices. We can't just assign an object
+			// with getUserMedia as it would overwrite existing properties.
+			// Here, we will just add the getUserMedia property if it's missing.
+			if (navigator.mediaDevices.getUserMedia === undefined) {
+				navigator.mediaDevices.getUserMedia = promisifiedOldGUM;
+			}
+
+			navigator.mediaDevices.getUserMedia(screen_constraints)
+				.then(function(stream) {
+					localStream2 = stream;
+					if (localvid.mozSrcObject) {
+						localvid.mozSrcObject = stream;
+						localvid.play();
+					} else {
+						try {
+							localvid.src = window.URL.createObjectURL(stream);
+							localvid.play();
+						} catch (e) {
+							console.log("Error setting video src: ", e);
+						}
+					}
+				})
+				.catch(function(err) {
+					console.log(err.name + ": " + err.message);
+					if (location.protocol === 'http:') {
+						alert('Please test this WebRTC experiment on HTTPS.');
+					} else {
+						alert('Screen capturing is either denied or not supported. Have you enabled the appropriate flag? see README.md');
+					}
+					console.error(e);
+				});
+		}
+		
+		startMedia();
 
 		let socket = io("https://twitchplaysnintendoswitch.com", {
 			path: "/8110/socket.io/",
 		});
 
-		socket.emit("join", "audioHost");
+		socket.emit("join", "videoHost");
 		setInterval(function() {
-			socket.emit("join", "audioHost");
+			socket.emit("join", "videoHost");
 		}, 5000);
 
 		let clients = [];
@@ -267,25 +377,25 @@
 
 
 		// get video/voice stream
-		navigator.getUserMedia({
-			video: false,
-			audio: true
-		}, gotMedia, function() {});
+// 		navigator.getUserMedia({
+// 			video: false,
+// 			audio: true
+// 		}, gotMedia, function() {});
 
-		function gotMedia(stream) {
-			localStream = stream;
-		}
+// 		function gotMedia(stream) {
+// 			localStream = stream;
+// 		}
 
 
-		socket.on("createNewPeer", function(data) {
+		socket.on("createNewPeerV", function(data) {
 
 			let id = data.id;
 
 			let peer = new SimplePeer({
 				initiator: true,
 				trickle: true,
-				stream: localStream,
-				sdpTransform: mySDPTransform,
+				stream: localStream2,
+// 				sdpTransform: mySDPTransform,
 			});
 
 			peer.on("error", function(err) {
@@ -299,7 +409,7 @@
 					id: id,
 					data: JSON.stringify(data)
 				};
-				socket.emit("hostPeerSignalReply", obj);
+				socket.emit("hostPeerSignalReplyV", obj);
 			});
 
 			peer.on("connect", function() {
@@ -315,7 +425,7 @@
 			clients.push(client);
 		});
 
-		socket.on("clientPeerSignal", function(data) {
+		socket.on("clientPeerSignalV", function(data) {
 			let index = findClientByID(data.id);
 			if (index == -1) {
 				return;
