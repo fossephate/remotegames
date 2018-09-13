@@ -5,6 +5,7 @@ const io = require("socket.io")(server);
 const port = 8110;
 
 const crypto = require("crypto");
+const cryptr = require("cryptr");
 const util = require("util");
 const fs = require("fs");
 const now = require("performance-now");
@@ -13,18 +14,30 @@ const session = require("express-session");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
 const twitchStrategy = require("passport-twitch").Strategy;
+const youtubeV3Strategy = require("passport-youtube-v3").Strategy;
 const request = require("request");
 const handlebars = require("handlebars");
 
 const config = require("./config.js");
 const insertionSort = require("./tools.js").insertionSort;
 
+const bluebird = require("bluebird");
+const redis = require("redis");
+bluebird.promisifyAll(redis);
+
 const _ = require("lodash");
 
 const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
 const TWITCH_CLIENT_SECRET = config.TWITCH_CLIENT_SECRET;
+const TWITCH_CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback/";
+
+const YOUTUBE_CLIENT_ID = "840562458-l6nrehcsn5hau13n65a5dd5b7j7u9ccf.apps.googleusercontent.com";
+const YOUTUBE_CLIENT_SECRET = config.YOUTUBE_CLIENT_SECRET;
+const YOUTUBE_CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/youtube/callback/";
+
 const SESSION_SECRET = config.SESSION_SECRET;
-const TWITCH_CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback";
+
+let encrypter = new cryptr(config.ENCRYPT_SECRET);
 
 let lagless1Settings = {
 	x1: 319 - 1920,
@@ -50,7 +63,7 @@ let lagless5Settings = {
 };
 
 let lastImage = "";
-let usernameDB;
+let clientDB;
 let localStorage;
 let clients = [];
 let channels = {};
@@ -102,6 +115,191 @@ app.use(express.static("public"));
 app.use(passport.initialize());
 app.use(passport.session());
 
+
+let redisClient = redis.createClient({host : "localhost", port : 6379});
+
+let IDToUniqueMap = {};
+
+
+function DataBaseClient() {
+	
+// 	this.profile = profile;
+	this.initializedAccounts = [];
+
+	// initialize to null:
+	
+	// twitch:
+	this.twitchID = null;
+	this.twitchAccessToken = null;
+	this.twitchRefreshToken = null;
+	this.twitchDisplayName = null;
+
+	this.login = null;
+	this.username = null;
+	this.profile_image_url = null;
+	this.email = null;
+	
+	// youtube:
+	this.youtubeID = null;
+	this.youtubeAccessToken = null;
+	this.youtubeRefreshToken = null;
+	this.youtubeDisplayName = null;
+	
+	this.addAccount = function(profile, type) {
+		
+		// set the id for the type of account we've connected:
+		this[type + "ID"] = profile.id;
+		this[type + "AccessToken"] = profile.accessToken;
+		this[type + "RefreshToken"] = profile.refreshToken;
+		this[type + "DisplayName"] = profile.displayName;
+		
+		if (type == "twitch") {
+			this.login				= profile.login;
+			this.username			= profile.username;
+			this.profile_image_url	= profile.profile_image_url;
+			this.email				= profile.email;
+			
+		} else if (type == "youtube") {
+// 			this.youtubeDisplayName = profile.displayName;
+		}
+		
+		this.initializedAccounts.push(type);
+		
+	}	
+}
+
+function addAccount(profile, type) {
+	// set the id for the type of account we've connected:
+	this[type + "ID"] = profile.id;
+	this[type + "AccessToken"] = profile.accessToken;
+	this[type + "RefreshToken"] = profile.refreshToken;
+
+	if (type == "twitch") {
+		this.login				= profile.login;
+		this.display_name		= profile.display_name;
+		this.profile_image_url	= profile.profile_image_url;
+		this.email				= profile.email;
+
+	} else if (type == "youtube") {
+		this.displayName = profile.display_name;
+	}
+
+	this.initializedAccounts.push(type);
+}
+
+function updateOrCreateUser(profile, type) {
+// 	redis.set("some key", "some value");
+// 	redis.expire("some key", 2);
+// client.exists('key', function(err, reply) {
+//     if (reply === 1) {
+//         console.log('exists');
+//     } else {
+//         console.log('doesn\'t exist');
+//     }
+// });
+	
+// 	console.log(profile);
+	
+	// "twitch:"
+	let prefix = type + ":";
+	let userMapLoc = profile.id;
+	
+	// check if the acccount exists already:
+	redisClient.hexistsAsync(prefix + "clientMap", userMapLoc).then(function(exist) {
+		
+		if (!exist) {
+			
+			console.log("creating user.");
+			
+			// create the user:
+			let dataBaseClient = new DataBaseClient();
+			dataBaseClient.addAccount(profile, type);
+			
+			// save client as a string to store:
+			let dataBaseClientString = JSON.stringify(dataBaseClient);
+			
+			// generate unique ID:
+			// https://stackoverflow.com/questions/51096273/how-do-i-synchronise-crypto-randombytes-function-of-crypto-module-in-node-js
+			// https://stackoverflow.com/questions/8855687/secure-random-token-in-node-js
+			// todo: async this:
+			let uniqueID = crypto.randomBytes(64).toString("hex");
+			
+			// todo: not this:
+			IDToUniqueMap[prefix + profile.id] = uniqueID;
+			
+			// store uniqueID in correct map for account type:
+			
+			redisClient.hsetAsync(prefix + "clientMap", userMapLoc, uniqueID).then(function(success) {
+				console.log("success: " + success);
+			});
+			
+			// store account at uniqueID location, at clients key:
+			redisClient.hsetAsync("clients", uniqueID, dataBaseClientString).then(function(success) {
+				console.log("success: " + success);
+			});
+			
+		} else {
+			
+			// the user already exists, update the user / add the account:
+			
+			console.log("user already exists.");
+			
+			// get the account's unique ID from the map:
+			redisClient.hgetAsync(prefix + "clientMap", userMapLoc).then(function(data) {
+				
+				if (data == null) {
+					console.log("something went wrong while getting uniqueID from map");
+					return;
+				}
+				
+				let uniqueID = data;
+				// todo: not this:
+				IDToUniqueMap[prefix + profile.id] = uniqueID;
+				
+				redisClient.hgetAsync("clients", uniqueID).then(function(data) {
+// 					console.log(JSON.parse(data));
+					let dataBaseClient = JSON.parse(data);
+// 					console.log(dataBaseClient);
+					
+					dataBaseClient.addAccount = addAccount;
+					// update account details:
+					dataBaseClient.addAccount(profile, type);
+					
+					// re-stringify:
+					let dataBaseClientString = JSON.stringify(dataBaseClient);
+					
+					// store back in database:
+					// store account at uniqueID location, at clients key:
+					redisClient.hsetAsync("clients", uniqueID, dataBaseClientString).then(function(success) {
+						console.log("success: " + success);
+					});
+					
+				});
+				
+			});
+			
+			
+		}
+		
+	});
+	
+	
+	
+// 	redisClient.hexistsAsync(prefix + "clientMap", userMapLoc, function(err, reply) {
+// 		if (reply === 1) {
+// 			userMapExists = 1;
+// 		} else {
+// 			userMapExists = 0;
+// 		}
+// 	}).then(function() {
+// 		console.log("does user exist: " + userMapExists);
+// 	});
+	
+}
+
+
+
+
 passport.use(new twitchStrategy({
 		clientID: TWITCH_CLIENT_ID,
 		clientSecret: TWITCH_CLIENT_SECRET,
@@ -111,6 +309,22 @@ passport.use(new twitchStrategy({
 	function(accessToken, refreshToken, profile, done) {
 		profile.accessToken = accessToken;
 		profile.refreshToken = refreshToken;
+		updateOrCreateUser(profile, "twitch");
+		done(null, profile);
+	}
+));
+
+passport.use(new youtubeV3Strategy({
+		clientID: YOUTUBE_CLIENT_ID,
+		clientSecret: YOUTUBE_CLIENT_SECRET,
+		callbackURL: YOUTUBE_CALLBACK_URL,
+		scope: ["https://www.googleapis.com/auth/youtube.readonly"],
+		// "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube"
+	},
+	function(accessToken, refreshToken, profile, done) {
+		profile.accessToken = accessToken;
+		profile.refreshToken = refreshToken;
+		updateOrCreateUser(profile, "youtube");
 		done(null, profile);
 	}
 ));
@@ -121,31 +335,51 @@ passport.deserializeUser(function(user, done) {
 	done(null, user);
 });
 
-app.get("/auth/twitch", passport.authenticate("twitch", {forceVerify: true}));
-app.get("/auth/twitch/callback", passport.authenticate("twitch", { failureRedirect: "/" }), function(req, res) {
-	// Successful authentication, redirect home.
-	res.redirect("/8110/");
-});
+app.get("/auth/twitch/", passport.authenticate("twitch", {forceVerify: true}));
+app.get("/auth/twitch/callback", passport.authenticate("twitch", {
+	successRedirect: "/8110/",
+	failureRedirect: "/",
+}));
+
+app.get("/auth/youtube/", passport.authenticate("youtube"));
+app.get("/auth/youtube/callback", passport.authenticate("youtube", {
+	successRedirect: "/8110/",
+	failureRedirect: "/",
+}));
+
 
 // If user has an authenticated session, display it, otherwise display link to authenticate
 app.get("/", function(req, res) {
 	if (req.session && req.session.passport && req.session.passport.user) {
+		
+		console.log("setting cookie.");
+		
 		console.log(req.user);
+		
+		// get uniqueID from hack map:
+		let uniqueID = "";
+		let prefix = "";
+		if (req.user.email != null) {
+			prefix = "twitch:";
+		} else {
+			prefix = "youtube:";
+		}
+		
+		uniqueID = IDToUniqueMap[prefix + req.user.id];
+		
+		// encrypt UniqueID:
+// 		let secret = config.HASH_SECRET;
+// 		let hashedUnique = crypto.createHmac("sha256", secret).update(uniqueID).digest("hex");
+		let encryptedUniqueID = encrypter.encrypt(uniqueID);
+		
 		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
-		//let time = 15*60*1000;// 15 minutes
-		let username = req.user.username;
-		let secret = config.HASH_SECRET;
-		let hashedUsername = crypto.createHmac("sha256", secret).update(username).digest("hex");
-
-		usernameDB[hashedUsername] = username;
-		localStorage.setItem("db", JSON.stringify(usernameDB));
-
-		res.cookie("TwitchPlaysNintendoSwitch", hashedUsername, {
+		res.cookie("TwitchPlaysNintendoSwitch", encryptedUniqueID, {
 			maxAge: time
 		});
+		
 		res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 	} else {
-		res.send(`<html><head><title>Twitch Auth Sample</title></head><a href="/8110/auth/twitch"><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></html>`);
+		res.send(`<html><head><title>Twitch Auth Sample</title></head><a href="/8110/auth/twitch/"><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></html>`);
 	}
 });
 
@@ -237,16 +471,16 @@ server.listen(port, function() {
 	console.log("Server listening at port %d", port);
 });
 
-let LocalStorage = require("node-localstorage").LocalStorage;
-localStorage = new LocalStorage("./myDatabase");
+// let LocalStorage = require("node-localstorage").LocalStorage;
+// localStorage = new LocalStorage("./myDatabase");
 
-usernameDB = JSON.parse(localStorage.getItem("db"));
+// clientDB = JSON.parse(localStorage.getItem("db"));
 
-if (typeof usernameDB == "undefined" || usernameDB === null) {
-	usernameDB = {};
-}
+// if (typeof clientDB == "undefined" || clientDB === null) {
+// 	clientDB = {};
+// }
 
-//console.log(util.inspect(usernameDB, false, null));
+//console.log(util.inspect(clientDB, false, null));
 
 function Client(socket) {
 	this.socket = socket;
@@ -365,12 +599,34 @@ io.on("connection", function(socket) {
 
 	socket.on("registerUsername", function(data) {
 		let index = findClientByID(socket.id);
-		if (typeof usernameDB[data] == "undefined") {
-			clients[index].username = null;
+		if (index == -1) {
 			return;
 		}
-		clients[index].username = usernameDB[data];
-		socket.emit("twitchUsername", clients[index].username);
+		
+		let uniqueID = encrypter.decrypt(data);
+		
+		redisClient.hgetAsync("clients", uniqueID).then(function(data) {
+			if (data == null) {
+				clients[index].username = null;
+				console.log("Invalid encrypted uniqueID.");
+				return;
+			}
+			let dataBaseClient = JSON.parse(data);
+			if (dataBaseClient.username != null) {
+				clients[index].username = dataBaseClient.username;
+			} else if (dataBaseClient.youtubeDisplayName != null) {
+				clients[index].username = dataBaseClient.youtubeDisplayName + "YT";
+			}
+			
+			socket.emit("twitchUsername", clients[index].username);
+		});
+		
+// 		if (typeof usernameDB[data] == "undefined") {
+// 			clients[index].username = null;
+// 			return;
+// 		}
+// 		clients[index].username = usernameDB[data];
+// 		socket.emit("twitchUsername", clients[index].username);
 	});
 
 	/* 2ND AUTH METHOD @@@@@@@@@@@@@@@@@@@@@*/
@@ -387,19 +643,24 @@ io.on("connection", function(socket) {
 				Authorization: "OAuth " + data,
 			}
 		}, function(error, response, body) {
-
-			let body2 = JSON.parse(body);
-
-			if (body2.message == "invalid access token") {
-				return;
-			} else {
-				let username = body2.login;
-				let secret = config.HASH_SECRET;
-				let hashedUsername = crypto.createHmac("sha256", secret).update(username).digest("hex");
-				usernameDB[hashedUsername] = username;
-				localStorage.setItem("db", JSON.stringify(usernameDB));
-				socket.emit("hashedUsername", hashedUsername);
-			}
+			
+// 			let body2 = JSON.parse(body);
+			
+// 			if (body2.message == "invalid access token") {
+// 				return;
+// 			} else {
+// 				let username = body2.login;
+// 				let secret = config.HASH_SECRET;
+// 				let hashedUsername = crypto.createHmac("sha256", secret).update(username).digest("hex");
+// 				usernameDB[hashedUsername] = username;
+// 				localStorage.setItem("db", JSON.stringify(usernameDB));
+// 				socket.emit("hashedUsername", hashedUsername);
+// 			}
+			
+// 			if (response && response.statusCode == 200) {
+// 				// valid
+// 			}
+			
 		});
 	});
 

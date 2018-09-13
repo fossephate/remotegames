@@ -461,7 +461,7 @@ function sendControllerState() {
 	authCookie = getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
 		swal({
-			title: "You need to connect to twitch! Redirecting you now!",
+			title: "You need to login! Redirecting you now!",
 		}).then((result) => {
 			if (result.value) {
 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -500,7 +500,7 @@ function getKeyboardInput() {
 	if (authCookie == null) {
 		$("#keyboardControlsCheckbox").prop("checked", false).trigger("change");
 		swal({
-			title: "You need to connect to twitch! Redirecting you now!",
+			title: "You need to login! Redirecting you now!",
 		}).then((result) => {
 			if (result.value) {
 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -738,14 +738,6 @@ window.addEventListener("keydown", function(e) {
 	}
 }, false);
 
-// function getMouseInput() {
-// 	if (!$("#mouseControlsCheckbox")[0].checked) {
-// 		return;
-// 	}
-	
-// 	//canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
-// }
-
 
 function getMouseInput(e) {
 	
@@ -777,8 +769,9 @@ function getMouseInput2(e) {
 	}
 }
 
-let c = $("#videoCanvas2")[0];
-c.requestPointerLock = c.requestPointerLock || c.mozRequestPointerLock;
+// todo: maybe make a virtual canvas w/ $() ? not sure if actual canvas is required
+let videoCanvas2 = $("#videoCanvas2")[0];
+videoCanvas2.requestPointerLock = videoCanvas2.requestPointerLock || videoCanvas2.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
 $("#mouseControlsCheckbox").change(function(e) {
@@ -1090,7 +1083,7 @@ function getGamepadInput() {
 	if (authCookie == null) {
 		$("#controllerControlsCheckbox").prop("checked", false).trigger("change");
 		swal({
-			title: "You need to connect to twitch! Redirecting you now!",
+			title: "You need to login! Redirecting you now!",
 		}).then((result) => {
 			if (result.value) {
 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -1768,7 +1761,7 @@ function resizeChat() {
 	height += ($("#navTabs").outerHeight());
 	height -= ($("#loggedInIndicator").outerHeight());
 	height += 10;// adjust
-	$("#twitchChat").height(height);
+	$("#chat").height(height);
 }
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1847,7 +1840,7 @@ function getTouchInput() {
 // 	if (authCookie == null) {
 // 		$("#touchControlsCheckbox").prop("checked", false).trigger("change");
 // 		swal({
-// 			title: "You need to connect to twitch! Redirecting you now!",
+// 			title: "You need to login! Redirecting you now!",
 // 		}).then((result) => {
 // 			if (result.value) {
 // 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -3902,7 +3895,7 @@ $("#darkThemeCheckbox").on("change", function() {
 		
 		$("body").addClass("dark");
 		
-		$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
+		$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
 		
 	} else {
 		let icon = $(".glyphicon-certificate");
@@ -3926,7 +3919,7 @@ $("#darkThemeCheckbox").on("change", function() {
 		
 		$("body").removeClass("dark");
 		
-		$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
+		$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
 	}
 });
 
@@ -4048,12 +4041,12 @@ $("#youtubeChatCheckbox").on("change", function() {
 	settings.youtubeChat = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.youtubeChat) {
-		$("#twitchChat").attr("src", "https://www.youtube.com/live_chat?v=vbqcZCzXqI0&embed_domain=twitchplaysnintendoswitch.com");
+		$("#chat").attr("src", "https://www.youtube.com/live_chat?v=vbqcZCzXqI0&embed_domain=twitchplaysnintendoswitch.com");
 	} else {
 		if (settings.darkTheme) {
-			$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
+			$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
 		} else {
-			$("#twitchChat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
+			$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
 		}
 	}
 });
@@ -4063,10 +4056,10 @@ $("#hideChatCheckbox").on("change", function() {
 	settings.hideChat = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.hideChat) {
-		$("#twitchChatContainer")[0].style.display = "none";
+		$("#chatContainer")[0].style.display = "none";
 // 		$("#picture").attr("style", "width: 100%;");
 	} else {
-		$("#twitchChatContainer")[0].style.display = "";
+		$("#chatContainer")[0].style.display = "";
 // 		$("#picture").attr("style", "width: 75%;");
 	}
 });

@@ -3,7 +3,7 @@
 <head>
 
 	<title>TPNS</title>
-	<link rel="icon" href="images/TwitchPlaysNintendoSwitch.png">
+	<link rel="icon" href="/images/TwitchPlaysNintendoSwitch.png">
 
 	<!-- CSS -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono">
@@ -630,7 +630,7 @@
 							</ul>
 							<ul class="list-group">
 								<li class="list-group-item">Default Keyboard Controls:</li>
-								<li class="list-group-item"><img style="width: 100%;" src="images/controls.jpg"></li>
+								<li class="list-group-item"><img style="width: 100%;" src="/images/controls.jpg"></li>
 							</ul>
 							<ul class="list-group">
 								<li class="list-group-item">List of games on the switch:</li>
@@ -658,12 +658,15 @@
 
 		</div>
 		
-		<div id="twitchChatContainer">
+		<div id="chatContainer">
 			<div id="loggedInContainer">
-				<div id="loggedInIndicator"><a id="authenticateButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></div>
+				<div id="loggedInIndicator">
+					<a id="connectWithTwitch" class="connectWithButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
+					<a id="connectWithYouTube" class="connectWithButton" href="/8110/auth/youtube/"><span id="connectWithYouTubeText">Connect with</span><img id="ytLogo" src="/images/yt_logo_rgb_light.png"></a>
+				</div>
 				<button id="logout" class="btn btn-secondary">Logout</button>
 			</div>
-			<iframe id="twitchChat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat"></iframe>
+			<iframe id="chat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat"></iframe>
 			<ul id="waitlist" class="list-group">
 				<li class="list-group-item">The waitlist is empty right now</li>
 			</ul>
