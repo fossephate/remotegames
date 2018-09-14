@@ -15,11 +15,13 @@ const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
 const twitchStrategy = require("passport-twitch").Strategy;
 const youtubeV3Strategy = require("passport-youtube-v3").Strategy;
+const googleStrategy = require("passport-google-oauth20").Strategy;
+const discordStrategy = require("passport-discord").Strategy;
+
 const request = require("request");
 const handlebars = require("handlebars");
 
 const config = require("./config.js");
-const insertionSort = require("./tools.js").insertionSort;
 
 const bluebird = require("bluebird");
 const redis = require("redis");
@@ -27,13 +29,21 @@ bluebird.promisifyAll(redis);
 
 const _ = require("lodash");
 
-const TWITCH_CLIENT_ID = "mxpjdvl0ymc6nrm4ogna0rgpuplkeo";
-const TWITCH_CLIENT_SECRET = config.TWITCH_CLIENT_SECRET;
-const TWITCH_CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/callback/";
+const TWITCH_CLIENT_ID		= config.TWITCH_CLIENT_ID;
+const TWITCH_CLIENT_SECRET	= config.TWITCH_CLIENT_SECRET;
+const TWITCH_CALLBACK_URL	= config.TWITCH_CALLBACK_URL;
 
-const YOUTUBE_CLIENT_ID = "840562458-l6nrehcsn5hau13n65a5dd5b7j7u9ccf.apps.googleusercontent.com";
-const YOUTUBE_CLIENT_SECRET = config.YOUTUBE_CLIENT_SECRET;
-const YOUTUBE_CALLBACK_URL = "https://twitchplaysnintendoswitch.com/8110/auth/youtube/callback/";
+const YOUTUBE_CLIENT_ID		= config.YOUTUBE_CLIENT_ID;
+const YOUTUBE_CLIENT_SECRET	= config.YOUTUBE_CLIENT_SECRET;
+const YOUTUBE_CALLBACK_URL	= config.YOUTUBE_CALLBACK_URL;
+
+const GOOGLE_CLIENT_ID		= config.GOOGLE_CLIENT_ID;
+const GOOGLE_CLIENT_SECRET	= config.GOOGLE_CLIENT_SECRET;
+const GOOGLE_CALLBACK_URL	= config.GOOGLE_CALLBACK_URL;
+
+const DISCORD_CLIENT_ID		= config.DISCORD_CLIENT_ID;
+const DISCORD_CLIENT_SECRET	= config.DISCORD_CLIENT_SECRET;
+const DISCORD_CALLBACK_URL	= config.DISCORD_CALLBACK_URL;
 
 const SESSION_SECRET = config.SESSION_SECRET;
 
@@ -124,7 +134,7 @@ let IDToUniqueMap = {};
 function DataBaseClient() {
 	
 // 	this.profile = profile;
-	this.initializedAccounts = [];
+	this.connectedAccounts = [];
 
 	// initialize to null:
 	
@@ -145,46 +155,43 @@ function DataBaseClient() {
 	this.youtubeRefreshToken = null;
 	this.youtubeDisplayName = null;
 	
-	this.addAccount = function(profile, type) {
-		
-		// set the id for the type of account we've connected:
-		this[type + "ID"] = profile.id;
-		this[type + "AccessToken"] = profile.accessToken;
-		this[type + "RefreshToken"] = profile.refreshToken;
-		this[type + "DisplayName"] = profile.displayName;
-		
-		if (type == "twitch") {
-			this.login				= profile.login;
-			this.username			= profile.username;
-			this.profile_image_url	= profile.profile_image_url;
-			this.email				= profile.email;
-			
-		} else if (type == "youtube") {
-// 			this.youtubeDisplayName = profile.displayName;
-		}
-		
-		this.initializedAccounts.push(type);
-		
-	}	
 }
 
 function addAccount(profile, type) {
-	// set the id for the type of account we've connected:
-	this[type + "ID"] = profile.id;
-	this[type + "AccessToken"] = profile.accessToken;
-	this[type + "RefreshToken"] = profile.refreshToken;
-
-	if (type == "twitch") {
-		this.login				= profile.login;
-		this.display_name		= profile.display_name;
-		this.profile_image_url	= profile.profile_image_url;
-		this.email				= profile.email;
-
-	} else if (type == "youtube") {
-		this.displayName = profile.display_name;
+	
+	// set the id, access, and refresh token for the type of account we've connected:
+	// universal:
+	this[type + "ID"]			= profile.id;
+	this[type + "AccessToken"]	= profile.accessToken;
+	this[type + "RefreshToken"]	= profile.refreshToken;
+	
+	if (type == "twitch" || type == "google" || type == "youtube") {
+		this[type + "DisplayName"]	= profile.displayName;
 	}
-
-	this.initializedAccounts.push(type);
+	
+	// unique to each platform:
+	if (type == "twitch") {
+		this[type + "Login"]				= profile.login;
+		this[type + "Username"]				= profile.username;
+		this[type + "Profile_image_url"]	= profile.profile_image_url;
+		this[type + "Email"]				= profile.email;
+	} else if (type == "google") {
+// 		this.displayName = profile.display_name;
+		this[type + "FamilyName"]	= profile.name.familyName;
+		this[type + "GivenName"]	= profile.name.givenName;
+	} else if (type == "youtube") {
+		
+	} else if (type == "discord") {
+		this[type + "Email"]			= profile.email;
+		this[type + "Username"]			= profile.username;
+		this[type + "Discriminator"]	= profile.discriminator;
+	}
+	
+	// update connected accounts list:
+	if (this.connectedAccounts.indexOf(type) == -1) {
+		this.connectedAccounts.push(type);
+	}
+	
 }
 
 function updateOrCreateUser(profile, type) {
@@ -198,7 +205,7 @@ function updateOrCreateUser(profile, type) {
 //     }
 // });
 	
-// 	console.log(profile);
+	console.log(profile);
 	
 	// "twitch:"
 	let prefix = type + ":";
@@ -211,8 +218,9 @@ function updateOrCreateUser(profile, type) {
 			
 			console.log("creating user.");
 			
-			// create the user:
+			// create the user & add account details:
 			let dataBaseClient = new DataBaseClient();
+			dataBaseClient.addAccount = addAccount;
 			dataBaseClient.addAccount(profile, type);
 			
 			// save client as a string to store:
@@ -261,8 +269,8 @@ function updateOrCreateUser(profile, type) {
 					let dataBaseClient = JSON.parse(data);
 // 					console.log(dataBaseClient);
 					
-					dataBaseClient.addAccount = addAccount;
 					// update account details:
+					dataBaseClient.addAccount = addAccount;
 					dataBaseClient.addAccount(profile, type);
 					
 					// re-stringify:
@@ -299,7 +307,7 @@ function updateOrCreateUser(profile, type) {
 
 
 
-
+// twitch:
 passport.use(new twitchStrategy({
 		clientID: TWITCH_CLIENT_ID,
 		clientSecret: TWITCH_CLIENT_SECRET,
@@ -313,7 +321,21 @@ passport.use(new twitchStrategy({
 		done(null, profile);
 	}
 ));
-
+// google:
+passport.use(new googleStrategy({
+		clientID: GOOGLE_CLIENT_ID,
+		clientSecret: GOOGLE_CLIENT_SECRET,
+		callbackURL: GOOGLE_CALLBACK_URL,
+		scope: ["profile"],
+	},
+	function(accessToken, refreshToken, profile, done) {
+		profile.accessToken = accessToken;
+		profile.refreshToken = refreshToken;
+		updateOrCreateUser(profile, "google");
+		done(null, profile);
+	}
+));
+// youtube:
 passport.use(new youtubeV3Strategy({
 		clientID: YOUTUBE_CLIENT_ID,
 		clientSecret: YOUTUBE_CLIENT_SECRET,
@@ -328,6 +350,21 @@ passport.use(new youtubeV3Strategy({
 		done(null, profile);
 	}
 ));
+// discord:
+passport.use(new discordStrategy({
+		clientID: DISCORD_CLIENT_ID,
+		clientSecret: DISCORD_CLIENT_SECRET,
+		callbackURL: DISCORD_CALLBACK_URL,
+		scope: ["identify", "email"],
+	},
+	function(accessToken, refreshToken, profile, done) {
+		profile.accessToken = accessToken;
+		profile.refreshToken = refreshToken;
+		updateOrCreateUser(profile, "discord");
+		done(null, profile);
+	}
+));
+
 passport.serializeUser(function(user, done) {
 	done(null, user);
 });
@@ -341,8 +378,20 @@ app.get("/auth/twitch/callback", passport.authenticate("twitch", {
 	failureRedirect: "/",
 }));
 
+app.get("/auth/google/", passport.authenticate("google"));
+app.get("/auth/google/callback", passport.authenticate("google", {
+	successRedirect: "/8110/",
+	failureRedirect: "/",
+}));
+
 app.get("/auth/youtube/", passport.authenticate("youtube"));
 app.get("/auth/youtube/callback", passport.authenticate("youtube", {
+	successRedirect: "/8110/",
+	failureRedirect: "/",
+}));
+
+app.get("/auth/discord/", passport.authenticate("discord"));
+app.get("/auth/discord/callback", passport.authenticate("discord", {
 	successRedirect: "/8110/",
 	failureRedirect: "/",
 }));
@@ -358,12 +407,7 @@ app.get("/", function(req, res) {
 		
 		// get uniqueID from hack map:
 		let uniqueID = "";
-		let prefix = "";
-		if (req.user.email != null) {
-			prefix = "twitch:";
-		} else {
-			prefix = "youtube:";
-		}
+		let prefix = req.user.provider + ":";
 		
 		uniqueID = IDToUniqueMap[prefix + req.user.id];
 		
@@ -374,13 +418,10 @@ app.get("/", function(req, res) {
 		
 		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
 		res.cookie("TwitchPlaysNintendoSwitch", encryptedUniqueID, {
-			maxAge: time
+			maxAge: time,
 		});
-		
-		res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
-	} else {
-		res.send(`<html><head><title>Twitch Auth Sample</title></head><a href="/8110/auth/twitch/"><img src="http://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a></html>`);
 	}
+	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 });
 
 
@@ -608,14 +649,24 @@ io.on("connection", function(socket) {
 		redisClient.hgetAsync("clients", uniqueID).then(function(data) {
 			if (data == null) {
 				clients[index].username = null;
+				socket.emit("needToSignIn");
 				console.log("Invalid encrypted uniqueID.");
 				return;
 			}
+			
 			let dataBaseClient = JSON.parse(data);
-			if (dataBaseClient.username != null) {
-				clients[index].username = dataBaseClient.username;
-			} else if (dataBaseClient.youtubeDisplayName != null) {
+			
+			if (dataBaseClient.connectedAccounts.indexOf("twitch") > -1) {
+				clients[index].username = dataBaseClient.twitchUsername;
+			}
+			if (dataBaseClient.connectedAccounts.indexOf("google") > -1) {
+				clients[index].username = dataBaseClient.googleDisplayName + "GO";
+			}
+			if (dataBaseClient.connectedAccounts.indexOf("youtube") > -1) {
 				clients[index].username = dataBaseClient.youtubeDisplayName + "YT";
+			}
+			if (dataBaseClient.connectedAccounts.indexOf("discord") > -1) {
+				clients[index].username = dataBaseClient.discordUsername + "#" + dataBaseClient.discordDiscriminator;
 			}
 			
 			socket.emit("twitchUsername", clients[index].username);
