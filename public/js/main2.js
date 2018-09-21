@@ -23,6 +23,8 @@ let player4;
 let audioConnected = false;
 let videoConnected = false;
 let authCookie;
+let crate;
+let usernameMap = {};
 let banlist = [];
 let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146"];
 
@@ -40,7 +42,11 @@ let controlQueue2 = [];
 let controlQueue3 = [];
 let controlQueue4 = [];
 let controlQueue5 = [];
-let twitchUsername = null;
+
+let myUniqueID = null;
+let myUsername = null;
+let myConnectedAccounts = [];
+let myValidUsernames = [];
 
 // settings:
 let settings = {
@@ -67,6 +73,7 @@ let settings = {
 	tab: 2,
 	dpadSwap: false,
 	volume: 50,
+	usernameIndex: 0,
 };
 
 let lagless1Settings = {};
@@ -433,7 +440,7 @@ function sendControllerState() {
 		return;
 	}
 	
-	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) == -1) {
+	if(controlQueues[currentPlayerChosen].indexOf(myUniqueID) == -1) {
 		socket.emit("requestTurn", currentPlayerChosen);
 		
 // 		// turn over:
@@ -450,7 +457,7 @@ function sendControllerState() {
 // 		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
 	}
 	
-	if(controlQueues[currentPlayerChosen].indexOf(twitchUsername) > 0 && controlQueues[currentPlayerChosen].length > 0) {
+	if(controlQueues[currentPlayerChosen].indexOf(myUniqueID) > 0 && controlQueues[currentPlayerChosen].length > 0) {
 		let alertMessage = $(".swal2-container")[0];
 		if (typeof alertMessage == "undefined") {
 			swal("It's not your turn yet!");
@@ -474,15 +481,15 @@ function sendControllerState() {
 	
 	let obj = {state: newControllerState, cNum: 0}
 	
-	if (controlQueues[0][0] == twitchUsername) {
+	if (controlQueues[0][0] == myUniqueID) {
 		obj.cNum = 0;
-	} else if (controlQueues[1][0] == twitchUsername) {
+	} else if (controlQueues[1][0] == myUniqueID) {
 		obj.cNum = 1;
-	} else if (controlQueues[2][0] == twitchUsername) {
+	} else if (controlQueues[2][0] == myUniqueID) {
 		obj.cNum = 2;
-	} else if (controlQueues[3][0] == twitchUsername) {
+	} else if (controlQueues[3][0] == myUniqueID) {
 		obj.cNum = 3;
-	} else if (controlQueues[4][0] == twitchUsername) {
+	} else if (controlQueues[4][0] == myUniqueID) {
 		obj.cNum = 4;
 	} else {
 		obj.cNum = currentPlayerChosen;
@@ -1213,7 +1220,6 @@ $(document).ready(function() {
 		setKeyboardMapperClasses();
 		
 		setTimeout(drawJoyCons, 2000);
-		setTimeout(setVideoWidth, 5000, 73.2);
 		
 		if (settings.keyboardControls) {
 			$("#keyboardControlsCheckbox").prop("checked", true).trigger("change");
@@ -1292,7 +1298,7 @@ $(document).ready(function() {
 		authCookie = getCookie("TwitchPlaysNintendoSwitch");
 		if (authCookie != null) {
 			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-			socket.emit("registerUsername", authCookie);
+			socket.emit("registerAccount", {auth: authCookie, usernameIndex: settings.usernameIndex});
 			$("#authenticateButton").remove();
 		} else {
 			// replace with twitch until signed in:
@@ -1302,7 +1308,10 @@ $(document).ready(function() {
 			$("#tab4").addClass("disabled");
 			// remove the logout button:
 			$("#logout").remove();
-			$("#loggedInIndicator").css("width", "100%");
+// 			$("#loggedInStatus").css("width", "100%");
+// 			$("#loggedInStatus").text("Not logged in.");
+			$("#loggedInStatus").remove();
+			
 			$(".disabled").on("click", function() {
 				swal("You need to sign in first!");
 			});
@@ -1312,7 +1321,7 @@ $(document).ready(function() {
 		fitText(".requestTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
 		fitText(".cancelTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
 		fitText(".list-group-item", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-		fitText("#loggedInIndicator", 2.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText("#loggedInIndicator", 2.5, { minFontSize: "10px", maxFontSize: "20px" });
 		
 		fitText("#lButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
 		fitText("#zlButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
@@ -1334,6 +1343,13 @@ $(document).ready(function() {
 				$(".loaded #loader-wrapper")[0].style.visibility = "hidden";
 			}, 500);
 		}, 1000);
+		
+		/* DISCORD EMBED */
+		crate = new Crate({
+			server: "433874668534104065",
+			channel: "487328538173767692",
+			shard: "https://cl2.widgetbot.io",
+		});
 		
 	});
 });
@@ -1646,14 +1662,14 @@ $("#deleteProfiles").on("click", function(event) {
 
 function clearAndReplaceProfiles() {
 	// clear the dropdown menu
-	$(".dropdown-menu").children().remove();
+	$(".keyboard-dropdown-menu").children().remove();
 	// fill it with profiles:
 	for (let key in settings.keyboardProfiles) {
-		let optionHTML = "<button class='dropdown-item'" + " config='" + JSON.stringify(settings.keyboardProfiles[key]) + "'>" + key + "</button>";
-		$(".dropdown-menu").append(optionHTML);
+		let optionHTML = "<button class='keyboard-dropdown-item'" + " config='" + JSON.stringify(settings.keyboardProfiles[key]) + "'>" + key + "</button>";
+		$(".keyboard-dropdown-menu").append(optionHTML);
 	}
 	
-	$(".dropdown-item").on("click", function(event) {
+	$(".keyboard-dropdown-item").on("click", function(event) {
 		let configName = $(event.target).text();
 		$("#dropdownMenuLink").text(configName);
 		keyboardLayout = JSON.parse($(event.target).attr("config"));
@@ -1710,7 +1726,7 @@ function drawJoyCons() {
 	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
 }
 
-function setVideoWidth(width, num) {
+function setVideoWidth(width) {
 	if (typeof $("#videoCanvas1")[0] != "undefined") {
 		$("#videoCanvas1")[0].style.width = width + "%";
 		$("#videoCanvas1")[0].style["margin-left"] = ((100-width)/2) + "%";
@@ -1736,15 +1752,17 @@ function setVideoWidth(width, num) {
 		$("#twitchVideo")[0].style.width = width + "%";
 		$("#twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
 		// calculate height for twitch:
-		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
-		$("#twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
+// 		$("#twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9/16);
 	}
 	if (typeof $(".twitchVideo")[0] != "undefined") {
 		$(".twitchVideo")[0].style.width = width + "%";
 		$(".twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
 		// calculate height for twitch:
-		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
-		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
+// 		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9/16);
 	}
 	
 	$("#rightJoyCon")[0].style["margin-left"] = (width) + ((100-width)/2) + "%";
@@ -1759,7 +1777,7 @@ function resizeChat() {
 	height += $(".videoCanvas").addUp($.fn.outerHeight);
 // 	height += $(".laglessBar").addUp($.fn.outerHeight);
 	height += ($("#navTabs").outerHeight());
-	height -= ($("#loggedInIndicator").outerHeight());
+	height -= ($("#loggedInContainer").outerHeight());
 	height += 10;// adjust
 	$("#chat").height(height);
 }
@@ -1940,7 +1958,7 @@ function onButtonPress(event) {
 		return;
 	}
 	
-	if(controlQueue1.indexOf(twitchUsername) == -1) {
+	if(controlQueue1.indexOf(myUniqueID) == -1) {
 		socket.emit("requestTurn", currentPlayerChosen);
 		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
 		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
@@ -2018,18 +2036,108 @@ function sendInputs() {
 }
 sendInputTimer = setInterval(sendInputs, 1000/120);
 
+
+/* AUTHENTICATION */
+
 setInterval(function() {
 	if (authCookie != null) {
-		socket.emit("registerUsername", authCookie);
-		$("#authenticateButton").remove();
+		socket.emit("registerAccount", {auth: authCookie, usernameIndex: settings.usernameIndex});
+// 		$("#authenticateButton").remove();
 	}
 }, 5000);
+
+socket.on("accountInfo", function(data) {
+	myUniqueID = data.uniqueID;
+	myConnectedAccounts = data.connectedAccounts;
+
+	let usernameChanged = (JSON.stringify(myUsername) !== JSON.stringify(data.username));
+	myUsername = data.username;
+	
+	let usernamesChanged = (JSON.stringify(myValidUsernames) !== JSON.stringify(data.validUsernames));
+	myValidUsernames = data.validUsernames;
+	
+// 	let loggedInText = '<span class="align-self-center">Logged in as: ' + myValidUsernames[settings.usernameIndex] + "</span>";
+// 	$("#loggedInStatus").html(loggedInText);
+	if (usernamesChanged) {
+		for (let i = 0; i < data.validUsernames.length; i++) {
+			let html = '<button class="username-dropdown-item dropdown-item">' + data.validUsernames[i] + "</button>";
+			$("#usernameDropdownDiv").append(html);
+		}
+	}
+	
+	if (usernameChanged) {
+		$("#usernameDropdownMenuLink").text(myUsername);
+	}
+	
+	if (myConnectedAccounts.indexOf("twitch") > -1) {
+		$("#connectWithTwitch").remove();
+	}
+	if (myConnectedAccounts.indexOf("google") > -1) {
+		$("#connectWithGoogle").remove();
+	}
+	if (myConnectedAccounts.indexOf("youtube") > -1) {
+		$("#connectWithYoutube").remove();
+	}
+	if (myConnectedAccounts.indexOf("discord") > -1) {
+		$("#connectWithDiscord").remove();
+	}
+	if (myConnectedAccounts.length == 4) {
+		$("#loggedInIndicator").remove();
+	}
+});
+
+socket.on("usernameMap", function(data) {
+	usernameMap = data;
+});
+
+$("#logout").on("click", function(event) {
+	deleteAllCookies();
+	location.reload(true);
+});
+
+$(document).on("click", ".username-dropdown-item", function(event) {
+	let username = $(event.target).text();
+	let index = $(event.target).index();
+	$("#usernameDropdownMenuLink").text(username);
+	settings.usernameIndex = index;
+	localforage.setItem("settings", JSON.stringify(settings));
+});
+
+socket.on("needToSignIn", function() {
+	swal("You need to sign in!");
+	setTimeout(function() {
+		deleteAllCookies();
+		location.reload(true);
+	}, 1000);
+});
+
+function connectAccountOrSignIn(type) {
+	let url = "https://twitchplaysnintendoswitch.com/8110/auth/" + type + "/";	
+	if (authCookie != null) {
+		url += "?uniqueIDMap=" + authCookie;
+	}
+	window.location.href = url;
+}
+
+$("#connectWithTwitchButton").on("click", function(event) {
+	connectAccountOrSignIn("twitch");
+});
+$("#connectWithGoogleButton").on("click", function(event) {
+	connectAccountOrSignIn("google");
+});
+$("#connectWithYoutubeButton").on("click", function(event) {
+	connectAccountOrSignIn("youtube");
+});
+$("#connectWithDiscordButton").on("click", function(event) {
+	connectAccountOrSignIn("discord");
+});
+
 
 setTimeout(function() {
 	if (!loaded) {
 		loaded = true;
 		$.ajax({
-			url: "https://twitchplaysnintendoswitch.com/usernameData/" + twitchUsername + "/" + authCookie,
+			url: "https://twitchplaysnintendoswitch.com/accountData/" + myUniqueID + "/" + authCookie,
 		});
 	}	
 }, 5000);
@@ -2509,7 +2617,7 @@ socket.on("lagless5Settings", function(data) {
 });
 
 
-/* LAGLESS 1.0*/
+/* LAGLESS 1.0 */
 
 let videoCanvas1 = $("#videoCanvas1")[0];
 let videoCanvas1Context = videoCanvas1.getContext("2d");
@@ -2967,7 +3075,16 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 // todo: debounce
 $(window).resize(function(event) {
 	resizeChat();
+	if (!settings.fullscreen && !settings.largescreen) {
+		setVideoWidth(73.2);
+	}
 });
+
+// https://github.com/yoannmoinet/nipplejs/issues/39
+// force joysticks to recalculate the center:
+// setInterval(function() {
+// 	window.dispatchEvent(new Event("resize"));
+// }, 5000);
 
 setInterval(function() {
 	socket.emit("joinLagless" + settings.tab);
@@ -3126,176 +3243,176 @@ socket.on("replaceWithLagless", function() {
 
 /* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 
-		var BandwidthHandler = (function() {
-			function setBAS(sdp, bandwidth, isScreen) {
-				if (!!navigator.mozGetUserMedia || !bandwidth) {
-					return sdp;
-				}
+let BandwidthHandler = (function() {
+	function setBAS(sdp, bandwidth, isScreen) {
+		if (!!navigator.mozGetUserMedia || !bandwidth) {
+			return sdp;
+		}
 
-				if (isScreen) {
-					if (!bandwidth.screen) {
-						console.warn('It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.');
-					} else if (bandwidth.screen < 300) {
-						console.warn('It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.');
-					}
-				}
-
-				// if screen; must use at least 300kbs
-				if (bandwidth.screen && isScreen) {
-					sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
-					sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n');
-				}
-
-				// remove existing bandwidth lines
-				if (bandwidth.audio || bandwidth.video || bandwidth.data) {
-					sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
-				}
-
-				if (bandwidth.audio) {
-					sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + bandwidth.audio + '\r\n');
-				}
-
-				if (bandwidth.video) {
-					sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + (isScreen ? bandwidth.screen : bandwidth.video) + '\r\n');
-				}
-
-				return sdp;
+		if (isScreen) {
+			if (!bandwidth.screen) {
+				console.warn('It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.');
+			} else if (bandwidth.screen < 300) {
+				console.warn('It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.');
 			}
+		}
 
-			// Find the line in sdpLines that starts with |prefix|, and, if specified,
-			// contains |substr| (case-insensitive search).
-			function findLine(sdpLines, prefix, substr) {
-				return findLineInRange(sdpLines, 0, -1, prefix, substr);
+		// if screen; must use at least 300kbs
+		if (bandwidth.screen && isScreen) {
+			sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
+			sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n');
+		}
+
+		// remove existing bandwidth lines
+		if (bandwidth.audio || bandwidth.video || bandwidth.data) {
+			sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
+		}
+
+		if (bandwidth.audio) {
+			sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + bandwidth.audio + '\r\n');
+		}
+
+		if (bandwidth.video) {
+			sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + (isScreen ? bandwidth.screen : bandwidth.video) + '\r\n');
+		}
+
+		return sdp;
+	}
+
+	// Find the line in sdpLines that starts with |prefix|, and, if specified,
+	// contains |substr| (case-insensitive search).
+	function findLine(sdpLines, prefix, substr) {
+		return findLineInRange(sdpLines, 0, -1, prefix, substr);
+	}
+
+	// Find the line in sdpLines[startLine...endLine - 1] that starts with |prefix|
+	// and, if specified, contains |substr| (case-insensitive search).
+	function findLineInRange(sdpLines, startLine, endLine, prefix, substr) {
+		var realEndLine = endLine !== -1 ? endLine : sdpLines.length;
+		for (var i = startLine; i < realEndLine; ++i) {
+			if (sdpLines[i].indexOf(prefix) === 0) {
+				if (!substr ||
+					sdpLines[i].toLowerCase().indexOf(substr.toLowerCase()) !== -1) {
+					return i;
+				}
 			}
+		}
+		return null;
+	}
 
-			// Find the line in sdpLines[startLine...endLine - 1] that starts with |prefix|
-			// and, if specified, contains |substr| (case-insensitive search).
-			function findLineInRange(sdpLines, startLine, endLine, prefix, substr) {
-				var realEndLine = endLine !== -1 ? endLine : sdpLines.length;
-				for (var i = startLine; i < realEndLine; ++i) {
-					if (sdpLines[i].indexOf(prefix) === 0) {
-						if (!substr ||
-							sdpLines[i].toLowerCase().indexOf(substr.toLowerCase()) !== -1) {
-							return i;
-						}
-					}
-				}
-				return null;
-			}
+	// Gets the codec payload type from an a=rtpmap:X line.
+	function getCodecPayloadType(sdpLine) {
+		var pattern = new RegExp('a=rtpmap:(\\d+) \\w+\\/\\d+');
+		var result = sdpLine.match(pattern);
+		return (result && result.length === 2) ? result[1] : null;
+	}
 
-			// Gets the codec payload type from an a=rtpmap:X line.
-			function getCodecPayloadType(sdpLine) {
-				var pattern = new RegExp('a=rtpmap:(\\d+) \\w+\\/\\d+');
-				var result = sdpLine.match(pattern);
-				return (result && result.length === 2) ? result[1] : null;
-			}
+	function setVideoBitrates(sdp, params) {
+		params = params || {};
+		var xgoogle_min_bitrate = params.min;
+		var xgoogle_max_bitrate = params.max;
 
-			function setVideoBitrates(sdp, params) {
-				params = params || {};
-				var xgoogle_min_bitrate = params.min;
-				var xgoogle_max_bitrate = params.max;
+		var sdpLines = sdp.split('\r\n');
 
-				var sdpLines = sdp.split('\r\n');
+		// VP8
+		var vp8Index = findLine(sdpLines, 'a=rtpmap', 'VP8/90000');
+		var vp8Payload;
+		if (vp8Index) {
+			vp8Payload = getCodecPayloadType(sdpLines[vp8Index]);
+		}
 
-				// VP8
-				var vp8Index = findLine(sdpLines, 'a=rtpmap', 'VP8/90000');
-				var vp8Payload;
-				if (vp8Index) {
-					vp8Payload = getCodecPayloadType(sdpLines[vp8Index]);
-				}
+		if (!vp8Payload) {
+			return sdp;
+		}
 
-				if (!vp8Payload) {
-					return sdp;
-				}
+		var rtxIndex = findLine(sdpLines, 'a=rtpmap', 'rtx/90000');
+		var rtxPayload;
+		if (rtxIndex) {
+			rtxPayload = getCodecPayloadType(sdpLines[rtxIndex]);
+		}
 
-				var rtxIndex = findLine(sdpLines, 'a=rtpmap', 'rtx/90000');
-				var rtxPayload;
-				if (rtxIndex) {
-					rtxPayload = getCodecPayloadType(sdpLines[rtxIndex]);
-				}
+		if (!rtxIndex) {
+			return sdp;
+		}
 
-				if (!rtxIndex) {
-					return sdp;
-				}
+		var rtxFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + rtxPayload.toString());
+		if (rtxFmtpLineIndex !== null) {
+			var appendrtxNext = '\r\n';
+			appendrtxNext += 'a=fmtp:' + vp8Payload + ' x-google-min-bitrate=' + (xgoogle_min_bitrate || '228') + '; x-google-max-bitrate=' + (xgoogle_max_bitrate || '228');
+			sdpLines[rtxFmtpLineIndex] = sdpLines[rtxFmtpLineIndex].concat(appendrtxNext);
+			sdp = sdpLines.join('\r\n');
+		}
 
-				var rtxFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + rtxPayload.toString());
-				if (rtxFmtpLineIndex !== null) {
-					var appendrtxNext = '\r\n';
-					appendrtxNext += 'a=fmtp:' + vp8Payload + ' x-google-min-bitrate=' + (xgoogle_min_bitrate || '228') + '; x-google-max-bitrate=' + (xgoogle_max_bitrate || '228');
-					sdpLines[rtxFmtpLineIndex] = sdpLines[rtxFmtpLineIndex].concat(appendrtxNext);
-					sdp = sdpLines.join('\r\n');
-				}
+		return sdp;
+	}
 
-				return sdp;
-			}
+	function setOpusAttributes(sdp, params) {
+		params = params || {};
 
-			function setOpusAttributes(sdp, params) {
-				params = params || {};
+		var sdpLines = sdp.split('\r\n');
 
-				var sdpLines = sdp.split('\r\n');
+		// Opus
+		var opusIndex = findLine(sdpLines, 'a=rtpmap', 'opus/48000');
+		var opusPayload;
+		if (opusIndex) {
+			opusPayload = getCodecPayloadType(sdpLines[opusIndex]);
+		}
 
-				// Opus
-				var opusIndex = findLine(sdpLines, 'a=rtpmap', 'opus/48000');
-				var opusPayload;
-				if (opusIndex) {
-					opusPayload = getCodecPayloadType(sdpLines[opusIndex]);
-				}
+		if (!opusPayload) {
+			return sdp;
+		}
 
-				if (!opusPayload) {
-					return sdp;
-				}
+		var opusFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + opusPayload.toString());
+		if (opusFmtpLineIndex === null) {
+			return sdp;
+		}
 
-				var opusFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + opusPayload.toString());
-				if (opusFmtpLineIndex === null) {
-					return sdp;
-				}
+		var appendOpusNext = '';
+		appendOpusNext += '; stereo=' + (typeof params.stereo != 'undefined' ? params.stereo : '1');
+		appendOpusNext += '; sprop-stereo=' + (typeof params['sprop-stereo'] != 'undefined' ? params['sprop-stereo'] : '1');
 
-				var appendOpusNext = '';
-				appendOpusNext += '; stereo=' + (typeof params.stereo != 'undefined' ? params.stereo : '1');
-				appendOpusNext += '; sprop-stereo=' + (typeof params['sprop-stereo'] != 'undefined' ? params['sprop-stereo'] : '1');
+		if (typeof params.maxaveragebitrate != 'undefined') {
+			appendOpusNext += '; maxaveragebitrate=' + (params.maxaveragebitrate || 128 * 1024 * 8);
+		}
 
-				if (typeof params.maxaveragebitrate != 'undefined') {
-					appendOpusNext += '; maxaveragebitrate=' + (params.maxaveragebitrate || 128 * 1024 * 8);
-				}
+		if (typeof params.maxplaybackrate != 'undefined') {
+			appendOpusNext += '; maxplaybackrate=' + (params.maxplaybackrate || 128 * 1024 * 8);
+		}
 
-				if (typeof params.maxplaybackrate != 'undefined') {
-					appendOpusNext += '; maxplaybackrate=' + (params.maxplaybackrate || 128 * 1024 * 8);
-				}
+		if (typeof params.cbr != 'undefined') {
+			appendOpusNext += '; cbr=' + (typeof params.cbr != 'undefined' ? params.cbr : '1');
+		}
 
-				if (typeof params.cbr != 'undefined') {
-					appendOpusNext += '; cbr=' + (typeof params.cbr != 'undefined' ? params.cbr : '1');
-				}
+		if (typeof params.useinbandfec != 'undefined') {
+			appendOpusNext += '; useinbandfec=' + params.useinbandfec;
+		}
 
-				if (typeof params.useinbandfec != 'undefined') {
-					appendOpusNext += '; useinbandfec=' + params.useinbandfec;
-				}
+		if (typeof params.usedtx != 'undefined') {
+			appendOpusNext += '; usedtx=' + params.usedtx;
+		}
 
-				if (typeof params.usedtx != 'undefined') {
-					appendOpusNext += '; usedtx=' + params.usedtx;
-				}
+		if (typeof params.maxptime != 'undefined') {
+			appendOpusNext += '\r\na=maxptime:' + params.maxptime;
+		}
 
-				if (typeof params.maxptime != 'undefined') {
-					appendOpusNext += '\r\na=maxptime:' + params.maxptime;
-				}
+		sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(appendOpusNext);
 
-				sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(appendOpusNext);
+		sdp = sdpLines.join('\r\n');
+		return sdp;
+	}
 
-				sdp = sdpLines.join('\r\n');
-				return sdp;
-			}
-
-			return {
-				setApplicationSpecificBandwidth: function(sdp, bandwidth, isScreen) {
-					return setBAS(sdp, bandwidth, isScreen);
-				},
-				setVideoBitrates: function(sdp, params) {
-					return setVideoBitrates(sdp, params);
-				},
-				setOpusAttributes: function(sdp, params) {
-					return setOpusAttributes(sdp, params);
-				}
-			};
-		})();
+	return {
+		setApplicationSpecificBandwidth: function(sdp, bandwidth, isScreen) {
+			return setBAS(sdp, bandwidth, isScreen);
+		},
+		setVideoBitrates: function(sdp, params) {
+			return setVideoBitrates(sdp, params);
+		},
+		setOpusAttributes: function(sdp, params) {
+			return setOpusAttributes(sdp, params);
+		}
+	};
+})();
 
 		
 		// example:
@@ -3323,34 +3440,34 @@ socket.on("replaceWithLagless", function() {
 // 			'maxptime': 3
 // 		});
 		
-		function mySDPTransform(sdp) {
-// 			sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 				'stereo': 0, // to disable stereo (to force mono audio)
-// 				'sprop-stereo': 1,
-// 				'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 				'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 				'cbr': 0, // disable cbr
-// 				'useinbandfec': 1, // use inband fec
-// 				'usedtx': 1, // use dtx
-// 				'maxptime': 3
-// 			});
-			
-			var bandwidth = {
-				screen: 300, // 300kbits minimum
-				audio: 500,   // 500kbits  minimum
-				video: 256   // 256kbits (both min-max)
-			};
-			var isScreenSharing = false;
+function mySDPTransform(sdp) {
+// 	sdp = BandwidthHandler.setOpusAttributes(sdp, {
+// 		'stereo': 0, // to disable stereo (to force mono audio)
+// 		'sprop-stereo': 1,
+// 		'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
+// 		'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
+// 		'cbr': 0, // disable cbr
+// 		'useinbandfec': 1, // use inband fec
+// 		'usedtx': 1, // use dtx
+// 		'maxptime': 3
+// 	});
 
-			sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
-			sdp = BandwidthHandler.setVideoBitrates(sdp, {
-				min: bandwidth.video,
-				max: bandwidth.video
-			});
-			sdp = BandwidthHandler.setOpusAttributes(sdp);
-			
-			return sdp;
-		}
+	var bandwidth = {
+		screen: 300, // 300kbits minimum
+		audio: 500,   // 500kbits  minimum
+		video: 256   // 256kbits (both min-max)
+	};
+	var isScreenSharing = false;
+
+	sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
+	sdp = BandwidthHandler.setVideoBitrates(sdp, {
+		min: bandwidth.video,
+		max: bandwidth.video
+	});
+	sdp = BandwidthHandler.setOpusAttributes(sdp);
+
+	return sdp;
+}
 
 
 
@@ -3471,12 +3588,12 @@ socket.on("controlQueues", function(data) {
 		
 		$("#controlQueue" + (i + 1)).empty();
 		for (let j = 0; j < data.controlQueues[i].length; j++) {
-			let username = data.controlQueues[i][j];
+			let username = usernameMap[data.controlQueues[i][j]];
 			let html;
 			if (!settings.darkTheme) {
-				html = "<li class='queueItem list-group-item'>" + username + "</li>";
+				html = '<li class="queueItem list-group-item" data-toggle="popover" tabindex="0">' + username + "</li>";
 			} else {
-				html = "<li class='queueItem list-group-item-dark'>" + username + "</li>";
+				html = '<li class="queueItem list-group-item-dark" data-toggle="popover" tabindex="0">' + username + "</li>";
 			}
 			$("#controlQueue" + (i + 1)).append(html);
 		}
@@ -3498,7 +3615,7 @@ socket.on("controlQueues", function(data) {
 		// for each queue:
 		for (let i = 0; i < controlQueues.length; i++) {
 			// check if user is in this queue:
-			if (controlQueues[i].indexOf(twitchUsername) > -1) {
+			if (controlQueues[i].indexOf(myUniqueID) > -1) {
 				// change request button -> cancel button:
 				let cancelTurnButton = $("#cancelTurn" + (i+1))[0];
 				if (typeof cancelTurnButton == "undefined") {
@@ -3523,11 +3640,79 @@ socket.on("controlQueues", function(data) {
 /* MOD COMMANDS */
 // selects elements in the future:
 // https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
-$(document).on("click", ".queueItem", function(event) {
-	let username = event.target.innerHTML;
-	$(this).effect("highlight", {}, 2000);
-	socket.emit("kickFromQueue", username);
+
+$("body").popover({
+	selector: ".queueItem",
+	trigger: "focus",
+	html: true,
+	toggle: "popover",
+	title: "Mod Powers",
+	boundary: "window",
+	container: "body",
+	placement: "right",
+	content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
+				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
+				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>',
 });
+// .click(function() {
+// 	setTimeout(function () {
+// 		$('[data-toggle="popover"]').popover("hide");
+// 	}, 8000);
+// });
+
+$("#container").popover({// must be unique
+	selector: ".viewerElement",
+// 	trigger: "focus",
+	html: true,
+	toggle: "popover",
+	title: "Mod Powers",
+	boundary: "window",
+	container: "body",
+	placement: "right",
+	content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
+				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
+				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
+				<button id="unban" class="btn btn-secondary"><b>Unban</b></button>',
+}).click(function() {
+	setTimeout(function () {
+		$('[data-toggle="popover"]').popover("hide");
+	}, 8000);
+});
+
+
+let modPowerUniqueID = "";
+$(document).on("click", ".queueItem", function(event) {
+	$(this).effect("highlight", {}, 2000);
+	let userIndex = $(this).index();
+	let queueIndex = parseInt($(this).parent().attr("id").slice(-1))-1;
+	modPowerUniqueID = controlQueues[queueIndex][userIndex];
+});
+
+$(document).on("click", ".viewerElement", function(event) {
+	$(this).effect("highlight", {}, 2000);
+// 	userIndex = $(this).index();
+// 	queueIndex = parseInt($(this).parent().attr("id").slice(-1))-1;
+	modPowerUniqueID = $(this).attr("uniqueID");
+});
+
+$(document).on("click", "#kickFromQueue", function(event) {
+	socket.emit("kickFromQueue", modPowerUniqueID);
+	$("#queuePopup").remove();
+});
+$(document).on("click", "#tempBan", function(event) {
+	socket.emit("tempBan", modPowerUniqueID);
+	$("#queuePopup").remove();
+});
+$(document).on("click", "#permaBan", function(event) {
+	socket.emit("permaBan", modPowerUniqueID);
+	$("#queuePopup").remove();
+});
+$(document).on("click", "#unban", function(event) {
+	socket.emit("unban", modPowerUniqueID);
+	$("#queuePopup").remove();
+});
+
+
 $(document).on("click", 'i:contains("lock")', function(event) {
 	$(this).effect("highlight", {}, 2000);
 	socket.emit("unlock");
@@ -3545,17 +3730,6 @@ $(document).on("click", 'i:contains("signal_wifi_off")', function(event) {
 	socket.emit("enableInternet");
 });
 
-socket.on("twitchUsername", function(data) {
-	twitchUsername = data;
-	let loggedInText = '<span class="align-self-center">Logged in as: ' + twitchUsername + "</span>";
-	$("#loggedInIndicator").html(loggedInText);
-});
-
-$("#logout").on("click", function(event) {
-	deleteAllCookies();
-	location.reload(true);
-});
-
 socket.on("turnTimesLeft", function(data) {
 	
 	lastCurrentTime = Date.now();
@@ -3563,7 +3737,6 @@ socket.on("turnTimesLeft", function(data) {
 	let waitlistsChanged = (JSON.stringify(waitlists) !== JSON.stringify(data.waitlists));
 	viewers = data.viewers;
 	waitlists = data.waitlists;
-	banlist = data.banlist;
 	if (locked != data.locked) {
 		locked = data.locked;
 		if (locked) {
@@ -3589,7 +3762,7 @@ socket.on("turnTimesLeft", function(data) {
 	
 // 	isExempt = false;
 // 	for (let i = 0; i < 5; i++) {
-// 		let index = controlQueues[i].indexOf(twitchUsername);
+// 		let index = controlQueues[i].indexOf(myUniqueID);
 // 		if (index < minQueuePos && index > -1) {
 // 			isExempt = true;
 // 		}
@@ -3624,11 +3797,11 @@ socket.on("turnTimesLeft", function(data) {
 		
 		let n = i+1;
 		
-		if (data.usernames[i] == null) {
+		if (controlQueues[i][0] == null) {
 			$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 			$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 		} else {
-			$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.usernames[i] + ": " + timeLeftSec + " seconds");
+			$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
 			$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
 		}
 	}
@@ -3645,7 +3818,8 @@ socket.on("turnTimesLeft", function(data) {
 			
 			$("#lagless" + (i + 1) + "ViewerDropdownDiv").empty();
 			for (let j = 0; j < data.viewers[i].length; j++) {
-				let html = '<button class="dropdown-item">' + data.viewers[i][j] + '</button>';
+// 				let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0">' + usernameMap[data.viewers[i][j]] + "</button>";
+				let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0" uniqueID="' + data.viewers[i][j] + '">' + usernameMap[data.viewers[i][j]] + "</button>";
 				$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(html);
 			}
 			
@@ -3657,10 +3831,11 @@ socket.on("turnTimesLeft", function(data) {
 				}
 				
 				if (data.viewers[k].length > 0) {
-					let dividerHTML = '<div class="dropdown-divider">Lagless ' + (k + 1) + '</div>';
+					let dividerHTML = '<div class="dropdown-divider">Lagless ' + (k + 1) + "</div>";
 					$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(dividerHTML);
 					for (let j = 0; j < data.viewers[k].length; j++) {
-						let html = '<button class="dropdown-item">' + data.viewers[k][j] + '</button>';
+// 						let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0">' + usernameMap[data.viewers[k][j]] + "</button>";
+						let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0" uniqueID="' + data.viewers[i][j] + '">' + usernameMap[data.viewers[i][j]] + "</button>";
 						$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(html);
 					}
 				}
@@ -3674,15 +3849,15 @@ socket.on("turnTimesLeft", function(data) {
 		
 		$("#waitlist").empty();
 		
-		let waitlistHeaderHTML = '<li class="list-group-item">Lagless ' + settings.tab + ' waitlist</li>';
+		let waitlistHeaderHTML = '<li class="list-group-item">Lagless ' + settings.tab + " waitlist</li>";
 		$("#waitlist").append(waitlistHeaderHTML);
 		
 		for (let i = 0; i < waitlists[settings.tab-1].length; i++) {
 			let listHTML;
 			
-			let username = waitlists[settings.tab-1][i];
+			let ID = waitlists[settings.tab-1][i];
 			
-			if (twitchUsername == username) {
+			if (myUniqueID == ID) {
 				
 // 				if (!tabsSwappedWithTwitch[settings.tab-1]) {
 // 					tabsSwappedWithTwitch[settings.tab-1] = true;
@@ -3693,11 +3868,11 @@ socket.on("turnTimesLeft", function(data) {
 // 					swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
 // 				}
 				
-				listHTML = '<li class="list-group-item-highlight">' + username + '</li>';
+				listHTML = '<li class="list-group-item-highlight">' + usernameMap[ID] + "</li>";
 			} else if (settings.darkTheme) {
-				listHTML = '<li class="list-group-item-dark">' + username + '</li>';
+				listHTML = '<li class="list-group-item-dark">' + usernameMap[ID] + "</li>";
 			} else {
-				listHTML = '<li class="list-group-item">' + username + '</li>';
+				listHTML = '<li class="list-group-item">' + usernameMap[ID] + "</li>";
 			}
 			
 			
@@ -3705,7 +3880,7 @@ socket.on("turnTimesLeft", function(data) {
 		}
 		
 		// check if you're in the waitlist
-		if (waitlists[settings.tab-1].indexOf(twitchUsername) > -1) {
+		if (waitlists[settings.tab-1].indexOf(myUniqueID) > -1) {
 			
 			if (!tabsSwappedWithTwitch[settings.tab-1]) {
 				tabsSwappedWithTwitch[settings.tab-1] = true;
@@ -4041,7 +4216,7 @@ $("#youtubeChatCheckbox").on("change", function() {
 	settings.youtubeChat = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.youtubeChat) {
-		$("#chat").attr("src", "https://www.youtube.com/live_chat?v=vbqcZCzXqI0&embed_domain=twitchplaysnintendoswitch.com");
+		$("#chat").attr("src", "https://www.youtube.com/live_chat?v=8jgSgQcZgGY&embed_domain=twitchplaysnintendoswitch.com");
 	} else {
 		if (settings.darkTheme) {
 			$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
@@ -4713,8 +4888,6 @@ function closingCode() {
 	return null;
 }
 
-
-
 /* COLLAPSE BUTTONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // $(".collapseButton").on("click", function(event) {
 // 	event.preventDefault();
@@ -4820,6 +4993,7 @@ $(".collapsible").on("hidden.bs.collapse", function() {
 
 // on blur, reset the controller state,
 // to prevent keys from getting stuck:
+// todo: fix
 $(window).blur(function() {
 // 	console.log("lost focus");
 	controller.reset();
@@ -4842,7 +5016,7 @@ $(window).focus(function() {
 /* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 socket.on("rickroll", function(data) {
-	if (twitchUsername == data || data == "everyone") {
+	if (myUsername == data || data == "everyone") {
 		let myPlayer;
 		swal({
 			html: '<canvas id="rickroll"></canvas>',
@@ -4888,7 +5062,7 @@ socket.on("rickroll", function(data) {
 });
 
 socket.on("rainbow", function(data) {
-	if (twitchUsername == data || data == "everyone") {
+	if (myUniqueID == data || data == "everyone") {
 		$("body").addClass("rainbow-text");
 	}
 });
@@ -4897,18 +5071,23 @@ socket.on("banlist", function(data) {
 	banlist = data;
 });
 
+socket.on("banned", function(data) {
+	swal("You're banned (maybe only temporarily?)");
+});
+
+
 /* IP */
 setInterval(function() {
 	$.getJSON("https://jsonip.com?callback=?", function (data) {
-		socket.emit("registerIP", {ip: data.ip, username: twitchUsername});
+		socket.emit("registerIP", {ip: data.ip, id: myUniqueID, username: myUsername});
 		if (bannedIPs.indexOf(data.ip) > -1) {
-// 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
 		}
-		if (banlist.indexOf(twitchUsername) > -1) {
-// 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-		}
+// 		if (banlist.indexOf(myUniqueID) > -1) {
+// // 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+// 		}
 	});
 }, 5000);
 
@@ -4917,5 +5096,3 @@ setInterval(function() {
 if (location.protocol != "https:") {
 	location.href = "https:" + window.location.href.substring(window.location.protocol.length);
 }
-
-

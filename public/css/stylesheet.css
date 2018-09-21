@@ -38,6 +38,11 @@ html {
 	flex-direction: row;
 	justify-content: space-evenly;
 /* 	margin-bottom: 20px; */
+	overflow-x: hidden;
+}
+
+.player {
+	overflow-x: hidden;
 }
 
 .collapsibleContainer {
@@ -175,6 +180,7 @@ margin-right: auto; */
 /* 	flex-grow: 1; */
 	padding: 0;
 	margin: 0;
+	overflow-x: hidden;
 }
 
 #chat {
@@ -183,62 +189,136 @@ margin-right: auto; */
 }
 #chatContainer {
 	width: 25%;
+	min-width: 340px;
 	display: flex;
 	flex-direction: column;
+	overflow-x: hidden;
 }
 
 /* LOGGED IN INDICATOR */
 #loggedInIndicator {
-	width: 70%;
-	border: 1px solid #333;
-	border-radius: 4px;
+	width: 100%;
+	border: 1px solid #888;
+	border-radius: 5px;
 	text-align: center;
 	display: flex;
-/* 	justify-content: center; */
 	justify-content: space-evenly;
+	flex-wrap: wrap;
+}
+#loggedInStatus {
+	width: 70%;
+	border: 1px solid #888;
+	border-radius: 5px;
+	text-align: center;
+	display: flex;
+	justify-content: center;
+/* 	overflow-x: hidden; */
+	overflow-y: visible;
 }
 
 #loggedInContainer {
 	display: flex;
+	flex-wrap: wrap;
+}
+
+.connectWithContainer {
+	display: flex;
 	flex-direction: row;
+	justify-content: space-evenly;
+	width: 48%;
+	margin-top: 4px;
+	margin-bottom: 4px;
 }
 
 .connectWithButton {
 	display: flex;
-	flex-direction: row;
+	align-self: center;
+	justify-content: space-evenly;
+	border: 1px solid #888;
+	border-radius: 5px;
+	box-shadow: 1px 1px 1px grey;
+	
+	text-decoration: none !important;
+	color: #282828;
+	white-space: nowrap;
+	min-height: 40px;
+	width: 100%;
+	cursor: pointer;
 }
 
 .connectWithButton > * {
 	display: flex;
 	align-self: center;
-	max-width: 150px;
-	padding: 6px;
+	color: #282828;
+/* 	max-width: 150px; */
+/* 	padding: 6px; */
 }
 
-#ytLogo {
-	max-width: 80px;
+#twitchLogo {
+/* 	width: 80px; */
+/* 	filter: drop-shadow(3px 3px 2px #333); */
+    width: 60px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
-/* 
-#connectWithYouTubeText {
-	display: flex;
-	vertical-align: middle;
-} */
+#googleLogo {
+	width: 80px;
+}
+#ytLogo {
+	width: 80px;
+}
+#discordLogo {
+	width: 80px;
+}
 
 #connectWithTwitch {
-	border: 2px solid #333;
-	border-radius: 6px;
-	margin-top: 4px;
-	margin-bottom: 4px;
 }
 
-#connectWithYouTube {
-	border: 2px solid #282828;
-	border-radius: 6px;
-	margin-top: 4px;
-	margin-bottom: 4px;
-	
-	text-decoration: none !important;
-	color: #282828;
+#connectWithTwitchButton {
+}
+
+#connectWithYoutube {
+
+}
+
+#connectWithGoogle {
+}
+
+#connectWithDiscord {
+}
+
+
+/* CONNECT WITH GOOGLE BUTTON */
+#googleConnectButton {
+	display: flex;
+	justify-content: space-evenly;
+	background: white;
+	color: #444;
+/* 	width: 80px; */
+	width: 75px;
+	margin-left: 0px;
+	margin-right: 5px;
+	white-space: nowrap;
+}
+#googleConnectButton:hover {
+	cursor: pointer;
+}
+span.googleLabel {
+	font-family: serif;
+	font-weight: normal;
+}
+span.googleIcon {
+	background: url(/images/g-normal.png) transparent 0px 50% no-repeat;
+	width: 32px;
+	height: 32px;
+}
+span.googleButtonText {
+	display: flex;
+	align-self: center;
+	font-size: 14px;
+	font-weight: bold;
+	/* Use the Roboto font that is loaded in the <head> */
+	font-family: "Roboto", sans-serif;
 }
 
 
@@ -1488,6 +1568,20 @@ clear: left;
 	margin: 5px;
 	padding: 5px;
 	text-align: center;
+}
+
+.queuePopup {
+/* 	background: #60BB60; */
+/* 	background: #FFF;
+	color: #000000;
+	border: 2px solid #333; */
+	width: 200px;
+	height: 100px;
+/* 	z-index: 9000;
+	border-radius: 15px;
+	margin: 5px;
+	padding: 5px;
+	text-align: center; */
 }
 
 .navTabPopup {

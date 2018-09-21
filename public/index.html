@@ -9,16 +9,26 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono">
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<link rel="stylesheet" href="css/preloader.css">
+	
 	<!-- Font Awesome	 -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-  <!-- Google Material Icons -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	
+	<!-- Google Material Icons -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   
 	<!-- socket.io -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+	
 	<!-- jquery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+	
+	<!-- BOOTSTRAP 4 -->
+	<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
+	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
 	
 <!-- 	<script src="js/observable-slim.min.js"></script> -->
 	<script src="js/keymaster.js"></script>
@@ -27,10 +37,12 @@
 	<script src="js/tools.js"></script>
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
-<!-- 	<script src="js/interact.min.js"></script> -->
 	<script src="js/jquery.fittext.js"></script>
 	<script src="js/simplepeer.min.js"></script>
-
+	
+	<!-- discord embed -->
+	<script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3"></script>
+	<!-- async defer -->
 	
 	<!-- jsmpeg -->
 	<script src="js/jsmpg.js"></script>
@@ -52,12 +64,10 @@
 	
 	
 	<script src="js/http-live-player.js"></script>
-  
-  
 	<script src="js/sweetalert2.min.js"></script>
+	
 <!-- 	<script src="js/meeting-client.js"></script> -->
-	<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
-	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
+
 <!-- 	<script src="/js/ads.js"></script> -->
 <!-- 	<script src="https://authedmine.com/lib/authedmine.min.js"></script> -->
 	
@@ -65,11 +75,7 @@
 <!-- 	<script src= "https://player.twitch.tv/js/embed/v1.js"></script> -->
 
 	<!-- TODO: use browserify -->
-
-	<!-- BOOTSTRAP 4 -->
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-
+	
 	<!-- ADS -->
 	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 	<script>
@@ -87,11 +93,11 @@
 		<div class="loader-section section-left"></div>
 		<div class="loader-section section-right"></div>
 	</div>
-
+	
 	<div id="container">
-
+		
 		<div id="picture" class="well">
-
+			
 			<ul id="navTabs" class="nav nav-tabs" role="tablist">
 				<li class="nav-item active">
 					<a id="tab1" class="nav-link active" data-toggle="tab" href="#lagless1">Lagless 1</a>
@@ -120,36 +126,36 @@
 						<div id="lagless1View" class="laglessView">
 							<canvas id="videoCanvas1" class="videoCanvas"></canvas>
 						</div>
-							<div id="lagless1Bar" class="laglessBar">
-								<div id="lagless1ViewerDropdown" class="viewerDropdown dropdown show">
-									<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Viewers
-									</a>
-									<div id="lagless1ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-								</div>
-								<div id="lagless1VolumeSlider" class="volumeSlider">
-									<i class="fa fa-volume-down"></i>
-									<div id="lagless1Volume" class="volume"></div>
-									<i class="fa fa-volume-up"></i>
-								</div>
-								<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-									<input class="audioThreeCheckbox" type="checkbox" />
-									<span class="checkbox-placeholder"></span>
-									Audio 3.0
-								</label>
-								<button id="lagless1Refresh" class="laglessRefresh btn btn-primary btn-settings">
-									<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
-								</button>
-								<button id="lagless1KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-									<i class="fas fa-keyboard" style="font-size: 25px;"></i>
-								</button>
-								<div id="lagless1KeyboardDropdown" class="keyboardDropdown dropdown show">
-									<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-										Keyboard Profiles
-									</a>
-									<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-								</div>
+						<div id="lagless1Bar" class="laglessBar">
+							<div id="lagless1ViewerDropdown" class="viewerDropdown dropdown show">
+								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Viewers
+								</a>
+								<div id="lagless1ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
+							<div id="lagless1VolumeSlider" class="volumeSlider">
+								<i class="fa fa-volume-down"></i>
+								<div id="lagless1Volume" class="volume"></div>
+								<i class="fa fa-volume-up"></i>
+							</div>
+							<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+								<input class="audioThreeCheckbox" type="checkbox" />
+								<span class="checkbox-placeholder"></span>
+								Audio 3.0
+							</label>
+							<button id="lagless1Refresh" class="laglessRefresh btn btn-primary btn-settings">
+								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
+							</button>
+							<button id="lagless1KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
+								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
+							</button>
+							<div id="lagless1KeyboardDropdown" class="keyboardDropdown dropdown show">
+								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Keyboard Profiles
+								</a>
+								<div class="keyboard-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div id="lagless2" class="tab-pane">
@@ -184,7 +190,7 @@
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Keyboard Profiles
 								</a>
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+								<div class="keyboard-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 						</div>
 					</div>
@@ -221,7 +227,7 @@
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Keyboard Profiles
 								</a>
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+								<div class="keyboard-dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 						</div>
 					</div>
@@ -259,7 +265,7 @@
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 									Keyboard Profiles
 								</a>
-								<div class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+								<div class="keyboard-dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 							</div>
 						</div>
 					</div>
@@ -600,7 +606,7 @@
 										<button id="360p" class="resolutionButton btn btn-secondary">360p</button>
 										<button id="720p" class="resolutionButton btn btn-secondary">720p</button>
 										<button id="960p" class="resolutionButton btn btn-secondary">960p</button>
-									</div>		
+									</div>
 		<!-- 							offsetX: <span id="offsetX2">0</span>
 									<div class="mysliderContainer">
 										<div id="offsetXSlider2" class="myslider"></div>
@@ -660,13 +666,55 @@
 		
 		<div id="chatContainer">
 			<div id="loggedInContainer">
-				<div id="loggedInIndicator">
-					<a id="connectWithTwitch" class="connectWithButton" href="/8110/auth/twitch/"><img src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"></a>
-					<a id="connectWithYouTube" class="connectWithButton" href="/8110/auth/youtube/"><span id="connectWithYouTubeText">Connect with</span><img id="ytLogo" src="/images/yt_logo_rgb_light.png"></a>
+<!-- 				<div id="loggedInStatus"></div> -->
+				<div id="loggedInStatus">
+					<div id="usernameDropdown" class="dropdown show">
+						<span class="align-self-center">Logged in as: </span>
+						<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="usernameDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							???
+						</a>
+						<div id="usernameDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+					</div>
 				</div>
 				<button id="logout" class="btn btn-secondary">Logout</button>
+				<div id="loggedInIndicator">
+					<div id="connectWithTwitch" class="connectWithContainer">
+						<div id="connectWithTwitchButton" class="connectWithButton" href="/8110/auth/twitch/">
+							<span id="connectWithTwitchText">Connect with</span>
+<!-- 							<img id="twitchLogo" src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"> -->
+							<img id="twitchLogo" src="/images/Twitch_Purple_RGB.png">
+						</div>
+					</div>
+					<div id="connectWithYoutube" class="connectWithContainer">
+						<div id="connectWithYoutubeButton" class="connectWithButton" href="/8110/auth/youtube/">
+							<span id="connectWithYouTubeText">Connect with</span>
+							<img id="ytLogo" src="/images/yt_logo_rgb_light.png">
+						</div>
+					</div>
+					<div id="connectWithGoogle" class="connectWithContainer">
+						<div id="connectWithGoogleButton" class="connectWithButton" href="/8110/auth/google/">
+							<span id="connectWithGoogleText">Connect with</span>
+<!-- 							<img id="googleLogo" src="/images/btn_google_signin_light_normal_web_short_modified3.png"> -->
+<!-- 							<div id="gSignInWrapper"> -->
+<!-- 								<span class="googleLabel">Sign in with:</span> -->
+								<div id="googleConnectButton" class="customGPlusSignIn">
+									<span class="googleIcon"></span>
+									<span class="googleButtonText">Google</span>
+								</div>
+<!-- 							</div> -->
+						</div>
+					</div>
+					<div id="connectWithDiscord" class="connectWithContainer">
+						<div id="connectWithDiscordButton" class="connectWithButton" href="/8110/auth/discord/">
+							<span id="connectWithDiscordText">Connect with</span>
+							<img id="discordLogo" src="/images/discord_logo.png">
+						</div>
+					</div>
+				
+				</div>
 			</div>
 			<iframe id="chat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat"></iframe>
+<!-- 			<iframe src="https://titanembeds.com/embed/433874668534104065?css=1&defaultchannel=487328538173767692&noscroll=false&sametarget=false&scrollbartheme=3d-dark&lockscrollbar=false&theme=DiscordDark" height="600" width="800" frameborder="0"></iframe> -->
 			<ul id="waitlist" class="list-group">
 				<li class="list-group-item">The waitlist is empty right now</li>
 			</ul>
