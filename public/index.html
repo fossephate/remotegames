@@ -38,10 +38,11 @@
 	<script src="js/stats.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
 	<script src="js/jquery.fittext.js"></script>
+	<script src="js/textfitpercent.js"></script>
 	<script src="js/simplepeer.min.js"></script>
 	
 	<!-- discord embed -->
-	<script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3"></script>
+<!-- 	<script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3"></script> -->
 	<!-- async defer -->
 	
 	<!-- jsmpeg -->
@@ -144,10 +145,10 @@
 								Audio 3.0
 							</label>
 							<button id="lagless1Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
+								<i class="fas fa-sync-alt"></i>
 							</button>
 							<button id="lagless1KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
+								<i class="fas fa-keyboard"></i>
 							</button>
 							<div id="lagless1KeyboardDropdown" class="keyboardDropdown dropdown show">
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -181,10 +182,10 @@
 								Audio 3.0
 							</label>
 							<button id="lagless2Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
+								<i class="fas fa-sync-alt"></i>
 							</button>
 							<button id="lagless2KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
+								<i class="fas fa-keyboard"></i>
 							</button>
 							<div id="lagless2KeyboardDropdown" class="keyboardDropdown dropdown show">
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -218,10 +219,10 @@
 								Audio 3.0
 							</label>
 							<button id="lagless3Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
+								<i class="fas fa-sync-alt"></i>
 							</button>
 							<button id="lagless3KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
+								<i class="fas fa-keyboard"></i>
 							</button>
 							<div id="lagless3KeyboardDropdown" class="keyboardDropdown dropdown show">
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -256,10 +257,10 @@
 								Audio 3.0
 							</label>
 							<button id="lagless4Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
+								<i class="fas fa-sync-alt"></i>
 							</button>
 							<button id="lagless4KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard" style="font-size: 25px;"></i>
+								<i class="fas fa-keyboard"></i>
 							</button>
 							<div id="lagless4KeyboardDropdown" class="keyboardDropdown dropdown show">
 								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -288,7 +289,7 @@
 								<i class="fa fa-volume-up"></i>
 							</div>
 							<button id="lagless5Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt" style="font-size: 25px;"></i>
+								<i class="fas fa-sync-alt"></i>
 							</button>
 						</div>
 					</div>
@@ -300,7 +301,7 @@
 				<div id="barUnderTheStream">
 					
 					<div id="playersContainer" class="collapsibleContainer">
-						<button class="btn btn-secondary collapseButton" data-toggle="" data-target="#players" collapsed="false">Hide</button>
+						<button id="hidePlayers" class="btn btn-secondary collapseButton" data-toggle="" data-target="#players" collapsed="false">Hide</button>
 						<div id="players" class="collapse show collapsible">
 							<div id="player1" class="player">
 								<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
@@ -450,6 +451,13 @@
 											<input id="dpadCheckbox" type="checkbox" />
 											<span class="checkbox-placeholder"></span>
 											DPad Swap
+										</label>
+									</li>
+									<li class="list-group-item">
+										<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+											<input id="3DSCheckbox" type="checkbox" />
+											<span class="checkbox-placeholder"></span>
+											3Ds config
 										</label>
 									</li>
 <!-- 									<li class="list-group-item">

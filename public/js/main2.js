@@ -27,6 +27,9 @@ let crate;
 let usernameMap = {};
 let banlist = [];
 let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146"];
+let resizers = [];
+let resizeDebounceTimer;
+let resizeAvailable = true;
 
 // twitch lagless swap settings
 let isExempt = false;
@@ -72,6 +75,7 @@ let settings = {
 	keyboardProfiles: {},
 	tab: 2,
 	dpadSwap: false,
+	TDSConfig: false,
 	volume: 50,
 	usernameIndex: 0,
 };
@@ -812,38 +816,70 @@ gamepad.on("disconnect", e => {
 
 gamepad.on("press", "button_1", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.b = 1;
+	if (!settings.TDSConfig) {
+		controller.btns.b = 1;
+	} else {
+		controller.btns.a = 1;
+	}
 });
 gamepad.on("release", "button_1", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.b = 0;
+	if (!settings.TDSConfig) {
+		controller.btns.b = 0;
+	} else {
+		controller.btns.a = 0;
+	}
 });
 
 gamepad.on("press", "button_2", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.a = 1;
+	if (!settings.TDSConfig) {
+		controller.btns.a = 1;
+	} else {
+		controller.btns.b = 1;
+	}
 });
 gamepad.on("release", "button_2", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.a = 0;
+	if (!settings.TDSConfig) {
+		controller.btns.a = 0;
+	} else {
+		controller.btns.b = 0;
+	}
 });
 
 gamepad.on("press", "button_3", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.y = 1;
+	if (!settings.TDSConfig) {
+		controller.btns.y = 1;
+	} else {
+		controller.btns.x = 1;
+	}
 });
 gamepad.on("release", "button_3", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.y = 0;
+	if (!settings.TDSConfig) {
+		controller.btns.y = 0;
+	} else {
+		controller.btns.x = 0;
+	}
 });
 
 gamepad.on("press", "button_4", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.x = 1;
+	if (!settings.TDSConfig) {
+		controller.btns.x = 1;
+	} else {
+		controller.btns.y = 1;
+	}
 });
 gamepad.on("release", "button_4", e => {
 	settings.currentInputMode = "controller";
-	controller.btns.x = 0;
+	if (!settings.TDSConfig) {
+		controller.btns.x = 0;
+	} else {
+		controller.btns.y = 0;
+	}
 });
 
 
@@ -1239,6 +1275,9 @@ $(document).ready(function() {
 		if (settings.dpadSwap) {
 			$("#dpadCheckbox").prop("checked", true).trigger("change");
 		}
+		if (settings.TDSConfig) {
+			$("#3DSCheckbox").prop("checked", true).trigger("change");
+		}
 		if (settings.enableAudioThree) {
 			$("#enableAudioThreeCheckbox").prop("checked", true).trigger("change");
 		}
@@ -1318,20 +1357,91 @@ $(document).ready(function() {
 		}
 		
 		// fit text:
-		fitText(".requestTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-		fitText(".cancelTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-		fitText(".list-group-item", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-// 		fitText("#loggedInIndicator", 2.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText(".requestTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText(".cancelTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText(".list-group-item", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
+// // 		fitText("#loggedInIndicator", 2.5, { minFontSize: "10px", maxFontSize: "20px" });
 		
-		fitText("#lButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-		fitText("#zlButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-		fitText("#rButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-		fitText("#zrButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText("#lButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText("#zlButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText("#rButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
+// 		fitText("#zrButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
 		
-		fitText(".collapseButton", 0.2, { minFontSize: "10px", maxFontSize: "16px" });
+// 		fitText(".collapseButton", 0.2, { minFontSize: "10px", maxFontSize: "16px" });
 		
-		fitText(".resolutionButton", 0.2, { minFontSize: "8px", maxFontSize: "16px" });
-		fitText(".fpsButton", 0.25, { minFontSize: "8px", maxFontSize: "16px" });
+// 		fitText(".resolutionButton", 0.2, { minFontSize: "8px", maxFontSize: "16px" });
+// 		fitText(".fpsButton", 0.25, { minFontSize: "8px", maxFontSize: "16px" });
+		
+		
+// 		resizers.push(textFitPercent({selector: "#lagless2KeyboardDropdown", percentWidth: 20, isFirstChild: true, parent: "#lagless2Bar"}));
+		
+// 		resizers.push(textFitPercent({
+// 			selector: ".keyboardDropdown",
+// 			parent: ".laglessBar",
+// 			percentWidth: 20,
+// 			isFirstChild: true,
+// 			isClass: true,
+// 			maxTries: 20,
+// 			increment: 0.2,
+// 		}));
+		
+		resizers.push(textFitPercent({
+			selector: "#lagless2KeyboardDropdown",
+			parent: "#lagless2Bar",
+			percentWidth: 20,
+			isFirstChild: true,
+			isClass: true,
+			maxTries: 20,
+			increment: 0.2,
+		}));
+		
+		resizers.push(textFitPercent({
+			selector: "#lagless2ViewerDropdown",
+			parent: "#lagless2Bar",
+			percentWidth: 12,
+			isFirstChild: true,
+			maxTries: 20,
+			increment: 0.2,
+			maxFontSize: 20,
+		}));
+		
+		
+		resizers.push(textFitPercent({
+			selector: "#lagless2Refresh",
+			parent: "#lagless2Bar",
+			percentWidth: 8,
+// 			isFirstChild: true,
+			maxTries: 20,
+			increment: 0.2,
+			accuracy: 5,
+			maxFontSize: 30,
+		}));
+		
+		resizers.push(textFitPercent({
+			selector: "#lagless2KeyboardSettings",
+			parent: "#lagless2Bar",
+			percentWidth: 8,
+// 			isFirstChild: true,
+			maxTries: 20,
+			increment: 0.2,
+			accuracy: 5,
+			maxFontSize: 30,
+		}));
+		
+		resizers.push(textFitPercent({
+			selector: "#hidePlayers",
+			parent: "#playersContainer",
+			percentWidth: 5,
+// 			isFirstChild: true,
+			maxTries: 20,
+			increment: 0.2,
+			accuracy: 5,
+			maxFontSize: 20,
+		}));
+		
+		for (let i = 0; i < resizers.length; i++) {
+			resizers[i].resize();
+		}
 		
 		setTimeout(resizeChat, 2000);
 		
@@ -1345,11 +1455,11 @@ $(document).ready(function() {
 		}, 1000);
 		
 		/* DISCORD EMBED */
-		crate = new Crate({
-			server: "433874668534104065",
-			channel: "487328538173767692",
-			shard: "https://cl2.widgetbot.io",
-		});
+// 		crate = new Crate({
+// 			server: "433874668534104065",
+// 			channel: "487328538173767692",
+// 			shard: "https://cl2.widgetbot.io",
+// 		});
 		
 	});
 });
@@ -2949,22 +3059,21 @@ function switchTabs(tab) {
 	// lagless 1:
 	if (tab == "#lagless1") {
 		settings.tab = 1;
-		socket2.emit("join", "viewers");
-		socket.emit("joinLagless1");
+		socket2.emit("join", "lagless1");
 		// todo: fix this:
 		clearInterval(lagless1JoinTimer);
 		lagless1JoinTimer = setInterval(function() {
-			socket2.emit("join", "viewers");
+			socket2.emit("join", "lagless1");
 		}, 5000);
 	} else {
 		clearInterval(lagless1JoinTimer);
-		socket2.emit("leave", "viewers");
+		socket2.emit("leave", "lagless1");
 	}
 	
 	// lagless 2:
 	if (tab == "#lagless2") {
 		settings.tab = 2;
-		socket.emit("joinLagless2");
+		socket.emit("join", "lagless2");
 		//player.play();
 		try {
 			player.destroy();
@@ -2997,7 +3106,7 @@ function switchTabs(tab) {
 	// lagless 3:
 	if (tab == "#lagless3") {
 		settings.tab = 3;
-		socket.emit("joinLagless3");
+		socket.emit("join", "lagless3");
 		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 		wsavc.connect(uri);
 	} else {
@@ -3010,7 +3119,7 @@ function switchTabs(tab) {
 	// lagless 4:
 	if (tab == "#lagless4") {
 		settings.tab = 4;
-		socket.emit("joinLagless4");
+		socket.emit("join", "lagless4");
 		if (!videoConnected) {
 			videoConnected = true;
 			socket.emit("requestVideo");
@@ -3024,8 +3133,7 @@ function switchTabs(tab) {
 	// lagless 5:
 	if (tab == "#lagless5") {
 		settings.tab = 5;
-		socket2.emit("join", "viewers5");
-		socket.emit("joinLagless5");
+		socket2.emit("join", "lagless5");
 		if (typeof player5 != "undefined") {
 			try {
 				player5.play();
@@ -3078,6 +3186,15 @@ $(window).resize(function(event) {
 	if (!settings.fullscreen && !settings.largescreen) {
 		setVideoWidth(73.2);
 	}
+// 	if (resizeAvailable) {
+		resizeAvailable = false;
+		resizeDebounceTimer = setTimeout(function() {
+			resizeAvailable = true;
+		}, 100);
+		for (let i = 0; i < resizers.length; i++) {
+			resizers[i].resize();
+		}
+// 	}
 });
 
 // https://github.com/yoannmoinet/nipplejs/issues/39
@@ -3168,8 +3285,7 @@ function replaceWithLagless(tab) {
 	tab = tab || currentTab;
 	let laglessCanvas;
 	if (tab == "#lagless1") {
-		socket.emit("joinLagless1");
-		socket2.emit("join", "viewers");
+		socket2.emit("join", "lagless1");
 		
 		$("#videoCanvas1")[0].style.display = "";
 		$("#twitchVideo").remove();
@@ -3178,7 +3294,7 @@ function replaceWithLagless(tab) {
 	}
 	
 	if (tab == "#lagless2") {
-		socket.emit("joinLagless2");
+		socket.emit("join", "lagless2");
 		player.play();
 		
 		$("#videoCanvas2")[0].style.display = "";
@@ -3198,7 +3314,7 @@ function replaceWithLagless(tab) {
 	}
 	
 	if (tab == "#lagless4") {
-		socket.emit("joinLagless4");
+		socket.emit("join", "lagless4");
 // 		player4.play();
 		
 		$("#videoCanvas4")[0].style.display = "";
@@ -3207,7 +3323,7 @@ function replaceWithLagless(tab) {
 	}
 	
 	if (tab == "#lagless5") {
-		socket.emit("joinLagless5");
+		socket.emit("join", "lagless5");
 		player.play();
 		
 		$("#videoCanvas5")[0].style.display = "";
@@ -3632,7 +3748,7 @@ socket.on("controlQueues", function(data) {
 			}
 		}
 		
-		$(window).trigger("resize.fittext");
+// 		$(window).trigger("resize.fittext");
 	}
 	
 });
@@ -3795,7 +3911,7 @@ socket.on("turnTimesLeft", function(data) {
 		let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
 		let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
 		
-		let n = i+1;
+		let n = i + 1;
 		
 		if (controlQueues[i][0] == null) {
 			$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
@@ -3811,7 +3927,7 @@ socket.on("turnTimesLeft", function(data) {
 	
 	if(viewersChanged) {
 		
-		$(window).trigger("resize.fittext");
+// 		$(window).trigger("resize.fittext");
 		
 		// for each lagless tab
 		for (let i = 0; i < 4; i++) {
@@ -4207,6 +4323,12 @@ $("#navCheckbox").on("change", function() {
 /* TOGGLE DPAD SWAP @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 $("#dpadCheckbox").on("change", function() {
 	settings.dpadSwap = this.checked;
+	localforage.setItem("settings", JSON.stringify(settings));
+});
+
+/* TOGGLE 3DS CONFIG @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+$("#3DSCheckbox").on("change", function() {
+	settings.TDSConfig = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
@@ -5072,7 +5194,10 @@ socket.on("banlist", function(data) {
 });
 
 socket.on("banned", function(data) {
-	swal("You're banned (maybe only temporarily?)");
+	let alertMessage = $(".swal2-container")[0];
+	if (typeof alertMessage == "undefined") {
+		swal("You're banned (maybe only temporarily?)");
+	}
 });
 
 

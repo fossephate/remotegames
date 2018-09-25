@@ -92,11 +92,11 @@
 
 			let n = i+1;
 
-			if (data.usernames[i] == null) {
+			if (data.currentPlayers[i] == null) {
 				$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 				$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
 			} else {
-				$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.usernames[i] + ": " + timeLeftSec + " seconds");
+				$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(data.currentPlayers[i] + ": " + timeLeftSec + " seconds");
 				$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
 			}
 		}

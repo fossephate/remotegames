@@ -30,10 +30,10 @@
 				pieces.unshift('#');
 			}
 			pieces.unshift(element.tagName);
-			pieces.unshift(' > ');
+			pieces.unshift(" > ");
 		}
 
-		return pieces.slice(1).join('');
+		return pieces.slice(1).join("");
 	};
 
 	$.fn.getSelector = function(only_one) {
