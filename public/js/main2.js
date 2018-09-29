@@ -1,3 +1,30 @@
+
+require("../js/keymaster.js");
+// require("../js/gamepad.js");
+// let keycode = require("keycode");
+window.keycode = require("keycode");
+let textFitPercent = require("../js/textfitpercent.js");
+let tools = require("../js/tools.js");
+// rest of tools:
+String.prototype.replaceAll = function(search, replacement) {
+	let target = this;
+	return target.replace(new RegExp(search, "g"), replacement);
+};
+
+$.fn.sumHeights = function() {
+	let h = 0;
+	this.each(function() {
+		h += $(this).outerHeight();
+	});
+	return h;
+};
+$.fn.addUp = function(getter) {
+	return Array.prototype.reduce.call(this, function(a, b) {
+		return a + getter.call($(b));
+	}, 0);
+}
+
+
 let socket = io("https://twitchplaysnintendoswitch.com", {
 	path: "/8110/socket.io",
 	transports: ["websocket"],
@@ -107,13 +134,10 @@ let videoBufferSize = 256*1024;
 let audioBufferSize = 128*1024;
 
 let oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
-let stats = new Stats();
 let lagless1Port = 8001;
 let lagless2Port = 8002;
 let lagless3Port = 8003;
 let lagless4Port = 8004;
-stats.showPanel(0);// 0: fps, 1: ms, 2: mb, 3+: custom
-// document.body.appendChild(stats.dom);
 
 /* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 // check if on mobile
@@ -181,7 +205,7 @@ function getMeta(url, callback) {
 
 let gamepadCounter = 0;
 
-controller = {};
+let controller = {};
 controller.btns = {
 	up:				0,
 	down: 			0,
@@ -224,10 +248,10 @@ controller.reset = function() {
 
 controller.getState = function() {
 	
-	this.LStick.x = minmax(this.LStick.x, 0, 255);
-	this.LStick.y = minmax(this.LStick.y, 0, 255);
-	this.RStick.x = minmax(this.RStick.x, 0, 255);
-	this.RStick.y = minmax(this.RStick.y, 0, 255);
+	this.LStick.x = tools.minmax(this.LStick.x, 0, 255);
+	this.LStick.y = tools.minmax(this.LStick.y, 0, 255);
+	this.RStick.x = tools.minmax(this.RStick.x, 0, 255);
+	this.RStick.y = tools.minmax(this.RStick.y, 0, 255);
 	
 	if (isNaN(this.LStick.x)) {
 		this.LStick.x = restPos;
@@ -349,73 +373,6 @@ controller.inputState = function(state) {
 	this.RStick.y = entireState[4];	
 }
 
-// // prevent controllers from working when the checkbox is set to off:
-// for (let prop in controller.btns) {
-// 	Object.defineProperty(controller.btns, prop, {
-// 		set: function(val) {
-// 			if (settings.currentInputMode == "keyboard" && !settings.keyboardControls) {
-// 				return;
-// 			}
-// 			if (settings.currentInputMode == "controller" && !settings.controllerControls) {
-// 				return;
-// 			}
-// 			if (settings.currentInputMode == "touch" && !settings.touchControls) {
-// 				return;
-// 			}
-// 			this["_" + prop] = val;
-// 		}
-// 	});
-	
-// 	Object.defineProperty(controller.btns, prop, {
-// 		get: function() {
-// 			return this["_" + prop];
-// 		}
-// 	});
-// }
-
-// for (let prop in controller.LStick) {
-// 	Object.defineProperty(controller.LStick, prop, {
-// 		set: function(val) {
-// 			if (settings.currentInputMode == "keyboard" && !settings.keyboardControls) {
-// 				return;
-// 			}
-// 			if (settings.currentInputMode == "controller" && !settings.controllerControls) {
-// 				return;
-// 			}
-// 			if (settings.currentInputMode == "touch" && !settings.touchControls) {
-// 				return;
-// 			}
-// 			this["_" + prop] = val;
-// 		}
-// 	});
-// 	Object.defineProperty(controller.LStick, prop, {
-// 		get: function() {
-// 			return this["_" + prop];
-// 		}
-// 	});
-// }
-// for (let prop in controller.RStick) {
-// 	Object.defineProperty(controller.RStick, prop, {
-// 		set: function(val) {
-// 			if (settings.currentInputMode == "keyboard" && !settings.keyboardControls) {
-// 				return;
-// 			}
-// 			if (settings.currentInputMode == "controller" && !settings.controllerControls) {
-// 				return;
-// 			}
-// 			if (settings.currentInputMode == "touch" && !settings.touchControls) {
-// 				return;
-// 			}
-// 			this["_" + prop] = val;
-// 		}
-// 	});
-// 	Object.defineProperty(controller.RStick, prop, {
-// 		get: function() {
-// 			return this["_" + prop];
-// 		}
-// 	});
-// }
-
 
 controller.reset();
 
@@ -440,7 +397,7 @@ function sendControllerState() {
 		return;
 	}
 	
-	if (/*settings.currentInputMode == "keyboard" && */ ($("#keyboardSettings").data("bs.modal") || {})._isShown) {
+	if (($("#keyboardSettings").data("bs.modal") || {})._isShown) {
 		return;
 	}
 	
@@ -469,7 +426,7 @@ function sendControllerState() {
 		return;
 	}
 	
-	authCookie = getCookie("TwitchPlaysNintendoSwitch");
+	authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
 		swal({
 			title: "You need to login! Redirecting you now!",
@@ -507,7 +464,7 @@ function getKeyboardInput() {
 	if (!$("#keyboardControlsCheckbox")[0].checked) {
 		return;
 	}
-	authCookie = getCookie("TwitchPlaysNintendoSwitch");
+	authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
 		$("#keyboardControlsCheckbox").prop("checked", false).trigger("change");
 		swal({
@@ -765,8 +722,8 @@ function getMouseInput(e) {
 	controller.RStick.x = x;
 	controller.RStick.y = y;
 	
-	controller.RStick.x = minmax(controller.RStick.x, 0, 255);
-	controller.RStick.y = minmax(controller.RStick.y, 0, 255);
+	controller.RStick.x = tools.minmax(controller.RStick.x, 0, 255);
+	controller.RStick.y = tools.minmax(controller.RStick.y, 0, 255);
 }
 
 function getMouseInput2(e) {
@@ -1122,7 +1079,7 @@ function getGamepadInput() {
 	if (!$("#controllerControlsCheckbox")[0].checked) {
 		return;
 	}
-	authCookie = getCookie("TwitchPlaysNintendoSwitch");
+	authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
 		$("#controllerControlsCheckbox").prop("checked", false).trigger("change");
 		swal({
@@ -1334,7 +1291,7 @@ $(document).ready(function() {
 		$(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
 		
 		/* AUTH  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		authCookie = getCookie("TwitchPlaysNintendoSwitch");
+		authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 		if (authCookie != null) {
 			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
 			socket.emit("registerAccount", {auth: authCookie, usernameIndex: settings.usernameIndex});
@@ -1443,7 +1400,8 @@ $(document).ready(function() {
 			resizers[i].resize();
 		}
 		
-		setTimeout(resizeChat, 2000);
+// 		setTimeout(resizeChat, 2000);
+		
 		
 		// wait a little longer so the joycon images load:
 		setTimeout(function() {
@@ -1465,252 +1423,49 @@ $(document).ready(function() {
 });
 
 
-$("#keyboard li").on("click", function(event) {
-	if ($(this).hasClass("keyDisabled")) {
-		return;
-	}
-	
-	let keyCode;
-	keyCode = $(this).attr("id");
-// 	console.log(keyCode);
-	
-	let that = this;
-	
-	// if we decide to select a new key to pair after selecting a different one, re-pair the original key:
-	if (keyboardLayout.tempSelectedKey !== "" && keyboardLayout.tempSelectedKey != $(that).attr("id")) {
-		keyboardLayout.tempSelectedKey = keyboardLayout.tempSelectedKey.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
-		
-		let element = $("#" + keyboardLayout.tempSelectedKey);
-		if (element.hasClass("keySelected")) {
-			element.removeClass("keySelected");
-		}
-		if (keyboardLayout.tempSelectedAction !== "") {
-			element.addClass("keyPaired");
-			element.attr("data-toggle", "tooltip");
-			element.attr("title", keyboardLayout.tempSelectedAction);
-			element.tooltip();
-			
-			let action = $("#" + keyboardLayout.tempSelectedAction);
-			action.attr("title", element.attr("id"));
-			action.tooltip();
-			action.addClass("actionPaired");
-		}
-		
-		keyboardLayout.tempSelectedKey = "";
-		keyboardLayout.tempSelectedAction = "";
-		
-// 		// new key has been selected:
-// 		if ($(that).hasClass("keyPaired")) {
-// 			$(that).removeClass("keyPaired");
-// 		}
-		
-// 		$(that).addClass("keySelected");
-// 		keyboardLayout.tempSelectedKey = $(that).attr("id");
-// 		return;
-	}
-	
-	
-	// if it's already paired, unpair it:
-	if ($(that).hasClass("keyPaired")) {
-		$(that).removeClass("keyPaired");
-		$(that).addClass("keySelected");
-		// store pair:
-		keyboardLayout.tempSelectedAction = $(that).attr("data-original-title") || $(that).attr("title");
-		keyboardLayout.tempSelectedKey = $(that).attr("id");
-		// delete pair:
-		$(that).attr("title", "");
-		try {
-			$(that).tooltip("dispose");
-			$(that).tooltip("destroy");
-		} catch(e) {}
-		
-		let action = $("#" + keyboardLayout.tempSelectedAction);
-		action.attr("title", "");
-		try {
-			action.tooltip("dispose");
-			action.tooltip("destroy");
-		} catch(e) {}
-		action.removeClass("actionPaired");
-		
-		keyboardLayout[keyboardLayout.tempSelectedAction] = "";
-// 		console.log("remapping old key");
-	} else {
-		// new key has been selected:
-		$(that).addClass("keySelected");
-		keyboardLayout.tempSelectedKey = $(that).attr("id");
-// 		console.log("new key");
-	}
-
-// 	swal("test");
-// 	$(this).addClass("keySelected");
-	//$("#dataTable").attr('data-timer')
-});
-
-
-
-$("#keyboardConfigCodes2 li").on("click", function(event) {
-// 	if (keyboardLayout.tempSelectedAction == "") {
-// 		return;
-// 	}
-	
-	let action = $(this).attr("id");
-	
-	// if this action is not already bound:
-	if (keyboardLayout.tempSelectedKey !== "" && keyboardLayout[action] === "") {
-		
-		keyboardLayout[action] = keyboardLayout.tempSelectedKey;
-		
-		keyboardLayout.tempSelectedKey = keyboardLayout.tempSelectedKey.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
-		
-		
-		if (!$(this).hasClass("actionPaired")) {
-			$(this).addClass("actionPaired");
-		}
-		$(this).attr("data-toggle", "tooltip");
-		$(this).attr("title", keyboardLayout.tempSelectedKey);
-		$(this).tooltip();
-		
-		// update key as well:
-		let element = $("#" + keyboardLayout.tempSelectedKey);
-		element.addClass("keyPaired");
-		element.attr("data-toggle", "tooltip");
-		element.attr("title", action);
-		element.tooltip();
-		
-		keyboardLayout.tempSelectedKey = "";
-		keyboardLayout.tempSelectedAction = "";
-	
-	}
-	// unbind:
-// 	} else if ($(this).attr("data-original-title") !== "") {
-		
-// 		keyboardLayout[action] = "";
-		
-// 		// unbind key as well:
-// 		let element = $("#" + $(this).attr("title"));
-// 		element.removeClass("keyPaired");
-// 		element.attr("title", "");
-// 		try {
-// 			element.tooltip("dispose");
-// 			element.tooltip("destroy");
-// 		} catch(e) {}
-		
-// 		$(this).attr("title", "");
-// 		$(this).removeClass("actionPaired");
-// 		try {
-// 			$(this).tooltip("dispose");
-// 			$(this).tooltip("destroy");
-// 		} catch(e) {}
-		
-// 		keyboardLayout.tempSelectedKey = "";
-// 		keyboardLayout.tempSelectedAction = "";
-// 		setKeyboardMapperClasses();
-// 	}
-	
-	
-	
-});
-
 function setKeyboardMapperClasses() {
+
 	
-	$("#keyboard li").removeClass("keyPaired");
-	$("#keyboard li").removeClass("keySelected");
-// 	$("#keyboard li").tooltip("destroy");
-	try {
-		$("#keyboard li").tooltip("dispose");
-		$("#keyboard li").tooltip("destroy");
-	} catch(e) {}
-	$("#keyboardConfigCodes2 li").removeClass("actionPaired");
-	$("#keyboardConfigCodes2 li").removeClass("actionSelected");
-// 	$("#keyboardConfigCodes2 li").tooltip("destroy");
-	try {
-		$("#keyboardConfigCodes2 li").tooltip("dispose");
-		$("#keyboardConfigCodes2 li").tooltip("destroy");
-	} catch(e) {}
-
-	for (let key in keyboardLayout) {
-		let prop = keyboardLayout[key];
-		prop = prop.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
-
-		if (prop === "") {
-			continue;
-		}
-
-		let element = $("#" + prop);
-		element.addClass("keyPaired");
-
-		element.attr("data-toggle", "tooltip");
-		element.attr("title", key);
-		element.tooltip();
-	}
-
-	for (let key in keyboardLayout) {
-		let prop = keyboardLayout[key];
-		prop = prop.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
-		if (key == "tempSelectedAction" || key == "tempSelectedKey") {
-			continue;
-		}
-
-// 		console.log(key);
-
-		let element = $("#" + key);
-		element.addClass("actionPaired");
-
-		element.attr("data-toggle", "tooltip");
-		element.attr("title", prop);
-		element.tooltip();
-	}
 }
+
+$("#keyboard li").on("click", function(event) {
+	
+});
+
+// https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
+
+function keyDownHandler(event) {
+	
+	keyDownHandler.element = keyDownHandler.element || "";
+	
+	let keyString = keycode(event);
+	keyDownHandler.element.text(keyString);
+	
+	let buttonKey = keyDownHandler.element.attr("id").slice(0, -3);
+	keyboardLayout[buttonKey] = keyString;
+	
+	
+	
+	document.removeEventListener("keydown", keyDownHandler, false);
+}
+
+
+$("#keyboardConfigKeys li").on("click", function(event) {
+	
+	let self = $(this);
+	
+	$(this).effect("highlight", {}, 2000);
+	
+	document.removeEventListener("keydown", keyDownHandler, false);
+	document.addEventListener("keydown", keyDownHandler, false);
+	
+	keyDownHandler.element = self;
+});
+
+
 
 $("#resetBindings").on("click", function(event) {
 	
-	$("#keyboard li").removeClass("keyPaired");
-	$("#keyboard li").removeClass("keySelected");
-// 	$("#keyboard li").tooltip("destroy");
-	try {
-		$("#keyboard li").tooltip("dispose");
-		$("#keyboard li").tooltip("destroy");
-	} catch(e) {}
-
-	$("#keyboardConfigCodes2 li").removeClass("actionPaired");
-	$("#keyboardConfigCodes2 li").removeClass("actionSelected");
-// 	$("#keyboardConfigCodes2 li").tooltip("destroy");
-	try {
-		$("#keyboardConfigCodes2 li").tooltip("dispose");
-		$("#keyboardConfigCodes2 li").tooltip("destroy");
-	} catch(e) {}
-	
-	keyboardLayout.tempSelectedAction = "";
-	keyboardLayout.tempSelectedKey = "";
-	
-	for (let key in keyboardLayout) {
-		let prop = keyboardLayout[key];
-		prop = prop.replace(/([ #;&,.+*~\':"!^$[\]()=>|\/@])/g,'\\$1');
-		if (key == "tempSelectedAction" || key == "tempSelectedKey") {
-			continue;
-		}
-		if (prop === "") {
-			continue;
-		}
-		
-// 		console.log(key);
-// 		console.log(prop);
-		
-		keyboardLayout[key] = "";
-		
-		let element;
-		element = $("#" + key);
-		element.removeClass("actionPaired");
-// 		if (element.attr("data-original-title")) {
-// 			element.tooltip("destroy");
-// 		}
-		
-		element = $("#" + prop);
-		element.removeClass("keyPaired");
-// 		if (element.attr("data-original-title")) {
-// 			element.tooltip("destroy");
-// 		}
-	}
 });
 
 $("#defaultBindings").on("click", function(event) {
@@ -1883,13 +1638,13 @@ function setVideoWidth(width) {
 }
 
 function resizeChat() {
-	let height = 0;
-	height += $(".videoCanvas").addUp($.fn.outerHeight);
-// 	height += $(".laglessBar").addUp($.fn.outerHeight);
-	height += ($("#navTabs").outerHeight());
-	height -= ($("#loggedInContainer").outerHeight());
-	height += 10;// adjust
-	$("#chat").height(height);
+// 	let height = 0;
+// 	height += $(".videoCanvas").addUp($.fn.outerHeight);
+// // 	height += $(".laglessBar").addUp($.fn.outerHeight);
+// 	height += ($("#navTabs").outerHeight());
+// 	height -= ($("#loggedInContainer").outerHeight());
+// 	height += 10;// adjust
+// 	$("#chat").height(height);
 }
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -1964,7 +1719,7 @@ function getTouchInput() {
 	if (!$("#touchControlsCheckbox")[0].checked) {
 		return;
 	}
-// 	authCookie = getCookie("TwitchPlaysNintendoSwitch");
+// 	authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 // 	if (authCookie == null) {
 // 		$("#touchControlsCheckbox").prop("checked", false).trigger("change");
 // 		swal({
@@ -2201,7 +1956,7 @@ socket.on("usernameMap", function(data) {
 });
 
 $("#logout").on("click", function(event) {
-	deleteAllCookies();
+	tools.deleteAllCookies();
 	location.reload(true);
 });
 
@@ -2216,7 +1971,7 @@ $(document).on("click", ".username-dropdown-item", function(event) {
 socket.on("needToSignIn", function() {
 	swal("You need to sign in!");
 	setTimeout(function() {
-		deleteAllCookies();
+		tools.deleteAllCookies();
 		location.reload(true);
 	}, 1000);
 });
@@ -2319,7 +2074,7 @@ $("#lagless1Volume").slider({
 	range: "min",
 	animate: true,
 	slide: function(event, ui) {
-		slideSliders(laglessNumber, ui);
+		slideSliders(1, ui);
   	}
 });
 
@@ -2735,7 +2490,6 @@ videoCanvas1.width = 1280;
 videoCanvas1.height = 720;
 
 socket2.on("viewImage", function(data) {
-	stats.begin();
 	let src = "data:image/jpeg;base64," + data;
 	if(src == "data:image/jpeg;base64,") {
 		socket.emit("restart");
@@ -2757,7 +2511,6 @@ socket2.on("viewImage", function(data) {
 		videoCanvas1Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
 	};
 	image.src = src;
-	stats.end();
 });
 $("#lagless1Refresh").on("click", function() {
 	socket.emit("restart1");
@@ -2772,7 +2525,6 @@ let canvas2 = $("#videoCanvas2")[0];
 // let player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
 // player.maxAudioLag = 0.5;
 // player.stop();
-// player.stats = stats;
 
 function resizeVideo2(scale) {
 	let w = 960;
@@ -2811,7 +2563,6 @@ let canvas3 = $("#videoCanvas3")[0];
 // Create h264 player
 let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
-wsavc.stats = stats;
 
 
 $("#lagless3Refresh").on("click", function() {
@@ -2866,7 +2617,6 @@ videoCanvas5.width = 1280;
 videoCanvas5.height = 720;
 
 socket2.on("viewImage5", function(data) {
-	stats.begin();
 	let src = "data:image/jpeg;base64," + data;
 	if(src == "data:image/jpeg;base64,") {
 		console.log("image was empty");
@@ -2889,7 +2639,6 @@ socket2.on("viewImage5", function(data) {
 		videoCanvas5Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
 	};
 	image.src = src;
-	stats.end();
 });
 
 /* RESIZABLE */
@@ -3184,7 +2933,11 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 $(window).resize(function(event) {
 	resizeChat();
 	if (!settings.fullscreen && !settings.largescreen) {
-		setVideoWidth(73.2);
+		try {
+			setVideoWidth(73.2);
+		} catch (error) {
+			console.log(error);
+		}
 	}
 // 	if (resizeAvailable) {
 		resizeAvailable = false;
@@ -4169,9 +3922,14 @@ $("#darkThemeCheckbox").on("change", function() {
 		icon.removeClass("glyphicon-fire");
 		icon.addClass("glyphicon-certificate");
 		
-		$(".well").each(function() {
-			$(this).removeClass("well");
-			$(this).addClass("well-dark");
+		$(".light").each(function() {
+			$(this).removeClass("light");
+			$(this).addClass("dark");
+		});
+		
+		$(".otborder").each(function() {
+			$(this).removeClass("otborder");
+			$(this).addClass("otborder-dark");
 		});
 		
 		$(".list-group-item").each(function() {
@@ -4189,13 +3947,19 @@ $("#darkThemeCheckbox").on("change", function() {
 		$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
 		
 	} else {
+		
 		let icon = $(".glyphicon-certificate");
 		icon.removeClass("glyphicon-certificate");
 		icon.addClass("glyphicon-fire");
 		
-		$(".well-dark").each(function() {
-			$(this).removeClass("well-dark");
-			$(this).addClass("well");
+		$(".dark").each(function() {
+			$(this).removeClass("dark");
+			$(this).addClass("light");
+		});
+		
+		$(".otborder-dark").each(function() {
+			$(this).removeClass("otborder-dark");
+			$(this).addClass("otborder");
 		});
 		
 		$(".list-group-item-dark").each(function() {
@@ -4209,6 +3973,7 @@ $("#darkThemeCheckbox").on("change", function() {
 		});
 		
 		$("body").removeClass("dark");
+// 		$("body").addClass("light");
 		
 		$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
 	}
@@ -4220,6 +3985,8 @@ $("#fullscreenCheckbox").on("change", function() {
 	settings.fullscreen = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.fullscreen) {
+		
+		$("#picture").css("width", "100%");
 		$(".videoCanvas").css("width", "100%");
 		$(".videoCanvas").css("margin-left", "0");
 		$(".laglessContainer").css("padding-left", "0");
@@ -4243,11 +4010,12 @@ $("#fullscreenCheckbox").on("change", function() {
 		$("body").addClass("hideScrollbar");
 		$(document).scrollTop(0);
 		
-		toggleFullScreen($("body")[0]);
+		tools.toggleFullScreen($("body")[0]);
 		
 	} else {
-		$(".videoCanvas").css("width", "100%");
-		$(".videoCanvas").css("margin-left", "0");
+		$("#picture").css("width", "");
+// 		$(".videoCanvas").css("width", "100%");
+// 		$(".videoCanvas").css("margin-left", "0");
 		$(".laglessContainer").css("padding-left", "");
 		$(".laglessContainer").css("padding-right", "");
 		
@@ -4354,10 +4122,10 @@ $("#hideChatCheckbox").on("change", function() {
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.hideChat) {
 		$("#chatContainer")[0].style.display = "none";
-// 		$("#picture").attr("style", "width: 100%;");
+		$("#picture").css("width", "100%");
 	} else {
 		$("#chatContainer")[0].style.display = "";
-// 		$("#picture").attr("style", "width: 75%;");
+		$("#picture").css("width", "");
 	}
 });
 
@@ -4485,11 +4253,11 @@ socket.on("controllerState1", function(data) {
 	let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
 	
 	let max = 120;
-	LMagnitude = minmax(LMagnitude, -max, max);
-	RMagnitude = minmax(RMagnitude, -max, max);
+	LMagnitude = tools.minmax(LMagnitude, -max, max);
+	RMagnitude = tools.minmax(RMagnitude, -max, max);
 	
-	let LStick = normalizeVector({x: LX, y: LY}, LMagnitude);
-	let RStick = normalizeVector({x: RX, y: RY}, RMagnitude);
+	let LStick = tools.normalizeVector({x: LX, y: LY}, LMagnitude);
+	let RStick = tools.normalizeVector({x: RX, y: RY}, RMagnitude);
 	
 	LX = parseInt(LStick.x * scale);
 	LY = parseInt(LStick.y * scale);

@@ -1,6 +1,6 @@
 
 
-let resizePercent = function(mySettings) {
+function resizePercent(mySettings) {
 	
 	this.textSettings = mySettings;
 	
@@ -84,10 +84,10 @@ let resizePercent = function(mySettings) {
 		
 	}
 
-};
+}
 
-
-let textFitPercent = function(options) {
+// textFitPercent
+module.exports = function (options) {
 	// Setup options
 	let textSettings = $.extend({
 		"selector": null,
@@ -107,4 +107,4 @@ let textFitPercent = function(options) {
 	
 	return myResizePercent;
 	
-};
+}

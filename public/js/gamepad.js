@@ -6,7 +6,7 @@
  * Released under the MIT license.
  */
 
-(function() {
+// (function() {
 
 	'use strict';
 
@@ -531,4 +531,4 @@
 
 	}
 
-}());
+// }());

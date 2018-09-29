@@ -5,7 +5,6 @@ const io = require("socket.io")(server);
 const port = 8110;
 
 const crypto = require("crypto");
-const cryptr = require("cryptr");
 const util = require("util");
 const fs = require("fs");
 const now = require("performance-now");
@@ -27,27 +26,23 @@ const bluebird = require("bluebird");
 const redis = require("redis");
 bluebird.promisifyAll(redis);
 
+const mongodb = require("mongodb");
+
 const _ = require("lodash");
 
 const TWITCH_CLIENT_ID		= config.TWITCH_CLIENT_ID;
 const TWITCH_CLIENT_SECRET	= config.TWITCH_CLIENT_SECRET;
 const TWITCH_CALLBACK_URL	= config.TWITCH_CALLBACK_URL;
-
 const YOUTUBE_CLIENT_ID		= config.YOUTUBE_CLIENT_ID;
 const YOUTUBE_CLIENT_SECRET	= config.YOUTUBE_CLIENT_SECRET;
 const YOUTUBE_CALLBACK_URL	= config.YOUTUBE_CALLBACK_URL;
-
 const GOOGLE_CLIENT_ID		= config.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET	= config.GOOGLE_CLIENT_SECRET;
 const GOOGLE_CALLBACK_URL	= config.GOOGLE_CALLBACK_URL;
-
 const DISCORD_CLIENT_ID		= config.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET	= config.DISCORD_CLIENT_SECRET;
 const DISCORD_CALLBACK_URL	= config.DISCORD_CALLBACK_URL;
-
 const SESSION_SECRET = config.SESSION_SECRET;
-
-let encrypter = new cryptr(config.ENCRYPT_SECRET);
 
 let lagless1Settings = {
 	x1: 319 - 1920,

@@ -1,9 +1,9 @@
 //     keymaster.js
 //     (c) 2011-2013 Thomas Fuchs
 //     keymaster.js may be freely distributed under the MIT license.
-var wasPressed = [];
-;
-(function(global) {
+// var wasPressed = [];
+
+// (function(global) {
 	var k,
 		_handlers = {},
 		_mods = {
@@ -356,4 +356,4 @@ var wasPressed = [];
 
 	if (typeof module !== 'undefined') module.exports = assignKey;
 
-})(this);
+// })(this);

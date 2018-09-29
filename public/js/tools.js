@@ -1,4 +1,10 @@
-function getCookie(name) {
+
+
+
+
+
+
+exports.getCookie = function(name) {
 	let dc = document.cookie;
 	let prefix = name + "=";
 	let begin = dc.indexOf("; " + prefix);
@@ -16,9 +22,9 @@ function getCookie(name) {
 	// because unescape has been deprecated, replaced with decodeURI
 	//return unescape(dc.substring(begin + prefix.length, end));
 	return decodeURI(dc.substring(begin + prefix.length, end));
-}
+};
 
-function setCookie(name, value, seconds) {
+exports.setCookie = function(name, value, seconds) {
 	let expires = "";
 	if (seconds) {
 		let date = new Date();
@@ -26,9 +32,9 @@ function setCookie(name, value, seconds) {
 		expires = "; expires=" + date.toUTCString();
 	}
 	document.cookie = name + "=" + (value || "") + expires + "; path=/";
-}
+};
 
-function minmax(num, min, max) {
+exports.minmax = function(num, min, max) {
 	if (num < min) {
 		return min;
 	} else if (num > max) {
@@ -36,19 +42,14 @@ function minmax(num, min, max) {
 	} else {
 		return num;
 	}
-}
-
-function round(value, precision) {
-	let multiplier = Math.pow(10, precision || 0);
-	return Math.round(value * multiplier) / multiplier;
-}
-
-String.prototype.replaceAll = function(search, replacement) {
-	let target = this;
-	return target.replace(new RegExp(search, "g"), replacement);
 };
 
-function msToTime(duration) {
+exports.round = function(value, precision) {
+	let multiplier = Math.pow(10, precision || 0);
+	return Math.round(value * multiplier) / multiplier;
+};
+
+exports.msToTime = function(duration) {
 	// 	var milliseconds = parseInt((duration % 1000) / 100);
 	let milliseconds = parseInt((((duration / 1000) % 60) % 1) * 1000);
 	let seconds = parseInt((duration / 1000) % 60);
@@ -75,7 +76,7 @@ function msToTime(duration) {
 	return time;
 }
 
-function toggleFullScreen(elem) {
+exports.toggleFullScreen = function(elem) {
 	// ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
 	if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
 		if (elem.requestFullScreen) {
@@ -100,7 +101,7 @@ function toggleFullScreen(elem) {
 	}
 }
 
-function setToPercentParent(elem, percent) {
+exports.setToPercentParent = function(elem, percent) {
 	$(elem).height(0);
 	let parentHeight = $(elem).parent().height();
 	let newHeight = (percent / 100) * parentHeight;
@@ -108,7 +109,7 @@ function setToPercentParent(elem, percent) {
 }
 
 // like sleep, but worse:
-function wait(ms) {
+exports.wait = function(ms) {
 	var start = new Date().getTime();
 	var end = start;
 	while (end < start + ms) {
@@ -117,7 +118,7 @@ function wait(ms) {
 }
 
 // brings number closer to target by accel
-function mathZoom(current, target, accel) {
+exports.mathZoom = function(current, target, accel) {
 	if (current == target) {
 		return current;
 	}
@@ -132,7 +133,7 @@ function mathZoom(current, target, accel) {
 }
 
 
-function normalizeVector(vector, scale) {
+exports.normalizeVector = function(vector, scale) {
 	let norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 	if (norm !== 0) {
 		vector.x = scale * vector.x / norm;
@@ -141,38 +142,13 @@ function normalizeVector(vector, scale) {
 	return vector;
 }
 
-// function normalizeVector(p, len) {
-// 	if((p.x === 0 && p.y === 0) || len === 0) {
-// 		return {x: 0, y: 0};
-// 	}    
-// 	let angle = Math.atan2(p.y, p.x);
-// 	let nx = Math.cos(angle) * len;
-// 	let ny = Math.sin(angle) * len;
-// 	return {x:nx, y:ny};
-// }
-
-function abs(n) {
+exports.abs = function(n) {
 	return Math.abs(n);
 }
 
-// jquery sum heights:
-(function($) {
-	$.fn.sumHeights = function() {
-		let h = 0;
-		this.each(function() {
-			h += $(this).outerHeight();
-		});
-		return h;
-	};
-	$.fn.addUp = function(getter) {
-		return Array.prototype.reduce.call(this, function(a, b) {
-			return a + getter.call($(b));
-		}, 0);
-	}
-})(jQuery);
-
 // delete all cookies:
-function deleteAllCookies() {
+exports.deleteAllCookies = function() {
+	
 	let cookies = document.cookie.split(";");
 
 	for (let i = 0; i < cookies.length; i++) {
@@ -182,3 +158,23 @@ function deleteAllCookies() {
 		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 	}
 }
+
+
+// String.prototype.replaceAll = function(search, replacement) {
+// 	let target = this;
+// 	return target.replace(new RegExp(search, "g"), replacement);
+// };
+
+// $.fn.sumHeights = function() {
+// 	let h = 0;
+// 	this.each(function() {
+// 		h += $(this).outerHeight();
+// 	});
+// 	return h;
+// };
+// $.fn.addUp = function(getter) {
+// 	return Array.prototype.reduce.call(this, function(a, b) {
+// 		return a + getter.call($(b));
+// 	}, 0);
+// }
+
