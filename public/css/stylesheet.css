@@ -228,13 +228,14 @@ margin-right: auto; */
 }
 
 #loggedInStatus {
-	width: 70%;
+	width: 100%;
 	border-radius: 4px;
 	text-align: center;
 	display: flex;
 	justify-content: center;
 	/* 	overflow-x: hidden; */
 	overflow-y: visible;
+	margin: 5px;
 }
 
 #loggedInContainer {
@@ -323,7 +324,7 @@ margin-right: 5px; */
 #googleConnectButton {
 	display: flex;
 	justify-content: space-evenly;
-	background: white;
+/* 	background: white; */
 	color: #444;
 	/* 	width: 80px; */
 	width: 75px;
@@ -342,7 +343,7 @@ span.googleLabel {
 }
 
 span.googleIcon {
-	background: url(/images/g-normal.png) transparent 0px 50% no-repeat;
+	background: url(/images/g-transparent.png) transparent 0px 50% no-repeat;
 	width: 32px;
 	height: 32px;
 }

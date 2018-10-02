@@ -5,6 +5,8 @@ const io = require("socket.io")(server);
 const port = 8110;
 
 const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+
 const util = require("util");
 const fs = require("fs");
 const now = require("performance-now");
@@ -13,8 +15,8 @@ const session = require("express-session");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
 const twitchStrategy = require("passport-twitch").Strategy;
-const youtubeV3Strategy = require("passport-youtube-v3").Strategy;
 const googleStrategy = require("passport-google-oauth20").Strategy;
+const youtubeV3Strategy = require("passport-youtube-v3").Strategy;
 const discordStrategy = require("passport-discord").Strategy;
 
 const request = require("request");
@@ -27,22 +29,26 @@ const redis = require("redis");
 bluebird.promisifyAll(redis);
 
 const mongodb = require("mongodb");
+const MongoClient = mongodb.MongoClient;
+const mongoose = require("mongoose");
+//Define a schema
+let Schema = mongoose.Schema;
 
 const _ = require("lodash");
 
 const TWITCH_CLIENT_ID		= config.TWITCH_CLIENT_ID;
 const TWITCH_CLIENT_SECRET	= config.TWITCH_CLIENT_SECRET;
 const TWITCH_CALLBACK_URL	= config.TWITCH_CALLBACK_URL;
-const YOUTUBE_CLIENT_ID		= config.YOUTUBE_CLIENT_ID;
-const YOUTUBE_CLIENT_SECRET	= config.YOUTUBE_CLIENT_SECRET;
-const YOUTUBE_CALLBACK_URL	= config.YOUTUBE_CALLBACK_URL;
 const GOOGLE_CLIENT_ID		= config.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET	= config.GOOGLE_CLIENT_SECRET;
 const GOOGLE_CALLBACK_URL	= config.GOOGLE_CALLBACK_URL;
+const YOUTUBE_CLIENT_ID		= config.YOUTUBE_CLIENT_ID;
+const YOUTUBE_CLIENT_SECRET	= config.YOUTUBE_CLIENT_SECRET;
+const YOUTUBE_CALLBACK_URL	= config.YOUTUBE_CALLBACK_URL;
 const DISCORD_CLIENT_ID		= config.DISCORD_CLIENT_ID;
 const DISCORD_CLIENT_SECRET	= config.DISCORD_CLIENT_SECRET;
 const DISCORD_CALLBACK_URL	= config.DISCORD_CALLBACK_URL;
-const SESSION_SECRET = config.SESSION_SECRET;
+const SESSION_SECRET		= config.SESSION_SECRET;
 
 let lagless1Settings = {
 	x1: 319 - 1920,
@@ -69,7 +75,6 @@ let lagless5Settings = {
 
 let lastImage = "";
 let clientDB;
-let localStorage;
 let clients = [];
 let channels = {};
 let restartAvailable = true;
@@ -127,6 +132,30 @@ let redisClient = redis.createClient({host : "localhost", port : 6379});
 let IDToUniqueMap = {};
 let uniqueIDToPreferredUsernameMap = {};
 
+let mongoURL = "mongodb://localhost:27017/tpnsDB";
+mongoose.connect(mongoURL);
+// Get Mongoose to use the global promise library
+mongoose.Promise = global.Promise;
+
+
+// get banned IPs:
+redisClient.getAsync("bannedIPs").then(function(dbBannedIPs) {
+	let dataBaseIPs;
+	if (dbBannedIPs == null) {
+		console.log("Creating IP DB.");
+		dataBaseIPs = bannedIPs;
+	} else {
+		dataBaseIPs = JSON.parse(dbBannedIPs);
+	}
+	bannedIPs = dataBaseIPs;
+	// re-stringify:
+	let dataBaseIPsString = JSON.stringify(dataBaseIPs);
+	// store back in database:
+	// store account at uniqueID location, at clients key:
+	redisClient.setAsync("bannedIPs", dataBaseIPsString).then(function(success) {
+		console.log("stored banned IPs: " + success);
+	});
+});
 
 function DataBaseClient() {
 	
@@ -179,194 +208,200 @@ function DataBaseClient() {
 	this.IPs = [];
 }
 
-function addAccount(profile, type) {
+let accountSchema = Schema({
+	
+// 	_id: Schema.Types.ObjectId,// created & initialized automatically
+	
+	email:			String,
+	username:		String,
+	password:		String,
+	
+	token:			String,
+	
+	connectedAccounts: [],
+	
+	// twitch:
+	twitch: {
+		id:					String,
+		accessToken:		String,
+		refreshToken:		String,
+		displayName:		String,
+		login:				String,
+		email:				String,
+		username:			String,
+		profile_image_url:	String,
+	},
+	
+	// google:
+	google: {
+		id:				String,
+		accessToken:	String,
+		refreshToken:	String,
+		displayName:	String,
+		familyName:		String,
+		givenName:		String,
+	},
+	
+	// youtube:
+	youtube: {
+		id:				String,
+		accessToken:	String,
+		refreshToken:	String,
+		displayName:	String,
+	},
+	
+	// discord:
+	discord: {
+		id:				String,
+		accessToken:	String,
+		refreshToken:	String,
+		email:			String,
+		username:		String,
+		discriminator:	String,
+	},
+	
+	// settings:
+	is_mod:			Boolean,
+	is_plus:		Boolean,
+	is_sub:			Boolean,
+	
+	is_ban:			Boolean,
+	is_perma_ban:	Boolean,
+	is_temp_ban:	Boolean,
+	
+	IPs: [],
+	
+});
+
+let Account = mongoose.model("Account", accountSchema);
+
+function connectAccount(account, profile, type) {
 	
 	// set the id, access, and refresh token for the type of account we've connected:
 	// universal:
-	this[type + "ID"]			= profile.id;
-	this[type + "AccessToken"]	= profile.accessToken;
-	this[type + "RefreshToken"]	= profile.refreshToken;
+	account[type].id			= profile.id;
+	account[type].accessToken	= profile.accessToken;
+	account[type].refreshToken	= profile.refreshToken;
 	
 	if (type == "twitch" || type == "google" || type == "youtube") {
-		this[type + "DisplayName"] = profile.displayName;
+		account[type].displayName = profile.displayName;
 	}
 	
 	// unique to each platform:
 	if (type == "twitch") {
-		this[type + "Login"]				= profile.login;
-		this[type + "Username"]				= profile.username;
-		this[type + "Profile_image_url"]	= profile.profile_image_url;
-		this[type + "Email"]				= profile.email;
 		
-		if (modlist.indexOf(this.twitchUsername) > -1) {
-			this.is_mod = true;
+		account[type].email				= profile.email;
+		account[type].login				= profile.login;
+		account[type].username			= profile.username;
+		account[type].profile_image_url	= profile.profile_image_url;
+		
+		
+		if (modlist.indexOf(account.twitch.username) > -1) {
+			account.is_mod = true;
 		}
-		if (pluslist.indexOf(this.twitchUsername) > -1) {
-			this.is_plus = true;
+		if (pluslist.indexOf(account.twitch.username) > -1) {
+			account.is_plus = true;
 		}
-		if (sublist.indexOf(this.twitchUsername) > -1) {
-			this.is_sub = true;
+		if (sublist.indexOf(account.twitch.username) > -1) {
+			account.is_sub = true;
 		}
 		
 	} else if (type == "google") {
-// 		this.displayName = profile.display_name;
-		this[type + "FamilyName"]	= profile.name.familyName;
-		this[type + "GivenName"]	= profile.name.givenName;
+		account[type].familyName	= profile.name.familyName;
+		account[type].givenName		= profile.name.givenName;
 	} else if (type == "youtube") {
 		
 	} else if (type == "discord") {
-		this[type + "Email"]			= profile.email;
-		this[type + "Username"]			= profile.username;
-		this[type + "Discriminator"]	= profile.discriminator;
+		account[type].email			= profile.email;
+		account[type].username		= profile.username;
+		account[type].discriminator	= profile.discriminator;
 	}
 	
 	// update connected accounts list:
-	if (this.connectedAccounts.indexOf(type) == -1) {
-		this.connectedAccounts.push(type);
+	if (account.connectedAccounts.indexOf(type) == -1) {
+		account.connectedAccounts.push(type);
 	}
 	
 }
 
 function updateOrCreateUser(profile, type, req) {
 	
-	let prefix = type + ":";
-// 	console.log("pass: " + req.session.uniqueIDMap);
-// 	console.log(util.inspect(req.auth.credentials, false, null));
-	
-	
-	if (req.session.uniqueIDMap != null) {	
+	// link to existing account:
+	if (req.session.uniqueToken != null) {
 		
-		let uniqueIDMap = req.session.uniqueIDMap;
-		// get the uniqueID:
-		redisClient.hgetAsync("clientMap", uniqueIDMap).then(function(data) {
-			if (data == null) {
-				console.log("something went wrong while getting the uniqueID_1.");
-				return;
+		// get account by token:
+		Account.findOne({"token": req.session.uniqueToken}).exec(function (error, account) {
+			
+			if (error) {
+				console.log(error);
+				throw error;
 			}
 			
-			let uniqueID = data;
-		
-			redisClient.hgetAsync("clients", uniqueID).then(function(data) {
-
-				if (data == null) {
-					console.log("something went wrong while getting the account.");
-					return;
-				}
-
-				// todo: not this:
-				IDToUniqueMap[prefix + profile.id] = uniqueID;
-
-				let dataBaseClient = JSON.parse(data);
-				// update account details:
-				dataBaseClient.addAccount = addAccount;
-				dataBaseClient.addAccount(profile, type);
-
-				console.log(dataBaseClient);
-
-				// re-stringify:
-				let dataBaseClientString = JSON.stringify(dataBaseClient);
-
-				// store back in database:
-				// store account at uniqueID location, at clients key:
-				redisClient.hsetAsync("clients", uniqueID, dataBaseClientString).then(function(success) {
-					console.log("success: " + success);
+			// account exists:
+			if (account) {
+				// update info:
+				connectAccount(account, profile, type);
+				// save:
+				account.save(function (err) {
+					if (err) {
+						console.log(err);
+						throw err;
+					}
+					console.log("account saved.");
 				});
-
-				return;
-			});
+			}
+			
+			if (!account) {
+				console.log("couldn't find account.");
+			}
 		});
 		
+		return;
 	}
 	
-// 	console.log(profile);
-	
-	// "twitch:"
-	let userMapLoc = profile.id;
-	
-	// check if the acccount exists already:
-	redisClient.hexistsAsync(prefix + "clientMap", userMapLoc).then(function(exist) {
+	// check if the acccount already exists:
+	let queryObj = {};
+	queryObj[type + "." + "id"] = profile.id;
+	Account.findOne(queryObj).exec(function (error, account) {
 		
-		if (!exist) {
-			
-			console.log("creating user.");
-			
-			// create the user & add account details:
-			let dataBaseClient = new DataBaseClient();
-			dataBaseClient.addAccount = addAccount;
-			dataBaseClient.addAccount(profile, type);
-			
-			// save client as a string to store:
-			let dataBaseClientString = JSON.stringify(dataBaseClient);
-			
-			// generate unique ID:
-			// https://stackoverflow.com/questions/51096273/how-do-i-synchronise-crypto-randombytes-function-of-crypto-module-in-node-js
-			// https://stackoverflow.com/questions/8855687/secure-random-token-in-node-js
-			// todo: async this:
-			let uniqueID = crypto.randomBytes(64).toString("hex");
-			
-			// todo: not this:
-			IDToUniqueMap[prefix + profile.id] = uniqueID;
-			
-			// store uniqueID in correct map for account type:
-			
-			redisClient.hsetAsync(prefix + "clientMap", userMapLoc, uniqueID).then(function(success) {
-				console.log("store uniqueID in clientmap: " + success);
-			});
-			
-			// store account at uniqueID location, in clients key:
-			redisClient.hsetAsync("clients", uniqueID, dataBaseClientString).then(function(success) {
-				console.log("store account at uniqueID in clients: " + success);
-			});
-			
-		} else {
-			
-			// the user already exists, update the user / add the account:
-			
-			console.log("user already exists.");
-			
-			// get the account's unique ID from the map:
-			redisClient.hgetAsync(prefix + "clientMap", userMapLoc).then(function(data) {
-				
-				if (data == null) {
-					console.log("something went wrong while getting uniqueID from map.");
-					return;
+		if (error) {
+			console.log(error);
+			throw error;
+		}
+		// account already exists:
+		if (account) {
+			console.log("account already exists, updating info.");
+			// update info:
+			connectAccount(account, profile, type);
+			// save:
+			account.save(function (err) {
+				if (err) {
+					console.log(err);
+					throw err;
 				}
-				
-				let uniqueID = data;
-				
-				redisClient.hgetAsync("clients", uniqueID).then(function(data) {
-					
-					
-					if (data == null) {
-						console.log("something trying to update an existing account");
-						return;
-					}
-					
-					// todo: not this:
-					IDToUniqueMap[prefix + profile.id] = uniqueID;
-					
-// 					console.log(JSON.parse(data));
-					let dataBaseClient = JSON.parse(data);
-					// update account details:
-					dataBaseClient.addAccount = addAccount;
-					dataBaseClient.addAccount(profile, type);
-					
-					// re-stringify:
-					let dataBaseClientString = JSON.stringify(dataBaseClient);
-					
-					// store back in database:
-					// store account at uniqueID location, at clients key:
-					redisClient.hsetAsync("clients", uniqueID, dataBaseClientString).then(function(success) {
-						console.log("success: " + success);
-					});
-					
-				});
-				
+				console.log("account saved.");
 			});
-			
 			
 		}
-		
+		// acount doesn't exist:
+		if (!account) {
+			console.log("creating account.");
+			
+			// create the user & add account details:
+			let newAccount = new Account();
+			
+			// add info:
+			connectAccount(newAccount, profile, type);
+			
+			// save the new instance:
+			newAccount.save(function (err) {
+				if (err) {
+					console.log(err);
+					throw err;
+				}
+				console.log("account saved.");
+			});
+		}
 	});
 	
 }
@@ -442,78 +477,95 @@ passport.deserializeUser(function(user, done) {
 
 // app.get("/auth/twitch/", passport.authenticate("twitch", {forceVerify: true}));
 app.get("/auth/twitch/", function (req, res, next) {
-	req.session.uniqueIDMap = req.query.uniqueIDMap;
+	req.session.uniqueToken = req.query.uniqueToken;
 	passport.authenticate("twitch", {forceVerify: true})(req, res, next);
 }, function(req, res) {});
 app.get("/auth/twitch/callback", passport.authenticate("twitch", {
-	successRedirect: "/8110/",
+	successRedirect: "/8110/redirect",
 	failureRedirect: "/",
 }));
 
 // app.get("/auth/google/", passport.authenticate("google"));
 app.get("/auth/google/", function (req, res, next) {
-	req.session.uniqueIDMap = req.query.uniqueIDMap;
+	req.session.uniqueToken = req.query.uniqueToken;
 	passport.authenticate("google")(req, res, next);
 }, function(req, res) {});
 app.get("/auth/google/callback", passport.authenticate("google", {
-	successRedirect: "/8110/",
+	successRedirect: "/8110/redirect",
 	failureRedirect: "/",
 }));
 
 // app.get("/auth/youtube/", passport.authenticate("youtube"));
 app.get("/auth/youtube/", function (req, res, next) {
-	req.session.uniqueIDMap = req.query.uniqueIDMap;
+	req.session.uniqueToken = req.query.uniqueToken;
 	passport.authenticate("youtube")(req, res, next);
 }, function(req, res) {});
 app.get("/auth/youtube/callback", passport.authenticate("youtube", {
-	successRedirect: "/8110/",
+	successRedirect: "/8110/redirect",
 	failureRedirect: "/",
 }));
 
 // app.get("/auth/discord/", passport.authenticate("discord"));
 app.get("/auth/discord/", function (req, res, next) {
-	req.session.uniqueIDMap = req.query.uniqueIDMap;
+	req.session.uniqueToken = req.query.uniqueToken;
 	passport.authenticate("discord")(req, res, next);
 }, function(req, res) {});
 app.get("/auth/discord/callback", passport.authenticate("discord", {
-	successRedirect: "/8110/",
+	successRedirect: "/8110/redirect",
 	failureRedirect: "/",
 }));
 
 
 // If user has an authenticated session, display it, otherwise display link to authenticate
-app.get("/", function(req, res) {
+app.get("/redirect", function(req, res) {
 	if (req.session && req.session.passport && req.session.passport.user) {
 		
 		console.log("setting cookie.");
 		
 		console.log(req.user);
 		
-		// get uniqueID from hack map:
-		let uniqueID = "";
-		let prefix = req.user.provider + ":";
 		
-		uniqueID = IDToUniqueMap[prefix + req.user.id];
+		// create a token that lets us access the account:
+		let token = crypto.randomBytes(64).toString("hex");
 		
-		// encrypt UniqueID:
-// 		let secret = config.HASH_SECRET;
-// 		let hashedUnique = crypto.createHmac("sha256", secret).update(uniqueID).digest("hex");
-// 		let encryptedUniqueID = encrypter.encrypt(uniqueID);
+		let type = req.user.provider;
+		let id = req.user.id;
 		
-		// create a "password" that lets us access the uniqueID:
-		let password = crypto.randomBytes(64).toString("hex");
-		// store uniqueID at password location, in clientMap key:
-		// clientMap[password] = uniqueID;
-		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
-		redisClient.hsetAsync("clientMap", password, uniqueID).then(function(success) {
-			console.log("password set: " + success);
+		// get account:
+		let queryObj = {};
+		queryObj[type + "." + "id"] = id;
+		
+		Account.findOne(queryObj).exec(function (error, account) {
+			
+			if (error) {
+				console.log(error);
+				throw error;
+			}
+			// account exists:
+			if (account) {
+				account.token = token;
+				// save:
+				account.save(function (err) {
+					if (err) {
+						console.log(err);
+						throw err;
+					}
+					console.log("account saved.");
+				});
+			}
+			// acount doesn't exist:
+			if (!account) {
+				console.log("account doesn't exist, something went wrong.");
+			}
+			
 		});
 		
-		res.cookie("TwitchPlaysNintendoSwitch", password, {
+		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
+		res.cookie("TwitchPlaysNintendoSwitch", token, {
 			maxAge: time,
 		});
 		
-		// set "password" to expire after 7 days:
+		// set token to expire after 7 days:
 		// todo: make expire:
 // 		redis.hexpireAsync("clientMap", password, (time / 1000)).then(function(success) {
 // 			console.log("set password to expire in 7 days: " + success);
@@ -523,6 +575,11 @@ app.get("/", function(req, res) {
 	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 });
 
+app.get("/deleteDB", function(req, res) {
+	console.log("deleting DB");
+	Account.remove({}, function(){});
+// 	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
+});
 
 
 app.get("/stats/", function(req, res) {});
@@ -718,8 +775,6 @@ io.on("connection", function(socket) {
 	let client = new Client(socket);
 	clients.push(client);
 	console.log("number of clients connected: " + clients.length);
-
-	
 	
 	socket.on("registerAccount", function(data) {
 		
@@ -727,39 +782,33 @@ io.on("connection", function(socket) {
 		if (index == -1) {
 			return;
 		}
-		
-		// get uniqueID:
-		redisClient.hgetAsync("clientMap", data.auth).then(function(uniqueID) {
+	
+		// get account by token:
+		Account.findOne({"token": data.auth}).exec(function (error, account) {
 			
-			if (uniqueID == null) {
-				console.log("Invalid password.");
-				socket.emit("needToSignIn");
-				return;
+			if (error) {
+				console.log(error);
+				throw error;
 			}
 			
-			redisClient.hgetAsync("clients", uniqueID).then(function(dbClient) {
-				if (dbClient == null) {
-					clients[index].username = null;
-					socket.emit("needToSignIn");
-					console.log("Invalid encrypted uniqueID.");
-					return;
-				}
-
-				let dataBaseClient = JSON.parse(dbClient);
+			// account exists:
+			if (account) {
+				
+// 				console.log("registering account.");
 				
 				clients[index].validUsernames = [];
 				
-				if (dataBaseClient.connectedAccounts.indexOf("discord") > -1) {
-					clients[index].validUsernames.push(dataBaseClient.discordUsername + "#" + dataBaseClient.discordDiscriminator);
+				if (account.connectedAccounts.indexOf("discord") > -1) {
+					clients[index].validUsernames.push(account.discord.username + "#" + account.discord.discriminator);
 				}
-				if (dataBaseClient.connectedAccounts.indexOf("twitch") > -1) {
-					clients[index].validUsernames.push(dataBaseClient.twitchUsername);
+				if (account.connectedAccounts.indexOf("twitch") > -1) {
+					clients[index].validUsernames.push(account.twitch.username);
 				}
-				if (dataBaseClient.connectedAccounts.indexOf("youtube") > -1) {
-					clients[index].validUsernames.push(dataBaseClient.youtubeDisplayName);
+				if (account.connectedAccounts.indexOf("youtube") > -1) {
+					clients[index].validUsernames.push(account.youtube.displayName);
 				}
-				if (dataBaseClient.connectedAccounts.indexOf("google") > -1) {
-					clients[index].validUsernames.push(dataBaseClient.googleDisplayName);
+				if (account.connectedAccounts.indexOf("google") > -1) {
+					clients[index].validUsernames.push(account.google.displayName);
 				}
 				
 				if (data.usernameIndex < clients[index].validUsernames.length) {
@@ -768,33 +817,37 @@ io.on("connection", function(socket) {
 					clients[index].username = clients[index].validUsernames[0];
 				}
 				
-				clients[index].uniqueID = uniqueID;
+				clients[index].uniqueID = "" + account._id;
+				clients[index].uniqueID = clients[index].uniqueID.trim();
 				
-				clients[index].is_mod	= dataBaseClient.is_mod;
-				clients[index].is_plus	= dataBaseClient.is_plus;
-				clients[index].is_sub	= dataBaseClient.is_sub;
-				clients[index].is_ban	= clients[index].is_ban || dataBaseClient.is_ban;
+				clients[index].is_mod	= account.is_mod;
+				clients[index].is_plus	= account.is_plus;
+				clients[index].is_sub	= account.is_sub;
+				clients[index].is_ban	= clients[index].is_ban || account.is_ban;
 				
 				
-				uniqueIDToPreferredUsernameMap[uniqueID] = clients[index].username;
+				uniqueIDToPreferredUsernameMap[clients[index].uniqueID] = clients[index].username;
 				
 				let accountInfo = {};
 				accountInfo.uniqueID = clients[index].uniqueID;
 				accountInfo.username = clients[index].username;
-				accountInfo.connectedAccounts = dataBaseClient.connectedAccounts;
+				accountInfo.connectedAccounts = account.connectedAccounts;
 				accountInfo.validUsernames = clients[index].validUsernames;
 				
 				socket.emit("accountInfo", accountInfo);
-			});
+			}
+			// acount doesn't exist:
+			if (!account) {
+				
+				console.log("account not found.");
+				
+				clients[index].username = null;
+				console.log("Invalid password.");
+				socket.emit("needToSignIn");
+				return;
+			}
 			
 		});
-		
-// 		if (typeof usernameDB[data] == "undefined") {
-// 			clients[index].username = null;
-// 			return;
-// 		}
-// 		clients[index].username = usernameDB[data];
-// 		socket.emit("twitchUsername", clients[index].username);
 	});
 
 	/* 2ND AUTH METHOD @@@@@@@@@@@@@@@@@@@@@*/
@@ -870,6 +923,7 @@ io.on("connection", function(socket) {
 		if (controlQueues[cNum].length === 0) {
 			return;
 		}
+		
 		if (client.uniqueID != controlQueues[cNum][0]) {
 			console.log("not the current player");
 			return;
@@ -1300,61 +1354,53 @@ io.on("connection", function(socket) {
 		}
 
 		// perma / IP ban:
-
-		redisClient.hgetAsync("clients", client.uniqueID).then(function(dbClient) {
-			if (dbClient == null) {
-				clients[index].username = null;
-				console.log("Invalid uniqueID?2.");
-				return;
+		
+		// get account:
+		Account.findById(client.uniqueID, function (error, account) {
+			if (error) {
+				console.log(error);
+				throw error;
 			}
-
-			let dataBaseClient = JSON.parse(dbClient);
-
-			dataBaseClient.is_ban = true;
-			dataBaseClient.is_perma_ban = true;
-
-
-			// update banned IP's:
-			redisClient.getAsync("bannedIPs", client.uniqueID).then(function(dbBannedIPs) {
-
-				let dataBaseIPs;
-
-				if (dbBannedIPs == null) {
-					console.log("Creating IP DB.");
-					dataBaseIPs = bannedIPs;
-				} else {
-					dataBaseIPs = JSON.parse(dbBannedIPs);
-				}
-
-				for (let i = 0; i < dataBaseClient.IPs.length; i++) {
-					if (dataBaseIPs.indexOf(dataBaseClient.IPs[i]) == -1) {
-						dataBaseIPs.push(dataBaseClient.IPs[i]);
+			// account exists:
+			if (account) {
+				// update info:
+				account.is_ban = true;
+				account.is_perma_ban = true;
+				
+				// update banned IP's:
+				redisClient.getAsync("bannedIPs").then(function(dbBannedIPs) {
+					let dataBaseIPs;
+					if (dbBannedIPs == null) {
+						console.log("Creating IP DB.");
+						dataBaseIPs = bannedIPs;
+					} else {
+						dataBaseIPs = JSON.parse(dbBannedIPs);
 					}
-				}
-
-				bannedIPs = dataBaseIPs;
-
-				// re-stringify:
-				let dataBaseIPsString = JSON.stringify(dataBaseIPs);
-
-				// store back in database:
-				// store account at uniqueID location, at clients key:
-				redisClient.setAsync("bannedIPs", dataBaseIPsString).then(function(success) {
-					console.log("stored banned IPs: " + success);
+					for (let i = 0; i < account.IPs.length; i++) {
+						if (dataBaseIPs.indexOf(account.IPs[i]) == -1) {
+							dataBaseIPs.push(account.IPs[i]);
+						}
+					}
+					bannedIPs = dataBaseIPs;
+					// re-stringify:
+					let dataBaseIPsString = JSON.stringify(dataBaseIPs);
+					// store back in database:
+					// store account at uniqueID location, at clients key:
+					redisClient.setAsync("bannedIPs", dataBaseIPsString).then(function(success) {
+						console.log("stored banned IPs: " + success);
+					});
 				});
-
-			});
-
-			// re-stringify:
-			let dataBaseClientString = JSON.stringify(dataBaseClient);
-
-			// store back in database:
-			// store account at uniqueID location, at clients key:
-			redisClient.hsetAsync("clients", uniqueID, dataBaseClientString).then(function(success) {
-				console.log("stored account: " + success);
-			});
-
+				
+				// save:
+				account.save(function (err) {
+					if (err) {
+						console.log(err);
+						throw err;
+					}
+				});
+			}
 		});
+		
 	});
 	
 	
@@ -1382,60 +1428,40 @@ io.on("connection", function(socket) {
 		client.is_perma_ban = false;
 
 		// unban:
-
-		redisClient.hgetAsync("clients", client.uniqueID).then(function(dbClient) {
-			if (dbClient == null) {
-				clients[index].username = null;
-				console.log("Invalid uniqueID?2.");
-				return;
-			}
-
-			let dataBaseClient = JSON.parse(dbClient);
-
-			dataBaseClient.is_ban = false;
-			dataBaseClient.is_perma_ban = false;
-
-
-			// update banned IP's:
-			redisClient.getAsync("bannedIPs", client.uniqueID).then(function(dbBannedIPs) {
-
-				let dataBaseIPs;
-
-				if (dbBannedIPs == null) {
-					console.log("Creating IP DB.");
-					dataBaseIPs = bannedIPs;
-				} else {
-					dataBaseIPs = JSON.parse(dbBannedIPs);
-				}
-
-				dataBaseIPs = dataBaseIPs.filter( function(el) {
-					return !dataBaseClient.IPs.includes(el);
-				});
-
-				bannedIPs = dataBaseIPs;
-
-				// re-stringify:
-				let dataBaseIPsString = JSON.stringify(dataBaseIPs);
-
-				// store back in database:
-				// store account at uniqueID location, at clients key:
-				redisClient.setAsync("bannedIPs", dataBaseIPsString).then(function(success) {
-					console.log("stored banned IPs: " + success);
-				});
-
-			});
-
-			// re-stringify:
-			let dataBaseClientString = JSON.stringify(dataBaseClient);
-
-			// store back in database:
-			// store account at uniqueID location, at clients key:
-			redisClient.hsetAsync("clients", uniqueID, dataBaseClientString).then(function(success) {
-				console.log("stored account: " + success);
-			});
-			
-		});
 		
+		// get account:
+		Account.findById(client.uniqueID, function (error, account) {
+			if (error) {
+				console.log(error);
+				throw error;
+			}
+			// account exists:
+			if (account) {
+				account.is_ban = false;
+				account.is_perma_ban = false;
+				// update banned IP's:
+				redisClient.getAsync("bannedIPs", client.uniqueID).then(function(dbBannedIPs) {
+					let dataBaseIPs;
+					if (dbBannedIPs == null) {
+						console.log("Creating IP DB.");
+						dataBaseIPs = bannedIPs;
+					} else {
+						dataBaseIPs = JSON.parse(dbBannedIPs);
+					}
+					dataBaseIPs = dataBaseIPs.filter( function(el) {
+						return !account.IPs.includes(el);
+					});
+					bannedIPs = dataBaseIPs;
+					// re-stringify:
+					let dataBaseIPsString = JSON.stringify(dataBaseIPs);
+					// store back in database:
+					// store account at uniqueID location, at clients key:
+					redisClient.setAsync("bannedIPs", dataBaseIPsString).then(function(success) {
+						console.log("stored banned IPs: " + success);
+					});
+				});
+			}
+		});
 	});
 	
 	socket.on("setTurnLength", function(data) {
@@ -1971,39 +1997,39 @@ io.on("connection", function(socket) {
 		}
 			
 		if (client.uniqueID == null) {
-			console.log("Not signed in.");
+			console.log("not signed in.");
 			return;
 		}
 		
 		// return if banned:
 		if (client.is_perma_banned || client.is_temp_banned) {
-			console.log("Not signed in.");
+			console.log("not signed in.");
 			return;
 		}
-
-		redisClient.hgetAsync("clients", client.uniqueID).then(function(dbClient) {
-			if (dbClient == null) {
-				clients[index].username = null;
-				console.log("Invalid uniqueID?.");
-				return;
+		
+		// get account:
+		Account.findById(client.uniqueID, function (error, account) {
+			if (error) {
+				console.log(error);
+				throw error;
 			}
-			
-			let dataBaseClient = JSON.parse(dbClient);
-			
-			if (dataBaseClient.IPs.indexOf(data.ip) == -1) {
-				dataBaseClient.IPs.push(data.ip);
+			// account exists:
+			if (account) {
+				// update info:
+				if (account.IPs.indexOf(data.ip) == -1) {
+					account.IPs.push(data.ip);
+				}
+				// save:
+				account.save(function (err) {
+					if (err) {
+						console.log(err);
+						throw err;
+					}
+				});
 			}
-			
-			// re-stringify:
-			let dataBaseClientString = JSON.stringify(dataBaseClient);
-
-			// store back in database:
-			// store account at uniqueID location, at clients key:
-			redisClient.hsetAsync("clients", client.uniqueID, dataBaseClientString).then(function(success) {
-				console.log("stored account: " + success);
-			});
-
 		});
+		
+		
 		
 	});
 	
@@ -2352,8 +2378,8 @@ setInterval(function() {
 
 // do every once in a while:
 setInterval(function() {
-// 	io.emit("banlist", banlist);
 	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
+	io.emit("bannedIPs", bannedIPs);
 }, 10000);
 
 function stream() {

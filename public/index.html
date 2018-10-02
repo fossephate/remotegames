@@ -28,8 +28,6 @@
 	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-
-	
 	
 	
 <!-- 	<script src="js/keymaster.js"></script> -->
@@ -110,7 +108,7 @@
 			</li>
 			<div id="statusContainer" class="otborder">
 				<i class="material-icons">lock_open</i>
-				<i class="material-icons">signal_wifi_off</i>
+<!-- 				<i class="material-icons">signal_wifi_off</i> -->
 			</div>
 		</ul>
 		
@@ -292,7 +290,6 @@
 			</div>
 
 			<div id="description">
-
 				
 				
 			</div>
@@ -301,7 +298,7 @@
 		
 		<div id="chatContainer" class="otborder">
 			<div id="loggedInContainer" class="otborder">
-				<div id="loggedInStatus">
+				<div id="loggedInStatus" class="otborder">
 					<div id="usernameDropdown" class="dropdown show">
 						<span class="align-self-center">Logged in as: </span>
 						<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="usernameDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -309,24 +306,25 @@
 						</a>
 						<div id="usernameDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
 					</div>
+					<button id="logout" class="btn btn-secondary">Logout</button>
 				</div>
-				<button id="logout" class="btn btn-secondary">Logout</button>
+				
 				<div id="loggedInIndicator">
 					<div id="connectWithTwitch" class="connectWithContainer">
-						<div id="connectWithTwitchButton" class="connectWithButton" href="/8110/auth/twitch/">
+						<div id="connectWithTwitchButton" class="connectWithButton">
 							<span id="connectWithTwitchText">Connect with</span>
 <!-- 							<img id="twitchLogo" src="https://ttv-api.s3.amazonaws.com/assets/connect_dark.png"> -->
 							<img id="twitchLogo" src="/images/Twitch_Purple_RGB.png">
 						</div>
 					</div>
 					<div id="connectWithYoutube" class="connectWithContainer">
-						<div id="connectWithYoutubeButton" class="connectWithButton" href="/8110/auth/youtube/">
+						<div id="connectWithYoutubeButton" class="connectWithButton">
 							<span id="connectWithYouTubeText">Connect with</span>
 							<img id="ytLogo" src="/images/yt_logo_rgb_light.png">
 						</div>
 					</div>
 					<div id="connectWithGoogle" class="connectWithContainer">
-						<div id="connectWithGoogleButton" class="connectWithButton" href="/8110/auth/google/">
+						<div id="connectWithGoogleButton" class="connectWithButton">
 							<span id="connectWithGoogleText">Connect with</span>
 								<div id="googleConnectButton" class="customGPlusSignIn">
 									<span class="googleIcon"></span>
@@ -335,7 +333,7 @@
 						</div>
 					</div>
 					<div id="connectWithDiscord" class="connectWithContainer">
-						<div id="connectWithDiscordButton" class="connectWithButton" href="/8110/auth/discord/">
+						<div id="connectWithDiscordButton" class="connectWithButton">
 							<span id="connectWithDiscordText">Connect with</span>
 							<img id="discordLogo" src="/images/discord_logo.png">
 						</div>
