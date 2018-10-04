@@ -36,15 +36,19 @@
     "passport-twitch": "github:mfosse/passport-twitch",
     "passport-youtube-v3": "github:mfosse/passport-youtube-v3",
     "performance-now": "^2.1.0",
-    "react-dom": "^16.5.2",
     "redis": "^2.8.0",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
     "@babel/preset-env": "^7.1.0",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.4",
+    "babel-plugin-add-module-exports": "^1.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
     "webpack": "^4.19.1",
     "webpack-cli": "^3.1.1"
   }

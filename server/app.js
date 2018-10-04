@@ -80,7 +80,6 @@ let channels = {};
 let restartAvailable = true;
 let lagless2ChangeAvailable = true;
 let locked = false;
-let wifiEnabled = false;
 let maxPlayers = 5;
 
 let controlQueues = [[], [], [], [], []];
@@ -158,12 +157,12 @@ redisClient.getAsync("bannedIPs").then(function(dbBannedIPs) {
 });
 
 function DataBaseClient() {
-	
+
 // 	this.profile = profile;
 	this.connectedAccounts = [];
 
 	// initialize to null:
-	
+
 	// twitch:
 	this.twitchID					= null;
 	this.twitchAccessToken			= null;
@@ -173,7 +172,7 @@ function DataBaseClient() {
 	this.twitchUsername				= null;
 	this.twitchProfile_image_url	= null;
 	this.twitchEmail				= null;
-	
+
 	// google:
 	this.googleID				= null;
 	this.googleAccessToken		= null;
@@ -181,13 +180,13 @@ function DataBaseClient() {
 	this.googleDisplayName		= null;
 	this.googleFamilyName		= null;
 	this.googleGivenName		= null;
-	
+
 	// youtube:
 	this.youtubeID				= null;
 	this.youtubeAccessToken		= null;
 	this.youtubeRefreshToken	= null;
 	this.youtubeDisplayName		= null;
-	
+
 	// discord:
 	this.discordID				= null;
 	this.discordAccessToken		= null;
@@ -195,31 +194,31 @@ function DataBaseClient() {
 	this.discordEmail			= null;
 	this.discordUsername		= null;
 	this.discordDiscriminator	= null;
-	
+
 	// settings:
 	this.is_mod					= false;
 	this.is_plus				= false;
 	this.is_sub					= false;
-	
+
 	this.is_ban					= false;
 	this.is_perma_ban			= false;
 	this.is_temp_ban			= false;
-	
+
 	this.IPs = [];
 }
 
 let accountSchema = Schema({
-	
+
 // 	_id: Schema.Types.ObjectId,// created & initialized automatically
-	
+
 	email:			String,
 	username:		String,
 	password:		String,
-	
+
 	token:			String,
-	
+
 	connectedAccounts: [],
-	
+
 	// twitch:
 	twitch: {
 		id:					String,
@@ -231,7 +230,7 @@ let accountSchema = Schema({
 		username:			String,
 		profile_image_url:	String,
 	},
-	
+
 	// google:
 	google: {
 		id:				String,
@@ -241,7 +240,7 @@ let accountSchema = Schema({
 		familyName:		String,
 		givenName:		String,
 	},
-	
+
 	// youtube:
 	youtube: {
 		id:				String,
@@ -249,7 +248,7 @@ let accountSchema = Schema({
 		refreshToken:	String,
 		displayName:	String,
 	},
-	
+
 	// discord:
 	discord: {
 		id:				String,
@@ -259,43 +258,43 @@ let accountSchema = Schema({
 		username:		String,
 		discriminator:	String,
 	},
-	
+
 	// settings:
 	is_mod:			Boolean,
 	is_plus:		Boolean,
 	is_sub:			Boolean,
-	
+
 	is_ban:			Boolean,
 	is_perma_ban:	Boolean,
 	is_temp_ban:	Boolean,
-	
+
 	IPs: [],
-	
+
 });
 
 let Account = mongoose.model("Account", accountSchema);
 
 function connectAccount(account, profile, type) {
-	
+
 	// set the id, access, and refresh token for the type of account we've connected:
 	// universal:
 	account[type].id			= profile.id;
 	account[type].accessToken	= profile.accessToken;
 	account[type].refreshToken	= profile.refreshToken;
-	
+
 	if (type == "twitch" || type == "google" || type == "youtube") {
 		account[type].displayName = profile.displayName;
 	}
-	
+
 	// unique to each platform:
 	if (type == "twitch") {
-		
+
 		account[type].email				= profile.email;
 		account[type].login				= profile.login;
 		account[type].username			= profile.username;
 		account[type].profile_image_url	= profile.profile_image_url;
-		
-		
+
+
 		if (modlist.indexOf(account.twitch.username) > -1) {
 			account.is_mod = true;
 		}
@@ -305,38 +304,38 @@ function connectAccount(account, profile, type) {
 		if (sublist.indexOf(account.twitch.username) > -1) {
 			account.is_sub = true;
 		}
-		
+
 	} else if (type == "google") {
 		account[type].familyName	= profile.name.familyName;
 		account[type].givenName		= profile.name.givenName;
 	} else if (type == "youtube") {
-		
+
 	} else if (type == "discord") {
 		account[type].email			= profile.email;
 		account[type].username		= profile.username;
 		account[type].discriminator	= profile.discriminator;
 	}
-	
+
 	// update connected accounts list:
 	if (account.connectedAccounts.indexOf(type) == -1) {
 		account.connectedAccounts.push(type);
 	}
-	
+
 }
 
 function updateOrCreateUser(profile, type, req) {
-	
+
 	// link to existing account:
 	if (req.session.uniqueToken != null) {
-		
+
 		// get account by token:
 		Account.findOne({"token": req.session.uniqueToken}).exec(function (error, account) {
-			
+
 			if (error) {
 				console.log(error);
 				throw error;
 			}
-			
+
 			// account exists:
 			if (account) {
 				// update info:
@@ -350,20 +349,20 @@ function updateOrCreateUser(profile, type, req) {
 					console.log("account saved.");
 				});
 			}
-			
+
 			if (!account) {
 				console.log("couldn't find account.");
 			}
 		});
-		
+
 		return;
 	}
-	
+
 	// check if the acccount already exists:
 	let queryObj = {};
 	queryObj[type + "." + "id"] = profile.id;
 	Account.findOne(queryObj).exec(function (error, account) {
-		
+
 		if (error) {
 			console.log(error);
 			throw error;
@@ -381,18 +380,18 @@ function updateOrCreateUser(profile, type, req) {
 				}
 				console.log("account saved.");
 			});
-			
+
 		}
 		// acount doesn't exist:
 		if (!account) {
 			console.log("creating account.");
-			
+
 			// create the user & add account details:
 			let newAccount = new Account();
-			
+
 			// add info:
 			connectAccount(newAccount, profile, type);
-			
+
 			// save the new instance:
 			newAccount.save(function (err) {
 				if (err) {
@@ -403,7 +402,7 @@ function updateOrCreateUser(profile, type, req) {
 			});
 		}
 	});
-	
+
 }
 
 // twitch:
@@ -519,24 +518,24 @@ app.get("/auth/discord/callback", passport.authenticate("discord", {
 // If user has an authenticated session, display it, otherwise display link to authenticate
 app.get("/redirect", function(req, res) {
 	if (req.session && req.session.passport && req.session.passport.user) {
-		
+
 		console.log("setting cookie.");
-		
+
 		console.log(req.user);
-		
-		
+
+
 		// create a token that lets us access the account:
 		let token = crypto.randomBytes(64).toString("hex");
-		
+
 		let type = req.user.provider;
 		let id = req.user.id;
-		
+
 		// get account:
 		let queryObj = {};
 		queryObj[type + "." + "id"] = id;
-		
+
 		Account.findOne(queryObj).exec(function (error, account) {
-			
+
 			if (error) {
 				console.log(error);
 				throw error;
@@ -557,20 +556,20 @@ app.get("/redirect", function(req, res) {
 			if (!account) {
 				console.log("account doesn't exist, something went wrong.");
 			}
-			
+
 		});
-		
+
 		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
 		res.cookie("TwitchPlaysNintendoSwitch", token, {
 			maxAge: time,
 		});
-		
+
 		// set token to expire after 7 days:
 		// todo: make expire:
 // 		redis.hexpireAsync("clientMap", password, (time / 1000)).then(function(success) {
 // 			console.log("set password to expire in 7 days: " + success);
 // 		});
-		
+
 	}
 	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 });
@@ -634,12 +633,12 @@ function Client(socket) {
 	this.validUsernames = [];
 	this.rooms = [];
 	this.joinTime = new Date();
-	
+
 	this.is_mod		= false;
 	this.is_plus	= false;
 	this.is_sub		= false;
 	this.is_ban		= false;
-	
+
 }
 
 function findClientByID(id) {
@@ -771,33 +770,33 @@ io.set("transports", [
 ]);
 
 io.on("connection", function(socket) {
-	
+
 	let client = new Client(socket);
 	clients.push(client);
 	console.log("number of clients connected: " + clients.length);
-	
+
 	socket.on("registerAccount", function(data) {
-		
+
 		let index = findClientByID(socket.id);
 		if (index == -1) {
 			return;
 		}
-	
+
 		// get account by token:
 		Account.findOne({"token": data.auth}).exec(function (error, account) {
-			
+
 			if (error) {
 				console.log(error);
 				throw error;
 			}
-			
+
 			// account exists:
 			if (account) {
-				
+
 // 				console.log("registering account.");
-				
+
 				clients[index].validUsernames = [];
-				
+
 				if (account.connectedAccounts.indexOf("discord") > -1) {
 					clients[index].validUsernames.push(account.discord.username + "#" + account.discord.discriminator);
 				}
@@ -810,43 +809,43 @@ io.on("connection", function(socket) {
 				if (account.connectedAccounts.indexOf("google") > -1) {
 					clients[index].validUsernames.push(account.google.displayName);
 				}
-				
+
 				if (data.usernameIndex < clients[index].validUsernames.length) {
 					clients[index].username = clients[index].validUsernames[data.usernameIndex];
 				} else {
 					clients[index].username = clients[index].validUsernames[0];
 				}
-				
+
 				clients[index].uniqueID = "" + account._id;
 				clients[index].uniqueID = clients[index].uniqueID.trim();
-				
+
 				clients[index].is_mod	= account.is_mod;
 				clients[index].is_plus	= account.is_plus;
 				clients[index].is_sub	= account.is_sub;
 				clients[index].is_ban	= clients[index].is_ban || account.is_ban;
-				
-				
+
+
 				uniqueIDToPreferredUsernameMap[clients[index].uniqueID] = clients[index].username;
-				
+
 				let accountInfo = {};
 				accountInfo.uniqueID = clients[index].uniqueID;
 				accountInfo.username = clients[index].username;
 				accountInfo.connectedAccounts = account.connectedAccounts;
 				accountInfo.validUsernames = clients[index].validUsernames;
-				
+
 				socket.emit("accountInfo", accountInfo);
 			}
 			// acount doesn't exist:
 			if (!account) {
-				
+
 				console.log("account not found.");
-				
+
 				clients[index].username = null;
 				console.log("Invalid password.");
 				socket.emit("needToSignIn");
 				return;
 			}
-			
+
 		});
 	});
 
@@ -864,9 +863,9 @@ io.on("connection", function(socket) {
 // 				Authorization: "OAuth " + data,
 // 			}
 // 		}, function(error, response, body) {
-			
+
 // // 			let body2 = JSON.parse(body);
-			
+
 // // 			if (body2.message == "invalid access token") {
 // // 				return;
 // // 			} else {
@@ -877,14 +876,14 @@ io.on("connection", function(socket) {
 // // 				localStorage.setItem("db", JSON.stringify(usernameDB));
 // // 				socket.emit("hashedUsername", hashedUsername);
 // // 			}
-			
+
 // // 			if (response && response.statusCode == 200) {
 // // 				// valid
 // // 			}
-			
+
 // 		});
 // 	});
-	
+
 	socket.on("disconnect", function() {
 		console.log("disconnected");
 		let i = findClientByID(socket.id);
@@ -899,7 +898,7 @@ io.on("connection", function(socket) {
 // 		}
 		io.to("lagless1").emit("viewImage", data);
 	});
-	
+
 	socket.on("screenshot4", function(data) {
 		lastImage = data;
 		// todo: replace the viewers5 room with "joinLaglessX" rooms
@@ -907,7 +906,7 @@ io.on("connection", function(socket) {
 	});
 
 	socket.on("sendControllerState", function(data) {
-		
+
 		let index = findClientByID(socket.id);
 		if (index == -1) {
 			return;
@@ -916,14 +915,14 @@ io.on("connection", function(socket) {
 		if (client.uniqueID == null) {
 			return;
 		}
-		
+
 		let cNum = data.cNum;
 		let controllerState = data.state;
-		
+
 		if (controlQueues[cNum].length === 0) {
 			return;
 		}
-		
+
 		if (client.uniqueID != controlQueues[cNum][0]) {
 			console.log("not the current player");
 			return;
@@ -937,10 +936,10 @@ io.on("connection", function(socket) {
 			socket.emit("banned");
 			return;
 		}
-		
+
 		// reset afkTimer:
 		afkTimer = Date.now();
-		
+
 		// sub perk:
 		if (sublist.indexOf(client.uniqueID) > -1) {
 // 		if (client.is_sub) {
@@ -953,8 +952,8 @@ io.on("connection", function(socket) {
 		clearTimeout(forfeitTimers[cNum]);
 		forfeitTimers[cNum] = setTimeout(forfeitTurn, timeTillForfeitDurations[cNum], client.uniqueID, cNum);
 		forfeitStartTimes[cNum] = Date.now();
-		
-		
+
+
 		let valid = true;
 		if (controllerState[5] == "1" && !client.is_mod) {
 			valid = false;
@@ -965,7 +964,7 @@ io.on("connection", function(socket) {
 		if (controllerState[14] == "1" && !client.is_mod) {
 			valid = false;
 		}
-		
+
 		cNum += 1;
 		if (cNum < 5) {
 			if (valid) {
@@ -1002,7 +1001,7 @@ io.on("connection", function(socket) {
 		if (cNum >= maxPlayers && maxPlayers != 4) {
 			return;
 		}
-		
+
 		// check to make sure user isn't already in another queue
 		let controllerList = [0, 1, 2, 3, 4];
 // 		controllerList.splice(controllerList.indexOf(cNum), 1);
@@ -1012,20 +1011,20 @@ io.on("connection", function(socket) {
 				return;
 			}
 		}
-		
+
 		if (typeof controlQueues[cNum] == "undefined") {
 			console.log("something weird happened.");
 			console.log(cNum);
 			return;
 		}
-		
+
 		// check to make sure they aren't in this queue (so we don't push it more than once)
 		// done above^
 		controlQueues[cNum].push(client.uniqueID);
 		io.emit("controlQueues", {
 			controlQueues: controlQueues
 		});
-		
+
 		// recently moved into this block// 7/21/18
 		// only if there's only one person in the queue
 		// ???// 9/13/18
@@ -1043,7 +1042,7 @@ io.on("connection", function(socket) {
 		if (client.uniqueID == null) {
 			return;
 		}
-		
+
 		// return if not in the queue:
 		index = controlQueues[cNum].indexOf(client.uniqueID);
 		if (index == -1) {
@@ -1059,10 +1058,10 @@ io.on("connection", function(socket) {
 				resetTimers(client.uniqueID, cNum);
 			}
 		}
-		
+
 		// emit turn times left:
 		emitTurnTimesLeft();
-		
+
 	});
 
 
@@ -1083,12 +1082,12 @@ io.on("connection", function(socket) {
 		restartAvailable = false;
 		console.log("restarting lagless2");
 		io.to("lagless2Host").emit("restart");
-		
+
 		// todo: resend settings
 		setTimeout(function() {
 			io.to("lagless2Host").emit("settings", currentLagless2Settings);
 		}, 3000);
-		
+
 		// notify client to restart:
 		io.emit("lagless2SettingsChange");
 	});
@@ -1107,14 +1106,14 @@ io.on("connection", function(socket) {
 // 		restartAvailable = false;
 // 		console.log("restarting lagless5");
 // 		io.to("lagless5Host").emit("restart");
-		
+
 // 		// todo: resend settings
 // 		io.to("lagless5Host").emit("settings", currentLagless5Settings);
-		
+
 // 		// notify client to restart:
 // 		io.emit("lagless5SettingsChange");
 // 	});
-	
+
 	socket.on("restart server", function() {
 		if (!restartAvailable) {
 			return;
@@ -1124,10 +1123,10 @@ io.on("connection", function(socket) {
 		io.emit("quit");
 		process.exit();
 	});
-	
-	
+
+
 	/* LISTS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-	
+
 // 	socket.on("banlist", function(data) {
 // 		// check if it's coming from the controller:
 // 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -1135,7 +1134,7 @@ io.on("connection", function(socket) {
 // 		}
 // 		io.emit("banlist", banlist);
 // 	});
-	
+
 	socket.on("pluslist", function(data) {
 		// check if it's coming from the controller:
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -1154,8 +1153,8 @@ io.on("connection", function(socket) {
 			sublist = data;
 		}
 	});
-	
-	
+
+
 	/* OTHER COMMANDS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("rickroll", function(data) {
 		// check if it's coming from the controller:
@@ -1175,68 +1174,13 @@ io.on("connection", function(socket) {
 			maxPlayers = data;
 		}
 	});
-	
+
 	socket.on("forceRefresh", function(channel) {
 		// check if it's coming from the controller:
 		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
 			io.emit("forceRefresh");
 		} else {
 			console.log("something bad happened 1.");
-		}
-	});
-	socket.on("disableInternet", function(channel) {
-		let legit = false;
-		// check if it's coming from the controller:
-		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
-			legit = true;
-		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
-		if (client.uniqueID != null) {
-			if (client.is_mod) {
-				legit = true;
-			}
-		}
-		if (legit) {
-			io.to("proxy").emit("disableInternet");
-			wifiEnabled = false;
-		}
-	});
-	socket.on("enableInternet", function(channel) {
-		let legit = false;
-		// check if it's coming from the controller:
-		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
-			legit = true;
-		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
-		if (client.uniqueID != null) {
-			if (client.is_mod) {
-				legit = true;
-			}
-		}
-		if (legit) {
-			io.to("proxy").emit("enableInternet");
-			wifiEnabled = true;
-		}
-	});
-	socket.on("getInternetStatus", function(data) {
-		// check if it's coming from the controller:
-		if(checkIfClientIsInRoomByID(socket.id, "controller")) {
-			io.to("proxy").emit("getInternetStatus");
-		}
-	});
-	socket.on("internetStatus", function(data) {
-		// check if it's coming from the proxy:
-		if(checkIfClientIsInRoomByID(socket.id, "proxy")) {
-			wifiEnabled = data;
-			io.to("controller").emit("internetStatus", data);
 		}
 	});
 	socket.on("lock", function(data) {
@@ -1290,7 +1234,7 @@ io.on("connection", function(socket) {
 		if (client.uniqueID == null) {
 			return;
 		}
-		
+
 		if (client.is_mod) {
 			for (let i = 0; i < controlQueues.length; i++) {
 				forfeitTurn(data, i);
@@ -1306,11 +1250,11 @@ io.on("connection", function(socket) {
 		if (client.uniqueID == null) {
 			return;
 		}
-		
+
 		if (!client.is_mod) {
 			return;
 		}
-			
+
 		index = findClientByUniqueID(data);
 		client = clients[index];
 		if (client.uniqueID == null) {
@@ -1324,9 +1268,9 @@ io.on("connection", function(socket) {
 		setTimeout(function(client) {
 			client.is_ban = false;
 		}, tempBanTime, client);
-		
+
 	});
-	
+
 	socket.on("permaBan", function(data) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
@@ -1336,11 +1280,11 @@ io.on("connection", function(socket) {
 		if (client.uniqueID == null) {
 			return;
 		}
-		
+
 		if (!client.is_mod) {
 			return;
 		}
-			
+
 		index = findClientByUniqueID(data);
 		client = clients[index];
 		if (client.uniqueID == null) {
@@ -1354,7 +1298,7 @@ io.on("connection", function(socket) {
 		}
 
 		// perma / IP ban:
-		
+
 		// get account:
 		Account.findById(client.uniqueID, function (error, account) {
 			if (error) {
@@ -1366,7 +1310,7 @@ io.on("connection", function(socket) {
 				// update info:
 				account.is_ban = true;
 				account.is_perma_ban = true;
-				
+
 				// update banned IP's:
 				redisClient.getAsync("bannedIPs").then(function(dbBannedIPs) {
 					let dataBaseIPs;
@@ -1390,7 +1334,7 @@ io.on("connection", function(socket) {
 						console.log("stored banned IPs: " + success);
 					});
 				});
-				
+
 				// save:
 				account.save(function (err) {
 					if (err) {
@@ -1400,10 +1344,10 @@ io.on("connection", function(socket) {
 				});
 			}
 		});
-		
+
 	});
-	
-	
+
+
 	socket.on("unban", function(data) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
@@ -1413,11 +1357,11 @@ io.on("connection", function(socket) {
 		if (client.uniqueID == null) {
 			return;
 		}
-		
+
 		if (!client.is_mod) {
 			return;
 		}
-			
+
 		index = findClientByUniqueID(data);
 		client = clients[index];
 		if (client.uniqueID == null) {
@@ -1428,7 +1372,7 @@ io.on("connection", function(socket) {
 		client.is_perma_ban = false;
 
 		// unban:
-		
+
 		// get account:
 		Account.findById(client.uniqueID, function (error, account) {
 			if (error) {
@@ -1463,7 +1407,7 @@ io.on("connection", function(socket) {
 			}
 		});
 	});
-	
+
 	socket.on("setTurnLength", function(data) {
 		// check if it's coming from the controller:
 		if(!checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -1478,7 +1422,7 @@ io.on("connection", function(socket) {
 			timeTillForfeitDurations[i] = parseInt(data) || 15000;
 		}
 	});
-	
+
 	socket.on("setForfeitLength", function(data) {
 		// check if it's coming from the controller:
 		if(!checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -1494,7 +1438,7 @@ io.on("connection", function(socket) {
 	});
 
 	/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-	
+
 	/* LAGLESS 1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless1Settings", function(data) {
 		let index = findClientByID(socket.id);
@@ -1509,7 +1453,7 @@ io.on("connection", function(socket) {
 			io.emit("lagless1Settings", lagless1Settings);
 			return;
 		}
-		
+
 		let obj = {};
 		if (typeof data.scale != "undefined") {
 			if (typeof data.scale == "number") {
@@ -1526,7 +1470,7 @@ io.on("connection", function(socket) {
 				obj.fps = data.fps;
 			}
 		}
-		
+
 		lagless1Settings = Object.assign({}, lagless1Settings, obj);
 		io.emit("lagless1Settings", lagless1Settings);
 	});
@@ -1537,8 +1481,8 @@ io.on("connection", function(socket) {
 	// 		lagless1Settings.y1 = data.y1 || lagless1Settings.y1;
 	// 		lagless1Settings.y2 = data.y2 || lagless1Settings.y2;
 	// 	});
-	
-	
+
+
 	/* LAGLESS2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless2Settings", function(data) {
 		let index = findClientByID(socket.id);
@@ -1553,9 +1497,9 @@ io.on("connection", function(socket) {
 			io.emit("lagless2Settings", lagless2Settings);
 			return;
 		}
-		
+
 		lagless2Settings = Object.assign({}, lagless2Settings, data);
-		
+
 		let obj = {};
 		if (typeof data.framerate != "undefined") {
 			io.emit("lagless2SettingsChange");
@@ -1587,13 +1531,13 @@ io.on("connection", function(socket) {
 				obj.offsetY = data.offsetY;
 			}
 		}
-		
+
 		currentLagless2Settings = obj;
-		
+
 		io.to("lagless2Host").emit("settings", obj);
 		io.emit("lagless2Settings", data);
 	});
-	
+
 	/* LAGLESS5 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless5Settings", function(data) {
 		let index = findClientByID(socket.id);
@@ -1608,9 +1552,9 @@ io.on("connection", function(socket) {
 			io.emit("lagless5Settings", lagless5Settings);
 			return;
 		}
-		
+
 		lagless5Settings = Object.assign({}, lagless5Settings, data);
-		
+
 		let obj = {};
 		if (typeof data.framerate != "undefined") {
 			io.emit("lagless5SettingsChange");
@@ -1642,18 +1586,18 @@ io.on("connection", function(socket) {
 				obj.offsetY = data.offsetY;
 			}
 		}
-		
+
 		currentLagless5Settings = obj;
-		
+
 		io.to("lagless5Host").emit("settings", obj);
 		io.emit("lagless5Settings", data);
 	});
-	
+
 	// broadcast settings when someone joins:
 	socket.emit("lagless1Settings", lagless1Settings);
 	socket.emit("lagless2Settings", lagless2Settings);
 	socket.emit("lagless5Settings", lagless5Settings);
-	
+
 
 	/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
 	/* SIMPLEPEER */
@@ -1669,7 +1613,7 @@ io.on("connection", function(socket) {
 	socket.on("hostPeerSignalReply", function(data) {
 		io.to(data.id).emit("hostPeerSignal", data.data);
 	});
-	
+
 	socket.on("hostPeerSignalV", function(data) {
 		io.emit("hostPeerSignalV", data);
 	});
@@ -1682,8 +1626,8 @@ io.on("connection", function(socket) {
 	socket.on("hostPeerSignalReplyV", function(data) {
 		io.to(data.id).emit("hostPeerSignalV", data.data);
 	});
-	
-	
+
+
 	/* AUDIO 4.0 @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("d", function (data) {
 		data["sid"] = socket.id;
@@ -1696,7 +1640,7 @@ io.on("connection", function(socket) {
 	});
 
 	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
-	
+
 	socket.on("leave", function(room) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
@@ -1709,7 +1653,7 @@ io.on("connection", function(socket) {
 		}
 		socket.leave(room);
 	});
-	
+
 	socket.on("join", function(room) {
 		// todo: add pi-proxy to this
 		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "lagless5Host", "controller", "controller2"];
@@ -1722,30 +1666,30 @@ io.on("connection", function(socket) {
 			return;
 		}
 		let client = clients[index];
-		
+
 		if (laglessList.indexOf(room) > -1) {
 			for (let i = 0; i < laglessList.length; i++) {
 				if (laglessList[i] != room) {
 					socket.leave(laglessList[i]);
 				}
-				
+
 				let laglessIndex = client.rooms.indexOf(laglessList[i]);
 				if (client.rooms.indexOf(laglessList[i]) > -1) {
 					client.rooms.splice(laglessIndex, 1);
 				}
 			}
 		}
-		
+
 		if (client.rooms.indexOf(room) == -1) {
 			client.rooms.push(room);
 		}
 		socket.join(room);
 	});
-	
+
 	socket.on("joinSecure", function(data, password) {
-		
+
 		let myData = {room: "", password: ""};
-		
+
 		if (typeof password == "undefined") {
 			myData.room = data.room;
 			myData.password = data.password;
@@ -1753,7 +1697,7 @@ io.on("connection", function(socket) {
 			myData.room = data;
 			myData.password = password;
 		}
-		
+
 		if (myData.password === config.ROOM_SECRET) {
 			let index = findClientByID(socket.id);
 			if (index == -1) {
@@ -1766,19 +1710,19 @@ io.on("connection", function(socket) {
 			socket.join(myData.room);
 		}
 	});
-	
-	
+
+
 	/* VIEWER COUNTS @@@@@@@@@@@@@@@@@@@@@@@@ */
 // 	socket.on("joinLagless1", function() {
-		
+
 // 		io.in("lagless1").clients((error, clientIDs) => {
 // 			if (error) throw error;
-			
+
 // 			// Returns an array of client IDs like ["Anw2LatarvGVVXEIAAAD"]
 // // 			laglessClientIds[0] = clientIDs;
 // 			console.log(clientIDs);
 // 		});
-		
+
 // 		let id = socket.id;
 // 		// if the id isn't in the list, add it:
 // 		if (laglessClientIds[0].indexOf(id) == -1) {
@@ -1903,7 +1847,7 @@ io.on("connection", function(socket) {
 // 			laglessClientIds[3].splice(index, 1);
 // 		}
 // 	});
-	
+
 	socket.on("leaveLagless", function() {
 // 		let id = socket.id;
 // 		// remove from lists:
@@ -1930,8 +1874,8 @@ io.on("connection", function(socket) {
 		socket.leave("lagless4");
 		socket.leave("lagless5");
 	});
-	
-	
+
+
 	/* SPLIT TIMER */
 // 	socket.on("createSplitTimer", function(data) {
 // 		let index = findClientByID(socket.id);
@@ -1946,7 +1890,7 @@ io.on("connection", function(socket) {
 // 		splitTimer = SplitTimer(data.startTime, data.splitNames, data.name);
 // 		io.emit("clearSplitTimes");
 // 	});
-	
+
 // 	socket.on("moveToNextSplit", function(data) {
 // 		//harmjan387
 // 		let index = findClientByID(socket.id);
@@ -1963,7 +1907,7 @@ io.on("connection", function(socket) {
 // 		} catch(error) {
 // 		}
 // 	});
-	
+
 // 	socket.on("removeLastSplit", function(data) {
 // 		// harmjan387
 // 		let index = findClientByID(socket.id);
@@ -1981,7 +1925,7 @@ io.on("connection", function(socket) {
 // 		}
 // 		io.emit("clearSplitTimes");
 // 	});
-	
+
 	/* BAN EVASION */
 	socket.on("registerIP", function(data) {
 		if (client.is_mod) {
@@ -1990,23 +1934,23 @@ io.on("connection", function(socket) {
 		console.log("username: " + data.username + " id: " + data.id + " ip: " + data.ip);
 // 		console.log("ip?: " + socket.conn.transport.socket._socket.remoteAddress);
 // 		console.log("ip?2: " + socket.handshake.headers['x-forwarded-for'].split(",")[0]);
-		
+
 		let index = findClientByID(socket.id);
 		if (index == -1) {
 			return;
 		}
-			
+
 		if (client.uniqueID == null) {
 			console.log("not signed in.");
 			return;
 		}
-		
+
 		// return if banned:
 		if (client.is_perma_banned || client.is_temp_banned) {
 			console.log("not signed in.");
 			return;
 		}
-		
+
 		// get account:
 		Account.findById(client.uniqueID, function (error, account) {
 			if (error) {
@@ -2028,11 +1972,11 @@ io.on("connection", function(socket) {
 				});
 			}
 		});
-		
-		
-		
+
+
+
 	});
-	
+
 	// send on connect:
 // 	io.emit("banlist", banlist);
 	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
@@ -2071,7 +2015,7 @@ setInterval(function() {
 
 
 function forfeitTurn(uniqueID, cNum) {
-	
+
 	// forfeit turn:
 	let index = controlQueues[cNum].indexOf(uniqueID);
 	if (index == -1) {
@@ -2079,14 +2023,14 @@ function forfeitTurn(uniqueID, cNum) {
 		console.log("uniqueID not found.");
 		return;
 	}
-	
+
 	controlQueues[cNum].splice(index, 1);
 	io.emit("controlQueues", {
 		controlQueues: controlQueues,
 	});
 	// stop the controller
 	io.to("controller").emit("controllerState", "800000000000000 128 128 128 128");// update this to use restPos
-	
+
 	// reset the timers if the person forfeiting is first in line:
 	if (index === 0) {
 		resetTimers(controlQueues[cNum][0], cNum);
@@ -2098,7 +2042,7 @@ function forfeitTurn(uniqueID, cNum) {
 	} else {
 		turnDurations[cNum] = normalTime;
 	}
-	
+
 	// emit turn times left:
 	emitTurnTimesLeft();
 }
@@ -2115,13 +2059,13 @@ function emitTurnTimesLeft() {
 		turnTimesLeft[i] = timeLeft;
 		forfeitTimesLeft[i] = timeLeftForfeit;
 	}
-	
+
 	// create current players list:
 	let currentPlayers = [];
 	for (let i = 0; i < controlQueues.length; i++) {
 		currentPlayers.push(uniqueIDToPreferredUsernameMap[controlQueues[i][0]]);
 	}
-	
+
 	io.emit("turnTimesLeft", {
 		turnTimesLeft: turnTimesLeft,
 		forfeitTimesLeft: forfeitTimesLeft,
@@ -2130,19 +2074,18 @@ function emitTurnTimesLeft() {
 		currentPlayers: currentPlayers,
 		waitlists: waitlists,
 		locked: locked,
-		wifiEnabled: wifiEnabled,
 	});
 }
 
 function resetTimers(uniqueID, cNum) {
-	
+
 	// sub perk:
 	if(sublist.indexOf(uniqueID) > -1) {
 		turnDurations[cNum] = subTime;
 	} else {
 		turnDurations[cNum] = normalTime;
 	}
-	
+
 	// reset turn timer:
 	turnStartTimes[cNum] = Date.now();
 	clearTimeout(moveLineTimers[cNum]);
@@ -2155,7 +2098,7 @@ function resetTimers(uniqueID, cNum) {
 }
 
 function moveLine(cNum) {
-	
+
 	// if the queue length is more than one person
 	// move the line:
 	if (controlQueues[cNum].length > 1) {
@@ -2166,14 +2109,14 @@ function moveLine(cNum) {
 	io.emit("controlQueues", {
 		controlQueues: controlQueues,
 	});
-	
+
 	// sub perk:
 	if(sublist.indexOf(controlQueues[cNum][0]) > -1) {
 		turnDurations[cNum] = subTime;
 	} else {
 		turnDurations[cNum] = normalTime;
 	}
-	
+
 	// reset turn time:
 	turnStartTimes[cNum] = Date.now();
 	clearTimeout(moveLineTimers[cNum]);
@@ -2195,16 +2138,16 @@ moveLine(3);
 moveLine(4);
 
 setInterval(function() {
-	
-	
+
+
 	// get all connected id's
 	let ids = Object.keys(io.sockets.sockets);
-	
+
 // 	// remove any clients not still connected:
 // 	for (let i = 0; i < laglessClientIds.length; i++) {
 // 		laglessClientIds[i] = laglessClientIds[i].filter(value => -1 !== ids.indexOf(value));
 // 	}
-	
+
 	io.in("lagless1").clients((error, clientIDs) => {
 		if (error) throw error;
 		laglessClientIds[0] = clientIDs;
@@ -2225,7 +2168,7 @@ setInterval(function() {
 		if (error) throw error;
 		laglessClientIds[4] = clientIDs;
 	});
-	
+
 	// calculate time left for each player
 	// edit: done in emitTurnTimesLeft();
 	// may actually be needed here though
@@ -2236,27 +2179,27 @@ setInterval(function() {
 // 		let timeLeft = turnDurations[i] - elapsedTime;
 // 		let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[i];
 // 		let timeLeftForfeit = timeTillForfeitDurations[i] - elapsedTimeSinceLastMove;
-		
+
 // 		turnTimesLeft[i] = timeLeft;
 // 		forfeitTimesLeft[i] = timeLeftForfeit;
-		
+
 // 		if(timeLeftForfeit < -50) {
 // // 			console.log("forfeit system screwed up somehow by: " + timeLeftForfeit);
 // 			// reset forfeit timer:
 // 			forfeitStartTimes[i] = Date.now();
 // 			clearTimeout(forfeitTimers[i]);
 // 			forfeitTimers[i] = setTimeout(forfeitTurn, timeTillForfeitDurations[i], controlQueues[i][0], i);
-			
+
 // 			// set the forfeitTime left to the duration of the forfeit timer:
 // 			forfeitTimesLeft[i] = timeTillForfeitDurations[i];
 // 		}
 // 	}
-	
+
 	laglessClientNames[0] = [];
 	laglessClientNames[1] = [];
 	laglessClientNames[2] = [];
 	laglessClientNames[3] = [];
-	
+
 	// create viewer list:
 	for (let i = 0; i < laglessClientIds[0].length; i++) {
 		laglessClientNames[0].push(getClientUniqueIDbySockedID(laglessClientIds[0][i]));
@@ -2270,21 +2213,21 @@ setInterval(function() {
 	for (let i = 0; i < laglessClientIds[3].length; i++) {
 		laglessClientNames[3].push(getClientUniqueIDbySockedID(laglessClientIds[3][i]));
 	}
-	
-	
+
+
 	// reset / copy waitlists:
 	let oldWaitlists = [];
 
 	for (var i = 0; i < waitlists.length; i++) {
 		oldWaitlists.push(waitlists[i].slice());
 	}
-	
+
 	waitlists = [[], [], [], [], []];
-	
-	
+
+
 	for (let i = 0; i < waitlists.length; i++) {
-	
-	
+
+
 		// check if lagless is over capacity:
 		if (laglessClientIds[i].length > waitlistMaxes[i]) {
 			// the number of people we need to put into the waitlist:
@@ -2346,17 +2289,17 @@ setInterval(function() {
 		} else if (laglessClientIds[i].length == waitlistMaxes[i]) {
 			waitlists[i] = oldWaitlists[i];
 		}
-		
-		
+
+
 	}
-	
+
 	// emit turn times left:
 	emitTurnTimesLeft();
-	
+
 	io.emit("controlQueues", {
 		controlQueues: controlQueues
 	});
-	
+
 	if (splitTimer != null) {
 		splitTimer.getCurrentTime();
 		let obj = {
@@ -2366,14 +2309,14 @@ setInterval(function() {
 		};
 		io.emit("splitTimes", obj);
 	}
-	
+
 	// afkTimer:
 	let elapsedTime =  Date.now() - afkTimer;
 	if (elapsedTime > afkTime) {
 		afkTimer = Date.now();
 		io.to("controller").emit("afk");
 	}
-	
+
 }, 500);
 
 // do every once in a while:

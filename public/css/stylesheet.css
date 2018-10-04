@@ -10,8 +10,8 @@ body {
 
 /* hide the scrollbar */
 
-/* ::-webkit-scrollbar { 
-display: none; 
+/* ::-webkit-scrollbar {
+display: none;
 } */
 
 .hideScrollbar {
@@ -185,6 +185,8 @@ margin-right: auto; */
 }
 
 #picture {
+	display: flex;
+	flex-direction: column;
 	/* 	width: 100%; */
 	width: 75%;
 	/* 	flex-grow: 1; */
@@ -403,8 +405,6 @@ flex-direction: column;
 	padding-top: 2px;
 	padding-bottom: 2px;
 	margin: 5px;
-	border: 1.2px solid #333;
-	border-radius: 4px;
 }
 
 .laglessViewerCount {
@@ -1238,7 +1238,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 }
 
 .volumeSlider i {
-	color: #666;
+	color: #333;
 	align-self: center;
 	border: 2px solid #333;
 	border-radius: 4px;
@@ -1278,6 +1278,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	margin-top: -12px;
 	cursor: pointer;
 	outline: none;
+}
+
+.volume span {
+	font-size: 10px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
 
 /* GENERIC SLIDER */

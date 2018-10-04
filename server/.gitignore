@@ -1,6 +1,0 @@
-# Custom
-*.db
-full/
-node_modules/
-config.js
-myDatabase/

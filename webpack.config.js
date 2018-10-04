@@ -19,6 +19,8 @@ module.exports = {
 	resolve: {
 		alias: {
 			js: path.resolve(__dirname, "./public/js/"),
+			src: path.resolve(__dirname, "./src/"),
 		},
 	},
+	devtool: "source-map",
 };

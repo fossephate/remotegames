@@ -9,47 +9,47 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Roboto+Mono">
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<link rel="stylesheet" href="css/preloader.css">
-	
+
 	<!-- Font Awesome	 -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
-	
+
 	<!-- Google Material Icons -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  
+
 	<!-- socket.io -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-	
+
 	<!-- jquery -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-	
+
 	<!-- BOOTSTRAP 4 -->
 	<script src="https://unpkg.com/popper.js/dist/umd/popper.min.js"></script>
 	<script src="https://unpkg.com/tooltip.js/dist/umd/tooltip.min.js"></script>
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
-	
-	
+
+
 <!-- 	<script src="js/keymaster.js"></script> -->
 	<script src="js/gamepad.js"></script>
 <!-- 	<script src="js/localforage.min.js"></script> -->
 <!-- 	<script src="js/textfitpercent.js"></script> -->
 <!-- 	<script src="js/tools.js"></script> -->
-	
-	
+
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.1/sweetalert2.all.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.1.2/simplepeer.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.7.2/localforage.min.js"></script>
-	
-	
+
+
 	<!-- discord embed -->
 <!-- 	<script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3"></script> -->
 	<!-- async defer -->
-	
+
 	<!-- jsmpeg -->
 	<script src="js/jsmpg.js"></script>
-	
+
 <!-- 	<script src="js/jsmpeg/jsmpeg.js"></script>
 	<script src="js/jsmpeg/canvas2d.js"></script>
 	<script src="js/jsmpeg/video-element.js"></script>
@@ -64,12 +64,12 @@
 	<script src="js/jsmpeg/webaudio.js"></script>
 	<script src="js/jsmpeg/websocket.js"></script>
 	<script src="js/jsmpeg/player.js"></script> -->
-	
+
 	<!-- h264 -->
 	<script src="js/http-live-player.js"></script>
 
 <!-- 	<script src="/js/ads.js"></script> -->
-	
+
 	<!-- ADS -->
 	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 	<script>
@@ -81,15 +81,18 @@
 </head>
 
 <body>
-	
+
+
 	<div id="loader-wrapper">
 		<div id="loader"></div>
 		<div class="loader-section section-left"></div>
 		<div class="loader-section section-right"></div>
 	</div>
-	
+
+	<div id="root"></div>
+
 	<div id="container" class="light">
-		
+
 		<ul id="navTabs" class="nav nav-tabs light otborder" role="tablist">
 			<li class="nav-item active">
 				<a id="tab1" class="nav-link active" data-toggle="tab" href="#lagless1">Lagless 1</a>
@@ -108,10 +111,9 @@
 			</li>
 			<div id="statusContainer" class="otborder">
 				<i class="material-icons">lock_open</i>
-<!-- 				<i class="material-icons">signal_wifi_off</i> -->
 			</div>
 		</ul>
-		
+
 		<div id="picture" class="otborder">
 
 			<div class="tab-content">
@@ -120,36 +122,6 @@
 						<div id="lagless1View" class="laglessView">
 							<canvas id="videoCanvas1" class="videoCanvas"></canvas>
 						</div>
-						<div id="lagless1Bar" class="laglessBar">
-							<div id="lagless1ViewerDropdown" class="viewerDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Viewers
-								</a>
-								<div id="lagless1ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-							<div id="lagless1VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless1Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
-							</div>
-							<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-								<input class="audioThreeCheckbox" type="checkbox" />
-								<span class="checkbox-placeholder"></span>
-								Audio 3.0
-							</label>
-							<button id="lagless1Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt"></i>
-							</button>
-							<button id="lagless1KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard"></i>
-							</button>
-							<div id="lagless1KeyboardDropdown" class="keyboardDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Keyboard Profiles
-								</a>
-								<div class="keyboard-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div id="lagless2" class="tab-pane">
@@ -157,36 +129,7 @@
 						<div id="lagless2View" class="laglessView">
 							<canvas id="videoCanvas2" class="videoCanvas"></canvas>
 						</div>
-						<div id="lagless2Bar" class="laglessBar">
-							<div id="lagless2ViewerDropdown" class="viewerDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Viewers
-								</a>
-								<div id="lagless2ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-							<div id="lagless2VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless2Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
-							</div>
-							<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-								<input class="audioThreeCheckbox" type="checkbox" />
-								<span class="checkbox-placeholder"></span>
-								Audio 3.0
-							</label>
-							<button id="lagless2Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt"></i>
-							</button>
-							<button id="lagless2KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard"></i>
-							</button>
-							<div id="lagless2KeyboardDropdown" class="keyboardDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Keyboard Profiles
-								</a>
-								<div class="keyboard-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-						</div>
+
 					</div>
 				</div>
 				<div id="lagless3" class="tab-pane">
@@ -194,73 +137,12 @@
 						<div id="lagless3View" class="laglessView">
 							<canvas id="videoCanvas3" class="videoCanvas"></canvas>
 						</div>
-						<div id="lagless3Bar" class="laglessBar">
-							<div id="lagless3ViewerDropdown" class="viewerDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Viewers
-								</a>
-								<div id="lagless3ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-							<div id="lagless3VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless3Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
-							</div>
-							<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-								<input class="audioThreeCheckbox" type="checkbox" />
-								<span class="checkbox-placeholder"></span>
-								Audio 3.0
-							</label>
-							<button id="lagless3Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt"></i>
-							</button>
-							<button id="lagless3KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard"></i>
-							</button>
-							<div id="lagless3KeyboardDropdown" class="keyboardDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Keyboard Profiles
-								</a>
-								<div class="keyboard-dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-						</div>
 					</div>
 				</div>
 				<div id="lagless4" class="tab-pane">
 					<div id="lagless4Container" class="laglessContainer">
 						<div id="lagless4View" class="laglessView">
-<!-- 							<canvas id="videoCanvas4" class="videoCanvas"></canvas> -->
 							<video id="videoCanvas4" class="videoCanvas"></video>
-						</div>
-						<div id="lagless4Bar" class="laglessBar">
-							<div id="lagless4ViewerDropdown" class="viewerDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Viewers
-								</a>
-								<div id="lagless4ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-							<div id="lagless4VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless4Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
-							</div>
-							<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
-								<input class="audioThreeCheckbox" type="checkbox" />
-								<span class="checkbox-placeholder"></span>
-								Audio 3.0
-							</label>
-							<button id="lagless4Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt"></i>
-							</button>
-							<button id="lagless4KeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
-								<i class="fas fa-keyboard"></i>
-							</button>
-							<div id="lagless4KeyboardDropdown" class="keyboardDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Keyboard Profiles
-								</a>
-								<div class="keyboard-dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
 						</div>
 					</div>
 				</div>
@@ -269,33 +151,44 @@
 						<div id="lagless5View" class="laglessView">
 							<canvas id="videoCanvas5" class="videoCanvas"></canvas>
 						</div>
-						<div id="lagless5Bar" class="laglessBar">
-							<div id="lagless5ViewerDropdown" class="viewerDropdown dropdown show">
-								<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-									Viewers
-								</a>
-								<div id="lagless5ViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
-							</div>
-							<div id="lagless5VolumeSlider" class="volumeSlider">
-								<i class="fa fa-volume-down"></i>
-								<div id="lagless5Volume" class="volume"></div>
-								<i class="fa fa-volume-up"></i>
-							</div>
-							<button id="lagless5Refresh" class="laglessRefresh btn btn-primary btn-settings">
-								<i class="fas fa-sync-alt"></i>
-							</button>
-						</div>
 					</div>
 				</div>
 			</div>
 
-			<div id="description">
-				
-				
+			<div id="laglessBar" class="laglessBar otborder">
+				<div id="laglessViewerDropdown" class="viewerDropdown dropdown show">
+					<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Viewers
+					</a>
+					<div id="laglessViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+				</div>
+				<div id="laglessVolumeSlider" class="volumeSlider">
+					<i class="fa fa-volume-down"></i>
+					<div id="laglessVolume" class="volume"></div>
+					<i class="fa fa-volume-up"></i>
+				</div>
+				<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+					<input class="audioThreeCheckbox" type="checkbox" />
+					<span class="checkbox-placeholder"></span>
+					Audio 3.0
+				</label>
+				<button id="laglessRefresh" class="laglessRefresh btn btn-primary btn-settings">
+					<i class="fas fa-sync-alt"></i>
+				</button>
+				<button id="laglessKeyboardSettings" data-toggle="modal" data-target="#keyboardSettings" class="keyboardMapper btn btn-primary btn-settings">
+					<i class="fas fa-keyboard"></i>
+					|
+					<i class="fas fa-gamepad"></i>
+				</button>
+				<div id="laglessKeyboardDropdown" class="keyboardDropdown dropdown show">
+					<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Keyboard Profiles
+					</a>
+					<div class="keyboard-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+				</div>
 			</div>
-
 		</div>
-		
+
 		<div id="chatContainer" class="otborder">
 			<div id="loggedInContainer" class="otborder">
 				<div id="loggedInStatus" class="otborder">
@@ -308,7 +201,7 @@
 					</div>
 					<button id="logout" class="btn btn-secondary">Logout</button>
 				</div>
-				
+
 				<div id="loggedInIndicator">
 					<div id="connectWithTwitch" class="connectWithContainer">
 						<div id="connectWithTwitchButton" class="connectWithButton">
@@ -338,14 +231,14 @@
 							<img id="discordLogo" src="/images/discord_logo.png">
 						</div>
 					</div>
-				
+
 				</div>
 			</div>
 			<iframe id="chat" frameborder="0" scrolling="no" id="chat_embed" src="https://www.twitch.tv/embed/twitchplaysconsoles/chat"></iframe>
 <!-- 			<iframe src="https://titanembeds.com/embed/433874668534104065?css=1&defaultchannel=487328538173767692&noscroll=false&sametarget=false&scrollbartheme=3d-dark&lockscrollbar=false&theme=DiscordDark" height="600" width="800" frameborder="0"></iframe> -->
 		</div>
-		
-		
+
+
 		<div id="barUnderTheStream" class="light otborder">
 
 			<div id="playersContainer" class="collapsibleContainer otborder">
@@ -609,7 +502,7 @@
 							<hr>
 
 							Quality: <span id="quality">70</span>
-							<div class="mysliderContainer">								
+							<div class="mysliderContainer">
 								<div id="qualitySlider" class="myslider"></div>
 							</div>
 							Scale: <span id="scale">30</span>
@@ -658,17 +551,17 @@
 						</div>
 
 					</div>
-					
+
 					<div id="waitlistContainer" class="settingsPanel otborder">
 						<ul id="waitlist" class="list-group">
 							<li class="list-group-item">The waitlist is empty right now</li>
 						</ul>
 					</div>
-				</div>	
+				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<div id="tutorialWindow" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -676,40 +569,40 @@
 					<h3 class="modal-title text-center">It looks like you might be new.</h3>
 				</div>
 				<div class="modal-body">
-					
-					
+
+
 					<h3>
 						So what is this?
 					</h3>
-					
+
 					<h5>
 						Well it's like a regular Twitch Plays, but instead of just chat controls, you can also use a keyboard or controller as well.
 					</h5>
-					
+
 					<h5>
 						To advance through the tutorial, click anywhere on screen.
 					</h5>
-					
+
 					<h5>
 						For security reasons, home, plus, capture, as well as internet access, are disabled by default, but can be enabled by mods and certain groups, contact a mod on the discord server if you need help.
 					</h5>
-					
+
 					<h5>
 						You won't be able to use the lagless streams until you sign in.
 					</h5>
-					
+
 					<h4>
 						Join the discord server! <a href="https://discord.gg/ARTbddH">https://discord.gg/ARTbddH</a>
 					</h4>
-					
+
 					Click here to start the tutorial:
 					<button id="startTutorial" class="btn btn-secondary">Start Tutorial</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	
+
+
 	<div id="serverOverloadWindow" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -717,7 +610,7 @@
 					<h3 class="modal-title text-center">Server Load</h3>
 				</div>
 				<div class="modal-body">
-					
+
 					<h2>
 						It looks like the server is having a hard time right now
 					</h2>
@@ -728,12 +621,12 @@
 						<li>If your position in any of the queues is &lt; 5</li>
 						<li>You've been on the site longer than XX and are signed in.</li>
 					</ul>
-					
+
 				</div>
 			</div>
 		</div>
 	</div>
-	
+
 	<!-- SETTINGS WINDOW ------------------------------------------- -->
 	<div id="keyboardSettings" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-lg">
