@@ -23181,6 +23181,7 @@ $(document).ready(function () {
     $("#return").text(settings.stickReturn); // volume:
 
     $("#laglessVolume").slider("value", settings.volume);
+    $("#laglessVolume span").text(settings.volume);
     setTimeout(function () {
       try {
         player.volume = settings.volume / 100; // doesn't update automatically :/
@@ -23922,6 +23923,7 @@ $("#laglessVolume").slider({
 $("#laglessVolumeSlider").children().first().on("click", function () {
   settings.volume = 0;
   $("#laglessVolume").slider("value", 0);
+  $("#laglessVolume span").text(settings.volume);
 
   if (!settings.audioThree) {
     player.volume = 0;
@@ -23932,6 +23934,7 @@ $("#laglessVolumeSlider").children().first().on("click", function () {
 $("#laglessVolumeSlider").children().last().on("click", function () {
   settings.volume = 100;
   $("#laglessVolume").slider("value", 100);
+  $("#laglessVolume span").text(settings.volume);
 
   if (!settings.audioThree) {
     player.volume = 1;
@@ -25314,7 +25317,11 @@ $(document).on("click", 'i:contains("lock_open")', function (event) {
 
 var ViewerList = __webpack_require__(/*! src/components/ViewerList.jsx */ "./src/components/ViewerList.jsx");
 
-var viewerList = _react.default.createElement(ViewerList, null); // viewerList.props.viewerIDs[1].push("1");
+var TurnTimer = __webpack_require__(/*! src/components/TurnTimer.jsx */ "./src/components/TurnTimer.jsx");
+
+var ForfeitTimer = __webpack_require__(/*! src/components/ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx");
+
+var Player = __webpack_require__(/*! src/components/Player.jsx */ "./src/components/Player.jsx"); // viewerList.props.viewerIDs[1].push("1");
 
 
 socket.on("turnTimesLeft", function (data) {
@@ -25339,32 +25346,10 @@ socket.on("turnTimesLeft", function (data) {
   // 	myViewerList.props.usernameMap = usernameMap;
 
 
-  viewerList = _reactDom.default.render(_react.default.createElement(ViewerList, {
+  _reactDom.default.render(_react.default.createElement(ViewerList, {
     viewerIDs: viewers,
     usernameMap: usernameMap
-  }), document.getElementById("laglessViewerDropdown")); // 	isExempt = false;
-  // 	for (let i = 0; i < 5; i++) {
-  // 		let index = controlQueues[i].indexOf(myUniqueID);
-  // 		if (index < minQueuePos && index > -1) {
-  // 			isExempt = true;
-  // 		}
-  // 	}
-  // 	if (!isExempt && viewers[settings.tab-1].length > maxViewersOnTab[settings.tab-1] && tabSwappedWithTwitch[settings.tab-1] === false) {
-  // 		tabSwappedWithTwitch[settings.tab-1] = true;
-  // 		setTimeout(function() {
-  // 			replaceWithTwitch("#lagless" + settings.tab);
-  // 			setTimeout(function() {
-  // 				socket.emit("leaveLagless");
-  // 			}, 4000);
-  // 			swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
-  // 		}, 2000);
-  // 	}
-  // 	// check if exempt, replace any twitch streams with lagless:
-  // 	if (isExempt) {
-  // 		//for (let i = 0; i < 5; i++) {
-  // 		replaceWithLagless("#lagless" + settings.tab);
-  // 		//}
-  // 	}
+  }), document.getElementById("laglessViewerDropdown"));
 
   for (var i = 0; i < data.turnTimesLeft.length; i++) {
     var timeLeftMilli = data.turnTimesLeft[i];
@@ -25373,15 +25358,29 @@ socket.on("turnTimesLeft", function (data) {
     var timeLeftMilli2 = data.forfeitTimesLeft[i];
     var timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
     var percent2 = parseInt(timeLeftMilli2 / timeTillForfeit * 100);
-    var n = i + 1;
+    var n = i + 1; // if (controlQueues[i][0] == null) {
+    // 	$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+    // 	$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+    // } else {
+    // 	$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
+    // 	$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+    // }
+    // ReactDOM.unmountComponentAtNode(document.getElementById("turnTimerBar" + n));
+    // https://reactjs.org/blog/2015/10/01/react-render-and-top-level-api.html
 
-    if (controlQueues[i][0] == null) {
-      $("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-      $("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-    } else {
-      $("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
-      $("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
-    }
+    _reactDom.default.render(_react.default.createElement(TurnTimer, {
+      num: n,
+      name: usernameMap[controlQueues[i][0]],
+      percent: percent,
+      timeLeft: timeLeftSec
+    }), document.getElementById("turnTimerBar" + n));
+
+    _reactDom.default.render(_react.default.createElement(ForfeitTimer, {
+      num: n,
+      name: usernameMap[controlQueues[i][0]],
+      percent: percent2,
+      timeLeft: timeLeftSec2
+    }), document.getElementById("forfeitTimerBar" + n));
   }
 
   var totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length + data.viewers[3].length + data.viewers[4].length;
@@ -26950,6 +26949,305 @@ exports.deleteAllCookies = function () {
 // 		return a + getter.call($(b));
 // 	}, 0);
 // }
+
+/***/ }),
+
+/***/ "./src/components/ForfeitTimer.jsx":
+/*!*****************************************!*\
+  !*** ./src/components/ForfeitTimer.jsx ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var TurnTimer =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(TurnTimer, _Component);
+
+  function TurnTimer(props) {
+    var _this;
+
+    _classCallCheck(this, TurnTimer);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TurnTimer).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(TurnTimer, [{
+    key: "getBarText",
+    value: function getBarText() {
+      if (this.props.name == null) {
+        return "No one is playing right now.";
+      } else {
+        return this.props.timeLeft + " seconds until turn forfeit.";
+      }
+    }
+  }, {
+    key: "getStyle",
+    value: function getStyle() {
+      if (this.props.name == null) {
+        return {
+          width: "100%"
+        };
+      } else {
+        return {
+          width: this.props.percent + "%"
+        };
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+        id: "forfeitTimerBar" + this.props.num,
+        className: "forfeitTimerBar progress"
+      }, _react.default.createElement("div", {
+        id: "forfeitTimerBarChild" + this.props.num,
+        className: "forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active",
+        role: "progressbar",
+        "aria-valuenow": "0",
+        "aria-valuemin": "0",
+        "aria-valuemax": "100",
+        style: this.getStyle()
+      }, this.getBarText())));
+    }
+  }]);
+
+  return TurnTimer;
+}(_react.Component);
+
+exports.default = TurnTimer;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/Player.jsx":
+/*!***********************************!*\
+  !*** ./src/components/Player.jsx ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _TurnTimer = _interopRequireDefault(__webpack_require__(/*! ./TurnTimer.jsx */ "./src/components/TurnTimer.jsx"));
+
+var _ForfeitTimer = _interopRequireDefault(__webpack_require__(/*! ./ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Player =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Player, _Component);
+
+  function Player(props) {
+    var _this;
+
+    _classCallCheck(this, Player);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Player).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(Player, [{
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("label", {
+        class: "playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "player" + this.props.playerNum + "Checkbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Player ", this.props.playerNum), _react.default.createElement(_TurnTimer.default, null), _react.default.createElement(_ForfeitTimer.default, null), _react.default.createElement("button", {
+        id: "requestTurn1",
+        class: "requestTurn btn btn-secondary",
+        code: "0"
+      }, "Join Queue"), _react.default.createElement("ul", {
+        id: "controlQueue1",
+        class: "controlQueue list-group"
+      })); // 		return <h1>test</h1>;
+    }
+  }]);
+
+  return Player;
+}(_react.Component);
+
+exports.default = Player;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/TurnTimer.jsx":
+/*!**************************************!*\
+  !*** ./src/components/TurnTimer.jsx ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var TurnTimer =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(TurnTimer, _Component);
+
+  function TurnTimer(props) {
+    var _this;
+
+    _classCallCheck(this, TurnTimer);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TurnTimer).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(TurnTimer, [{
+    key: "getBarText",
+    value: function getBarText() {
+      if (this.props.name == null) {
+        return "No one is playing right now.";
+      } else {
+        return this.props.name + ": " + this.props.timeLeft + " seconds";
+      }
+    }
+  }, {
+    key: "getStyle",
+    value: function getStyle() {
+      if (this.props.name == null) {
+        return {
+          width: "100%"
+        };
+      } else {
+        return {
+          width: this.props.percent + "%"
+        };
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+        id: "turnTimerBar" + this.props.num,
+        className: "turnTimerBar progress"
+      }, _react.default.createElement("div", {
+        id: "turnTimerBarChild" + this.props.num,
+        className: "turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active",
+        role: "progressbar",
+        "aria-valuenow": "0",
+        "aria-valuemin": "0",
+        "aria-valuemax": "100",
+        style: this.getStyle()
+      }, this.getBarText())));
+    }
+  }]);
+
+  return TurnTimer;
+}(_react.Component);
+
+exports.default = TurnTimer;
+module.exports = exports.default;
 
 /***/ }),
 

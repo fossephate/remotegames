@@ -3,60 +3,43 @@
 import React, { Component } from "react";
 
 
-class ViewerList extends Component {
+export default class TurnTimer extends Component {
 
 	constructor(props) {
 		super(props);
 	}
 
-
 	state = {
 	};
 
-	getViewerList() {
-
-		let viewerNames = [];
-
-		for (let i = 0; i < this.props.viewerIDs.length; i++) {
-			viewerNames.push([]);
-			for (let j = 0; j < this.props.viewerIDs[i].length; j++) {
-				let name = this.props.usernameMap[this.props.viewerIDs[i][j]];
-				viewerNames[i].push(name);
-			}
+	getBarText() {
+		if (this.props.name == null) {
+			return "No one is playing right now.";
+		} else {
+			return this.props.name + ": " + this.props.timeLeft + " seconds";
 		}
+	}
 
-		let viewers = [];
-
-		for (let i = 0; i < viewerNames.length; i++) {
-			if (viewerNames[i].length > 0) {
-				viewers.push(<div key={i} className="dropdown-divider">Lagless {i+1}</div>);
-// 				lists.push(this.state.viewerNames.map(name => <li key={name}>{name}</li>));
-			}
-			for (let j = 0; j < viewerNames[i].length; j++) {
-				let html = <button key={i + ":" + j} className="viewerElement dropdown-item" data-toggle="popover" tabIndex="0">{viewerNames[i][j]}</button>;
-				viewers.push(html);
-			}
+	getStyle() {
+		if (this.props.name == null) {
+			return {width: "100%"};
+		} else {
+			return {width: this.props.percent + "%"};
 		}
-		//this.state.viewerNames.map(name => <li key={name}>{name}</li>)
-		return viewers;
 	}
 
 	render () {
 
 		return (
 			<React.Fragment>
-				<a className="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-					Viewers
-				</a>
-				<div id="laglessViewerDropdownDiv" className="dropdown-menu" aria-labelledby="dropdownMenuLink">
-					{this.getViewerList()}
+				<div id={"turnTimerBar" + this.props.num} className="turnTimerBar progress">
+					<div id={"turnTimerBarChild" + this.props.num} className="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={this.getStyle()}>
+						{this.getBarText()}
+					</div>
 				</div>
 			</React.Fragment>
 		);
-// 		return <h1>test</h1>;
+
 	}
 
 }
-
-// module.exports =  ViewerList;
-export default ViewerList;

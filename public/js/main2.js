@@ -1047,6 +1047,7 @@ $(document).ready(function() {
 
 		// volume:
 		$("#laglessVolume").slider("value", settings.volume);
+		$("#laglessVolume span").text(settings.volume);
 		setTimeout(function() {
 			try {
 				player.volume = settings.volume / 100;// doesn't update automatically :/
@@ -1812,6 +1813,7 @@ $("#laglessVolume").slider({
 $("#laglessVolumeSlider").children().first().on("click", function(){
 	settings.volume = 0;
 	$("#laglessVolume").slider("value", 0);
+	$("#laglessVolume span").text(settings.volume);
 	if (!settings.audioThree) {
 		player.volume = 0;
 	} else {
@@ -1822,6 +1824,7 @@ $("#laglessVolumeSlider").children().first().on("click", function(){
 $("#laglessVolumeSlider").children().last().on("click", function(){
 	settings.volume = 100;
 	$("#laglessVolume").slider("value", 100);
+	$("#laglessVolume span").text(settings.volume);
 	if (!settings.audioThree) {
 		player.volume = 1;
 	} else {
@@ -3279,7 +3282,9 @@ $(document).on("click", 'i:contains("lock_open")', function(event) {
 });
 
 const ViewerList = require("src/components/ViewerList.jsx");
-let viewerList = <ViewerList/>;
+const TurnTimer = require("src/components/TurnTimer.jsx");
+const ForfeitTimer = require("src/components/ForfeitTimer.jsx");
+const Player = require("src/components/Player.jsx")
 // viewerList.props.viewerIDs[1].push("1");
 
 socket.on("turnTimesLeft", function(data) {
@@ -3304,33 +3309,7 @@ socket.on("turnTimesLeft", function(data) {
 
 // 	myViewerList.props.viewerIDs = viewers;
 // 	myViewerList.props.usernameMap = usernameMap;
-	viewerList = ReactDOM.render(<ViewerList viewerIDs={viewers} usernameMap={usernameMap} />, document.getElementById("laglessViewerDropdown"));
-
-// 	isExempt = false;
-// 	for (let i = 0; i < 5; i++) {
-// 		let index = controlQueues[i].indexOf(myUniqueID);
-// 		if (index < minQueuePos && index > -1) {
-// 			isExempt = true;
-// 		}
-// 	}
-
-// 	if (!isExempt && viewers[settings.tab-1].length > maxViewersOnTab[settings.tab-1] && tabSwappedWithTwitch[settings.tab-1] === false) {
-// 		tabSwappedWithTwitch[settings.tab-1] = true;
-// 		setTimeout(function() {
-// 			replaceWithTwitch("#lagless" + settings.tab);
-// 			setTimeout(function() {
-// 				socket.emit("leaveLagless");
-// 			}, 4000);
-// 			swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
-// 		}, 2000);
-// 	}
-
-// 	// check if exempt, replace any twitch streams with lagless:
-// 	if (isExempt) {
-// 		//for (let i = 0; i < 5; i++) {
-// 		replaceWithLagless("#lagless" + settings.tab);
-// 		//}
-// 	}
+	ReactDOM.render(<ViewerList viewerIDs={viewers} usernameMap={usernameMap} />, document.getElementById("laglessViewerDropdown"));
 
 	for (let i = 0; i < data.turnTimesLeft.length; i++) {
 		let timeLeftMilli = data.turnTimesLeft[i];
@@ -3343,13 +3322,19 @@ socket.on("turnTimesLeft", function(data) {
 
 		let n = i + 1;
 
-		if (controlQueues[i][0] == null) {
-			$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-			$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		} else {
-			$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
-			$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
-		}
+		// if (controlQueues[i][0] == null) {
+		// 	$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		// 	$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		// } else {
+		// 	$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
+		// 	$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+		// }
+		// ReactDOM.unmountComponentAtNode(document.getElementById("turnTimerBar" + n));
+		// https://reactjs.org/blog/2015/10/01/react-render-and-top-level-api.html
+		ReactDOM.render(<TurnTimer num={n} name={usernameMap[controlQueues[i][0]]} percent={percent} timeLeft={timeLeftSec}/>, document.getElementById("turnTimerBar" + n));
+
+		ReactDOM.render(<ForfeitTimer num={n} name={usernameMap[controlQueues[i][0]]} percent={percent2} timeLeft={timeLeftSec2}/>, document.getElementById("forfeitTimerBar" + n));
+
 	}
 
 	let totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length + data.viewers[3].length + data.viewers[4].length;

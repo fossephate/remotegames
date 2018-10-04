@@ -1618,6 +1618,10 @@ visibility: visible;
 
 /* MISC */
 
+.contents {
+	display: contents;
+}
+
 .collapse:not(.show) {
 	display: none !important;
 }
