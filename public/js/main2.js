@@ -100,7 +100,7 @@ let myConnectedAccounts = [];
 let myValidUsernames = [];
 
 // settings:
-let settings = {
+window.settings = {
 	enableAudioThree: true,
 	audioThree: false,
 	keyboardControls: false,
@@ -116,6 +116,28 @@ let settings = {
 	hideChat: false,
 	hideNav: false,
 	deadzone: 50,
+	sticks: {
+		L: {
+			X: {
+				sensitivity: 1,
+				offset: 0,
+			},
+			Y: {
+				sensitivity: 1,
+				offset: 0,
+			},
+		},
+		R: {
+			X: {
+				sensitivity: 1,
+				offset: 0,
+			},
+			Y: {
+				sensitivity: 1,
+				offset: 0,
+			},
+		},
+	},
 	stickSensitivityX: 1,
 	stickSensitivityY: 1,
 	stickAttack: 20,
@@ -798,14 +820,14 @@ gamepad.on("release", "d_pad_right", e => {
 
 gamepad.on("hold", "stick_axis_left", e => {
 	settings.currentInputMode = "controller";
-	let x = e.value[0] * settings.stickSensitivityX;
-	let y = e.value[1] * settings.stickSensitivityY;
+	let x = (e.value[0] * settings.sticks.L.X.sensitivity);
+	let y = (e.value[1] * settings.sticks.L.Y.sensitivity);
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
-	controller.LStick.x = parseInt(x);
-	controller.LStick.y = parseInt(y);
+	controller.LStick.x = parseInt(x) + settings.sticks.L.X.offset;
+	controller.LStick.y = parseInt(y) + settings.sticks.L.Y.offset;
 	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
 		controller.LStick.x = restPos;
@@ -816,14 +838,14 @@ gamepad.on("hold", "stick_axis_left", e => {
 });
 gamepad.on("press", "stick_axis_left", e => {
 	settings.currentInputMode = "controller";
-	let x = e.value[0] * settings.stickSensitivityX;
-	let y = e.value[1] * settings.stickSensitivityY;
+	let x = (e.value[0] * settings.sticks.L.X.sensitivity);
+	let y = (e.value[1] * settings.sticks.L.Y.sensitivity);
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
-	controller.LStick.x = parseInt(x);
-	controller.LStick.y = parseInt(y);
+	controller.LStick.x = parseInt(x) + settings.sticks.L.X.offset;
+	controller.LStick.y = parseInt(y) + settings.sticks.L.Y.offset;
 	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
 		controller.LStick.x = restPos;
@@ -834,14 +856,14 @@ gamepad.on("press", "stick_axis_left", e => {
 });
 gamepad.on("release", "stick_axis_left", e => {
 	settings.currentInputMode = "controller";
-	let x = e.value[0] * settings.stickSensitivityX;
-	let y = e.value[1] * settings.stickSensitivityY;
+	let x = (e.value[0] * settings.sticks.L.X.sensitivity);
+	let y = (e.value[1] * settings.sticks.L.Y.sensitivity);
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
-	controller.LStick.x = parseInt(x);
-	controller.LStick.y = parseInt(y);
+	controller.LStick.x = parseInt(x) + settings.sticks.L.X.offset;
+	controller.LStick.y = parseInt(y) + settings.sticks.L.Y.offset;
 	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.LStick.x) < thresh) {
 		controller.LStick.x = restPos;
@@ -852,14 +874,14 @@ gamepad.on("release", "stick_axis_left", e => {
 });
 gamepad.on("hold", "stick_axis_right", e => {
 	settings.currentInputMode = "controller";
-	let x = e.value[0] * settings.stickSensitivityX;
-	let y = e.value[1] * settings.stickSensitivityY;
+	let x = (e.value[0] * settings.sticks.R.X.sensitivity);
+	let y = (e.value[1] * settings.sticks.R.Y.sensitivity);
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
-	controller.RStick.x = parseInt(x);
-	controller.RStick.y = parseInt(y);
+	controller.RStick.x = parseInt(x) + settings.sticks.R.X.offset;
+	controller.RStick.y = parseInt(y) + settings.sticks.R.Y.offset;
 	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
 		controller.RStick.x = restPos;
@@ -870,14 +892,14 @@ gamepad.on("hold", "stick_axis_right", e => {
 });
 gamepad.on("press", "stick_axis_right", e => {
 	settings.currentInputMode = "controller";
-	let x = e.value[0] * settings.stickSensitivityX;
-	let y = e.value[1] * settings.stickSensitivityY;
+	let x = (e.value[0] * settings.sticks.R.X.sensitivity);
+	let y = (e.value[1] * settings.sticks.R.Y.sensitivity);
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
-	controller.RStick.x = parseInt(x);
-	controller.RStick.y = parseInt(y);
+	controller.RStick.x = parseInt(x) + settings.sticks.R.X.offset;
+	controller.RStick.y = parseInt(y) + settings.sticks.R.Y.offset;
 	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
 		controller.RStick.x = restPos;
@@ -888,14 +910,14 @@ gamepad.on("press", "stick_axis_right", e => {
 });
 gamepad.on("release", "stick_axis_right", e => {
 	settings.currentInputMode = "controller";
-	let x = e.value[0] * settings.stickSensitivityX;
-	let y = e.value[1] * settings.stickSensitivityY;
+	let x = (e.value[0] * settings.sticks.R.X.sensitivity);
+	let y = (e.value[1] * settings.sticks.R.Y.sensitivity);
 	x = (x / 2) + 0.5;
 	y = (-y / 2) + 0.5;
 	x *= 255;
 	y *= 255;
-	controller.RStick.x = parseInt(x);
-	controller.RStick.y = parseInt(y);
+	controller.RStick.x = parseInt(x) + settings.sticks.R.X.offset;
+	controller.RStick.y = parseInt(y) + settings.sticks.R.Y.offset;
 	let thresh = parseInt($("#deadzone").text());
 	if (Math.abs(restPos - controller.RStick.x) < thresh) {
 		controller.RStick.x = restPos;
@@ -1273,26 +1295,6 @@ $(document).on("click", ".keyboard-dropdown-item", function (event) {
 /* TOUCH CONTROLS */
 
 function setVideoWidth(width) {
-	// if (typeof $("#videoCanvas1")[0] != "undefined") {
-	// 	$("#videoCanvas1")[0].style.width = width + "%";
-	// 	$("#videoCanvas1")[0].style["margin-left"] = ((100 - width) / 2) + "%";
-	// }
-	// if (typeof $("#videoCanvas2")[0] != "undefined") {
-	// 	$("#videoCanvas2")[0].style.width = width + "%";
-	// 	$("#videoCanvas2")[0].style["margin-left"] = ((100 - width) / 2) + "%";
-	// }
-	// if (typeof $("#videoCanvas3")[0] != "undefined") {
-	// 	$("#videoCanvas3")[0].style.width = width + "%";
-	// 	$("#videoCanvas3")[0].style["margin-left"] = ((100 - width) / 2) + "%";
-	// }
-	// if (typeof $("#videoCanvas4")[0] != "undefined") {
-	// 	$("#videoCanvas4")[0].style.width = width + "%";
-	// 	$("#videoCanvas4")[0].style["margin-left"] = ((100 - width) / 2) + "%";
-	// }
-	// if (typeof $("#videoCanvas5")[0] != "undefined") {
-	// 	$("#videoCanvas5")[0].style.width = width + "%";
-	// 	$("#videoCanvas5")[0].style["margin-left"] = ((100 - width) / 2) + "%";
-	// }
 
 	if (typeof $("#twitchVideo")[0] != "undefined") {
 		$("#twitchVideo")[0].style.width = width + "%";
@@ -1813,8 +1815,12 @@ $("#stickSensitivitySlider").slider({
 	animate: true,
 	slide: function (event, ui) {
 		$("#sensitivity").text(ui.value);
-		settings.stickSensitivityX = ui.value;
-		settings.stickSensitivityY = ui.value;
+		// settings.stickSensitivityX = ui.value;
+		// settings.stickSensitivityY = ui.value;
+		settings.sticks.L.X.sensitivity = ui.value;
+		settings.sticks.L.Y.sensitivity = ui.value;
+		settings.sticks.R.X.sensitivity = ui.value;
+		settings.sticks.R.Y.sensitivity = ui.value;
 	},
 	stop: function (event, ui) {
 		localforage.setItem("settings", JSON.stringify(settings));
@@ -3232,11 +3238,13 @@ $("#fullscreenCheckbox").on("change", function () {
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.fullscreen) {
 
+		$("body").css("padding", "0");
 		$("#picture").css("width", "100%");
+		$("#picture").css("border", "none");
 		$(".videoCanvas").css("width", "100%");
 		$(".videoCanvas").css("margin-left", "0");
-		$(".laglessContainer").css("padding-left", "0");
-		$(".laglessContainer").css("padding-right", "0");
+		$(".laglessView").css("margin-left", "0");
+		$(".laglessView").css("margin-right", "0");
 
 		if (settings.touchControls) {
 			$("#touchControlsCheckbox").prop("checked", false).trigger("change");
@@ -3252,24 +3260,21 @@ $("#fullscreenCheckbox").on("change", function () {
 			$(this).removeClass("well");
 			$(this).addClass("well2");
 		});
-		$("body").addClass("well2");
 		$("body").addClass("hideScrollbar");
 		$(document).scrollTop(0);
 
 		tools.toggleFullScreen($("body")[0]);
 
 	} else {
-		$("#picture").css("width", "");
-		// 		$(".videoCanvas").css("width", "100%");
-		// 		$(".videoCanvas").css("margin-left", "0");
-		$(".laglessContainer").css("padding-left", "");
-		$(".laglessContainer").css("padding-right", "");
 
-		$(".well2").each(function () {
-			$(this).removeClass("well2");
-			$(this).addClass("well");
-		});
-		$("body").removeClass("well2");
+		$("body").css("padding", "");
+		$("#picture").css("width", "");
+		$("#picture").css("border", "");
+		$(".videoCanvas").css("width", "");
+		$(".videoCanvas").css("margin-left", "");
+		$(".laglessView").css("margin-left", "");
+		$(".laglessView").css("margin-right", "");
+
 		$("body").removeClass("hideScrollbar");
 	}
 });
@@ -3316,8 +3321,8 @@ $("#largescreenCheckbox").on("change", function () {
 			rebindUnbindTouchControls();
 		}
 	} else {
-		$(".videoCanvas").css("width", "75%");
-		$(".videoCanvas").css("margin-left", "12.5%");
+		$(".videoCanvas").css("width", "");
+		$(".videoCanvas").css("margin-left", "");
 		$("#touchControlsCheckbox").prop("checked", true).trigger("change");
 	}
 });
@@ -3342,6 +3347,21 @@ $("#dpadCheckbox").on("change", function () {
 /* TOGGLE 3DS CONFIG @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 $("#3DSCheckbox").on("change", function () {
 	settings.TDSConfig = this.checked;
+	if (settings.TDSConfig) {
+		settings.sticks.L.X.sensitivity = 1.5;
+		settings.sticks.L.Y.sensitivity = 1.5;
+		settings.sticks.R.X.sensitivity = 1.5;
+		settings.sticks.R.Y.sensitivity = 1.5;
+		settings.sticks.R.X.offset = -20;
+		settings.sticks.R.Y.offset = -10;
+	} else {
+		settings.sticks.L.X.sensitivity = 1;
+		settings.sticks.L.Y.sensitivity = 1;
+		settings.sticks.R.X.sensitivity = 1;
+		settings.sticks.R.Y.sensitivity = 1;
+		settings.sticks.R.X.offset = 0;
+		settings.sticks.R.Y.offset = 0;
+	}
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 

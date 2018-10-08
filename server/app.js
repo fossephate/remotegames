@@ -59,7 +59,7 @@ let lagless1Settings = {
 	quality: 60,
 	scale: 30,
 };
-let lagless2Settings = { framerate: 30, videoBitrate: 1, scale: 960 };
+let lagless2Settings = { framerate: 20, videoBitrate: 1, scale: 720 };
 let currentLagless2Settings;
 // let lagless5Settings = {framerate: 30, scale: 960, videoBitrate: 1};
 let currentLagless5Settings;
@@ -155,7 +155,7 @@ let redisClient = redis.createClient({ host: "localhost", port: 6379 });
 let IDToUniqueMap = {};
 let uniqueIDToPreferredUsernameMap = {};
 
-let mongoURL = "mongodb://localhost:27017/tpnsDB";
+let mongoURL = "mongodb://localhost:27017/db";
 mongoose.connect(mongoURL);
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
@@ -179,57 +179,6 @@ redisClient.getAsync("bannedIPs").then(function (dbBannedIPs) {
 		console.log("stored banned IPs: " + success);
 	});
 });
-
-function DataBaseClient() {
-
-	// 	this.profile = profile;
-	this.connectedAccounts = [];
-
-	// initialize to null:
-
-	// twitch:
-	this.twitchID = null;
-	this.twitchAccessToken = null;
-	this.twitchRefreshToken = null;
-	this.twitchDisplayName = null;
-	this.twitchLogin = null;
-	this.twitchUsername = null;
-	this.twitchProfile_image_url = null;
-	this.twitchEmail = null;
-
-	// google:
-	this.googleID = null;
-	this.googleAccessToken = null;
-	this.googleRefreshToken = null;
-	this.googleDisplayName = null;
-	this.googleFamilyName = null;
-	this.googleGivenName = null;
-
-	// youtube:
-	this.youtubeID = null;
-	this.youtubeAccessToken = null;
-	this.youtubeRefreshToken = null;
-	this.youtubeDisplayName = null;
-
-	// discord:
-	this.discordID = null;
-	this.discordAccessToken = null;
-	this.discordRefreshToken = null;
-	this.discordEmail = null;
-	this.discordUsername = null;
-	this.discordDiscriminator = null;
-
-	// settings:
-	this.is_mod = false;
-	this.is_plus = false;
-	this.is_sub = false;
-
-	this.is_ban = false;
-	this.is_perma_ban = false;
-	this.is_temp_ban = false;
-
-	this.IPs = [];
-}
 
 let accountSchema = Schema({
 
@@ -598,11 +547,11 @@ app.get("/redirect", function (req, res) {
 	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 });
 
-app.get("/deleteDB", function (req, res) {
-	console.log("deleting DB");
-	Account.remove({}, function () {});
-	// 	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
-});
+// app.get("/deleteDB", function (req, res) {
+// 	console.log("deleting DB");
+// 	Account.remove({}, function () {});
+// 	// 	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
+// });
 
 
 app.get("/stats/", function (req, res) {});
@@ -1709,163 +1658,7 @@ io.on("connection", function (socket) {
 		}
 	});
 
-
-	/* VIEWER COUNTS @@@@@@@@@@@@@@@@@@@@@@@@ */
-	// 	socket.on("joinLagless1", function() {
-
-	// 		io.in("lagless1").clients((error, clientIDs) => {
-	// 			if (error) throw error;
-
-	// 			// Returns an array of client IDs like ["Anw2LatarvGVVXEIAAAD"]
-	// // 			laglessClientIds[0] = clientIDs;
-	// 			console.log(clientIDs);
-	// 		});
-
-	// 		let id = socket.id;
-	// 		// if the id isn't in the list, add it:
-	// 		if (laglessClientIds[0].indexOf(id) == -1) {
-	// 			laglessClientIds[0].push(id);
-	// 		}
-	// 		// remove from other lists:
-	// 		let index;
-	// 		index = laglessClientIds[1].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[1].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[2].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[2].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[3].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[3].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[4].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[4].splice(index, 1);
-	// 		}
-	// 	});
-	// 	socket.on("joinLagless2", function() {
-	// 		let id = socket.id;
-	// 		// if the id isn't in the list, add it:
-	// 		if (laglessClientIds[1].indexOf(id) == -1) {
-	// 			laglessClientIds[1].push(id);
-	// 		}
-	// 		// remove from other lists:
-	// 		let index;
-	// 		index = laglessClientIds[0].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[0].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[2].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[2].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[3].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[3].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[4].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[4].splice(index, 1);
-	// 		}
-	// 	});
-	// 	socket.on("joinLagless3", function() {
-	// 		let id = socket.id;
-	// 		// if the id isn't in the list, add it:
-	// 		if (laglessClientIds[2].indexOf(id) == -1) {
-	// 			laglessClientIds[2].push(id);
-	// 		}
-	// 		// remove from other lists:
-	// 		let index;
-	// 		index = laglessClientIds[0].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[0].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[1].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[1].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[3].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[3].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[4].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[4].splice(index, 1);
-	// 		}
-	// 	});
-	// 	socket.on("joinLagless4", function() {
-	// 		let id = socket.id;
-	// 		// if the id isn't in the list, add it:
-	// 		if (laglessClientIds[3].indexOf(id) == -1) {
-	// 			laglessClientIds[3].push(id);
-	// 		}
-	// 		// remove from other lists:
-	// 		let index;
-	// 		index = laglessClientIds[0].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[0].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[1].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[1].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[2].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[2].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[4].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[4].splice(index, 1);
-	// 		}
-	// 	});
-	// 	socket.on("joinLagless5", function() {
-	// 		let id = socket.id;
-	// 		// if the id isn't in the list, add it:
-	// 		if (laglessClientIds[4].indexOf(id) == -1) {
-	// 			laglessClientIds[4].push(id);
-	// 		}
-	// 		// remove from other lists:
-	// 		let index;
-	// 		index = laglessClientIds[0].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[0].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[1].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[1].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[2].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[2].splice(index, 1);
-	// 		}
-	// 		index = laglessClientIds[3].indexOf(id);
-	// 		if (index > -1) {
-	// 			laglessClientIds[3].splice(index, 1);
-	// 		}
-	// 	});
-
 	socket.on("leaveLagless", function () {
-		// 		let id = socket.id;
-		// 		// remove from lists:
-		// 		let index;
-		// 		index = laglessClientIds[0].indexOf(id);
-		// 		if (index > -1) {
-		// 			laglessClientIds[0].splice(index, 1);
-		// 		}
-		// 		index = laglessClientIds[1].indexOf(id);
-		// 		if (index > -1) {
-		// 			laglessClientIds[1].splice(index, 1);
-		// 		}
-		// 		index = laglessClientIds[2].indexOf(id);
-		// 		if (index > -1) {
-		// 			laglessClientIds[2].splice(index, 1);
-		// 		}
-		// 		index = laglessClientIds[3].indexOf(id);
-		// 		if (index > -1) {
-		// 			laglessClientIds[3].splice(index, 1);
-		// 		}
 		socket.leave("lagless1");
 		socket.leave("lagless2");
 		socket.leave("lagless3");
@@ -1979,30 +1772,6 @@ io.on("connection", function (socket) {
 	// 	io.emit("banlist", banlist);
 	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
 });
-
-function onNewNamespace(channel, sender) {
-	io.of("/" + channel).on("connection", function (socket) {
-		let username;
-		if (io.isConnected) {
-			io.isConnected = false;
-			socket.emit("connect", true);
-		}
-
-		socket.on("message", function (data) {
-			if (data.sender == sender) {
-				if (!username) username = data.data.sender;
-				socket.broadcast.emit("message", data.data);
-			}
-		});
-
-		socket.on("disconnect", function () {
-			if (username) {
-				socket.broadcast.emit("user-left", username);
-				username = null;
-			}
-		});
-	});
-}
 
 setInterval(function () {
 	restartAvailable = true;
