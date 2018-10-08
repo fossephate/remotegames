@@ -22161,7 +22161,7 @@ var authCookie;
 var crate;
 var usernameMap = {};
 var banlist = [];
-var bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146"];
+var bannedIPs = [];
 var resizers = [];
 var resizeDebounceTimer;
 var resizeAvailable = true; // twitch lagless swap settings
@@ -22214,7 +22214,7 @@ var lagless1Settings = {};
 var lagless2Settings = {
   framerate: 30,
   videoBitrate: 1,
-  scale: 960,
+  scale: 720,
   offsetX: 0,
   offsetY: 0
 };
@@ -22250,7 +22250,7 @@ var lagless1Port = 8001;
 var lagless2Port = 8002;
 var lagless3Port = 8003;
 var lagless4Port = 8004;
-/* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // check if on mobile
 
 if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
@@ -22315,8 +22315,7 @@ function getMeta(url, callback) {
 
 
 var gamepadCounter = 0;
-
-var controller = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
+window.controller = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js"); // todo: undo
 
 controller.reset();
 
@@ -22346,18 +22345,7 @@ function sendControllerState() {
   }
 
   if (controlQueues[currentPlayerChosen].indexOf(myUniqueID) == -1) {
-    socket.emit("requestTurn", currentPlayerChosen); // 		// turn over:
-    // 		$(".cancelTurn").each(function() {
-    // 			cNum = $(this).attr("code");
-    // 			if (cNum == (currentPlayerChosen + 1)) {
-    // // 				return;
-    // 			}
-    // 			let html = '<button id="requestTurn' + cNum + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
-    // 			$(this).replaceWith(html);
-    // 		});
-    // 		// replace only the currect button:
-    // 		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
-    // 		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
+    socket.emit("joinQueue", currentPlayerChosen);
   }
 
   if (controlQueues[currentPlayerChosen].indexOf(myUniqueID) > 0 && controlQueues[currentPlayerChosen].length > 0) {
@@ -23109,8 +23097,6 @@ $(document).ready(function () {
     addJoyCons("#lagless" + settings.tab);
     rebindUnbindTouchControls();
     clearAndReplaceProfiles();
-    setKeyboardMapperClasses();
-    setTimeout(drawJoyCons, 2000);
 
     if (settings.keyboardControls) {
       $("#keyboardControlsCheckbox").prop("checked", true).trigger("change");
@@ -23208,38 +23194,15 @@ $(document).ready(function () {
       replaceWithTwitch("#lagless" + settings.tab);
       $("#tab1").addClass("disabled");
       $("#tab3").addClass("disabled");
-      $("#tab4").addClass("disabled"); // remove the logout button:
+      $("#tab4").addClass("disabled");
+      $("#tab5").addClass("disabled"); // remove the logout button:
 
-      $("#logout").remove(); // 			$("#loggedInStatus").css("width", "100%");
-      // 			$("#loggedInStatus").text("Not logged in.");
-
+      $("#logout").remove();
       $("#loggedInStatus").remove();
       $(".disabled").on("click", function () {
-        swal("You need to sign in first!");
+        swal("You have to sign in first!");
       });
-    } // fit text:
-    // 		fitText(".requestTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // 		fitText(".cancelTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // 		fitText(".list-group-item", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // // 		fitText("#loggedInIndicator", 2.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // 		fitText("#lButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // 		fitText("#zlButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // 		fitText("#rButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // 		fitText("#zrButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-    // 		fitText(".collapseButton", 0.2, { minFontSize: "10px", maxFontSize: "16px" });
-    // 		fitText(".resolutionButton", 0.2, { minFontSize: "8px", maxFontSize: "16px" });
-    // 		fitText(".fpsButton", 0.25, { minFontSize: "8px", maxFontSize: "16px" });
-    // 		resizers.push(textFitPercent({selector: "#lagless2KeyboardDropdown", percentWidth: 20, isFirstChild: true, parent: "#lagless2Bar"}));
-    // 		resizers.push(textFitPercent({
-    // 			selector: ".keyboardDropdown",
-    // 			parent: ".laglessBar",
-    // 			percentWidth: 20,
-    // 			isFirstChild: true,
-    // 			isClass: true,
-    // 			maxTries: 20,
-    // 			increment: 0.2,
-    // 		}));
-
+    }
 
     resizers.push(textFitPercent({
       selector: "#lagless2KeyboardDropdown",
@@ -23310,11 +23273,7 @@ $(document).ready(function () {
     // 			shard: "https://cl2.widgetbot.io",
     // 		});
   });
-});
-
-function setKeyboardMapperClasses() {}
-
-$("#keyboard li").on("click", function (event) {}); // https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
+}); // https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
 
 function keyDownHandler(event) {
   keyDownHandler.element = keyDownHandler.element || "";
@@ -23397,94 +23356,37 @@ function clearAndReplaceProfiles() {
     var optionHTML = "<button class='keyboard-dropdown-item'" + " config='" + JSON.stringify(settings.keyboardProfiles[_key]) + "'>" + _key + "</button>";
     $(".keyboard-dropdown-menu").append(optionHTML);
   }
-
-  $(".keyboard-dropdown-item").on("click", function (event) {
-    var configName = $(event.target).text();
-    $("#dropdownMenuLink").text(configName);
-    keyboardLayout = JSON.parse($(event.target).attr("config"));
-    setKeyboardMapperClasses();
-  });
 }
 
-var leftJoyConImage;
-var rightJoyConImage;
+$(document).on("click", ".keyboard-dropdown-item", function (event) {
+  var configName = $(event.target).text();
+  $("#keyboardDropdownButton").text(configName);
+  keyboardLayout = JSON.parse($(event.target).attr("config"));
+  console.log(configName);
+});
 /* TOUCH CONTROLS */
 
-function drawJoyCons() {
-  var leftJoyConCanvas = $("#leftJoyConCanvas")[0];
-  leftJoyConCanvas.width = 500;
-  leftJoyConCanvas.height = 500;
-  var leftJoyConCtx = leftJoyConCanvas.getContext("2d");
-  /*let */
-
-  leftJoyConImage = new Image();
-
-  leftJoyConImage.onload = function () {
-    var imgWidth = leftJoyConImage.width;
-    var imgHeight = leftJoyConImage.height;
-    var canvasWidth = leftJoyConCanvas.width;
-    var canvasHeight = leftJoyConCanvas.height;
-    var ratio = imgHeight / imgWidth;
-    var canvasRatio = canvasWidth / canvasHeight;
-    var ratioW = 500 / $("#leftJoyConCanvas").innerWidth();
-    var ratioH = 500 / $("#leftJoyConCanvas").innerHeight();
-    var cWidth = $("#leftJoyConCanvas").innerWidth();
-    leftJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-    leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-  };
-
-  leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
-  var rightJoyConCanvas = $("#rightJoyConCanvas")[0];
-  rightJoyConCanvas.width = 500;
-  rightJoyConCanvas.height = 500;
-  var rightJoyConCtx = rightJoyConCanvas.getContext("2d");
-  /*let */
-
-  rightJoyConImage = new Image();
-
-  rightJoyConImage.onload = function () {
-    var imgWidth = rightJoyConImage.width;
-    var imgHeight = rightJoyConImage.height;
-    var canvasWidth = rightJoyConCanvas.width;
-    var canvasHeight = rightJoyConCanvas.height;
-    var ratio = imgHeight / imgWidth;
-    var canvasRatio = canvasWidth / canvasHeight;
-    var ratioW = 500 / $("#rightJoyConCanvas").innerWidth();
-    var ratioH = 500 / $("#rightJoyConCanvas").innerHeight();
-    var cWidth = $("#rightJoyConCanvas").innerWidth();
-    rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-    rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-  };
-
-  rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
-}
-
 function setVideoWidth(width) {
-  if (typeof $("#videoCanvas1")[0] != "undefined") {
-    $("#videoCanvas1")[0].style.width = width + "%";
-    $("#videoCanvas1")[0].style["margin-left"] = (100 - width) / 2 + "%";
-  }
-
-  if (typeof $("#videoCanvas2")[0] != "undefined") {
-    $("#videoCanvas2")[0].style.width = width + "%";
-    $("#videoCanvas2")[0].style["margin-left"] = (100 - width) / 2 + "%";
-  }
-
-  if (typeof $("#videoCanvas3")[0] != "undefined") {
-    $("#videoCanvas3")[0].style.width = width + "%";
-    $("#videoCanvas3")[0].style["margin-left"] = (100 - width) / 2 + "%";
-  }
-
-  if (typeof $("#videoCanvas4")[0] != "undefined") {
-    $("#videoCanvas4")[0].style.width = width + "%";
-    $("#videoCanvas4")[0].style["margin-left"] = (100 - width) / 2 + "%";
-  }
-
-  if (typeof $("#videoCanvas5")[0] != "undefined") {
-    $("#videoCanvas5")[0].style.width = width + "%";
-    $("#videoCanvas5")[0].style["margin-left"] = (100 - width) / 2 + "%";
-  }
-
+  // if (typeof $("#videoCanvas1")[0] != "undefined") {
+  // 	$("#videoCanvas1")[0].style.width = width + "%";
+  // 	$("#videoCanvas1")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+  // }
+  // if (typeof $("#videoCanvas2")[0] != "undefined") {
+  // 	$("#videoCanvas2")[0].style.width = width + "%";
+  // 	$("#videoCanvas2")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+  // }
+  // if (typeof $("#videoCanvas3")[0] != "undefined") {
+  // 	$("#videoCanvas3")[0].style.width = width + "%";
+  // 	$("#videoCanvas3")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+  // }
+  // if (typeof $("#videoCanvas4")[0] != "undefined") {
+  // 	$("#videoCanvas4")[0].style.width = width + "%";
+  // 	$("#videoCanvas4")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+  // }
+  // if (typeof $("#videoCanvas5")[0] != "undefined") {
+  // 	$("#videoCanvas5")[0].style.width = width + "%";
+  // 	$("#videoCanvas5")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+  // }
   if (typeof $("#twitchVideo")[0] != "undefined") {
     $("#twitchVideo")[0].style.width = width + "%";
     $("#twitchVideo")[0].style["margin-left"] = (100 - width) / 2 + "%"; // calculate height for twitch:
@@ -23501,24 +23403,21 @@ function setVideoWidth(width) {
     // 		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
 
     $("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9 / 16);
-  }
+  } // $("#rightJoyCon")[0].style["margin-left"] = (width) + ((100 - width) / 2) + "%";
+  // $("#leftJoyCon")[0].style.width = ((100 - width) / 2) + "%";
+  // $("#rightJoyCon")[0].style.width = ((100 - width) / 2) + "%";
 
-  $("#rightJoyCon")[0].style["margin-left"] = width + (100 - width) / 2 + "%";
-  $("#leftJoyCon")[0].style.width = (100 - width) / 2 + "%";
-  $("#rightJoyCon")[0].style.width = (100 - width) / 2 + "%";
-  leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
-  rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
 }
 
 function resizeChat() {} // 	let height = 0;
 // 	height += $(".videoCanvas").addUp($.fn.outerHeight);
-// // 	height += $(".laglessBar").addUp($.fn.outerHeight);
+//  	height += $(".laglessBar").addUp($.fn.outerHeight);
 // 	height += ($("#navTabs").outerHeight());
 // 	height -= ($("#loggedInContainer").outerHeight());
 // 	height += 10;// adjust
 // 	$("#chat").height(height);
 
-/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 
 var leftJoyStick = {
@@ -23713,9 +23612,7 @@ function onButtonPress(event) {
   }
 
   if (controlQueue1.indexOf(myUniqueID) == -1) {
-    socket.emit("requestTurn", currentPlayerChosen);
-    var html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
-    $("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
+    socket.emit("joinQueue", currentPlayerChosen);
   }
 }
 
@@ -23887,7 +23784,7 @@ setTimeout(function () {
     });
   }
 }, 5000);
-/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // prevent arrow keys from messing with the slider:
 // https://stackoverflow.com/questions/2922174/jquery-ui-slider-how-to-disable-keyboard-input
 
@@ -23974,7 +23871,7 @@ $("#scaleSlider").slider({
 });
 $("#fpsSlider").slider({
   min: 1,
-  max: 25,
+  max: 18,
   step: 1,
   value: 15,
   range: "min",
@@ -24056,7 +23953,7 @@ $("#stickReturnSlider").slider({
 // 		setVideoWidth(ui.value);
 //   	},
 // 	stop: function(event, ui) {
-// // 		localforage.setItem("settings", JSON.stringify(settings));
+//  		localforage.setItem("settings", JSON.stringify(settings));
 // 	}
 // });
 
@@ -24086,9 +23983,9 @@ $("#bitrateSlider2").slider({
 });
 $("#scaleSlider2").slider({
   min: 100,
-  max: 960,
+  max: 720,
   step: 1,
-  value: 960,
+  value: 720,
   range: "min",
   animate: true,
   slide: function slide(event, ui) {
@@ -24119,13 +24016,6 @@ $("#720p").on("click", function (event) {
   $("#scaleSlider2").slider("value", 720);
   socket.emit("lagless2Settings", {
     scale: 720
-  });
-});
-$("#960p").on("click", function (event) {
-  $("#scale2").text(960);
-  $("#scaleSlider2").slider("value", 960);
-  socket.emit("lagless2Settings", {
-    scale: 960
   });
 });
 $("#offsetXSlider2").slider({
@@ -24314,10 +24204,10 @@ $("#lagless1Refresh").on("click", function () {
 /* LAGLESS 2.0 */
 // Setup the WebSocket connection and start the player
 
-var url = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
+var lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
 var canvas2 = $("#videoCanvas2")[0]; // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-// let player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
+// let player = new JSMpeg.Player(lagless2URL, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
 // player.maxAudioLag = 0.5;
 // player.stop();
 
@@ -24338,12 +24228,10 @@ socket.on("lagless2SettingsChange", function (data) {
     player.destroy();
   } catch (error) {}
 
-  player = new JSMpeg.Player(url, {
+  player = new JSMpeg.Player(lagless2URL, {
     canvas: canvas2,
     video: true,
-    audio:
-    /*!settings.audioThree*/
-    true,
+    audio: true,
     videoBufferSize: videoBufferSize,
     audioBufferSize: audioBufferSize,
     maxAudioLag: 0.5
@@ -24365,6 +24253,24 @@ var canvas3 = $("#videoCanvas3")[0]; // Create h264 player
 
 var uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 var wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
+window.wsavc = wsavc;
+wsavc.on("disconnected", function () {
+  return console.log("WS Disconnected");
+});
+wsavc.on("connected", function () {
+  return console.log("WS connected");
+});
+wsavc.on("frame_shift", function (fbl) {// fb.innerText = "fl: " + fbl
+});
+wsavc.on("initalized", function (payload) {
+  console.log("Initialized", payload);
+});
+wsavc.on("stream_active", function (active) {
+  return console.log("Stream is ", active ? "active" : "offline");
+});
+wsavc.on("custom_event_from_server", function (event) {
+  return console.log("got event from server", event);
+});
 $("#lagless3Refresh").on("click", function () {
   try {
     wsavc.disconnect();
@@ -24444,14 +24350,14 @@ socket2.on("viewImage5", function (data) {
 /* RESIZABLE */
 // interact("#picture")
 // 	.resizable({
-//     // resize from all edges and corners
+//      resize from all edges and corners
 //     edges: { left: false, right: true, bottom: false, top: false },
-//     // keep the edges inside the parent
+//      keep the edges inside the parent
 //     restrictEdges: {
 //       outer: "parent",
 //       endOnly: true,
 //     },
-//     // minimum size
+//      minimum size
 //     restrictSize: {
 //       min: { width: 100, height: 50 },
 //     },
@@ -24462,20 +24368,20 @@ socket2.on("viewImage5", function (data) {
 //     var target = event.target,
 //         x = (parseFloat(target.getAttribute("data-x")) || 0),
 //         y = (parseFloat(target.getAttribute("data-y")) || 0);
-//     // update the element's style
+//      update the element's style
 //     target.style.width  = event.rect.width + "px";
 //     target.style.height = event.rect.height + "px";
 //   });
 // interact("#videoCanvas2")
 // 	.resizable({
-//     // resize from all edges and corners
+//      resize from all edges and corners
 //     edges: { left: true, right: true, bottom: true, top: true },
-//     // keep the edges inside the parent
+//      keep the edges inside the parent
 //     restrictEdges: {
 //       outer: "parent",
 //       endOnly: true,
 //     },
-//     // minimum size
+//      minimum size
 //     restrictSize: {
 //       min: { width: 100, height: 50 },
 //     },
@@ -24486,20 +24392,20 @@ socket2.on("viewImage5", function (data) {
 //     var target = event.target,
 //         x = (parseFloat(target.getAttribute("data-x")) || 0),
 //         y = (parseFloat(target.getAttribute("data-y")) || 0);
-//     // update the element's style
+//      update the element's style
 //     target.style.width  = event.rect.width + "px";
 //     target.style.height = event.rect.height + "px";
 //   });
 // interact("#videoCanvas3")
 // 	.resizable({
-//     // resize from all edges and corners
+//      resize from all edges and corners
 //     edges: { left: true, right: true, bottom: true, top: true },
-//     // keep the edges inside the parent
+//      keep the edges inside the parent
 //     restrictEdges: {
 //       outer: "parent",
 //       endOnly: true,
 //     },
-//     // minimum size
+//      minimum size
 //     restrictSize: {
 //       min: { width: 100, height: 50 },
 //     },
@@ -24510,7 +24416,7 @@ socket2.on("viewImage5", function (data) {
 //     var target = event.target,
 //         x = (parseFloat(target.getAttribute("data-x")) || 0),
 //         y = (parseFloat(target.getAttribute("data-y")) || 0);
-//     // update the element's style
+//      update the element's style
 //     target.style.width  = event.rect.width + "px";
 //     target.style.height = event.rect.height + "px";
 //   });
@@ -24532,14 +24438,12 @@ function addJoyCons(tab, actual) {
 
   $("#leftJoyCon").remove();
   $("#rightJoyCon").remove();
-  var leftJoyConHTML = "\n\t<div id=\"leftJoyCon\">\n\t\t<canvas id=\"leftJoyConCanvas\"></canvas>\n\t\t<div id=\"leftStick\">\n\t\t\t<div id=\"leftStick2\"></div>\n\t\t</div>\n\n\t\t<div id=\"dpadButtons\">\n\t\t\t<div id=\"upButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"downButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"leftButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"rightButton\" class=\"controllerButton\"></div>\n\t\t</div>\n\t\t<div id=\"leftJoyConOther\">\n\t\t\t<div id=\"minusButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"captureButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"lButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">L</div></div>\n\t\t\t<div id=\"zlButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">ZL</div></div>\n\t\t</div>\n\t</div>";
-  var rightJoyConHTML = "\n\t<div id=\"rightJoyCon\">\n\t\t<canvas id=\"rightJoyConCanvas\"></canvas>\n\t\t<div id=\"rightStick\">\n\t\t\t<div id=\"rightStick2\"></div>\n\t\t</div>\n\t\t<div id=\"abxyButtons\">\n\t\t\t<div id=\"xButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"bButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"yButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"aButton\" class=\"controllerButton\"></div>\n\t\t</div>\n\t\t<div id=\"rightJoyConOther\">\n\t\t\t<div id=\"plusButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"homeButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"rButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">R</div></div>\n\t\t\t<div id=\"zrButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">ZR</div></div>\n\t\t</div>\n\t</div>";
+  var leftJoyConHTML = "\n\t<div id=\"leftJoyCon\">\n\t\t<img id=\"leftJoyConCanvas\" src=\"https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png\" />\n\t\t<div id=\"leftStick\">\n\t\t\t<div id=\"leftStick2\"></div>\n\t\t</div>\n\n\t\t<div id=\"dpadButtons\">\n\t\t\t<div id=\"upButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"downButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"leftButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"rightButton\" class=\"controllerButton\"></div>\n\t\t</div>\n\t\t<div id=\"leftJoyConOther\">\n\t\t\t<div id=\"minusButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"captureButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"lButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">L</div></div>\n\t\t\t<div id=\"zlButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">ZL</div></div>\n\t\t</div>\n\t</div>";
+  var rightJoyConHTML = "\n\t<div id=\"rightJoyCon\">\n\t\t<img id=\"rightJoyConCanvas\" src=\"https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png\" />\n\t\t<div id=\"rightStick\">\n\t\t\t<div id=\"rightStick2\"></div>\n\t\t</div>\n\t\t<div id=\"abxyButtons\">\n\t\t\t<div id=\"xButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"bButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"yButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"aButton\" class=\"controllerButton\"></div>\n\t\t</div>\n\t\t<div id=\"rightJoyConOther\">\n\t\t\t<div id=\"plusButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"homeButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"rButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">R</div></div>\n\t\t\t<div id=\"zrButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">ZR</div></div>\n\t\t</div>\n\t</div>";
   $(tab).prepend(leftJoyConHTML);
-  $(tab).prepend(rightJoyConHTML); // rebind touch controls:
+  $(tab).append(rightJoyConHTML); // rebind touch controls:
 
-  rebindUnbindTouchControls(); // redraw joycons:
-
-  drawJoyCons(); // resize window:
+  rebindUnbindTouchControls(); // resize window:
 
   setVideoWidth(73.2); // rebind sticks:
 
@@ -24576,11 +24480,11 @@ function switchTabs(tab) {
       player.destroy();
     } catch (error) {}
 
-    player = new JSMpeg.Player(url, {
+    player = new JSMpeg.Player(lagless2URL, {
       canvas: canvas2,
       video: true,
       audio:
-      /*!settings.audioThree*/
+      /* !settings.audioThree */
       true,
       videoBufferSize: videoBufferSize,
       audioBufferSize: audioBufferSize,
@@ -24600,7 +24504,7 @@ function switchTabs(tab) {
       player.destroy();
     } catch (error) {}
 
-    player = new JSMpeg.Player(url, {
+    player = new JSMpeg.Player(lagless2URL, {
       canvas: canvas2,
       video: false,
       audio: true,
@@ -24680,8 +24584,6 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
 
   if (!settings.largescreen) {
     addJoyCons(contentId);
-    setTimeout(drawJoyCons, 2000); // todo: find a solution like onload, but for tab changes
-
     rebindUnbindTouchControls();
   } // https://github.com/yoannmoinet/nipplejs/issues/39
   // force joysticks to recalculate the center:
@@ -24851,236 +24753,11 @@ socket.on("replaceWithLagless", function () {
 
 /* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 
-var BandwidthHandler = function () {
-  function setBAS(sdp, bandwidth, isScreen) {
-    if (!!navigator.mozGetUserMedia || !bandwidth) {
-      return sdp;
-    }
-
-    if (isScreen) {
-      if (!bandwidth.screen) {
-        console.warn('It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.');
-      } else if (bandwidth.screen < 300) {
-        console.warn('It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.');
-      }
-    } // if screen; must use at least 300kbs
-
-
-    if (bandwidth.screen && isScreen) {
-      sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
-      sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n');
-    } // remove existing bandwidth lines
-
-
-    if (bandwidth.audio || bandwidth.video || bandwidth.data) {
-      sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
-    }
-
-    if (bandwidth.audio) {
-      sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + bandwidth.audio + '\r\n');
-    }
-
-    if (bandwidth.video) {
-      sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + (isScreen ? bandwidth.screen : bandwidth.video) + '\r\n');
-    }
-
-    return sdp;
-  } // Find the line in sdpLines that starts with |prefix|, and, if specified,
-  // contains |substr| (case-insensitive search).
-
-
-  function findLine(sdpLines, prefix, substr) {
-    return findLineInRange(sdpLines, 0, -1, prefix, substr);
-  } // Find the line in sdpLines[startLine...endLine - 1] that starts with |prefix|
-  // and, if specified, contains |substr| (case-insensitive search).
-
-
-  function findLineInRange(sdpLines, startLine, endLine, prefix, substr) {
-    var realEndLine = endLine !== -1 ? endLine : sdpLines.length;
-
-    for (var i = startLine; i < realEndLine; ++i) {
-      if (sdpLines[i].indexOf(prefix) === 0) {
-        if (!substr || sdpLines[i].toLowerCase().indexOf(substr.toLowerCase()) !== -1) {
-          return i;
-        }
-      }
-    }
-
-    return null;
-  } // Gets the codec payload type from an a=rtpmap:X line.
-
-
-  function getCodecPayloadType(sdpLine) {
-    var pattern = new RegExp('a=rtpmap:(\\d+) \\w+\\/\\d+');
-    var result = sdpLine.match(pattern);
-    return result && result.length === 2 ? result[1] : null;
-  }
-
-  function _setVideoBitrates(sdp, params) {
-    params = params || {};
-    var xgoogle_min_bitrate = params.min;
-    var xgoogle_max_bitrate = params.max;
-    var sdpLines = sdp.split('\r\n'); // VP8
-
-    var vp8Index = findLine(sdpLines, 'a=rtpmap', 'VP8/90000');
-    var vp8Payload;
-
-    if (vp8Index) {
-      vp8Payload = getCodecPayloadType(sdpLines[vp8Index]);
-    }
-
-    if (!vp8Payload) {
-      return sdp;
-    }
-
-    var rtxIndex = findLine(sdpLines, 'a=rtpmap', 'rtx/90000');
-    var rtxPayload;
-
-    if (rtxIndex) {
-      rtxPayload = getCodecPayloadType(sdpLines[rtxIndex]);
-    }
-
-    if (!rtxIndex) {
-      return sdp;
-    }
-
-    var rtxFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + rtxPayload.toString());
-
-    if (rtxFmtpLineIndex !== null) {
-      var appendrtxNext = '\r\n';
-      appendrtxNext += 'a=fmtp:' + vp8Payload + ' x-google-min-bitrate=' + (xgoogle_min_bitrate || '228') + '; x-google-max-bitrate=' + (xgoogle_max_bitrate || '228');
-      sdpLines[rtxFmtpLineIndex] = sdpLines[rtxFmtpLineIndex].concat(appendrtxNext);
-      sdp = sdpLines.join('\r\n');
-    }
-
-    return sdp;
-  }
-
-  function _setOpusAttributes(sdp, params) {
-    params = params || {};
-    var sdpLines = sdp.split('\r\n'); // Opus
-
-    var opusIndex = findLine(sdpLines, 'a=rtpmap', 'opus/48000');
-    var opusPayload;
-
-    if (opusIndex) {
-      opusPayload = getCodecPayloadType(sdpLines[opusIndex]);
-    }
-
-    if (!opusPayload) {
-      return sdp;
-    }
-
-    var opusFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + opusPayload.toString());
-
-    if (opusFmtpLineIndex === null) {
-      return sdp;
-    }
-
-    var appendOpusNext = '';
-    appendOpusNext += '; stereo=' + (typeof params.stereo != 'undefined' ? params.stereo : '1');
-    appendOpusNext += '; sprop-stereo=' + (typeof params['sprop-stereo'] != 'undefined' ? params['sprop-stereo'] : '1');
-
-    if (typeof params.maxaveragebitrate != 'undefined') {
-      appendOpusNext += '; maxaveragebitrate=' + (params.maxaveragebitrate || 128 * 1024 * 8);
-    }
-
-    if (typeof params.maxplaybackrate != 'undefined') {
-      appendOpusNext += '; maxplaybackrate=' + (params.maxplaybackrate || 128 * 1024 * 8);
-    }
-
-    if (typeof params.cbr != 'undefined') {
-      appendOpusNext += '; cbr=' + (typeof params.cbr != 'undefined' ? params.cbr : '1');
-    }
-
-    if (typeof params.useinbandfec != 'undefined') {
-      appendOpusNext += '; useinbandfec=' + params.useinbandfec;
-    }
-
-    if (typeof params.usedtx != 'undefined') {
-      appendOpusNext += '; usedtx=' + params.usedtx;
-    }
-
-    if (typeof params.maxptime != 'undefined') {
-      appendOpusNext += '\r\na=maxptime:' + params.maxptime;
-    }
-
-    sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(appendOpusNext);
-    sdp = sdpLines.join('\r\n');
-    return sdp;
-  }
-
-  return {
-    setApplicationSpecificBandwidth: function setApplicationSpecificBandwidth(sdp, bandwidth, isScreen) {
-      return setBAS(sdp, bandwidth, isScreen);
-    },
-    setVideoBitrates: function setVideoBitrates(sdp, params) {
-      return _setVideoBitrates(sdp, params);
-    },
-    setOpusAttributes: function setOpusAttributes(sdp, params) {
-      return _setOpusAttributes(sdp, params);
-    }
-  };
-}(); // example:
-// 		var bandwidth = {
-// 			screen: 300, // 300kbits minimum
-// 			audio: 50,   // 50kbits  minimum
-// 			video: 256   // 256kbits (both min-max)
-// 		};
-// 		var isScreenSharing = false;
-// 		sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
-// 		sdp = BandwidthHandler.setVideoBitrates(sdp, {
-// 			min: bandwidth.video,
-// 			max: bandwidth.video
-// 		});
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp);
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 			'stereo': 0, // to disable stereo (to force mono audio)
-// 			'sprop-stereo': 1,
-// 			'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 			'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 			'cbr': 0, // disable cbr
-// 			'useinbandfec': 1, // use inband fec
-// 			'usedtx': 1, // use dtx
-// 			'maxptime': 3
-// 		});
-
-
-function mySDPTransform(sdp) {
-  // 	sdp = BandwidthHandler.setOpusAttributes(sdp, {
-  // 		'stereo': 0, // to disable stereo (to force mono audio)
-  // 		'sprop-stereo': 1,
-  // 		'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-  // 		'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-  // 		'cbr': 0, // disable cbr
-  // 		'useinbandfec': 1, // use inband fec
-  // 		'usedtx': 1, // use dtx
-  // 		'maxptime': 3
-  // 	});
-  var bandwidth = {
-    screen: 300,
-    // 300kbits minimum
-    audio: 500,
-    // 500kbits  minimum
-    video: 256 // 256kbits (both min-max)
-
-  };
-  var isScreenSharing = false;
-  sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
-  sdp = BandwidthHandler.setVideoBitrates(sdp, {
-    min: bandwidth.video,
-    max: bandwidth.video
-  });
-  sdp = BandwidthHandler.setOpusAttributes(sdp);
-  return sdp;
-}
 /* AUDIO 3.0 */
-
 
 var peer = new SimplePeer({
   initiator: false,
-  trickle: true,
-  sdpTransform: mySDPTransform
+  trickle: true
 });
 peer.on("error", function (err) {
   console.log("error", err);
@@ -25132,7 +24809,7 @@ $("#enableAudioThreeCheckbox").on("change", function () {
 $("#audioThreeCheckbox").on("change", function () {
   if (!settings.enableAudioThree) {
     $("#audioThreeCheckbox").prop("checked", false);
-    swal("You need to enable Audio 3.0 first!");
+    swal("You have to enable Audio 3.0 first!");
     return;
   }
 
@@ -25141,8 +24818,7 @@ $("#audioThreeCheckbox").on("change", function () {
 
   if (settings.audioThree) {
     if (!audioConnected) {
-      // 			setTimeout(function() {
-      audio.volume = settings.volume / 100; // 			}, 8000);
+      audio.volume = settings.volume / 100;
     } else {
       try {
         audio.volume = settings.volume / 100;
@@ -25150,7 +24826,6 @@ $("#audioThreeCheckbox").on("change", function () {
       } catch (error) {}
     }
   } else {
-    // 		$("#audioThreeCheckbox").prop("checked", false);
     audio.volume = 0;
     player.volume = settings.volume / 100;
   }
@@ -25161,79 +24836,29 @@ $(".audioThreeCheckbox").on("change", function () {
     $(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
   }, 100);
 });
-/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+var ControlQueue = __webpack_require__(/*! src/components/ControlQueue.jsx */ "./src/components/ControlQueue.jsx");
+
+var JoinLeaveQueueButton = __webpack_require__(/*! src/components/JoinLeaveQueueButton.jsx */ "./src/components/JoinLeaveQueueButton.jsx");
+/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
 
 socket.on("controlQueues", function (data) {
-  var sameQueues = [];
-
-  for (var i = 0; i < data.controlQueues.length; i++) {
-    sameQueues.push(JSON.stringify(controlQueues[i]) === JSON.stringify(data.controlQueues[i]));
-  }
-
-  var controlQueuesChanged = JSON.stringify(controlQueues) !== JSON.stringify(data.controlQueues);
   controlQueues = data.controlQueues;
 
-  for (var _i2 = 0; _i2 < data.controlQueues.length; _i2++) {
-    // don't do anything if it hasn't changed:
-    if (sameQueues[_i2]) {
-      continue;
-    }
+  for (var i = 0; i < controlQueues.length; i++) {
+    _reactDom.default.render(_react.default.createElement(ControlQueue, {
+      num: i + 1,
+      viewerIDs: data.controlQueues[i],
+      usernameMap: usernameMap,
+      darkTheme: settings.darkTheme
+    }), document.getElementById("controlQueue" + (i + 1)));
 
-    $("#controlQueue" + (_i2 + 1)).empty();
-
-    for (var j = 0; j < data.controlQueues[_i2].length; j++) {
-      var username = usernameMap[data.controlQueues[_i2][j]];
-
-      var _html = void 0;
-
-      if (!settings.darkTheme) {
-        _html = '<li class="queueItem list-group-item" data-toggle="popover" tabindex="0">' + username + "</li>";
-      } else {
-        _html = '<li class="queueItem list-group-item-dark" data-toggle="popover" tabindex="0">' + username + "</li>";
-      }
-
-      $("#controlQueue" + (_i2 + 1)).append(_html);
-    }
-
-    var html = void 0;
-
-    if (!settings.darkTheme) {
-      html = "<li class='list-group-item'>The queue is empty.</li>";
-    } else {
-      html = "<li class='list-group-item-dark'>The queue is empty.</li>";
-    }
-
-    if (data.controlQueues[_i2].length === 0) {
-      $("#controlQueue" + (_i2 + 1)).append(html);
-    }
-  }
-
-  if (controlQueuesChanged) {
-    // join / leave button management:
-    // for each queue:
-    for (var _i3 = 0; _i3 < controlQueues.length; _i3++) {
-      // check if user is in this queue:
-      if (controlQueues[_i3].indexOf(myUniqueID) > -1) {
-        // change request button -> cancel button:
-        var cancelTurnButton = $("#cancelTurn" + (_i3 + 1))[0];
-
-        if (typeof cancelTurnButton == "undefined") {
-          var _html2 = '<button id="cancelTurn' + (_i3 + 1) + '" class="cancelTurn btn btn-secondary" code="' + _i3 + '">Leave Queue</button>';
-
-          $("#requestTurn" + (_i3 + 1)).replaceWith(_html2);
-        }
-      } else {
-        // change cancel button -> request button:
-        var requestTurnButton = $("#requestTurn" + (_i3 + 1))[0];
-
-        if (typeof requestTurnButton == "undefined") {
-          var _html3 = '<button id="requestTurn' + (_i3 + 1) + '" class="requestTurn btn btn-secondary" code="' + _i3 + '">Join Queue</button>';
-
-          $("#cancelTurn" + (_i3 + 1)).replaceWith(_html3);
-        }
-      }
-    } // 		$(window).trigger("resize.fittext");
-
+    _reactDom.default.render(_react.default.createElement(JoinLeaveQueueButton, {
+      num: i + 1,
+      controlQueue: data.controlQueues[i],
+      myID: myUniqueID
+    }), document.getElementById("joinLeaveQueue" + (i + 1)));
   }
 });
 /* MOD COMMANDS */
@@ -25321,8 +24946,7 @@ var TurnTimer = __webpack_require__(/*! src/components/TurnTimer.jsx */ "./src/c
 
 var ForfeitTimer = __webpack_require__(/*! src/components/ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx");
 
-var Player = __webpack_require__(/*! src/components/Player.jsx */ "./src/components/Player.jsx"); // viewerList.props.viewerIDs[1].push("1");
-
+var Player = __webpack_require__(/*! src/components/Player.jsx */ "./src/components/Player.jsx");
 
 socket.on("turnTimesLeft", function (data) {
   lastCurrentTime = Date.now();
@@ -25341,10 +24965,7 @@ socket.on("turnTimesLeft", function (data) {
       var _iconHTML = '<i class="material-icons">lock_open</i>';
       $('i:contains("lock")').replaceWith(_iconHTML);
     }
-  } // 	console.log(ViewerList.getNames());
-  // 	myViewerList.props.viewerIDs = viewers;
-  // 	myViewerList.props.usernameMap = usernameMap;
-
+  }
 
   _reactDom.default.render(_react.default.createElement(ViewerList, {
     viewerIDs: viewers,
@@ -25359,11 +24980,11 @@ socket.on("turnTimesLeft", function (data) {
     var timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
     var percent2 = parseInt(timeLeftMilli2 / timeTillForfeit * 100);
     var n = i + 1; // if (controlQueues[i][0] == null) {
-    // 	$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-    // 	$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+    // 	$("#turnTimerBarChild" + n).css("width", "100%").text("No one is playing right now.");
+    // 	$("#forfeitTimerBarChild" + n).css("width", "100%").text("No one is playing right now.");
     // } else {
-    // 	$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
-    // 	$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+    // 	$("#turnTimerBarChild" + n).css("width", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
+    // 	$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
     // }
     // ReactDOM.unmountComponentAtNode(document.getElementById("turnTimerBar" + n));
     // https://reactjs.org/blog/2015/10/01/react-render-and-top-level-api.html
@@ -25383,45 +25004,16 @@ socket.on("turnTimesLeft", function (data) {
     }), document.getElementById("forfeitTimerBar" + n));
   }
 
-  var totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length + data.viewers[3].length + data.viewers[4].length;
-
-  if (viewersChanged) {} // 		$(window).trigger("resize.fittext");
-  // for each lagless tab
-  // 		for (let i = 0; i < 4; i++) {
-  // 			$("#laglessViewerDropdownDiv").empty();
-  // 			for (let j = 0; j < data.viewers[i].length; j++) {
-  // // 				let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0">' + usernameMap[data.viewers[i][j]] + "</button>";
-  // 				let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0" uniqueID="' + data.viewers[i][j] + '">' + usernameMap[data.viewers[i][j]] + "</button>";
-  // 				$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(html);
-  // 			}
-  // 			// for each lagless tab:
-  // 			for (let k = 0; k < 4; k++) {
-  // 				// skip the tab we already did:
-  // 				if (k == i) {
-  // 					continue;
-  // 				}
-  // 				if (data.viewers[k].length > 0) {
-  // 					let dividerHTML = '<div class="dropdown-divider">Lagless ' + (k + 1) + "</div>";
-  // 					$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(dividerHTML);
-  // 					for (let j = 0; j < data.viewers[k].length; j++) {
-  // // 						let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0">' + usernameMap[data.viewers[k][j]] + "</button>";
-  // 						let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0" uniqueID="' + data.viewers[i][j] + '">' + usernameMap[data.viewers[i][j]] + "</button>";
-  // 						$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(html);
-  // 					}
-  // 				}
-  // 			}
-  // 		}
-  // lagless / twitch swap
-
+  var totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length + data.viewers[3].length + data.viewers[4].length; // lagless / twitch swap
 
   if (waitlistsChanged) {
     $("#waitlist").empty();
     var waitlistHeaderHTML = '<li class="list-group-item">Lagless ' + settings.tab + " waitlist</li>";
     $("#waitlist").append(waitlistHeaderHTML);
 
-    for (var _i4 = 0; _i4 < waitlists[settings.tab - 1].length; _i4++) {
+    for (var _i2 = 0; _i2 < waitlists[settings.tab - 1].length; _i2++) {
       var listHTML = void 0;
-      var ID = waitlists[settings.tab - 1][_i4];
+      var ID = waitlists[settings.tab - 1][_i2];
 
       if (myUniqueID == ID) {
         // 				if (!tabsSwappedWithTwitch[settings.tab-1]) {
@@ -25457,8 +25049,8 @@ socket.on("turnTimesLeft", function (data) {
 
       replaceWithLagless("#lagless" + settings.tab);
     } // 		for (let i = 0; i < 3; i++) {
-    // 	// 		if (!tabsSwappedWithTwitch[i]) {
-    // 	// 		}
+    //   		if (!tabsSwappedWithTwitch[i]) {
+    //   		}
     // 		}
 
   }
@@ -25469,7 +25061,7 @@ socket.on("turnTimesLeft", function (data) {
 // 	let timeLeftSec = parseInt(timeLeftMilli / 1000);
 // 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
 // 	let progressBar = $(".progress-bar");
-// 	progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
+// 	progressBar.css("width", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
 // }, 200);
 
 socket.on("forceRefresh", function (data) {
@@ -25485,29 +25077,29 @@ socket.on("forceRefresh", function (data) {
     location.reload(true);
   }, 5000);
 });
-$(document).on("click", ".requestTurn", function (event) {
-  var cNum = parseInt($(this).attr("code"));
+$(document).on("click", ".joinQueue", function (event) {
+  var cNum = parseInt($(this).attr("id").slice(-1)) - 1;
 
   for (var i = 0; i < controlQueues.length; i++) {
     if (i == cNum) {
       continue;
     }
 
-    socket.emit("cancelTurn", i);
+    socket.emit("leaveQueue", i);
   }
 
-  socket.emit("requestTurn", cNum);
+  socket.emit("joinQueue", cNum);
 });
-$(document).on("click", ".cancelTurn", function (event) {
-  var cNum = parseInt($(this).attr("code"));
-  socket.emit("cancelTurn", cNum);
+$(document).on("click", ".leaveQueue", function (event) {
+  var cNum = parseInt($(this).attr("id").slice(-1)) - 1;
+  socket.emit("leaveQueue", cNum);
 });
-/* MULTIPLAYER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* MULTIPLAYER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#player1Checkbox").prop("checked", true).trigger("change");
 $("#player1Checkbox").on("change", function (event) {
   if (this.checked) {
-    socket.emit("cancelTurn", currentPlayerChosen);
+    socket.emit("leaveQueue", currentPlayerChosen);
     currentPlayerChosen = 0;
     $("#player2Checkbox").prop("checked", false).trigger("change");
     $("#player3Checkbox").prop("checked", false).trigger("change");
@@ -25520,7 +25112,7 @@ $("#player1Checkbox").on("change", function (event) {
 });
 $("#player2Checkbox").on("change", function (event) {
   if (this.checked) {
-    socket.emit("cancelTurn", currentPlayerChosen);
+    socket.emit("leaveQueue", currentPlayerChosen);
     currentPlayerChosen = 1;
     $("#player1Checkbox").prop("checked", false).trigger("change");
     $("#player3Checkbox").prop("checked", false).trigger("change");
@@ -25533,7 +25125,7 @@ $("#player2Checkbox").on("change", function (event) {
 });
 $("#player3Checkbox").on("change", function (event) {
   if (this.checked) {
-    socket.emit("cancelTurn", currentPlayerChosen);
+    socket.emit("leaveQueue", currentPlayerChosen);
     currentPlayerChosen = 2;
     $("#player1Checkbox").prop("checked", false).trigger("change");
     $("#player2Checkbox").prop("checked", false).trigger("change");
@@ -25546,7 +25138,7 @@ $("#player3Checkbox").on("change", function (event) {
 });
 $("#player4Checkbox").on("change", function (event) {
   if (this.checked) {
-    socket.emit("cancelTurn", currentPlayerChosen);
+    socket.emit("leaveQueue", currentPlayerChosen);
     currentPlayerChosen = 3;
     $("#player1Checkbox").prop("checked", false).trigger("change");
     $("#player2Checkbox").prop("checked", false).trigger("change");
@@ -25559,7 +25151,7 @@ $("#player4Checkbox").on("change", function (event) {
 });
 $("#player5Checkbox").on("change", function (event) {
   if (this.checked) {
-    socket.emit("cancelTurn", currentPlayerChosen);
+    socket.emit("leaveQueue", currentPlayerChosen);
     currentPlayerChosen = 4;
     $("#player1Checkbox").prop("checked", false).trigger("change");
     $("#player2Checkbox").prop("checked", false).trigger("change");
@@ -25570,19 +25162,19 @@ $("#player5Checkbox").on("change", function (event) {
     event.preventDefault();
   }
 });
-/* TOGGLE KEYBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE KEYBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#keyboardControlsCheckbox").on("change", function () {
   settings.keyboardControls = this.checked;
   localforage.setItem("settings", JSON.stringify(settings));
 });
-/* TOGGLE CONTROLLER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE CONTROLLER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#controllerControlsCheckbox").on("change", function () {
   settings.controllerControls = this.checked;
   localforage.setItem("settings", JSON.stringify(settings));
 });
-/* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#darkThemeCheckbox").on("change", function () {
   settings.darkTheme = this.checked;
@@ -25638,7 +25230,7 @@ $("#darkThemeCheckbox").on("change", function () {
     $("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
   }
 });
-/* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#fullscreenCheckbox").on("change", function () {
   settings.fullscreen = this.checked;
@@ -25712,7 +25304,7 @@ function exitHandler() {
     resizeChat();
   }
 }
-/* TOGGLE LARGESCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE LARGESCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 
 $("#largescreenCheckbox").on("change", function () {
@@ -25735,7 +25327,7 @@ $("#largescreenCheckbox").on("change", function () {
     $("#touchControlsCheckbox").prop("checked", true).trigger("change");
   }
 });
-/* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#navCheckbox").on("change", function () {
   settings.hideNav = this.checked;
@@ -25747,19 +25339,19 @@ $("#navCheckbox").on("change", function () {
     $(".nav")[0].style.display = "";
   }
 });
-/* TOGGLE DPAD SWAP @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE DPAD SWAP @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#dpadCheckbox").on("change", function () {
   settings.dpadSwap = this.checked;
   localforage.setItem("settings", JSON.stringify(settings));
 });
-/* TOGGLE 3DS CONFIG @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE 3DS CONFIG @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#3DSCheckbox").on("change", function () {
   settings.TDSConfig = this.checked;
   localforage.setItem("settings", JSON.stringify(settings));
 });
-/* TOGGLE YOUTUBE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE YOUTUBE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#youtubeChatCheckbox").on("change", function () {
   settings.youtubeChat = this.checked;
@@ -25775,7 +25367,7 @@ $("#youtubeChatCheckbox").on("change", function () {
     }
   }
 });
-/* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#hideChatCheckbox").on("change", function () {
   settings.hideChat = this.checked;
@@ -25789,13 +25381,13 @@ $("#hideChatCheckbox").on("change", function () {
     $("#picture").css("width", "");
   }
 });
-/* TOGGLE ANALOG STICK MODE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TOGGLE ANALOG STICK MODE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#analogStickCheckbox").on("change", function () {
   settings.analogStickMode = this.checked;
   localforage.setItem("settings", JSON.stringify(settings));
 });
-/* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 socket.on("controllerState1", function (data) {
   var str = data;
@@ -25888,12 +25480,13 @@ socket.on("controllerState1", function (data) {
 
   try {
     for (var i = 0; i < btns.length; i++) {
-      // 			$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)";//50bb50
-      $("#" + btns[i])[0].style.background = "rgba(220, 220, 220, 0.7)"; //505050
+      $("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)"; //50bb50
+      // $("#" + btns[i])[0].style.background = "rgba(220, 220, 220, 0.7)"; 505050
+      // $("#" + btns[i])[0].style.background = "rgba(187, 187, 80, 0.7)"; //505050
     }
 
-    for (var _i5 = 0; _i5 < unpressedBtns.length; _i5++) {
-      $("#" + unpressedBtns[_i5])[0].style.background = "";
+    for (var _i3 = 0; _i3 < unpressedBtns.length; _i3++) {
+      $("#" + unpressedBtns[_i3])[0].style.background = "";
     }
   } catch (error) {
     console.log("buttons missing from DOM");
@@ -25935,7 +25528,7 @@ socket.on("controllerState1", function (data) {
     console.log("sticks missing from DOM");
   }
 });
-/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 setInterval(function () {
   pingTime = Date.now();
@@ -25968,7 +25561,7 @@ socket.on("pong2", function () {
   var latency = Date.now() - pingTime;
   $("#ping").text(latency + "ms");
 });
-/* MINE @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* MINE @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // todo: make sure it's configurable
 // let miner = new CoinHive.Anonymous("KBrW1gsiedkcmcFuyHij1XJIcb2C5fbF", {throttle: 0.5});
 // Only start on non-mobile devices and if not opted-out
@@ -26033,22 +25626,22 @@ socket.on("pong2", function () {
 // 		$("#splitTimes").children()[i].innerHTML = msToTime(times[i]);
 // 	}
 // 	let t = (currentTime / 1000);
-// 	//t.toFixed(3)
+//  t.toFixed(3)
 // 	$("#times").children()[0].innerHTML = msToTime(currentTime);
 // 	lastSplitTime = new Date();
 // 	lastSplitTimeMS = currentTime;
 // });
 // socket.on("clearSplitTimes", function(data) {
-// // 	$("#splitTimes").empty();
+//  	$("#splitTimes").empty();
 // 	let listHTML;
 // 	if (settings.darkTheme) {
 // 		listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
 // 	} else {
 // 		listHTML = "<li class='list-group-item'>&nbsp;</li>";
 // 	}
-// // 	for (let i = 0; i < splitNames.length; i++) {
-// // 		$("#splitTimes").children()[i].replaceWith(listHTML);
-// // 	}
+//  	for (let i = 0; i < splitNames.length; i++) {
+//  		$("#splitTimes").children()[i].replaceWith(listHTML);
+//  	}
 // 	$("#splitTimes").children().each(function() {
 // 		$(this).replaceWith(listHTML);
 // 	});
@@ -26059,16 +25652,16 @@ socket.on("pong2", function () {
 // 	let currentTime = lastSplitTimeMS + timePassed;
 // 	$("#times").children()[0].innerHTML = msToTime(currentTime);
 // }, 50);
-// // easily split:
+//  easily split:
 // window.addEventListener("keydown", function(e) {
-// 	// space, numpad3
+//   space, numpad3
 // 	if ([32, 99].indexOf(e.keyCode) > -1) {
 // 		e.preventDefault();
 // 		socket.emit("moveToNextSplit");
 // 	}
 // }, false);
 
-/* TUTORIAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TUTORIAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 function tutorial() {
   if (typeof tutorial.step == "undefined") {
@@ -26079,12 +25672,12 @@ function tutorial() {
 
   var step = tutorial.step;
   var c = -1; // 	if (step === ++c) {
-  // // 		$(document).scrollTop(0);
+  //  		$(document).scrollTop(0);
   // 		$("html, body").animate({
   // 			scrollTop: 0,
   // 		}, 500);
-  // // 		$("#tutorialWindow").modal();
-  // // 		swal("tutorial");
+  //  		$("#tutorialWindow").modal();
+  //  		swal("tutorial");
   // 		$(document).on("click", function(event) {
   // 			event.preventDefault();
   // 			tutorial();
@@ -26269,7 +25862,7 @@ function tutorial() {
     var _div11 = "#lagless2KeyboardDropdown";
     $(_div11).effect("highlight", {}, 3000);
 
-    var _popupHTML12 = $('<div id="laglessKeyboardDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this change between keyboard profiles.</div>');
+    var _popupHTML12 = $('<div id="keyboardDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this change between keyboard profiles.</div>');
 
     $("#container").append(_popupHTML12);
 
@@ -26277,7 +25870,7 @@ function tutorial() {
       placement: "bottom"
     });
   } // 	if (step === ++c) {
-  // 		$("#laglessKeyboardDropdownPopup").remove();
+  // 		$("#keyboardDropdownPopup").remove();
   // 		let div = "#timer";
   // 		$(div).effect("highlight", {}, 3000);
   // 		let popupHTML = $('<div id="timerPopup" class="genericPopup"><span class="tooltipArrowUp"></span>The current local time.</div>');
@@ -26291,7 +25884,7 @@ function tutorial() {
 
   if (step === ++c) {
     // 		$("#timerPopup").remove();
-    $("#laglessKeyboardDropdownPopup").remove(); // 		$("#rightJoyConPopup").remove();
+    $("#keyboardDropdownPopup").remove(); // 		$("#rightJoyConPopup").remove();
 
     $("html, body").animate({
       scrollTop: $("#players").offset().top
@@ -26339,10 +25932,10 @@ function tutorial() {
   if (step === ++c) {
     $("#turnTimerBarPopup").remove();
     $("#forfeitTimerBarPopup").remove();
-    var _div15 = "#requestTurn1";
+    var _div15 = "#joinQueue1";
     $(_div15).effect("highlight", {}, 3000);
 
-    var _popupHTML16 = $('<div id="requestTurnPopup" class="largerPopup"><span class="tooltipArrowUp"></span>Use this to manually request a turn, turns are automatically requested for you if you try to send any input though.</div>');
+    var _popupHTML16 = $('<div id="joinQueuePopup" class="largerPopup"><span class="tooltipArrowUp"></span>Use this to manually request a turn, turns are automatically requested for you if you try to send any input though.</div>');
 
     $("#container").append(_popupHTML16);
 
@@ -26361,7 +25954,7 @@ function tutorial() {
 
 
   if (step === ++c) {
-    $("#requestTurnPopup").remove(); // 		$("#cancelTurnPopup").remove();
+    $("#joinQueuePopup").remove(); // 		$("#cancelTurnPopup").remove();
 
     var _div16 = "#controlQueue1";
     $(_div16).effect("highlight", {}, 3000);
@@ -26375,7 +25968,7 @@ function tutorial() {
     });
   } // checkbox settings:
   // 	if (step === ++c) {
-  // 		$("#requestTurnPopup").remove();
+  // 		$("#joinQueuePopup").remove();
   // 		$("#cancelTurnPopup").remove();
   // 		let div = "#keyboardControllerCheckbox";
   // 		$(div).effect("highlight", {}, 3000);
@@ -26454,9 +26047,6 @@ $("#resetSettings").on("click", function (event) {
     location.reload(true);
   });
 });
-/* FIT TEXT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-// let reqFit = fitty(".requestTurn");
-
 /* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 window.onbeforeunload = closingCode;
@@ -26473,14 +26063,14 @@ function closingCode() {
 // 		let target = $($(self).attr("data-target"));
 // 		if (!target.hasClass("show")) {
 // 			$(self).text("Show");
-// 			// make the parent height equal to the button height:
-// // 			let height = $(self).outerHeight() + 5;
-// // 			$(self).parent().height(height);
+// 		  make the parent height equal to the button height:
+//  			let height = $(self).outerHeight() + 5;
+//  			$(self).parent().height(height);
 // 		} else {
 // 			$(self).text("Hide");
 // 			$(self).parent().css("height", "");
-// // 			let height = target.outerHeight();
-// // 			$(self).parent().height(height);
+//  			let height = target.outerHeight();
+//  			$(self).parent().height(height);
 // 		}
 // 	}, 500, this);
 // });
@@ -26510,11 +26100,11 @@ $(".collapseButton").on("click", function (event) {
     }, 500);
   }
 });
-$(".collapsible").on("show.bs.collapse", function () {// // 	$(this).parent().css("margin-top", "");
+$(".collapsible").on("show.bs.collapse", function () {//  	$(this).parent().css("margin-top", "");
   // 	$(this).parent().animate({"margin-top": "0px"});
   // 	$(this).parent().css("width", "");
   // 	$(this).parent().css("height", "");
-  // // 	$(this).parent().animate({"width": "", "height": ""});
+  //  	$(this).parent().animate({"width": "", "height": ""});
   // 	let thisId = "#" + $(this).attr("id");
   // 	let button = $('[data-target="' + thisId + '"]');
   // 	button.css("align-self", "");
@@ -26560,7 +26150,7 @@ $(window).focus(function () {
   wasPressedKeyCodes = [];
   sendControllerState();
 });
-/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 socket.on("rickroll", function (data) {
   if (myUsername == data || data == "everyone") {
@@ -26581,7 +26171,7 @@ socket.on("rickroll", function (data) {
       customClass: "swal-wide"
     }); // 		let timerInterval
     // 		swal({
-    // // 			title: "Auto close alert!",
+    //  			title: "Auto close alert!",
     // 			html: "closing in <strong></strong> seconds.",
     // 			timer: 2000,
     // 			onOpen: () => {
@@ -26636,7 +26226,7 @@ setInterval(function () {
     if (bannedIPs.indexOf(data.ip) > -1) {
       window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
     } // 		if (banlist.indexOf(myUniqueID) > -1) {
-    // // 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+    //  			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
     // 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
     // 		}
 
@@ -26952,6 +26542,111 @@ exports.deleteAllCookies = function () {
 
 /***/ }),
 
+/***/ "./src/components/ControlQueue.jsx":
+/*!*****************************************!*\
+  !*** ./src/components/ControlQueue.jsx ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ControlQueue =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(ControlQueue, _PureComponent);
+
+  function ControlQueue(props) {
+    var _this;
+
+    _classCallCheck(this, ControlQueue);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ControlQueue).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(ControlQueue, [{
+    key: "getQueue",
+    value: function getQueue() {
+      var queue = [];
+      var usernameMap = this.props.usernameMap;
+      var elementClass = this.props.darkTheme ? "queueItem list-group-item-dark" : "queueItem list-group-item";
+
+      if (this.props.viewerIDs.length == 0) {
+        return _react.default.createElement("li", {
+          key: "0",
+          className: elementClass,
+          "data-toggle": "popover",
+          tabIndex: "0"
+        }, "The queue is empty.");
+      }
+
+      for (var i = 0; i < this.props.viewerIDs.length; i++) {
+        var username = this.props.usernameMap[this.props.viewerIDs[i]];
+
+        var html = _react.default.createElement("li", {
+          key: i,
+          className: elementClass,
+          "data-toggle": "popover",
+          tabIndex: "0"
+        }, username);
+
+        queue.push(html);
+      }
+
+      return queue;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("ul", {
+        id: "controlQueue" + this.props.num,
+        className: "controlQueue list-group"
+      }, this.getQueue());
+    }
+  }]);
+
+  return ControlQueue;
+}(_react.PureComponent);
+
+exports.default = ControlQueue;
+module.exports = exports.default;
+
+/***/ }),
+
 /***/ "./src/components/ForfeitTimer.jsx":
 /*!*****************************************!*\
   !*** ./src/components/ForfeitTimer.jsx ***!
@@ -26993,8 +26688,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var TurnTimer =
 /*#__PURE__*/
-function (_Component) {
-  _inherits(TurnTimer, _Component);
+function (_PureComponent) {
+  _inherits(TurnTimer, _PureComponent);
 
   function TurnTimer(props) {
     var _this;
@@ -27033,25 +26728,114 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+      return _react.default.createElement("div", {
         id: "forfeitTimerBar" + this.props.num,
         className: "forfeitTimerBar progress"
       }, _react.default.createElement("div", {
         id: "forfeitTimerBarChild" + this.props.num,
         className: "forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active",
-        role: "progressbar",
-        "aria-valuenow": "0",
-        "aria-valuemin": "0",
-        "aria-valuemax": "100",
         style: this.getStyle()
-      }, this.getBarText())));
+      }, this.getBarText()));
     }
   }]);
 
   return TurnTimer;
-}(_react.Component);
+}(_react.PureComponent);
 
 exports.default = TurnTimer;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/JoinLeaveQueueButton.jsx":
+/*!*************************************************!*\
+  !*** ./src/components/JoinLeaveQueueButton.jsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var JoinLeaveQueueButton =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(JoinLeaveQueueButton, _PureComponent);
+
+  function JoinLeaveQueueButton(props) {
+    var _this;
+
+    _classCallCheck(this, JoinLeaveQueueButton);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(JoinLeaveQueueButton).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(JoinLeaveQueueButton, [{
+    key: "getButton",
+    value: function getButton() {
+      var num = this.props.num;
+      var buttonText;
+      var buttonType;
+
+      if (this.props.controlQueue.indexOf(this.props.myID) > -1) {
+        buttonType = "leaveQueue";
+        buttonText = "Leave Queue";
+      } else {
+        buttonType = "joinQueue";
+        buttonText = "Join Queue";
+      }
+
+      var elementID = buttonType + this.props.num;
+      var elementClass = buttonType + " btn btn-secondary";
+      return _react.default.createElement("button", {
+        id: elementID,
+        className: elementClass
+      }, buttonText);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, this.getButton());
+    }
+  }]);
+
+  return JoinLeaveQueueButton;
+}(_react.PureComponent);
+
+exports.default = JoinLeaveQueueButton;
 module.exports = exports.default;
 
 /***/ }),
@@ -27135,7 +26919,7 @@ function (_Component) {
       }, "Join Queue"), _react.default.createElement("ul", {
         id: "controlQueue1",
         class: "controlQueue list-group"
-      })); // 		return <h1>test</h1>;
+      }));
     }
   }]);
 
@@ -27188,8 +26972,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var TurnTimer =
 /*#__PURE__*/
-function (_Component) {
-  _inherits(TurnTimer, _Component);
+function (_PureComponent) {
+  _inherits(TurnTimer, _PureComponent);
 
   function TurnTimer(props) {
     var _this;
@@ -27228,23 +27012,19 @@ function (_Component) {
   }, {
     key: "render",
     value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+      return _react.default.createElement("div", {
         id: "turnTimerBar" + this.props.num,
         className: "turnTimerBar progress"
       }, _react.default.createElement("div", {
         id: "turnTimerBarChild" + this.props.num,
         className: "turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active",
-        role: "progressbar",
-        "aria-valuenow": "0",
-        "aria-valuemin": "0",
-        "aria-valuemax": "100",
         style: this.getStyle()
-      }, this.getBarText())));
+      }, this.getBarText()));
     }
   }]);
 
   return TurnTimer;
-}(_react.Component);
+}(_react.PureComponent);
 
 exports.default = TurnTimer;
 module.exports = exports.default;
@@ -27292,8 +27072,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 var ViewerList =
 /*#__PURE__*/
-function (_Component) {
-  _inherits(ViewerList, _Component);
+function (_PureComponent) {
+  _inherits(ViewerList, _PureComponent);
 
   function ViewerList(props) {
     var _this;
@@ -27310,29 +27090,35 @@ function (_Component) {
   _createClass(ViewerList, [{
     key: "getViewerList",
     //     componentDidMount() {
-    // // 		setInterval(() => {
-    // // 			this.setState({});
-    // // 		}, 1000);
-    // // 		console.log("mounted");
+    //  		setInterval(() => {
+    //  			this.setState({});
+    //  		}, 1000);
+    //  		console.log("mounted");
     //     }
-    // 	shouldComponentUpdate(nextProps, nextState) {
-    // 		console.log("shouldComponentUpdate");
+    // shouldComponentUpdate(nextProps, nextState) {
+    //   viewer list changed:
+    // 	if (JSON.stringify(this.props.viewerIDs) != JSON.stringify(nextProps.viewerIDs)) {
+    // 		console.log("updated");
     // 		return true;
+    // 	} else {
+    // 		return false;
     // 	}
+    // }
     // 	componentDidUpdate(prevProps, prevState) {
     // 		console.log("changed");
     // 	}
-    // 	static getDerivedStateFromProps(nextProps, prevState) {
-    // 		console.log("get");
-    // 	}
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    // 	console.log("get");
+    // 	return {};
+    // }
     // 	componentDidUpdate(prevProps) {
-    // 		// compare props:
+    // 	  compare props:
     // 		if (this.props.viewerIDs !== prevProps.viewerIDs) {
     // 			console.log("props changed.");
     // 		}
     // 	}
     // 	componentWillRecieveProps(nextProps) {
-    // 		// compare props:
+    // 	  compare props:
     // 		if (this.props.viewerIDs !== nextProps.viewerIDs) {
     // 			console.log("props changed.");
     // 			this.setState({});
@@ -27381,21 +27167,17 @@ function (_Component) {
       return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("a", {
         className: "btn btn-secondary dropdown-toggle",
         href: "#",
-        role: "button",
         id: "dropdownMenuLink",
-        "data-toggle": "dropdown",
-        "aria-haspopup": "true",
-        "aria-expanded": "false"
+        "data-toggle": "dropdown"
       }, "Viewers"), _react.default.createElement("div", {
         id: "laglessViewerDropdownDiv",
-        className: "dropdown-menu",
-        "aria-labelledby": "dropdownMenuLink"
-      }, this.getViewerList())); // 		return <h1>test</h1>;
+        className: "dropdown-menu"
+      }, this.getViewerList()));
     }
   }]);
 
   return ViewerList;
-}(_react.Component);
+}(_react.PureComponent);
 
 exports.default = ViewerList;
 module.exports = exports.default;

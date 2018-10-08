@@ -71,18 +71,14 @@ margin-right: auto; */
 	/* 	margin-left: 40%; */
 }
 
-.requestTurn {
-	/* 	width: 48%; */
+.joinQueue {
 	width: 100%;
 	height: fit-content;
-	/* 	margin-right: 2%; */
 }
 
-.cancelTurn {
-	/* 	width: 48%; */
+.leaveQueue {
 	width: 100%;
 	height: fit-content;
-	/* 	margin-left: 2%; */
 }
 
 .player {
@@ -372,28 +368,20 @@ display: flex;
 flex-direction: column;
 } */
 
-.laglessContainer {
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	flex-direction: column;
-	/* 	border: 2px solid #333; */
-	/* 	border: 1px solid #e3e3e3; */
-	/* 	border-radius: 4px; */
-	padding-left: 20px;
-	padding-right: 20px;
-}
-
 .laglessView {
 	display: flex;
 	flex-direction: row;
 	justify-content: start;
 	position: relative;
+	margin-left: 20px;
+    margin-right: 20px;
+	text-align: center;
 }
 
 .videoCanvas {
-	width: 75%;
-	margin-left: 12.5%;
+	/* width: 75%; */
+	/* margin-left: 12.5%; */
+	width: 73.2%;
 	align-self: center;
 }
 
@@ -402,6 +390,7 @@ flex-direction: column;
 	justify-content: space-evenly;
 	align-self: center;
 	width: 80%;
+	min-width: min-content;
 	padding-top: 2px;
 	padding-bottom: 2px;
 	margin: 5px;
@@ -421,52 +410,6 @@ flex-direction: column;
 .keyboardMapper {
 	align-self: center;
 }
-
-/* LAGLESS1 */
-
-#lagless1Container {}
-
-#lagless1View {}
-
-#videoCanvas1 {}
-
-#lagless1Bar {}
-
-#lagless1Refresh {}
-
-#lagless1ViewerCount {}
-
-/* LAGLESS2 */
-
-#lagless2Container {}
-
-#lagless2View {}
-
-#videoCanvas2 {}
-
-#lagless2Bar {}
-
-#lagless2ViewerCount {}
-
-#lagless2VolumeSlider {}
-
-/* LAGLESS3 */
-
-#lagless3Container {}
-
-#lagless3View {}
-
-#videoCanvas3 {}
-
-#lagless3Bar {}
-
-#lagless3Refresh {}
-
-#lagless3ViewerCount {}
-
-/* LAGLESS4 */
-
-#videoCanvas4 {}
 
 .tunnel {
 	/*   overflow: visible; */
@@ -707,9 +650,11 @@ ul {
 }
 
 #leftJoyCon {
-	width: 12.5%;
-	height: 100%;
-	position: absolute;
+	/* width: 12.5%; */
+	/* height: 100%; */
+	/* position: absolute; */
+	position: relative;
+	width: 13.4%;
 }
 
 .highlighted {
@@ -718,11 +663,6 @@ ul {
 
 #leftJoyConCanvas {
 	width: 100%;
-	height: 100%;
-	/*     background: rgba(0, 0, 255, 0.2); */
-	position: absolute;
-	left: 0;
-	top: 0;
 }
 
 #leftStick {
@@ -830,19 +770,16 @@ height: 30px; */
 }
 
 #rightJoyCon {
-	width: 12.5%;
-	height: 100%;
-	position: absolute;
-	margin-left: 87.5%;
+	/* width: 12.5%; */
+	/* height: 100%; */
+	/* position: absolute; */
+	/* margin-left: 87.5%; */
+	position: relative;
+	width: 13.4%;
 }
 
 #rightJoyConCanvas {
 	width: 100%;
-	height: 100%;
-	/*     background: rgba(255, 0, 0, 0.2); */
-	position: absolute;
-	left: 0;
-	top: 0;
 }
 
 #rightStick {
@@ -1229,7 +1166,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	display: flex;
 	justify-content: space-evenly;
 	width: 30%;
-	border: 2px solid #333;
+	min-width: 125px;
 	border-radius: 10px;
 	/*     margin-top: 2px; */
 	/*     margin-bottom: 2px; */
@@ -1669,10 +1606,16 @@ label {
 	/* 	margin-bottom: 0; */
 }
 
-.laglessBar>.checkbox-inline {
+.laglessBar > .checkbox-inline {
 	margin-bottom: 0;
 	display: flex;
 	align-self: center;
+	min-width: 100px;
+	padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-radius: 6px;
 }
 
 /* scale font size */

@@ -66,7 +66,8 @@
 	<script src="js/jsmpeg/player.js"></script> -->
 
 	<!-- h264 -->
-	<script src="js/http-live-player.js"></script>
+	<!-- <script src="js/http-live-player.js"></script> -->
+	<script src="js/WSAvcPlayer.js"></script>
 
 <!-- 	<script src="/js/ads.js"></script> -->
 
@@ -93,7 +94,7 @@
 
 	<div id="container" class="light">
 
-		<ul id="navTabs" class="nav nav-tabs light otborder" role="tablist">
+		<ul id="navTabs" class="nav nav-tabs light otborder">
 			<li class="nav-item active">
 				<a id="tab1" class="nav-link active" data-toggle="tab" href="#lagless1">Lagless 1</a>
 			</li>
@@ -118,56 +119,45 @@
 
 			<div class="tab-content">
 				<div id="lagless1" class="tab-pane active">
-					<div id="lagless1Container"  class="laglessContainer">
-						<div id="lagless1View" class="laglessView">
-							<canvas id="videoCanvas1" class="videoCanvas"></canvas>
-						</div>
+					<div id="lagless1View" class="laglessView">
+						<canvas id="videoCanvas1" class="videoCanvas"></canvas>
 					</div>
 				</div>
 				<div id="lagless2" class="tab-pane">
-					<div id="lagless2Container" class="laglessContainer">
-						<div id="lagless2View" class="laglessView">
-							<canvas id="videoCanvas2" class="videoCanvas"></canvas>
-						</div>
-
+					<div id="lagless2View" class="laglessView">
+						<canvas id="videoCanvas2" class="videoCanvas"></canvas>
 					</div>
 				</div>
 				<div id="lagless3" class="tab-pane">
-					<div id="lagless3Container" class="laglessContainer">
-						<div id="lagless3View" class="laglessView">
-							<canvas id="videoCanvas3" class="videoCanvas"></canvas>
-						</div>
+					<div id="lagless3View" class="laglessView">
+						<canvas id="videoCanvas3" class="videoCanvas"></canvas>
 					</div>
 				</div>
 				<div id="lagless4" class="tab-pane">
-					<div id="lagless4Container" class="laglessContainer">
-						<div id="lagless4View" class="laglessView">
-							<video id="videoCanvas4" class="videoCanvas"></video>
-						</div>
+					<div id="lagless4View" class="laglessView">
+						<video id="videoCanvas4" class="videoCanvas"></video>
 					</div>
 				</div>
 				<div id="lagless5" class="tab-pane">
-					<div id="lagless5Container" class="laglessContainer">
-						<div id="lagless5View" class="laglessView">
-							<canvas id="videoCanvas5" class="videoCanvas"></canvas>
-						</div>
+					<div id="lagless5View" class="laglessView">
+						<canvas id="videoCanvas5" class="videoCanvas"></canvas>
 					</div>
 				</div>
 			</div>
 
 			<div id="laglessBar" class="laglessBar otborder">
 				<div id="laglessViewerDropdown" class="viewerDropdown dropdown show">
-					<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					<a id="viewerListDropdownButton" class="btn btn-secondary dropdown-toggle" href="#" data-toggle="dropdown">
 						Viewers
 					</a>
-					<div id="laglessViewerDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+					<div id="laglessViewerDropdownDiv" class="dropdown-menu"></div>
 				</div>
-				<div id="laglessVolumeSlider" class="volumeSlider">
+				<div id="laglessVolumeSlider" class="volumeSlider otborder">
 					<i class="fa fa-volume-down"></i>
 					<div id="laglessVolume" class="volume"></div>
 					<i class="fa fa-volume-up"></i>
 				</div>
-				<label class="checkbox-inline checkbox-bootstrap checkbox-lg">
+				<label class="checkbox-inline checkbox-bootstrap checkbox-lg otborder">
 					<input class="audioThreeCheckbox" type="checkbox" />
 					<span class="checkbox-placeholder"></span>
 					Audio 3.0
@@ -180,11 +170,11 @@
 					|
 					<i class="fas fa-gamepad"></i>
 				</button>
-				<div id="laglessKeyboardDropdown" class="keyboardDropdown dropdown show">
-					<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+				<div id="keyboardDropdown" class="keyboardDropdown dropdown show">
+					<a id="keyboardDropdownButton" class="btn btn-secondary dropdown-toggle" href="#" data-toggle="dropdown">
 						Keyboard Profiles
 					</a>
-					<div class="keyboard-dropdown-menu dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+					<div class="keyboard-dropdown-menu dropdown-menu"></div>
 				</div>
 			</div>
 		</div>
@@ -194,10 +184,10 @@
 				<div id="loggedInStatus" class="otborder">
 					<div id="usernameDropdown" class="dropdown show">
 						<span class="align-self-center">Logged in as: </span>
-						<a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="usernameDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						<a class="btn btn-secondary dropdown-toggle" href="#" id="usernameDropdownMenuLink" data-toggle="dropdown">
 							???
 						</a>
-						<div id="usernameDropdownDiv" class="dropdown-menu" aria-labelledby="dropdownMenuLink"></div>
+						<div id="usernameDropdownDiv" class="dropdown-menu"></div>
 					</div>
 					<button id="logout" class="btn btn-secondary">Logout</button>
 				</div>
@@ -252,8 +242,8 @@
 						</label>
 						<div id="turnTimerBar1" class="contents"></div>
 						<div id="forfeitTimerBar1" class="contents"></div>
-						<button id="requestTurn1" class="requestTurn btn btn-secondary" code="0">Join Queue</button>
-						<ul id="controlQueue1" class="controlQueue list-group"></ul>
+						<div id="joinLeaveQueue1" class="contents"></div>
+						<div id="controlQueue1" class="contents"></div>
 					</div>
 
 					<div id="player2" class="player">
@@ -264,8 +254,8 @@
 						</label>
 						<div id="turnTimerBar2" class="contents"></div>
 						<div id="forfeitTimerBar2" class="contents"></div>
-						<button id="requestTurn2" class="requestTurn btn btn-secondary" code="1">Join Queue</button>
-						<ul id="controlQueue2" class="controlQueue list-group"></ul>
+						<div id="joinLeaveQueue2" class="contents"></div>
+						<div id="controlQueue2" class="contents"></div>
 					</div>
 
 					<div id="player3" class="player">
@@ -276,14 +266,8 @@
 						</label>
 						<div id="turnTimerBar3" class="contents"></div>
 						<div id="forfeitTimerBar3" class="contents"></div>
-						<!-- <div id="turnTimerBar3" class="turnTimerBar progress">
-							<div id="turnTimerBarChild3" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
-						</div> -->
-						<!-- <div id="forfeitTimerBar3" class="forfeitTimerBar progress">
-							<div id="forfeitTimerBarChild3" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
-						</div> -->
-						<button id="requestTurn3" class="requestTurn btn btn-secondary" code="2">Join Queue</button>
-						<ul id="controlQueue3" class="controlQueue list-group"></ul>
+						<div id="joinLeaveQueue3" class="contents"></div>
+						<div id="controlQueue3" class="contents"></div>
 					</div>
 
 					<div id="player4" class="player">
@@ -294,15 +278,10 @@
 						</label>
 						<div id="turnTimerBar4" class="contents"></div>
 						<div id="forfeitTimerBar4" class="contents"></div>
-						<!-- <div id="turnTimerBar4" class="turnTimerBar progress">
-							<div id="turnTimerBarChild4" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
-						</div> -->
-						<!-- <div id="forfeitTimerBar4" class="forfeitTimerBar progress">
-							<div id="forfeitTimerBarChild4" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
-						</div> -->
-						<button id="requestTurn4" class="requestTurn btn btn-secondary" code="3">Join Queue</button>
-						<ul id="controlQueue4" class="controlQueue list-group"></ul>
+						<div id="joinLeaveQueue4" class="contents"></div>
+						<div id="controlQueue4" class="contents"></div>
 					</div>
+
 					<div id="player5" class="player">
 						<label id="wiiUPlayerCheckbox" class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 							<input id="player5Checkbox" type="checkbox" />
@@ -310,14 +289,9 @@
 							Player 1 WiiU
 						</label>
 						<div id="turnTimerBar5" class="contents"></div>
-						<div id="forfeitTimerBar5" class="contents" class="contents""turnTimerBar5" class="turnTimerBar progress">
-							<div id="turnTimerBarChild5" class="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
-						</div> -->
-						<!-- <div id="forfeitTimerBar5" class="forfeitTimerBar progress">
-							<div id="forfeitTimerBarChild5" class="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div>
-						</div> -->
-						<button id="requestTurn5" class="requestTurn btn btn-secondary" code="4">Join Queue</button>
-						<ul id="controlQueue5" class="controlQueue list-group"></ul>
+						<div id="forfeitTimerBar5" class="contents"></div>
+						<div id="joinLeaveQueue5" class="contents"></div>
+						<div id="controlQueue5" class="contents"></div>
 					</div>
 <!-- 						<div id="splits">
 						<div id="splitMetaContainer">
@@ -527,7 +501,7 @@
 							<div class="mysliderContainer">
 								<div id="bitrateSlider2" class="myslider"></div>
 							</div>
-							Scale: <span id="scale2">960</span>
+							Scale: <span id="scale2">720</span>
 							<div class="mysliderContainer">
 								<div id="scaleSlider2" class="myslider"></div>
 							</div>
@@ -535,7 +509,6 @@
 								<button id="240p" class="resolutionButton btn btn-secondary">240p</button>
 								<button id="360p" class="resolutionButton btn btn-secondary">360p</button>
 								<button id="720p" class="resolutionButton btn btn-secondary">720p</button>
-<!-- 								<button id="960p" class="resolutionButton btn btn-secondary">960p</button> -->
 							</div>
 <!-- 							offsetX: <span id="offsetX2">0</span>
 							<div class="mysliderContainer">
@@ -559,7 +532,7 @@
 		</div>
 	</div>
 
-	<div id="tutorialWindow" class="modal fade" role="dialog">
+	<div id="tutorialWindow" class="modal fade">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -600,7 +573,7 @@
 	</div>
 
 
-	<div id="serverOverloadWindow" class="modal fade" role="dialog">
+	<div id="serverOverloadWindow" class="modal fade">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -625,7 +598,7 @@
 	</div>
 
 	<!-- SETTINGS WINDOW ------------------------------------------- -->
-	<div id="keyboardSettings" class="modal fade" role="dialog">
+	<div id="keyboardSettings" class="modal fade">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 

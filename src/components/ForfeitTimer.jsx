@@ -1,16 +1,12 @@
+import React, { PureComponent } from "react";
 
-
-import React, { Component } from "react";
-
-
-export default class TurnTimer extends Component {
+export default class TurnTimer extends PureComponent {
 
 	constructor(props) {
 		super(props);
 	}
 
-	state = {
-	};
+	state = {};
 
 	getBarText() {
 		if (this.props.name == null) {
@@ -22,22 +18,20 @@ export default class TurnTimer extends Component {
 
 	getStyle() {
 		if (this.props.name == null) {
-			return {width: "100%"};
+			return { width: "100%" };
 		} else {
-			return {width: this.props.percent + "%"};
+			return { width: this.props.percent + "%" };
 		}
 	}
 
-	render () {
+	render() {
 
 		return (
-			<React.Fragment>
-				<div id={"forfeitTimerBar" + this.props.num} className="forfeitTimerBar progress">
-					<div id={"forfeitTimerBarChild" + this.props.num} className="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={this.getStyle()}>
-						{this.getBarText()}
-					</div>
+			<div id={"forfeitTimerBar" + this.props.num} className="forfeitTimerBar progress">
+				<div id={"forfeitTimerBarChild" + this.props.num} className="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" style={this.getStyle()}>
+					{this.getBarText()}
 				</div>
-			</React.Fragment>
+			</div>
 		);
 
 	}

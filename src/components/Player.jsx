@@ -1,8 +1,4 @@
-
-
-
-
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 
 import TurnTimer from "./TurnTimer.jsx";
 import ForfeitTimer from "./ForfeitTimer.jsx";
@@ -15,10 +11,9 @@ export default class Player extends Component {
 		super(props);
 	}
 
-	state = {
-	};
+	state = {};
 
-	render () {
+	render() {
 
 		return (
 			<React.Fragment>
@@ -33,7 +28,7 @@ export default class Player extends Component {
 				<ul id="controlQueue1" class="controlQueue list-group"></ul>
 			</React.Fragment>
 		);
-// 		return <h1>test</h1>;
+
 	}
 
 }

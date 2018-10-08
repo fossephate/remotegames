@@ -8,20 +8,20 @@ window.keycode = require("keycode");
 let textFitPercent = require("js/textfitpercent.js");
 let tools = require("js/tools.js");
 // rest of tools:
-String.prototype.replaceAll = function(search, replacement) {
+String.prototype.replaceAll = function (search, replacement) {
 	let target = this;
 	return target.replace(new RegExp(search, "g"), replacement);
 };
 
-$.fn.sumHeights = function() {
+$.fn.sumHeights = function () {
 	let h = 0;
-	this.each(function() {
+	this.each(function () {
 		h += $(this).outerHeight();
 	});
 	return h;
 };
-$.fn.addUp = function(getter) {
-	return Array.prototype.reduce.call(this, function(a, b) {
+$.fn.addUp = function (getter) {
+	return Array.prototype.reduce.call(this, function (a, b) {
 		return a + getter.call($(b));
 	}, 0);
 }
@@ -31,7 +31,7 @@ $.fn.addUp = function(getter) {
 
 let socket = io("https://twitchplaysnintendoswitch.com", {
 	path: "/8110/socket.io",
-	transports: ["websocket"],
+	transports: ["websocket"]
 });
 // let socket2 = io("https://twitchplaysnintendoswitch.com", {
 // 	path: "/8001/socket.io",
@@ -56,7 +56,7 @@ let authCookie;
 let crate;
 let usernameMap = {};
 let banlist = [];
-let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146"];
+let bannedIPs = [];
 let resizers = [];
 let resizeDebounceTimer;
 let resizeAvailable = true;
@@ -67,9 +67,27 @@ let minQueuePos = 5;
 let tabsSwappedWithTwitch = [false, false, false, false];
 let maxViewersOnTab = [10, 10, 10, 10];
 
-let viewers = [[], [], [], [], []];
-let waitlists = [[], [], [], [], []];
-let controlQueues = [["The queue is empty."], ["The queue is empty."], ["The queue is empty."], ["The queue is empty."], ["The queue is empty."]];
+let viewers = [
+	[],
+	[],
+	[],
+	[],
+	[]
+];
+let waitlists = [
+	[],
+	[],
+	[],
+	[],
+	[]
+];
+let controlQueues = [
+	["The queue is empty."],
+	["The queue is empty."],
+	["The queue is empty."],
+	["The queue is empty."],
+	["The queue is empty."]
+];
 let controlQueue1 = [];
 let controlQueue2 = [];
 let controlQueue3 = [];
@@ -107,16 +125,28 @@ let settings = {
 	dpadSwap: false,
 	TDSConfig: false,
 	volume: 50,
-	usernameIndex: 0,
+	usernameIndex: 0
 };
 
 let lagless1Settings = {};
-let lagless2Settings = {framerate: 30, videoBitrate: 1, scale: 960, offsetX: 0, offsetY: 0};
-let lagless5Settings = {framerate: 30, videoBitrate: 1, scale: 960, offsetX: 0, offsetY: 0};
+let lagless2Settings = {
+	framerate: 30,
+	videoBitrate: 1,
+	scale: 720,
+	offsetX: 0,
+	offsetY: 0
+};
+let lagless5Settings = {
+	framerate: 30,
+	videoBitrate: 1,
+	scale: 960,
+	offsetX: 0,
+	offsetY: 0
+};
 let disableController = false;
 
 // detect firefox:
-if(navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
+if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
 	settings.stickSensitivityX = 1.5;
 	settings.stickSensitivityY = 1.5;
 }
@@ -133,8 +163,8 @@ let pingTime = 0;
 let restPos = 128;
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-let videoBufferSize = 256*1024;
-let audioBufferSize = 128*1024;
+let videoBufferSize = 256 * 1024;
+let audioBufferSize = 128 * 1024;
 
 let oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
 let lagless1Port = 8001;
@@ -142,10 +172,10 @@ let lagless2Port = 8002;
 let lagless3Port = 8003;
 let lagless4Port = 8004;
 
-/* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // check if on mobile
-if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0,4))) {
-    isMobile = true;
+if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
+	isMobile = true;
 }
 
 // if (isMobile) {
@@ -198,19 +228,17 @@ settings.keyboardProfiles.default = keyboardLayout;
 function getMeta(url, callback) {
 	let img = new Image();
 	img.src = url;
-	img.onload = function() {
+	img.onload = function () {
 		callback(this.width, this.height);
 	}
 }
-
 
 /* CONTROLLER STUFF */
 
 let gamepadCounter = 0;
 
-let controller = require("js/VirtualProController.js");
+window.controller = require("js/VirtualProController.js"); // todo: undo
 controller.reset();
-
 
 function sendControllerState() {
 
@@ -236,24 +264,11 @@ function sendControllerState() {
 		return;
 	}
 
-	if(controlQueues[currentPlayerChosen].indexOf(myUniqueID) == -1) {
-		socket.emit("requestTurn", currentPlayerChosen);
-
-// 		// turn over:
-// 		$(".cancelTurn").each(function() {
-// 			cNum = $(this).attr("code");
-// 			if (cNum == (currentPlayerChosen + 1)) {
-// // 				return;
-// 			}
-// 			let html = '<button id="requestTurn' + cNum + '" class="requestTurn btn btn-secondary" code="'+ cNum +'">Join Queue</button>';
-// 			$(this).replaceWith(html);
-// 		});
-// 		// replace only the currect button:
-// 		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
-// 		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
+	if (controlQueues[currentPlayerChosen].indexOf(myUniqueID) == -1) {
+		socket.emit("joinQueue", currentPlayerChosen);
 	}
 
-	if(controlQueues[currentPlayerChosen].indexOf(myUniqueID) > 0 && controlQueues[currentPlayerChosen].length > 0) {
+	if (controlQueues[currentPlayerChosen].indexOf(myUniqueID) > 0 && controlQueues[currentPlayerChosen].length > 0) {
 		let alertMessage = $(".swal2-container")[0];
 		if (typeof alertMessage == "undefined") {
 			swal("It's not your turn yet!");
@@ -264,7 +279,7 @@ function sendControllerState() {
 	authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie == null) {
 		swal({
-			title: "You need to login! Redirecting you now!",
+			title: "You need to login! Redirecting you now!"
 		}).then((result) => {
 			if (result.value) {
 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -275,7 +290,10 @@ function sendControllerState() {
 		authCookie = authCookie.split(" ")[0].replace(/;/g, "");
 	}
 
-	let obj = {state: newControllerState, cNum: 0}
+	let obj = {
+		state: newControllerState,
+		cNum: 0
+	}
 
 	if (controlQueues[0][0] == myUniqueID) {
 		obj.cNum = 0;
@@ -303,7 +321,7 @@ function getKeyboardInput() {
 	if (authCookie == null) {
 		$("#keyboardControlsCheckbox").prop("checked", false).trigger("change");
 		swal({
-			title: "You need to login! Redirecting you now!",
+			title: "You need to login! Redirecting you now!"
 		}).then((result) => {
 			if (result.value) {
 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -319,22 +337,22 @@ function getKeyboardInput() {
 	if (!settings.analogStickMode) {
 		if (key.isPressed(keyboardLayout.LU)) {
 			controller.LStick.y = 255;
-		} else if(key.wasPressed(keyboardLayout.LU, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.LU, wasPressedKeyCodes)) {
 			controller.LStick.y = restPos;
 		}
 		if (key.isPressed(keyboardLayout.LD)) {
 			controller.LStick.y = 0;
-		} else if(key.wasPressed(keyboardLayout.LD, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.LD, wasPressedKeyCodes)) {
 			controller.LStick.y = restPos;
 		}
 		if (key.isPressed(keyboardLayout.LL)) {
 			controller.LStick.x = 0;
-		} else if(key.wasPressed(keyboardLayout.LL, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.LL, wasPressedKeyCodes)) {
 			controller.LStick.x = restPos;
 		}
 		if (key.isPressed(keyboardLayout.LR)) {
 			controller.LStick.x = 255;
-		} else if(key.wasPressed(keyboardLayout.LR, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.LR, wasPressedKeyCodes)) {
 			controller.LStick.x = restPos;
 		}
 	} else {
@@ -369,65 +387,65 @@ function getKeyboardInput() {
 
 	if (key.isPressed(keyboardLayout.ABtn)) {
 		controller.btns.a = 1;
-	} else if(key.wasPressed(keyboardLayout.ABtn, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.ABtn, wasPressedKeyCodes)) {
 		controller.btns.a = 0;
 	}
 	if (key.isPressed(keyboardLayout.BBtn)) {
 		controller.btns.b = 1;
-	} else if(key.wasPressed(keyboardLayout.BBtn, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.BBtn, wasPressedKeyCodes)) {
 		controller.btns.b = 0;
 	}
 	if (key.isPressed(keyboardLayout.XBtn)) {
 		controller.btns.x = 1;
-	} else if(key.wasPressed(keyboardLayout.XBtn, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.XBtn, wasPressedKeyCodes)) {
 		controller.btns.x = 0;
 	}
 	if (key.isPressed(keyboardLayout.YBtn)) {
 		controller.btns.y = 1;
-	} else if(key.wasPressed(keyboardLayout.YBtn, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.YBtn, wasPressedKeyCodes)) {
 		controller.btns.y = 0;
 	}
 
 	if (key.isPressed(keyboardLayout.DUp)) {
 		controller.btns.up = 1;
-	} else if(key.wasPressed(keyboardLayout.DUp, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.DUp, wasPressedKeyCodes)) {
 		controller.btns.up = 0;
 	}
 	if (key.isPressed(keyboardLayout.DDown)) {
 		controller.btns.down = 1;
-	} else if(key.wasPressed(keyboardLayout.DDown, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.DDown, wasPressedKeyCodes)) {
 		controller.btns.down = 0;
 	}
 	if (key.isPressed(keyboardLayout.DLeft)) {
 		controller.btns.left = 1;
-	} else if(key.wasPressed(keyboardLayout.DLeft, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.DLeft, wasPressedKeyCodes)) {
 		controller.btns.left = 0;
 	}
 	if (key.isPressed(keyboardLayout.DRight)) {
 		controller.btns.right = 1;
-	} else if(key.wasPressed(keyboardLayout.DRight, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.DRight, wasPressedKeyCodes)) {
 		controller.btns.right = 0;
 	}
 
 	if (!settings.analogStickMode) {
 		if (key.isPressed(keyboardLayout.RU)) {
 			controller.RStick.y = 255;
-		} else if(key.wasPressed(keyboardLayout.RU, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.RU, wasPressedKeyCodes)) {
 			controller.RStick.y = restPos;
 		}
 		if (key.isPressed(keyboardLayout.RD)) {
 			controller.RStick.y = 0;
-		} else if(key.wasPressed(keyboardLayout.RD, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.RD, wasPressedKeyCodes)) {
 			controller.RStick.y = restPos;
 		}
 		if (key.isPressed(keyboardLayout.RL)) {
 			controller.RStick.x = 0;
-		} else if(key.wasPressed(keyboardLayout.RL, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.RL, wasPressedKeyCodes)) {
 			controller.RStick.x = restPos;
 		}
 		if (key.isPressed(keyboardLayout.RR)) {
 			controller.RStick.x = 255;
-		} else if(key.wasPressed(keyboardLayout.RR, wasPressedKeyCodes)) {
+		} else if (key.wasPressed(keyboardLayout.RR, wasPressedKeyCodes)) {
 			controller.RStick.x = restPos;
 		}
 	} else {
@@ -461,56 +479,56 @@ function getKeyboardInput() {
 
 	if (key.isPressed(keyboardLayout.Minus)) {
 		controller.btns.minus = 1;
-	} else if(key.wasPressed(keyboardLayout.Minus, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.Minus, wasPressedKeyCodes)) {
 		controller.btns.minus = 0;
 	}
 	if (key.isPressed(keyboardLayout.Plus)) {
 		controller.btns.plus = 1;
-	} else if(key.wasPressed(keyboardLayout.Plus, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.Plus, wasPressedKeyCodes)) {
 		controller.btns.plus = 0;
 	}
 
 	if (key.isPressed(keyboardLayout.Capture)) {
 		controller.btns.capture = 1;
-	} else if(key.wasPressed(keyboardLayout.Capture, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.Capture, wasPressedKeyCodes)) {
 		controller.btns.capture = 0;
 	}
 	if (key.isPressed(keyboardLayout.Home)) {
 		controller.btns.home = 1;
-	} else if(key.wasPressed(keyboardLayout.Home, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.Home, wasPressedKeyCodes)) {
 		controller.btns.home = 0;
 	}
 
 	if (key.isPressed(keyboardLayout.LBtn)) {
 		controller.btns.l = 1;
-	} else if(key.wasPressed(keyboardLayout.LBtn, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.LBtn, wasPressedKeyCodes)) {
 		controller.btns.l = 0;
 	}
 	if (key.isPressed(keyboardLayout.RBtn)) {
 		controller.btns.r = 1;
-	} else if(key.wasPressed(keyboardLayout.RBtn, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.RBtn, wasPressedKeyCodes)) {
 		controller.btns.r = 0;
 	}
 
 	if (key.isPressed(keyboardLayout.ZL)) {
 		controller.btns.zl = 1;
-	} else if(key.wasPressed(keyboardLayout.ZL, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.ZL, wasPressedKeyCodes)) {
 		controller.btns.zl = 0;
 	}
 	if (key.isPressed(keyboardLayout.ZR)) {
 		controller.btns.zr = 1;
-	} else if(key.wasPressed(keyboardLayout.ZR, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.ZR, wasPressedKeyCodes)) {
 		controller.btns.zr = 0;
 	}
 
 	if (key.isPressed(keyboardLayout.LStick)) {
 		controller.btns.stick_button = 1;
-	} else if(key.wasPressed(keyboardLayout.LStick, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.LStick, wasPressedKeyCodes)) {
 		controller.btns.stick_button = 0;
 	}
 	if (key.isPressed(keyboardLayout.RStick)) {
 		controller.btns.stick_button2 = 1;
-	} else if(key.wasPressed(keyboardLayout.RStick, wasPressedKeyCodes)) {
+	} else if (key.wasPressed(keyboardLayout.RStick, wasPressedKeyCodes)) {
 		controller.btns.stick_button2 = 0;
 	}
 
@@ -525,9 +543,8 @@ function getKeyboardInput() {
 	}
 }
 
-
 /* prevent arrow key scrolling */
-window.addEventListener("keydown", function(e) {
+window.addEventListener("keydown", function (e) {
 	// space and arrow keys
 	if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
 		e.preventDefault();
@@ -541,18 +558,17 @@ window.addEventListener("keydown", function(e) {
 	}
 }, false);
 
-
 function getMouseInput(e) {
 
 	// on mouse stop:
 	clearTimeout(mouseMoveTimer);
-	mouseMoveTimer = setTimeout(function(){
+	mouseMoveTimer = setTimeout(function () {
 		controller.RStick.x = restPos;
 		controller.RStick.y = restPos;
 	}, 100);
 
-	var x = restPos + e.movementX*10;
-	var y = restPos - e.movementY*10;
+	var x = restPos + e.movementX * 10;
+	var y = restPos - e.movementY * 10;
 
 	controller.RStick.x = x;
 	controller.RStick.y = y;
@@ -562,11 +578,13 @@ function getMouseInput(e) {
 }
 
 function getMouseInput2(e) {
-	let value = e.type == "mousedown" ? 1 : 0;
+	let value = e.type == "mousedown" ?
+		1 :
+		0;
 	// left button:
-	if(e.which === 1) {
+	if (e.which === 1) {
 		controller.btns.zr = value;
-	// right button:
+		// right button:
 	} else if (e.which == 3) {
 		//controller.btns.zr = value;
 	}
@@ -577,7 +595,7 @@ let videoCanvas2 = $("#videoCanvas2")[0];
 videoCanvas2.requestPointerLock = videoCanvas2.requestPointerLock || videoCanvas2.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
-$("#mouseControlsCheckbox").change(function(e) {
+$("#mouseControlsCheckbox").change(function (e) {
 	if (this.checked) {
 		c.requestPointerLock();
 		document.addEventListener("mousemove", getMouseInput, false);
@@ -590,7 +608,6 @@ $("#mouseControlsCheckbox").change(function(e) {
 		document.removeEventListener("mouseup", getMouseInput2);
 	}
 });
-
 
 /* GAMEPAD API */
 
@@ -674,7 +691,6 @@ gamepad.on("release", "button_4", e => {
 	}
 });
 
-
 gamepad.on("press", "shoulder_top_left", e => {
 	settings.currentInputMode = "controller";
 	controller.btns.l = 1;
@@ -727,8 +743,6 @@ gamepad.on("release", "start", e => {
 	settings.currentInputMode = "controller";
 	controller.btns.plus = 0;
 });
-
-
 
 gamepad.on("press", "d_pad_up", e => {
 	settings.currentInputMode = "controller";
@@ -908,7 +922,6 @@ gamepad.on("release", "stick_button_right", e => {
 	controller.btns.stick_button2 = 0;
 });
 
-
 function getGamepadInput() {
 
 	if (!$("#controllerControlsCheckbox")[0].checked) {
@@ -918,7 +931,7 @@ function getGamepadInput() {
 	if (authCookie == null) {
 		$("#controllerControlsCheckbox").prop("checked", false).trigger("change");
 		swal({
-			title: "You need to login! Redirecting you now!",
+			title: "You need to login! Redirecting you now!"
 		}).then((result) => {
 			if (result.value) {
 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
@@ -930,17 +943,15 @@ function getGamepadInput() {
 	}
 }
 
-
-
 /* SAVABLE SETTINGS */
 
 // restore preferences:
-$(document).ready(function() {
+$(document).ready(function () {
 
 	console.log("restoring preferences");
 
 	// check if new:
-	localforage.getItem("new").then(function(value) {
+	localforage.getItem("new").then(function (value) {
 		if (value != "new") {
 			$("#tutorialWindow").modal();
 		}
@@ -948,20 +959,20 @@ $(document).ready(function() {
 	});
 
 	// check for ads:
-// 	localforage.getItem("ads").then(function(value) {
-// 		if (value != "ads") {
-// 			if (typeof canRunAds == "undefined") {
-// 				console.log("test");
-// 				swal({
-// 					title: "Disable your adblocker! or don\'t ¯\\_(ツ)_/¯ This message won't appear again!",
-// 				});
-// 			}
-// 		}
-// 		localforage.setItem("ads", "ads");
-// 	});
+	// 	localforage.getItem("ads").then(function(value) {
+	// 		if (value != "ads") {
+	// 			if (typeof canRunAds == "undefined") {
+	// 				console.log("test");
+	// 				swal({
+	// 					title: "Disable your adblocker! or don\'t ¯\\_(ツ)_/¯ This message won't appear again!",
+	// 				});
+	// 			}
+	// 		}
+	// 		localforage.setItem("ads", "ads");
+	// 	});
 
 	// Get stored preferences
-	localforage.getItem("settings").then(function(value) {
+	localforage.getItem("settings").then(function (value) {
 		// If they exist, write them
 		if (typeof value != "undefined") {
 			settings = Object.assign({}, settings, JSON.parse(value));
@@ -982,9 +993,6 @@ $(document).ready(function() {
 
 		rebindUnbindTouchControls();
 		clearAndReplaceProfiles();
-		setKeyboardMapperClasses();
-
-		setTimeout(drawJoyCons, 2000);
 
 		if (settings.keyboardControls) {
 			$("#keyboardControlsCheckbox").prop("checked", true).trigger("change");
@@ -995,9 +1003,9 @@ $(document).ready(function() {
 		if (settings.touchControls) {
 			$("#touchControlsCheckbox").prop("checked", true).trigger("change");
 		}
-// 		if (settings.mouseControls) {
-// 			$("#mouseControlsCheckbox").prop("checked", true).trigger("change");
-// 		}
+		// 		if (settings.mouseControls) {
+		// 			$("#mouseControlsCheckbox").prop("checked", true).trigger("change");
+		// 		}
 		if (settings.analogStickMode) {
 			$("#analogStickCheckbox").prop("checked", true).trigger("change");
 		}
@@ -1048,15 +1056,13 @@ $(document).ready(function() {
 		// volume:
 		$("#laglessVolume").slider("value", settings.volume);
 		$("#laglessVolume span").text(settings.volume);
-		setTimeout(function() {
+		setTimeout(function () {
 			try {
-				player.volume = settings.volume / 100;// doesn't update automatically :/
-			} catch (error) {
-			}
+				player.volume = settings.volume / 100; // doesn't update automatically :/
+			} catch (error) {}
 			try {
-				audio.volume = settings.volume / 100;// doesn't update automatically :/
-			} catch (error) {
-			}
+				audio.volume = settings.volume / 100; // doesn't update automatically :/
+			} catch (error) {}
 		}, 2000);
 		$(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
 
@@ -1064,7 +1070,10 @@ $(document).ready(function() {
 		authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 		if (authCookie != null) {
 			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-			socket.emit("registerAccount", {auth: authCookie, usernameIndex: settings.usernameIndex});
+			socket.emit("registerAccount", {
+				auth: authCookie,
+				usernameIndex: settings.usernameIndex
+			});
 			$("#authenticateButton").remove();
 		} else {
 			// replace with twitch until signed in:
@@ -1072,45 +1081,15 @@ $(document).ready(function() {
 			$("#tab1").addClass("disabled");
 			$("#tab3").addClass("disabled");
 			$("#tab4").addClass("disabled");
+			$("#tab5").addClass("disabled");
 			// remove the logout button:
 			$("#logout").remove();
-// 			$("#loggedInStatus").css("width", "100%");
-// 			$("#loggedInStatus").text("Not logged in.");
 			$("#loggedInStatus").remove();
 
-			$(".disabled").on("click", function() {
-				swal("You need to sign in first!");
+			$(".disabled").on("click", function () {
+				swal("You have to sign in first!");
 			});
 		}
-
-		// fit text:
-// 		fitText(".requestTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-// 		fitText(".cancelTurn", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-// 		fitText(".list-group-item", 1.5, { minFontSize: "10px", maxFontSize: "20px" });
-// // 		fitText("#loggedInIndicator", 2.5, { minFontSize: "10px", maxFontSize: "20px" });
-
-// 		fitText("#lButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-// 		fitText("#zlButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-// 		fitText("#rButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-// 		fitText("#zrButton", 0.5, { minFontSize: "10px", maxFontSize: "20px" });
-
-// 		fitText(".collapseButton", 0.2, { minFontSize: "10px", maxFontSize: "16px" });
-
-// 		fitText(".resolutionButton", 0.2, { minFontSize: "8px", maxFontSize: "16px" });
-// 		fitText(".fpsButton", 0.25, { minFontSize: "8px", maxFontSize: "16px" });
-
-
-// 		resizers.push(textFitPercent({selector: "#lagless2KeyboardDropdown", percentWidth: 20, isFirstChild: true, parent: "#lagless2Bar"}));
-
-// 		resizers.push(textFitPercent({
-// 			selector: ".keyboardDropdown",
-// 			parent: ".laglessBar",
-// 			percentWidth: 20,
-// 			isFirstChild: true,
-// 			isClass: true,
-// 			maxTries: 20,
-// 			increment: 0.2,
-// 		}));
 
 		resizers.push(textFitPercent({
 			selector: "#lagless2KeyboardDropdown",
@@ -1119,7 +1098,7 @@ $(document).ready(function() {
 			isFirstChild: true,
 			isClass: true,
 			maxTries: 20,
-			increment: 0.2,
+			increment: 0.2
 		}));
 
 		resizers.push(textFitPercent({
@@ -1129,77 +1108,65 @@ $(document).ready(function() {
 			isFirstChild: true,
 			maxTries: 20,
 			increment: 0.2,
-			maxFontSize: 20,
+			maxFontSize: 20
 		}));
-
 
 		resizers.push(textFitPercent({
 			selector: "#lagless2Refresh",
 			parent: "#lagless2Bar",
 			percentWidth: 8,
-// 			isFirstChild: true,
+			// 			isFirstChild: true,
 			maxTries: 20,
 			increment: 0.2,
 			accuracy: 5,
-			maxFontSize: 30,
+			maxFontSize: 30
 		}));
 
 		resizers.push(textFitPercent({
 			selector: "#lagless2KeyboardSettings",
 			parent: "#lagless2Bar",
 			percentWidth: 8,
-// 			isFirstChild: true,
+			// 			isFirstChild: true,
 			maxTries: 20,
 			increment: 0.2,
 			accuracy: 5,
-			maxFontSize: 30,
+			maxFontSize: 30
 		}));
 
 		resizers.push(textFitPercent({
 			selector: "#hidePlayers",
 			parent: "#playersContainer",
 			percentWidth: 5,
-// 			isFirstChild: true,
+			// 			isFirstChild: true,
 			maxTries: 20,
 			increment: 0.2,
 			accuracy: 5,
-			maxFontSize: 20,
+			maxFontSize: 20
 		}));
 
 		for (let i = 0; i < resizers.length; i++) {
 			resizers[i].resize();
 		}
 
-// 		setTimeout(resizeChat, 2000);
-
+		// 		setTimeout(resizeChat, 2000);
 
 		// wait a little longer so the joycon images load:
-		setTimeout(function() {
+		setTimeout(function () {
 			$("body").addClass("loaded");
 			// after animation is done:
-			setTimeout(function() {
+			setTimeout(function () {
 				$(".loaded #loader-wrapper")[0].style.visibility = "hidden";
 			}, 500);
 		}, 1000);
 
 		/* DISCORD EMBED */
-// 		crate = new Crate({
-// 			server: "433874668534104065",
-// 			channel: "487328538173767692",
-// 			shard: "https://cl2.widgetbot.io",
-// 		});
+		// 		crate = new Crate({
+		// 			server: "433874668534104065",
+		// 			channel: "487328538173767692",
+		// 			shard: "https://cl2.widgetbot.io",
+		// 		});
 
 	});
-});
-
-
-function setKeyboardMapperClasses() {
-
-
-}
-
-$("#keyboard li").on("click", function(event) {
-
 });
 
 // https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
@@ -1214,13 +1181,10 @@ function keyDownHandler(event) {
 	let buttonKey = keyDownHandler.element.attr("id").slice(0, -3);
 	keyboardLayout[buttonKey] = keyString;
 
-
-
 	document.removeEventListener("keydown", keyDownHandler, false);
 }
 
-
-$("#keyboardConfigKeys li").on("click", function(event) {
+$("#keyboardConfigKeys li").on("click", function (event) {
 
 	let self = $(this);
 
@@ -1232,13 +1196,9 @@ $("#keyboardConfigKeys li").on("click", function(event) {
 	keyDownHandler.element = self;
 });
 
+$("#resetBindings").on("click", function (event) {});
 
-
-$("#resetBindings").on("click", function(event) {
-
-});
-
-$("#defaultBindings").on("click", function(event) {
+$("#defaultBindings").on("click", function (event) {
 	keyboardLayout.tempSelectedAction = "";
 	keyboardLayout.tempSelectedKey = "";
 	keyboardLayout.LU = "W";
@@ -1270,10 +1230,9 @@ $("#defaultBindings").on("click", function(event) {
 	setKeyboardMapperClasses();
 });
 
-
 /* KEYBOARD PROFILES */
 
-$("#createProfile").on("click", function(event) {
+$("#createProfile").on("click", function (event) {
 	event.preventDefault();
 	let profileName = $("#profileName").val();
 	if (profileName === "") {
@@ -1288,7 +1247,7 @@ $("#createProfile").on("click", function(event) {
 	$("#profileName").val("");
 });
 
-$("#deleteProfiles").on("click", function(event) {
+$("#deleteProfiles").on("click", function (event) {
 	event.preventDefault();
 	settings.keyboardProfiles = {};
 	localforage.setItem("settings", JSON.stringify(settings));
@@ -1303,136 +1262,92 @@ function clearAndReplaceProfiles() {
 		let optionHTML = "<button class='keyboard-dropdown-item'" + " config='" + JSON.stringify(settings.keyboardProfiles[key]) + "'>" + key + "</button>";
 		$(".keyboard-dropdown-menu").append(optionHTML);
 	}
-
-	$(".keyboard-dropdown-item").on("click", function(event) {
-		let configName = $(event.target).text();
-		$("#dropdownMenuLink").text(configName);
-		keyboardLayout = JSON.parse($(event.target).attr("config"));
-		setKeyboardMapperClasses();
-	});
 }
-
-
-
-let leftJoyConImage;
-let rightJoyConImage;
-
+$(document).on("click", ".keyboard-dropdown-item", function (event) {
+	let configName = $(event.target).text();
+	$("#keyboardDropdownButton").text(configName);
+	keyboardLayout = JSON.parse($(event.target).attr("config"));
+	console.log(configName);
+});
 
 /* TOUCH CONTROLS */
-function drawJoyCons() {
-	let leftJoyConCanvas = $("#leftJoyConCanvas")[0];
-	leftJoyConCanvas.width = 500;
-	leftJoyConCanvas.height = 500;
-	let leftJoyConCtx = leftJoyConCanvas.getContext("2d");
-	/*let */leftJoyConImage = new Image();
-	leftJoyConImage.onload = function() {
-		let imgWidth = leftJoyConImage.width;
-		let imgHeight = leftJoyConImage.height;
-		let canvasWidth = leftJoyConCanvas.width;
-		let canvasHeight = leftJoyConCanvas.height;
-		let ratio = (imgHeight / imgWidth);
-		let canvasRatio = canvasWidth / canvasHeight;
-		let ratioW = 500 / $("#leftJoyConCanvas").innerWidth();
-		let ratioH = 500 / $("#leftJoyConCanvas").innerHeight();
-		let cWidth = $("#leftJoyConCanvas").innerWidth();
-		leftJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-		leftJoyConCtx.drawImage(leftJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-	};
-	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
-
-	let rightJoyConCanvas = $("#rightJoyConCanvas")[0];
-	rightJoyConCanvas.width = 500;
-	rightJoyConCanvas.height = 500;
-	let rightJoyConCtx = rightJoyConCanvas.getContext("2d");
-	/*let */rightJoyConImage = new Image();
-	rightJoyConImage.onload = function() {
-		let imgWidth = rightJoyConImage.width;
-		let imgHeight = rightJoyConImage.height;
-		let canvasWidth = rightJoyConCanvas.width;
-		let canvasHeight = rightJoyConCanvas.height;
-		let ratio = (imgHeight / imgWidth);
-		let canvasRatio = canvasWidth / canvasHeight;
-		let ratioW = 500 / $("#rightJoyConCanvas").innerWidth();
-		let ratioH = 500 / $("#rightJoyConCanvas").innerHeight();
-		let cWidth = $("#rightJoyConCanvas").innerWidth();
-		rightJoyConCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-		rightJoyConCtx.drawImage(rightJoyConImage, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-	};
-	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
-}
 
 function setVideoWidth(width) {
-	if (typeof $("#videoCanvas1")[0] != "undefined") {
-		$("#videoCanvas1")[0].style.width = width + "%";
-		$("#videoCanvas1")[0].style["margin-left"] = ((100-width)/2) + "%";
-	}
-	if (typeof $("#videoCanvas2")[0] != "undefined") {
-		$("#videoCanvas2")[0].style.width = width + "%";
-		$("#videoCanvas2")[0].style["margin-left"] = ((100-width)/2) + "%";
-	}
-	if (typeof $("#videoCanvas3")[0] != "undefined") {
-		$("#videoCanvas3")[0].style.width = width + "%";
-		$("#videoCanvas3")[0].style["margin-left"] = ((100-width)/2) + "%";
-	}
-	if (typeof $("#videoCanvas4")[0] != "undefined") {
-		$("#videoCanvas4")[0].style.width = width + "%";
-		$("#videoCanvas4")[0].style["margin-left"] = ((100-width)/2) + "%";
-	}
-	if (typeof $("#videoCanvas5")[0] != "undefined") {
-		$("#videoCanvas5")[0].style.width = width + "%";
-		$("#videoCanvas5")[0].style["margin-left"] = ((100-width)/2) + "%";
-	}
+	// if (typeof $("#videoCanvas1")[0] != "undefined") {
+	// 	$("#videoCanvas1")[0].style.width = width + "%";
+	// 	$("#videoCanvas1")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+	// }
+	// if (typeof $("#videoCanvas2")[0] != "undefined") {
+	// 	$("#videoCanvas2")[0].style.width = width + "%";
+	// 	$("#videoCanvas2")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+	// }
+	// if (typeof $("#videoCanvas3")[0] != "undefined") {
+	// 	$("#videoCanvas3")[0].style.width = width + "%";
+	// 	$("#videoCanvas3")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+	// }
+	// if (typeof $("#videoCanvas4")[0] != "undefined") {
+	// 	$("#videoCanvas4")[0].style.width = width + "%";
+	// 	$("#videoCanvas4")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+	// }
+	// if (typeof $("#videoCanvas5")[0] != "undefined") {
+	// 	$("#videoCanvas5")[0].style.width = width + "%";
+	// 	$("#videoCanvas5")[0].style["margin-left"] = ((100 - width) / 2) + "%";
+	// }
 
 	if (typeof $("#twitchVideo")[0] != "undefined") {
 		$("#twitchVideo")[0].style.width = width + "%";
-		$("#twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
+		$("#twitchVideo")[0].style["margin-left"] = ((100 - width) / 2) + "%";
 		// calculate height for twitch:
-// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
-// 		$("#twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
-		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9/16);
+		// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
+		// 		$("#twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9 / 16);
 	}
 	if (typeof $(".twitchVideo")[0] != "undefined") {
 		$(".twitchVideo")[0].style.width = width + "%";
-		$(".twitchVideo")[0].style["margin-left"] = ((100-width)/2) + "%";
+		$(".twitchVideo")[0].style["margin-left"] = ((100 - width) / 2) + "%";
 		// calculate height for twitch:
-// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
-// 		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
-		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9/16);
+		// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
+		// 		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
+		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9 / 16);
 	}
 
-	$("#rightJoyCon")[0].style["margin-left"] = (width) + ((100-width)/2) + "%";
-	$("#leftJoyCon")[0].style.width = ((100-width)/2) + "%";
-	$("#rightJoyCon")[0].style.width = ((100-width)/2) + "%";
-	leftJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png";
-	rightJoyConImage.src = "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png";
+	// $("#rightJoyCon")[0].style["margin-left"] = (width) + ((100 - width) / 2) + "%";
+	// $("#leftJoyCon")[0].style.width = ((100 - width) / 2) + "%";
+	// $("#rightJoyCon")[0].style.width = ((100 - width) / 2) + "%";
 }
 
 function resizeChat() {
-// 	let height = 0;
-// 	height += $(".videoCanvas").addUp($.fn.outerHeight);
-// // 	height += $(".laglessBar").addUp($.fn.outerHeight);
-// 	height += ($("#navTabs").outerHeight());
-// 	height -= ($("#loggedInContainer").outerHeight());
-// 	height += 10;// adjust
-// 	$("#chat").height(height);
+	// 	let height = 0;
+	// 	height += $(".videoCanvas").addUp($.fn.outerHeight);
+	//  	height += $(".laglessBar").addUp($.fn.outerHeight);
+	// 	height += ($("#navTabs").outerHeight());
+	// 	height -= ($("#loggedInContainer").outerHeight());
+	// 	height += 10;// adjust
+	// 	$("#chat").height(height);
 }
 
-/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 let leftJoyStick = {
 	zone: document.querySelector("#leftStick"),
 	mode: "static",
 	catchDistance: 10,
 	color: "#FF3C28",
-	position: {left: "50%", top: "50%"},
-	size: 60,
+	position: {
+		left: "50%",
+		top: "50%"
+	},
+	size: 60
 };
 let rightJoyStick = {
 	zone: document.querySelector("#rightStick"),
 	mode: "static",
 	catchDistance: 10,
 	color: "#0AB9E6",
-	position: {left: "50%", top: "50%"},
-	size: 60,
+	position: {
+		left: "50%",
+		top: "50%"
+	},
+	size: 60
 };
 
 let leftStick;
@@ -1441,18 +1356,18 @@ let rightStick;
 function bindJoysticks() {
 	let stickSize = 60;
 	let s1 = stickSize;
-	let s2 = stickSize/2;
-	leftStick.on("start", function(evt, data) {
+	let s2 = stickSize / 2;
+	leftStick.on("start", function (evt, data) {
 		let pos = data.frontPosition;
 		pos.x = parseInt(((pos.x + s2) / s1) * 255);
 		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.LStick.x = pos.x;
 		controller.LStick.y = pos.y;
-	}).on("end", function(evt, data) {
+	}).on("end", function (evt, data) {
 		controller.LStick.x = restPos;
 		controller.LStick.y = restPos;
-	}).on("move", function(evt, data) {
+	}).on("move", function (evt, data) {
 		let pos = data.instance.frontPosition;
 		pos.x = parseInt(((pos.x + s2) / s1) * 255);
 		pos.y = parseInt(((pos.y + s2) / s1) * 255);
@@ -1461,17 +1376,17 @@ function bindJoysticks() {
 		controller.LStick.y = pos.y;
 	})
 
-	rightStick.on("start", function(evt, data) {
+	rightStick.on("start", function (evt, data) {
 		let pos = data.frontPosition;
 		pos.x = parseInt(((pos.x + s2) / s1) * 255);
 		pos.y = parseInt(((pos.y + s2) / s1) * 255);
 		pos.y = 255 - pos.y;
 		controller.RStick.x = pos.x;
 		controller.RStick.y = pos.y;
-	}).on("end", function(evt, data) {
+	}).on("end", function (evt, data) {
 		controller.RStick.x = restPos;
 		controller.RStick.y = restPos;
-	}).on("move", function(evt, data) {
+	}).on("move", function (evt, data) {
 		let pos = data.instance.frontPosition;
 		pos.x = parseInt(((pos.x + s2) / s1) * 255);
 		pos.y = parseInt(((pos.y + s2) / s1) * 255);
@@ -1484,28 +1399,26 @@ function bindJoysticks() {
 // rightStick = nipplejs.create(rightJoyStick);
 // bindJoysticks();
 
-
 function getTouchInput() {
 	if (!$("#touchControlsCheckbox")[0].checked) {
 		return;
 	}
-// 	authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-// 	if (authCookie == null) {
-// 		$("#touchControlsCheckbox").prop("checked", false).trigger("change");
-// 		swal({
-// 			title: "You need to login! Redirecting you now!",
-// 		}).then((result) => {
-// 			if (result.value) {
-// 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-// 			}
-// 		});
-// 		return;
-// 	} else {
-// 		authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-// 	}
+	// 	authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+	// 	if (authCookie == null) {
+	// 		$("#touchControlsCheckbox").prop("checked", false).trigger("change");
+	// 		swal({
+	// 			title: "You need to login! Redirecting you now!",
+	// 		}).then((result) => {
+	// 			if (result.value) {
+	// 				window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+	// 			}
+	// 		});
+	// 		return;
+	// 	} else {
+	// 		authCookie = authCookie.split(" ")[0].replace(/;/g, "");
+	// 	}
 	//controller.reset();
 }
-
 
 function onButtonPress(event) {
 
@@ -1513,9 +1426,15 @@ function onButtonPress(event) {
 
 	settings.currentInputMode = "touch";
 
-	if (!$("#touchControlsCheckbox")[0].checked) {return;}
-	if (event.target.id == null) {return;}
-	if (event.target.id == "dpadButtons" || event.target.id == "abxyButtons") {return;}
+	if (!$("#touchControlsCheckbox")[0].checked) {
+		return;
+	}
+	if (event.target.id == null) {
+		return;
+	}
+	if (event.target.id == "dpadButtons" || event.target.id == "abxyButtons") {
+		return;
+	}
 
 	let value = 0;
 	if (event.type == "mousedown" || event.type == "touchstart" || event.type == "pointerdown") {
@@ -1528,12 +1447,11 @@ function onButtonPress(event) {
 		// todo: make an equivalent to mouseleave since touchleave doesn't exist :/
 	}
 
-
 	let button = event.target.id;
 
 	let oldState = JSON.stringify(controller);
 
-	switch(button) {
+	switch (button) {
 		case "upButton":
 			controller.btns.up = value;
 			break;
@@ -1593,10 +1511,8 @@ function onButtonPress(event) {
 		return;
 	}
 
-	if(controlQueue1.indexOf(myUniqueID) == -1) {
-		socket.emit("requestTurn", currentPlayerChosen);
-		let html = '<button id="cancelTurn' + (currentPlayerChosen + 1) + '" class="cancelTurn btn btn-secondary" code="' + currentPlayerChosen + '">Leave Queue</button>';
-		$("#requestTurn" + (currentPlayerChosen + 1)).replaceWith(html);
+	if (controlQueue1.indexOf(myUniqueID) == -1) {
+		socket.emit("joinQueue", currentPlayerChosen);
 	}
 }
 
@@ -1609,8 +1525,7 @@ function rebindUnbindTouchControls() {
 			$("#leftJoyCon")[0].style.display = "";
 			$("#rightJoyCon")[0].style.display = "";
 			setVideoWidth(73.2);
-		} catch(error) {
-		}
+		} catch (error) {}
 
 		for (let i = 0; i < buttonsList.length; i++) {
 			$(buttonsList[i]).bind("touchstart", onButtonPress);
@@ -1629,8 +1544,7 @@ function rebindUnbindTouchControls() {
 		try {
 			$("#leftJoyCon")[0].style.display = "none";
 			$("#rightJoyCon")[0].style.display = "none";
-		} catch(error) {
-		}
+		} catch (error) {}
 
 		for (let i = 0; i < buttonsList.length; i++) {
 			$(buttonsList[i]).unbind("touchstart", onButtonPress);
@@ -1647,9 +1561,8 @@ function rebindUnbindTouchControls() {
 	}
 }
 
-
-$("#touchControlsCheckbox").on("change", function() {
-// 	console.log("checked touch controls")
+$("#touchControlsCheckbox").on("change", function () {
+	// 	console.log("checked touch controls")
 	settings.touchControls = $("#touchControlsCheckbox")[0].checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 
@@ -1662,26 +1575,28 @@ $("#touchControlsCheckbox").on("change", function() {
 });
 
 function sendInputs() {
-	if(!isMobile) {
+	if (!isMobile) {
 		getKeyboardInput();
 		getGamepadInput();
 	}
 	getTouchInput();
 	sendControllerState();
 }
-sendInputTimer = setInterval(sendInputs, 1000/120);
-
+sendInputTimer = setInterval(sendInputs, 1000 / 120);
 
 /* AUTHENTICATION */
 
-setInterval(function() {
+setInterval(function () {
 	if (authCookie != null) {
-		socket.emit("registerAccount", {auth: authCookie, usernameIndex: settings.usernameIndex});
-// 		$("#authenticateButton").remove();
+		socket.emit("registerAccount", {
+			auth: authCookie,
+			usernameIndex: settings.usernameIndex
+		});
+		// 		$("#authenticateButton").remove();
 	}
 }, 5000);
 
-socket.on("accountInfo", function(data) {
+socket.on("accountInfo", function (data) {
 	myUniqueID = data.uniqueID;
 	myConnectedAccounts = data.connectedAccounts;
 
@@ -1691,8 +1606,8 @@ socket.on("accountInfo", function(data) {
 	let usernamesChanged = (JSON.stringify(myValidUsernames) !== JSON.stringify(data.validUsernames));
 	myValidUsernames = data.validUsernames;
 
-// 	let loggedInText = '<span class="align-self-center">Logged in as: ' + myValidUsernames[settings.usernameIndex] + "</span>";
-// 	$("#loggedInStatus").html(loggedInText);
+	// 	let loggedInText = '<span class="align-self-center">Logged in as: ' + myValidUsernames[settings.usernameIndex] + "</span>";
+	// 	$("#loggedInStatus").html(loggedInText);
 	if (usernamesChanged) {
 		for (let i = 0; i < data.validUsernames.length; i++) {
 			let html = '<button class="username-dropdown-item dropdown-item">' + data.validUsernames[i] + "</button>";
@@ -1721,16 +1636,16 @@ socket.on("accountInfo", function(data) {
 	}
 });
 
-socket.on("usernameMap", function(data) {
+socket.on("usernameMap", function (data) {
 	usernameMap = data;
 });
 
-$("#logout").on("click", function(event) {
+$("#logout").on("click", function (event) {
 	tools.deleteAllCookies();
 	location.reload(true);
 });
 
-$(document).on("click", ".username-dropdown-item", function(event) {
+$(document).on("click", ".username-dropdown-item", function (event) {
 	let username = $(event.target).text();
 	let index = $(event.target).index();
 	$("#usernameDropdownMenuLink").text(username);
@@ -1738,9 +1653,9 @@ $(document).on("click", ".username-dropdown-item", function(event) {
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
-socket.on("needToSignIn", function() {
+socket.on("needToSignIn", function () {
 	swal("You need to sign in!");
-	setTimeout(function() {
+	setTimeout(function () {
 		tools.deleteAllCookies();
 		location.reload(true);
 	}, 1000);
@@ -1754,50 +1669,46 @@ function connectAccountOrSignIn(type) {
 	window.location.href = url;
 }
 
-$("#connectWithTwitchButton").on("click", function(event) {
+$("#connectWithTwitchButton").on("click", function (event) {
 	connectAccountOrSignIn("twitch");
 });
-$("#connectWithGoogleButton").on("click", function(event) {
+$("#connectWithGoogleButton").on("click", function (event) {
 	connectAccountOrSignIn("google");
 });
-$("#connectWithYoutubeButton").on("click", function(event) {
+$("#connectWithYoutubeButton").on("click", function (event) {
 	connectAccountOrSignIn("youtube");
 });
-$("#connectWithDiscordButton").on("click", function(event) {
+$("#connectWithDiscordButton").on("click", function (event) {
 	connectAccountOrSignIn("discord");
 });
 
-
-setTimeout(function() {
+setTimeout(function () {
 	if (!loaded) {
 		loaded = true;
 		$.ajax({
-			url: "https://twitchplaysnintendoswitch.com/accountData/" + myUniqueID + "/" + authCookie,
+			url: "https://twitchplaysnintendoswitch.com/accountData/" + myUniqueID + "/" + authCookie
 		});
 	}
 }, 5000);
 
-
-
-/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 // prevent arrow keys from messing with the slider:
 // https://stackoverflow.com/questions/2922174/jquery-ui-slider-how-to-disable-keyboard-input
 $.prototype.slider_old = $.prototype.slider;
-$.prototype.slider = function() {
+$.prototype.slider = function () {
 	let result = $.prototype.slider_old.apply(this, arguments);
 	this.find(".ui-slider-handle").unbind("keydown"); // disable keyboard actions
 	return result;
 }
 
-
 $("#laglessVolume").slider({
-    min: 0,
-    max: 100,
-    value: 0,
+	min: 0,
+	max: 100,
+	value: 0,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		settings.volume = ui.value;
 		localforage.setItem("settings", JSON.stringify(settings));
 		if (!settings.audioThree) {
@@ -1807,10 +1718,10 @@ $("#laglessVolume").slider({
 		}
 		$("#laglessVolume").slider("value", settings.volume);
 		$("#laglessVolume span").text(settings.volume);
-  	}
+	}
 });
 
-$("#laglessVolumeSlider").children().first().on("click", function(){
+$("#laglessVolumeSlider").children().first().on("click", function () {
 	settings.volume = 0;
 	$("#laglessVolume").slider("value", 0);
 	$("#laglessVolume span").text(settings.volume);
@@ -1821,7 +1732,7 @@ $("#laglessVolumeSlider").children().first().on("click", function(){
 	}
 });
 
-$("#laglessVolumeSlider").children().last().on("click", function(){
+$("#laglessVolumeSlider").children().last().on("click", function () {
 	settings.volume = 100;
 	$("#laglessVolume").slider("value", 100);
 	$("#laglessVolume span").text(settings.volume);
@@ -1833,110 +1744,111 @@ $("#laglessVolumeSlider").children().last().on("click", function(){
 });
 
 $("#qualitySlider").slider({
-    min: 20,
-    max: 80,
+	min: 20,
+	max: 80,
 	step: 1,
-    value: 70,
+	value: 70,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#quality").text(ui.value);
-		socket.emit("lagless1Settings", {quality: parseInt(ui.value)});
-  	},
-	stop: function(event, ui) {
-	}
+		socket.emit("lagless1Settings", {
+			quality: parseInt(ui.value)
+		});
+	},
+	stop: function (event, ui) {}
 });
 
 $("#scaleSlider").slider({
-    min: 10,
-    max: 80,
+	min: 10,
+	max: 80,
 	step: 5,
-    value: 30,
+	value: 30,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#scale").text(ui.value);
-		socket.emit("lagless1Settings", {scale: parseInt(ui.value)});
-  	},
-	stop: function(event, ui) {
-	}
+		socket.emit("lagless1Settings", {
+			scale: parseInt(ui.value)
+		});
+	},
+	stop: function (event, ui) {}
 });
 
 $("#fpsSlider").slider({
-    min: 1,
-    max: 25,
+	min: 1,
+	max: 18,
 	step: 1,
-    value: 15,
+	value: 15,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#fps").text(ui.value);
-		socket.emit("lagless1Settings", {fps: parseInt(ui.value)});
-  	},
-	stop: function(event, ui) {
-	}
+		socket.emit("lagless1Settings", {
+			fps: parseInt(ui.value)
+		});
+	},
+	stop: function (event, ui) {}
 });
 
-
 $("#deadzoneSlider").slider({
-    min: 1,
-    max: 100,
+	min: 1,
+	max: 100,
 	step: 1,
-    value: 50,
+	value: 50,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#deadzone").text(ui.value);
-  	},
-	stop: function(event, ui) {
-	}
+	},
+	stop: function (event, ui) {}
 });
 
 $("#stickSensitivitySlider").slider({
-    min: 0,
-    max: 3,
+	min: 0,
+	max: 3,
 	step: 0.01,
-    value: 1,
+	value: 1,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#sensitivity").text(ui.value);
 		settings.stickSensitivityX = ui.value;
 		settings.stickSensitivityY = ui.value;
-  	},
-	stop: function(event, ui) {
+	},
+	stop: function (event, ui) {
 		localforage.setItem("settings", JSON.stringify(settings));
 	}
 });
 
 $("#stickAttackSlider").slider({
-    min: 0,
-    max: 40,
+	min: 0,
+	max: 40,
 	step: 0.1,
-    value: 20,
+	value: 20,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#attack").text(ui.value);
 		settings.stickAttack = ui.value;
-  	},
-	stop: function(event, ui) {
+	},
+	stop: function (event, ui) {
 		localforage.setItem("settings", JSON.stringify(settings));
 	}
 });
 
 $("#stickReturnSlider").slider({
-    min: 0,
-    max: 40,
+	min: 0,
+	max: 40,
 	step: 0.1,
-    value: 20,
+	value: 20,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#return").text(ui.value);
 		settings.stickReturn = ui.value;
-  	},
-	stop: function(event, ui) {
+	},
+	stop: function (event, ui) {
 		localforage.setItem("settings", JSON.stringify(settings));
 	}
 });
@@ -1953,11 +1865,11 @@ $("#stickReturnSlider").slider({
 // 		setVideoWidth(ui.value);
 //   	},
 // 	stop: function(event, ui) {
-// // 		localforage.setItem("settings", JSON.stringify(settings));
+//  		localforage.setItem("settings", JSON.stringify(settings));
 // 	}
 // });
 
-socket.on("lagless1Settings", function(data) {
+socket.on("lagless1Settings", function (data) {
 	lagless1Settings = Object.assign({}, lagless1Settings, data);
 	$("#scale").text(lagless1Settings.scale);
 	$("#scaleSlider").slider("value", lagless1Settings.scale);
@@ -1965,111 +1877,124 @@ socket.on("lagless1Settings", function(data) {
 	$("#qualitySlider").slider("value", lagless1Settings.quality);
 });
 
-
 // lagless2:
 
 $("#bitrateSlider2").slider({
-    min: 0,
-    max: 3,
+	min: 0,
+	max: 3,
 	step: 0.05,
-    value: 1,
+	value: 1,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#bitrate2").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless2Settings", {videoBitrate: parseFloat(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless2Settings", {
+			videoBitrate: parseFloat(ui.value)
+		});
 	}
 });
 
 $("#scaleSlider2").slider({
-    min: 100,
-    max: 960,
+	min: 100,
+	max: 720,
 	step: 1,
-    value: 960,
+	value: 720,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#scale2").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless2Settings", {scale: parseInt(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless2Settings", {
+			scale: parseInt(ui.value)
+		});
 	}
 });
 
-$("#240p").on("click", function(event) {
+$("#240p").on("click", function (event) {
 	$("#scale2").text(240);
 	$("#scaleSlider2").slider("value", 240);
-	socket.emit("lagless2Settings", {scale: 240});
+	socket.emit("lagless2Settings", {
+		scale: 240
+	});
 });
-$("#360p").on("click", function(event) {
+$("#360p").on("click", function (event) {
 	$("#scale2").text(360);
 	$("#scaleSlider2").slider("value", 360);
-	socket.emit("lagless2Settings", {scale: 360});
+	socket.emit("lagless2Settings", {
+		scale: 360
+	});
 });
-$("#720p").on("click", function(event) {
+$("#720p").on("click", function (event) {
 	$("#scale2").text(720);
 	$("#scaleSlider2").slider("value", 720);
-	socket.emit("lagless2Settings", {scale: 720});
+	socket.emit("lagless2Settings", {
+		scale: 720
+	});
 });
-$("#960p").on("click", function(event) {
-	$("#scale2").text(960);
-	$("#scaleSlider2").slider("value", 960);
-	socket.emit("lagless2Settings", {scale: 960});
-});
-
-
 
 $("#offsetXSlider2").slider({
-    min:0,
-    max: 600,
+	min: 0,
+	max: 600,
 	step: 1,
-    value: 0,
+	value: 0,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#offsetX2").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless2Settings", {offsetX: parseInt(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless2Settings", {
+			offsetX: parseInt(ui.value)
+		});
 	}
 });
 
 $("#offsetYSlider2").slider({
-    min:0,
-    max: 300,
+	min: 0,
+	max: 300,
 	step: 1,
-    value: 0,
+	value: 0,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#offsetY2").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless2Settings", {offsetY: parseInt(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless2Settings", {
+			offsetY: parseInt(ui.value)
+		});
 	}
 });
 
-$("#20fps").on("click", function(event) {
+$("#20fps").on("click", function (event) {
 	$("#fps2").text(20);
-	socket.emit("lagless2Settings", {framerate: 20});
+	socket.emit("lagless2Settings", {
+		framerate: 20
+	});
 });
-$("#30fps").on("click", function(event) {
+$("#30fps").on("click", function (event) {
 	$("#fps2").text(30);
-	socket.emit("lagless2Settings", {framerate: 30});
+	socket.emit("lagless2Settings", {
+		framerate: 30
+	});
 });
-$("#45fps").on("click", function(event) {
+$("#45fps").on("click", function (event) {
 	$("#fps2").text(45);
-	socket.emit("lagless2Settings", {framerate: 45});
+	socket.emit("lagless2Settings", {
+		framerate: 45
+	});
 });
-$("#60fps").on("click", function(event) {
+$("#60fps").on("click", function (event) {
 	$("#fps2").text(60);
-	socket.emit("lagless2Settings", {framerate: 60});
+	socket.emit("lagless2Settings", {
+		framerate: 60
+	});
 });
 
-
-socket.on("lagless2Settings", function(data) {
+socket.on("lagless2Settings", function (data) {
 	lagless2Settings = Object.assign({}, lagless2Settings, data);
 
 	$("#fps2").text(lagless2Settings.framerate);
@@ -2092,70 +2017,77 @@ socket.on("lagless2Settings", function(data) {
 // lagless4:
 // lagless3:
 
-
 // lagless5:
 
 $("#bitrateSlider5").slider({
-    min: 0,
-    max: 2,
+	min: 0,
+	max: 2,
 	step: 0.05,
-    value: 1,
+	value: 1,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#bitrate5").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless5Settings", {videoBitrate: parseFloat(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless5Settings", {
+			videoBitrate: parseFloat(ui.value)
+		});
 	}
 });
 
 $("#scaleSlider5").slider({
-    min: 100,
-    max: 960,
+	min: 100,
+	max: 960,
 	step: 1,
-    value: 960,
+	value: 960,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#scale5").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless5Settings", {scale: parseInt(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless5Settings", {
+			scale: parseInt(ui.value)
+		});
 	}
 });
 
 $("#offsetXSlider5").slider({
-    min:0,
-    max: 600,
+	min: 0,
+	max: 600,
 	step: 1,
-    value: 0,
+	value: 0,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#offsetX5").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless5Settings", {offsetX: parseInt(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless5Settings", {
+			offsetX: parseInt(ui.value)
+		});
 	}
 });
 
 $("#offsetYSlider5").slider({
-    min:0,
-    max: 400,
+	min: 0,
+	max: 400,
 	step: 1,
-    value: 0,
+	value: 0,
 	range: "min",
 	animate: true,
-	slide: function(event, ui) {
+	slide: function (event, ui) {
 		$("#offsetY5").text(ui.value);
-  	},
-	stop: function(event, ui) {
-		socket.emit("lagless5Settings", {offsetY: parseInt(ui.value)});
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless5Settings", {
+			offsetY: parseInt(ui.value)
+		});
 	}
 });
 
-socket.on("lagless5Settings", function(data) {
+socket.on("lagless5Settings", function (data) {
 	lagless5Settings = Object.assign({}, lagless5Settings, data);
 
 	$("#scale5").text(lagless5Settings.scale);
@@ -2171,7 +2103,6 @@ socket.on("lagless5Settings", function(data) {
 	$("#offsetYSlider5").slider("value", lagless5Settings.offsetY);
 });
 
-
 /* LAGLESS 1.0 */
 
 let videoCanvas1 = $("#videoCanvas1")[0];
@@ -2179,15 +2110,15 @@ let videoCanvas1Context = videoCanvas1.getContext("2d");
 videoCanvas1.width = 1280;
 videoCanvas1.height = 720;
 
-socket2.on("viewImage", function(data) {
+socket2.on("viewImage", function (data) {
 	let src = "data:image/jpeg;base64," + data;
-	if(src == "data:image/jpeg;base64,") {
+	if (src == "data:image/jpeg;base64,") {
 		socket.emit("restart");
 		return;
 	}
 	let image = new Image();
 	image.style = "max-width:100%; height:auto;";
-	image.onload = function() {
+	image.onload = function () {
 		let imgWidth = image.width;
 		let imgHeight = image.height;
 		let canvasWidth = videoCanvas1.width;
@@ -2202,17 +2133,17 @@ socket2.on("viewImage", function(data) {
 	};
 	image.src = src;
 });
-$("#lagless1Refresh").on("click", function() {
+$("#lagless1Refresh").on("click", function () {
 	socket.emit("restart1");
 });
 
 /* LAGLESS 2.0 */
 // Setup the WebSocket connection and start the player
-let url = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
+let lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
 let canvas2 = $("#videoCanvas2")[0];
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-// let player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
+// let player = new JSMpeg.Player(lagless2URL, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
 // player.maxAudioLag = 0.5;
 // player.stop();
 
@@ -2228,12 +2159,18 @@ function resizeVideo2(scale) {
 }
 
 // on settings change:
-socket.on("lagless2SettingsChange", function(data) {
+socket.on("lagless2SettingsChange", function (data) {
 	try {
 		player.destroy();
-	} catch(error) {
-	}
-	player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: /*!settings.audioThree*/true, videoBufferSize: videoBufferSize, audioBufferSize: audioBufferSize, maxAudioLag: 0.5});
+	} catch (error) {}
+	player = new JSMpeg.Player(lagless2URL, {
+		canvas: canvas2,
+		video: true,
+		audio: true,
+		videoBufferSize: videoBufferSize,
+		audioBufferSize: audioBufferSize,
+		maxAudioLag: 0.5
+	});
 	if (!settings.audioThree) {
 		player.volume = settings.volume / 100;
 	} else {
@@ -2243,28 +2180,36 @@ socket.on("lagless2SettingsChange", function(data) {
 
 //socket.emit("lagless2Settings", {videoBitrate: "2M", framerate: 20, scale: "640:360"});
 
-$("#lagless2Refresh").on("click", function() {
+$("#lagless2Refresh").on("click", function () {
 	socket.emit("restart2");
 });
-
 
 /* LAGLESS 3.0 */
 let canvas3 = $("#videoCanvas3")[0];
 // Create h264 player
 let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
+window.wsavc = wsavc;
+wsavc.on("disconnected", () => console.log("WS Disconnected"));
+wsavc.on("connected", () => console.log("WS connected"));
+wsavc.on("frame_shift", (fbl) => {
+	// fb.innerText = "fl: " + fbl
+});
+wsavc.on("initalized", (payload) => {
+	console.log("Initialized", payload);
+});
+wsavc.on("stream_active", active => console.log("Stream is ", active ? "active" : "offline"));
+wsavc.on("custom_event_from_server", event => console.log("got event from server", event));
 
-
-$("#lagless3Refresh").on("click", function() {
+$("#lagless3Refresh").on("click", function () {
 	try {
 		wsavc.disconnect();
-	} catch(error) {
-	}
-	let uri = "wss://twitchplaysnintendoswitch.com/"+ lagless3Port + "/";
+	} catch (error) {}
+	let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 	wsavc.connect(uri);
 });
 
-$("#lagless3Refresh").on("click", function() {
+$("#lagless3Refresh").on("click", function () {
 	socket.emit("restart3");
 });
 
@@ -2274,31 +2219,29 @@ let videoPeer = new SimplePeer({
 	initiator: false,
 	trickle: true
 });
-videoPeer.on("error", function(err) {
+videoPeer.on("error", function (err) {
 	console.log("error", err)
 });
-videoPeer.on("signal", function(data) {
+videoPeer.on("signal", function (data) {
 	console.log("SIGNAL", JSON.stringify(data));
 	socket.emit("clientPeerSignalV", JSON.stringify(data));
 });
-videoPeer.on("connect", function() {
+videoPeer.on("connect", function () {
 	console.log("CONNECT");
 	videoPeer.send(Math.random());
 });
-videoPeer.on("data", function(data) {
+videoPeer.on("data", function (data) {
 	console.log("data: " + data)
 });
-socket.on("hostPeerSignalV", function(data) {
+socket.on("hostPeerSignalV", function (data) {
 	videoPeer.signal(JSON.parse(data));
 });
 videoPeer.on("stream", function (stream) {
 	// got remote video stream, then show it in a video tag
-	canvas4.src = window.URL.createObjectURL(stream);// deprecated
-// 	canvas4.srcObj = stream;
+	canvas4.src = window.URL.createObjectURL(stream); // deprecated
+	// 	canvas4.srcObj = stream;
 	canvas4.play();
 });
-
-
 
 /* LAGLESS 5.0 */
 let videoCanvas5 = $("#videoCanvas5")[0];
@@ -2306,16 +2249,16 @@ let videoCanvas5Context = videoCanvas5.getContext("2d");
 videoCanvas5.width = 1280;
 videoCanvas5.height = 720;
 
-socket2.on("viewImage5", function(data) {
+socket2.on("viewImage5", function (data) {
 	let src = "data:image/jpeg;base64," + data;
-	if(src == "data:image/jpeg;base64,") {
+	if (src == "data:image/jpeg;base64,") {
 		console.log("image was empty");
 		socket.emit("restart5");
 		return;
 	}
 	let image = new Image();
 	image.style = "max-width:100%; height:auto;";
-	image.onload = function() {
+	image.onload = function () {
 		let imgWidth = image.width;
 		let imgHeight = image.height;
 		let canvasWidth = videoCanvas5.width;
@@ -2334,14 +2277,14 @@ socket2.on("viewImage5", function(data) {
 /* RESIZABLE */
 // interact("#picture")
 // 	.resizable({
-//     // resize from all edges and corners
+//      resize from all edges and corners
 //     edges: { left: false, right: true, bottom: false, top: false },
-//     // keep the edges inside the parent
+//      keep the edges inside the parent
 //     restrictEdges: {
 //       outer: "parent",
 //       endOnly: true,
 //     },
-//     // minimum size
+//      minimum size
 //     restrictSize: {
 //       min: { width: 100, height: 50 },
 //     },
@@ -2353,20 +2296,20 @@ socket2.on("viewImage5", function(data) {
 //         x = (parseFloat(target.getAttribute("data-x")) || 0),
 //         y = (parseFloat(target.getAttribute("data-y")) || 0);
 
-//     // update the element's style
+//      update the element's style
 //     target.style.width  = event.rect.width + "px";
 //     target.style.height = event.rect.height + "px";
 //   });
 // interact("#videoCanvas2")
 // 	.resizable({
-//     // resize from all edges and corners
+//      resize from all edges and corners
 //     edges: { left: true, right: true, bottom: true, top: true },
-//     // keep the edges inside the parent
+//      keep the edges inside the parent
 //     restrictEdges: {
 //       outer: "parent",
 //       endOnly: true,
 //     },
-//     // minimum size
+//      minimum size
 //     restrictSize: {
 //       min: { width: 100, height: 50 },
 //     },
@@ -2378,20 +2321,20 @@ socket2.on("viewImage5", function(data) {
 //         x = (parseFloat(target.getAttribute("data-x")) || 0),
 //         y = (parseFloat(target.getAttribute("data-y")) || 0);
 
-//     // update the element's style
+//      update the element's style
 //     target.style.width  = event.rect.width + "px";
 //     target.style.height = event.rect.height + "px";
 //   });
 // interact("#videoCanvas3")
 // 	.resizable({
-//     // resize from all edges and corners
+//      resize from all edges and corners
 //     edges: { left: true, right: true, bottom: true, top: true },
-//     // keep the edges inside the parent
+//      keep the edges inside the parent
 //     restrictEdges: {
 //       outer: "parent",
 //       endOnly: true,
 //     },
-//     // minimum size
+//      minimum size
 //     restrictSize: {
 //       min: { width: 100, height: 50 },
 //     },
@@ -2403,11 +2346,10 @@ socket2.on("viewImage5", function(data) {
 //         x = (parseFloat(target.getAttribute("data-x")) || 0),
 //         y = (parseFloat(target.getAttribute("data-y")) || 0);
 
-//     // update the element's style
+//      update the element's style
 //     target.style.width  = event.rect.width + "px";
 //     target.style.height = event.rect.height + "px";
 //   });
-
 
 function addJoyCons(tab, actual) {
 
@@ -2421,17 +2363,16 @@ function addJoyCons(tab, actual) {
 	try {
 		leftStick.destroy();
 		rightStick.destroy();
-	} catch(e) {
+	} catch (e) {
 		console.log("JoyCon delete error.");
 	}
 
 	$("#leftJoyCon").remove();
 	$("#rightJoyCon").remove();
 
-
 	let leftJoyConHTML = `
 	<div id="leftJoyCon">
-		<canvas id="leftJoyConCanvas"></canvas>
+		<img id="leftJoyConCanvas" src="https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png" />
 		<div id="leftStick">
 			<div id="leftStick2"></div>
 		</div>
@@ -2452,7 +2393,7 @@ function addJoyCons(tab, actual) {
 
 	let rightJoyConHTML = `
 	<div id="rightJoyCon">
-		<canvas id="rightJoyConCanvas"></canvas>
+		<img id="rightJoyConCanvas" src="https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png" />
 		<div id="rightStick">
 			<div id="rightStick2"></div>
 		</div>
@@ -2470,14 +2411,13 @@ function addJoyCons(tab, actual) {
 		</div>
 	</div>`;
 
+
 	$(tab).prepend(leftJoyConHTML);
-	$(tab).prepend(rightJoyConHTML);
+	$(tab).append(rightJoyConHTML);
+
 
 	// rebind touch controls:
 	rebindUnbindTouchControls();
-
-	// redraw joycons:
-	drawJoyCons();
 
 	// resize window:
 	setVideoWidth(73.2);
@@ -2490,8 +2430,6 @@ function addJoyCons(tab, actual) {
 	bindJoysticks();
 }
 
-
-
 /* SWITCH IMPLEMENTATIONS */
 
 function switchTabs(tab) {
@@ -2501,7 +2439,7 @@ function switchTabs(tab) {
 		socket2.emit("join", "lagless1");
 		// todo: fix this:
 		clearInterval(lagless1JoinTimer);
-		lagless1JoinTimer = setInterval(function() {
+		lagless1JoinTimer = setInterval(function () {
 			socket2.emit("join", "lagless1");
 		}, 5000);
 	} else {
@@ -2516,9 +2454,15 @@ function switchTabs(tab) {
 		//player.play();
 		try {
 			player.destroy();
-		} catch (error) {
-		}
-		player = new JSMpeg.Player(url, {canvas: canvas2, video: true, audio: /*!settings.audioThree*/true, videoBufferSize: videoBufferSize, audioBufferSize: audioBufferSize, maxAudioLag: 0.5});
+		} catch (error) {}
+		player = new JSMpeg.Player(lagless2URL, {
+			canvas: canvas2,
+			video: true,
+			audio: /* !settings.audioThree */ true,
+			videoBufferSize: videoBufferSize,
+			audioBufferSize: audioBufferSize,
+			maxAudioLag: 0.5
+		});
 		if (!settings.audioThree) {
 			player.volume = settings.volume / 100;
 			audio.volume = 0;
@@ -2527,12 +2471,18 @@ function switchTabs(tab) {
 			audio.volume = settings.volume / 100;
 		}
 	} else {
-// 		player.stop();
+		// 		player.stop();
 		try {
 			player.destroy();
-		} catch (error) {
-		}
-		player = new JSMpeg.Player(url, {canvas: canvas2, video: false, audio: true, videoBufferSize: videoBufferSize, audioBufferSize: audioBufferSize, maxAudioLag: 0.5});
+		} catch (error) {}
+		player = new JSMpeg.Player(lagless2URL, {
+			canvas: canvas2,
+			video: false,
+			audio: true,
+			videoBufferSize: videoBufferSize,
+			audioBufferSize: audioBufferSize,
+			maxAudioLag: 0.5
+		});
 		if (!settings.audioThree) {
 			player.volume = settings.volume / 100;
 			audio.volume = 0;
@@ -2551,8 +2501,7 @@ function switchTabs(tab) {
 	} else {
 		try {
 			wsavc.disconnect();
-		} catch(error) {
-		}
+		} catch (error) {}
 	}
 
 	// lagless 4:
@@ -2576,24 +2525,22 @@ function switchTabs(tab) {
 		if (typeof player5 != "undefined") {
 			try {
 				player5.play();
-			} catch (e) {
-			}
+			} catch (e) {}
 		}
-// 		setTimeout(function() {
-// 			player.volume = 0;
-// 		}, 1000);
+		// 		setTimeout(function() {
+		// 			player.volume = 0;
+		// 		}, 1000);
 	} else {
 		socket2.emit("leave", "viewers5");
 		if (typeof player5 != "undefined") {
 			try {
 				player5.stop();
-			} catch (e) {
-			}
+			} catch (e) {}
 		}
 	}
 }
 
-$(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
+$(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
 
 	let tab = $(e.target);
 	let contentId = tab.attr("href");
@@ -2602,25 +2549,23 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function(e) {
 
 	switchTabs(contentId);
 
-
 	localforage.setItem("settings", JSON.stringify(settings));
 
 	if (!settings.largescreen) {
 		addJoyCons(contentId);
-		setTimeout(drawJoyCons, 2000);// todo: find a solution like onload, but for tab changes
 		rebindUnbindTouchControls();
 	}
 
 	// https://github.com/yoannmoinet/nipplejs/issues/39
 	// force joysticks to recalculate the center:
 	window.dispatchEvent(new Event("resize"));
-	setTimeout(function() {
+	setTimeout(function () {
 		window.dispatchEvent(new Event("resize"));
 	}, 5000);
 });
 
 // todo: debounce
-$(window).resize(function(event) {
+$(window).resize(function (event) {
 	resizeChat();
 	if (!settings.fullscreen && !settings.largescreen) {
 		try {
@@ -2629,15 +2574,15 @@ $(window).resize(function(event) {
 			console.log(error);
 		}
 	}
-// 	if (resizeAvailable) {
-		resizeAvailable = false;
-		resizeDebounceTimer = setTimeout(function() {
-			resizeAvailable = true;
-		}, 100);
-		for (let i = 0; i < resizers.length; i++) {
-			resizers[i].resize();
-		}
-// 	}
+	// 	if (resizeAvailable) {
+	resizeAvailable = false;
+	resizeDebounceTimer = setTimeout(function () {
+		resizeAvailable = true;
+	}, 100);
+	for (let i = 0; i < resizers.length; i++) {
+		resizers[i].resize();
+	}
+	// 	}
 });
 
 // https://github.com/yoannmoinet/nipplejs/issues/39
@@ -2646,10 +2591,9 @@ $(window).resize(function(event) {
 // 	window.dispatchEvent(new Event("resize"));
 // }, 5000);
 
-setInterval(function() {
+setInterval(function () {
 	socket.emit("joinLagless" + settings.tab);
 }, 10000);
-
 
 // let twitchPlayer1 = new Twitch.Player("lagless1View", {channel: "twitchplaysconsoles"});
 // let twitchPlayer2 = new Twitch.Player("lagless2View", {channel: "twitchplaysconsoles"});
@@ -2667,9 +2611,6 @@ setInterval(function() {
 // $("#twitchVideo2")[0].style.display = "none";
 // $("#twitchVideo3")[0].style.display = "none";
 
-
-
-
 function replaceWithTwitch(tab) {
 	tab = tab || currentTab;
 	let twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
@@ -2680,49 +2621,44 @@ function replaceWithTwitch(tab) {
 		$("#videoCanvas1")[0].style.display = "none";
 		$("#videoCanvas1").after(twitchIFrame);
 	} else {
-// 		$("#tab1").addClass("disabled");
+		// 		$("#tab1").addClass("disabled");
 	}
 
 	if (tab == "#lagless2") {
 		try {
 			player.stop();
-		} catch(error) {
+		} catch (error) {
 			console.log("player not defined");
 		}
 		$("#videoCanvas2")[0].style.display = "none";
 		$("#videoCanvas2").after(twitchIFrame);
-	} else {
-	}
+	} else {}
 
 	if (tab == "#lagless3") {
 		wsavc.disconnect();
 		$("#videoCanvas3")[0].style.display = "none";
 		$("#videoCanvas3").after(twitchIFrame);
-	} else {
-	}
+	} else {}
 
 	if (tab == "#lagless4") {
 		try {
-// 			player.stop();
-		} catch(error) {
-// 			console.log("player not defined");
+			// 			player.stop();
+		} catch (error) {
+			// 			console.log("player not defined");
 		}
 		$("#videoCanvas4")[0].style.display = "none";
 		$("#videoCanvas4").after(twitchIFrame);
-	} else {
-	}
+	} else {}
 
 	if (tab == "#lagless5") {
 		player5.stop();
 		$("#videoCanvas5")[0].style.display = "none";
 		$("#videoCanvas5").after(twitchIFrame);
-	} else {
-	}
+	} else {}
 
 	setVideoWidth(73.2);
 	socket.emit("leaveLagless");
 }
-
 
 function replaceWithLagless(tab) {
 	tab = tab || currentTab;
@@ -2733,7 +2669,7 @@ function replaceWithLagless(tab) {
 		$("#videoCanvas1")[0].style.display = "";
 		$("#twitchVideo").remove();
 	} else {
-// 		$("#tab1").removeClass("disabled");
+		// 		$("#tab1").removeClass("disabled");
 	}
 
 	if (tab == "#lagless2") {
@@ -2742,8 +2678,7 @@ function replaceWithLagless(tab) {
 
 		$("#videoCanvas2")[0].style.display = "";
 		$("#twitchVideo").remove();
-	} else {
-	}
+	} else {}
 
 	if (tab == "#lagless3") {
 		socket.emit("joinLagless3");
@@ -2753,17 +2688,16 @@ function replaceWithLagless(tab) {
 		$("#videoCanvas3")[0].style.display = "";
 		$("#twitchVideo").remove();
 	} else {
-// 		$("#tab3").removeClass("disabled");
+		// 		$("#tab3").removeClass("disabled");
 	}
 
 	if (tab == "#lagless4") {
 		socket.emit("join", "lagless4");
-// 		player4.play();
+		// 		player4.play();
 
 		$("#videoCanvas4")[0].style.display = "";
 		$("#twitchVideo").remove();
-	} else {
-	}
+	} else {}
 
 	if (tab == "#lagless5") {
 		socket.emit("join", "lagless5");
@@ -2771,29 +2705,26 @@ function replaceWithLagless(tab) {
 
 		$("#videoCanvas5")[0].style.display = "";
 		$("#twitchVideo").remove();
-	} else {
-	}
+	} else {}
 
 	setVideoWidth(73.2);
 }
 
-$("#replaceWithTwitch").on("click", function() {
+$("#replaceWithTwitch").on("click", function () {
 	replaceWithTwitch();
 });
 
-$("#replaceWithLagless").on("click", function() {
+$("#replaceWithLagless").on("click", function () {
 	replaceWithLagless();
 });
 
-socket.on("replaceWithTwitch", function() {
+socket.on("replaceWithTwitch", function () {
 	replaceWithTwitch();
 });
 
-socket.on("replaceWithLagless", function() {
+socket.on("replaceWithLagless", function () {
 	replaceWithTwitch();
 });
-
-
 
 /* STATUS BAR @@@@@@@@@@@@@@@@ */
 // socket.on("lock", function() {
@@ -2802,260 +2733,31 @@ socket.on("replaceWithLagless", function() {
 
 /* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 
-let BandwidthHandler = (function() {
-	function setBAS(sdp, bandwidth, isScreen) {
-		if (!!navigator.mozGetUserMedia || !bandwidth) {
-			return sdp;
-		}
-
-		if (isScreen) {
-			if (!bandwidth.screen) {
-				console.warn('It seems that you are not using bandwidth for screen. Screen sharing is expected to fail.');
-			} else if (bandwidth.screen < 300) {
-				console.warn('It seems that you are using wrong bandwidth value for screen. Screen sharing is expected to fail.');
-			}
-		}
-
-		// if screen; must use at least 300kbs
-		if (bandwidth.screen && isScreen) {
-			sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
-			sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + bandwidth.screen + '\r\n');
-		}
-
-		// remove existing bandwidth lines
-		if (bandwidth.audio || bandwidth.video || bandwidth.data) {
-			sdp = sdp.replace(/b=AS([^\r\n]+\r\n)/g, '');
-		}
-
-		if (bandwidth.audio) {
-			sdp = sdp.replace(/a=mid:audio\r\n/g, 'a=mid:audio\r\nb=AS:' + bandwidth.audio + '\r\n');
-		}
-
-		if (bandwidth.video) {
-			sdp = sdp.replace(/a=mid:video\r\n/g, 'a=mid:video\r\nb=AS:' + (isScreen ? bandwidth.screen : bandwidth.video) + '\r\n');
-		}
-
-		return sdp;
-	}
-
-	// Find the line in sdpLines that starts with |prefix|, and, if specified,
-	// contains |substr| (case-insensitive search).
-	function findLine(sdpLines, prefix, substr) {
-		return findLineInRange(sdpLines, 0, -1, prefix, substr);
-	}
-
-	// Find the line in sdpLines[startLine...endLine - 1] that starts with |prefix|
-	// and, if specified, contains |substr| (case-insensitive search).
-	function findLineInRange(sdpLines, startLine, endLine, prefix, substr) {
-		var realEndLine = endLine !== -1 ? endLine : sdpLines.length;
-		for (var i = startLine; i < realEndLine; ++i) {
-			if (sdpLines[i].indexOf(prefix) === 0) {
-				if (!substr ||
-					sdpLines[i].toLowerCase().indexOf(substr.toLowerCase()) !== -1) {
-					return i;
-				}
-			}
-		}
-		return null;
-	}
-
-	// Gets the codec payload type from an a=rtpmap:X line.
-	function getCodecPayloadType(sdpLine) {
-		var pattern = new RegExp('a=rtpmap:(\\d+) \\w+\\/\\d+');
-		var result = sdpLine.match(pattern);
-		return (result && result.length === 2) ? result[1] : null;
-	}
-
-	function setVideoBitrates(sdp, params) {
-		params = params || {};
-		var xgoogle_min_bitrate = params.min;
-		var xgoogle_max_bitrate = params.max;
-
-		var sdpLines = sdp.split('\r\n');
-
-		// VP8
-		var vp8Index = findLine(sdpLines, 'a=rtpmap', 'VP8/90000');
-		var vp8Payload;
-		if (vp8Index) {
-			vp8Payload = getCodecPayloadType(sdpLines[vp8Index]);
-		}
-
-		if (!vp8Payload) {
-			return sdp;
-		}
-
-		var rtxIndex = findLine(sdpLines, 'a=rtpmap', 'rtx/90000');
-		var rtxPayload;
-		if (rtxIndex) {
-			rtxPayload = getCodecPayloadType(sdpLines[rtxIndex]);
-		}
-
-		if (!rtxIndex) {
-			return sdp;
-		}
-
-		var rtxFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + rtxPayload.toString());
-		if (rtxFmtpLineIndex !== null) {
-			var appendrtxNext = '\r\n';
-			appendrtxNext += 'a=fmtp:' + vp8Payload + ' x-google-min-bitrate=' + (xgoogle_min_bitrate || '228') + '; x-google-max-bitrate=' + (xgoogle_max_bitrate || '228');
-			sdpLines[rtxFmtpLineIndex] = sdpLines[rtxFmtpLineIndex].concat(appendrtxNext);
-			sdp = sdpLines.join('\r\n');
-		}
-
-		return sdp;
-	}
-
-	function setOpusAttributes(sdp, params) {
-		params = params || {};
-
-		var sdpLines = sdp.split('\r\n');
-
-		// Opus
-		var opusIndex = findLine(sdpLines, 'a=rtpmap', 'opus/48000');
-		var opusPayload;
-		if (opusIndex) {
-			opusPayload = getCodecPayloadType(sdpLines[opusIndex]);
-		}
-
-		if (!opusPayload) {
-			return sdp;
-		}
-
-		var opusFmtpLineIndex = findLine(sdpLines, 'a=fmtp:' + opusPayload.toString());
-		if (opusFmtpLineIndex === null) {
-			return sdp;
-		}
-
-		var appendOpusNext = '';
-		appendOpusNext += '; stereo=' + (typeof params.stereo != 'undefined' ? params.stereo : '1');
-		appendOpusNext += '; sprop-stereo=' + (typeof params['sprop-stereo'] != 'undefined' ? params['sprop-stereo'] : '1');
-
-		if (typeof params.maxaveragebitrate != 'undefined') {
-			appendOpusNext += '; maxaveragebitrate=' + (params.maxaveragebitrate || 128 * 1024 * 8);
-		}
-
-		if (typeof params.maxplaybackrate != 'undefined') {
-			appendOpusNext += '; maxplaybackrate=' + (params.maxplaybackrate || 128 * 1024 * 8);
-		}
-
-		if (typeof params.cbr != 'undefined') {
-			appendOpusNext += '; cbr=' + (typeof params.cbr != 'undefined' ? params.cbr : '1');
-		}
-
-		if (typeof params.useinbandfec != 'undefined') {
-			appendOpusNext += '; useinbandfec=' + params.useinbandfec;
-		}
-
-		if (typeof params.usedtx != 'undefined') {
-			appendOpusNext += '; usedtx=' + params.usedtx;
-		}
-
-		if (typeof params.maxptime != 'undefined') {
-			appendOpusNext += '\r\na=maxptime:' + params.maxptime;
-		}
-
-		sdpLines[opusFmtpLineIndex] = sdpLines[opusFmtpLineIndex].concat(appendOpusNext);
-
-		sdp = sdpLines.join('\r\n');
-		return sdp;
-	}
-
-	return {
-		setApplicationSpecificBandwidth: function(sdp, bandwidth, isScreen) {
-			return setBAS(sdp, bandwidth, isScreen);
-		},
-		setVideoBitrates: function(sdp, params) {
-			return setVideoBitrates(sdp, params);
-		},
-		setOpusAttributes: function(sdp, params) {
-			return setOpusAttributes(sdp, params);
-		}
-	};
-})();
-
-
-		// example:
-// 		var bandwidth = {
-// 			screen: 300, // 300kbits minimum
-// 			audio: 50,   // 50kbits  minimum
-// 			video: 256   // 256kbits (both min-max)
-// 		};
-// 		var isScreenSharing = false;
-
-// 		sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
-// 		sdp = BandwidthHandler.setVideoBitrates(sdp, {
-// 			min: bandwidth.video,
-// 			max: bandwidth.video
-// 		});
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp);
-// 		sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 			'stereo': 0, // to disable stereo (to force mono audio)
-// 			'sprop-stereo': 1,
-// 			'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 			'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 			'cbr': 0, // disable cbr
-// 			'useinbandfec': 1, // use inband fec
-// 			'usedtx': 1, // use dtx
-// 			'maxptime': 3
-// 		});
-
-function mySDPTransform(sdp) {
-// 	sdp = BandwidthHandler.setOpusAttributes(sdp, {
-// 		'stereo': 0, // to disable stereo (to force mono audio)
-// 		'sprop-stereo': 1,
-// 		'maxaveragebitrate': 500 * 1024 * 8, // 500 kbits
-// 		'maxplaybackrate': 500 * 1024 * 8, // 500 kbits
-// 		'cbr': 0, // disable cbr
-// 		'useinbandfec': 1, // use inband fec
-// 		'usedtx': 1, // use dtx
-// 		'maxptime': 3
-// 	});
-
-	var bandwidth = {
-		screen: 300, // 300kbits minimum
-		audio: 500,   // 500kbits  minimum
-		video: 256   // 256kbits (both min-max)
-	};
-	var isScreenSharing = false;
-
-	sdp = BandwidthHandler.setApplicationSpecificBandwidth(sdp, bandwidth, isScreenSharing);
-	sdp = BandwidthHandler.setVideoBitrates(sdp, {
-		min: bandwidth.video,
-		max: bandwidth.video
-	});
-	sdp = BandwidthHandler.setOpusAttributes(sdp);
-
-	return sdp;
-}
-
-
-
 /* AUDIO 3.0 */
 let peer = new SimplePeer({
 	initiator: false,
 	trickle: true,
-	sdpTransform: mySDPTransform,
 });
 
-peer.on("error", function(err) {
+peer.on("error", function (err) {
 	console.log("error", err)
 });
 
-peer.on("signal", function(data) {
+peer.on("signal", function (data) {
 	console.log("SIGNAL", JSON.stringify(data));
 	socket.emit("clientPeerSignal", JSON.stringify(data));
 });
 
-peer.on("connect", function() {
+peer.on("connect", function () {
 	console.log("CONNECT");
 	peer.send(Math.random());
 });
 
-peer.on("data", function(data) {
+peer.on("data", function (data) {
 	console.log("data: " + data)
 });
 
-socket.on("hostPeerSignal", function(data) {
+socket.on("hostPeerSignal", function (data) {
 	peer.signal(JSON.parse(data));
 });
 
@@ -3063,19 +2765,19 @@ let audio = document.createElement("audio");
 
 peer.on("stream", function (stream) {
 	// got remote audio stream, then show it in an audio tag
-	audio.src = window.URL.createObjectURL(stream);// deprecated
-// 			audio.srcObj = stream;
+	audio.src = window.URL.createObjectURL(stream); // deprecated
+	// 			audio.srcObj = stream;
 	audio.play();
 	audio.volume = 0;
 });
 
-$("#enableAudioThreeCheckbox").on("change", function() {
+$("#enableAudioThreeCheckbox").on("change", function () {
 	settings.enableAudioThree = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.enableAudioThree) {
 		if (!audioConnected) {
 			socket.emit("requestAudio");
-			setTimeout(function() {
+			setTimeout(function () {
 				audioConnected = true;
 			}, 100);
 		}
@@ -3083,117 +2785,52 @@ $("#enableAudioThreeCheckbox").on("change", function() {
 		try {
 			audio.volume = 0;
 			player.volume = settings.volume / 100;
-		} catch (error) {
-		}
+		} catch (error) {}
 		$("#audioThreeCheckbox").prop("checked", false);
 		$(".audioThreeCheckbox").prop("checked", false);
 	}
 });
 
-
-$("#audioThreeCheckbox").on("change", function() {
+$("#audioThreeCheckbox").on("change", function () {
 	if (!settings.enableAudioThree) {
 		$("#audioThreeCheckbox").prop("checked", false);
-		swal("You need to enable Audio 3.0 first!");
+		swal("You have to enable Audio 3.0 first!");
 		return;
 	}
 	settings.audioThree = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.audioThree) {
 		if (!audioConnected) {
-// 			setTimeout(function() {
-				audio.volume = settings.volume / 100;
-// 			}, 8000);
+			audio.volume = settings.volume / 100;
 		} else {
 			try {
 				audio.volume = settings.volume / 100;
 				player.volume = 0;
-			} catch (error) {
-			}
+			} catch (error) {}
 		}
 	} else {
-// 		$("#audioThreeCheckbox").prop("checked", false);
 		audio.volume = 0;
 		player.volume = settings.volume / 100;
 	}
 });
 
-$(".audioThreeCheckbox").on("change", function() {
+$(".audioThreeCheckbox").on("change", function () {
 	$("#audioThreeCheckbox").trigger("click");
-	setTimeout(function() {
+	setTimeout(function () {
 		$(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
 	}, 100);
 });
 
+const ControlQueue = require("src/components/ControlQueue.jsx");
+const JoinLeaveQueueButton = require("src/components/JoinLeaveQueueButton.jsx");
 
-
-/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-socket.on("controlQueues", function(data) {
-
-	let sameQueues = [];
-	for (let i = 0; i < data.controlQueues.length; i++) {
-		sameQueues.push(JSON.stringify(controlQueues[i]) === JSON.stringify(data.controlQueues[i]))
-	}
-
-	let controlQueuesChanged = (JSON.stringify(controlQueues) !== JSON.stringify(data.controlQueues));
+/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+socket.on("controlQueues", function (data) {
 	controlQueues = data.controlQueues;
-
-	for (let i = 0; i < data.controlQueues.length; i++) {
-
-		// don't do anything if it hasn't changed:
-		if (sameQueues[i]) {
-			continue;
-		}
-
-		$("#controlQueue" + (i + 1)).empty();
-		for (let j = 0; j < data.controlQueues[i].length; j++) {
-			let username = usernameMap[data.controlQueues[i][j]];
-			let html;
-			if (!settings.darkTheme) {
-				html = '<li class="queueItem list-group-item" data-toggle="popover" tabindex="0">' + username + "</li>";
-			} else {
-				html = '<li class="queueItem list-group-item-dark" data-toggle="popover" tabindex="0">' + username + "</li>";
-			}
-			$("#controlQueue" + (i + 1)).append(html);
-		}
-
-		let html;
-		if (!settings.darkTheme) {
-			html = "<li class='list-group-item'>The queue is empty.</li>";
-		} else {
-			html = "<li class='list-group-item-dark'>The queue is empty.</li>";
-		}
-		if (data.controlQueues[i].length === 0) {
-			$("#controlQueue" + (i + 1)).append(html);
-		}
-
+	for (let i = 0; i < controlQueues.length; i++) {
+		ReactDOM.render(<ControlQueue num={i + 1} viewerIDs={data.controlQueues[i]} usernameMap={usernameMap} darkTheme={settings.darkTheme}/>, document.getElementById("controlQueue" + (i + 1)));
+		ReactDOM.render(<JoinLeaveQueueButton num={i + 1} controlQueue={data.controlQueues[i]} myID={myUniqueID} />, document.getElementById("joinLeaveQueue" + (i + 1)));
 	}
-
-	if (controlQueuesChanged) {
-		// join / leave button management:
-		// for each queue:
-		for (let i = 0; i < controlQueues.length; i++) {
-			// check if user is in this queue:
-			if (controlQueues[i].indexOf(myUniqueID) > -1) {
-				// change request button -> cancel button:
-				let cancelTurnButton = $("#cancelTurn" + (i+1))[0];
-				if (typeof cancelTurnButton == "undefined") {
-					let html = '<button id="cancelTurn' + (i + 1) + '" class="cancelTurn btn btn-secondary" code="'+ i +'">Leave Queue</button>';
-					$("#requestTurn" + (i+1)).replaceWith(html);
-				}
-			} else {
-				// change cancel button -> request button:
-				let requestTurnButton = $("#requestTurn" + (i + 1))[0];
-				if (typeof requestTurnButton == "undefined") {
-					let html = '<button id="requestTurn' + (i + 1) + '" class="requestTurn btn btn-secondary" code="'+ i +'">Join Queue</button>';
-					$("#cancelTurn" + (i+1)).replaceWith(html);
-				}
-			}
-		}
-
-// 		$(window).trigger("resize.fittext");
-	}
-
 });
 
 /* MOD COMMANDS */
@@ -3211,7 +2848,7 @@ $("body").popover({
 	placement: "right",
 	content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
 				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
-				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>',
+				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>'
 });
 // .click(function() {
 // 	setTimeout(function () {
@@ -3219,9 +2856,9 @@ $("body").popover({
 // 	}, 8000);
 // });
 
-$("#container").popover({// must be unique
+$("#container").popover({ // must be unique
 	selector: ".viewerElement",
-// 	trigger: "focus",
+	// 	trigger: "focus",
 	html: true,
 	toggle: "popover",
 	title: "Mod Powers",
@@ -3231,52 +2868,50 @@ $("#container").popover({// must be unique
 	content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
 				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
 				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
-				<button id="unban" class="btn btn-secondary"><b>Unban</b></button>',
-}).click(function() {
+				<button id="unban" class="btn btn-secondary"><b>Unban</b></button>'
+}).click(function () {
 	setTimeout(function () {
 		$('[data-toggle="popover"]').popover("hide");
 	}, 8000);
 });
 
-
 let modPowerUniqueID = "";
-$(document).on("click", ".queueItem", function(event) {
+$(document).on("click", ".queueItem", function (event) {
 	$(this).effect("highlight", {}, 2000);
 	let userIndex = $(this).index();
-	let queueIndex = parseInt($(this).parent().attr("id").slice(-1))-1;
+	let queueIndex = parseInt($(this).parent().attr("id").slice(-1)) - 1;
 	modPowerUniqueID = controlQueues[queueIndex][userIndex];
 });
 
-$(document).on("click", ".viewerElement", function(event) {
+$(document).on("click", ".viewerElement", function (event) {
 	$(this).effect("highlight", {}, 2000);
-// 	userIndex = $(this).index();
-// 	queueIndex = parseInt($(this).parent().attr("id").slice(-1))-1;
+	// 	userIndex = $(this).index();
+	// 	queueIndex = parseInt($(this).parent().attr("id").slice(-1))-1;
 	modPowerUniqueID = $(this).attr("uniqueID");
 });
 
-$(document).on("click", "#kickFromQueue", function(event) {
+$(document).on("click", "#kickFromQueue", function (event) {
 	socket.emit("kickFromQueue", modPowerUniqueID);
 	$("#queuePopup").remove();
 });
-$(document).on("click", "#tempBan", function(event) {
+$(document).on("click", "#tempBan", function (event) {
 	socket.emit("tempBan", modPowerUniqueID);
 	$("#queuePopup").remove();
 });
-$(document).on("click", "#permaBan", function(event) {
+$(document).on("click", "#permaBan", function (event) {
 	socket.emit("permaBan", modPowerUniqueID);
 	$("#queuePopup").remove();
 });
-$(document).on("click", "#unban", function(event) {
+$(document).on("click", "#unban", function (event) {
 	socket.emit("unban", modPowerUniqueID);
 	$("#queuePopup").remove();
 });
 
-
-$(document).on("click", 'i:contains("lock")', function(event) {
+$(document).on("click", 'i:contains("lock")', function (event) {
 	$(this).effect("highlight", {}, 2000);
 	socket.emit("unlock");
 });
-$(document).on("click", 'i:contains("lock_open")', function(event) {
+$(document).on("click", 'i:contains("lock_open")', function (event) {
 	$(this).effect("highlight", {}, 2000);
 	socket.emit("lock");
 });
@@ -3285,9 +2920,9 @@ const ViewerList = require("src/components/ViewerList.jsx");
 const TurnTimer = require("src/components/TurnTimer.jsx");
 const ForfeitTimer = require("src/components/ForfeitTimer.jsx");
 const Player = require("src/components/Player.jsx")
-// viewerList.props.viewerIDs[1].push("1");
 
-socket.on("turnTimesLeft", function(data) {
+
+socket.on("turnTimesLeft", function (data) {
 
 	lastCurrentTime = Date.now();
 	let viewersChanged = (JSON.stringify(viewers) !== JSON.stringify(data.viewers));
@@ -3305,11 +2940,7 @@ socket.on("turnTimesLeft", function(data) {
 		}
 	}
 
-// 	console.log(ViewerList.getNames());
-
-// 	myViewerList.props.viewerIDs = viewers;
-// 	myViewerList.props.usernameMap = usernameMap;
-	ReactDOM.render(<ViewerList viewerIDs={viewers} usernameMap={usernameMap} />, document.getElementById("laglessViewerDropdown"));
+	ReactDOM.render(<ViewerList viewerIDs={viewers} usernameMap={usernameMap}/>, document.getElementById("laglessViewerDropdown"));
 
 	for (let i = 0; i < data.turnTimesLeft.length; i++) {
 		let timeLeftMilli = data.turnTimesLeft[i];
@@ -3323,11 +2954,11 @@ socket.on("turnTimesLeft", function(data) {
 		let n = i + 1;
 
 		// if (controlQueues[i][0] == null) {
-		// 	$("#turnTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
-		// 	$("#forfeitTimerBarChild" + n).css("width", "100%").attr("aria-valuenow", "100%").text("No one is playing right now.");
+		// 	$("#turnTimerBarChild" + n).css("width", "100%").text("No one is playing right now.");
+		// 	$("#forfeitTimerBarChild" + n).css("width", "100%").text("No one is playing right now.");
 		// } else {
-		// 	$("#turnTimerBarChild" + n).css("width", percent + "%").attr("aria-valuenow", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
-		// 	$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").attr("aria-valuenow", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+		// 	$("#turnTimerBarChild" + n).css("width", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
+		// 	$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
 		// }
 		// ReactDOM.unmountComponentAtNode(document.getElementById("turnTimerBar" + n));
 		// https://reactjs.org/blog/2015/10/01/react-render-and-top-level-api.html
@@ -3339,43 +2970,6 @@ socket.on("turnTimesLeft", function(data) {
 
 	let totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length + data.viewers[3].length + data.viewers[4].length;
 
-
-	if(viewersChanged) {
-
-// 		$(window).trigger("resize.fittext");
-
-		// for each lagless tab
-// 		for (let i = 0; i < 4; i++) {
-
-// 			$("#laglessViewerDropdownDiv").empty();
-// 			for (let j = 0; j < data.viewers[i].length; j++) {
-// // 				let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0">' + usernameMap[data.viewers[i][j]] + "</button>";
-// 				let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0" uniqueID="' + data.viewers[i][j] + '">' + usernameMap[data.viewers[i][j]] + "</button>";
-// 				$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(html);
-// 			}
-
-// 			// for each lagless tab:
-// 			for (let k = 0; k < 4; k++) {
-// 				// skip the tab we already did:
-// 				if (k == i) {
-// 					continue;
-// 				}
-
-// 				if (data.viewers[k].length > 0) {
-// 					let dividerHTML = '<div class="dropdown-divider">Lagless ' + (k + 1) + "</div>";
-// 					$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(dividerHTML);
-// 					for (let j = 0; j < data.viewers[k].length; j++) {
-// // 						let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0">' + usernameMap[data.viewers[k][j]] + "</button>";
-// 						let html = '<button class="viewerElement dropdown-item" data-toggle="popover" tabindex="0" uniqueID="' + data.viewers[i][j] + '">' + usernameMap[data.viewers[i][j]] + "</button>";
-// 						$("#lagless" + (i + 1) + "ViewerDropdownDiv").append(html);
-// 					}
-// 				}
-// 			}
-// 		}
-
-
-	}
-
 	// lagless / twitch swap
 
 	if (waitlistsChanged) {
@@ -3385,21 +2979,21 @@ socket.on("turnTimesLeft", function(data) {
 		let waitlistHeaderHTML = '<li class="list-group-item">Lagless ' + settings.tab + " waitlist</li>";
 		$("#waitlist").append(waitlistHeaderHTML);
 
-		for (let i = 0; i < waitlists[settings.tab-1].length; i++) {
+		for (let i = 0; i < waitlists[settings.tab - 1].length; i++) {
 			let listHTML;
 
-			let ID = waitlists[settings.tab-1][i];
+			let ID = waitlists[settings.tab - 1][i];
 
 			if (myUniqueID == ID) {
 
-// 				if (!tabsSwappedWithTwitch[settings.tab-1]) {
-// 					tabsSwappedWithTwitch[settings.tab-1] = true;
-// 					replaceWithTwitch("#lagless" + settings.tab);
-// 					setTimeout(function() {
-// 						socket.emit("leaveLagless");
-// 					}, 4000);
-// 					swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
-// 				}
+				// 				if (!tabsSwappedWithTwitch[settings.tab-1]) {
+				// 					tabsSwappedWithTwitch[settings.tab-1] = true;
+				// 					replaceWithTwitch("#lagless" + settings.tab);
+				// 					setTimeout(function() {
+				// 						socket.emit("leaveLagless");
+				// 					}, 4000);
+				// 					swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
+				// 				}
 
 				listHTML = '<li class="list-group-item-highlight">' + usernameMap[ID] + "</li>";
 			} else if (settings.darkTheme) {
@@ -3408,43 +3002,36 @@ socket.on("turnTimesLeft", function(data) {
 				listHTML = '<li class="list-group-item">' + usernameMap[ID] + "</li>";
 			}
 
-
 			$("#waitlist").append(listHTML);
 		}
 
 		// check if you're in the waitlist
-		if (waitlists[settings.tab-1].indexOf(myUniqueID) > -1) {
+		if (waitlists[settings.tab - 1].indexOf(myUniqueID) > -1) {
 
-			if (!tabsSwappedWithTwitch[settings.tab-1]) {
-				tabsSwappedWithTwitch[settings.tab-1] = true;
+			if (!tabsSwappedWithTwitch[settings.tab - 1]) {
+				tabsSwappedWithTwitch[settings.tab - 1] = true;
 				replaceWithTwitch("#lagless" + settings.tab);
-				setTimeout(function() {
+				setTimeout(function () {
 					socket.emit("leaveLagless");
 				}, 4000);
 				swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
 			}
 
-		} else if (tabsSwappedWithTwitch[settings.tab-1]) {
-			tabsSwappedWithTwitch[settings.tab-1] = false;
-// 			swal("You're at the top of the waitlist! switching back to lagless!");
+		} else if (tabsSwappedWithTwitch[settings.tab - 1]) {
+			tabsSwappedWithTwitch[settings.tab - 1] = false;
+			// 			swal("You're at the top of the waitlist! switching back to lagless!");
 			replaceWithLagless("#lagless" + settings.tab);
 		}
 
+		// 		for (let i = 0; i < 3; i++) {
+		//   		if (!tabsSwappedWithTwitch[i]) {
 
-// 		for (let i = 0; i < 3; i++) {
-// 	// 		if (!tabsSwappedWithTwitch[i]) {
+		//   		}
 
-// 	// 		}
-
-// 		}
+		// 		}
 	}
 
-
-
-
-
 });
-
 
 // setInterval(function() {
 // 	let currentTime = Date.now();
@@ -3453,13 +3040,12 @@ socket.on("turnTimesLeft", function(data) {
 // 	let timeLeftSec = parseInt(timeLeftMilli / 1000);
 // 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
 // 	let progressBar = $(".progress-bar");
-// 	progressBar.css("width", percent + "%").attr("aria-valuenow", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
+// 	progressBar.css("width", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
 // }, 200);
 
-
-socket.on("forceRefresh", function(data) {
+socket.on("forceRefresh", function (data) {
 	swal({
-		title: "There has been a force refresh!",
+		title: "There has been a force refresh!"
 	}).then((result) => {
 		if (result.value) {
 			location.reload(true);
@@ -3467,34 +3053,33 @@ socket.on("forceRefresh", function(data) {
 	});
 
 	// actually force after 5 seconds:
-	setTimeout(function() {
+	setTimeout(function () {
 		location.reload(true);
 	}, 5000);
 
 });
 
-$(document).on("click", ".requestTurn", function(event) {
-	let cNum = parseInt($(this).attr("code"));
+$(document).on("click", ".joinQueue", function (event) {
+	let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
 	for (let i = 0; i < controlQueues.length; i++) {
 		if (i == cNum) {
 			continue;
 		}
-		socket.emit("cancelTurn", i);
+		socket.emit("leaveQueue", i);
 	}
-	socket.emit("requestTurn", cNum);
+	socket.emit("joinQueue", cNum);
 });
 
-$(document).on("click", ".cancelTurn", function(event) {
-	let cNum = parseInt($(this).attr("code"));
-	socket.emit("cancelTurn", cNum);
+$(document).on("click", ".leaveQueue", function (event) {
+	let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
+	socket.emit("leaveQueue", cNum);
 });
 
-
-/* MULTIPLAYER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* MULTIPLAYER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 $("#player1Checkbox").prop("checked", true).trigger("change");
-$("#player1Checkbox").on("change", function(event) {
+$("#player1Checkbox").on("change", function (event) {
 	if (this.checked) {
-		socket.emit("cancelTurn", currentPlayerChosen);
+		socket.emit("leaveQueue", currentPlayerChosen);
 		currentPlayerChosen = 0;
 		$("#player2Checkbox").prop("checked", false).trigger("change");
 		$("#player3Checkbox").prop("checked", false).trigger("change");
@@ -3506,9 +3091,9 @@ $("#player1Checkbox").on("change", function(event) {
 	}
 });
 
-$("#player2Checkbox").on("change", function(event) {
+$("#player2Checkbox").on("change", function (event) {
 	if (this.checked) {
-		socket.emit("cancelTurn", currentPlayerChosen);
+		socket.emit("leaveQueue", currentPlayerChosen);
 		currentPlayerChosen = 1;
 		$("#player1Checkbox").prop("checked", false).trigger("change");
 		$("#player3Checkbox").prop("checked", false).trigger("change");
@@ -3520,9 +3105,9 @@ $("#player2Checkbox").on("change", function(event) {
 	}
 });
 
-$("#player3Checkbox").on("change", function(event) {
+$("#player3Checkbox").on("change", function (event) {
 	if (this.checked) {
-		socket.emit("cancelTurn", currentPlayerChosen);
+		socket.emit("leaveQueue", currentPlayerChosen);
 		currentPlayerChosen = 2;
 		$("#player1Checkbox").prop("checked", false).trigger("change");
 		$("#player2Checkbox").prop("checked", false).trigger("change");
@@ -3534,9 +3119,9 @@ $("#player3Checkbox").on("change", function(event) {
 	}
 });
 
-$("#player4Checkbox").on("change", function(event) {
+$("#player4Checkbox").on("change", function (event) {
 	if (this.checked) {
-		socket.emit("cancelTurn", currentPlayerChosen);
+		socket.emit("leaveQueue", currentPlayerChosen);
 		currentPlayerChosen = 3;
 		$("#player1Checkbox").prop("checked", false).trigger("change");
 		$("#player2Checkbox").prop("checked", false).trigger("change");
@@ -3548,9 +3133,9 @@ $("#player4Checkbox").on("change", function(event) {
 	}
 });
 
-$("#player5Checkbox").on("change", function(event) {
+$("#player5Checkbox").on("change", function (event) {
 	if (this.checked) {
-		socket.emit("cancelTurn", currentPlayerChosen);
+		socket.emit("leaveQueue", currentPlayerChosen);
 		currentPlayerChosen = 4;
 		$("#player1Checkbox").prop("checked", false).trigger("change");
 		$("#player2Checkbox").prop("checked", false).trigger("change");
@@ -3562,23 +3147,21 @@ $("#player5Checkbox").on("change", function(event) {
 	}
 });
 
-
-/* TOGGLE KEYBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#keyboardControlsCheckbox").on("change", function() {
+/* TOGGLE KEYBOARD @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#keyboardControlsCheckbox").on("change", function () {
 	settings.keyboardControls = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
-/* TOGGLE CONTROLLER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#controllerControlsCheckbox").on("change", function() {
+/* TOGGLE CONTROLLER @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#controllerControlsCheckbox").on("change", function () {
 	settings.controllerControls = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
+/* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-/* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-
-$("#darkThemeCheckbox").on("change", function() {
+$("#darkThemeCheckbox").on("change", function () {
 	settings.darkTheme = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.darkTheme) {
@@ -3586,22 +3169,22 @@ $("#darkThemeCheckbox").on("change", function() {
 		icon.removeClass("glyphicon-fire");
 		icon.addClass("glyphicon-certificate");
 
-		$(".light").each(function() {
+		$(".light").each(function () {
 			$(this).removeClass("light");
 			$(this).addClass("dark");
 		});
 
-		$(".otborder").each(function() {
+		$(".otborder").each(function () {
 			$(this).removeClass("otborder");
 			$(this).addClass("otborder-dark");
 		});
 
-		$(".list-group-item").each(function() {
+		$(".list-group-item").each(function () {
 			$(this).removeClass("list-group-item");
 			$(this).addClass("list-group-item-dark");
 		});
 
-		$(".nav-link").each(function() {
+		$(".nav-link").each(function () {
 			$(this).removeClass("nav-link");
 			$(this).addClass("nav-link-dark");
 		});
@@ -3616,36 +3199,35 @@ $("#darkThemeCheckbox").on("change", function() {
 		icon.removeClass("glyphicon-certificate");
 		icon.addClass("glyphicon-fire");
 
-		$(".dark").each(function() {
+		$(".dark").each(function () {
 			$(this).removeClass("dark");
 			$(this).addClass("light");
 		});
 
-		$(".otborder-dark").each(function() {
+		$(".otborder-dark").each(function () {
 			$(this).removeClass("otborder-dark");
 			$(this).addClass("otborder");
 		});
 
-		$(".list-group-item-dark").each(function() {
+		$(".list-group-item-dark").each(function () {
 			$(this).removeClass("list-group-item-dark");
 			$(this).addClass("list-group-item");
 		});
 
-		$(".nav-link-dark").each(function() {
+		$(".nav-link-dark").each(function () {
 			$(this).removeClass("nav-link-dark");
 			$(this).addClass("nav-link");
 		});
 
 		$("body").removeClass("dark");
-// 		$("body").addClass("light");
+		// 		$("body").addClass("light");
 
 		$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
 	}
 });
 
-
-/* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#fullscreenCheckbox").on("change", function() {
+/* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#fullscreenCheckbox").on("change", function () {
 	settings.fullscreen = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.fullscreen) {
@@ -3666,7 +3248,7 @@ $("#fullscreenCheckbox").on("change", function() {
 			$("#navCheckbox").prop("checked", true).trigger("change");
 		}
 
-		$(".well").each(function() {
+		$(".well").each(function () {
 			$(this).removeClass("well");
 			$(this).addClass("well2");
 		});
@@ -3678,12 +3260,12 @@ $("#fullscreenCheckbox").on("change", function() {
 
 	} else {
 		$("#picture").css("width", "");
-// 		$(".videoCanvas").css("width", "100%");
-// 		$(".videoCanvas").css("margin-left", "0");
+		// 		$(".videoCanvas").css("width", "100%");
+		// 		$(".videoCanvas").css("margin-left", "0");
 		$(".laglessContainer").css("padding-left", "");
 		$(".laglessContainer").css("padding-right", "");
 
-		$(".well2").each(function() {
+		$(".well2").each(function () {
 			$(this).removeClass("well2");
 			$(this).addClass("well");
 		});
@@ -3692,7 +3274,7 @@ $("#fullscreenCheckbox").on("change", function() {
 	}
 });
 
-window.addEventListener("keydown", function(e) {
+window.addEventListener("keydown", function (e) {
 	// escape, f11
 	if ([27, 122].indexOf(e.keyCode) > -1) {
 		e.preventDefault();
@@ -3701,10 +3283,10 @@ window.addEventListener("keydown", function(e) {
 }, false);
 
 if (document.addEventListener) {
-    document.addEventListener("webkitfullscreenchange", exitHandler, false);
-    document.addEventListener("mozfullscreenchange", exitHandler, false);
-    document.addEventListener("fullscreenchange", exitHandler, false);
-    document.addEventListener("MSFullscreenChange", exitHandler, false);
+	document.addEventListener("webkitfullscreenchange", exitHandler, false);
+	document.addEventListener("mozfullscreenchange", exitHandler, false);
+	document.addEventListener("fullscreenchange", exitHandler, false);
+	document.addEventListener("MSFullscreenChange", exitHandler, false);
 }
 
 // https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
@@ -3720,8 +3302,8 @@ function exitHandler() {
 	}
 }
 
-/* TOGGLE LARGESCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#largescreenCheckbox").on("change", function() {
+/* TOGGLE LARGESCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#largescreenCheckbox").on("change", function () {
 	settings.largescreen = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.largescreen) {
@@ -3740,9 +3322,8 @@ $("#largescreenCheckbox").on("change", function() {
 	}
 });
 
-
-/* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#navCheckbox").on("change", function() {
+/* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#navCheckbox").on("change", function () {
 	settings.hideNav = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.hideNav) {
@@ -3752,21 +3333,20 @@ $("#navCheckbox").on("change", function() {
 	}
 });
 
-/* TOGGLE DPAD SWAP @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#dpadCheckbox").on("change", function() {
+/* TOGGLE DPAD SWAP @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#dpadCheckbox").on("change", function () {
 	settings.dpadSwap = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
-/* TOGGLE 3DS CONFIG @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#3DSCheckbox").on("change", function() {
+/* TOGGLE 3DS CONFIG @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#3DSCheckbox").on("change", function () {
 	settings.TDSConfig = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
-
-/* TOGGLE YOUTUBE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#youtubeChatCheckbox").on("change", function() {
+/* TOGGLE YOUTUBE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#youtubeChatCheckbox").on("change", function () {
 	settings.youtubeChat = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.youtubeChat) {
@@ -3780,8 +3360,8 @@ $("#youtubeChatCheckbox").on("change", function() {
 	}
 });
 
-/* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#hideChatCheckbox").on("change", function() {
+/* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#hideChatCheckbox").on("change", function () {
 	settings.hideChat = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 	if (settings.hideChat) {
@@ -3793,25 +3373,41 @@ $("#hideChatCheckbox").on("change", function() {
 	}
 });
 
-
-/* TOGGLE ANALOG STICK MODE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-$("#analogStickCheckbox").on("change", function() {
+/* TOGGLE ANALOG STICK MODE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+$("#analogStickCheckbox").on("change", function () {
 	settings.analogStickMode = this.checked;
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
-
-
-/* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-socket.on("controllerState1", function(data) {
+/* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+socket.on("controllerState1", function (data) {
 
 	let str = data;
 	let dpad = str[0];
 
 	let btns = [];
-	let unpressedBtns = ["upButton", "downButton", "leftButton", "rightButton", "aButton", "bButton", "xButton", "yButton", "lButton", "zlButton", "rButton", "zrButton", "minusButton", "captureButton", "plusButton", "homeButton", "leftStick", "rightStick"];
+	let unpressedBtns = [
+		"upButton",
+		"downButton",
+		"leftButton",
+		"rightButton",
+		"aButton",
+		"bButton",
+		"xButton",
+		"yButton",
+		"lButton",
+		"zlButton",
+		"rButton",
+		"zrButton",
+		"minusButton",
+		"captureButton",
+		"plusButton",
+		"homeButton",
+		"leftStick",
+		"rightStick"
+	];
 
-	if(dpad == "7") {
+	if (dpad == "7") {
 		btns.push("upButton");
 		btns.push("leftButton");
 	} else if (dpad == "1") {
@@ -3848,7 +3444,6 @@ socket.on("controllerState1", function(data) {
 		btns.push("yButton");
 	}
 
-
 	if (str[2] == "1") {
 		btns.push("lButton");
 	}
@@ -3862,7 +3457,6 @@ socket.on("controllerState1", function(data) {
 	if (str[12] == "1") {
 		btns.push("zrButton");
 	}
-
 
 	if (str[4] == "1") {
 		btns.push("minusButton");
@@ -3885,25 +3479,25 @@ socket.on("controllerState1", function(data) {
 		btns.push("rightStick");
 	}
 
-	unpressedBtns = unpressedBtns.filter( function(el) {
+	unpressedBtns = unpressedBtns.filter(function (el) {
 		return !btns.includes(el);
 	});
 
 	try {
 		for (let i = 0; i < btns.length; i++) {
-// 			$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)";//50bb50
-			$("#" + btns[i])[0].style.background = "rgba(220, 220, 220, 0.7)";//505050
+			$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)"; //50bb50
+			// $("#" + btns[i])[0].style.background = "rgba(220, 220, 220, 0.7)"; 505050
+			// $("#" + btns[i])[0].style.background = "rgba(187, 187, 80, 0.7)"; //505050
 
 		}
 		for (let i = 0; i < unpressedBtns.length; i++) {
 			$("#" + unpressedBtns[i])[0].style.background = "";
 		}
-	} catch(error) {
+	} catch (error) {
 		console.log("buttons missing from DOM");
 	}
 
 	let stickPositions = str.substring(16).split(" ");
-
 
 	let LX = (parseInt(stickPositions[0]) - restPos);
 	let LY = (parseInt(stickPositions[1]) - restPos);
@@ -3922,8 +3516,14 @@ socket.on("controllerState1", function(data) {
 	LMagnitude = tools.minmax(LMagnitude, -max, max);
 	RMagnitude = tools.minmax(RMagnitude, -max, max);
 
-	let LStick = tools.normalizeVector({x: LX, y: LY}, LMagnitude);
-	let RStick = tools.normalizeVector({x: RX, y: RY}, RMagnitude);
+	let LStick = tools.normalizeVector({
+		x: LX,
+		y: LY
+	}, LMagnitude);
+	let RStick = tools.normalizeVector({
+		x: RX,
+		y: RY
+	}, RMagnitude);
 
 	LX = parseInt(LStick.x * scale);
 	LY = parseInt(LStick.y * scale);
@@ -3936,14 +3536,14 @@ socket.on("controllerState1", function(data) {
 	try {
 		$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
 		$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
-	} catch(error) {
+	} catch (error) {
 		console.log("sticks missing from DOM");
 	}
 
 });
 
-/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-setInterval(function() {
+/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+setInterval(function () {
 	pingTime = Date.now();
 	socket.emit("ping2");
 
@@ -3954,31 +3554,27 @@ setInterval(function() {
 			audio.volume = 0;
 			try {
 				player.volume = settings.volume / 100;
-			} catch (error) {
-			}
+			} catch (error) {}
 		} else {
 			audio.volume = settings.volume / 100;
 			try {
 				player.volume = 0;
-			} catch (error) {
-			}
+			} catch (error) {}
 		}
 	} else {
 		audio.volume = 0;
 		try {
 			player.volume = 0;
-		} catch (error) {
-		}
+		} catch (error) {}
 	}
 }, 1000);
 
-socket.on("pong2", function() {
+socket.on("pong2", function () {
 	let latency = Date.now() - pingTime;
 	$("#ping").text(latency + "ms");
 });
 
-
-/* MINE @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* MINE @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // todo: make sure it's configurable
 // let miner = new CoinHive.Anonymous("KBrW1gsiedkcmcFuyHij1XJIcb2C5fbF", {throttle: 0.5});
 // Only start on non-mobile devices and if not opted-out
@@ -4001,7 +3597,6 @@ socket.on("pong2", function() {
 // 	};
 // 	socket.emit("createSplitTimer", data);
 // }
-
 
 // $("#moveToNextSplit").on("click", function(event) {
 // 	socket.emit("moveToNextSplit");
@@ -4049,23 +3644,23 @@ socket.on("pong2", function() {
 // 		$("#splitTimes").children()[i].innerHTML = msToTime(times[i]);
 // 	}
 // 	let t = (currentTime / 1000);
-// 	//t.toFixed(3)
+//  t.toFixed(3)
 // 	$("#times").children()[0].innerHTML = msToTime(currentTime);
 // 	lastSplitTime = new Date();
 // 	lastSplitTimeMS = currentTime;
 // });
 
 // socket.on("clearSplitTimes", function(data) {
-// // 	$("#splitTimes").empty();
+//  	$("#splitTimes").empty();
 // 	let listHTML;
 // 	if (settings.darkTheme) {
 // 		listHTML = "<li class='list-group-item-dark'>&nbsp;</li>";
 // 	} else {
 // 		listHTML = "<li class='list-group-item'>&nbsp;</li>";
 // 	}
-// // 	for (let i = 0; i < splitNames.length; i++) {
-// // 		$("#splitTimes").children()[i].replaceWith(listHTML);
-// // 	}
+//  	for (let i = 0; i < splitNames.length; i++) {
+//  		$("#splitTimes").children()[i].replaceWith(listHTML);
+//  	}
 // 	$("#splitTimes").children().each(function() {
 // 		$(this).replaceWith(listHTML);
 // 	});
@@ -4078,17 +3673,16 @@ socket.on("pong2", function() {
 // 	$("#times").children()[0].innerHTML = msToTime(currentTime);
 // }, 50);
 
-// // easily split:
+//  easily split:
 // window.addEventListener("keydown", function(e) {
-// 	// space, numpad3
+//   space, numpad3
 // 	if ([32, 99].indexOf(e.keyCode) > -1) {
 // 		e.preventDefault();
 // 		socket.emit("moveToNextSplit");
 // 	}
 // }, false);
 
-
-/* TUTORIAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+/* TUTORIAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 function tutorial() {
 
 	if (typeof tutorial.step == "undefined") {
@@ -4100,20 +3694,19 @@ function tutorial() {
 	let step = tutorial.step;
 	let c = -1;
 
-// 	if (step === ++c) {
-// // 		$(document).scrollTop(0);
-// 		$("html, body").animate({
-// 			scrollTop: 0,
-// 		}, 500);
+	// 	if (step === ++c) {
+	//  		$(document).scrollTop(0);
+	// 		$("html, body").animate({
+	// 			scrollTop: 0,
+	// 		}, 500);
 
-
-// // 		$("#tutorialWindow").modal();
-// // 		swal("tutorial");
-// 		$(document).on("click", function(event) {
-// 			event.preventDefault();
-// 			tutorial();
-// 		});
-// 	}
+	//  		$("#tutorialWindow").modal();
+	//  		swal("tutorial");
+	// 		$(document).on("click", function(event) {
+	// 			event.preventDefault();
+	// 			tutorial();
+	// 		});
+	// 	}
 
 	if (step === ++c) {
 		$("#tutorialWindow").modal("hide");
@@ -4125,7 +3718,7 @@ function tutorial() {
 		let popupHTML = $('<div id="navTabsPopup" class="genericPopup"><span class="tooltipArrowUp"></span>This lets you navigate to the different Lagless Tabs</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($("#navTabs"), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4135,7 +3728,7 @@ function tutorial() {
 		let popupHTML = $('<div id="tab1Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>The fastest, but siginificantly lower quality, no sound unless manually turned on.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4144,7 +3737,7 @@ function tutorial() {
 		let popupHTML = $('<div id="tab2Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Slightly slower, but siginificantly higher quality, built in sound.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4153,7 +3746,7 @@ function tutorial() {
 		let popupHTML = $('<div id="tab3Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Don\'t use this, probably.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4162,7 +3755,7 @@ function tutorial() {
 		let popupHTML = $('<div id="tab4Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Twitch Plays Wii U</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 
@@ -4177,7 +3770,7 @@ function tutorial() {
 		let popupHTML = $('<div id="leftJoyConPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This is the controller view, it shows the buttons currently being pressed by Player 1.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "right",
+			placement: "right"
 		});
 	}
 	if (step === ++c) {
@@ -4186,7 +3779,7 @@ function tutorial() {
 		let popupHTML = $('<div id="rightJoyConPopup" class="largerPopup"><span class="tooltipArrowRight"></span>It also doubles as touch controls, currently only the sticks work on IOS, but everything works on android.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "left",
+			placement: "left"
 		});
 	}
 
@@ -4204,7 +3797,7 @@ function tutorial() {
 		let popupHTML = $('<div id="laglessBarPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Todo: fill this in with helpful info, or just delete it.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 
@@ -4216,7 +3809,7 @@ function tutorial() {
 		let popupHTML = $('<div id="laglessViewerDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Shows who\'s watching.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4227,7 +3820,7 @@ function tutorial() {
 		let popupHTML = $('<div id="laglessVolumeSliderPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Controls the volume of lagless.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4238,7 +3831,7 @@ function tutorial() {
 		let popupHTML = $('<div id="laglessRefreshPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Restarts this specific stream.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4249,7 +3842,7 @@ function tutorial() {
 		let popupHTML = $('<div id="laglessKeyboardSettingsPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to configure keyboard settings profiles.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4257,29 +3850,29 @@ function tutorial() {
 
 		let div = "#lagless2KeyboardDropdown";
 		$(div).effect("highlight", {}, 3000);
-		let popupHTML = $('<div id="laglessKeyboardDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this change between keyboard profiles.</div>');
+		let popupHTML = $('<div id="keyboardDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this change between keyboard profiles.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
-// 	if (step === ++c) {
-// 		$("#laglessKeyboardDropdownPopup").remove();
+	// 	if (step === ++c) {
+	// 		$("#keyboardDropdownPopup").remove();
 
-// 		let div = "#timer";
-// 		$(div).effect("highlight", {}, 3000);
-// 		let popupHTML = $('<div id="timerPopup" class="genericPopup"><span class="tooltipArrowUp"></span>The current local time.</div>');
-// 		$("#container").append(popupHTML);
-// 		let popper = new Popper($(div), popupHTML, {
-// 			placement: "bottom",
-// 		});
-// 	}
+	// 		let div = "#timer";
+	// 		$(div).effect("highlight", {}, 3000);
+	// 		let popupHTML = $('<div id="timerPopup" class="genericPopup"><span class="tooltipArrowUp"></span>The current local time.</div>');
+	// 		$("#container").append(popupHTML);
+	// 		let popper = new Popper($(div), popupHTML, {
+	// 			placement: "bottom",
+	// 		});
+	// 	}
 
 	// players section
 	if (step === ++c) {
-// 		$("#timerPopup").remove();
-		$("#laglessKeyboardDropdownPopup").remove();
-// 		$("#rightJoyConPopup").remove();
+		// 		$("#timerPopup").remove();
+		$("#keyboardDropdownPopup").remove();
+		// 		$("#rightJoyConPopup").remove();
 
 		$("html, body").animate({
 			scrollTop: $("#players").offset().top
@@ -4289,7 +3882,7 @@ function tutorial() {
 		let popupHTML = $('<div id="playersPopup" class="genericPopup"><span class="tooltipArrowUp"></span>This is where you can see who\'s playing, and who\'s turn is next.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 	if (step === ++c) {
@@ -4299,7 +3892,7 @@ function tutorial() {
 		let popupHTML = $('<div id="turnTimerBarPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This bar shows who\'s playing, and how much time is left on their turn.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "right",
+			placement: "right"
 		});
 	}
 	if (step === ++c) {
@@ -4309,59 +3902,59 @@ function tutorial() {
 		let popupHTML = $('<div id="forfeitTimerBarPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>After being AFK for a while, you give up your turn, the time until turn forefeit is displayed here.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "right",
+			placement: "right"
 		});
 	}
 	if (step === ++c) {
 		$("#turnTimerBarPopup").remove();
 		$("#forfeitTimerBarPopup").remove();
 
-		let div = "#requestTurn1";
+		let div = "#joinQueue1";
 		$(div).effect("highlight", {}, 3000);
-		let popupHTML = $('<div id="requestTurnPopup" class="largerPopup"><span class="tooltipArrowUp"></span>Use this to manually request a turn, turns are automatically requested for you if you try to send any input though.</div>');
+		let popupHTML = $('<div id="joinQueuePopup" class="largerPopup"><span class="tooltipArrowUp"></span>Use this to manually request a turn, turns are automatically requested for you if you try to send any input though.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
-// 	if (step === ++c) {
-// 		let div = "#cancelTurn1";
-// 		$(div).effect("highlight", {}, 3000);
-// 		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue, or end your turn early.</div>');
-// 		$("#container").append(popupHTML);
-// 		let popper = new Popper($(div), popupHTML, {
-// 			placement: "bottom",
-// 		});
-// 	}
+	// 	if (step === ++c) {
+	// 		let div = "#cancelTurn1";
+	// 		$(div).effect("highlight", {}, 3000);
+	// 		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue, or end your turn early.</div>');
+	// 		$("#container").append(popupHTML);
+	// 		let popper = new Popper($(div), popupHTML, {
+	// 			placement: "bottom",
+	// 		});
+	// 	}
 
 	if (step === ++c) {
-		$("#requestTurnPopup").remove();
-// 		$("#cancelTurnPopup").remove();
+		$("#joinQueuePopup").remove();
+		// 		$("#cancelTurnPopup").remove();
 
 		let div = "#controlQueue1";
 		$(div).effect("highlight", {}, 3000);
 		let popupHTML = $('<div id="controlQueuePopup" class="genericPopup"><span class="tooltipArrowUp"></span>Shows who\'s in line to play next.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($(div), popupHTML, {
-			placement: "bottom",
+			placement: "bottom"
 		});
 	}
 
 	// checkbox settings:
-// 	if (step === ++c) {
-// 		$("#requestTurnPopup").remove();
-// 		$("#cancelTurnPopup").remove();
+	// 	if (step === ++c) {
+	// 		$("#joinQueuePopup").remove();
+	// 		$("#cancelTurnPopup").remove();
 
-// 		let div = "#keyboardControllerCheckbox";
-// 		$(div).effect("highlight", {}, 3000);
-// 		let popupHTML = $('<div id="keyboardControllerCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables the use of a keyboard or controller to play, don\'t forget to check this!</div>');
-// 		$("#container").append(popupHTML);
-// 		let popper = new Popper($("#checkboxSettings").children().children()[0], popupHTML, {
-// 			placement: "right",
-// 		});
-// 	}
+	// 		let div = "#keyboardControllerCheckbox";
+	// 		$(div).effect("highlight", {}, 3000);
+	// 		let popupHTML = $('<div id="keyboardControllerCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables the use of a keyboard or controller to play, don\'t forget to check this!</div>');
+	// 		$("#container").append(popupHTML);
+	// 		let popper = new Popper($("#checkboxSettings").children().children()[0], popupHTML, {
+	// 			placement: "right",
+	// 		});
+	// 	}
 	if (step === ++c) {
-// 		$("#keyboardControllerCheckboxPopup").remove();
+		// 		$("#keyboardControllerCheckboxPopup").remove();
 		$("#controlQueuePopup").remove();
 
 		let div = "#dpadCheckbox";
@@ -4369,7 +3962,7 @@ function tutorial() {
 		let popupHTML = $('<div id="dpadCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Swaps DPAD Up/Down with Left/Right only useful if you\'re using a Pro Controller on Firefox.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($("#checkboxSettings").children().children()[1], popupHTML, {
-			placement: "right",
+			placement: "right"
 		});
 	}
 	if (step === ++c) {
@@ -4380,29 +3973,25 @@ function tutorial() {
 		let popupHTML = $('<div id="touchControlsCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables and Disables the Touch Controls.</div>');
 		$("#container").append(popupHTML);
 		let popper = new Popper($("#checkboxSettings").children().children()[2], popupHTML, {
-			placement: "right",
+			placement: "right"
 		});
 	}
-
 
 	if (step === ++c) {
 		$("#touchControlsCheckboxPopup").remove();
 
-// 		$("#cancelTurn1").effect("highlight", {}, 3000);
-// 		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue or end your turn early.</div>');
-// 		$("#container").append(popupHTML);
-// 		let popper = new Popper($("#cancelTurn1"), popupHTML, {
-// 			placement: "bottom",
-// 		});
+		// 		$("#cancelTurn1").effect("highlight", {}, 3000);
+		// 		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue or end your turn early.</div>');
+		// 		$("#container").append(popupHTML);
+		// 		let popper = new Popper($("#cancelTurn1"), popupHTML, {
+		// 			placement: "bottom",
+		// 		});
 	}
 
 	if (step === ++c) {
-// 		$(document).unbind("click");
+		// 		$(document).unbind("click");
 		location.reload(true);
 	}
-
-
-
 
 }
 
@@ -4412,33 +4001,29 @@ function startTutorial() {
 	tutorial();
 
 	$("html, body").animate({
-		scrollTop: 0,
+		scrollTop: 0
 	}, 500);
-	$(document).on("click", function(event) {
+	$(document).on("click", function (event) {
 		event.preventDefault();
 		tutorial();
 	});
 }
 
-$("#startTutorial").on("click", function(event) {
+$("#startTutorial").on("click", function (event) {
 	event.preventDefault();
 	startTutorial();
 });
 
-$("#resetSettings").on("click", function(event) {
+$("#resetSettings").on("click", function (event) {
 	event.preventDefault();
-	localforage.clear().then(function() {
+	localforage.clear().then(function () {
 		location.reload(true);
 	});
 });
 
-
-/* FIT TEXT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-// let reqFit = fitty(".requestTurn");
-
-
 /* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 window.onbeforeunload = closingCode;
+
 function closingCode() {
 	socket.emit("leaveLagless");
 	return null;
@@ -4457,24 +4042,23 @@ function closingCode() {
 // 		if (!target.hasClass("show")) {
 // 			$(self).text("Show");
 
-// 			// make the parent height equal to the button height:
-// // 			let height = $(self).outerHeight() + 5;
-// // 			$(self).parent().height(height);
+// 		  make the parent height equal to the button height:
+//  			let height = $(self).outerHeight() + 5;
+//  			$(self).parent().height(height);
 
 // 		} else {
 // 			$(self).text("Hide");
 // 			$(self).parent().css("height", "");
 
-// // 			let height = target.outerHeight();
-// // 			$(self).parent().height(height);
+//  			let height = target.outerHeight();
+//  			$(self).parent().height(height);
 // 		}
-
 
 // 	}, 500, this);
 
 // });
 
-$(".collapseButton").on("click", function(event) {
+$(".collapseButton").on("click", function (event) {
 	let target = $(this).attr("data-target");
 	if ($(this).attr("collapsed") == "false") {
 		$(this).attr("collapsed", "true");
@@ -4482,40 +4066,40 @@ $(".collapseButton").on("click", function(event) {
 	} else {
 		$(this).attr("collapsed", "false");
 
-
-
-		$(target).parent().animate({"margin-top": "0px"});
-// 		$(target).parent().css("width", "");
+		$(target).parent().animate({
+			"margin-top": "0px"
+		});
+		// 		$(target).parent().css("width", "");
 		$(target).parent().css("height", "");
 
-	// 	$(this).parent().animate({"width": "", "height": ""});
+		// 	$(this).parent().animate({"width": "", "height": ""});
 		let thisId = "#" + $(target).attr("id");
 		let button = $('[data-target="' + thisId + '"]');
 		button.css("align-self", "");
 		button.css("margin-left", "5px");
 
-		setTimeout(function() {
+		setTimeout(function () {
 			$(target).parent().css("width", "");
 			$(target).collapse("show");
 		}, 500);
 	}
 });
 
-$(".collapsible").on("show.bs.collapse", function() {
+$(".collapsible").on("show.bs.collapse", function () {
 
-// // 	$(this).parent().css("margin-top", "");
-// 	$(this).parent().animate({"margin-top": "0px"});
-// 	$(this).parent().css("width", "");
-// 	$(this).parent().css("height", "");
+	//  	$(this).parent().css("margin-top", "");
+	// 	$(this).parent().animate({"margin-top": "0px"});
+	// 	$(this).parent().css("width", "");
+	// 	$(this).parent().css("height", "");
 
-// // 	$(this).parent().animate({"width": "", "height": ""});
-// 	let thisId = "#" + $(this).attr("id");
-// 	let button = $('[data-target="' + thisId + '"]');
-// 	button.css("align-self", "");
-// 	button.css("margin-left", "5px");
+	//  	$(this).parent().animate({"width": "", "height": ""});
+	// 	let thisId = "#" + $(this).attr("id");
+	// 	let button = $('[data-target="' + thisId + '"]');
+	// 	button.css("align-self", "");
+	// 	button.css("margin-left", "5px");
 });
 
-$(".collapsible").on("shown.bs.collapse", function() {
+$(".collapsible").on("shown.bs.collapse", function () {
 
 	let thisId = "#" + $(this).attr("id");
 	let button = $('[data-target="' + thisId + '"]');
@@ -4523,12 +4107,11 @@ $(".collapsible").on("shown.bs.collapse", function() {
 
 })
 
-$(".collapsible").on("hidden.bs.collapse", function() {
+$(".collapsible").on("hidden.bs.collapse", function () {
 
 	let thisId = "#" + $(this).attr("id");
 	let button = $('[data-target="' + thisId + '"]');
 	button.text("Show");
-
 
 	let height = button.outerHeight() + 5;
 	button.parent().height(height);
@@ -4536,120 +4119,125 @@ $(".collapsible").on("hidden.bs.collapse", function() {
 	let width = button.outerWidth() + 10;
 	button.parent().width(width);
 
-	button.parent().animate({"margin-top": "-60px"});
+	button.parent().animate({
+		"margin-top": "-60px"
+	});
 
-// 	button.parent().animate({"height" : height});
-// 	button.parent().animate({"width": width, "height": height});
+	// 	button.parent().animate({"height" : height});
+	// 	button.parent().animate({"width": width, "height": height});
 
 	button.css("align-self", "center");
 	button.css("margin-left", "0px");
 
 })
 
-
 // on blur, reset the controller state,
 // to prevent keys from getting stuck:
 // todo: fix
-$(window).blur(function() {
-// 	console.log("lost focus");
+$(window).blur(function () {
+	// 	console.log("lost focus");
 	controller.reset();
-// 	oldControllerState = controller.getState();
+	// 	oldControllerState = controller.getState();
 	wasPressedKeyCodes = [];
 	sendControllerState();
 	clearInterval(sendInputTimer);
 });
-$(window).focus(function() {
-// 	console.log("focused");
-	sendInputTimer = setInterval(sendInputs, 1000/120);
+$(window).focus(function () {
+	// 	console.log("focused");
+	sendInputTimer = setInterval(sendInputs, 1000 / 120);
 	controller.reset();
-// 	oldControllerState = controller.getState();
+	// 	oldControllerState = controller.getState();
 	wasPressedKeyCodes = [];
 	sendControllerState();
 });
 
+/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-
-/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-
-socket.on("rickroll", function(data) {
+socket.on("rickroll", function (data) {
 	if (myUsername == data || data == "everyone") {
 		let myPlayer;
 		swal({
 			html: '<canvas id="rickroll"></canvas>',
 			onOpen: () => {
 				let rickrollCanvas = $("#rickroll")[0];
-				myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {canvas: rickrollCanvas, loop: false, autoplay: true});
+				myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
+					canvas: rickrollCanvas,
+					loop: false,
+					autoplay: true
+				});
 			},
 			onClose: () => {
 				myPlayer.destroy();
 			},
-			customClass: "swal-wide",
+			customClass: "swal-wide"
 		});
 
-// 		let timerInterval
-// 		swal({
-// // 			title: "Auto close alert!",
-// 			html: "closing in <strong></strong> seconds.",
-// 			timer: 2000,
-// 			onOpen: () => {
-// 			swal.showLoading()
-// 			timerInterval = setInterval(() => {
-// 				swal.getContent().querySelector("strong").textContent = swal.getTimerLeft();
-// 			}, 100)
-// 			},
-// 			onClose: () => {
-// 				clearInterval(timerInterval);
-// 			},
-// 		}).then((result) => {
-// 			swal({
-// 				html: '<canvas id="rickroll"></canvas>',
-// 				onOpen: () => {
-// 					let rickrollCanvas = $("#rickroll")[0];
-// 					myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {canvas: rickrollCanvas, loop: false, autoplay: true});
-// 				},
-// 				onClose: () => {
-// 					myPlayer.destroy();
-// 				},
-// 				customClass: "swal-wide",
-// 			});
-// 		});
+		// 		let timerInterval
+		// 		swal({
+		//  			title: "Auto close alert!",
+		// 			html: "closing in <strong></strong> seconds.",
+		// 			timer: 2000,
+		// 			onOpen: () => {
+		// 			swal.showLoading()
+		// 			timerInterval = setInterval(() => {
+		// 				swal.getContent().querySelector("strong").textContent = swal.getTimerLeft();
+		// 			}, 100)
+		// 			},
+		// 			onClose: () => {
+		// 				clearInterval(timerInterval);
+		// 			},
+		// 		}).then((result) => {
+		// 			swal({
+		// 				html: '<canvas id="rickroll"></canvas>',
+		// 				onOpen: () => {
+		// 					let rickrollCanvas = $("#rickroll")[0];
+		// 					myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {canvas: rickrollCanvas, loop: false, autoplay: true});
+		// 				},
+		// 				onClose: () => {
+		// 					myPlayer.destroy();
+		// 				},
+		// 				customClass: "swal-wide",
+		// 			});
+		// 		});
 
 	}
 });
 
-socket.on("rainbow", function(data) {
+socket.on("rainbow", function (data) {
 	if (myUniqueID == data || data == "everyone") {
 		$("body").addClass("rainbow-text");
 	}
 });
 
-socket.on("banlist", function(data) {
+socket.on("banlist", function (data) {
 	banlist = data;
 });
 
-socket.on("banned", function(data) {
+socket.on("banned", function (data) {
 	let alertMessage = $(".swal2-container")[0];
 	if (typeof alertMessage == "undefined") {
 		swal("You're banned (maybe only temporarily?)");
 	}
 });
 
-
 /* IP */
-setInterval(function() {
+setInterval(function () {
 	$.getJSON("https://jsonip.com?callback=?", function (data) {
-		socket.emit("registerIP", {ip: data.ip, id: myUniqueID, username: myUsername});
+		socket.emit("registerIP", {
+			ip: data.ip,
+			id: myUniqueID,
+			username: myUsername
+		});
 		if (bannedIPs.indexOf(data.ip) > -1) {
 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+			// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
 		}
-// 		if (banlist.indexOf(myUniqueID) > -1) {
-// // 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-// 		}
+		// 		if (banlist.indexOf(myUniqueID) > -1) {
+		//  			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+		// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+		// 		}
 	});
 }, 5000);
-
 
 /* FORCE HTTPS */
 if (location.protocol != "https:") {
