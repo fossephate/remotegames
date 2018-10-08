@@ -2,11 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 require("js/keymaster.js");
-// require("../js/gamepad.js");
-// let keycode = require("keycode");
-window.keycode = require("keycode");
-let textFitPercent = require("js/textfitpercent.js");
-let tools = require("js/tools.js");
+const VirtualProController = require("js/VirtualProController.js");
+const keycode = require("keycode");
+const textFitPercent = require("js/textfitpercent.js");
+const tools = require("js/tools.js");
+
 // rest of tools:
 String.prototype.replaceAll = function (search, replacement) {
 	let target = this;
@@ -188,7 +188,8 @@ let restPos = 128;
 let videoBufferSize = 256 * 1024;
 let audioBufferSize = 128 * 1024;
 
-let oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
+// let oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
+let oldControllerState = "000000000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
 let lagless1Port = 8001;
 let lagless2Port = 8002;
 let lagless3Port = 8003;
@@ -259,7 +260,7 @@ function getMeta(url, callback) {
 
 let gamepadCounter = 0;
 
-window.controller = require("js/VirtualProController.js"); // todo: undo
+window.controller = new VirtualProController(); // todo: undo
 controller.reset();
 
 function sendControllerState() {
@@ -2280,83 +2281,6 @@ socket2.on("viewImage5", function (data) {
 	image.src = src;
 });
 
-/* RESIZABLE */
-// interact("#picture")
-// 	.resizable({
-//      resize from all edges and corners
-//     edges: { left: false, right: true, bottom: false, top: false },
-//      keep the edges inside the parent
-//     restrictEdges: {
-//       outer: "parent",
-//       endOnly: true,
-//     },
-//      minimum size
-//     restrictSize: {
-//       min: { width: 100, height: 50 },
-//     },
-// 	preserveAspectRatio: true,
-//     inertia: true,
-//   })
-//   .on("resizemove", function (event) {
-//     var target = event.target,
-//         x = (parseFloat(target.getAttribute("data-x")) || 0),
-//         y = (parseFloat(target.getAttribute("data-y")) || 0);
-
-//      update the element's style
-//     target.style.width  = event.rect.width + "px";
-//     target.style.height = event.rect.height + "px";
-//   });
-// interact("#videoCanvas2")
-// 	.resizable({
-//      resize from all edges and corners
-//     edges: { left: true, right: true, bottom: true, top: true },
-//      keep the edges inside the parent
-//     restrictEdges: {
-//       outer: "parent",
-//       endOnly: true,
-//     },
-//      minimum size
-//     restrictSize: {
-//       min: { width: 100, height: 50 },
-//     },
-// 	preserveAspectRatio: true,
-//     inertia: true,
-//   })
-//   .on("resizemove", function (event) {
-//     var target = event.target,
-//         x = (parseFloat(target.getAttribute("data-x")) || 0),
-//         y = (parseFloat(target.getAttribute("data-y")) || 0);
-
-//      update the element's style
-//     target.style.width  = event.rect.width + "px";
-//     target.style.height = event.rect.height + "px";
-//   });
-// interact("#videoCanvas3")
-// 	.resizable({
-//      resize from all edges and corners
-//     edges: { left: true, right: true, bottom: true, top: true },
-//      keep the edges inside the parent
-//     restrictEdges: {
-//       outer: "parent",
-//       endOnly: true,
-//     },
-//      minimum size
-//     restrictSize: {
-//       min: { width: 100, height: 50 },
-//     },
-// 	preserveAspectRatio: true,
-//     inertia: true,
-//   })
-//   .on("resizemove", function (event) {
-//     var target = event.target,
-//         x = (parseFloat(target.getAttribute("data-x")) || 0),
-//         y = (parseFloat(target.getAttribute("data-y")) || 0);
-
-//      update the element's style
-//     target.style.width  = event.rect.width + "px";
-//     target.style.height = event.rect.height + "px";
-//   });
-
 function addJoyCons(tab, actual) {
 
 	actual = actual || false;
@@ -2373,53 +2297,8 @@ function addJoyCons(tab, actual) {
 		console.log("JoyCon delete error.");
 	}
 
-	$("#leftJoyCon").remove();
-	$("#rightJoyCon").remove();
-
-	let leftJoyConHTML = `
-	<div id="leftJoyCon">
-		<img id="leftJoyConCanvas" src="https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png" />
-		<div id="leftStick">
-			<div id="leftStick2"></div>
-		</div>
-
-		<div id="dpadButtons">
-			<div id="upButton" class="controllerButton"></div>
-			<div id="downButton" class="controllerButton"></div>
-			<div id="leftButton" class="controllerButton"></div>
-			<div id="rightButton" class="controllerButton"></div>
-		</div>
-		<div id="leftJoyConOther">
-			<div id="minusButton" class="controllerButton lessRound"></div>
-			<div id="captureButton" class="controllerButton lessRound"></div>
-			<div id="lButton" class="controllerButton lessRound"><div class="click-passthrough">L</div></div>
-			<div id="zlButton" class="controllerButton lessRound"><div class="click-passthrough">ZL</div></div>
-		</div>
-	</div>`;
-
-	let rightJoyConHTML = `
-	<div id="rightJoyCon">
-		<img id="rightJoyConCanvas" src="https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png" />
-		<div id="rightStick">
-			<div id="rightStick2"></div>
-		</div>
-		<div id="abxyButtons">
-			<div id="xButton" class="controllerButton"></div>
-			<div id="bButton" class="controllerButton"></div>
-			<div id="yButton" class="controllerButton"></div>
-			<div id="aButton" class="controllerButton"></div>
-		</div>
-		<div id="rightJoyConOther">
-			<div id="plusButton" class="controllerButton lessRound"></div>
-			<div id="homeButton" class="controllerButton lessRound"></div>
-			<div id="rButton" class="controllerButton lessRound"><div class="click-passthrough">R</div></div>
-			<div id="zrButton" class="controllerButton lessRound"><div class="click-passthrough">ZR</div></div>
-		</div>
-	</div>`;
-
-
-	$(tab).prepend(leftJoyConHTML);
-	$(tab).append(rightJoyConHTML);
+	ReactDOM.render(<LeftJoyCon/>, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
+	ReactDOM.render(<RightJoyCon/>, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
 
 
 	// rebind touch controls:
@@ -3399,166 +3278,60 @@ $("#analogStickCheckbox").on("change", function () {
 	localforage.setItem("settings", JSON.stringify(settings));
 });
 
+
+const LeftJoyCon = require("src/components/LeftJoyCon.jsx");
+const RightJoyCon = require("src/components/RightJoyCon.jsx");
+
 /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 socket.on("controllerState1", function (data) {
 
 	let str = data;
-	let dpad = str[0];
 
-	let btns = [];
-	let unpressedBtns = [
-		"upButton",
-		"downButton",
-		"leftButton",
-		"rightButton",
-		"aButton",
-		"bButton",
-		"xButton",
-		"yButton",
-		"lButton",
-		"zlButton",
-		"rButton",
-		"zrButton",
-		"minusButton",
-		"captureButton",
-		"plusButton",
-		"homeButton",
-		"leftStick",
-		"rightStick"
-	];
+	// let stickPositions = str.substring(19).split(" ");
+	//
+	// let LX = (parseInt(stickPositions[0]) - restPos);
+	// let LY = (parseInt(stickPositions[1]) - restPos);
+	// let RX = (parseInt(stickPositions[2]) - restPos);
+	// let RY = (parseInt(stickPositions[3]) - restPos);
+	//
+	// LY *= -1;
+	// RY *= -1;
+	//
+	// // normalize:
+	// let scale = 0.25;
+	// let LMagnitude = Math.sqrt((LX * LX) + (LY * LY));
+	// let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
+	//
+	// let max = 120;
+	// LMagnitude = tools.minmax(LMagnitude, -max, max);
+	// RMagnitude = tools.minmax(RMagnitude, -max, max);
+	//
+	// let LStick = tools.normalizeVector({
+	// 	x: LX,
+	// 	y: LY
+	// }, LMagnitude);
+	// let RStick = tools.normalizeVector({
+	// 	x: RX,
+	// 	y: RY
+	// }, RMagnitude);
+	//
+	// LX = parseInt(LStick.x * scale);
+	// LY = parseInt(LStick.y * scale);
+	// RX = parseInt(RStick.x * scale);
+	// RY = parseInt(RStick.y * scale);
+	//
+	// let leftTransform = LX + "px" + "," + LY + "px";
+	// let rightTransform = RX + "px" + "," + RY + "px";
+	//
+	// try {
+	// 	$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
+	// 	$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
+	// } catch (error) {
+	// 	console.log("sticks missing from DOM");
+	// }
 
-	if (dpad == "7") {
-		btns.push("upButton");
-		btns.push("leftButton");
-	} else if (dpad == "1") {
-		btns.push("upButton");
-		btns.push("rightButton");
-	} else if (dpad == "5") {
-		btns.push("downButton");
-		btns.push("leftButton");
-	} else if (dpad == "3") {
-		btns.push("downButton");
-		btns.push("rightButton");
-	} else if (dpad == "0") {
-		btns.push("upButton");
-	} else if (dpad == "4") {
-		btns.push("downButton");
-	} else if (dpad == "6") {
-		btns.push("leftButton");
-	} else if (dpad == "2") {
-		btns.push("rightButton");
-	} else if (dpad == "8") {
-		// nothing
-	}
-
-	if (str[6] == "1") {
-		btns.push("aButton");
-	}
-	if (str[7] == "1") {
-		btns.push("bButton");
-	}
-	if (str[8] == "1") {
-		btns.push("xButton");
-	}
-	if (str[9] == "1") {
-		btns.push("yButton");
-	}
-
-	if (str[2] == "1") {
-		btns.push("lButton");
-	}
-	if (str[3] == "1") {
-		btns.push("zlButton");
-	}
-
-	if (str[11] == "1") {
-		btns.push("rButton");
-	}
-	if (str[12] == "1") {
-		btns.push("zrButton");
-	}
-
-	if (str[4] == "1") {
-		btns.push("minusButton");
-	}
-	if (str[5] == "1") {
-		btns.push("captureButton");
-	}
-
-	if (str[13] == "1") {
-		btns.push("plusButton");
-	}
-	if (str[14] == "1") {
-		btns.push("homeButton");
-	}
-
-	if (str[1] == "1") {
-		btns.push("leftStick");
-	}
-	if (str[10] == "1") {
-		btns.push("rightStick");
-	}
-
-	unpressedBtns = unpressedBtns.filter(function (el) {
-		return !btns.includes(el);
-	});
-
-	try {
-		for (let i = 0; i < btns.length; i++) {
-			$("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)"; //50bb50
-			// $("#" + btns[i])[0].style.background = "rgba(220, 220, 220, 0.7)"; 505050
-			// $("#" + btns[i])[0].style.background = "rgba(187, 187, 80, 0.7)"; //505050
-
-		}
-		for (let i = 0; i < unpressedBtns.length; i++) {
-			$("#" + unpressedBtns[i])[0].style.background = "";
-		}
-	} catch (error) {
-		console.log("buttons missing from DOM");
-	}
-
-	let stickPositions = str.substring(16).split(" ");
-
-	let LX = (parseInt(stickPositions[0]) - restPos);
-	let LY = (parseInt(stickPositions[1]) - restPos);
-	let RX = (parseInt(stickPositions[2]) - restPos);
-	let RY = (parseInt(stickPositions[3]) - restPos);
-
-	LY *= -1;
-	RY *= -1;
-
-	// normalize:
-	let scale = 0.25;
-	let LMagnitude = Math.sqrt((LX * LX) + (LY * LY));
-	let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
-
-	let max = 120;
-	LMagnitude = tools.minmax(LMagnitude, -max, max);
-	RMagnitude = tools.minmax(RMagnitude, -max, max);
-
-	let LStick = tools.normalizeVector({
-		x: LX,
-		y: LY
-	}, LMagnitude);
-	let RStick = tools.normalizeVector({
-		x: RX,
-		y: RY
-	}, RMagnitude);
-
-	LX = parseInt(LStick.x * scale);
-	LY = parseInt(LStick.y * scale);
-	RX = parseInt(RStick.x * scale);
-	RY = parseInt(RStick.y * scale);
-
-	let leftTransform = LX + "px" + "," + LY + "px";
-	let rightTransform = RX + "px" + "," + RY + "px";
-
-	try {
-		$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
-		$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
-	} catch (error) {
-		console.log("sticks missing from DOM");
-	}
+	ReactDOM.render(<LeftJoyCon controllerState={data} />, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
+	ReactDOM.render(<RightJoyCon controllerState={data} />, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
 
 });
 
@@ -3785,7 +3558,7 @@ function tutorial() {
 		$("#tab2Popup").remove();
 		$("#tab3Popup").remove();
 		$("#tab4Popup").remove();
-		let div = "#leftJoyConCanvas";
+		let div = "#leftJoyConImage";
 		$(div).effect("highlight", {}, 3000);
 		let popupHTML = $('<div id="leftJoyConPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This is the controller view, it shows the buttons currently being pressed by Player 1.</div>');
 		$("#container").append(popupHTML);
@@ -3794,7 +3567,7 @@ function tutorial() {
 		});
 	}
 	if (step === ++c) {
-		let div = "#rightJoyConCanvas";
+		let div = "#rightJoyConImage";
 		$(div).effect("highlight", {}, 3000);
 		let popupHTML = $('<div id="rightJoyConPopup" class="largerPopup"><span class="tooltipArrowRight"></span>It also doubles as touch controls, currently only the sticks work on IOS, but everything works on android.</div>');
 		$("#container").append(popupHTML);

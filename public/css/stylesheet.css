@@ -661,7 +661,7 @@ ul {
 	background: rgba(255, 255, 50, 0.2);
 }
 
-#leftJoyConCanvas {
+#leftJoyConImage {
 	width: 100%;
 }
 
@@ -698,6 +698,10 @@ height: 30px; */
 	display: flex;
 	justify-content: space-evenly;
 	flex-direction: column;
+}
+
+.highlightedButton {
+	background: rgba(80, 187, 80, 0.7);
 }
 
 .lessRound {
@@ -778,7 +782,7 @@ height: 30px; */
 	width: 13.4%;
 }
 
-#rightJoyConCanvas {
+#rightJoyConImage {
 	width: 100%;
 }
 

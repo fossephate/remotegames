@@ -893,13 +893,13 @@ io.on("connection", function (socket) {
 
 
 		let valid = true;
-		if (controllerState[5] == "1" && !client.is_mod) {
+		if (controllerState[5 + 3] == "1" && !client.is_mod) {
 			valid = false;
 		}
-		if (controllerState[13] == "1" && !client.is_plus) {
+		if (controllerState[13 + 3] == "1" && !client.is_plus) {
 			valid = false;
 		}
-		if (controllerState[14] == "1" && !client.is_mod) {
+		if (controllerState[14 + 3] == "1" && !client.is_mod) {
 			valid = false;
 		}
 
@@ -1796,7 +1796,8 @@ function forfeitTurn(uniqueID, cNum) {
 		controlQueues: controlQueues,
 	});
 	// stop the controller
-	io.to("controller").emit("controllerState", "800000000000000 128 128 128 128"); // update this to use restPos
+	// io.to("controller").emit("controllerState", "800000000000000 128 128 128 128"); // update this to use restPos
+	io.to("controller").emit("controllerState", "000000000000000000 128 128 128 128"); // update this to use restPos
 
 	// reset the timers if the person forfeiting is first in line:
 	if (index === 0) {

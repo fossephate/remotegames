@@ -21520,165 +21520,151 @@ module.exports = g;
 "use strict";
 
 
-var controller = {};
-var restPos = 128;
+function VirtualProController() {
+  var controller = {};
+  var restPos = 128;
 
-var minmax = __webpack_require__(/*! ../js/tools.js */ "./public/js/tools.js").minmax;
+  var minmax = __webpack_require__(/*! ../js/tools.js */ "./public/js/tools.js").minmax;
 
-controller.btns = {
-  up: 0,
-  down: 0,
-  left: 0,
-  right: 0,
-  stick_button: 0,
-  l: 0,
-  zl: 0,
-  minus: 0,
-  capture: 0,
-  a: 0,
-  b: 0,
-  x: 0,
-  y: 0,
-  stick_button2: 0,
-  r: 0,
-  zr: 0,
-  plus: 0,
-  home: 0
-};
-controller.LStick = {
-  x: restPos,
-  y: restPos
-};
-controller.RStick = {
-  x: restPos,
-  y: restPos
-};
+  controller.btns = {
+    up: 0,
+    down: 0,
+    left: 0,
+    right: 0,
+    stick_button: 0,
+    l: 0,
+    zl: 0,
+    minus: 0,
+    capture: 0,
+    a: 0,
+    b: 0,
+    x: 0,
+    y: 0,
+    stick_button2: 0,
+    r: 0,
+    zr: 0,
+    plus: 0,
+    home: 0
+  };
+  controller.LStick = {
+    x: restPos,
+    y: restPos
+  };
+  controller.RStick = {
+    x: restPos,
+    y: restPos
+  };
 
-controller.reset = function () {
-  for (var prop in controller.btns) {
-    controller.btns[prop] = 0;
-  }
+  controller.reset = function () {
+    for (var prop in controller.btns) {
+      controller.btns[prop] = 0;
+    }
 
-  controller.LStick.x = restPos;
-  controller.LStick.y = restPos;
-  controller.RStick.x = restPos;
-  controller.RStick.y = restPos;
-};
+    controller.LStick.x = restPos;
+    controller.LStick.y = restPos;
+    controller.RStick.x = restPos;
+    controller.RStick.y = restPos;
+  };
 
-controller.getState = function () {
-  this.LStick.x = minmax(this.LStick.x, 0, 255);
-  this.LStick.y = minmax(this.LStick.y, 0, 255);
-  this.RStick.x = minmax(this.RStick.x, 0, 255);
-  this.RStick.y = minmax(this.RStick.y, 0, 255);
+  controller.getState = function () {
+    this.LStick.x = minmax(this.LStick.x, 0, 255);
+    this.LStick.y = minmax(this.LStick.y, 0, 255);
+    this.RStick.x = minmax(this.RStick.x, 0, 255);
+    this.RStick.y = minmax(this.RStick.y, 0, 255);
 
-  if (isNaN(this.LStick.x)) {
-    this.LStick.x = restPos;
-  }
+    if (isNaN(this.LStick.x)) {
+      this.LStick.x = restPos;
+    }
 
-  if (isNaN(this.LStick.y)) {
-    this.LStick.y = restPos;
-  }
+    if (isNaN(this.LStick.y)) {
+      this.LStick.y = restPos;
+    }
 
-  if (isNaN(this.RStick.x)) {
-    this.RStick.x = restPos;
-  }
+    if (isNaN(this.RStick.x)) {
+      this.RStick.x = restPos;
+    }
 
-  if (isNaN(this.RStick.y)) {
-    this.RStick.y = restPos;
-  }
+    if (isNaN(this.RStick.y)) {
+      this.RStick.y = restPos;
+    }
 
-  var state = "";
+    var state = ""; // if (this.btns.up == 1 && this.btns.left == 1) {
+    // 	state += "7";
+    // } else if (this.btns.up == 1 && this.btns.right == 1) {
+    // 	state += "1";
+    // } else if (this.btns.down == 1 && this.btns.left == 1) {
+    // 	state += "5";
+    // } else if (this.btns.down == 1 && this.btns.right == 1) {
+    // 	state += "3";
+    // } else if (this.btns.up == 1) {
+    // 	state += "0";
+    // } else if (this.btns.down == 1) {
+    // 	state += "4";
+    // } else if (this.btns.left == 1) {
+    // 	state += "6";
+    // } else if (this.btns.right == 1) {
+    // 	state += "2";
+    // } else {
+    // 	state += "8";
+    // }
 
-  if (this.btns.up == 1 && this.btns.left == 1) {
-    state += "7";
-  } else if (this.btns.up == 1 && this.btns.right == 1) {
-    state += "1";
-  } else if (this.btns.down == 1 && this.btns.left == 1) {
-    state += "5";
-  } else if (this.btns.down == 1 && this.btns.right == 1) {
-    state += "3";
-  } else if (this.btns.up == 1) {
-    state += "0";
-  } else if (this.btns.down == 1) {
-    state += "4";
-  } else if (this.btns.left == 1) {
-    state += "6";
-  } else if (this.btns.right == 1) {
-    state += "2";
-  } else {
-    state += "8";
-  }
+    state += this.btns.up;
+    state += this.btns.down;
+    state += this.btns.left;
+    state += this.btns.right;
+    state += this.btns.stick_button;
+    state += this.btns.l;
+    state += this.btns.zl;
+    state += this.btns.minus;
+    state += this.btns.capture;
+    state += this.btns.a;
+    state += this.btns.b;
+    state += this.btns.x;
+    state += this.btns.y;
+    state += this.btns.stick_button2;
+    state += this.btns.r;
+    state += this.btns.zr;
+    state += this.btns.plus;
+    state += this.btns.home;
+    var LX = this.LStick.x;
+    var LY = this.LStick.y;
+    var RX = this.RStick.x;
+    var RY = this.RStick.y;
+    state += " " + LX + " " + LY + " " + RX + " " + RY;
+    return state;
+  };
 
-  state += this.btns.stick_button;
-  state += this.btns.l;
-  state += this.btns.zl;
-  state += this.btns.minus;
-  state += this.btns.capture;
-  state += this.btns.a;
-  state += this.btns.b;
-  state += this.btns.x;
-  state += this.btns.y;
-  state += this.btns.stick_button2;
-  state += this.btns.r;
-  state += this.btns.zr;
-  state += this.btns.plus;
-  state += this.btns.home;
-  var LX = this.LStick.x;
-  var LY = this.LStick.y;
-  var RX = this.RStick.x;
-  var RY = this.RStick.y;
-  state += " " + LX + " " + LY + " " + RX + " " + RY;
-  return state;
-};
+  controller.inputState = function (state) {
+    var entireState = state.split(" ");
+    var btns = entireState[0];
+    this.btns.up = parseInt(btns[0]);
+    this.btns.down = parseInt(btns[1]);
+    this.btns.left = parseInt(btns[2]);
+    this.btns.right = parseInt(btns[3]);
+    this.btns.stick_button = parseInt(btns[4]);
+    this.btns.l = parseInt(btns[5]);
+    this.btns.zl = parseInt(btns[6]);
+    this.btns.minus = parseInt(btns[7]);
+    this.btns.capture = parseInt(btns[8]);
+    this.btns.a = parseInt(btns[9]);
+    this.btns.b = parseInt(btns[10]);
+    this.btns.x = parseInt(btns[11]);
+    this.btns.y = parseInt(btns[12]);
+    this.btns.stick_button2 = parseInt(btns[13]);
+    this.btns.r = parseInt(btns[14]);
+    this.btns.zr = parseInt(btns[15]);
+    this.btns.plus = parseInt(btns[16]);
+    this.btns.home = parseInt(btns[17]);
+    this.LStick.x = entireState[1];
+    this.LStick.y = entireState[2];
+    this.RStick.x = entireState[3];
+    this.RStick.y = entireState[4];
+  };
 
-controller.inputState = function (state) {
-  var entireState = state.split(" ");
-  var btns = entireState[0];
-  var dpad = btns[0];
+  return controller;
+}
 
-  if (dpad == "7") {
-    this.btns.up = 1;
-    this.btns.left = 1;
-  } else if (dpad == "1") {
-    this.btns.up = 1;
-    this.btns.right = 1;
-  } else if (dpad == "5") {
-    this.btns.down = 1;
-    this.btns.left = 1;
-  } else if (dpad == "3") {
-    this.btns.down = 1;
-    this.btns.right = 1;
-  } else if (dpad == "0") {
-    this.btns.up = 1;
-  } else if (dpad == "4") {
-    this.btns.down = 1;
-  } else if (dpad == "6") {
-    this.btns.left = 1;
-  } else if (dpad == "2") {
-    this.btns.right = 1;
-  } else if (dpad == "8") {}
-
-  this.btns.stick_button = parseInt(btns[1]);
-  this.btns.l = parseInt(btns[2]);
-  this.btns.zl = parseInt(btns[3]);
-  this.btns.minus = parseInt(btns[4]);
-  this.btns.capture = parseInt(btns[5]);
-  this.btns.a = parseInt(btns[6]);
-  this.btns.b = parseInt(btns[7]);
-  this.btns.x = parseInt(btns[8]);
-  this.btns.y = parseInt(btns[9]);
-  this.btns.stick_button2 = parseInt(btns[10]);
-  this.btns.r = parseInt(btns[11]);
-  this.btns.zr = parseInt(btns[12]);
-  this.btns.plus = parseInt(btns[13]);
-  this.btns.home = parseInt(btns[14]);
-  this.LStick.x = entireState[1];
-  this.LStick.y = entireState[2];
-  this.RStick.x = entireState[3];
-  this.RStick.y = entireState[4];
-};
-
-module.exports = controller;
+module.exports = VirtualProController;
 
 /***/ }),
 
@@ -22103,11 +22089,11 @@ var _reactDom = _interopRequireDefault(__webpack_require__(/*! react-dom */ "./n
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-__webpack_require__(/*! js/keymaster.js */ "./public/js/keymaster.js"); // require("../js/gamepad.js");
-// let keycode = require("keycode");
+__webpack_require__(/*! js/keymaster.js */ "./public/js/keymaster.js");
 
+var VirtualProController = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
 
-window.keycode = __webpack_require__(/*! keycode */ "./node_modules/keycode/index.js");
+var keycode = __webpack_require__(/*! keycode */ "./node_modules/keycode/index.js");
 
 var textFitPercent = __webpack_require__(/*! js/textfitpercent.js */ "./public/js/textfitpercent.js");
 
@@ -22266,8 +22252,9 @@ var restPos = 128; // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
 
 var videoBufferSize = 256 * 1024;
-var audioBufferSize = 128 * 1024;
-var oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
+var audioBufferSize = 128 * 1024; // let oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
+
+var oldControllerState = "000000000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
 var lagless1Port = 8001;
 var lagless2Port = 8002;
 var lagless3Port = 8003;
@@ -22337,7 +22324,7 @@ function getMeta(url, callback) {
 
 
 var gamepadCounter = 0;
-window.controller = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js"); // todo: undo
+window.controller = new VirtualProController(); // todo: undo
 
 controller.reset();
 
@@ -24353,79 +24340,6 @@ socket2.on("viewImage5", function (data) {
 
   image.src = src;
 });
-/* RESIZABLE */
-// interact("#picture")
-// 	.resizable({
-//      resize from all edges and corners
-//     edges: { left: false, right: true, bottom: false, top: false },
-//      keep the edges inside the parent
-//     restrictEdges: {
-//       outer: "parent",
-//       endOnly: true,
-//     },
-//      minimum size
-//     restrictSize: {
-//       min: { width: 100, height: 50 },
-//     },
-// 	preserveAspectRatio: true,
-//     inertia: true,
-//   })
-//   .on("resizemove", function (event) {
-//     var target = event.target,
-//         x = (parseFloat(target.getAttribute("data-x")) || 0),
-//         y = (parseFloat(target.getAttribute("data-y")) || 0);
-//      update the element's style
-//     target.style.width  = event.rect.width + "px";
-//     target.style.height = event.rect.height + "px";
-//   });
-// interact("#videoCanvas2")
-// 	.resizable({
-//      resize from all edges and corners
-//     edges: { left: true, right: true, bottom: true, top: true },
-//      keep the edges inside the parent
-//     restrictEdges: {
-//       outer: "parent",
-//       endOnly: true,
-//     },
-//      minimum size
-//     restrictSize: {
-//       min: { width: 100, height: 50 },
-//     },
-// 	preserveAspectRatio: true,
-//     inertia: true,
-//   })
-//   .on("resizemove", function (event) {
-//     var target = event.target,
-//         x = (parseFloat(target.getAttribute("data-x")) || 0),
-//         y = (parseFloat(target.getAttribute("data-y")) || 0);
-//      update the element's style
-//     target.style.width  = event.rect.width + "px";
-//     target.style.height = event.rect.height + "px";
-//   });
-// interact("#videoCanvas3")
-// 	.resizable({
-//      resize from all edges and corners
-//     edges: { left: true, right: true, bottom: true, top: true },
-//      keep the edges inside the parent
-//     restrictEdges: {
-//       outer: "parent",
-//       endOnly: true,
-//     },
-//      minimum size
-//     restrictSize: {
-//       min: { width: 100, height: 50 },
-//     },
-// 	preserveAspectRatio: true,
-//     inertia: true,
-//   })
-//   .on("resizemove", function (event) {
-//     var target = event.target,
-//         x = (parseFloat(target.getAttribute("data-x")) || 0),
-//         y = (parseFloat(target.getAttribute("data-y")) || 0);
-//      update the element's style
-//     target.style.width  = event.rect.width + "px";
-//     target.style.height = event.rect.height + "px";
-//   });
 
 function addJoyCons(tab, actual) {
   actual = actual || false;
@@ -24442,12 +24356,10 @@ function addJoyCons(tab, actual) {
     console.log("JoyCon delete error.");
   }
 
-  $("#leftJoyCon").remove();
-  $("#rightJoyCon").remove();
-  var leftJoyConHTML = "\n\t<div id=\"leftJoyCon\">\n\t\t<img id=\"leftJoyConCanvas\" src=\"https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png\" />\n\t\t<div id=\"leftStick\">\n\t\t\t<div id=\"leftStick2\"></div>\n\t\t</div>\n\n\t\t<div id=\"dpadButtons\">\n\t\t\t<div id=\"upButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"downButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"leftButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"rightButton\" class=\"controllerButton\"></div>\n\t\t</div>\n\t\t<div id=\"leftJoyConOther\">\n\t\t\t<div id=\"minusButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"captureButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"lButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">L</div></div>\n\t\t\t<div id=\"zlButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">ZL</div></div>\n\t\t</div>\n\t</div>";
-  var rightJoyConHTML = "\n\t<div id=\"rightJoyCon\">\n\t\t<img id=\"rightJoyConCanvas\" src=\"https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png\" />\n\t\t<div id=\"rightStick\">\n\t\t\t<div id=\"rightStick2\"></div>\n\t\t</div>\n\t\t<div id=\"abxyButtons\">\n\t\t\t<div id=\"xButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"bButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"yButton\" class=\"controllerButton\"></div>\n\t\t\t<div id=\"aButton\" class=\"controllerButton\"></div>\n\t\t</div>\n\t\t<div id=\"rightJoyConOther\">\n\t\t\t<div id=\"plusButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"homeButton\" class=\"controllerButton lessRound\"></div>\n\t\t\t<div id=\"rButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">R</div></div>\n\t\t\t<div id=\"zrButton\" class=\"controllerButton lessRound\"><div class=\"click-passthrough\">ZR</div></div>\n\t\t</div>\n\t</div>";
-  $(tab).prepend(leftJoyConHTML);
-  $(tab).append(rightJoyConHTML); // rebind touch controls:
+  _reactDom.default.render(_react.default.createElement(LeftJoyCon, null), document.getElementById("leftJoyConPlaceHolder" + settings.tab));
+
+  _reactDom.default.render(_react.default.createElement(RightJoyCon, null), document.getElementById("rightJoyConPlaceHolder" + settings.tab)); // rebind touch controls:
+
 
   rebindUnbindTouchControls(); // resize window:
 
@@ -25408,146 +25320,64 @@ $("#analogStickCheckbox").on("change", function () {
   settings.analogStickMode = this.checked;
   localforage.setItem("settings", JSON.stringify(settings));
 });
+
+var LeftJoyCon = __webpack_require__(/*! src/components/LeftJoyCon.jsx */ "./src/components/LeftJoyCon.jsx");
+
+var RightJoyCon = __webpack_require__(/*! src/components/RightJoyCon.jsx */ "./src/components/RightJoyCon.jsx");
 /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
+
 socket.on("controllerState1", function (data) {
-  var str = data;
-  var dpad = str[0];
-  var btns = [];
-  var unpressedBtns = ["upButton", "downButton", "leftButton", "rightButton", "aButton", "bButton", "xButton", "yButton", "lButton", "zlButton", "rButton", "zrButton", "minusButton", "captureButton", "plusButton", "homeButton", "leftStick", "rightStick"];
+  var str = data; // let stickPositions = str.substring(19).split(" ");
+  //
+  // let LX = (parseInt(stickPositions[0]) - restPos);
+  // let LY = (parseInt(stickPositions[1]) - restPos);
+  // let RX = (parseInt(stickPositions[2]) - restPos);
+  // let RY = (parseInt(stickPositions[3]) - restPos);
+  //
+  // LY *= -1;
+  // RY *= -1;
+  //
+  // // normalize:
+  // let scale = 0.25;
+  // let LMagnitude = Math.sqrt((LX * LX) + (LY * LY));
+  // let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
+  //
+  // let max = 120;
+  // LMagnitude = tools.minmax(LMagnitude, -max, max);
+  // RMagnitude = tools.minmax(RMagnitude, -max, max);
+  //
+  // let LStick = tools.normalizeVector({
+  // 	x: LX,
+  // 	y: LY
+  // }, LMagnitude);
+  // let RStick = tools.normalizeVector({
+  // 	x: RX,
+  // 	y: RY
+  // }, RMagnitude);
+  //
+  // LX = parseInt(LStick.x * scale);
+  // LY = parseInt(LStick.y * scale);
+  // RX = parseInt(RStick.x * scale);
+  // RY = parseInt(RStick.y * scale);
+  //
+  // let leftTransform = LX + "px" + "," + LY + "px";
+  // let rightTransform = RX + "px" + "," + RY + "px";
+  //
+  // try {
+  // 	$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
+  // 	$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
+  // } catch (error) {
+  // 	console.log("sticks missing from DOM");
+  // }
 
-  if (dpad == "7") {
-    btns.push("upButton");
-    btns.push("leftButton");
-  } else if (dpad == "1") {
-    btns.push("upButton");
-    btns.push("rightButton");
-  } else if (dpad == "5") {
-    btns.push("downButton");
-    btns.push("leftButton");
-  } else if (dpad == "3") {
-    btns.push("downButton");
-    btns.push("rightButton");
-  } else if (dpad == "0") {
-    btns.push("upButton");
-  } else if (dpad == "4") {
-    btns.push("downButton");
-  } else if (dpad == "6") {
-    btns.push("leftButton");
-  } else if (dpad == "2") {
-    btns.push("rightButton");
-  } else if (dpad == "8") {// nothing
-  }
+  _reactDom.default.render(_react.default.createElement(LeftJoyCon, {
+    controllerState: data
+  }), document.getElementById("leftJoyConPlaceHolder" + settings.tab));
 
-  if (str[6] == "1") {
-    btns.push("aButton");
-  }
-
-  if (str[7] == "1") {
-    btns.push("bButton");
-  }
-
-  if (str[8] == "1") {
-    btns.push("xButton");
-  }
-
-  if (str[9] == "1") {
-    btns.push("yButton");
-  }
-
-  if (str[2] == "1") {
-    btns.push("lButton");
-  }
-
-  if (str[3] == "1") {
-    btns.push("zlButton");
-  }
-
-  if (str[11] == "1") {
-    btns.push("rButton");
-  }
-
-  if (str[12] == "1") {
-    btns.push("zrButton");
-  }
-
-  if (str[4] == "1") {
-    btns.push("minusButton");
-  }
-
-  if (str[5] == "1") {
-    btns.push("captureButton");
-  }
-
-  if (str[13] == "1") {
-    btns.push("plusButton");
-  }
-
-  if (str[14] == "1") {
-    btns.push("homeButton");
-  }
-
-  if (str[1] == "1") {
-    btns.push("leftStick");
-  }
-
-  if (str[10] == "1") {
-    btns.push("rightStick");
-  }
-
-  unpressedBtns = unpressedBtns.filter(function (el) {
-    return !btns.includes(el);
-  });
-
-  try {
-    for (var i = 0; i < btns.length; i++) {
-      $("#" + btns[i])[0].style.background = "rgba(80, 187, 80, 0.7)"; //50bb50
-      // $("#" + btns[i])[0].style.background = "rgba(220, 220, 220, 0.7)"; 505050
-      // $("#" + btns[i])[0].style.background = "rgba(187, 187, 80, 0.7)"; //505050
-    }
-
-    for (var _i3 = 0; _i3 < unpressedBtns.length; _i3++) {
-      $("#" + unpressedBtns[_i3])[0].style.background = "";
-    }
-  } catch (error) {
-    console.log("buttons missing from DOM");
-  }
-
-  var stickPositions = str.substring(16).split(" ");
-  var LX = parseInt(stickPositions[0]) - restPos;
-  var LY = parseInt(stickPositions[1]) - restPos;
-  var RX = parseInt(stickPositions[2]) - restPos;
-  var RY = parseInt(stickPositions[3]) - restPos;
-  LY *= -1;
-  RY *= -1; // normalize:
-
-  var scale = 0.25;
-  var LMagnitude = Math.sqrt(LX * LX + LY * LY);
-  var RMagnitude = Math.sqrt(RX * RX + RY * RY);
-  var max = 120;
-  LMagnitude = tools.minmax(LMagnitude, -max, max);
-  RMagnitude = tools.minmax(RMagnitude, -max, max);
-  var LStick = tools.normalizeVector({
-    x: LX,
-    y: LY
-  }, LMagnitude);
-  var RStick = tools.normalizeVector({
-    x: RX,
-    y: RY
-  }, RMagnitude);
-  LX = parseInt(LStick.x * scale);
-  LY = parseInt(LStick.y * scale);
-  RX = parseInt(RStick.x * scale);
-  RY = parseInt(RStick.y * scale);
-  var leftTransform = LX + "px" + "," + LY + "px";
-  var rightTransform = RX + "px" + "," + RY + "px";
-
-  try {
-    $("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
-    $("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
-  } catch (error) {
-    console.log("sticks missing from DOM");
-  }
+  _reactDom.default.render(_react.default.createElement(RightJoyCon, {
+    controllerState: data
+  }), document.getElementById("rightJoyConPlaceHolder" + settings.tab));
 });
 /* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -25778,7 +25608,7 @@ function tutorial() {
     $("#tab2Popup").remove();
     $("#tab3Popup").remove();
     $("#tab4Popup").remove();
-    var _div4 = "#leftJoyConCanvas";
+    var _div4 = "#leftJoyConImage";
     $(_div4).effect("highlight", {}, 3000);
 
     var _popupHTML5 = $('<div id="leftJoyConPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This is the controller view, it shows the buttons currently being pressed by Player 1.</div>');
@@ -25791,7 +25621,7 @@ function tutorial() {
   }
 
   if (step === ++c) {
-    var _div5 = "#rightJoyConCanvas";
+    var _div5 = "#rightJoyConImage";
     $(_div5).effect("highlight", {}, 3000);
 
     var _popupHTML6 = $('<div id="rightJoyConPopup" class="largerPopup"><span class="tooltipArrowRight"></span>It also doubles as touch controls, currently only the sticks work on IOS, but everything works on android.</div>');
@@ -26861,6 +26691,154 @@ module.exports = exports.default;
 
 /***/ }),
 
+/***/ "./src/components/LeftJoyCon.jsx":
+/*!***************************************!*\
+  !*** ./src/components/LeftJoyCon.jsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var VirtualProController = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
+
+var tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
+
+var LeftJoyCon =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(LeftJoyCon, _PureComponent);
+
+  function LeftJoyCon(props) {
+    var _this;
+
+    _classCallCheck(this, LeftJoyCon);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(LeftJoyCon).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    _this.controller = new VirtualProController();
+    return _this;
+  }
+
+  _createClass(LeftJoyCon, [{
+    key: "getJoyCon",
+    value: function getJoyCon() {
+      var controllerState = "000000000000000000 128 128 128 128";
+      this.controller.inputState(this.props.controllerState || controllerState);
+      var str = this.props.controllerState || controllerState;
+      var restPos = 128;
+      var stickPositions = str.substring(19).split(" ");
+      var LX = parseInt(stickPositions[0]) - restPos;
+      var LY = parseInt(stickPositions[1]) - restPos;
+      var RX = parseInt(stickPositions[2]) - restPos;
+      var RY = parseInt(stickPositions[3]) - restPos;
+      LY *= -1; // normalize:
+
+      var scale = 0.25;
+      var LMagnitude = Math.sqrt(LX * LX + LY * LY);
+      var max = 120;
+      LMagnitude = tools.minmax(LMagnitude, -max, max);
+      var LStick = tools.normalizeVector({
+        x: LX,
+        y: LY
+      }, LMagnitude);
+      LX = parseInt(LStick.x * scale);
+      LY = parseInt(LStick.y * scale);
+      var leftTransform = LX + "px" + "," + LY + "px";
+      return _react.default.createElement("div", {
+        id: "leftJoyCon"
+      }, _react.default.createElement("img", {
+        id: "leftJoyConImage",
+        src: "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png"
+      }), _react.default.createElement("div", {
+        id: "leftStick",
+        className: "" + (this.controller.btns.stick_button ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        id: "leftStick2",
+        style: {
+          transform: "translate(" + leftTransform + ")"
+        }
+      })), _react.default.createElement("div", {
+        id: "dpadButtons"
+      }, _react.default.createElement("div", {
+        id: "upButton",
+        className: "controllerButton" + (this.controller.btns.up ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "downButton",
+        className: "controllerButton" + (this.controller.btns.down ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "leftButton",
+        className: "controllerButton" + (this.controller.btns.left ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "rightButton",
+        className: "controllerButton" + (this.controller.btns.right ? " highlightedButton" : "")
+      })), _react.default.createElement("div", {
+        id: "leftJoyConOther"
+      }, _react.default.createElement("div", {
+        id: "minusButton",
+        className: "controllerButton lessRound" + (this.controller.btns.minus ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "captureButton",
+        className: "controllerButton lessRound" + (this.controller.btns.capture ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "lButton",
+        className: "controllerButton lessRound" + (this.controller.btns.l ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "L")), _react.default.createElement("div", {
+        id: "zlButton",
+        className: "controllerButton lessRound" + (this.controller.btns.zl ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "ZL"))));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, this.getJoyCon());
+    }
+  }]);
+
+  return LeftJoyCon;
+}(_react.PureComponent);
+
+exports.default = LeftJoyCon;
+module.exports = exports.default;
+
+/***/ }),
+
 /***/ "./src/components/Player.jsx":
 /*!***********************************!*\
   !*** ./src/components/Player.jsx ***!
@@ -26948,6 +26926,152 @@ function (_Component) {
 }(_react.Component);
 
 exports.default = Player;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/RightJoyCon.jsx":
+/*!****************************************!*\
+  !*** ./src/components/RightJoyCon.jsx ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var VirtualProController = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
+
+var tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
+
+var RightJoyCon =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(RightJoyCon, _PureComponent);
+
+  function RightJoyCon(props) {
+    var _this;
+
+    _classCallCheck(this, RightJoyCon);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(RightJoyCon).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    _this.controller = new VirtualProController();
+    return _this;
+  }
+
+  _createClass(RightJoyCon, [{
+    key: "getJoyCon",
+    value: function getJoyCon() {
+      var controllerState = "000000000000000000 128 128 128 128";
+      this.controller.inputState(this.props.controllerState || controllerState);
+      var str = this.props.controllerState || controllerState;
+      var restPos = 128;
+      var stickPositions = str.substring(19).split(" ");
+      var RX = parseInt(stickPositions[2]) - restPos;
+      var RY = parseInt(stickPositions[3]) - restPos;
+      RY *= -1; // normalize:
+
+      var scale = 0.25;
+      var RMagnitude = Math.sqrt(RX * RX + RY * RY);
+      var max = 120;
+      RMagnitude = tools.minmax(RMagnitude, -max, max);
+      var RStick = tools.normalizeVector({
+        x: RX,
+        y: RY
+      }, RMagnitude);
+      RX = parseInt(RStick.x * scale);
+      RY = parseInt(RStick.y * scale);
+      var rightTransform = RX + "px" + "," + RY + "px";
+      return _react.default.createElement("div", {
+        id: "rightJoyCon"
+      }, _react.default.createElement("img", {
+        id: "rightJoyConImage",
+        src: "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png"
+      }), _react.default.createElement("div", {
+        id: "rightStick",
+        className: "" + (this.controller.btns.stick_button2 ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        id: "rightStick2",
+        style: {
+          transform: "translate(" + rightTransform + ")"
+        }
+      })), _react.default.createElement("div", {
+        id: "abxyButtons"
+      }, _react.default.createElement("div", {
+        id: "aButton",
+        className: "controllerButton" + (this.controller.btns.a ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "bButton",
+        className: "controllerButton" + (this.controller.btns.b ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "xButton",
+        className: "controllerButton" + (this.controller.btns.x ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "yButton",
+        className: "controllerButton" + (this.controller.btns.y ? " highlightedButton" : "")
+      })), _react.default.createElement("div", {
+        id: "rightJoyConOther"
+      }, _react.default.createElement("div", {
+        id: "plusButton",
+        className: "controllerButton lessRound" + (this.controller.btns.plus ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "homeButton",
+        className: "controllerButton lessRound" + (this.controller.btns.home ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "rButton",
+        className: "controllerButton lessRound" + (this.controller.btns.r ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "R")), _react.default.createElement("div", {
+        id: "zrButton",
+        className: "controllerButton lessRound" + (this.controller.btns.zr ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "ZR"))));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, this.getJoyCon());
+    }
+  }]);
+
+  return RightJoyCon;
+}(_react.PureComponent);
+
+exports.default = RightJoyCon;
 module.exports = exports.default;
 
 /***/ }),
