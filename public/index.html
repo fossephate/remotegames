@@ -10,7 +10,10 @@
 	<link rel="stylesheet" href="css/stylesheet.css">
 	<link rel="stylesheet" href="css/preloader.css">
 
-	<!-- Font Awesome	 -->
+	<!-- Noty -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.css">
+
+	<!-- Font Awesome -->
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
 	<!-- Google Material Icons -->
@@ -30,17 +33,19 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 
 
-<!-- 	<script src="js/keymaster.js"></script> -->
-	<script src="js/gamepad.js"></script>
-<!-- 	<script src="js/localforage.min.js"></script> -->
-<!-- 	<script src="js/textfitpercent.js"></script> -->
-<!-- 	<script src="js/tools.js"></script> -->
+	<!-- <script src="js/keymaster.js"></script> -->
+	<!-- <script src="js/gamepad.js"></script> -->
+	<!-- <script src="js/localforage.min.js"></script> -->
+	<!-- <script src="js/textfitpercent.js"></script> -->
+	<!-- <script src="js/tools.js"></script> -->
 
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/nipplejs/0.6.8/nipplejs.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.28.1/sweetalert2.all.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.1.2/simplepeer.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.7.2/localforage.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/noty/3.1.4/noty.min.js"></script> -->
+
 
 
 	<!-- discord embed -->
@@ -102,14 +107,14 @@
 				<a id="tab2" class="nav-link" data-toggle="tab" href="#lagless2">Lagless 2</a>
 			</li>
 			<li class="nav-item">
-				<a id="tab3" class="nav-link" data-toggle="tab" href="#lagless3">Lagless 3</a>
+				<a id="tab3" class="nav-link disabled" data-toggle="tab" href="#lagless3">Lagless 3</a>
 			</li>
 			<li class="nav-item">
-				<a id="tab4" class="nav-link" data-toggle="tab" href="#lagless4">Lagless 4</a>
+				<a id="tab4" class="nav-link disabled" data-toggle="tab" href="#lagless4">Lagless 4</a>
 			</li>
-			<li class="nav-item">
-				<a id="tab5" class="nav-link" data-toggle="tab" href="#lagless5">WiiU Lagless</a>
-			</li>
+			<!-- <li class="nav-item">
+				<a id="tab5" class="nav-link disabled" data-toggle="tab" href="#lagless5">WiiU Lagless</a>
+			</li> -->
 			<div id="statusContainer" class="otborder">
 				<i class="material-icons">lock_open</i>
 			</div>
@@ -289,7 +294,7 @@
 						<div id="controlQueue4" class="contents"></div>
 					</div>
 
-					<div id="player5" class="player">
+					<!-- <div id="player5" class="player">
 						<label id="wiiUPlayerCheckbox" class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
 							<input id="player5Checkbox" type="checkbox" />
 							<span class="checkbox-placeholder"></span>
@@ -299,7 +304,7 @@
 						<div id="forfeitTimerBar5" class="contents"></div>
 						<div id="joinLeaveQueue5" class="contents"></div>
 						<div id="controlQueue5" class="contents"></div>
-					</div>
+					</div> -->
 <!-- 						<div id="splits">
 						<div id="splitMetaContainer">
 							<div id="splitContainer">
@@ -497,12 +502,12 @@
 							Lagless 2 Settings<br>
 							<hr>
 
-							FPS: <span id="fps2">30</span>
+							FPS: <span id="fps2">20</span>
 							<div class="buttonSettings">
-								<button id="20fps" class="fpsButton btn btn-secondary">20FPS</button>
-								<button id="30fps" class="fpsButton btn btn-secondary">30FPS</button>
-								<button id="45fps" class="fpsButton btn btn-secondary">45FPS</button>
-								<button id="60fps" class="fpsButton btn btn-secondary">60FPS</button>
+								<button id="20fps2" class="fpsButton btn btn-secondary">20FPS</button>
+								<button id="30fps2" class="fpsButton btn btn-secondary">30FPS</button>
+								<!-- <button id="45fps2" class="fpsButton btn btn-secondary">45FPS</button> -->
+								<!-- <button id="60fps2" class="fpsButton btn btn-secondary">60FPS</button> -->
 							</div>
 							Bitrate: <span id="bitrate2">1</span>
 							<div class="mysliderContainer">
@@ -513,20 +518,39 @@
 								<div id="scaleSlider2" class="myslider"></div>
 							</div>
 							<div class="buttonSettings">
-								<button id="240p" class="resolutionButton btn btn-secondary">240p</button>
-								<button id="360p" class="resolutionButton btn btn-secondary">360p</button>
-								<button id="720p" class="resolutionButton btn btn-secondary">720p</button>
+								<button id="240p2" class="resolutionButton btn btn-secondary">240p</button>
+								<button id="360p2" class="resolutionButton btn btn-secondary">360p</button>
+								<button id="540p2" class="resolutionButton btn btn-secondary">540p</button>
+								<button id="720p2" class="resolutionButton btn btn-secondary">720p</button>
 							</div>
-<!-- 							offsetX: <span id="offsetX2">0</span>
-							<div class="mysliderContainer">
-								<div id="offsetXSlider2" class="myslider"></div>
-							</div>
-							offsetY: <span id="offsetY2">0</span>
-							<div class="mysliderContainer">
-								<div id="offsetYSlider2" class="myslider"></div>
-							</div> -->
 						</div>
 
+						<div id="lagless3Settings" class="laglessSettings">
+							Lagless 3 Settings<br>
+							<hr>
+
+							FPS: <span id="fps3">20</span>
+							<div class="buttonSettings">
+								<button id="20fps3" class="fpsButton btn btn-secondary">20FPS</button>
+								<button id="30fps3" class="fpsButton btn btn-secondary">30FPS</button>
+								<!-- <button id="45fps3" class="fpsButton btn btn-secondary">45FPS</button> -->
+								<!-- <button id="60fps3" class="fpsButton btn btn-secondary">60FPS</button> -->
+							</div>
+							Bitrate: <span id="bitrate3">1</span>
+							<div class="mysliderContainer">
+								<div id="bitrateSlider3" class="myslider"></div>
+							</div>
+							Scale: <span id="scale3">720</span>
+							<div class="mysliderContainer">
+								<div id="scaleSlider3" class="myslider"></div>
+							</div>
+							<div class="buttonSettings">
+								<button id="240p3" class="resolutionButton btn btn-secondary">240p</button>
+								<button id="360p3" class="resolutionButton btn btn-secondary">360p</button>
+								<button id="540p3" class="resolutionButton btn btn-secondary">540p</button>
+								<button id="720p3" class="resolutionButton btn btn-secondary">720p</button>
+							</div>
+						</div>
 					</div>
 
 					<div id="waitlistContainer" class="settingsPanel otborder">

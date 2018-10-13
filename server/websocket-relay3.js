@@ -4,7 +4,7 @@ const port = 8130;
 const ws = require("ws");
 const NALseparator = new Buffer([0, 0, 0, 1]); // NAL break
 
-server.listen(port, function() {
+server.listen(port, function () {
 	console.log("Server listening at port %d", port);
 });
 
@@ -34,7 +34,7 @@ socketServer.connectionCount = 0;
 // 		console.log("Disconnected WebSocket (" + socketServer.connectionCount + " total)");
 // 	});
 // });
-socketServer.on("connection", function(socket) {
+socketServer.on("connection", function (socket) {
 
 	var self = this;
 	console.log("New guy");
@@ -58,21 +58,21 @@ socketServer.on("connection", function(socket) {
 	//     self.readStream.pause();
 	// });
 
-	socket.on("close", function() {
+	socket.on("close", function () {
 		//self.readStream.end();
 		console.log("stopping client interval");
 	});
 });
 socketServer.on("open", function open() {
-    console.log("connected");
-    socketServer.send(Date.now());
+	console.log("connected");
+	socketServer.send(Date.now());
 });
-socketServer.broadcast = function(data) {
-	socketServer.clients.forEach(function(socket) {
-// 		if (socket.buzy) {
-// 			return;
-// 		}
-// 		socket.buzy = false;
+socketServer.broadcast = function (data) {
+	socketServer.clients.forEach(function (socket) {
+		// 		if (socket.buzy) {
+		// 			return;
+		// 		}
+		// 		socket.buzy = false;
 		socket.send(Buffer.concat([NALseparator, data]), {
 			binary: true
 		}, function ack(error) {
@@ -82,8 +82,8 @@ socketServer.broadcast = function(data) {
 }
 
 
-io.on("connection", function(socket) {
-	socket.on("videoData3", function(data) {
+io.on("connection", function (socket) {
+	socket.on("videoData3", function (data) {
 		socketServer.broadcast(data);
 	});
 });

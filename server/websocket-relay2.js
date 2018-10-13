@@ -3,7 +3,7 @@ const io = require("socket.io")(server);
 const port = 8120;
 const ws = require("ws");
 
-server.listen(port, function() {
+server.listen(port, function () {
 	console.log("Server listening at port %d", port);
 });
 
@@ -20,7 +20,7 @@ let socketServer = new ws.Server({
 	perMessageDeflate: false
 });
 socketServer.connectionCount = 0;
-socketServer.on("connection", function(socket, upgradeReq) {
+socketServer.on("connection", function (socket, upgradeReq) {
 	socketServer.connectionCount++;
 	console.log(
 		"New WebSocket Connection: ",
@@ -28,12 +28,12 @@ socketServer.on("connection", function(socket, upgradeReq) {
 		(upgradeReq || socket.upgradeReq).headers["user-agent"],
 		"(" + socketServer.connectionCount + " total)"
 	);
-	socket.on("close", function(code, message) {
+	socket.on("close", function (code, message) {
 		socketServer.connectionCount--;
 		console.log("Disconnected WebSocket (" + socketServer.connectionCount + " total)");
 	});
 });
-socketServer.broadcast = function(data) {
+socketServer.broadcast = function (data) {
 	socketServer.clients.forEach(function each(client) {
 		if (client.readyState === ws.OPEN) {
 			client.send(data);
@@ -41,8 +41,8 @@ socketServer.broadcast = function(data) {
 	});
 };
 
-io.on("connection", function(socket) {
-	socket.on("videoData2", function(data) {
+io.on("connection", function (socket) {
+	socket.on("videoData2", function (data) {
 		socketServer.broadcast((data));
 	});
 });

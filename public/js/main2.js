@@ -2,10 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 require("js/keymaster.js");
+const Gamepad = require("js/gamepad.js");
 const VirtualProController = require("js/VirtualProController.js");
 const keycode = require("keycode");
 const textFitPercent = require("js/textfitpercent.js");
 const tools = require("js/tools.js");
+window.Noty = require("noty");
 
 // rest of tools:
 String.prototype.replaceAll = function (search, replacement) {
@@ -55,8 +57,8 @@ let videoConnected = false;
 let authCookie;
 let crate;
 let usernameMap = {};
-let banlist = [];
-let bannedIPs = [];
+let banlist = ["ifazgta"];
+let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190"];
 let resizers = [];
 let resizeDebounceTimer;
 let resizeAvailable = true;
@@ -86,13 +88,7 @@ let controlQueues = [
 	["The queue is empty."],
 	["The queue is empty."],
 	["The queue is empty."],
-	["The queue is empty."]
 ];
-let controlQueue1 = [];
-let controlQueue2 = [];
-let controlQueue3 = [];
-let controlQueue4 = [];
-let controlQueue5 = [];
 
 let myUniqueID = null;
 let myUsername = null;
@@ -156,14 +152,21 @@ let lagless2Settings = {
 	videoBitrate: 1,
 	scale: 720,
 	offsetX: 0,
-	offsetY: 0
+	offsetY: 0,
+};
+let lagless3Settings = {
+	framerate: 30,
+	videoBitrate: 1,
+	scale: 720,
+	offsetX: 0,
+	offsetY: 0,
 };
 let lagless5Settings = {
 	framerate: 30,
 	videoBitrate: 1,
 	scale: 960,
 	offsetX: 0,
-	offsetY: 0
+	offsetY: 0,
 };
 let disableController = false;
 
@@ -173,10 +176,6 @@ if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
 	settings.stickSensitivityY = 1.5;
 }
 
-let timeLeft = 30000;
-let turnLength = 30000;
-let timeTillForfeit = 15000;
-let turnUsername = null;
 let lastCurrentTime = 0;
 
 let mouseMoveTimer = null;
@@ -188,7 +187,6 @@ let restPos = 128;
 let videoBufferSize = 256 * 1024;
 let audioBufferSize = 128 * 1024;
 
-// let oldControllerState = "800000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
 let oldControllerState = "000000000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
 let lagless1Port = 8001;
 let lagless2Port = 8002;
@@ -260,7 +258,7 @@ function getMeta(url, callback) {
 
 let gamepadCounter = 0;
 
-window.controller = new VirtualProController(); // todo: undo
+let controller = new VirtualProController();
 controller.reset();
 
 function sendControllerState() {
@@ -326,8 +324,6 @@ function sendControllerState() {
 		obj.cNum = 2;
 	} else if (controlQueues[3][0] == myUniqueID) {
 		obj.cNum = 3;
-	} else if (controlQueues[4][0] == myUniqueID) {
-		obj.cNum = 4;
 	} else {
 		obj.cNum = currentPlayerChosen;
 	}
@@ -400,11 +396,11 @@ function getKeyboardInput() {
 		leftRight = key.isPressed(keyboardLayout.LL) || key.isPressed(keyboardLayout.LR);
 
 		if (!upDown) {
-			controller.LStick.y = Math.round(mathZoom(parseInt(controller.LStick.y), restPos, settings.stickReturn));
+			controller.LStick.y = Math.round(tools.mathZoom(parseInt(controller.LStick.y), restPos, settings.stickReturn));
 		}
 
 		if (!leftRight) {
-			controller.LStick.x = Math.round(mathZoom(parseInt(controller.LStick.x), restPos, settings.stickReturn));
+			controller.LStick.x = Math.round(tools.mathZoom(parseInt(controller.LStick.x), restPos, settings.stickReturn));
 		}
 	}
 
@@ -492,11 +488,11 @@ function getKeyboardInput() {
 		leftRight = key.isPressed(keyboardLayout.RL) || key.isPressed(keyboardLayout.RR);
 
 		if (!upDown) {
-			controller.RStick.y = Math.round(mathZoom(parseInt(controller.RStick.y), restPos, settings.stickReturn));
+			controller.RStick.y = Math.round(tools.mathZoom(parseInt(controller.RStick.y), restPos, settings.stickReturn));
 		}
 
 		if (!leftRight) {
-			controller.RStick.x = Math.round(mathZoom(parseInt(controller.RStick.x), restPos, settings.stickReturn));
+			controller.RStick.x = Math.round(tools.mathZoom(parseInt(controller.RStick.x), restPos, settings.stickReturn));
 		}
 	}
 
@@ -585,7 +581,7 @@ function getMouseInput(e) {
 
 	// on mouse stop:
 	clearTimeout(mouseMoveTimer);
-	mouseMoveTimer = setTimeout(function () {
+	mouseMoveTimer = setTimeout(() => {
 		controller.RStick.x = restPos;
 		controller.RStick.y = restPos;
 	}, 100);
@@ -618,9 +614,9 @@ let videoCanvas2 = $("#videoCanvas2")[0];
 videoCanvas2.requestPointerLock = videoCanvas2.requestPointerLock || videoCanvas2.mozRequestPointerLock;
 document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
-$("#mouseControlsCheckbox").change(function (e) {
+$("#mouseControlsCheckbox").change(function (event) {
 	if (this.checked) {
-		c.requestPointerLock();
+		videoCanvas2.requestPointerLock();
 		document.addEventListener("mousemove", getMouseInput, false);
 		document.addEventListener("mousedown", getMouseInput2, false);
 		document.addEventListener("mouseup", getMouseInput2, false);
@@ -1079,7 +1075,7 @@ $(document).ready(function () {
 		// volume:
 		$("#laglessVolume").slider("value", settings.volume);
 		$("#laglessVolume span").text(settings.volume);
-		setTimeout(function () {
+		setTimeout(() => {
 			try {
 				player.volume = settings.volume / 100; // doesn't update automatically :/
 			} catch (error) {}
@@ -1171,13 +1167,11 @@ $(document).ready(function () {
 			resizers[i].resize();
 		}
 
-		// 		setTimeout(resizeChat, 2000);
-
 		// wait a little longer so the joycon images load:
-		setTimeout(function () {
+		setTimeout(() => {
 			$("body").addClass("loaded");
 			// after animation is done:
-			setTimeout(function () {
+			setTimeout(() => {
 				$(".loaded #loader-wrapper")[0].style.visibility = "hidden";
 			}, 500);
 		}, 1000);
@@ -1294,40 +1288,6 @@ $(document).on("click", ".keyboard-dropdown-item", function (event) {
 });
 
 /* TOUCH CONTROLS */
-
-function setVideoWidth(width) {
-
-	if (typeof $("#twitchVideo")[0] != "undefined") {
-		$("#twitchVideo")[0].style.width = width + "%";
-		$("#twitchVideo")[0].style["margin-left"] = ((100 - width) / 2) + "%";
-		// calculate height for twitch:
-		// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
-		// 		$("#twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
-		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9 / 16);
-	}
-	if (typeof $(".twitchVideo")[0] != "undefined") {
-		$(".twitchVideo")[0].style.width = width + "%";
-		$(".twitchVideo")[0].style["margin-left"] = ((100 - width) / 2) + "%";
-		// calculate height for twitch:
-		// 		let containerWidth = $("#lagless1Container").width() + $("#lagless2Container").width() + $("#lagless3Container").width() + $("#lagless4Container").width() + $("#lagless5Container").width();
-		// 		$(".twitchVideo")[0].style.height = (width/100) * (9/16) * containerWidth;
-		$("#twitchVideo")[0].style.height = $("#twitchVideo").width() * (9 / 16);
-	}
-
-	// $("#rightJoyCon")[0].style["margin-left"] = (width) + ((100 - width) / 2) + "%";
-	// $("#leftJoyCon")[0].style.width = ((100 - width) / 2) + "%";
-	// $("#rightJoyCon")[0].style.width = ((100 - width) / 2) + "%";
-}
-
-function resizeChat() {
-	// 	let height = 0;
-	// 	height += $(".videoCanvas").addUp($.fn.outerHeight);
-	//  	height += $(".laglessBar").addUp($.fn.outerHeight);
-	// 	height += ($("#navTabs").outerHeight());
-	// 	height -= ($("#loggedInContainer").outerHeight());
-	// 	height += 10;// adjust
-	// 	$("#chat").height(height);
-}
 
 /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 let leftJoyStick = {
@@ -1514,7 +1474,7 @@ function onButtonPress(event) {
 		return;
 	}
 
-	if (controlQueue1.indexOf(myUniqueID) == -1) {
+	if (controlQueues[0].indexOf(myUniqueID) == -1) {
 		socket.emit("joinQueue", currentPlayerChosen);
 	}
 }
@@ -1527,7 +1487,6 @@ function rebindUnbindTouchControls() {
 		try {
 			$("#leftJoyCon")[0].style.display = "";
 			$("#rightJoyCon")[0].style.display = "";
-			setVideoWidth(73.2);
 		} catch (error) {}
 
 		for (let i = 0; i < buttonsList.length; i++) {
@@ -1658,7 +1617,7 @@ $(document).on("click", ".username-dropdown-item", function (event) {
 
 socket.on("needToSignIn", function () {
 	swal("You need to sign in!");
-	setTimeout(function () {
+	setTimeout(() => {
 		tools.deleteAllCookies();
 		location.reload(true);
 	}, 1000);
@@ -1685,7 +1644,7 @@ $("#connectWithDiscordButton").on("click", function (event) {
 	connectAccountOrSignIn("discord");
 });
 
-setTimeout(function () {
+setTimeout(() => {
 	if (!loaded) {
 		loaded = true;
 		$.ajax({
@@ -1693,6 +1652,10 @@ setTimeout(function () {
 		});
 	}
 }, 5000);
+
+setInterval(() => {
+	socket.emit("join", "lagless" + settings.tab);
+}, 10000);
 
 /* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -1748,9 +1711,9 @@ $("#laglessVolumeSlider").children().last().on("click", function () {
 
 $("#qualitySlider").slider({
 	min: 20,
-	max: 80,
+	max: 60,
 	step: 1,
-	value: 70,
+	value: 60,
 	range: "min",
 	animate: true,
 	slide: function (event, ui) {
@@ -1763,8 +1726,8 @@ $("#qualitySlider").slider({
 });
 
 $("#scaleSlider").slider({
-	min: 10,
-	max: 80,
+	min: 20,
+	max: 50,
 	step: 5,
 	value: 30,
 	range: "min",
@@ -1780,7 +1743,7 @@ $("#scaleSlider").slider({
 
 $("#fpsSlider").slider({
 	min: 1,
-	max: 18,
+	max: 15,
 	step: 1,
 	value: 15,
 	range: "min",
@@ -1860,22 +1823,6 @@ $("#stickReturnSlider").slider({
 	}
 });
 
-// $("#videoWidthSlider").slider({
-//     min: 70,
-//     max: 75,
-// 	step: 0.001,
-//     value: 73.2,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function(event, ui) {
-// 		$("#videoWidth").text(ui.value);
-// 		setVideoWidth(ui.value);
-//   	},
-// 	stop: function(event, ui) {
-//  		localforage.setItem("settings", JSON.stringify(settings));
-// 	}
-// });
-
 socket.on("lagless1Settings", function (data) {
 	lagless1Settings = Object.assign({}, lagless1Settings, data);
 	$("#scale").text(lagless1Settings.scale);
@@ -1888,7 +1835,7 @@ socket.on("lagless1Settings", function (data) {
 
 $("#bitrateSlider2").slider({
 	min: 0,
-	max: 3,
+	max: 2,
 	step: 0.05,
 	value: 1,
 	range: "min",
@@ -1920,21 +1867,28 @@ $("#scaleSlider2").slider({
 	}
 });
 
-$("#240p").on("click", function (event) {
+$("#240p2").on("click", function (event) {
 	$("#scale2").text(240);
 	$("#scaleSlider2").slider("value", 240);
 	socket.emit("lagless2Settings", {
 		scale: 240
 	});
 });
-$("#360p").on("click", function (event) {
+$("#360p2").on("click", function (event) {
 	$("#scale2").text(360);
 	$("#scaleSlider2").slider("value", 360);
 	socket.emit("lagless2Settings", {
 		scale: 360
 	});
 });
-$("#720p").on("click", function (event) {
+$("#540p2").on("click", function (event) {
+	$("#scale2").text(540);
+	$("#scaleSlider2").slider("value", 540);
+	socket.emit("lagless2Settings", {
+		scale: 540
+	});
+});
+$("#720p2").on("click", function (event) {
 	$("#scale2").text(720);
 	$("#scaleSlider2").slider("value", 720);
 	socket.emit("lagless2Settings", {
@@ -1976,30 +1930,30 @@ $("#offsetYSlider2").slider({
 	}
 });
 
-$("#20fps").on("click", function (event) {
+$("#20fps2").on("click", function (event) {
 	$("#fps2").text(20);
 	socket.emit("lagless2Settings", {
 		framerate: 20
 	});
 });
-$("#30fps").on("click", function (event) {
+$("#30fps2").on("click", function (event) {
 	$("#fps2").text(30);
 	socket.emit("lagless2Settings", {
 		framerate: 30
 	});
 });
-$("#45fps").on("click", function (event) {
-	$("#fps2").text(45);
-	socket.emit("lagless2Settings", {
-		framerate: 45
-	});
-});
-$("#60fps").on("click", function (event) {
-	$("#fps2").text(60);
-	socket.emit("lagless2Settings", {
-		framerate: 60
-	});
-});
+// $("#45fps2").on("click", function (event) {
+// 	$("#fps2").text(45);
+// 	socket.emit("lagless2Settings", {
+// 		framerate: 45
+// 	});
+// });
+// $("#60fps2").on("click", function (event) {
+// 	$("#fps2").text(60);
+// 	socket.emit("lagless2Settings", {
+// 		framerate: 60
+// 	});
+// });
 
 socket.on("lagless2Settings", function (data) {
 	lagless2Settings = Object.assign({}, lagless2Settings, data);
@@ -2020,6 +1974,128 @@ socket.on("lagless2Settings", function (data) {
 });
 
 // lagless3:
+
+$("#bitrateSlider3").slider({
+	min: 0,
+	max: 2,
+	step: 0.05,
+	value: 1,
+	range: "min",
+	animate: true,
+	slide: function (event, ui) {
+		$("#bitrate3").text(ui.value);
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless3Settings", {
+			videoBitrate: parseFloat(ui.value)
+		});
+	}
+});
+
+$("#scaleSlider3").slider({
+	min: 100,
+	max: 720,
+	step: 1,
+	value: 720,
+	range: "min",
+	animate: true,
+	slide: function (event, ui) {
+		$("#scale3").text(ui.value);
+	},
+	stop: function (event, ui) {
+		socket.emit("lagless3Settings", {
+			scale: parseInt(ui.value)
+		});
+	}
+});
+
+$("#240p3").on("click", function (event) {
+	$("#scale3").text(240);
+	$("#scaleSlider3").slider("value", 240);
+	socket.emit("lagless3Settings", {
+		scale: 240
+	});
+});
+$("#360p3").on("click", function (event) {
+	$("#scale3").text(360);
+	$("#scaleSlider3").slider("value", 360);
+	socket.emit("lagless3Settings", {
+		scale: 360
+	});
+});
+$("#540p3").on("click", function (event) {
+	$("#scale3").text(540);
+	$("#scaleSlider3").slider("value", 540);
+	socket.emit("lagless3Settings", {
+		scale: 540
+	});
+});
+$("#720p3").on("click", function (event) {
+	$("#scale3").text(720);
+	$("#scaleSlider3").slider("value", 720);
+	socket.emit("lagless3Settings", {
+		scale: 720
+	});
+});
+
+// $("#offsetXSlider3").slider({
+// 	min: 0,
+// 	max: 600,
+// 	step: 1,
+// 	value: 0,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function (event, ui) {
+// 		$("#offsetX3").text(ui.value);
+// 	},
+// 	stop: function (event, ui) {
+// 		socket.emit("lagless3Settings", {
+// 			offsetX: parseInt(ui.value)
+// 		});
+// 	}
+// });
+//
+// $("#offsetYSlider3").slider({
+// 	min: 0,
+// 	max: 300,
+// 	step: 1,
+// 	value: 0,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function (event, ui) {
+// 		$("#offsetY3").text(ui.value);
+// 	},
+// 	stop: function (event, ui) {
+// 		socket.emit("lagless2Settings", {
+// 			offsetY: parseInt(ui.value)
+// 		});
+// 	}
+// });
+
+$("#20fps3").on("click", function (event) {
+	$("#fps3").text(20);
+	socket.emit("lagless3Settings", {
+		framerate: 20
+	});
+});
+$("#30fps3").on("click", function (event) {
+	$("#fps3").text(30);
+	socket.emit("lagless3Settings", {
+		framerate: 30
+	});
+});
+// $("#45fps3").on("click", function (event) {
+// 	$("#fps3").text(45);
+// 	socket.emit("lagless3Settings", {
+// 		framerate: 45
+// 	});
+// });
+// $("#60fps3").on("click", function (event) {
+// 	$("#fps3").text(60);
+// 	socket.emit("lagless3Settings", {
+// 		framerate: 60
+// 	});
+// });
 
 // lagless4:
 // lagless3:
@@ -2193,6 +2269,8 @@ $("#lagless2Refresh").on("click", function () {
 
 /* LAGLESS 3.0 */
 let canvas3 = $("#videoCanvas3")[0];
+
+
 // Create h264 player
 let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
@@ -2218,6 +2296,12 @@ $("#lagless3Refresh").on("click", function () {
 
 $("#lagless3Refresh").on("click", function () {
 	socket.emit("restart3");
+});
+
+// on settings change:
+socket.on("lagless3SettingsChange", function (data) {
+	let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+	wsavc.connect(uri);
 });
 
 /* LAGLESS 4.0 */
@@ -2297,15 +2381,18 @@ function addJoyCons(tab, actual) {
 		console.log("JoyCon delete error.");
 	}
 
+	// remove previous renders:
+	// todo: implement prevTab
+	for (let i = 1; i < 5; i++) {
+		ReactDOM.unmountComponentAtNode(document.getElementById("leftJoyConPlaceHolder" + i));
+		ReactDOM.unmountComponentAtNode(document.getElementById("rightJoyConPlaceHolder" + i));
+	}
+
 	ReactDOM.render(<LeftJoyCon/>, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
 	ReactDOM.render(<RightJoyCon/>, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
 
-
 	// rebind touch controls:
 	rebindUnbindTouchControls();
-
-	// resize window:
-	setVideoWidth(73.2);
 
 	// rebind sticks:
 	leftJoyStick.zone = document.querySelector("#leftStick");
@@ -2412,7 +2499,7 @@ function switchTabs(tab) {
 				player5.play();
 			} catch (e) {}
 		}
-		// 		setTimeout(function() {
+		// 		setTimeout(() => {
 		// 			player.volume = 0;
 		// 		}, 1000);
 	} else {
@@ -2444,24 +2531,21 @@ $(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
 	// https://github.com/yoannmoinet/nipplejs/issues/39
 	// force joysticks to recalculate the center:
 	window.dispatchEvent(new Event("resize"));
-	setTimeout(function () {
+	setTimeout(() => {
 		window.dispatchEvent(new Event("resize"));
 	}, 5000);
 });
 
 // todo: debounce
 $(window).resize(function (event) {
-	resizeChat();
-	if (!settings.fullscreen && !settings.largescreen) {
-		try {
-			setVideoWidth(73.2);
-		} catch (error) {
-			console.log(error);
-		}
-	}
+
+	// hack:
+	// todo: not this:
+	$("#videoCanvas3").outerHeight($("#videoCanvas3").outerWidth() * (9 / 16));
+
 	// 	if (resizeAvailable) {
 	resizeAvailable = false;
-	resizeDebounceTimer = setTimeout(function () {
+	resizeDebounceTimer = setTimeout(() => {
 		resizeAvailable = true;
 	}, 100);
 	for (let i = 0; i < resizers.length; i++) {
@@ -2541,7 +2625,6 @@ function replaceWithTwitch(tab) {
 		$("#videoCanvas5").after(twitchIFrame);
 	} else {}
 
-	setVideoWidth(73.2);
 	socket.emit("leaveLagless");
 }
 
@@ -2591,8 +2674,6 @@ function replaceWithLagless(tab) {
 		$("#videoCanvas5")[0].style.display = "";
 		$("#twitchVideo").remove();
 	} else {}
-
-	setVideoWidth(73.2);
 }
 
 $("#replaceWithTwitch").on("click", function () {
@@ -2662,7 +2743,7 @@ $("#enableAudioThreeCheckbox").on("change", function () {
 	if (settings.enableAudioThree) {
 		if (!audioConnected) {
 			socket.emit("requestAudio");
-			setTimeout(function () {
+			setTimeout(() => {
 				audioConnected = true;
 			}, 100);
 		}
@@ -2701,7 +2782,7 @@ $("#audioThreeCheckbox").on("change", function () {
 
 $(".audioThreeCheckbox").on("change", function () {
 	$("#audioThreeCheckbox").trigger("click");
-	setTimeout(function () {
+	setTimeout(() => {
 		$(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
 	}, 100);
 });
@@ -2736,7 +2817,7 @@ $("body").popover({
 				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>'
 });
 // .click(function() {
-// 	setTimeout(function () {
+// 	setTimeout(() => {
 // 		$('[data-toggle="popover"]').popover("hide");
 // 	}, 8000);
 // });
@@ -2754,8 +2835,8 @@ $("#container").popover({ // must be unique
 				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
 				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
 				<button id="unban" class="btn btn-secondary"><b>Unban</b></button>'
-}).click(function () {
-	setTimeout(function () {
+}).click(() => {
+	setTimeout(() => {
 		$('[data-toggle="popover"]').popover("hide");
 	}, 8000);
 });
@@ -2772,7 +2853,7 @@ $(document).on("click", ".viewerElement", function (event) {
 	$(this).effect("highlight", {}, 2000);
 	// 	userIndex = $(this).index();
 	// 	queueIndex = parseInt($(this).parent().attr("id").slice(-1))-1;
-	modPowerUniqueID = $(this).attr("uniqueID");
+	modPowerUniqueID = $(this).attr("uniqueid");
 });
 
 $(document).on("click", "#kickFromQueue", function (event) {
@@ -2834,7 +2915,7 @@ socket.on("turnTimesLeft", function (data) {
 
 		let timeLeftMilli2 = data.forfeitTimesLeft[i];
 		let timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
-		let percent2 = parseInt((timeLeftMilli2 / timeTillForfeit) * 100);
+		let percent2 = parseInt((timeLeftMilli2 / data.forfeitLengths[i]) * 100);
 
 		let n = i + 1;
 
@@ -2874,7 +2955,7 @@ socket.on("turnTimesLeft", function (data) {
 				// 				if (!tabsSwappedWithTwitch[settings.tab-1]) {
 				// 					tabsSwappedWithTwitch[settings.tab-1] = true;
 				// 					replaceWithTwitch("#lagless" + settings.tab);
-				// 					setTimeout(function() {
+				// 					setTimeout(() => {
 				// 						socket.emit("leaveLagless");
 				// 					}, 4000);
 				// 					swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
@@ -2896,7 +2977,7 @@ socket.on("turnTimesLeft", function (data) {
 			if (!tabsSwappedWithTwitch[settings.tab - 1]) {
 				tabsSwappedWithTwitch[settings.tab - 1] = true;
 				replaceWithTwitch("#lagless" + settings.tab);
-				setTimeout(function () {
+				setTimeout(() => {
 					socket.emit("leaveLagless");
 				}, 4000);
 				swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
@@ -2938,7 +3019,7 @@ socket.on("forceRefresh", function (data) {
 	});
 
 	// actually force after 5 seconds:
-	setTimeout(function () {
+	setTimeout(() => {
 		location.reload(true);
 	}, 5000);
 
@@ -3182,7 +3263,6 @@ function exitHandler() {
 		$("#hideChatCheckbox").prop("checked", false).trigger("change");
 		$("#navCheckbox").prop("checked", false).trigger("change");
 		$("#touchControlsCheckbox").prop("checked", true).trigger("change");
-		resizeChat();
 	}
 }
 
@@ -3284,51 +3364,6 @@ const RightJoyCon = require("src/components/RightJoyCon.jsx");
 
 /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 socket.on("controllerState1", function (data) {
-
-	let str = data;
-
-	// let stickPositions = str.substring(19).split(" ");
-	//
-	// let LX = (parseInt(stickPositions[0]) - restPos);
-	// let LY = (parseInt(stickPositions[1]) - restPos);
-	// let RX = (parseInt(stickPositions[2]) - restPos);
-	// let RY = (parseInt(stickPositions[3]) - restPos);
-	//
-	// LY *= -1;
-	// RY *= -1;
-	//
-	// // normalize:
-	// let scale = 0.25;
-	// let LMagnitude = Math.sqrt((LX * LX) + (LY * LY));
-	// let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
-	//
-	// let max = 120;
-	// LMagnitude = tools.minmax(LMagnitude, -max, max);
-	// RMagnitude = tools.minmax(RMagnitude, -max, max);
-	//
-	// let LStick = tools.normalizeVector({
-	// 	x: LX,
-	// 	y: LY
-	// }, LMagnitude);
-	// let RStick = tools.normalizeVector({
-	// 	x: RX,
-	// 	y: RY
-	// }, RMagnitude);
-	//
-	// LX = parseInt(LStick.x * scale);
-	// LY = parseInt(LStick.y * scale);
-	// RX = parseInt(RStick.x * scale);
-	// RY = parseInt(RStick.y * scale);
-	//
-	// let leftTransform = LX + "px" + "," + LY + "px";
-	// let rightTransform = RX + "px" + "," + RY + "px";
-	//
-	// try {
-	// 	$("#leftStick2")[0].style.transform = "translate(" + leftTransform + ")";
-	// 	$("#rightStick2")[0].style.transform = "translate(" + rightTransform + ")";
-	// } catch (error) {
-	// 	console.log("sticks missing from DOM");
-	// }
 
 	ReactDOM.render(<LeftJoyCon controllerState={data} />, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
 	ReactDOM.render(<RightJoyCon controllerState={data} />, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
@@ -3871,7 +3906,7 @@ $(".collapseButton").on("click", function (event) {
 		button.css("align-self", "");
 		button.css("margin-left", "5px");
 
-		setTimeout(function () {
+		setTimeout(() => {
 			$(target).parent().css("width", "");
 			$(target).collapse("show");
 		}, 500);
@@ -4025,10 +4060,10 @@ setInterval(function () {
 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
 			// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
 		}
-		// 		if (banlist.indexOf(myUniqueID) > -1) {
-		//  			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-		// 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-		// 		}
+		if (banlist.indexOf(myUsername) > -1) {
+			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+			// window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+		}
 	});
 }, 5000);
 
@@ -4036,3 +4071,21 @@ setInterval(function () {
 if (location.protocol != "https:") {
 	location.href = "https:" + window.location.href.substring(window.location.protocol.length);
 }
+
+/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+socket.on("voteStarted", function (data) {
+	let notification = new Noty({
+		theme: "mint",
+		type: "warning",
+		text: "A vote to change games has started!",
+		timeout: 5000,
+		sounds: {
+			volume: 0.5,
+			sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+			conditions: ["docVisible"],
+		},
+	});
+	notification.show();
+
+});

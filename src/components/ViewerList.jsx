@@ -69,11 +69,10 @@ export default class ViewerList extends PureComponent {
 				// 				lists.push(this.state.viewerNames.map(name => <li key={name}>{name}</li>));
 			}
 			for (let j = 0; j < viewerNames[i].length; j++) {
-				let html = <button key={i + ":" + j} className="viewerElement dropdown-item" data-toggle="popover" tabIndex="0">{viewerNames[i][j]}</button>;
+				let html = <button key={i + ":" + j} className="viewerElement dropdown-item" data-toggle="popover" tabIndex="0" uniqueid={this.props.viewerIDs[i][j]}>{viewerNames[i][j]}</button>;
 				viewers.push(html);
 			}
 		}
-		//this.state.viewerNames.map(name => <li key={name}>{name}</li>)
 		return viewers;
 	}
 

@@ -22,12 +22,12 @@ html {
 	height: 100%;
 }
 
-.twitchVideo {
+#twitchVideo {
 	/*   position: absolute; */
 	/*   top: 0; */
 	/*   right: 0; */
 	width: 73.2%;
-	margin-left: 13.4%;
+	/* margin-left: 13.4%; */
 }
 
 #playersContainer {
@@ -385,6 +385,13 @@ flex-direction: column;
 	align-self: center;
 }
 
+#videoCanvas3 {
+	align-self: unset;
+	/* width: unset; */
+	/* height: unset; */
+}
+
+
 .laglessBar {
 	display: flex;
 	justify-content: space-evenly;
@@ -533,6 +540,10 @@ ul {
 .laglessSettings {}
 
 #lagless2Settings {
+	margin-top: 10px;
+}
+
+#lagless3Settings {
 	margin-top: 10px;
 }
 
