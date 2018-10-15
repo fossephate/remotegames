@@ -24,7 +24,7 @@ export default class JoinLeaveQueueButton extends PureComponent {
 			buttonText = "Join Queue";
 		}
 
-		let elementID = buttonType + this.props.num
+		let elementID = buttonType + this.props.num;
 		let elementClass = buttonType + " btn btn-secondary";
 
 		return <button id={elementID} className={elementClass}>{buttonText}</button>;

@@ -53,10 +53,13 @@ export default class ViewerList extends PureComponent {
 
 		let viewerNames = [];
 
-		for (let i = 0; i < this.props.viewerIDs.length; i++) {
+		for (let i = 0; i < this.props.uniqueIDs.length; i++) {
 			viewerNames.push([]);
-			for (let j = 0; j < this.props.viewerIDs[i].length; j++) {
-				let name = this.props.usernameMap[this.props.viewerIDs[i][j]];
+			for (let j = 0; j < this.props.uniqueIDs[i].length; j++) {
+				let name = this.props.usernameMap[this.props.uniqueIDs[i][j]];
+				if (name == null) {
+					name = "guest";
+				}
 				viewerNames[i].push(name);
 			}
 		}
@@ -69,7 +72,7 @@ export default class ViewerList extends PureComponent {
 				// 				lists.push(this.state.viewerNames.map(name => <li key={name}>{name}</li>));
 			}
 			for (let j = 0; j < viewerNames[i].length; j++) {
-				let html = <button key={i + ":" + j} className="viewerElement dropdown-item" data-toggle="popover" tabIndex="0" uniqueid={this.props.viewerIDs[i][j]}>{viewerNames[i][j]}</button>;
+				let html = <button key={i + ":" + j} className="viewerElement dropdown-item" data-toggle="popover" tabIndex="0" uniqueid={this.props.uniqueIDs[i][j]}>{viewerNames[i][j]}</button>;
 				viewers.push(html);
 			}
 		}

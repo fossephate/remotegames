@@ -2,10 +2,12 @@ import React, { Component, PureComponent } from "react";
 
 import TurnTimer from "./TurnTimer.jsx";
 import ForfeitTimer from "./ForfeitTimer.jsx";
+import ControlQueue from "./ControlQueue.jsx";
+import JoinLeaveQueueButton from "./JoinLeaveQueueButton.jsx";
 
 
 
-export default class Player extends Component {
+export default class Player extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -16,17 +18,17 @@ export default class Player extends Component {
 	render() {
 
 		return (
-			<React.Fragment>
-				<label class="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
-					<input id={"player"+this.props.playerNum+"Checkbox"} type="checkbox" />
+			<div id={"player" + this.props.num} className="player">
+				<label className="playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg">
+					<input id={"player" + this.props.num + "Checkbox"} type="checkbox" />
 					<span className="checkbox-placeholder"></span>
 					Player {this.props.playerNum}
 				</label>
-				<TurnTimer />
-				<ForfeitTimer />
-				<button id="requestTurn1" class="requestTurn btn btn-secondary" code="0">Join Queue</button>
-				<ul id="controlQueue1" class="controlQueue list-group"></ul>
-			</React.Fragment>
+				<TurnTimer name={this.props.usernameMap[this.props.controlQueue[0]]} percent={this.props.player.turnPercent} timeLeft={this.props.player.turnTimeLeft}/>
+				<ForfeitTimer name={this.props.usernameMap[this.props.controlQueue[0]]} percent={this.props.player.forfeitPercent} timeLeft={this.props.player.forfeitTimeLeft}/>
+				<JoinLeaveQueueButton num={this.props.num} controlQueue={this.props.controlQueue} myID={this.props.myID} />
+				<ControlQueue uniqueIDs={this.props.controlQueue} usernameMap={this.props.usernameMap} darkTheme={this.props.darkTheme}/>
+			</div>
 		);
 
 	}

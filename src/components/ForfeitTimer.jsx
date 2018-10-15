@@ -27,8 +27,8 @@ export default class TurnTimer extends PureComponent {
 	render() {
 
 		return (
-			<div id={"forfeitTimerBar" + this.props.num} className="forfeitTimerBar progress">
-				<div id={"forfeitTimerBarChild" + this.props.num} className="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" style={this.getStyle()}>
+			<div className="forfeitTimerBar progress">
+				<div className="forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active" style={this.getStyle()}>
 					{this.getBarText()}
 				</div>
 			</div>

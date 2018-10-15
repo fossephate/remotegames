@@ -97,14 +97,14 @@ let pluslist = [];
 let sublist = [];
 
 // todo: combine:
-laglessClientIds = [
+let laglessClientIds = [
 	[],
 	[],
 	[],
 	[],
 	[],
 ];
-laglessClientNames = [
+laglessClientUniqueIds = [
 	[],
 	[],
 	[],
@@ -769,6 +769,9 @@ io.on("connection", function (socket) {
 					if (sublist.indexOf(account.twitch.displayName) > -1) {
 						account.is_sub = true;
 					}
+					if (pluslist.indexOf(account.twitch.displayName) > -1) {
+						account.is_plus = true;
+					}
 				}
 				if (account.connectedAccounts.indexOf("youtube") > -1) {
 					clients[index].validUsernames.push(account.youtube.displayName);
@@ -959,9 +962,7 @@ io.on("connection", function (socket) {
 		// check to make sure they aren't in this queue (so we don't push it more than once)
 		// done above^
 		controlQueues[cNum].push(client.uniqueID);
-		io.emit("controlQueues", {
-			controlQueues: controlQueues
-		});
+		io.emit("controlQueues", controlQueues);
 
 		// reset timers when you join the queue & you're the only person in the queue:
 		if (controlQueues[cNum].length == 1) {
@@ -990,9 +991,7 @@ io.on("connection", function (socket) {
 			return;
 		}
 		controlQueues[cNum].splice(index, 1);
-		io.emit("controlQueues", {
-			controlQueues: controlQueues
-		});
+		io.emit("controlQueues", controlQueues);
 
 		if (controlQueues[cNum].length >= 1) {
 			if (index === 0) {
@@ -1805,9 +1804,7 @@ function forfeitTurn(uniqueID, cNum) {
 	}
 
 	controlQueues[cNum].splice(index, 1);
-	io.emit("controlQueues", {
-		controlQueues: controlQueues,
-	});
+	io.emit("controlQueues", controlQueues);
 	// stop the controller
 	// io.to("controller").emit("controllerState", "800000000000000 128 128 128 128"); // update this to use restPos
 	io.to("controller").emit("controllerState", "000000000000000000 128 128 128 128"); // update this to use restPos
@@ -1852,12 +1849,15 @@ function emitTurnTimesLeft() {
 		currentPlayers.push(uniqueIDToPreferredUsernameMap[controlQueues[i][0]]);
 	}
 
+	// remove waitlisted people from viewer list:
+
+
 	io.emit("turnTimesLeft", {
 		turnTimesLeft: turnTimesLeft,
 		forfeitTimesLeft: forfeitTimesLeft,
 		turnLengths: turnDurations,
 		forfeitLengths: timeTillForfeitDurations,
-		viewers: [laglessClientNames[0], laglessClientNames[1], laglessClientNames[2], laglessClientNames[3], laglessClientNames[4]],
+		viewers: [laglessClientUniqueIds[0], laglessClientUniqueIds[1], laglessClientUniqueIds[2], laglessClientUniqueIds[3], laglessClientUniqueIds[4]],
 		currentPlayers: currentPlayers,
 		waitlists: waitlists,
 		locked: locked,
@@ -1893,9 +1893,7 @@ function moveLine(cNum) {
 		// stop the controller
 		io.to("controller").emit("controllerState", "800000000000000 128 128 128 128");
 	}
-	io.emit("controlQueues", {
-		controlQueues: controlQueues,
-	});
+	io.emit("controlQueues", controlQueues);
 
 	// sub perk:
 	let index = findClientByUniqueID(controlQueues[cNum][0]);
@@ -1983,44 +1981,44 @@ setInterval(function () {
 	// 		}
 	// 	}
 
-	laglessClientNames[0] = [];
-	laglessClientNames[1] = [];
-	laglessClientNames[2] = [];
-	laglessClientNames[3] = [];
+	laglessClientUniqueIds[0] = [];
+	laglessClientUniqueIds[1] = [];
+	laglessClientUniqueIds[2] = [];
+	laglessClientUniqueIds[3] = [];
 
 	// create viewer list:
 	for (let i = 0; i < laglessClientIds[0].length; i++) {
 		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[0][i]);
 		if (uniqueID != null) {
-			laglessClientNames[0].push(uniqueID);
+			laglessClientUniqueIds[0].push(uniqueID);
 		}
 	}
 	for (let i = 0; i < laglessClientIds[1].length; i++) {
 		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[1][i]);
 		if (uniqueID != null) {
-			laglessClientNames[1].push(uniqueID);
+			laglessClientUniqueIds[1].push(uniqueID);
 		}
 	}
 	for (let i = 0; i < laglessClientIds[2].length; i++) {
 		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[2][i]);
 		if (uniqueID != null) {
-			laglessClientNames[2].push(uniqueID);
+			laglessClientUniqueIds[2].push(uniqueID);
 		}
 	}
 	for (let i = 0; i < laglessClientIds[3].length; i++) {
 		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[3][i]);
 		if (uniqueID != null) {
-			laglessClientNames[3].push(uniqueID);
+			laglessClientUniqueIds[3].push(uniqueID);
 		}
 	}
 
 
 	// reset / copy waitlists:
-	let oldWaitlists = [];
-
-	for (var i = 0; i < waitlists.length; i++) {
-		oldWaitlists.push(waitlists[i].slice());
-	}
+	// let oldWaitlists = [];
+	//
+	// for (var i = 0; i < waitlists.length; i++) {
+	// 	oldWaitlists.push(waitlists[i].slice());
+	// }
 
 	waitlists = [
 		[],
@@ -2033,20 +2031,31 @@ setInterval(function () {
 	for (let i = 0; i < waitlists.length; i++) {
 
 
-		// check if lagless is over capacity:
+		// check if lagless tab is over capacity:
 		if (laglessClientIds[i].length >= waitlistMaxes[i]) { // >= 10/12/18
 			// the number of people we need to put into the waitlist:
 			let numberOfPeopleToWaitlist = laglessClientIds[i].length - waitlistMaxes[i];
 			let exemptCounter = 0;
 
+			// console.log("# to waitlist: " + numberOfPeopleToWaitlist);
+
 			// remove anyone exempt by being in a queue, with a position less than 5:
-			let laglessClientIdsCopy = laglessClientIds[i].slice();
+			let laglessClientIdsCopy = laglessClientIds[i].slice(0);
 			for (let j = 0; j < laglessClientIds[i].length; j++) {
-				let clientIndex = findClientByUniqueID(laglessClientIds[i][j]);
+				let clientIndex = findClientByID(laglessClientIds[i][j]);
 				let client = clients[clientIndex];
 				if (client == null) {
 					// console.log("client was null");
 					continue;
+				}
+				// exempt if they aren't signed in:
+				if (client.uniqueID == null) {
+					let index = laglessClientIdsCopy.indexOf(client.id);
+					if (index > -1) {
+						laglessClientIdsCopy.splice(index);
+					} else {
+						// console.log("index was null1");
+					}
 				}
 				if (client.uniqueID != null) {
 					// mods are exempt:
@@ -2058,13 +2067,22 @@ setInterval(function () {
 						let pos = controlQueues[k].indexOf(client.uniqueID);
 						// if exempt:
 						if (pos > -1 && pos < minQueuePositions[i]) {
-							laglessClientIdsCopy.splice(laglessClientIdsCopy.indexOf(client.id));
+							let index = laglessClientIdsCopy.indexOf(client.id);
+							if (index > -1) {
+								laglessClientIdsCopy.splice(index);
+							} else {
+								// console.log("index was null2");
+							}
 							exemptCounter++;
 						}
 					}
 					//}
 				}
 			}
+
+			// console.log("exempt counter: " + exemptCounter);
+			// console.log(laglessClientIdsCopy);
+
 
 			// now we have a list of non-auto-exempt people:
 			// sort them by the time that they joined, and exempt more people until the queue limit is met
@@ -2074,7 +2092,11 @@ setInterval(function () {
 			for (let j = 0; j < laglessClientIdsCopy.length; j++) {
 				let clientIndex = findClientByID(laglessClientIdsCopy[j]);
 				let client = clients[clientIndex];
-				laglessXClients.push(client);
+				if (client == null) {
+					// console.log("client was null2.");
+				} else {
+					laglessXClients.push(client);
+				}
 			}
 
 			// sort by time joined:
@@ -2085,6 +2107,9 @@ setInterval(function () {
 				laglessXClients.shift();
 				exemptCounter++;
 			}
+			// console.log(laglessXClients);
+			// console.log(laglessClientIdsCopy);
+
 
 			// our final waitlist is everyone in laglessXClients
 			for (let j = 0; j < laglessXClients.length; j++) {
@@ -2096,9 +2121,6 @@ setInterval(function () {
 				}
 			}
 		}
-		/*else if (laglessClientIds[i].length == waitlistMaxes[i]) {
-			waitlists[i] = oldWaitlists[i];
-		}*/
 
 
 	}
@@ -2119,9 +2141,7 @@ setInterval(function () {
 		}
 	}
 
-	io.emit("controlQueues", {
-		controlQueues: controlQueues
-	});
+	io.emit("controlQueues", controlQueues);
 
 	if (splitTimer != null) {
 		splitTimer.getCurrentTime();

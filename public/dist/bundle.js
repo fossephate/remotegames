@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./public/js/main2.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./src/index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -23700,6 +23700,662 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/redux/es/redux.js":
+/*!****************************************!*\
+  !*** ./node_modules/redux/es/redux.js ***!
+  \****************************************/
+/*! exports provided: createStore, combineReducers, bindActionCreators, applyMiddleware, compose, __DO_NOT_USE__ActionTypes */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createStore", function() { return createStore; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "combineReducers", function() { return combineReducers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "bindActionCreators", function() { return bindActionCreators; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "applyMiddleware", function() { return applyMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "compose", function() { return compose; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "__DO_NOT_USE__ActionTypes", function() { return ActionTypes; });
+/* harmony import */ var symbol_observable__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! symbol-observable */ "./node_modules/symbol-observable/es/index.js");
+
+
+/**
+ * These are private action types reserved by Redux.
+ * For any unknown actions, you must return the current state.
+ * If the current state is undefined, you must return the initial state.
+ * Do not reference these action types directly in your code.
+ */
+var randomString = function randomString() {
+  return Math.random().toString(36).substring(7).split('').join('.');
+};
+
+var ActionTypes = {
+  INIT: "@@redux/INIT" + randomString(),
+  REPLACE: "@@redux/REPLACE" + randomString(),
+  PROBE_UNKNOWN_ACTION: function PROBE_UNKNOWN_ACTION() {
+    return "@@redux/PROBE_UNKNOWN_ACTION" + randomString();
+  }
+};
+
+/**
+ * @param {any} obj The object to inspect.
+ * @returns {boolean} True if the argument appears to be a plain object.
+ */
+function isPlainObject(obj) {
+  if (typeof obj !== 'object' || obj === null) return false;
+  var proto = obj;
+
+  while (Object.getPrototypeOf(proto) !== null) {
+    proto = Object.getPrototypeOf(proto);
+  }
+
+  return Object.getPrototypeOf(obj) === proto;
+}
+
+/**
+ * Creates a Redux store that holds the state tree.
+ * The only way to change the data in the store is to call `dispatch()` on it.
+ *
+ * There should only be a single store in your app. To specify how different
+ * parts of the state tree respond to actions, you may combine several reducers
+ * into a single reducer function by using `combineReducers`.
+ *
+ * @param {Function} reducer A function that returns the next state tree, given
+ * the current state tree and the action to handle.
+ *
+ * @param {any} [preloadedState] The initial state. You may optionally specify it
+ * to hydrate the state from the server in universal apps, or to restore a
+ * previously serialized user session.
+ * If you use `combineReducers` to produce the root reducer function, this must be
+ * an object with the same shape as `combineReducers` keys.
+ *
+ * @param {Function} [enhancer] The store enhancer. You may optionally specify it
+ * to enhance the store with third-party capabilities such as middleware,
+ * time travel, persistence, etc. The only store enhancer that ships with Redux
+ * is `applyMiddleware()`.
+ *
+ * @returns {Store} A Redux store that lets you read the state, dispatch actions
+ * and subscribe to changes.
+ */
+
+function createStore(reducer, preloadedState, enhancer) {
+  var _ref2;
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'function' || typeof enhancer === 'function' && typeof arguments[3] === 'function') {
+    throw new Error('It looks like you are passing several store enhancers to ' + 'createStore(). This is not supported. Instead, compose them ' + 'together to a single function');
+  }
+
+  if (typeof preloadedState === 'function' && typeof enhancer === 'undefined') {
+    enhancer = preloadedState;
+    preloadedState = undefined;
+  }
+
+  if (typeof enhancer !== 'undefined') {
+    if (typeof enhancer !== 'function') {
+      throw new Error('Expected the enhancer to be a function.');
+    }
+
+    return enhancer(createStore)(reducer, preloadedState);
+  }
+
+  if (typeof reducer !== 'function') {
+    throw new Error('Expected the reducer to be a function.');
+  }
+
+  var currentReducer = reducer;
+  var currentState = preloadedState;
+  var currentListeners = [];
+  var nextListeners = currentListeners;
+  var isDispatching = false;
+
+  function ensureCanMutateNextListeners() {
+    if (nextListeners === currentListeners) {
+      nextListeners = currentListeners.slice();
+    }
+  }
+  /**
+   * Reads the state tree managed by the store.
+   *
+   * @returns {any} The current state tree of your application.
+   */
+
+
+  function getState() {
+    if (isDispatching) {
+      throw new Error('You may not call store.getState() while the reducer is executing. ' + 'The reducer has already received the state as an argument. ' + 'Pass it down from the top reducer instead of reading it from the store.');
+    }
+
+    return currentState;
+  }
+  /**
+   * Adds a change listener. It will be called any time an action is dispatched,
+   * and some part of the state tree may potentially have changed. You may then
+   * call `getState()` to read the current state tree inside the callback.
+   *
+   * You may call `dispatch()` from a change listener, with the following
+   * caveats:
+   *
+   * 1. The subscriptions are snapshotted just before every `dispatch()` call.
+   * If you subscribe or unsubscribe while the listeners are being invoked, this
+   * will not have any effect on the `dispatch()` that is currently in progress.
+   * However, the next `dispatch()` call, whether nested or not, will use a more
+   * recent snapshot of the subscription list.
+   *
+   * 2. The listener should not expect to see all state changes, as the state
+   * might have been updated multiple times during a nested `dispatch()` before
+   * the listener is called. It is, however, guaranteed that all subscribers
+   * registered before the `dispatch()` started will be called with the latest
+   * state by the time it exits.
+   *
+   * @param {Function} listener A callback to be invoked on every dispatch.
+   * @returns {Function} A function to remove this change listener.
+   */
+
+
+  function subscribe(listener) {
+    if (typeof listener !== 'function') {
+      throw new Error('Expected the listener to be a function.');
+    }
+
+    if (isDispatching) {
+      throw new Error('You may not call store.subscribe() while the reducer is executing. ' + 'If you would like to be notified after the store has been updated, subscribe from a ' + 'component and invoke store.getState() in the callback to access the latest state. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+    }
+
+    var isSubscribed = true;
+    ensureCanMutateNextListeners();
+    nextListeners.push(listener);
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return;
+      }
+
+      if (isDispatching) {
+        throw new Error('You may not unsubscribe from a store listener while the reducer is executing. ' + 'See https://redux.js.org/api-reference/store#subscribe(listener) for more details.');
+      }
+
+      isSubscribed = false;
+      ensureCanMutateNextListeners();
+      var index = nextListeners.indexOf(listener);
+      nextListeners.splice(index, 1);
+    };
+  }
+  /**
+   * Dispatches an action. It is the only way to trigger a state change.
+   *
+   * The `reducer` function, used to create the store, will be called with the
+   * current state tree and the given `action`. Its return value will
+   * be considered the **next** state of the tree, and the change listeners
+   * will be notified.
+   *
+   * The base implementation only supports plain object actions. If you want to
+   * dispatch a Promise, an Observable, a thunk, or something else, you need to
+   * wrap your store creating function into the corresponding middleware. For
+   * example, see the documentation for the `redux-thunk` package. Even the
+   * middleware will eventually dispatch plain object actions using this method.
+   *
+   * @param {Object} action A plain object representing “what changed”. It is
+   * a good idea to keep actions serializable so you can record and replay user
+   * sessions, or use the time travelling `redux-devtools`. An action must have
+   * a `type` property which may not be `undefined`. It is a good idea to use
+   * string constants for action types.
+   *
+   * @returns {Object} For convenience, the same action object you dispatched.
+   *
+   * Note that, if you use a custom middleware, it may wrap `dispatch()` to
+   * return something else (for example, a Promise you can await).
+   */
+
+
+  function dispatch(action) {
+    if (!isPlainObject(action)) {
+      throw new Error('Actions must be plain objects. ' + 'Use custom middleware for async actions.');
+    }
+
+    if (typeof action.type === 'undefined') {
+      throw new Error('Actions may not have an undefined "type" property. ' + 'Have you misspelled a constant?');
+    }
+
+    if (isDispatching) {
+      throw new Error('Reducers may not dispatch actions.');
+    }
+
+    try {
+      isDispatching = true;
+      currentState = currentReducer(currentState, action);
+    } finally {
+      isDispatching = false;
+    }
+
+    var listeners = currentListeners = nextListeners;
+
+    for (var i = 0; i < listeners.length; i++) {
+      var listener = listeners[i];
+      listener();
+    }
+
+    return action;
+  }
+  /**
+   * Replaces the reducer currently used by the store to calculate the state.
+   *
+   * You might need this if your app implements code splitting and you want to
+   * load some of the reducers dynamically. You might also need this if you
+   * implement a hot reloading mechanism for Redux.
+   *
+   * @param {Function} nextReducer The reducer for the store to use instead.
+   * @returns {void}
+   */
+
+
+  function replaceReducer(nextReducer) {
+    if (typeof nextReducer !== 'function') {
+      throw new Error('Expected the nextReducer to be a function.');
+    }
+
+    currentReducer = nextReducer;
+    dispatch({
+      type: ActionTypes.REPLACE
+    });
+  }
+  /**
+   * Interoperability point for observable/reactive libraries.
+   * @returns {observable} A minimal observable of state changes.
+   * For more information, see the observable proposal:
+   * https://github.com/tc39/proposal-observable
+   */
+
+
+  function observable() {
+    var _ref;
+
+    var outerSubscribe = subscribe;
+    return _ref = {
+      /**
+       * The minimal observable subscription method.
+       * @param {Object} observer Any object that can be used as an observer.
+       * The observer object should have a `next` method.
+       * @returns {subscription} An object with an `unsubscribe` method that can
+       * be used to unsubscribe the observable from the store, and prevent further
+       * emission of values from the observable.
+       */
+      subscribe: function subscribe(observer) {
+        if (typeof observer !== 'object' || observer === null) {
+          throw new TypeError('Expected the observer to be an object.');
+        }
+
+        function observeState() {
+          if (observer.next) {
+            observer.next(getState());
+          }
+        }
+
+        observeState();
+        var unsubscribe = outerSubscribe(observeState);
+        return {
+          unsubscribe: unsubscribe
+        };
+      }
+    }, _ref[symbol_observable__WEBPACK_IMPORTED_MODULE_0__["default"]] = function () {
+      return this;
+    }, _ref;
+  } // When a store is created, an "INIT" action is dispatched so that every
+  // reducer returns their initial state. This effectively populates
+  // the initial state tree.
+
+
+  dispatch({
+    type: ActionTypes.INIT
+  });
+  return _ref2 = {
+    dispatch: dispatch,
+    subscribe: subscribe,
+    getState: getState,
+    replaceReducer: replaceReducer
+  }, _ref2[symbol_observable__WEBPACK_IMPORTED_MODULE_0__["default"]] = observable, _ref2;
+}
+
+/**
+ * Prints a warning in the console if it exists.
+ *
+ * @param {String} message The warning message.
+ * @returns {void}
+ */
+function warning(message) {
+  /* eslint-disable no-console */
+  if (typeof console !== 'undefined' && typeof console.error === 'function') {
+    console.error(message);
+  }
+  /* eslint-enable no-console */
+
+
+  try {
+    // This error was thrown as a convenience so that if you enable
+    // "break on all exceptions" in your console,
+    // it would pause the execution at this line.
+    throw new Error(message);
+  } catch (e) {} // eslint-disable-line no-empty
+
+}
+
+function getUndefinedStateErrorMessage(key, action) {
+  var actionType = action && action.type;
+  var actionDescription = actionType && "action \"" + String(actionType) + "\"" || 'an action';
+  return "Given " + actionDescription + ", reducer \"" + key + "\" returned undefined. " + "To ignore an action, you must explicitly return the previous state. " + "If you want this reducer to hold no value, you can return null instead of undefined.";
+}
+
+function getUnexpectedStateShapeWarningMessage(inputState, reducers, action, unexpectedKeyCache) {
+  var reducerKeys = Object.keys(reducers);
+  var argumentName = action && action.type === ActionTypes.INIT ? 'preloadedState argument passed to createStore' : 'previous state received by the reducer';
+
+  if (reducerKeys.length === 0) {
+    return 'Store does not have a valid reducer. Make sure the argument passed ' + 'to combineReducers is an object whose values are reducers.';
+  }
+
+  if (!isPlainObject(inputState)) {
+    return "The " + argumentName + " has unexpected type of \"" + {}.toString.call(inputState).match(/\s([a-z|A-Z]+)/)[1] + "\". Expected argument to be an object with the following " + ("keys: \"" + reducerKeys.join('", "') + "\"");
+  }
+
+  var unexpectedKeys = Object.keys(inputState).filter(function (key) {
+    return !reducers.hasOwnProperty(key) && !unexpectedKeyCache[key];
+  });
+  unexpectedKeys.forEach(function (key) {
+    unexpectedKeyCache[key] = true;
+  });
+  if (action && action.type === ActionTypes.REPLACE) return;
+
+  if (unexpectedKeys.length > 0) {
+    return "Unexpected " + (unexpectedKeys.length > 1 ? 'keys' : 'key') + " " + ("\"" + unexpectedKeys.join('", "') + "\" found in " + argumentName + ". ") + "Expected to find one of the known reducer keys instead: " + ("\"" + reducerKeys.join('", "') + "\". Unexpected keys will be ignored.");
+  }
+}
+
+function assertReducerShape(reducers) {
+  Object.keys(reducers).forEach(function (key) {
+    var reducer = reducers[key];
+    var initialState = reducer(undefined, {
+      type: ActionTypes.INIT
+    });
+
+    if (typeof initialState === 'undefined') {
+      throw new Error("Reducer \"" + key + "\" returned undefined during initialization. " + "If the state passed to the reducer is undefined, you must " + "explicitly return the initial state. The initial state may " + "not be undefined. If you don't want to set a value for this reducer, " + "you can use null instead of undefined.");
+    }
+
+    if (typeof reducer(undefined, {
+      type: ActionTypes.PROBE_UNKNOWN_ACTION()
+    }) === 'undefined') {
+      throw new Error("Reducer \"" + key + "\" returned undefined when probed with a random type. " + ("Don't try to handle " + ActionTypes.INIT + " or other actions in \"redux/*\" ") + "namespace. They are considered private. Instead, you must return the " + "current state for any unknown actions, unless it is undefined, " + "in which case you must return the initial state, regardless of the " + "action type. The initial state may not be undefined, but can be null.");
+    }
+  });
+}
+/**
+ * Turns an object whose values are different reducer functions, into a single
+ * reducer function. It will call every child reducer, and gather their results
+ * into a single state object, whose keys correspond to the keys of the passed
+ * reducer functions.
+ *
+ * @param {Object} reducers An object whose values correspond to different
+ * reducer functions that need to be combined into one. One handy way to obtain
+ * it is to use ES6 `import * as reducers` syntax. The reducers may never return
+ * undefined for any action. Instead, they should return their initial state
+ * if the state passed to them was undefined, and the current state for any
+ * unrecognized action.
+ *
+ * @returns {Function} A reducer function that invokes every reducer inside the
+ * passed object, and builds a state object with the same shape.
+ */
+
+
+function combineReducers(reducers) {
+  var reducerKeys = Object.keys(reducers);
+  var finalReducers = {};
+
+  for (var i = 0; i < reducerKeys.length; i++) {
+    var key = reducerKeys[i];
+
+    if (true) {
+      if (typeof reducers[key] === 'undefined') {
+        warning("No reducer provided for key \"" + key + "\"");
+      }
+    }
+
+    if (typeof reducers[key] === 'function') {
+      finalReducers[key] = reducers[key];
+    }
+  }
+
+  var finalReducerKeys = Object.keys(finalReducers);
+  var unexpectedKeyCache;
+
+  if (true) {
+    unexpectedKeyCache = {};
+  }
+
+  var shapeAssertionError;
+
+  try {
+    assertReducerShape(finalReducers);
+  } catch (e) {
+    shapeAssertionError = e;
+  }
+
+  return function combination(state, action) {
+    if (state === void 0) {
+      state = {};
+    }
+
+    if (shapeAssertionError) {
+      throw shapeAssertionError;
+    }
+
+    if (true) {
+      var warningMessage = getUnexpectedStateShapeWarningMessage(state, finalReducers, action, unexpectedKeyCache);
+
+      if (warningMessage) {
+        warning(warningMessage);
+      }
+    }
+
+    var hasChanged = false;
+    var nextState = {};
+
+    for (var _i = 0; _i < finalReducerKeys.length; _i++) {
+      var _key = finalReducerKeys[_i];
+      var reducer = finalReducers[_key];
+      var previousStateForKey = state[_key];
+      var nextStateForKey = reducer(previousStateForKey, action);
+
+      if (typeof nextStateForKey === 'undefined') {
+        var errorMessage = getUndefinedStateErrorMessage(_key, action);
+        throw new Error(errorMessage);
+      }
+
+      nextState[_key] = nextStateForKey;
+      hasChanged = hasChanged || nextStateForKey !== previousStateForKey;
+    }
+
+    return hasChanged ? nextState : state;
+  };
+}
+
+function bindActionCreator(actionCreator, dispatch) {
+  return function () {
+    return dispatch(actionCreator.apply(this, arguments));
+  };
+}
+/**
+ * Turns an object whose values are action creators, into an object with the
+ * same keys, but with every function wrapped into a `dispatch` call so they
+ * may be invoked directly. This is just a convenience method, as you can call
+ * `store.dispatch(MyActionCreators.doSomething())` yourself just fine.
+ *
+ * For convenience, you can also pass a single function as the first argument,
+ * and get a function in return.
+ *
+ * @param {Function|Object} actionCreators An object whose values are action
+ * creator functions. One handy way to obtain it is to use ES6 `import * as`
+ * syntax. You may also pass a single function.
+ *
+ * @param {Function} dispatch The `dispatch` function available on your Redux
+ * store.
+ *
+ * @returns {Function|Object} The object mimicking the original object, but with
+ * every action creator wrapped into the `dispatch` call. If you passed a
+ * function as `actionCreators`, the return value will also be a single
+ * function.
+ */
+
+
+function bindActionCreators(actionCreators, dispatch) {
+  if (typeof actionCreators === 'function') {
+    return bindActionCreator(actionCreators, dispatch);
+  }
+
+  if (typeof actionCreators !== 'object' || actionCreators === null) {
+    throw new Error("bindActionCreators expected an object or a function, instead received " + (actionCreators === null ? 'null' : typeof actionCreators) + ". " + "Did you write \"import ActionCreators from\" instead of \"import * as ActionCreators from\"?");
+  }
+
+  var keys = Object.keys(actionCreators);
+  var boundActionCreators = {};
+
+  for (var i = 0; i < keys.length; i++) {
+    var key = keys[i];
+    var actionCreator = actionCreators[key];
+
+    if (typeof actionCreator === 'function') {
+      boundActionCreators[key] = bindActionCreator(actionCreator, dispatch);
+    }
+  }
+
+  return boundActionCreators;
+}
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+/**
+ * Composes single-argument functions from right to left. The rightmost
+ * function can take multiple arguments as it provides the signature for
+ * the resulting composite function.
+ *
+ * @param {...Function} funcs The functions to compose.
+ * @returns {Function} A function obtained by composing the argument functions
+ * from right to left. For example, compose(f, g, h) is identical to doing
+ * (...args) => f(g(h(...args))).
+ */
+function compose() {
+  for (var _len = arguments.length, funcs = new Array(_len), _key = 0; _key < _len; _key++) {
+    funcs[_key] = arguments[_key];
+  }
+
+  if (funcs.length === 0) {
+    return function (arg) {
+      return arg;
+    };
+  }
+
+  if (funcs.length === 1) {
+    return funcs[0];
+  }
+
+  return funcs.reduce(function (a, b) {
+    return function () {
+      return a(b.apply(void 0, arguments));
+    };
+  });
+}
+
+/**
+ * Creates a store enhancer that applies middleware to the dispatch method
+ * of the Redux store. This is handy for a variety of tasks, such as expressing
+ * asynchronous actions in a concise manner, or logging every action payload.
+ *
+ * See `redux-thunk` package as an example of the Redux middleware.
+ *
+ * Because middleware is potentially asynchronous, this should be the first
+ * store enhancer in the composition chain.
+ *
+ * Note that each middleware will be given the `dispatch` and `getState` functions
+ * as named arguments.
+ *
+ * @param {...Function} middlewares The middleware chain to be applied.
+ * @returns {Function} A store enhancer applying the middleware.
+ */
+
+function applyMiddleware() {
+  for (var _len = arguments.length, middlewares = new Array(_len), _key = 0; _key < _len; _key++) {
+    middlewares[_key] = arguments[_key];
+  }
+
+  return function (createStore) {
+    return function () {
+      var store = createStore.apply(void 0, arguments);
+
+      var _dispatch = function dispatch() {
+        throw new Error("Dispatching while constructing your middleware is not allowed. " + "Other middleware would not be applied to this dispatch.");
+      };
+
+      var middlewareAPI = {
+        getState: store.getState,
+        dispatch: function dispatch() {
+          return _dispatch.apply(void 0, arguments);
+        }
+      };
+      var chain = middlewares.map(function (middleware) {
+        return middleware(middlewareAPI);
+      });
+      _dispatch = compose.apply(void 0, chain)(store.dispatch);
+      return _objectSpread({}, store, {
+        dispatch: _dispatch
+      });
+    };
+  };
+}
+
+/*
+ * This is a dummy function to check if the function name has been altered by minification.
+ * If the function has been minified and NODE_ENV !== 'production', warn the user.
+ */
+
+function isCrushed() {}
+
+if ("development" !== 'production' && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed') {
+  warning('You are currently using minified code outside of NODE_ENV === "production". ' + 'This means that you are running a slower development build of Redux. ' + 'You can use loose-envify (https://github.com/zertosh/loose-envify) for browserify ' + 'or setting mode to production in webpack (https://webpack.js.org/concepts/mode/) ' + 'to ensure you have the correct code for your production build.');
+}
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/schedule/cjs/schedule-tracing.development.js":
 /*!*******************************************************************!*\
   !*** ./node_modules/schedule/cjs/schedule-tracing.development.js ***!
@@ -24607,6 +25263,69 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "./node_modules/symbol-observable/es/index.js":
+/*!****************************************************!*\
+  !*** ./node_modules/symbol-observable/es/index.js ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(global, module) {/* harmony import */ var _ponyfill_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./ponyfill.js */ "./node_modules/symbol-observable/es/ponyfill.js");
+/* global window */
+
+
+var root;
+
+if (typeof self !== 'undefined') {
+  root = self;
+} else if (typeof window !== 'undefined') {
+  root = window;
+} else if (typeof global !== 'undefined') {
+  root = global;
+} else if (true) {
+  root = module;
+} else {}
+
+var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__["default"])(root);
+/* harmony default export */ __webpack_exports__["default"] = (result);
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../webpack/buildin/harmony-module.js */ "./node_modules/webpack/buildin/harmony-module.js")(module)))
+
+/***/ }),
+
+/***/ "./node_modules/symbol-observable/es/ponyfill.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/symbol-observable/es/ponyfill.js ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return symbolObservablePonyfill; });
+function symbolObservablePonyfill(root) {
+	var result;
+	var Symbol = root.Symbol;
+
+	if (typeof Symbol === 'function') {
+		if (Symbol.observable) {
+			result = Symbol.observable;
+		} else {
+			result = Symbol('observable');
+			Symbol.observable = result;
+		}
+	} else {
+		result = '@@observable';
+	}
+
+	return result;
+};
+
+
+/***/ }),
+
 /***/ "./node_modules/webpack/buildin/amd-options.js":
 /*!****************************************!*\
   !*** (webpack)/buildin/amd-options.js ***!
@@ -24648,6 +25367,41 @@ try {
 // easier to handle this case. if(!global) { ...}
 
 module.exports = g;
+
+
+/***/ }),
+
+/***/ "./node_modules/webpack/buildin/harmony-module.js":
+/*!*******************************************!*\
+  !*** (webpack)/buildin/harmony-module.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = function(originalModule) {
+	if (!originalModule.webpackPolyfill) {
+		var module = Object.create(originalModule);
+		// module.parent = undefined by default
+		if (!module.children) module.children = [];
+		Object.defineProperty(module, "loaded", {
+			enumerable: true,
+			get: function() {
+				return module.l;
+			}
+		});
+		Object.defineProperty(module, "id", {
+			enumerable: true,
+			get: function() {
+				return module.i;
+			}
+		});
+		Object.defineProperty(module, "exports", {
+			enumerable: true
+		});
+		module.webpackPolyfill = 1;
+	}
+	return module;
+};
 
 
 /***/ }),
@@ -25625,9 +26379,113 @@ if (true) module.exports = assignKey; // })(this);
 
 /***/ }),
 
-/***/ "./public/js/main2.js":
+/***/ "./public/js/textfitpercent.js":
+/*!*************************************!*\
+  !*** ./public/js/textfitpercent.js ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function resizePercent(mySettings) {
+  this.textSettings = mySettings;
+
+  this.resize = function () {
+    var self1 = this;
+    var self2;
+
+    if (this.textSettings.isFirstChild) {
+      self2 = $(this.textSettings.selector).children().first();
+    } else {
+      self2 = $(this.textSettings.selector);
+    }
+
+    self2.each(function () {
+      var self3 = $(this);
+      var currentFontSize = parseFloat(self3.css("font-size"));
+      var parentWidth;
+      var parentHeight;
+
+      if (self1.textSettings.parent != null) {
+        parentWidth = $(self1.textSettings.parent).outerWidth();
+        parentHeight = $(self1.textSettings.parent).outerHeight();
+
+        if (self1.textSettings.isClass) {
+          parentWidth = $(self1.textSettings.parent).addUp($.fn.outerWidth);
+          parentHeight = $(self1.textSettings.parent).addUp($.fn.outerHeight);
+        }
+      } else {
+        parentWidth = self3.parent().outerWidth();
+        parentHeight = self3.parent().outerHeight();
+      }
+
+      var currentWidth = self3.outerWidth();
+      var currentHeight = self3.outerHeight();
+      var targetWidth = self1.textSettings.percentWidth / 100 * parentWidth;
+      var counter = 0;
+
+      while (Math.abs(currentWidth - targetWidth) > self1.textSettings.accuracy && counter < self1.textSettings.maxTries) {
+        counter++; // min / max font sizes:
+
+        if (currentFontSize < self1.textSettings.minFontSize) {
+          currentFontSize = self1.textSettings.minFontSize;
+        }
+
+        if (currentFontSize > self1.textSettings.maxFontSize) {
+          currentFontSize = self1.textSettings.maxFontSize;
+        } // if it's bigger than it should be:
+        // decrease the font size:
+
+
+        if (currentWidth - targetWidth > 0) {
+          self3.css("font-size", currentFontSize - self1.textSettings.increment); // 					console.log("decreasing font size.");
+          // if it's smaller than it should be:
+          // increase the font size:
+        } else if (currentWidth - targetWidth < 0) {
+          self3.css("font-size", currentFontSize + self1.textSettings.increment); // 					console.log("increasing font size.");
+        } // update current width and height:
+
+
+        currentWidth = self3.outerWidth();
+        currentHeight = self3.outerHeight(); // update current font size:
+
+        currentFontSize = parseFloat(self3.css("font-size")); // not necessary:
+        // 				targetWidth = (self1.textSettings.percentWidth / 100) * parentWidth;
+        // 				console.log("cw: " + currentWidth);
+        // 				console.log("tw: " + targetWidth);
+        // 				console.log("fs: " + currentFontSize);
+      }
+    });
+  };
+} // textFitPercent
+
+
+module.exports = function (options) {
+  // Setup options
+  var textSettings = $.extend({
+    "selector": null,
+    "parent": null,
+    "isFirstChild": false,
+    "isClass": false,
+    "percentWidth": 10,
+    "percentHeight": 10,
+    "accuracy": 10,
+    "increment": 0.1,
+    "maxTries": 40,
+    "minFontSize": Number.NEGATIVE_INFINITY,
+    "maxFontSize": Number.POSITIVE_INFINITY
+  }, options);
+  var myResizePercent = new resizePercent(textSettings);
+  return myResizePercent;
+};
+
+/***/ }),
+
+/***/ "./public/js/tools.js":
 /*!****************************!*\
-  !*** ./public/js/main2.js ***!
+  !*** ./public/js/tools.js ***!
   \****************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -25635,11 +26493,1767 @@ if (true) module.exports = assignKey; // })(this);
 "use strict";
 
 
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+exports.getCookie = function (name) {
+  var dc = document.cookie;
+  var prefix = name + "=";
+  var begin = dc.indexOf("; " + prefix);
+  var end;
+
+  if (begin == -1) {
+    begin = dc.indexOf(prefix);
+    if (begin !== 0) return null;
+  } else {
+    begin += 2;
+    end = document.cookie.indexOf(";", begin);
+
+    if (end == -1) {
+      end = dc.length;
+    }
+  } // because unescape has been deprecated, replaced with decodeURI
+  //return unescape(dc.substring(begin + prefix.length, end));
+
+
+  return decodeURI(dc.substring(begin + prefix.length, end));
+};
+
+exports.setCookie = function (name, value, seconds) {
+  var expires = "";
+
+  if (seconds) {
+    var date = new Date();
+    date.setTime(date.getTime() + seconds * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+};
+
+exports.minmax = function (num, min, max) {
+  if (num < min) {
+    return min;
+  } else if (num > max) {
+    return max;
+  } else {
+    return num;
+  }
+};
+
+exports.round = function (value, precision) {
+  var multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+};
+
+exports.msToTime = function (duration) {
+  // 	var milliseconds = parseInt((duration % 1000) / 100);
+  var milliseconds = parseInt(duration / 1000 % 60 % 1 * 1000);
+  var seconds = parseInt(duration / 1000 % 60);
+  var minutes = parseInt(duration / (1000 * 60) % 60);
+  var hours = parseInt(duration / (1000 * 60 * 60) % 24);
+  hours = hours < 10 ? "0" + hours : hours;
+
+  if (hours.length == 2 || hours.length == 3 && hours[0] == "0") {
+    hours = hours.substr(1);
+  }
+
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+
+  if (minutes.length == 3 || minutes.length == 4) {
+    minutes = minutes.substr(1);
+  }
+
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  if (seconds.length == 3 || seconds.length == 4) {
+    seconds = seconds.substr(1);
+  } //seconds = seconds.replaceAll("-", "");
+
+
+  if (seconds.length < 2) {
+    seconds = "0" + seconds;
+  }
+
+  var time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  time = time.replaceAll("-", ""); // remove negative signs
+
+  return time;
+};
+
+exports.toggleFullScreen = function (elem) {
+  // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+  if (document.fullScreenElement !== undefined && document.fullScreenElement === null || document.msFullscreenElement !== undefined && document.msFullscreenElement === null || document.mozFullScreen !== undefined && !document.mozFullScreen || document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen) {
+    if (elem.requestFullScreen) {
+      elem.requestFullScreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullScreen) {
+      elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    }
+  } else {
+    if (document.cancelFullScreen) {
+      document.cancelFullScreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+};
+
+exports.setToPercentParent = function (elem, percent) {
+  $(elem).height(0);
+  var parentHeight = $(elem).parent().height();
+  var newHeight = percent / 100 * parentHeight;
+  $(elem).height(newHeight);
+}; // like sleep, but worse:
+
+
+exports.wait = function (ms) {
+  var start = new Date().getTime();
+  var end = start;
+
+  while (end < start + ms) {
+    end = new Date().getTime();
+  }
+}; // brings number closer to target by accel
+
+
+exports.mathZoom = function (current, target, accel) {
+  if (current == target) {
+    return current;
+  }
+
+  if (Math.abs(current - target) < accel) {
+    return target;
+  }
+
+  if (current < target) {
+    return current + accel;
+  } else {
+    return current - accel;
+  }
+};
+
+exports.normalizeVector = function (vector, scale) {
+  var norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+
+  if (norm !== 0) {
+    vector.x = scale * vector.x / norm;
+    vector.y = scale * vector.y / norm;
+  }
+
+  return vector;
+};
+
+exports.abs = function (n) {
+  return Math.abs(n);
+}; // delete all cookies:
+
+
+exports.deleteAllCookies = function () {
+  var cookies = document.cookie.split(";");
+
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i];
+    var eqPos = cookie.indexOf("=");
+    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  }
+}; // String.prototype.replaceAll = function(search, replacement) {
+// 	let target = this;
+// 	return target.replace(new RegExp(search, "g"), replacement);
+// };
+// $.fn.sumHeights = function() {
+// 	let h = 0;
+// 	this.each(function() {
+// 		h += $(this).outerHeight();
+// 	});
+// 	return h;
+// };
+// $.fn.addUp = function(getter) {
+// 	return Array.prototype.reduce.call(this, function(a, b) {
+// 		return a + getter.call($(b));
+// 	}, 0);
+// }
+
+/***/ }),
+
+/***/ "./src/components/Checkbox.jsx":
+/*!*************************************!*\
+  !*** ./src/components/Checkbox.jsx ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Checkbox =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(Checkbox, _PureComponent);
+
+  function Checkbox(props) {
+    var _this;
+
+    _classCallCheck(this, Checkbox);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Checkbox).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(Checkbox, [{
+    key: "getButton",
+    value: function getButton() {}
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        onChange: this.props.handleChange,
+        type: "checkbox",
+        checked: this.props.checked
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), this.props.text);
+    }
+  }]);
+
+  return Checkbox;
+}(_react.PureComponent);
+
+exports.default = Checkbox;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/ConnectAccounts.jsx":
+/*!********************************************!*\
+  !*** ./src/components/ConnectAccounts.jsx ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var ConnectAccounts =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(ConnectAccounts, _PureComponent);
+
+  function ConnectAccounts(props) {
+    _classCallCheck(this, ConnectAccounts);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(ConnectAccounts).call(this, props));
+  }
+
+  _createClass(ConnectAccounts, [{
+    key: "getUnconnectedAccounts",
+    value: function getUnconnectedAccounts() {
+      var unconnectedAccounts = [];
+
+      var connectWithTwitch = _react.default.createElement("div", {
+        key: 0,
+        id: "connectWithTwitch",
+        className: "connectWithContainer"
+      }, _react.default.createElement("div", {
+        id: "connectWithTwitchButton",
+        className: "connectWithButton"
+      }, _react.default.createElement("span", {
+        id: "connectWithTwitchText"
+      }, "Connect with"), _react.default.createElement("img", {
+        id: "twitchLogo",
+        src: "/images/Twitch_Purple_RGB.png"
+      })));
+
+      var connectWithYoutube = _react.default.createElement("div", {
+        key: 1,
+        id: "connectWithYoutube",
+        className: "connectWithContainer"
+      }, _react.default.createElement("div", {
+        id: "connectWithYoutubeButton",
+        className: "connectWithButton"
+      }, _react.default.createElement("span", {
+        id: "connectWithYouTubeText"
+      }, "Connect with"), _react.default.createElement("img", {
+        id: "ytLogo",
+        src: "/images/yt_logo_rgb_light.png"
+      })));
+
+      var connectWithGoogle = _react.default.createElement("div", {
+        key: 2,
+        id: "connectWithGoogle",
+        className: "connectWithContainer"
+      }, _react.default.createElement("div", {
+        id: "connectWithGoogleButton",
+        className: "connectWithButton"
+      }, _react.default.createElement("span", {
+        id: "connectWithGoogleText"
+      }, "Connect with"), _react.default.createElement("div", {
+        id: "googleConnectButton",
+        className: "customGPlusSignIn"
+      }, _react.default.createElement("span", {
+        className: "googleIcon"
+      }), _react.default.createElement("span", {
+        className: "googleButtonText"
+      }, "Google"))));
+
+      var connectWithDiscord = _react.default.createElement("div", {
+        key: 3,
+        id: "connectWithDiscord",
+        className: "connectWithContainer"
+      }, _react.default.createElement("div", {
+        id: "connectWithDiscordButton",
+        className: "connectWithButton"
+      }, _react.default.createElement("span", {
+        id: "connectWithDiscordText"
+      }, "Connect with"), _react.default.createElement("img", {
+        id: "discordLogo",
+        src: "/images/discord_logo.png"
+      })));
+
+      if (this.props.connectedAccounts.indexOf("twitch") == -1) {
+        unconnectedAccounts.push(connectWithTwitch);
+      }
+
+      if (this.props.connectedAccounts.indexOf("youtube") == -1) {
+        unconnectedAccounts.push(connectWithYoutube);
+      }
+
+      if (this.props.connectedAccounts.indexOf("google") == -1) {
+        unconnectedAccounts.push(connectWithGoogle);
+      }
+
+      if (this.props.connectedAccounts.indexOf("discord") == -1) {
+        unconnectedAccounts.push(connectWithDiscord);
+      }
+
+      return unconnectedAccounts;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", {
+        id: "loggedInIndicator"
+      }, this.getUnconnectedAccounts());
+    }
+  }]);
+
+  return ConnectAccounts;
+}(_react.PureComponent);
+
+exports.default = ConnectAccounts;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/ControlQueue.jsx":
+/*!*****************************************!*\
+  !*** ./src/components/ControlQueue.jsx ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ControlQueue =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(ControlQueue, _PureComponent);
+
+  function ControlQueue(props) {
+    var _this;
+
+    _classCallCheck(this, ControlQueue);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ControlQueue).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(ControlQueue, [{
+    key: "getQueue",
+    value: function getQueue() {
+      var queue = [];
+      var usernameMap = this.props.usernameMap;
+      var elementClass = this.props.darkTheme ? "queueItem list-group-item-dark" : "queueItem list-group-item";
+
+      if (this.props.uniqueIDs.length == 0) {
+        return _react.default.createElement("li", {
+          key: "0",
+          className: elementClass,
+          "data-toggle": "popover",
+          tabIndex: "0"
+        }, "The queue is empty.");
+      }
+
+      for (var i = 0; i < this.props.uniqueIDs.length; i++) {
+        var username = this.props.usernameMap[this.props.uniqueIDs[i]];
+
+        var html = _react.default.createElement("li", {
+          key: i,
+          className: elementClass,
+          "data-toggle": "popover",
+          tabIndex: "0",
+          uniqueid: this.props.uniqueIDs[i]
+        }, username);
+
+        queue.push(html);
+      }
+
+      return queue;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("ul", {
+        className: "controlQueue list-group"
+      }, this.getQueue());
+    }
+  }]);
+
+  return ControlQueue;
+}(_react.PureComponent);
+
+exports.default = ControlQueue;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/ForfeitTimer.jsx":
+/*!*****************************************!*\
+  !*** ./src/components/ForfeitTimer.jsx ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var TurnTimer =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(TurnTimer, _PureComponent);
+
+  function TurnTimer(props) {
+    var _this;
+
+    _classCallCheck(this, TurnTimer);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TurnTimer).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(TurnTimer, [{
+    key: "getBarText",
+    value: function getBarText() {
+      if (this.props.name == null) {
+        return "No one is playing right now.";
+      } else {
+        return this.props.timeLeft + " seconds until turn forfeit.";
+      }
+    }
+  }, {
+    key: "getStyle",
+    value: function getStyle() {
+      if (this.props.name == null) {
+        return {
+          width: "100%"
+        };
+      } else {
+        return {
+          width: this.props.percent + "%"
+        };
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", {
+        className: "forfeitTimerBar progress"
+      }, _react.default.createElement("div", {
+        className: "forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active",
+        style: this.getStyle()
+      }, this.getBarText()));
+    }
+  }]);
+
+  return TurnTimer;
+}(_react.PureComponent);
+
+exports.default = TurnTimer;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/JoinLeaveQueueButton.jsx":
+/*!*************************************************!*\
+  !*** ./src/components/JoinLeaveQueueButton.jsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var JoinLeaveQueueButton =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(JoinLeaveQueueButton, _PureComponent);
+
+  function JoinLeaveQueueButton(props) {
+    var _this;
+
+    _classCallCheck(this, JoinLeaveQueueButton);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(JoinLeaveQueueButton).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(JoinLeaveQueueButton, [{
+    key: "getButton",
+    value: function getButton() {
+      var num = this.props.num;
+      var buttonText;
+      var buttonType;
+
+      if (this.props.controlQueue.indexOf(this.props.myID) > -1) {
+        buttonType = "leaveQueue";
+        buttonText = "Leave Queue";
+      } else {
+        buttonType = "joinQueue";
+        buttonText = "Join Queue";
+      }
+
+      var elementID = buttonType + this.props.num;
+      var elementClass = buttonType + " btn btn-secondary";
+      return _react.default.createElement("button", {
+        id: elementID,
+        className: elementClass
+      }, buttonText);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, this.getButton());
+    }
+  }]);
+
+  return JoinLeaveQueueButton;
+}(_react.PureComponent);
+
+exports.default = JoinLeaveQueueButton;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/LaglessView.jsx":
+/*!****************************************!*\
+  !*** ./src/components/LaglessView.jsx ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _LeftJoyCon = _interopRequireDefault(__webpack_require__(/*! ./LeftJoyCon.jsx */ "./src/components/LeftJoyCon.jsx"));
+
+var _RightJoyCon = _interopRequireDefault(__webpack_require__(/*! ./RightJoyCon.jsx */ "./src/components/RightJoyCon.jsx"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var LaglessView =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(LaglessView, _PureComponent);
+
+  function LaglessView(props) {
+    var _this;
+
+    _classCallCheck(this, LaglessView);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(LaglessView).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(LaglessView, [{
+    key: "getButton",
+    value: function getButton() {
+      var num = this.props.num;
+      var buttonText;
+      var buttonType;
+
+      if (this.props.controlQueue.indexOf(this.props.myID) > -1) {
+        buttonType = "leaveQueue";
+        buttonText = "Leave Queue";
+      } else {
+        buttonType = "joinQueue";
+        buttonText = "Join Queue";
+      }
+
+      var elementID = buttonType + this.props.num;
+      var elementClass = buttonType + " btn btn-secondary";
+      return _react.default.createElement("button", {
+        id: elementID,
+        className: elementClass
+      }, buttonText);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", {
+        id: "lagless" + this.props.num + "View",
+        className: "laglessView"
+      }, _react.default.createElement(_LeftJoyCon.default, {
+        controllerState: this.props.controllerState
+      }), _react.default.createElement("canvas", {
+        id: "videoCanvas" + this.props.num,
+        className: "videoCanvas"
+      }), _react.default.createElement(_RightJoyCon.default, {
+        controllerState: this.props.controllerState
+      }));
+    }
+  }]);
+
+  return LaglessView;
+}(_react.PureComponent);
+
+exports.default = LaglessView;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/LeftJoyCon.jsx":
+/*!***************************************!*\
+  !*** ./src/components/LeftJoyCon.jsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var VirtualProController = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
+
+var tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
+
+var LeftJoyCon =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(LeftJoyCon, _PureComponent);
+
+  function LeftJoyCon(props) {
+    var _this;
+
+    _classCallCheck(this, LeftJoyCon);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(LeftJoyCon).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    _this.controller = new VirtualProController();
+    return _this;
+  }
+
+  _createClass(LeftJoyCon, [{
+    key: "getJoyCon",
+    value: function getJoyCon() {
+      var controllerState = "000000000000000000 128 128 128 128";
+      this.controller.inputState(this.props.controllerState || controllerState);
+      var str = this.props.controllerState || controllerState;
+      var restPos = 128;
+      var stickPositions = str.substring(19).split(" ");
+      var LX = parseInt(stickPositions[0]) - restPos;
+      var LY = parseInt(stickPositions[1]) - restPos;
+      var RX = parseInt(stickPositions[2]) - restPos;
+      var RY = parseInt(stickPositions[3]) - restPos;
+      LY *= -1; // normalize:
+
+      var scale = 0.25;
+      var LMagnitude = Math.sqrt(LX * LX + LY * LY);
+      var max = 120;
+      LMagnitude = tools.minmax(LMagnitude, -max, max);
+      var LStick = tools.normalizeVector({
+        x: LX,
+        y: LY
+      }, LMagnitude);
+      LX = parseInt(LStick.x * scale);
+      LY = parseInt(LStick.y * scale);
+      var leftTransform = LX + "px" + "," + LY + "px";
+      return _react.default.createElement("div", {
+        id: "leftJoyCon"
+      }, _react.default.createElement("img", {
+        id: "leftJoyConImage",
+        src: "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png"
+      }), _react.default.createElement("div", {
+        id: "leftStick",
+        className: "" + (this.controller.btns.stick_button ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        id: "leftStick2",
+        style: {
+          transform: "translate(" + leftTransform + ")"
+        }
+      })), _react.default.createElement("div", {
+        id: "dpadButtons"
+      }, _react.default.createElement("div", {
+        id: "upButton",
+        className: "controllerButton" + (this.controller.btns.up ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "downButton",
+        className: "controllerButton" + (this.controller.btns.down ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "leftButton",
+        className: "controllerButton" + (this.controller.btns.left ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "rightButton",
+        className: "controllerButton" + (this.controller.btns.right ? " highlightedButton" : "")
+      })), _react.default.createElement("div", {
+        id: "leftJoyConOther"
+      }, _react.default.createElement("div", {
+        id: "minusButton",
+        className: "controllerButton lessRound" + (this.controller.btns.minus ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "captureButton",
+        className: "controllerButton lessRound" + (this.controller.btns.capture ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "lButton",
+        className: "controllerButton lessRound" + (this.controller.btns.l ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "L")), _react.default.createElement("div", {
+        id: "zlButton",
+        className: "controllerButton lessRound" + (this.controller.btns.zl ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "ZL"))));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, this.getJoyCon());
+    }
+  }]);
+
+  return LeftJoyCon;
+}(_react.PureComponent);
+
+exports.default = LeftJoyCon;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/Player.jsx":
+/*!***********************************!*\
+  !*** ./src/components/Player.jsx ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _TurnTimer = _interopRequireDefault(__webpack_require__(/*! ./TurnTimer.jsx */ "./src/components/TurnTimer.jsx"));
+
+var _ForfeitTimer = _interopRequireDefault(__webpack_require__(/*! ./ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx"));
+
+var _ControlQueue = _interopRequireDefault(__webpack_require__(/*! ./ControlQueue.jsx */ "./src/components/ControlQueue.jsx"));
+
+var _JoinLeaveQueueButton = _interopRequireDefault(__webpack_require__(/*! ./JoinLeaveQueueButton.jsx */ "./src/components/JoinLeaveQueueButton.jsx"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var Player =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(Player, _PureComponent);
+
+  function Player(props) {
+    var _this;
+
+    _classCallCheck(this, Player);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Player).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(Player, [{
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", {
+        id: "player" + this.props.num,
+        className: "player"
+      }, _react.default.createElement("label", {
+        className: "playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "player" + this.props.num + "Checkbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Player ", this.props.playerNum), _react.default.createElement(_TurnTimer.default, {
+        name: this.props.usernameMap[this.props.controlQueue[0]],
+        percent: this.props.player.turnPercent,
+        timeLeft: this.props.player.turnTimeLeft
+      }), _react.default.createElement(_ForfeitTimer.default, {
+        name: this.props.usernameMap[this.props.controlQueue[0]],
+        percent: this.props.player.forfeitPercent,
+        timeLeft: this.props.player.forfeitTimeLeft
+      }), _react.default.createElement(_JoinLeaveQueueButton.default, {
+        num: this.props.num,
+        controlQueue: this.props.controlQueue,
+        myID: this.props.myID
+      }), _react.default.createElement(_ControlQueue.default, {
+        uniqueIDs: this.props.controlQueue,
+        usernameMap: this.props.usernameMap,
+        darkTheme: this.props.darkTheme
+      }));
+    }
+  }]);
+
+  return Player;
+}(_react.PureComponent);
+
+exports.default = Player;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/RightJoyCon.jsx":
+/*!****************************************!*\
+  !*** ./src/components/RightJoyCon.jsx ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var VirtualProController = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
+
+var tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
+
+var RightJoyCon =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(RightJoyCon, _PureComponent);
+
+  function RightJoyCon(props) {
+    var _this;
+
+    _classCallCheck(this, RightJoyCon);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(RightJoyCon).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    _this.controller = new VirtualProController();
+    return _this;
+  }
+
+  _createClass(RightJoyCon, [{
+    key: "getJoyCon",
+    value: function getJoyCon() {
+      var controllerState = "000000000000000000 128 128 128 128";
+      this.controller.inputState(this.props.controllerState || controllerState);
+      var str = this.props.controllerState || controllerState;
+      var restPos = 128;
+      var stickPositions = str.substring(19).split(" ");
+      var RX = parseInt(stickPositions[2]) - restPos;
+      var RY = parseInt(stickPositions[3]) - restPos;
+      RY *= -1; // normalize:
+
+      var scale = 0.25;
+      var RMagnitude = Math.sqrt(RX * RX + RY * RY);
+      var max = 120;
+      RMagnitude = tools.minmax(RMagnitude, -max, max);
+      var RStick = tools.normalizeVector({
+        x: RX,
+        y: RY
+      }, RMagnitude);
+      RX = parseInt(RStick.x * scale);
+      RY = parseInt(RStick.y * scale);
+      var rightTransform = RX + "px" + "," + RY + "px";
+      return _react.default.createElement("div", {
+        id: "rightJoyCon"
+      }, _react.default.createElement("img", {
+        id: "rightJoyConImage",
+        src: "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png"
+      }), _react.default.createElement("div", {
+        id: "rightStick",
+        className: "" + (this.controller.btns.stick_button2 ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        id: "rightStick2",
+        style: {
+          transform: "translate(" + rightTransform + ")"
+        }
+      })), _react.default.createElement("div", {
+        id: "abxyButtons"
+      }, _react.default.createElement("div", {
+        id: "aButton",
+        className: "controllerButton" + (this.controller.btns.a ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "bButton",
+        className: "controllerButton" + (this.controller.btns.b ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "xButton",
+        className: "controllerButton" + (this.controller.btns.x ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "yButton",
+        className: "controllerButton" + (this.controller.btns.y ? " highlightedButton" : "")
+      })), _react.default.createElement("div", {
+        id: "rightJoyConOther"
+      }, _react.default.createElement("div", {
+        id: "plusButton",
+        className: "controllerButton lessRound" + (this.controller.btns.plus ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "homeButton",
+        className: "controllerButton lessRound" + (this.controller.btns.home ? " highlightedButton" : "")
+      }), _react.default.createElement("div", {
+        id: "rButton",
+        className: "controllerButton lessRound" + (this.controller.btns.r ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "R")), _react.default.createElement("div", {
+        id: "zrButton",
+        className: "controllerButton lessRound" + (this.controller.btns.zr ? " highlightedButton" : "")
+      }, _react.default.createElement("div", {
+        className: "click-passthrough"
+      }, "ZR"))));
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, this.getJoyCon());
+    }
+  }]);
+
+  return RightJoyCon;
+}(_react.PureComponent);
+
+exports.default = RightJoyCon;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/TurnTimer.jsx":
+/*!**************************************!*\
+  !*** ./src/components/TurnTimer.jsx ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var TurnTimer =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(TurnTimer, _PureComponent);
+
+  function TurnTimer(props) {
+    var _this;
+
+    _classCallCheck(this, TurnTimer);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(TurnTimer).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(TurnTimer, [{
+    key: "getBarText",
+    value: function getBarText() {
+      if (this.props.name == null) {
+        return "No one is playing right now.";
+      } else {
+        return this.props.name + ": " + this.props.timeLeft + " seconds";
+      }
+    }
+  }, {
+    key: "getStyle",
+    value: function getStyle() {
+      if (this.props.name == null) {
+        return {
+          width: "100%"
+        };
+      } else {
+        return {
+          width: this.props.percent + "%"
+        };
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("div", {
+        className: "turnTimerBar progress"
+      }, _react.default.createElement("div", {
+        className: "turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active",
+        style: this.getStyle()
+      }, this.getBarText()));
+    }
+  }]);
+
+  return TurnTimer;
+}(_react.PureComponent);
+
+exports.default = TurnTimer;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/UsernameDropdown.jsx":
+/*!*********************************************!*\
+  !*** ./src/components/UsernameDropdown.jsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var UsernameDropdown =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(UsernameDropdown, _PureComponent);
+
+  function UsernameDropdown(props) {
+    _classCallCheck(this, UsernameDropdown);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(UsernameDropdown).call(this, props));
+  }
+
+  _createClass(UsernameDropdown, [{
+    key: "getUsernameList",
+    value: function getUsernameList() {
+      var usernames = [];
+
+      for (var i = 0; i < this.props.validUsernames.length; i++) {
+        var html = _react.default.createElement("button", {
+          key: i,
+          className: "username-dropdown-item dropdown-item"
+        }, this.props.validUsernames[i]);
+
+        usernames.push(html);
+      }
+
+      if (this.props.validUsernames.length == 0) {
+        return _react.default.createElement("button", {
+          key: 0,
+          className: "username-dropdown-item dropdown-item"
+        }, "???");
+      }
+
+      return usernames;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+        id: "usernameDropdown",
+        className: "dropdown show"
+      }, _react.default.createElement("span", {
+        className: "align-self-center"
+      }, "Logged in as: "), _react.default.createElement("a", {
+        className: "btn btn-secondary dropdown-toggle",
+        href: "#",
+        id: "usernameDropdownMenuLink",
+        "data-toggle": "dropdown"
+      }, this.props.myUsername), _react.default.createElement("div", {
+        id: "usernameDropdownDiv",
+        className: "dropdown-menu"
+      }, this.getUsernameList())));
+    }
+  }]);
+
+  return UsernameDropdown;
+}(_react.PureComponent);
+
+exports.default = UsernameDropdown;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/ViewerList.jsx":
+/*!***************************************!*\
+  !*** ./src/components/ViewerList.jsx ***!
+  \***************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var ViewerList =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(ViewerList, _PureComponent);
+
+  function ViewerList(props) {
+    var _this;
+
+    _classCallCheck(this, ViewerList);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(ViewerList).call(this, props));
+
+    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
+
+    return _this;
+  }
+
+  _createClass(ViewerList, [{
+    key: "getViewerList",
+    //     componentDidMount() {
+    //  		setInterval(() => {
+    //  			this.setState({});
+    //  		}, 1000);
+    //  		console.log("mounted");
+    //     }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //   viewer list changed:
+    // 	if (JSON.stringify(this.props.viewerIDs) != JSON.stringify(nextProps.viewerIDs)) {
+    // 		console.log("updated");
+    // 		return true;
+    // 	} else {
+    // 		return false;
+    // 	}
+    // }
+    // 	componentDidUpdate(prevProps, prevState) {
+    // 		console.log("changed");
+    // 	}
+    // static getDerivedStateFromProps(nextProps, prevState) {
+    // 	console.log("get");
+    // 	return {};
+    // }
+    // 	componentDidUpdate(prevProps) {
+    // 	  compare props:
+    // 		if (this.props.viewerIDs !== prevProps.viewerIDs) {
+    // 			console.log("props changed.");
+    // 		}
+    // 	}
+    // 	componentWillRecieveProps(nextProps) {
+    // 	  compare props:
+    // 		if (this.props.viewerIDs !== nextProps.viewerIDs) {
+    // 			console.log("props changed.");
+    // 			this.setState({});
+    // 		}
+    // 	}
+    value: function getViewerList() {
+      var viewerNames = [];
+
+      for (var i = 0; i < this.props.uniqueIDs.length; i++) {
+        viewerNames.push([]);
+
+        for (var j = 0; j < this.props.uniqueIDs[i].length; j++) {
+          var name = this.props.usernameMap[this.props.uniqueIDs[i][j]];
+
+          if (name == null) {
+            name = "guest";
+          }
+
+          viewerNames[i].push(name);
+        }
+      }
+
+      var viewers = [];
+
+      for (var _i = 0; _i < viewerNames.length; _i++) {
+        if (viewerNames[_i].length > 0) {
+          viewers.push(_react.default.createElement("div", {
+            key: _i,
+            className: "dropdown-divider"
+          }, "Lagless ", _i + 1)); // 				lists.push(this.state.viewerNames.map(name => <li key={name}>{name}</li>));
+        }
+
+        for (var _j = 0; _j < viewerNames[_i].length; _j++) {
+          var html = _react.default.createElement("button", {
+            key: _i + ":" + _j,
+            className: "viewerElement dropdown-item",
+            "data-toggle": "popover",
+            tabIndex: "0",
+            uniqueid: this.props.uniqueIDs[_i][_j]
+          }, viewerNames[_i][_j]);
+
+          viewers.push(html);
+        }
+      }
+
+      return viewers;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("a", {
+        className: "btn btn-secondary dropdown-toggle",
+        href: "#",
+        id: "dropdownMenuLink",
+        "data-toggle": "dropdown"
+      }, "Viewers"), _react.default.createElement("div", {
+        id: "laglessViewerDropdownDiv",
+        className: "dropdown-menu"
+      }, this.getViewerList()));
+    }
+  }]);
+
+  return ViewerList;
+}(_react.PureComponent);
+
+exports.default = ViewerList;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/Waitlist.jsx":
+/*!*************************************!*\
+  !*** ./src/components/Waitlist.jsx ***!
+  \*************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var Waitlist =
+/*#__PURE__*/
+function (_PureComponent) {
+  _inherits(Waitlist, _PureComponent);
+
+  function Waitlist(props) {
+    _classCallCheck(this, Waitlist);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Waitlist).call(this, props));
+  }
+
+  _createClass(Waitlist, [{
+    key: "getWaitlist",
+    value: function getWaitlist() {
+      var waitlist = [];
+
+      if (this.props.uniqueIDs[this.props.tab - 1].length == 0) {
+        return _react.default.createElement("li", {
+          key: 0,
+          className: this.props.darkTheme ? "list-group-item-dark" : "list-group-item"
+        }, "The waitlist is empty right now");
+      }
+
+      for (var i = 0; i < this.props.uniqueIDs[this.props.tab - 1].length; i++) {
+        var listHTML = void 0;
+        var ID = this.props.uniqueIDs[this.props.tab - 1][i];
+
+        if (this.props.myID == ID) {
+          listHTML = _react.default.createElement("li", {
+            key: i,
+            className: "list-group-item-highlight"
+          }, this.props.usernameMap[ID]);
+        } else if (this.props.darkTheme) {
+          listHTML = _react.default.createElement("li", {
+            key: i,
+            className: "list-group-item-dark"
+          }, this.props.usernameMap[ID]);
+        } else {
+          listHTML = _react.default.createElement("li", {
+            key: i,
+            className: "list-group-item"
+          }, this.props.usernameMap[ID]);
+        }
+
+        waitlist.push(listHTML);
+      }
+
+      return waitlist;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      return _react.default.createElement("ul", {
+        id: "waitlist",
+        className: "list-group"
+      }, this.getWaitlist());
+    }
+  }]);
+
+  return Waitlist;
+}(_react.PureComponent);
+
+exports.default = Waitlist;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
 var _reactDom = _interopRequireDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
 
+var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+// components:
+var ViewerList = __webpack_require__(/*! src/components/ViewerList.jsx */ "./src/components/ViewerList.jsx");
+
+var TurnTimer = __webpack_require__(/*! src/components/TurnTimer.jsx */ "./src/components/TurnTimer.jsx");
+
+var ForfeitTimer = __webpack_require__(/*! src/components/ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx");
+
+var Player = __webpack_require__(/*! src/components/Player.jsx */ "./src/components/Player.jsx");
+
+var ControlQueue = __webpack_require__(/*! src/components/ControlQueue.jsx */ "./src/components/ControlQueue.jsx");
+
+var JoinLeaveQueueButton = __webpack_require__(/*! src/components/JoinLeaveQueueButton.jsx */ "./src/components/JoinLeaveQueueButton.jsx");
+
+var UsernameDropdown = __webpack_require__(/*! src/components/UsernameDropdown.jsx */ "./src/components/UsernameDropdown.jsx");
+
+var Waitlist = __webpack_require__(/*! src/components/Waitlist.jsx */ "./src/components/Waitlist.jsx");
+
+var ConnectAccounts = __webpack_require__(/*! src/components/ConnectAccounts.jsx */ "./src/components/ConnectAccounts.jsx");
+
+var Checkbox = __webpack_require__(/*! src/components/Checkbox.jsx */ "./src/components/Checkbox.jsx");
+
+var LeftJoyCon = __webpack_require__(/*! src/components/LeftJoyCon.jsx */ "./src/components/LeftJoyCon.jsx");
+
+var RightJoyCon = __webpack_require__(/*! src/components/RightJoyCon.jsx */ "./src/components/RightJoyCon.jsx");
+
+var LaglessView = __webpack_require__(/*! src/components/LaglessView.jsx */ "./src/components/LaglessView.jsx"); // libs:
+
 
 __webpack_require__(/*! js/keymaster.js */ "./public/js/keymaster.js");
 
@@ -25679,13 +28293,8 @@ $.fn.addUp = function (getter) {
 var socket = io("https://twitchplaysnintendoswitch.com", {
   path: "/8110/socket.io",
   transports: ["websocket"]
-}); // let socket2 = io("https://twitchplaysnintendoswitch.com", {
-// 	path: "/8001/socket.io",
-// });
-
-var socket2 = socket;
+});
 var globalEventTimer = false;
-var lagless1JoinTimer;
 var sendInputTimer;
 var currentTab = "#lagless1";
 var currentPlayerChosen = 0;
@@ -25701,7 +28310,7 @@ var videoConnected = false;
 var authCookie;
 var crate;
 var usernameMap = {};
-var banlist = ["ifazgta"];
+var banlist = [];
 var bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190"];
 var resizers = [];
 var resizeDebounceTimer;
@@ -25710,7 +28319,6 @@ var resizeAvailable = true; // twitch lagless swap settings
 var isExempt = false;
 var minQueuePos = 5;
 var tabsSwappedWithTwitch = [false, false, false, false];
-var maxViewersOnTab = [10, 10, 10, 10];
 var viewers = [[], [], [], [], []];
 var waitlists = [[], [], [], [], []];
 var controlQueues = [["The queue is empty."], ["The queue is empty."], ["The queue is empty."], ["The queue is empty."]];
@@ -25783,13 +28391,6 @@ var lagless3Settings = {
   offsetX: 0,
   offsetY: 0
 };
-var lagless5Settings = {
-  framerate: 30,
-  videoBitrate: 1,
-  scale: 960,
-  offsetX: 0,
-  offsetY: 0
-};
 var disableController = false; // detect firefox:
 
 if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
@@ -25816,7 +28417,1295 @@ var lagless4Port = 8004;
 
 if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
   isMobile = true;
-} // if (isMobile) {
+}
+
+var App =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(App, _Component);
+
+  function App(props) {
+    var _this;
+
+    _classCallCheck(this, App);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(App).call(this, props));
+    _this.toggleDarkTheme = _this.toggleDarkTheme.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.toggleFullscreen = _this.toggleFullscreen.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.toggleLargescreen = _this.toggleLargescreen.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.toggleYoutubeChat = _this.toggleYoutubeChat.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.toggleHideChat = _this.toggleHideChat.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.switchTabs = _this.switchTabs.bind(_assertThisInitialized(_assertThisInitialized(_this)));
+    _this.state = {
+      players: [{
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }, {
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }, {
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }, {
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }],
+      waitlists: [[], [], [], [], []],
+      viewerIDs: [],
+      usernameMap: {},
+      controlQueues: [[], [], [], []],
+      // account info:
+      myUniqueID: "",
+      myConnectedAccounts: [],
+      myUsername: "???",
+      myValidUsernames: [],
+      usernameIndex: 0,
+      // lagless tab:
+      tab: 2,
+      enableAudioThree: true,
+      audioThree: false,
+      keyboardControls: false,
+      controllerControls: false,
+      touchControls: true,
+      mouseControls: false,
+      analogStickMode: false,
+      currentInputMode: null,
+      darkTheme: false,
+      fullscreen: false,
+      largescreen: false,
+      youtubeChat: false,
+      hideChat: false,
+      hideNav: false,
+      deadzone: 50,
+      // controller view:
+      controllerViewState: ""
+    };
+    return _this;
+  }
+
+  _createClass(App, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      console.log("restoring preferences"); // check if new:
+      // localforage.getItem("new").then(function (value) {
+      // 	if (value != "new") {
+      // 		$("#tutorialWindow").modal();
+      // 	}
+      // 	localforage.setItem("new", "new");
+      // });
+      // check for ads:
+      // 	localforage.getItem("ads").then(function(value) {
+      // 		if (value != "ads") {
+      // 			if (typeof canRunAds == "undefined") {
+      // 				console.log("test");
+      // 				swal({
+      // 					title: "Disable your adblocker! or don\'t ¯\\_(ツ)_/¯ This message won't appear again!",
+      // 				});
+      // 			}
+      // 		}
+      // 		localforage.setItem("ads", "ads");
+      // 	});
+      // Get stored preferences
+
+      localforage.getItem("settings").then(function (value) {
+        // If they exist, write them
+        if (typeof value != "undefined") {
+          settings = Object.assign({}, settings, JSON.parse(value));
+        } // Store the preferences (so that the default values get stored)
+
+
+        localforage.setItem("settings", JSON.stringify(settings)); // debug:
+
+        console.log(settings); // if (settings.tab != 1) {
+        // 	$("#tab" + settings.tab).trigger("click");
+        // }
+
+        $("#tab" + settings.tab).trigger("click");
+
+        if (settings.tab == 1) {} // this.switchTabs(1);
+        // addJoyCons(settings.tab);
+
+
+        rebindUnbindTouchControls();
+        clearAndReplaceProfiles();
+
+        _this2.setState({
+          keyboardControls: settings.keyboardControls,
+          controllerControls: settings.controllerControls,
+          touchControls: settings.touchControls,
+          analogStickMode: settings.analogStickMode,
+          dpadSwap: settings.dpadSwap,
+          TDSConfig: settings.TDSConfig,
+          enableAudioThree: settings.enableAudioThree,
+          audioThree: settings.audioThree,
+          darkTheme: settings.darkTheme,
+          fullscreen: settings.fullscreen,
+          largescreen: settings.largescreen,
+          youtubeChat: settings.youtubeChat,
+          hideChat: settings.hideChat,
+          hideNav: settings.hideNav
+        }); // $("#deadzoneSlider").slider("value", settings.deadzone);
+        // $("#deadzone").text(settings.deadzone);
+        //
+        // $("#stickSensitivitySlider").slider("value", settings.stickSensitivityX);
+        // $("#sensitivity").text(settings.stickSensitivityX);
+        //
+        // $("#stickAttackSlider").slider("value", settings.stickAttack);
+        // $("#attack").text(settings.stickAttack);
+        //
+        // $("#stickReturnSlider").slider("value", settings.stickReturn);
+        // $("#return").text(settings.stickReturn);
+        //
+        // // volume:
+        // $("#laglessVolume").slider("value", settings.volume);
+        // $("#laglessVolume span").text(settings.volume);
+        // setTimeout(() => {
+        // 	try {
+        // 		player.volume = settings.volume / 100; // doesn't update automatically :/
+        // 	} catch (error) {}
+        // 	try {
+        // 		audio.volume = settings.volume / 100; // doesn't update automatically :/
+        // 	} catch (error) {}
+        // }, 2000);
+        // $(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
+        //
+        // /* AUTH  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+        // authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+        // if (authCookie != null) {
+        // 	authCookie = authCookie.split(" ")[0].replace(/;/g, "");
+        // 	socket.emit("registerAccount", {
+        // 		auth: authCookie,
+        // 		usernameIndex: settings.usernameIndex
+        // 	});
+        // 	$("#authenticateButton").remove();
+        // } else {
+        // 	// replace with twitch until signed in:
+        // 	replaceWithTwitch("#lagless" + settings.tab);
+        // 	$("#tab1").addClass("disabled");
+        // 	$("#tab3").addClass("disabled");
+        // 	$("#tab4").addClass("disabled");
+        // 	$("#tab5").addClass("disabled");
+        // 	// remove the logout button:
+        // 	$("#logout").remove();
+        // 	$("#loggedInStatus").remove();
+        //
+        // 	$(".disabled").on("click", function () {
+        // 		swal("You have to sign in first!");
+        // 	});
+        // }
+        //
+        // resizers.push(textFitPercent({
+        // 	selector: "#lagless2KeyboardDropdown",
+        // 	parent: "#lagless2Bar",
+        // 	percentWidth: 20,
+        // 	isFirstChild: true,
+        // 	isClass: true,
+        // 	maxTries: 20,
+        // 	increment: 0.2
+        // }));
+        //
+        // resizers.push(textFitPercent({
+        // 	selector: "#lagless2ViewerDropdown",
+        // 	parent: "#lagless2Bar",
+        // 	percentWidth: 12,
+        // 	isFirstChild: true,
+        // 	maxTries: 20,
+        // 	increment: 0.2,
+        // 	maxFontSize: 20
+        // }));
+        //
+        // resizers.push(textFitPercent({
+        // 	selector: "#lagless2Refresh",
+        // 	parent: "#lagless2Bar",
+        // 	percentWidth: 8,
+        // 	// 			isFirstChild: true,
+        // 	maxTries: 20,
+        // 	increment: 0.2,
+        // 	accuracy: 5,
+        // 	maxFontSize: 30
+        // }));
+        //
+        // resizers.push(textFitPercent({
+        // 	selector: "#lagless2KeyboardSettings",
+        // 	parent: "#lagless2Bar",
+        // 	percentWidth: 8,
+        // 	// 			isFirstChild: true,
+        // 	maxTries: 20,
+        // 	increment: 0.2,
+        // 	accuracy: 5,
+        // 	maxFontSize: 30
+        // }));
+        //
+        // resizers.push(textFitPercent({
+        // 	selector: "#hidePlayers",
+        // 	parent: "#playersContainer",
+        // 	percentWidth: 5,
+        // 	// 			isFirstChild: true,
+        // 	maxTries: 20,
+        // 	increment: 0.2,
+        // 	accuracy: 5,
+        // 	maxFontSize: 20
+        // }));
+        //
+        // for (let i = 0; i < resizers.length; i++) {
+        // 	resizers[i].resize();
+        // }
+        //
+        // // wait a little longer so the joycon images load:
+        // setTimeout(() => {
+        // 	$("body").addClass("loaded");
+        // 	// after animation is done:
+        // 	setTimeout(() => {
+        // 		$(".loaded #loader-wrapper")[0].style.visibility = "hidden";
+        // 	}, 500);
+        // }, 1000);
+
+        /* DISCORD EMBED */
+        // 		crate = new Crate({
+        // 			server: "433874668534104065",
+        // 			channel: "487328538173767692",
+        // 			shard: "https://cl2.widgetbot.io",
+        // 		});
+
+      });
+      var socket = io("https://twitchplaysnintendoswitch.com", {
+        path: "/8110/socket.io",
+        transports: ["websocket"]
+      });
+      socket.on("turnTimesLeft", function (data) {
+        var newPlayers = _toConsumableArray(_this2.state.players);
+
+        for (var i = 0; i < data.turnTimesLeft.length; i++) {
+          var turnTimeLeft = parseInt(data.turnTimesLeft[i] / 1000);
+          var turnPercent = parseInt(data.turnTimesLeft[i] / data.turnLengths[i] * 100);
+          var forfeitTimeLeft = parseInt(data.forfeitTimesLeft[i] / 1000);
+          var forfeitPercent = parseInt(data.forfeitTimesLeft[i] / data.forfeitLengths[i] * 100); // players[i].name
+
+          newPlayers[i].turnTimeLeft = turnTimeLeft;
+          newPlayers[i].turnPercent = turnPercent;
+          newPlayers[i].forfeitTimeLeft = forfeitTimeLeft;
+          newPlayers[i].forfeitPercent = forfeitPercent;
+        } // check if you're in the waitlist
+
+
+        if (data.waitlists[_this2.state.tab - 1].indexOf(_this2.state.myUniqueID) > -1) {
+          if (!tabsSwappedWithTwitch[_this2.state.settings.tab - 1]) {
+            tabsSwappedWithTwitch[_this2.state.settings.tab - 1] = true;
+            replaceWithTwitch("#lagless" + settings.tab); // setTimeout(() => {
+            // socket.emit("leaveLagless");
+            // }, 4000);
+            // swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
+
+            new Noty({
+              theme: "mint",
+              type: "warning",
+              text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
+              timeout: 5000,
+              sounds: {
+                volume: 0.5,
+                sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+                conditions: ["docVisible"]
+              }
+            }).show();
+          }
+        } else if (tabsSwappedWithTwitch[settings.tab - 1]) {
+          tabsSwappedWithTwitch[settings.tab - 1] = false;
+          new Noty({
+            theme: "mint",
+            type: "success",
+            text: "You're at the top of the waitlist! Switching back to lagless!",
+            timeout: 5000,
+            sounds: {
+              volume: 0.5,
+              sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+              conditions: ["docVisible"]
+            }
+          }).show();
+          replaceWithLagless(settings.tab);
+        }
+
+        _this2.setState({
+          waitlists: data.waitlists,
+          viewerIDs: data.viewers,
+          players: newPlayers
+        });
+      });
+      socket.on("controlQueues", function (data) {
+        var newPlayers = _toConsumableArray(_this2.state.players);
+
+        for (var i = 0; i < data.length; i++) {
+          newPlayers[i].name = data[i][0];
+        }
+
+        _this2.setState({
+          controlQueues: data,
+          players: newPlayers
+        });
+      });
+      socket.on("usernameMap", function (data) {
+        _this2.setState({
+          usernameMap: data
+        });
+      });
+      socket.on("accountInfo", function (data) {
+        _this2.setState({
+          myUniqueID: data.uniqueID,
+          myConnectedAccounts: data.connectedAccounts,
+          myUsername: data.username,
+          myValidUsernames: data.validUsernames
+        });
+      });
+      var authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+
+      if (authCookie != null) {
+        authCookie = authCookie.split(" ")[0].replace(/;/g, "");
+      }
+
+      setInterval(function () {
+        if (authCookie != null) {
+          socket.emit("registerAccount", {
+            auth: authCookie,
+            usernameIndex: _this2.state.usernameIndex
+          });
+        }
+      }, 5000);
+      /* IP */
+
+      setInterval(function () {
+        $.getJSON("https://jsonip.com?callback=?", function (data) {
+          socket.emit("registerIP", {
+            ip: data.ip,
+            id: _this2.state.myUniqueID,
+            username: _this2.state.myUsername
+          });
+
+          if (bannedIPs.indexOf(data.ip) > -1) {
+            window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+          }
+
+          if (banlist.indexOf(myUsername) > -1) {
+            window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+          }
+        });
+      }, 5000);
+      /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+      socket.on("controllerState1", function (data) {
+        _this2.setState({
+          controllerViewState: data
+        }); // if (document.getElementById("leftJoyConPlaceHolder" + settings.tab)) {
+        // 	ReactDOM.render(<LeftJoyCon controllerState={data} />, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
+        // }
+        // if (document.getElementById("rightJoyConPlaceHolder" + settings.tab)) {
+        // 	ReactDOM.render(<RightJoyCon controllerState={data} />, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
+        // }
+
+      });
+    } // checkbox settings:
+
+  }, {
+    key: "toggleDarkTheme",
+    value: function toggleDarkTheme(event) {
+      var _this3 = this;
+
+      this.setState({
+        darkTheme: event.target.checked
+      }, function () {
+        if (_this3.state.darkTheme) {
+          $("body").addClass("dark");
+        } else {
+          $("body").removeClass("dark");
+        }
+      });
+    }
+  }, {
+    key: "toggleFullscreen",
+    value: function toggleFullscreen(event) {
+      var _this4 = this;
+
+      this.setState({
+        fullscreen: event.target.checked
+      }, function () {
+        if (_this4.state.fullscreen) {
+          $("body").css("padding", "0");
+          $("#picture").css("width", "100%");
+          $("#picture").css("border", "none");
+          $(".videoCanvas").css("width", "100%");
+          $(".videoCanvas").css("margin-left", "0");
+          $(".laglessView").css("margin-left", "0");
+          $(".laglessView").css("margin-right", "0");
+
+          if (settings.touchControls) {
+            $("#touchControlsCheckbox").prop("checked", false).trigger("change");
+          }
+
+          if (!settings.hideChat) {
+            $("#hideChatCheckbox").prop("checked", true).trigger("change");
+          }
+
+          if (!settings.hideNav) {
+            $("#navCheckbox").prop("checked", true).trigger("change");
+          }
+
+          $(".well").each(function () {
+            $(this).removeClass("well");
+            $(this).addClass("well2");
+          });
+          $("body").addClass("hideScrollbar");
+          $(document).scrollTop(0);
+          tools.toggleFullScreen($("body")[0]);
+        } else {
+          $("body").css("padding", "");
+          $("#picture").css("width", "");
+          $("#picture").css("border", "");
+          $(".videoCanvas").css("width", "");
+          $(".videoCanvas").css("margin-left", "");
+          $(".laglessView").css("margin-left", "");
+          $(".laglessView").css("margin-right", "");
+          $("body").removeClass("hideScrollbar");
+        }
+      });
+    }
+  }, {
+    key: "toggleLargescreen",
+    value: function toggleLargescreen(event) {
+      var _this5 = this;
+
+      this.setState({
+        largescreen: event.target.checked
+      }, function () {
+        if (_this5.state.largescreen) {
+          $(".videoCanvas").css("width", "100%");
+          $(".videoCanvas").css("margin-left", "0");
+
+          if (settings.touchControls) {
+            $("#touchControlsCheckbox").prop("checked", false);
+            settings.touchControls = false;
+            localforage.setItem("settings", JSON.stringify(settings));
+            rebindUnbindTouchControls();
+          }
+        } else {
+          $(".videoCanvas").css("width", "");
+          $(".videoCanvas").css("margin-left", "");
+          $("#touchControlsCheckbox").prop("checked", true).trigger("change");
+        }
+      });
+    }
+  }, {
+    key: "toggleYoutubeChat",
+    value: function toggleYoutubeChat(event) {
+      var _this6 = this;
+
+      this.setState({
+        youtubeChat: event.target.checked
+      }, function () {
+        if (_this6.state.youtubeChat) {
+          $("#chat").attr("src", "https://www.youtube.com/live_chat?v=8jgSgQcZgGY&embed_domain=twitchplaysnintendoswitch.com");
+        } else {
+          if (_this6.state.darkTheme) {
+            $("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
+          } else {
+            $("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
+          }
+        }
+      });
+    }
+  }, {
+    key: "toggleHideChat",
+    value: function toggleHideChat(event) {
+      var _this7 = this;
+
+      this.setState({
+        hideChat: event.target.checked
+      }, function () {
+        if (_this7.state.hideChat) {
+          $("#chatContainer")[0].style.display = "none";
+          $("#picture").css("width", "100%");
+        } else {
+          $("#chatContainer")[0].style.display = "";
+          $("#picture").css("width", "");
+        }
+      });
+    }
+  }, {
+    key: "switchTabs",
+    value: function switchTabs(tab) {
+      this.setState({
+        tab: tab
+      }, function () {
+        // lagless 1:
+        if (tab == 1) {
+          socket.emit("join", "lagless1");
+        } else {
+          socket.emit("leave", "lagless1");
+        } // lagless 2:
+
+
+        if (tab == 2) {
+          socket.emit("join", "lagless2"); //player.play();
+
+          try {
+            player.destroy();
+          } catch (error) {}
+
+          player = new JSMpeg.Player(lagless2URL, {
+            canvas: document.getElementById("videoCanvas2"),
+            video: true,
+            audio:
+            /* !settings.audioThree */
+            true,
+            videoBufferSize: videoBufferSize,
+            audioBufferSize: audioBufferSize,
+            maxAudioLag: 0.5
+          });
+
+          if (!settings.audioThree) {
+            player.volume = settings.volume / 100;
+            audio.volume = 0;
+          } else {
+            player.volume = 0;
+            audio.volume = settings.volume / 100;
+          }
+        } else {
+          socket.emit("leave", "lagless2"); // 		player.stop();
+
+          try {
+            player.destroy();
+          } catch (error) {}
+
+          player = new JSMpeg.Player(lagless2URL, {
+            canvas: document.getElementById("videoCanvas2"),
+            video: false,
+            audio: true,
+            videoBufferSize: videoBufferSize,
+            audioBufferSize: audioBufferSize,
+            maxAudioLag: 0.5
+          });
+
+          if (!settings.audioThree) {
+            player.volume = settings.volume / 100;
+            audio.volume = 0;
+          } else {
+            player.volume = 0;
+            audio.volume = settings.volume / 100;
+          }
+        } // lagless 3:
+
+
+        if (tab == 3) {
+          socket.emit("join", "lagless3");
+
+          var _uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+
+          wsavc.connect(_uri);
+        } else {
+          socket.emit("leave", "lagless3");
+
+          try {
+            wsavc.disconnect();
+          } catch (error) {}
+        } // lagless 4:
+
+
+        if (tab == 4) {
+          socket.emit("join", "lagless4");
+
+          if (!videoConnected) {
+            videoConnected = true;
+            socket.emit("requestVideo");
+          } else {
+            videoCanvas4.play();
+          }
+        } else {
+          socket.emit("leave", "lagless4"); // videoCanvas4.pause();
+        }
+
+        localforage.setItem("settings", JSON.stringify(settings));
+
+        if (!settings.largescreen) {
+          addJoyCons(tab);
+          rebindUnbindTouchControls();
+        } // https://github.com/yoannmoinet/nipplejs/issues/39
+        // force joysticks to recalculate the center:
+
+
+        window.dispatchEvent(new Event("resize"));
+        setTimeout(function () {
+          window.dispatchEvent(new Event("resize"));
+        }, 5000);
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this8 = this;
+
+      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+        id: "container",
+        className: this.state.darkTheme ? "dark" : "light"
+      }, _react.default.createElement("ul", {
+        id: "navTabs",
+        className: "nav nav-tabs " + (this.state.darkTheme ? "dark otborder-dark" : "light otborder")
+      }, _react.default.createElement("li", {
+        className: "nav-item active"
+      }, _react.default.createElement("a", {
+        id: "tab1",
+        className: (this.state.darkTheme ? "nav-link-dark" : "nav-link") + " active",
+        "data-toggle": "tab",
+        href: "#lagless1",
+        onClick: function onClick() {
+          _this8.switchTabs(1);
+        }
+      }, "Lagless 1")), _react.default.createElement("li", {
+        className: "nav-item"
+      }, _react.default.createElement("a", {
+        id: "tab2",
+        className: this.state.darkTheme ? "nav-link-dark" : "nav-link",
+        "data-toggle": "tab",
+        href: "#lagless2",
+        onClick: function onClick() {
+          _this8.switchTabs(2);
+        }
+      }, "Lagless 2")), _react.default.createElement("li", {
+        className: "nav-item"
+      }, _react.default.createElement("a", {
+        id: "tab3",
+        className: (this.state.darkTheme ? "nav-link-dark" : "nav-link") + " disabled",
+        "data-toggle": "tab",
+        href: "#lagless3",
+        onClick: function onClick() {
+          _this8.switchTabs(3);
+        }
+      }, "Lagless 3")), _react.default.createElement("li", {
+        className: "nav-item"
+      }, _react.default.createElement("a", {
+        id: "tab4",
+        className: (this.state.darkTheme ? "nav-link-dark" : "nav-link") + " disabled",
+        "data-toggle": "tab",
+        href: "#lagless4",
+        onClick: function onClick() {
+          _this8.switchTabs(4);
+        }
+      }, "Lagless 4")), _react.default.createElement("div", {
+        id: "statusContainer",
+        className: this.state.darkTheme ? "otborder-dark" : "otborder"
+      }, _react.default.createElement("i", {
+        className: "material-icons"
+      }, "lock_open"))), _react.default.createElement("div", {
+        id: "picture",
+        className: this.state.darkTheme ? "otborder-dark" : "otborder"
+      }, _react.default.createElement(LaglessView, {
+        num: this.state.tab,
+        controllerState: this.state.controllerViewState
+      }), _react.default.createElement("div", {
+        id: "laglessBar",
+        className: "laglessBar otborder"
+      }, _react.default.createElement(ViewerList, {
+        uniqueIDs: this.state.viewerIDs,
+        usernameMap: this.state.usernameMap
+      }), _react.default.createElement("div", {
+        id: "laglessVolumeSlider",
+        className: "volumeSlider otborder"
+      }, _react.default.createElement("i", {
+        className: "fa fa-volume-down"
+      }), _react.default.createElement("div", {
+        id: "laglessVolume",
+        className: "volume"
+      }), _react.default.createElement("i", {
+        className: "fa fa-volume-up"
+      })), _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg otborder"
+      }, _react.default.createElement("input", {
+        className: "audioThreeCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Audio 3.0"), _react.default.createElement("button", {
+        id: "laglessRefresh",
+        className: "laglessRefresh btn btn-primary btn-settings"
+      }, _react.default.createElement("i", {
+        className: "fas fa-sync-alt"
+      })), _react.default.createElement("button", {
+        id: "laglessKeyboardSettings",
+        "data-toggle": "modal",
+        "data-target": "#keyboardSettings",
+        className: "keyboardMapper btn btn-primary btn-settings"
+      }, _react.default.createElement("i", {
+        className: "fas fa-keyboard"
+      }), "|", _react.default.createElement("i", {
+        className: "fas fa-gamepad"
+      })), _react.default.createElement("div", {
+        id: "keyboardDropdown",
+        className: "keyboardDropdown dropdown show"
+      }, _react.default.createElement("a", {
+        id: "keyboardDropdownButton",
+        className: "btn btn-secondary dropdown-toggle",
+        href: "#",
+        "data-toggle": "dropdown"
+      }, "Keyboard Profiles"), _react.default.createElement("div", {
+        className: "keyboard-dropdown-menu dropdown-menu"
+      })))), _react.default.createElement("div", {
+        id: "chatContainer",
+        className: "otborder"
+      }, _react.default.createElement("div", {
+        id: "loggedInContainer",
+        className: "otborder"
+      }, _react.default.createElement("div", {
+        id: "loggedInStatus",
+        className: "otborder"
+      }, _react.default.createElement(UsernameDropdown, {
+        validUsernames: this.state.myValidUsernames,
+        myUsername: this.state.myUsername
+      }), _react.default.createElement("button", {
+        id: "logout",
+        className: "btn btn-secondary"
+      }, "Logout")), _react.default.createElement(ConnectAccounts, {
+        connectedAccounts: this.state.myConnectedAccounts
+      })), _react.default.createElement("iframe", {
+        id: "chat",
+        frameBorder: "0",
+        scrolling: "no",
+        src: "https://www.twitch.tv/embed/twitchplaysconsoles/chat" + (this.state.darkTheme ? "?darkpopout" : "")
+      })), _react.default.createElement("div", {
+        id: "barUnderTheStream",
+        className: this.state.darkTheme ? "dark otborder-dark" : "light otborder"
+      }, _react.default.createElement("div", {
+        id: "playersContainer",
+        className: "collapsibleContainer " + (this.state.darkTheme ? "otborder-dark" : "otborder")
+      }, _react.default.createElement("button", {
+        id: "hidePlayers",
+        className: "btn btn-secondary collapseButton",
+        "data-toggle": "",
+        "data-target": "#players",
+        collapsed: "false"
+      }, "Hide"), _react.default.createElement("div", {
+        id: "players",
+        className: "collapse show collapsible"
+      }, _react.default.createElement(Player, {
+        num: 1,
+        player: this.state.players[0],
+        myID: this.state.myUniqueID,
+        usernameMap: this.state.usernameMap,
+        controlQueue: this.state.controlQueues[0],
+        darkTheme: this.state.darkTheme
+      }), _react.default.createElement(Player, {
+        num: 2,
+        player: this.state.players[1],
+        myID: this.state.myUniqueID,
+        usernameMap: this.state.usernameMap,
+        controlQueue: this.state.controlQueues[1],
+        darkTheme: this.state.darkTheme
+      }), _react.default.createElement(Player, {
+        num: 3,
+        player: this.state.players[2],
+        myID: this.state.myUniqueID,
+        usernameMap: this.state.usernameMap,
+        controlQueue: this.state.controlQueues[2],
+        darkTheme: this.state.darkTheme
+      }), _react.default.createElement(Player, {
+        num: 4,
+        player: this.state.players[3],
+        myID: this.state.myUniqueID,
+        usernameMap: this.state.usernameMap,
+        controlQueue: this.state.controlQueues[3],
+        darkTheme: this.state.darkTheme
+      }))), _react.default.createElement("div", {
+        id: "settingsContainer",
+        className: "collapsibleContainer " + (this.state.darkTheme ? "otborder-dark" : "otborder")
+      }, _react.default.createElement("div", {
+        id: "settings",
+        className: "collapse show collapsible"
+      }, _react.default.createElement("div", {
+        id: "checkboxSettings",
+        className: "settingsPanel " + (this.state.darkTheme ? "otborder-dark dark" : "otborder light")
+      }, _react.default.createElement("ul", {
+        className: "list-group"
+      }, _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "keyboardControlsCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Enable Keyboard Controls")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "controllerControlsCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Enable Controller Controls")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "touchControlsCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Enable Touch Controls")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "mouseControlsCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Enable Mouse Controls")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "analogStickCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Analog Stick Mode")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "dpadCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "DPad Swap")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "3DSCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "3Ds config")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "enableAudioThreeCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Enable Audio 3.0")), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement(Checkbox, {
+        text: "Enable Dark Theme",
+        handleChange: this.toggleDarkTheme,
+        checked: this.state.darkTheme
+      })), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement(Checkbox, {
+        text: "Enable Fullscreen Mode",
+        handleChange: this.toggleFullscreen,
+        checked: this.state.fullscreen
+      })), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement(Checkbox, {
+        text: "Enable Largescreen Mode",
+        handleChange: this.toggleLargescreen,
+        checked: this.state.largescreen
+      })), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement(Checkbox, {
+        text: "YouTube Chat",
+        handleChange: this.toggleYoutubeChat,
+        checked: this.state.youtubeChat
+      })), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement(Checkbox, {
+        text: "Hide Chat",
+        handleChange: this.toggleHideChat,
+        checked: this.state.hideChat
+      })), _react.default.createElement("li", {
+        className: this.state.darkTheme ? "list-group-item-dark" : "list-group-item"
+      }, _react.default.createElement("label", {
+        className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+      }, _react.default.createElement("input", {
+        id: "navCheckbox",
+        type: "checkbox"
+      }), _react.default.createElement("span", {
+        className: "checkbox-placeholder"
+      }), "Hide Nav Bar")))), _react.default.createElement("div", {
+        id: "generalSettings",
+        className: "settingsPanel " + (this.state.darkTheme ? "otborder-dark dark" : "otborder light")
+      }, "General Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "Stick Deadzone: ", _react.default.createElement("span", {
+        id: "deadzone"
+      }, "50"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "deadzoneSlider",
+        className: "myslider"
+      })), "Stick Sensitivity: ", _react.default.createElement("span", {
+        id: "sensitivity"
+      }, "1"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "stickSensitivitySlider",
+        className: "myslider"
+      })), "Analog Stick Attack: ", _react.default.createElement("span", {
+        id: "attack"
+      }, "20"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "stickAttackSlider",
+        className: "myslider"
+      })), "Analog Stick Return: ", _react.default.createElement("span", {
+        id: "return"
+      }, "20"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "stickReturnSlider",
+        className: "myslider"
+      })), _react.default.createElement("button", {
+        id: "resetSettings",
+        className: "btn btn-secondary"
+      }, "Reset All Settings")), _react.default.createElement("div", {
+        id: "laglessSettingsContainer",
+        className: "settingsPanel " + (this.state.darkTheme ? "otborder-dark dark" : "otborder light")
+      }, _react.default.createElement("div", {
+        id: "lagless1Settings",
+        className: "laglessSettings"
+      }, "Lagless 1 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "Quality: ", _react.default.createElement("span", {
+        id: "quality"
+      }, "70"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "qualitySlider",
+        className: "myslider"
+      })), "Scale: ", _react.default.createElement("span", {
+        id: "scale"
+      }, "30"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "scaleSlider",
+        className: "myslider"
+      })), "FPS: ", _react.default.createElement("span", {
+        id: "fps"
+      }, "15"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "fpsSlider",
+        className: "myslider"
+      }))), _react.default.createElement("div", {
+        id: "lagless2Settings",
+        className: "laglessSettings"
+      }, "Lagless 2 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "FPS: ", _react.default.createElement("span", {
+        id: "fps2"
+      }, "20"), _react.default.createElement("div", {
+        className: "buttonSettings"
+      }, _react.default.createElement("button", {
+        id: "20fps2",
+        className: "fpsButton btn btn-secondary"
+      }, "20FPS"), _react.default.createElement("button", {
+        id: "30fps2",
+        className: "fpsButton btn btn-secondary"
+      }, "30FPS")), "Bitrate: ", _react.default.createElement("span", {
+        id: "bitrate2"
+      }, "1"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "bitrateSlider2",
+        className: "myslider"
+      })), "Scale: ", _react.default.createElement("span", {
+        id: "scale2"
+      }, "720"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "scaleSlider2",
+        className: "myslider"
+      })), _react.default.createElement("div", {
+        className: "buttonSettings"
+      }, _react.default.createElement("button", {
+        id: "240p2",
+        className: "resolutionButton btn btn-secondary"
+      }, "240p"), _react.default.createElement("button", {
+        id: "360p2",
+        className: "resolutionButton btn btn-secondary"
+      }, "360p"), _react.default.createElement("button", {
+        id: "540p2",
+        className: "resolutionButton btn btn-secondary"
+      }, "540p"), _react.default.createElement("button", {
+        id: "720p2",
+        className: "resolutionButton btn btn-secondary"
+      }, "720p"))), _react.default.createElement("div", {
+        id: "lagless3Settings",
+        className: "laglessSettings"
+      }, "Lagless 3 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "FPS: ", _react.default.createElement("span", {
+        id: "fps3"
+      }, "20"), _react.default.createElement("div", {
+        className: "buttonSettings"
+      }, _react.default.createElement("button", {
+        id: "20fps3",
+        className: "fpsButton btn btn-secondary"
+      }, "20FPS"), _react.default.createElement("button", {
+        id: "30fps3",
+        className: "fpsButton btn btn-secondary"
+      }, "30FPS")), "Bitrate: ", _react.default.createElement("span", {
+        id: "bitrate3"
+      }, "1"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "bitrateSlider3",
+        className: "myslider"
+      })), "Scale: ", _react.default.createElement("span", {
+        id: "scale3"
+      }, "720"), _react.default.createElement("div", {
+        className: "mysliderContainer"
+      }, _react.default.createElement("div", {
+        id: "scaleSlider3",
+        className: "myslider"
+      })), _react.default.createElement("div", {
+        className: "buttonSettings"
+      }, _react.default.createElement("button", {
+        id: "240p3",
+        className: "resolutionButton btn btn-secondary"
+      }, "240p"), _react.default.createElement("button", {
+        id: "360p3",
+        className: "resolutionButton btn btn-secondary"
+      }, "360p"), _react.default.createElement("button", {
+        id: "540p3",
+        className: "resolutionButton btn btn-secondary"
+      }, "540p"), _react.default.createElement("button", {
+        id: "720p3",
+        className: "resolutionButton btn btn-secondary"
+      }, "720p")))), _react.default.createElement("div", {
+        id: "waitlistContainer",
+        className: "settingsPanel " + (this.state.darkTheme ? "otborder-dark" : "otborder")
+      }, _react.default.createElement(Waitlist, {
+        tab: this.state.tab,
+        usernameMap: this.state.usernameMap,
+        uniqueIDs: this.state.waitlists,
+        myID: this.state.myUniqueID,
+        darkTheme: this.state.darkTheme
+      })))))), _react.default.createElement("div", {
+        id: "keyboardSettings",
+        className: "modal fade"
+      }, _react.default.createElement("div", {
+        className: "modal-dialog modal-lg"
+      }, _react.default.createElement("div", {
+        className: "modal-content"
+      }, _react.default.createElement("div", {
+        className: "modal-header"
+      }, _react.default.createElement("h3", {
+        className: "modal-title text-center"
+      }, "Keyboard Remapper")), _react.default.createElement("div", {
+        className: "modal-body"
+      }, _react.default.createElement("button", {
+        id: "resetBindings",
+        className: "btn btn-primary"
+      }, "Reset Keyboard Bindings"), _react.default.createElement("button", {
+        id: "defaultBindings",
+        className: "btn btn-primary"
+      }, "Default Keyboard Bindings"), _react.default.createElement("form", {
+        id: "profileCreator",
+        className: "form-inline"
+      }, _react.default.createElement("div", {
+        className: "form-group"
+      }, _react.default.createElement("input", {
+        id: "profileName",
+        className: "form-control mx-sm-3",
+        type: "text",
+        placeholder: "Profile Name"
+      }), _react.default.createElement("button", {
+        id: "createProfile",
+        className: "btn btn-primary"
+      }, "Create Keyboard Profile"))), _react.default.createElement("div", {
+        id: "keyboardConfigurator",
+        className: ""
+      }, _react.default.createElement("div", {
+        id: "keyboardRemapperInstructions"
+      }, "To remap keys, click the letter you want to remap, then press the key you want to bind."), _react.default.createElement("div", {
+        id: "keyboardMapperContainer"
+      }, _react.default.createElement("div", {
+        id: "keyboardConfigCodes"
+      }, _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LU"
+      }, "Left Stick Up"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LD"
+      }, "Left Stick Down"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LL"
+      }, "Left Stick Left"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LR"
+      }, "Left Stick Right"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RU"
+      }, "Right Stick Up"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RD"
+      }, "Right Stick Down"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RL"
+      }, "Right Stick Left"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RR"
+      }, "Right Stick Right"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "ABtn"
+      }, "A"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "BBtn"
+      }, "B"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "XBtn"
+      }, "X"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "YBtn"
+      }, "Y"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DUp"
+      }, "DPad Up"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DDown"
+      }, "DPad Down"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DLeft"
+      }, "DPad Left"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DRight"
+      }, "DPad Right"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LStick"
+      }, "LStick Button"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RStick"
+      }, "RStick Button"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LBtn"
+      }, "L"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "ZL"
+      }, "ZL"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RBtn"
+      }, "R"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "ZR"
+      }, "ZR"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "Minus"
+      }, "Minus"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "Plus"
+      }, "Plus"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "Capture"
+      }, "Capture"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "Home"
+      }, "Home")), _react.default.createElement("div", {
+        id: "keyboardConfigKeys"
+      }, _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LUKey"
+      }, "W"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LDKey"
+      }, "S"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LLKey"
+      }, "A"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LRKey"
+      }, "D"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RUKey"
+      }, "I"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RDKey"
+      }, "K"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RLKey"
+      }, "J"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RRKey"
+      }, "L"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "ABtnKey"
+      }, "\u2192"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "BBtnKey"
+      }, "\u2193"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "XBtnKey"
+      }, "\u2191"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "YBtnKey"
+      }, "\u2190"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DUpKey"
+      }, "T"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DDownKey"
+      }, "G"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DLeftKey"
+      }, "F"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "DRightKey"
+      }, "H"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LStickKey"
+      }, "R"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RStickKey"
+      }, "Y"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "LBtnKey"
+      }, "U"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "ZLKey"
+      }, "Q"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "RBtnKey"
+      }, "O"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "ZRKey"
+      }, "E"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "MinusKey"
+      }, "-"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "PlusKey"
+      }, "="), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "CaptureKey"
+      }, "1"), _react.default.createElement("li", {
+        className: "buttonConfig list-group-item",
+        id: "HomeKey"
+      }, "2")))))))));
+    }
+  }]);
+
+  return App;
+}(_react.Component);
+
+exports.default = App;
+
+_reactDom.default.render(_react.default.createElement(App, null), document.getElementById("root")); // if (isMobile) {
 // 	swal({
 // 		title: "Do you want to go to the mobile site?",
 // 		type: "warning",
@@ -25863,17 +29752,7 @@ keyboardLayout.Plus = "=";
 keyboardLayout.Capture = "1";
 keyboardLayout.Home = "2";
 settings.keyboardProfiles.default = keyboardLayout;
-
-function getMeta(url, callback) {
-  var img = new Image();
-  img.src = url;
-
-  img.onload = function () {
-    callback(this.width, this.height);
-  };
-}
 /* CONTROLLER STUFF */
-
 
 var gamepadCounter = 0;
 var controller = new VirtualProController();
@@ -25909,25 +29788,37 @@ function sendControllerState() {
   }
 
   if (controlQueues[currentPlayerChosen].indexOf(myUniqueID) > 0 && controlQueues[currentPlayerChosen].length > 0) {
-    var alertMessage = $(".swal2-container")[0];
-
-    if (typeof alertMessage == "undefined") {
-      swal("It's not your turn yet!");
-    }
-
+    var notification = new Noty({
+      theme: "mint",
+      type: "warning",
+      text: "It's not your turn yet!",
+      timeout: 500
+    });
+    notification.show();
     return;
   }
 
   authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 
   if (authCookie == null) {
-    swal({
-      title: "You need to login! Redirecting you now!"
-    }).then(function (result) {
-      if (result.value) {
-        window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+    // swal({
+    // 	title: "You need to login! Redirecting you now!"
+    // }).then((result) => {
+    // 	if (result.value) {
+    // 		window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+    // 	}
+    // });
+    new Noty({
+      theme: "mint",
+      type: "warning",
+      text: "You aren't signed in!",
+      timeout: 500,
+      sounds: {
+        volume: 0.5,
+        sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+        conditions: ["docVisible"]
       }
-    });
+    }).show();
     return;
   } else {
     authCookie = authCookie.split(" ")[0].replace(/;/g, "");
@@ -25962,14 +29853,25 @@ function getKeyboardInput() {
   authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 
   if (authCookie == null) {
-    $("#keyboardControlsCheckbox").prop("checked", false).trigger("change");
-    swal({
-      title: "You need to login! Redirecting you now!"
-    }).then(function (result) {
-      if (result.value) {
-        window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+    $("#keyboardControlsCheckbox").prop("checked", false).trigger("change"); // swal({
+    // 	title: "You need to login! Redirecting you now!"
+    // }).then((result) => {
+    // 	if (result.value) {
+    // 		window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+    // 	}
+    // });
+
+    new Noty({
+      theme: "mint",
+      type: "warning",
+      text: "You aren't signed in!",
+      timeout: 500,
+      sounds: {
+        volume: 0.5,
+        sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+        conditions: ["docVisible"]
       }
-    });
+    }).show();
     return;
   } else {
     authCookie = authCookie.split(" ")[0].replace(/;/g, "");
@@ -26594,13 +30496,17 @@ function getGamepadInput() {
 
   if (authCookie == null) {
     $("#controllerControlsCheckbox").prop("checked", false).trigger("change");
-    swal({
-      title: "You need to login! Redirecting you now!"
-    }).then(function (result) {
-      if (result.value) {
-        window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
+    new Noty({
+      theme: "mint",
+      type: "warning",
+      text: "You aren't signed in!",
+      timeout: 500,
+      sounds: {
+        volume: 0.5,
+        sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+        conditions: ["docVisible"]
       }
-    });
+    }).show();
     return;
   } else {
     authCookie = authCookie.split(" ")[0].replace(/;/g, "");
@@ -26612,14 +30518,13 @@ function getGamepadInput() {
 
 $(document).ready(function () {
   console.log("restoring preferences"); // check if new:
-
-  localforage.getItem("new").then(function (value) {
-    if (value != "new") {
-      $("#tutorialWindow").modal();
-    }
-
-    localforage.setItem("new", "new");
-  }); // check for ads:
+  // localforage.getItem("new").then(function (value) {
+  // 	if (value != "new") {
+  // 		$("#tutorialWindow").modal();
+  // 	}
+  // 	localforage.setItem("new", "new");
+  // });
+  // check for ads:
   // 	localforage.getItem("ads").then(function(value) {
   // 		if (value != "ads") {
   // 			if (typeof canRunAds == "undefined") {
@@ -26640,19 +30545,17 @@ $(document).ready(function () {
     } // Store the preferences (so that the default values get stored)
 
 
-    localforage.setItem("settings", JSON.stringify(settings)); // debug:
+    localforage.setItem("settings", JSON.stringify(settings)); // // debug:
+    // console.log(settings);
+    //
+    // if (settings.tab != 1) {
+    // 	$("#tab" + settings.tab).trigger("click");
+    // }
+    // if (settings.tab == 1) {
+    // 	switchTabs(1);
+    // }
+    // addJoyCons(settings.tab);
 
-    console.log(settings);
-
-    if (settings.tab != 1) {
-      $("#tab" + settings.tab).trigger("click");
-    }
-
-    if (settings.tab == 1) {
-      switchTabs("#lagless1");
-    }
-
-    addJoyCons("#lagless" + settings.tab);
     rebindUnbindTouchControls();
     clearAndReplaceProfiles();
 
@@ -26749,7 +30652,7 @@ $(document).ready(function () {
       $("#authenticateButton").remove();
     } else {
       // replace with twitch until signed in:
-      replaceWithTwitch("#lagless" + settings.tab);
+      replaceWithTwitch(settings.tab);
       $("#tab1").addClass("disabled");
       $("#tab3").addClass("disabled");
       $("#tab4").addClass("disabled");
@@ -27196,45 +31099,22 @@ setInterval(function () {
     }); // 		$("#authenticateButton").remove();
   }
 }, 5000);
-socket.on("accountInfo", function (data) {
-  myUniqueID = data.uniqueID;
-  myConnectedAccounts = data.connectedAccounts;
-  var usernameChanged = JSON.stringify(myUsername) !== JSON.stringify(data.username);
-  myUsername = data.username;
-  var usernamesChanged = JSON.stringify(myValidUsernames) !== JSON.stringify(data.validUsernames);
-  myValidUsernames = data.validUsernames; // 	let loggedInText = '<span class="align-self-center">Logged in as: ' + myValidUsernames[settings.usernameIndex] + "</span>";
-  // 	$("#loggedInStatus").html(loggedInText);
-
-  if (usernamesChanged) {
-    for (var i = 0; i < data.validUsernames.length; i++) {
-      var html = '<button class="username-dropdown-item dropdown-item">' + data.validUsernames[i] + "</button>";
-      $("#usernameDropdownDiv").append(html);
-    }
-  }
-
-  if (usernameChanged) {
-    $("#usernameDropdownMenuLink").text(myUsername);
-  }
-
-  if (myConnectedAccounts.indexOf("twitch") > -1) {
-    $("#connectWithTwitch").remove();
-  }
-
-  if (myConnectedAccounts.indexOf("google") > -1) {
-    $("#connectWithGoogle").remove();
-  }
-
-  if (myConnectedAccounts.indexOf("youtube") > -1) {
-    $("#connectWithYoutube").remove();
-  }
-
-  if (myConnectedAccounts.indexOf("discord") > -1) {
-    $("#connectWithDiscord").remove();
-  }
-
-  if (myConnectedAccounts.length == 4) {
-    $("#loggedInIndicator").remove();
-  }
+socket.on("accountInfo", function (data) {//
+  // if (myConnectedAccounts.indexOf("twitch") > -1) {
+  // 	$("#connectWithTwitch").remove();
+  // }
+  // if (myConnectedAccounts.indexOf("google") > -1) {
+  // 	$("#connectWithGoogle").remove();
+  // }
+  // if (myConnectedAccounts.indexOf("youtube") > -1) {
+  // 	$("#connectWithYoutube").remove();
+  // }
+  // if (myConnectedAccounts.indexOf("discord") > -1) {
+  // 	$("#connectWithDiscord").remove();
+  // }
+  // if (myConnectedAccounts.length == 4) {
+  // 	$("#loggedInIndicator").remove();
+  // }
 });
 socket.on("usernameMap", function (data) {
   usernameMap = data;
@@ -27649,40 +31529,7 @@ $("#720p3").on("click", function (event) {
   socket.emit("lagless3Settings", {
     scale: 720
   });
-}); // $("#offsetXSlider3").slider({
-// 	min: 0,
-// 	max: 600,
-// 	step: 1,
-// 	value: 0,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#offsetX3").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {
-// 		socket.emit("lagless3Settings", {
-// 			offsetX: parseInt(ui.value)
-// 		});
-// 	}
-// });
-//
-// $("#offsetYSlider3").slider({
-// 	min: 0,
-// 	max: 300,
-// 	step: 1,
-// 	value: 0,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#offsetY3").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {
-// 		socket.emit("lagless2Settings", {
-// 			offsetY: parseInt(ui.value)
-// 		});
-// 	}
-// });
-
+});
 $("#20fps3").on("click", function (event) {
   $("#fps3").text(20);
   socket.emit("lagless3Settings", {
@@ -27694,104 +31541,18 @@ $("#30fps3").on("click", function (event) {
   socket.emit("lagless3Settings", {
     framerate: 30
   });
-}); // $("#45fps3").on("click", function (event) {
-// 	$("#fps3").text(45);
-// 	socket.emit("lagless3Settings", {
-// 		framerate: 45
-// 	});
-// });
-// $("#60fps3").on("click", function (event) {
-// 	$("#fps3").text(60);
-// 	socket.emit("lagless3Settings", {
-// 		framerate: 60
-// 	});
-// });
-// lagless4:
-// lagless3:
-// lagless5:
-
-$("#bitrateSlider5").slider({
-  min: 0,
-  max: 2,
-  step: 0.05,
-  value: 1,
-  range: "min",
-  animate: true,
-  slide: function slide(event, ui) {
-    $("#bitrate5").text(ui.value);
-  },
-  stop: function stop(event, ui) {
-    socket.emit("lagless5Settings", {
-      videoBitrate: parseFloat(ui.value)
-    });
-  }
-});
-$("#scaleSlider5").slider({
-  min: 100,
-  max: 960,
-  step: 1,
-  value: 960,
-  range: "min",
-  animate: true,
-  slide: function slide(event, ui) {
-    $("#scale5").text(ui.value);
-  },
-  stop: function stop(event, ui) {
-    socket.emit("lagless5Settings", {
-      scale: parseInt(ui.value)
-    });
-  }
-});
-$("#offsetXSlider5").slider({
-  min: 0,
-  max: 600,
-  step: 1,
-  value: 0,
-  range: "min",
-  animate: true,
-  slide: function slide(event, ui) {
-    $("#offsetX5").text(ui.value);
-  },
-  stop: function stop(event, ui) {
-    socket.emit("lagless5Settings", {
-      offsetX: parseInt(ui.value)
-    });
-  }
-});
-$("#offsetYSlider5").slider({
-  min: 0,
-  max: 400,
-  step: 1,
-  value: 0,
-  range: "min",
-  animate: true,
-  slide: function slide(event, ui) {
-    $("#offsetY5").text(ui.value);
-  },
-  stop: function stop(event, ui) {
-    socket.emit("lagless5Settings", {
-      offsetY: parseInt(ui.value)
-    });
-  }
-});
-socket.on("lagless5Settings", function (data) {
-  lagless5Settings = Object.assign({}, lagless5Settings, data);
-  $("#scale5").text(lagless5Settings.scale);
-  $("#scaleSlider5").slider("value", lagless5Settings.scale);
-  $("#bitrate5").text(lagless5Settings.videoBitrate);
-  $("#bitrateSlider5").slider("value", lagless5Settings.videoBitrate);
-  $("#offsetX5").text(lagless5Settings.offsetX);
-  $("#offsetXSlider5").slider("value", lagless5Settings.offsetX);
-  $("#offsetY5").text(lagless5Settings.offsetY);
-  $("#offsetYSlider5").slider("value", lagless5Settings.offsetY);
 });
 /* LAGLESS 1.0 */
+// let videoCanvas1 = $("#videoCanvas1")[0];
+// let videoCanvas1Context = videoCanvas1.getContext("2d");
+// videoCanvas1.width = 1280;
+// videoCanvas1.height = 720;
 
-var videoCanvas1 = $("#videoCanvas1")[0];
-var videoCanvas1Context = videoCanvas1.getContext("2d");
-videoCanvas1.width = 1280;
-videoCanvas1.height = 720;
-socket2.on("viewImage", function (data) {
+socket.on("viewImage", function (data) {
+  var videoCanvas1 = $("#videoCanvas1")[0];
+  var videoCanvas1Context = videoCanvas1.getContext("2d");
+  videoCanvas1.width = 1280;
+  videoCanvas1.height = 720;
   var src = "data:image/jpeg;base64," + data;
 
   if (src == "data:image/jpeg;base64,") {
@@ -27938,46 +31699,12 @@ videoPeer.on("stream", function (stream) {
 
   canvas4.play();
 });
-/* LAGLESS 5.0 */
-
-var videoCanvas5 = $("#videoCanvas5")[0];
-var videoCanvas5Context = videoCanvas5.getContext("2d");
-videoCanvas5.width = 1280;
-videoCanvas5.height = 720;
-socket2.on("viewImage5", function (data) {
-  var src = "data:image/jpeg;base64," + data;
-
-  if (src == "data:image/jpeg;base64,") {
-    console.log("image was empty");
-    socket.emit("restart5");
-    return;
-  }
-
-  var image = new Image();
-  image.style = "max-width:100%; height:auto;";
-
-  image.onload = function () {
-    var imgWidth = image.width;
-    var imgHeight = image.height;
-    var canvasWidth = videoCanvas5.width;
-    var canvasHeight = videoCanvas5.height;
-    var ratio = imgHeight / imgWidth;
-    var canvasRatio = canvasWidth / canvasHeight;
-    var ratioW = 1280 / $("#videoCanvas5").innerWidth();
-    var ratioH = 720 / $("#videoCanvas5").innerHeight();
-    var cWidth = $("#videoCanvas5").innerWidth();
-    videoCanvas5Context.clearRect(0, 0, canvasWidth, canvasHeight);
-    videoCanvas5Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-  };
-
-  image.src = src;
-});
 
 function addJoyCons(tab, actual) {
   actual = actual || false;
 
   if (!actual) {
-    tab = tab + "View";
+    tab = "#lagless" + tab + "View";
   } // delete old joycons:
 
 
@@ -27988,168 +31715,28 @@ function addJoyCons(tab, actual) {
     console.log("JoyCon delete error.");
   } // remove previous renders:
   // todo: implement prevTab
+  // for (let i = 1; i < 5; i++) {
+  // 	ReactDOM.unmountComponentAtNode(document.getElementById("leftJoyConPlaceHolder" + i));
+  // 	ReactDOM.unmountComponentAtNode(document.getElementById("rightJoyConPlaceHolder" + i));
+  // }
+  // if (document.getElementById("leftJoyConPlaceHolder" + settings.tab)) {
+  // 	ReactDOM.render(<LeftJoyCon/>, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
+  // }
+  // if (document.getElementById("rightJoyConPlaceHolder" + settings.tab)) {
+  // 	ReactDOM.render(<RightJoyCon/>, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
+  // }
+  // // rebind touch controls:
+  // rebindUnbindTouchControls();
+  //
+  // // rebind sticks:
+  // leftJoyStick.zone = document.querySelector("#leftStick");
+  // rightJoyStick.zone = document.querySelector("#rightStick");
+  // leftStick = nipplejs.create(leftJoyStick);
+  // rightStick = nipplejs.create(rightJoyStick);
+  // bindJoysticks();
 
+} // todo: debounce
 
-  for (var i = 1; i < 5; i++) {
-    _reactDom.default.unmountComponentAtNode(document.getElementById("leftJoyConPlaceHolder" + i));
-
-    _reactDom.default.unmountComponentAtNode(document.getElementById("rightJoyConPlaceHolder" + i));
-  }
-
-  _reactDom.default.render(_react.default.createElement(LeftJoyCon, null), document.getElementById("leftJoyConPlaceHolder" + settings.tab));
-
-  _reactDom.default.render(_react.default.createElement(RightJoyCon, null), document.getElementById("rightJoyConPlaceHolder" + settings.tab)); // rebind touch controls:
-
-
-  rebindUnbindTouchControls(); // rebind sticks:
-
-  leftJoyStick.zone = document.querySelector("#leftStick");
-  rightJoyStick.zone = document.querySelector("#rightStick");
-  leftStick = nipplejs.create(leftJoyStick);
-  rightStick = nipplejs.create(rightJoyStick);
-  bindJoysticks();
-}
-/* SWITCH IMPLEMENTATIONS */
-
-
-function switchTabs(tab) {
-  // lagless 1:
-  if (tab == "#lagless1") {
-    settings.tab = 1;
-    socket2.emit("join", "lagless1"); // todo: fix this:
-
-    clearInterval(lagless1JoinTimer);
-    lagless1JoinTimer = setInterval(function () {
-      socket2.emit("join", "lagless1");
-    }, 5000);
-  } else {
-    clearInterval(lagless1JoinTimer);
-    socket2.emit("leave", "lagless1");
-  } // lagless 2:
-
-
-  if (tab == "#lagless2") {
-    settings.tab = 2;
-    socket.emit("join", "lagless2"); //player.play();
-
-    try {
-      player.destroy();
-    } catch (error) {}
-
-    player = new JSMpeg.Player(lagless2URL, {
-      canvas: canvas2,
-      video: true,
-      audio:
-      /* !settings.audioThree */
-      true,
-      videoBufferSize: videoBufferSize,
-      audioBufferSize: audioBufferSize,
-      maxAudioLag: 0.5
-    });
-
-    if (!settings.audioThree) {
-      player.volume = settings.volume / 100;
-      audio.volume = 0;
-    } else {
-      player.volume = 0;
-      audio.volume = settings.volume / 100;
-    }
-  } else {
-    // 		player.stop();
-    try {
-      player.destroy();
-    } catch (error) {}
-
-    player = new JSMpeg.Player(lagless2URL, {
-      canvas: canvas2,
-      video: false,
-      audio: true,
-      videoBufferSize: videoBufferSize,
-      audioBufferSize: audioBufferSize,
-      maxAudioLag: 0.5
-    });
-
-    if (!settings.audioThree) {
-      player.volume = settings.volume / 100;
-      audio.volume = 0;
-    } else {
-      player.volume = 0;
-      audio.volume = settings.volume / 100;
-    }
-  } // lagless 3:
-
-
-  if (tab == "#lagless3") {
-    settings.tab = 3;
-    socket.emit("join", "lagless3");
-
-    var _uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-
-    wsavc.connect(_uri);
-  } else {
-    try {
-      wsavc.disconnect();
-    } catch (error) {}
-  } // lagless 4:
-
-
-  if (tab == "#lagless4") {
-    settings.tab = 4;
-    socket.emit("join", "lagless4");
-
-    if (!videoConnected) {
-      videoConnected = true;
-      socket.emit("requestVideo");
-    } else {
-      videoCanvas4.play();
-    }
-  } else {
-    videoCanvas4.pause();
-  } // lagless 5:
-
-
-  if (tab == "#lagless5") {
-    settings.tab = 5;
-    socket2.emit("join", "lagless5");
-
-    if (typeof player5 != "undefined") {
-      try {
-        player5.play();
-      } catch (e) {}
-    } // 		setTimeout(() => {
-    // 			player.volume = 0;
-    // 		}, 1000);
-
-  } else {
-    socket2.emit("leave", "viewers5");
-
-    if (typeof player5 != "undefined") {
-      try {
-        player5.stop();
-      } catch (e) {}
-    }
-  }
-}
-
-$(document).on("shown.bs.tab", 'a[data-toggle="tab"]', function (e) {
-  var tab = $(e.target);
-  var contentId = tab.attr("href");
-  currentTab = contentId;
-  switchTabs(contentId);
-  localforage.setItem("settings", JSON.stringify(settings));
-
-  if (!settings.largescreen) {
-    addJoyCons(contentId);
-    rebindUnbindTouchControls();
-  } // https://github.com/yoannmoinet/nipplejs/issues/39
-  // force joysticks to recalculate the center:
-
-
-  window.dispatchEvent(new Event("resize"));
-  setTimeout(function () {
-    window.dispatchEvent(new Event("resize"));
-  }, 5000);
-}); // todo: debounce
 
 $(window).resize(function (event) {
   // hack:
@@ -28172,36 +31759,20 @@ $(window).resize(function (event) {
 // }, 5000);
 
 setInterval(function () {
-  socket.emit("joinLagless" + settings.tab);
-}, 10000); // let twitchPlayer1 = new Twitch.Player("lagless1View", {channel: "twitchplaysconsoles"});
-// let twitchPlayer2 = new Twitch.Player("lagless2View", {channel: "twitchplaysconsoles"});
-// let twitchPlayer3 = new Twitch.Player("lagless3View", {channel: "twitchplaysconsoles"});
-// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[0].id = "twitchVideo1";
-// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[1].id = "twitchVideo2";
-// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[2].id = "twitchVideo3";
-// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[0].className = "twitchVideo";
-// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[1].className = "twitchVideo";
-// $("iframe[src='https://player.twitch.tv/?allowfullscreen&channel=twitchplaysconsoles&origin=https%3A%2F%2Ftwitchplaysnintendoswitch.com']")[2].className = "twitchVideo";
-// twitchPlayer1.pause();
-// twitchPlayer2.pause();
-// twitchPlayer3.pause();
-// $("#twitchVideo1")[0].style.display = "none";
-// $("#twitchVideo2")[0].style.display = "none";
-// $("#twitchVideo3")[0].style.display = "none";
+  socket.emit("join", "lagless" + settings.tab);
+}, 10000);
 
 function replaceWithTwitch(tab) {
   tab = tab || currentTab;
   var twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
 
-  if (tab == "#lagless1") {
-    clearInterval(lagless1JoinTimer);
-    socket2.emit("leave", "viewers");
+  if (tab == 1) {
     $("#videoCanvas1")[0].style.display = "none";
     $("#videoCanvas1").after(twitchIFrame);
   } else {// 		$("#tab1").addClass("disabled");
   }
 
-  if (tab == "#lagless2") {
+  if (tab == 2) {
     try {
       player.stop();
     } catch (error) {
@@ -28212,13 +31783,13 @@ function replaceWithTwitch(tab) {
     $("#videoCanvas2").after(twitchIFrame);
   } else {}
 
-  if (tab == "#lagless3") {
+  if (tab == 3) {
     wsavc.disconnect();
     $("#videoCanvas3")[0].style.display = "none";
     $("#videoCanvas3").after(twitchIFrame);
   } else {}
 
-  if (tab == "#lagless4") {
+  if (tab == 4) {
     try {// 			player.stop();
     } catch (error) {// 			console.log("player not defined");
     }
@@ -28227,36 +31798,32 @@ function replaceWithTwitch(tab) {
     $("#videoCanvas4").after(twitchIFrame);
   } else {}
 
-  if (tab == "#lagless5") {
+  if (tab == 5) {
     player5.stop();
     $("#videoCanvas5")[0].style.display = "none";
     $("#videoCanvas5").after(twitchIFrame);
-  } else {}
+  } else {} // socket.emit("leaveLagless");
 
-  socket.emit("leaveLagless");
 }
 
 function replaceWithLagless(tab) {
   tab = tab || currentTab;
   var laglessCanvas;
 
-  if (tab == "#lagless1") {
-    socket2.emit("join", "lagless1");
+  if (tab == 1) {
+    socket.emit("join", "lagless1");
     $("#videoCanvas1")[0].style.display = "";
     $("#twitchVideo").remove();
   } else {// 		$("#tab1").removeClass("disabled");
   }
 
-  if (tab == "#lagless2") {
-    socket.emit("join", "lagless2");
+  if (tab == 2) {
     player.play();
     $("#videoCanvas2")[0].style.display = "";
     $("#twitchVideo").remove();
   } else {}
 
-  if (tab == "#lagless3") {
-    socket.emit("joinLagless3");
-
+  if (tab == 3) {
     var _uri2 = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 
     wsavc.connect(_uri2);
@@ -28265,15 +31832,12 @@ function replaceWithLagless(tab) {
   } else {// 		$("#tab3").removeClass("disabled");
   }
 
-  if (tab == "#lagless4") {
-    socket.emit("join", "lagless4"); // 		player4.play();
-
+  if (tab == 4) {
     $("#videoCanvas4")[0].style.display = "";
     $("#twitchVideo").remove();
   } else {}
 
-  if (tab == "#lagless5") {
-    socket.emit("join", "lagless5");
+  if (tab == 5) {
     player.play();
     $("#videoCanvas5")[0].style.display = "";
     $("#twitchVideo").remove();
@@ -28382,31 +31946,6 @@ $(".audioThreeCheckbox").on("change", function () {
     $(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
   }, 100);
 });
-
-var ControlQueue = __webpack_require__(/*! src/components/ControlQueue.jsx */ "./src/components/ControlQueue.jsx");
-
-var JoinLeaveQueueButton = __webpack_require__(/*! src/components/JoinLeaveQueueButton.jsx */ "./src/components/JoinLeaveQueueButton.jsx");
-/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-
-socket.on("controlQueues", function (data) {
-  controlQueues = data.controlQueues;
-
-  for (var i = 0; i < controlQueues.length; i++) {
-    _reactDom.default.render(_react.default.createElement(ControlQueue, {
-      num: i + 1,
-      viewerIDs: data.controlQueues[i],
-      usernameMap: usernameMap,
-      darkTheme: settings.darkTheme
-    }), document.getElementById("controlQueue" + (i + 1)));
-
-    _reactDom.default.render(_react.default.createElement(JoinLeaveQueueButton, {
-      num: i + 1,
-      controlQueue: data.controlQueues[i],
-      myID: myUniqueID
-    }), document.getElementById("joinLeaveQueue" + (i + 1)));
-  }
-});
 /* MOD COMMANDS */
 // selects elements in the future:
 // https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
@@ -28451,14 +31990,10 @@ $("#container").popover({
 var modPowerUniqueID = "";
 $(document).on("click", ".queueItem", function (event) {
   $(this).effect("highlight", {}, 2000);
-  var userIndex = $(this).index();
-  var queueIndex = parseInt($(this).parent().attr("id").slice(-1)) - 1;
-  modPowerUniqueID = controlQueues[queueIndex][userIndex];
+  modPowerUniqueID = $(this).attr("uniqueid");
 });
 $(document).on("click", ".viewerElement", function (event) {
-  $(this).effect("highlight", {}, 2000); // 	userIndex = $(this).index();
-  // 	queueIndex = parseInt($(this).parent().attr("id").slice(-1))-1;
-
+  $(this).effect("highlight", {}, 2000);
   modPowerUniqueID = $(this).attr("uniqueid");
 });
 $(document).on("click", "#kickFromQueue", function (event) {
@@ -28485,15 +32020,6 @@ $(document).on("click", 'i:contains("lock_open")', function (event) {
   $(this).effect("highlight", {}, 2000);
   socket.emit("lock");
 });
-
-var ViewerList = __webpack_require__(/*! src/components/ViewerList.jsx */ "./src/components/ViewerList.jsx");
-
-var TurnTimer = __webpack_require__(/*! src/components/TurnTimer.jsx */ "./src/components/TurnTimer.jsx");
-
-var ForfeitTimer = __webpack_require__(/*! src/components/ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx");
-
-var Player = __webpack_require__(/*! src/components/Player.jsx */ "./src/components/Player.jsx");
-
 socket.on("turnTimesLeft", function (data) {
   lastCurrentTime = Date.now();
   var viewersChanged = JSON.stringify(viewers) !== JSON.stringify(data.viewers);
@@ -28511,94 +32037,74 @@ socket.on("turnTimesLeft", function (data) {
       var _iconHTML = '<i class="material-icons">lock_open</i>';
       $('i:contains("lock")').replaceWith(_iconHTML);
     }
-  }
+  } // lagless / twitch swap
 
-  _reactDom.default.render(_react.default.createElement(ViewerList, {
-    viewerIDs: viewers,
-    usernameMap: usernameMap
-  }), document.getElementById("laglessViewerDropdown"));
 
-  for (var i = 0; i < data.turnTimesLeft.length; i++) {
-    var timeLeftMilli = data.turnTimesLeft[i];
-    var timeLeftSec = parseInt(data.turnTimesLeft[i] / 1000);
-    var percent = parseInt(timeLeftMilli / data.turnLengths[i] * 100);
-    var timeLeftMilli2 = data.forfeitTimesLeft[i];
-    var timeLeftSec2 = parseInt(timeLeftMilli2 / 1000);
-    var percent2 = parseInt(timeLeftMilli2 / data.forfeitLengths[i] * 100);
-    var n = i + 1; // if (controlQueues[i][0] == null) {
-    // 	$("#turnTimerBarChild" + n).css("width", "100%").text("No one is playing right now.");
-    // 	$("#forfeitTimerBarChild" + n).css("width", "100%").text("No one is playing right now.");
-    // } else {
-    // 	$("#turnTimerBarChild" + n).css("width", percent + "%").text(usernameMap[controlQueues[i][0]] + ": " + timeLeftSec + " seconds");
-    // 	$("#forfeitTimerBarChild" + n).css("width", percent2 + "%").text(timeLeftSec2 + " seconds until turn forfeit.");
+  if (waitlistsChanged) {// $("#waitlist").empty();
+    //
+    // let waitlistHeaderHTML = '<li class="list-group-item">Lagless ' + settings.tab + " waitlist</li>";
+    // $("#waitlist").append(waitlistHeaderHTML);
+    //
+    // for (let i = 0; i < waitlists[settings.tab - 1].length; i++) {
+    // 	let listHTML;
+    //
+    // 	let ID = waitlists[settings.tab - 1][i];
+    //
+    // 	if (myUniqueID == ID) {
+    // 		listHTML = '<li class="list-group-item-highlight">' + usernameMap[ID] + "</li>";
+    // 	} else if (settings.darkTheme) {
+    // 		listHTML = '<li class="list-group-item-dark">' + usernameMap[ID] + "</li>";
+    // 	} else {
+    // 		listHTML = '<li class="list-group-item">' + usernameMap[ID] + "</li>";
+    // 	}
+    //
+    // 	$("#waitlist").append(listHTML);
     // }
-    // ReactDOM.unmountComponentAtNode(document.getElementById("turnTimerBar" + n));
-    // https://reactjs.org/blog/2015/10/01/react-render-and-top-level-api.html
-
-    _reactDom.default.render(_react.default.createElement(TurnTimer, {
-      num: n,
-      name: usernameMap[controlQueues[i][0]],
-      percent: percent,
-      timeLeft: timeLeftSec
-    }), document.getElementById("turnTimerBar" + n));
-
-    _reactDom.default.render(_react.default.createElement(ForfeitTimer, {
-      num: n,
-      name: usernameMap[controlQueues[i][0]],
-      percent: percent2,
-      timeLeft: timeLeftSec2
-    }), document.getElementById("forfeitTimerBar" + n));
-  }
-
-  var totalViewers = data.viewers[0].length + data.viewers[1].length + data.viewers[2].length + data.viewers[3].length + data.viewers[4].length; // lagless / twitch swap
-
-  if (waitlistsChanged) {
-    $("#waitlist").empty();
-    var waitlistHeaderHTML = '<li class="list-group-item">Lagless ' + settings.tab + " waitlist</li>";
-    $("#waitlist").append(waitlistHeaderHTML);
-
-    for (var _i2 = 0; _i2 < waitlists[settings.tab - 1].length; _i2++) {
-      var listHTML = void 0;
-      var ID = waitlists[settings.tab - 1][_i2];
-
-      if (myUniqueID == ID) {
-        // 				if (!tabsSwappedWithTwitch[settings.tab-1]) {
-        // 					tabsSwappedWithTwitch[settings.tab-1] = true;
-        // 					replaceWithTwitch("#lagless" + settings.tab);
-        // 					setTimeout(() => {
-        // 						socket.emit("leaveLagless");
-        // 					}, 4000);
-        // 					swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch.");
-        // 				}
-        listHTML = '<li class="list-group-item-highlight">' + usernameMap[ID] + "</li>";
-      } else if (settings.darkTheme) {
-        listHTML = '<li class="list-group-item-dark">' + usernameMap[ID] + "</li>";
-      } else {
-        listHTML = '<li class="list-group-item">' + usernameMap[ID] + "</li>";
-      }
-
-      $("#waitlist").append(listHTML);
-    } // check if you're in the waitlist
-
-
-    if (waitlists[settings.tab - 1].indexOf(myUniqueID) > -1) {
-      if (!tabsSwappedWithTwitch[settings.tab - 1]) {
-        tabsSwappedWithTwitch[settings.tab - 1] = true;
-        replaceWithTwitch("#lagless" + settings.tab);
-        setTimeout(function () {
-          socket.emit("leaveLagless");
-        }, 4000);
-        swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
-      }
-    } else if (tabsSwappedWithTwitch[settings.tab - 1]) {
-      tabsSwappedWithTwitch[settings.tab - 1] = false; // 			swal("You're at the top of the waitlist! switching back to lagless!");
-
-      replaceWithLagless("#lagless" + settings.tab);
-    } // 		for (let i = 0; i < 3; i++) {
+    // // check if you're in the waitlist
+    // if (waitlists[settings.tab - 1].indexOf(myUniqueID) > -1) {
+    //
+    // 	if (!tabsSwappedWithTwitch[settings.tab - 1]) {
+    // 		tabsSwappedWithTwitch[settings.tab - 1] = true;
+    // 		replaceWithTwitch("#lagless" + settings.tab);
+    // 		// setTimeout(() => {
+    // 		// socket.emit("leaveLagless");
+    // 		// }, 4000);
+    //
+    // 		// swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
+    // 		let notification = new Noty({
+    // 			theme: "mint",
+    // 			type: "warning",
+    // 			text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
+    // 			timeout: 5000,
+    // 			sounds: {
+    // 				volume: 0.5,
+    // 				sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+    // 				conditions: ["docVisible"],
+    // 			},
+    // 		});
+    // 		notification.show();
+    // 	}
+    //
+    // } else if (tabsSwappedWithTwitch[settings.tab - 1]) {
+    // 	tabsSwappedWithTwitch[settings.tab - 1] = false;
+    // 	let notification = new Noty({
+    // 		theme: "mint",
+    // 		type: "success",
+    // 		text: "You're at the top of the waitlist! Switching back to lagless!",
+    // 		timeout: 5000,
+    // 		sounds: {
+    // 			volume: 0.5,
+    // 			sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+    // 			conditions: ["docVisible"],
+    // 		},
+    // 	});
+    // 	notification.show();
+    // 	replaceWithLagless("#lagless" + settings.tab);
+    // }
+    // 		for (let i = 0; i < 3; i++) {
     //   		if (!tabsSwappedWithTwitch[i]) {
     //   		}
     // 		}
-
   }
 }); // setInterval(function() {
 // 	let currentTime = Date.now();
@@ -28721,106 +32227,118 @@ $("#controllerControlsCheckbox").on("change", function () {
   localforage.setItem("settings", JSON.stringify(settings));
 });
 /* DARK THEME @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+// $("#darkThemeCheckbox").on("change", function () {
+// 	settings.darkTheme = this.checked;
+// 	localforage.setItem("settings", JSON.stringify(settings));
+// 	if (settings.darkTheme) {
+// 		let icon = $(".glyphicon-fire");
+// 		icon.removeClass("glyphicon-fire");
+// 		icon.addClass("glyphicon-certificate");
+//
+// 		$(".light").each(function () {
+// 			$(this).removeClass("light");
+// 			$(this).addClass("dark");
+// 		});
+//
+// 		$(".otborder").each(function () {
+// 			$(this).removeClass("otborder");
+// 			$(this).addClass("otborder-dark");
+// 		});
+//
+// 		$(".list-group-item").each(function () {
+// 			$(this).removeClass("list-group-item");
+// 			$(this).addClass("list-group-item-dark");
+// 		});
+//
+// 		$(".nav-link").each(function () {
+// 			$(this).removeClass("nav-link");
+// 			$(this).addClass("nav-link-dark");
+// 		});
+//
+// 		$("body").addClass("dark");
+//
+// 		$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
+//
+// 	} else {
+//
+// 		let icon = $(".glyphicon-certificate");
+// 		icon.removeClass("glyphicon-certificate");
+// 		icon.addClass("glyphicon-fire");
+//
+// 		$(".dark").each(function () {
+// 			$(this).removeClass("dark");
+// 			$(this).addClass("light");
+// 		});
+//
+// 		$(".otborder-dark").each(function () {
+// 			$(this).removeClass("otborder-dark");
+// 			$(this).addClass("otborder");
+// 		});
+//
+// 		$(".list-group-item-dark").each(function () {
+// 			$(this).removeClass("list-group-item-dark");
+// 			$(this).addClass("list-group-item");
+// 		});
+//
+// 		$(".nav-link-dark").each(function () {
+// 			$(this).removeClass("nav-link-dark");
+// 			$(this).addClass("nav-link");
+// 		});
+//
+// 		$("body").removeClass("dark");
+// 		// 		$("body").addClass("light");
+//
+// 		$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
+// 	}
+// });
 
-$("#darkThemeCheckbox").on("change", function () {
-  settings.darkTheme = this.checked;
-  localforage.setItem("settings", JSON.stringify(settings));
-
-  if (settings.darkTheme) {
-    var icon = $(".glyphicon-fire");
-    icon.removeClass("glyphicon-fire");
-    icon.addClass("glyphicon-certificate");
-    $(".light").each(function () {
-      $(this).removeClass("light");
-      $(this).addClass("dark");
-    });
-    $(".otborder").each(function () {
-      $(this).removeClass("otborder");
-      $(this).addClass("otborder-dark");
-    });
-    $(".list-group-item").each(function () {
-      $(this).removeClass("list-group-item");
-      $(this).addClass("list-group-item-dark");
-    });
-    $(".nav-link").each(function () {
-      $(this).removeClass("nav-link");
-      $(this).addClass("nav-link-dark");
-    });
-    $("body").addClass("dark");
-    $("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
-  } else {
-    var _icon = $(".glyphicon-certificate");
-
-    _icon.removeClass("glyphicon-certificate");
-
-    _icon.addClass("glyphicon-fire");
-
-    $(".dark").each(function () {
-      $(this).removeClass("dark");
-      $(this).addClass("light");
-    });
-    $(".otborder-dark").each(function () {
-      $(this).removeClass("otborder-dark");
-      $(this).addClass("otborder");
-    });
-    $(".list-group-item-dark").each(function () {
-      $(this).removeClass("list-group-item-dark");
-      $(this).addClass("list-group-item");
-    });
-    $(".nav-link-dark").each(function () {
-      $(this).removeClass("nav-link-dark");
-      $(this).addClass("nav-link");
-    });
-    $("body").removeClass("dark"); // 		$("body").addClass("light");
-
-    $("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
-  }
-});
 /* TOGGLE FULLSCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+// $("#fullscreenCheckbox").on("change", function () {
+// 	settings.fullscreen = this.checked;
+// 	localforage.setItem("settings", JSON.stringify(settings));
+// 	if (settings.fullscreen) {
+//
+// 		$("body").css("padding", "0");
+// 		$("#picture").css("width", "100%");
+// 		$("#picture").css("border", "none");
+// 		$(".videoCanvas").css("width", "100%");
+// 		$(".videoCanvas").css("margin-left", "0");
+// 		$(".laglessView").css("margin-left", "0");
+// 		$(".laglessView").css("margin-right", "0");
+//
+// 		if (settings.touchControls) {
+// 			$("#touchControlsCheckbox").prop("checked", false).trigger("change");
+// 		}
+// 		if (!settings.hideChat) {
+// 			$("#hideChatCheckbox").prop("checked", true).trigger("change");
+// 		}
+// 		if (!settings.hideNav) {
+// 			$("#navCheckbox").prop("checked", true).trigger("change");
+// 		}
+//
+// 		$(".well").each(function () {
+// 			$(this).removeClass("well");
+// 			$(this).addClass("well2");
+// 		});
+// 		$("body").addClass("hideScrollbar");
+// 		$(document).scrollTop(0);
+//
+// 		tools.toggleFullScreen($("body")[0]);
+//
+// 	} else {
+//
+// 		$("body").css("padding", "");
+// 		$("#picture").css("width", "");
+// 		$("#picture").css("border", "");
+// 		$(".videoCanvas").css("width", "");
+// 		$(".videoCanvas").css("margin-left", "");
+// 		$(".laglessView").css("margin-left", "");
+// 		$(".laglessView").css("margin-right", "");
+//
+// 		$("body").removeClass("hideScrollbar");
+// 	}
+// });
 
-$("#fullscreenCheckbox").on("change", function () {
-  settings.fullscreen = this.checked;
-  localforage.setItem("settings", JSON.stringify(settings));
-
-  if (settings.fullscreen) {
-    $("body").css("padding", "0");
-    $("#picture").css("width", "100%");
-    $("#picture").css("border", "none");
-    $(".videoCanvas").css("width", "100%");
-    $(".videoCanvas").css("margin-left", "0");
-    $(".laglessView").css("margin-left", "0");
-    $(".laglessView").css("margin-right", "0");
-
-    if (settings.touchControls) {
-      $("#touchControlsCheckbox").prop("checked", false).trigger("change");
-    }
-
-    if (!settings.hideChat) {
-      $("#hideChatCheckbox").prop("checked", true).trigger("change");
-    }
-
-    if (!settings.hideNav) {
-      $("#navCheckbox").prop("checked", true).trigger("change");
-    }
-
-    $(".well").each(function () {
-      $(this).removeClass("well");
-      $(this).addClass("well2");
-    });
-    $("body").addClass("hideScrollbar");
-    $(document).scrollTop(0);
-    tools.toggleFullScreen($("body")[0]);
-  } else {
-    $("body").css("padding", "");
-    $("#picture").css("width", "");
-    $("#picture").css("border", "");
-    $(".videoCanvas").css("width", "");
-    $(".videoCanvas").css("margin-left", "");
-    $(".laglessView").css("margin-left", "");
-    $(".laglessView").css("margin-right", "");
-    $("body").removeClass("hideScrollbar");
-  }
-});
 window.addEventListener("keydown", function (e) {
   // escape, f11
   if ([27, 122].indexOf(e.keyCode) > -1) {
@@ -28848,29 +32366,27 @@ function exitHandler() {
   }
 }
 /* TOGGLE LARGESCREEN @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+// $("#largescreenCheckbox").on("change", function () {
+// 	settings.largescreen = this.checked;
+// 	localforage.setItem("settings", JSON.stringify(settings));
+// 	if (settings.largescreen) {
+// 		$(".videoCanvas").css("width", "100%");
+// 		$(".videoCanvas").css("margin-left", "0");
+// 		if (settings.touchControls) {
+// 			$("#touchControlsCheckbox").prop("checked", false);
+// 			settings.touchControls = false;
+// 			localforage.setItem("settings", JSON.stringify(settings));
+// 			rebindUnbindTouchControls();
+// 		}
+// 	} else {
+// 		$(".videoCanvas").css("width", "");
+// 		$(".videoCanvas").css("margin-left", "");
+// 		$("#touchControlsCheckbox").prop("checked", true).trigger("change");
+// 	}
+// });
 
-
-$("#largescreenCheckbox").on("change", function () {
-  settings.largescreen = this.checked;
-  localforage.setItem("settings", JSON.stringify(settings));
-
-  if (settings.largescreen) {
-    $(".videoCanvas").css("width", "100%");
-    $(".videoCanvas").css("margin-left", "0");
-
-    if (settings.touchControls) {
-      $("#touchControlsCheckbox").prop("checked", false);
-      settings.touchControls = false;
-      localforage.setItem("settings", JSON.stringify(settings));
-      rebindUnbindTouchControls();
-    }
-  } else {
-    $(".videoCanvas").css("width", "");
-    $(".videoCanvas").css("margin-left", "");
-    $("#touchControlsCheckbox").prop("checked", true).trigger("change");
-  }
-});
 /* TOGGLE HIDE NAV @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
 
 $("#navCheckbox").on("change", function () {
   settings.hideNav = this.checked;
@@ -28912,56 +32428,38 @@ $("#3DSCheckbox").on("change", function () {
   localforage.setItem("settings", JSON.stringify(settings));
 });
 /* TOGGLE YOUTUBE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+// $("#youtubeChatCheckbox").on("change", function () {
+// 	settings.youtubeChat = this.checked;
+// 	localforage.setItem("settings", JSON.stringify(settings));
+// 	if (settings.youtubeChat) {
+// 		$("#chat").attr("src", "https://www.youtube.com/live_chat?v=8jgSgQcZgGY&embed_domain=twitchplaysnintendoswitch.com");
+// 	} else {
+// 		if (settings.darkTheme) {
+// 			$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
+// 		} else {
+// 			$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
+// 		}
+// 	}
+// });
+//
+// /* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+// $("#hideChatCheckbox").on("change", function () {
+// 	settings.hideChat = this.checked;
+// 	localforage.setItem("settings", JSON.stringify(settings));
+// 	if (settings.hideChat) {
+// 		$("#chatContainer")[0].style.display = "none";
+// 		$("#picture").css("width", "100%");
+// 	} else {
+// 		$("#chatContainer")[0].style.display = "";
+// 		$("#picture").css("width", "");
+// 	}
+// });
 
-$("#youtubeChatCheckbox").on("change", function () {
-  settings.youtubeChat = this.checked;
-  localforage.setItem("settings", JSON.stringify(settings));
-
-  if (settings.youtubeChat) {
-    $("#chat").attr("src", "https://www.youtube.com/live_chat?v=8jgSgQcZgGY&embed_domain=twitchplaysnintendoswitch.com");
-  } else {
-    if (settings.darkTheme) {
-      $("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
-    } else {
-      $("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
-    }
-  }
-});
-/* TOGGLE CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-$("#hideChatCheckbox").on("change", function () {
-  settings.hideChat = this.checked;
-  localforage.setItem("settings", JSON.stringify(settings));
-
-  if (settings.hideChat) {
-    $("#chatContainer")[0].style.display = "none";
-    $("#picture").css("width", "100%");
-  } else {
-    $("#chatContainer")[0].style.display = "";
-    $("#picture").css("width", "");
-  }
-});
 /* TOGGLE ANALOG STICK MODE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 $("#analogStickCheckbox").on("change", function () {
   settings.analogStickMode = this.checked;
   localforage.setItem("settings", JSON.stringify(settings));
-});
-
-var LeftJoyCon = __webpack_require__(/*! src/components/LeftJoyCon.jsx */ "./src/components/LeftJoyCon.jsx");
-
-var RightJoyCon = __webpack_require__(/*! src/components/RightJoyCon.jsx */ "./src/components/RightJoyCon.jsx");
-/* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-
-socket.on("controllerState1", function (data) {
-  _reactDom.default.render(_react.default.createElement(LeftJoyCon, {
-    controllerState: data
-  }), document.getElementById("leftJoyConPlaceHolder" + settings.tab));
-
-  _reactDom.default.render(_react.default.createElement(RightJoyCon, {
-    controllerState: data
-  }), document.getElementById("rightJoyConPlaceHolder" + settings.tab));
 });
 /* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -29096,386 +32594,6 @@ socket.on("pong2", function () {
 // 	}
 // }, false);
 
-/* TUTORIAL @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-function tutorial() {
-  if (typeof tutorial.step == "undefined") {
-    tutorial.step = 0;
-  } else {
-    tutorial.step += 1;
-  }
-
-  var step = tutorial.step;
-  var c = -1; // 	if (step === ++c) {
-  //  		$(document).scrollTop(0);
-  // 		$("html, body").animate({
-  // 			scrollTop: 0,
-  // 		}, 500);
-  //  		$("#tutorialWindow").modal();
-  //  		swal("tutorial");
-  // 		$(document).on("click", function(event) {
-  // 			event.preventDefault();
-  // 			tutorial();
-  // 		});
-  // 	}
-
-  if (step === ++c) {
-    $("#tutorialWindow").modal("hide");
-  } // nav tabs:
-
-
-  if (step === ++c) {
-    $("#navTabs").effect("highlight", {}, 3000);
-    var popupHTML = $('<div id="navTabsPopup" class="genericPopup"><span class="tooltipArrowUp"></span>This lets you navigate to the different Lagless Tabs</div>');
-    $("#container").append(popupHTML);
-    var popper = new Popper($("#navTabs"), popupHTML, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    $("#navTabsPopup").remove();
-    var div = "#tab1";
-    $(div).effect("highlight", {}, 3000);
-
-    var _popupHTML = $('<div id="tab1Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>The fastest, but siginificantly lower quality, no sound unless manually turned on.</div>');
-
-    $("#container").append(_popupHTML);
-
-    var _popper = new Popper($(div), _popupHTML, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    var _div = "#tab2";
-    $(_div).effect("highlight", {}, 3000);
-
-    var _popupHTML2 = $('<div id="tab2Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Slightly slower, but siginificantly higher quality, built in sound.</div>');
-
-    $("#container").append(_popupHTML2);
-
-    var _popper2 = new Popper($(_div), _popupHTML2, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    var _div2 = "#tab3";
-    $(_div2).effect("highlight", {}, 3000);
-
-    var _popupHTML3 = $('<div id="tab3Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Don\'t use this, probably.</div>');
-
-    $("#container").append(_popupHTML3);
-
-    var _popper3 = new Popper($(_div2), _popupHTML3, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    var _div3 = "#tab4";
-    $(_div3).effect("highlight", {}, 3000);
-
-    var _popupHTML4 = $('<div id="tab4Popup" class="navTabPopup"><span class="tooltipArrowUp"></span>Twitch Plays Wii U</div>');
-
-    $("#container").append(_popupHTML4);
-
-    var _popper4 = new Popper($(_div3), _popupHTML4, {
-      placement: "bottom"
-    });
-  } // lagless view:
-
-
-  if (step === ++c) {
-    $("#tab1Popup").remove();
-    $("#tab2Popup").remove();
-    $("#tab3Popup").remove();
-    $("#tab4Popup").remove();
-    var _div4 = "#leftJoyConImage";
-    $(_div4).effect("highlight", {}, 3000);
-
-    var _popupHTML5 = $('<div id="leftJoyConPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This is the controller view, it shows the buttons currently being pressed by Player 1.</div>');
-
-    $("#container").append(_popupHTML5);
-
-    var _popper5 = new Popper($(_div4), _popupHTML5, {
-      placement: "right"
-    });
-  }
-
-  if (step === ++c) {
-    var _div5 = "#rightJoyConImage";
-    $(_div5).effect("highlight", {}, 3000);
-
-    var _popupHTML6 = $('<div id="rightJoyConPopup" class="largerPopup"><span class="tooltipArrowRight"></span>It also doubles as touch controls, currently only the sticks work on IOS, but everything works on android.</div>');
-
-    $("#container").append(_popupHTML6);
-
-    var _popper6 = new Popper($(_div5), _popupHTML6, {
-      placement: "left"
-    });
-  } // lagless bar:
-
-
-  if (step === ++c) {
-    $("#leftJoyConPopup").remove();
-    $("#rightJoyConPopup").remove();
-    $("html, body").animate({
-      scrollTop: $("#lagless2Bar").offset().top
-    }, 500);
-    var _div6 = "#lagless2Bar";
-    $(_div6).effect("highlight", {}, 3000);
-
-    var _popupHTML7 = $('<div id="laglessBarPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Todo: fill this in with helpful info, or just delete it.</div>');
-
-    $("#container").append(_popupHTML7);
-
-    var _popper7 = new Popper($(_div6), _popupHTML7, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    $("#laglessBarPopup").remove();
-    var _div7 = "#lagless2ViewerDropdown";
-    $(_div7).effect("highlight", {}, 3000);
-
-    var _popupHTML8 = $('<div id="laglessViewerDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Shows who\'s watching.</div>');
-
-    $("#container").append(_popupHTML8);
-
-    var _popper8 = new Popper($(_div7), _popupHTML8, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    $("#laglessViewerDropdownPopup").remove();
-    var _div8 = "#laglessVolumeSlider";
-    $(_div8).effect("highlight", {}, 3000);
-
-    var _popupHTML9 = $('<div id="laglessVolumeSliderPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Controls the volume of lagless.</div>');
-
-    $("#container").append(_popupHTML9);
-
-    var _popper9 = new Popper($(_div8), _popupHTML9, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    $("#laglessVolumeSliderPopup").remove();
-    var _div9 = "#lagless2Refresh";
-    $(_div9).effect("highlight", {}, 3000);
-
-    var _popupHTML10 = $('<div id="laglessRefreshPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Restarts this specific stream.</div>');
-
-    $("#container").append(_popupHTML10);
-
-    var _popper10 = new Popper($(_div9), _popupHTML10, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    $("#laglessRefreshPopup").remove();
-    var _div10 = "#lagless2KeyboardSettings";
-    $(_div10).effect("highlight", {}, 3000);
-
-    var _popupHTML11 = $('<div id="laglessKeyboardSettingsPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to configure keyboard settings profiles.</div>');
-
-    $("#container").append(_popupHTML11);
-
-    var _popper11 = new Popper($(_div10), _popupHTML11, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    $("#laglessKeyboardSettingsPopup").remove();
-    var _div11 = "#lagless2KeyboardDropdown";
-    $(_div11).effect("highlight", {}, 3000);
-
-    var _popupHTML12 = $('<div id="keyboardDropdownPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this change between keyboard profiles.</div>');
-
-    $("#container").append(_popupHTML12);
-
-    var _popper12 = new Popper($(_div11), _popupHTML12, {
-      placement: "bottom"
-    });
-  } // 	if (step === ++c) {
-  // 		$("#keyboardDropdownPopup").remove();
-  // 		let div = "#timer";
-  // 		$(div).effect("highlight", {}, 3000);
-  // 		let popupHTML = $('<div id="timerPopup" class="genericPopup"><span class="tooltipArrowUp"></span>The current local time.</div>');
-  // 		$("#container").append(popupHTML);
-  // 		let popper = new Popper($(div), popupHTML, {
-  // 			placement: "bottom",
-  // 		});
-  // 	}
-  // players section
-
-
-  if (step === ++c) {
-    // 		$("#timerPopup").remove();
-    $("#keyboardDropdownPopup").remove(); // 		$("#rightJoyConPopup").remove();
-
-    $("html, body").animate({
-      scrollTop: $("#players").offset().top
-    }, 500);
-    var _div12 = "#players";
-    $(_div12).effect("highlight", {}, 3000);
-
-    var _popupHTML13 = $('<div id="playersPopup" class="genericPopup"><span class="tooltipArrowUp"></span>This is where you can see who\'s playing, and who\'s turn is next.</div>');
-
-    $("#container").append(_popupHTML13);
-
-    var _popper13 = new Popper($(_div12), _popupHTML13, {
-      placement: "bottom"
-    });
-  }
-
-  if (step === ++c) {
-    $("#playersPopup").remove();
-    var _div13 = "#turnTimerBar1";
-    $(_div13).effect("highlight", {}, 3000);
-
-    var _popupHTML14 = $('<div id="turnTimerBarPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>This bar shows who\'s playing, and how much time is left on their turn.</div>');
-
-    $("#container").append(_popupHTML14);
-
-    var _popper14 = new Popper($(_div13), _popupHTML14, {
-      placement: "right"
-    });
-  }
-
-  if (step === ++c) {
-    $("#turnTimerBarPopup").remove();
-    var _div14 = "#forfeitTimerBar1";
-    $(_div14).effect("highlight", {}, 3000);
-
-    var _popupHTML15 = $('<div id="forfeitTimerBarPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>After being AFK for a while, you give up your turn, the time until turn forefeit is displayed here.</div>');
-
-    $("#container").append(_popupHTML15);
-
-    var _popper15 = new Popper($(_div14), _popupHTML15, {
-      placement: "right"
-    });
-  }
-
-  if (step === ++c) {
-    $("#turnTimerBarPopup").remove();
-    $("#forfeitTimerBarPopup").remove();
-    var _div15 = "#joinQueue1";
-    $(_div15).effect("highlight", {}, 3000);
-
-    var _popupHTML16 = $('<div id="joinQueuePopup" class="largerPopup"><span class="tooltipArrowUp"></span>Use this to manually request a turn, turns are automatically requested for you if you try to send any input though.</div>');
-
-    $("#container").append(_popupHTML16);
-
-    var _popper16 = new Popper($(_div15), _popupHTML16, {
-      placement: "bottom"
-    });
-  } // 	if (step === ++c) {
-  // 		let div = "#cancelTurn1";
-  // 		$(div).effect("highlight", {}, 3000);
-  // 		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue, or end your turn early.</div>');
-  // 		$("#container").append(popupHTML);
-  // 		let popper = new Popper($(div), popupHTML, {
-  // 			placement: "bottom",
-  // 		});
-  // 	}
-
-
-  if (step === ++c) {
-    $("#joinQueuePopup").remove(); // 		$("#cancelTurnPopup").remove();
-
-    var _div16 = "#controlQueue1";
-    $(_div16).effect("highlight", {}, 3000);
-
-    var _popupHTML17 = $('<div id="controlQueuePopup" class="genericPopup"><span class="tooltipArrowUp"></span>Shows who\'s in line to play next.</div>');
-
-    $("#container").append(_popupHTML17);
-
-    var _popper17 = new Popper($(_div16), _popupHTML17, {
-      placement: "bottom"
-    });
-  } // checkbox settings:
-  // 	if (step === ++c) {
-  // 		$("#joinQueuePopup").remove();
-  // 		$("#cancelTurnPopup").remove();
-  // 		let div = "#keyboardControllerCheckbox";
-  // 		$(div).effect("highlight", {}, 3000);
-  // 		let popupHTML = $('<div id="keyboardControllerCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables the use of a keyboard or controller to play, don\'t forget to check this!</div>');
-  // 		$("#container").append(popupHTML);
-  // 		let popper = new Popper($("#checkboxSettings").children().children()[0], popupHTML, {
-  // 			placement: "right",
-  // 		});
-  // 	}
-
-
-  if (step === ++c) {
-    // 		$("#keyboardControllerCheckboxPopup").remove();
-    $("#controlQueuePopup").remove();
-    var _div17 = "#dpadCheckbox";
-    $(_div17).effect("highlight", {}, 3000);
-
-    var _popupHTML18 = $('<div id="dpadCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Swaps DPAD Up/Down with Left/Right only useful if you\'re using a Pro Controller on Firefox.</div>');
-
-    $("#container").append(_popupHTML18);
-
-    var _popper18 = new Popper($("#checkboxSettings").children().children()[1], _popupHTML18, {
-      placement: "right"
-    });
-  }
-
-  if (step === ++c) {
-    $("#dpadCheckboxPopup").remove();
-    var _div18 = "#touchControlsCheckbox";
-    $(_div18).effect("highlight", {}, 3000);
-
-    var _popupHTML19 = $('<div id="touchControlsCheckboxPopup" class="genericPopup"><span class="tooltipArrowLeft"></span>Enables and Disables the Touch Controls.</div>');
-
-    $("#container").append(_popupHTML19);
-
-    var _popper19 = new Popper($("#checkboxSettings").children().children()[2], _popupHTML19, {
-      placement: "right"
-    });
-  }
-
-  if (step === ++c) {
-    $("#touchControlsCheckboxPopup").remove(); // 		$("#cancelTurn1").effect("highlight", {}, 3000);
-    // 		let popupHTML = $('<div id="cancelTurnPopup" class="genericPopup"><span class="tooltipArrowUp"></span>Use this to remove yourself from the queue or end your turn early.</div>');
-    // 		$("#container").append(popupHTML);
-    // 		let popper = new Popper($("#cancelTurn1"), popupHTML, {
-    // 			placement: "bottom",
-    // 		});
-  }
-
-  if (step === ++c) {
-    // 		$(document).unbind("click");
-    location.reload(true);
-  }
-}
-
-function startTutorial() {
-  $(document).unbind("click");
-  tutorial.step = undefined;
-  tutorial();
-  $("html, body").animate({
-    scrollTop: 0
-  }, 500);
-  $(document).on("click", function (event) {
-    event.preventDefault();
-    tutorial();
-  });
-}
-
-$("#startTutorial").on("click", function (event) {
-  event.preventDefault();
-  startTutorial();
-});
 $("#resetSettings").on("click", function (event) {
   event.preventDefault();
   localforage.clear().then(function () {
@@ -29604,33 +32722,7 @@ socket.on("rickroll", function (data) {
         myPlayer.destroy();
       },
       customClass: "swal-wide"
-    }); // 		let timerInterval
-    // 		swal({
-    //  			title: "Auto close alert!",
-    // 			html: "closing in <strong></strong> seconds.",
-    // 			timer: 2000,
-    // 			onOpen: () => {
-    // 			swal.showLoading()
-    // 			timerInterval = setInterval(() => {
-    // 				swal.getContent().querySelector("strong").textContent = swal.getTimerLeft();
-    // 			}, 100)
-    // 			},
-    // 			onClose: () => {
-    // 				clearInterval(timerInterval);
-    // 			},
-    // 		}).then((result) => {
-    // 			swal({
-    // 				html: '<canvas id="rickroll"></canvas>',
-    // 				onOpen: () => {
-    // 					let rickrollCanvas = $("#rickroll")[0];
-    // 					myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {canvas: rickrollCanvas, loop: false, autoplay: true});
-    // 				},
-    // 				onClose: () => {
-    // 					myPlayer.destroy();
-    // 				},
-    // 				customClass: "swal-wide",
-    // 			});
-    // 		});
+    });
   }
 });
 socket.on("rainbow", function (data) {
@@ -29648,25 +32740,6 @@ socket.on("banned", function (data) {
     swal("You're banned (maybe only temporarily?)");
   }
 });
-/* IP */
-
-setInterval(function () {
-  $.getJSON("https://jsonip.com?callback=?", function (data) {
-    socket.emit("registerIP", {
-      ip: data.ip,
-      id: myUniqueID,
-      username: myUsername
-    });
-
-    if (bannedIPs.indexOf(data.ip) > -1) {
-      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // 			window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-    }
-
-    if (banlist.indexOf(myUsername) > -1) {
-      window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ"; // window.location.href = "https://twitchplaysnintendoswitch.com/8110/auth/twitch/";
-    }
-  });
-}, 5000);
 /* FORCE HTTPS */
 
 if (location.protocol != "https:") {
@@ -29689,1243 +32762,6 @@ socket.on("voteStarted", function (data) {
   });
   notification.show();
 });
-
-/***/ }),
-
-/***/ "./public/js/textfitpercent.js":
-/*!*************************************!*\
-  !*** ./public/js/textfitpercent.js ***!
-  \*************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-function resizePercent(mySettings) {
-  this.textSettings = mySettings;
-
-  this.resize = function () {
-    var self1 = this;
-    var self2;
-
-    if (this.textSettings.isFirstChild) {
-      self2 = $(this.textSettings.selector).children().first();
-    } else {
-      self2 = $(this.textSettings.selector);
-    }
-
-    self2.each(function () {
-      var self3 = $(this);
-      var currentFontSize = parseFloat(self3.css("font-size"));
-      var parentWidth;
-      var parentHeight;
-
-      if (self1.textSettings.parent != null) {
-        parentWidth = $(self1.textSettings.parent).outerWidth();
-        parentHeight = $(self1.textSettings.parent).outerHeight();
-
-        if (self1.textSettings.isClass) {
-          parentWidth = $(self1.textSettings.parent).addUp($.fn.outerWidth);
-          parentHeight = $(self1.textSettings.parent).addUp($.fn.outerHeight);
-        }
-      } else {
-        parentWidth = self3.parent().outerWidth();
-        parentHeight = self3.parent().outerHeight();
-      }
-
-      var currentWidth = self3.outerWidth();
-      var currentHeight = self3.outerHeight();
-      var targetWidth = self1.textSettings.percentWidth / 100 * parentWidth;
-      var counter = 0;
-
-      while (Math.abs(currentWidth - targetWidth) > self1.textSettings.accuracy && counter < self1.textSettings.maxTries) {
-        counter++; // min / max font sizes:
-
-        if (currentFontSize < self1.textSettings.minFontSize) {
-          currentFontSize = self1.textSettings.minFontSize;
-        }
-
-        if (currentFontSize > self1.textSettings.maxFontSize) {
-          currentFontSize = self1.textSettings.maxFontSize;
-        } // if it's bigger than it should be:
-        // decrease the font size:
-
-
-        if (currentWidth - targetWidth > 0) {
-          self3.css("font-size", currentFontSize - self1.textSettings.increment); // 					console.log("decreasing font size.");
-          // if it's smaller than it should be:
-          // increase the font size:
-        } else if (currentWidth - targetWidth < 0) {
-          self3.css("font-size", currentFontSize + self1.textSettings.increment); // 					console.log("increasing font size.");
-        } // update current width and height:
-
-
-        currentWidth = self3.outerWidth();
-        currentHeight = self3.outerHeight(); // update current font size:
-
-        currentFontSize = parseFloat(self3.css("font-size")); // not necessary:
-        // 				targetWidth = (self1.textSettings.percentWidth / 100) * parentWidth;
-        // 				console.log("cw: " + currentWidth);
-        // 				console.log("tw: " + targetWidth);
-        // 				console.log("fs: " + currentFontSize);
-      }
-    });
-  };
-} // textFitPercent
-
-
-module.exports = function (options) {
-  // Setup options
-  var textSettings = $.extend({
-    "selector": null,
-    "parent": null,
-    "isFirstChild": false,
-    "isClass": false,
-    "percentWidth": 10,
-    "percentHeight": 10,
-    "accuracy": 10,
-    "increment": 0.1,
-    "maxTries": 40,
-    "minFontSize": Number.NEGATIVE_INFINITY,
-    "maxFontSize": Number.POSITIVE_INFINITY
-  }, options);
-  var myResizePercent = new resizePercent(textSettings);
-  return myResizePercent;
-};
-
-/***/ }),
-
-/***/ "./public/js/tools.js":
-/*!****************************!*\
-  !*** ./public/js/tools.js ***!
-  \****************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.getCookie = function (name) {
-  var dc = document.cookie;
-  var prefix = name + "=";
-  var begin = dc.indexOf("; " + prefix);
-  var end;
-
-  if (begin == -1) {
-    begin = dc.indexOf(prefix);
-    if (begin !== 0) return null;
-  } else {
-    begin += 2;
-    end = document.cookie.indexOf(";", begin);
-
-    if (end == -1) {
-      end = dc.length;
-    }
-  } // because unescape has been deprecated, replaced with decodeURI
-  //return unescape(dc.substring(begin + prefix.length, end));
-
-
-  return decodeURI(dc.substring(begin + prefix.length, end));
-};
-
-exports.setCookie = function (name, value, seconds) {
-  var expires = "";
-
-  if (seconds) {
-    var date = new Date();
-    date.setTime(date.getTime() + seconds * 1000);
-    expires = "; expires=" + date.toUTCString();
-  }
-
-  document.cookie = name + "=" + (value || "") + expires + "; path=/";
-};
-
-exports.minmax = function (num, min, max) {
-  if (num < min) {
-    return min;
-  } else if (num > max) {
-    return max;
-  } else {
-    return num;
-  }
-};
-
-exports.round = function (value, precision) {
-  var multiplier = Math.pow(10, precision || 0);
-  return Math.round(value * multiplier) / multiplier;
-};
-
-exports.msToTime = function (duration) {
-  // 	var milliseconds = parseInt((duration % 1000) / 100);
-  var milliseconds = parseInt(duration / 1000 % 60 % 1 * 1000);
-  var seconds = parseInt(duration / 1000 % 60);
-  var minutes = parseInt(duration / (1000 * 60) % 60);
-  var hours = parseInt(duration / (1000 * 60 * 60) % 24);
-  hours = hours < 10 ? "0" + hours : hours;
-
-  if (hours.length == 2 || hours.length == 3 && hours[0] == "0") {
-    hours = hours.substr(1);
-  }
-
-  minutes = minutes < 10 ? "0" + minutes : minutes;
-
-  if (minutes.length == 3 || minutes.length == 4) {
-    minutes = minutes.substr(1);
-  }
-
-  seconds = seconds < 10 ? "0" + seconds : seconds;
-
-  if (seconds.length == 3 || seconds.length == 4) {
-    seconds = seconds.substr(1);
-  } //seconds = seconds.replaceAll("-", "");
-
-
-  if (seconds.length < 2) {
-    seconds = "0" + seconds;
-  }
-
-  var time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
-  time = time.replaceAll("-", ""); // remove negative signs
-
-  return time;
-};
-
-exports.toggleFullScreen = function (elem) {
-  // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
-  if (document.fullScreenElement !== undefined && document.fullScreenElement === null || document.msFullscreenElement !== undefined && document.msFullscreenElement === null || document.mozFullScreen !== undefined && !document.mozFullScreen || document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen) {
-    if (elem.requestFullScreen) {
-      elem.requestFullScreen();
-    } else if (elem.mozRequestFullScreen) {
-      elem.mozRequestFullScreen();
-    } else if (elem.webkitRequestFullScreen) {
-      elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
-    } else if (elem.msRequestFullscreen) {
-      elem.msRequestFullscreen();
-    }
-  } else {
-    if (document.cancelFullScreen) {
-      document.cancelFullScreen();
-    } else if (document.mozCancelFullScreen) {
-      document.mozCancelFullScreen();
-    } else if (document.webkitCancelFullScreen) {
-      document.webkitCancelFullScreen();
-    } else if (document.msExitFullscreen) {
-      document.msExitFullscreen();
-    }
-  }
-};
-
-exports.setToPercentParent = function (elem, percent) {
-  $(elem).height(0);
-  var parentHeight = $(elem).parent().height();
-  var newHeight = percent / 100 * parentHeight;
-  $(elem).height(newHeight);
-}; // like sleep, but worse:
-
-
-exports.wait = function (ms) {
-  var start = new Date().getTime();
-  var end = start;
-
-  while (end < start + ms) {
-    end = new Date().getTime();
-  }
-}; // brings number closer to target by accel
-
-
-exports.mathZoom = function (current, target, accel) {
-  if (current == target) {
-    return current;
-  }
-
-  if (Math.abs(current - target) < accel) {
-    return target;
-  }
-
-  if (current < target) {
-    return current + accel;
-  } else {
-    return current - accel;
-  }
-};
-
-exports.normalizeVector = function (vector, scale) {
-  var norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
-
-  if (norm !== 0) {
-    vector.x = scale * vector.x / norm;
-    vector.y = scale * vector.y / norm;
-  }
-
-  return vector;
-};
-
-exports.abs = function (n) {
-  return Math.abs(n);
-}; // delete all cookies:
-
-
-exports.deleteAllCookies = function () {
-  var cookies = document.cookie.split(";");
-
-  for (var i = 0; i < cookies.length; i++) {
-    var cookie = cookies[i];
-    var eqPos = cookie.indexOf("=");
-    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
-    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
-  }
-}; // String.prototype.replaceAll = function(search, replacement) {
-// 	let target = this;
-// 	return target.replace(new RegExp(search, "g"), replacement);
-// };
-// $.fn.sumHeights = function() {
-// 	let h = 0;
-// 	this.each(function() {
-// 		h += $(this).outerHeight();
-// 	});
-// 	return h;
-// };
-// $.fn.addUp = function(getter) {
-// 	return Array.prototype.reduce.call(this, function(a, b) {
-// 		return a + getter.call($(b));
-// 	}, 0);
-// }
-
-/***/ }),
-
-/***/ "./src/components/ControlQueue.jsx":
-/*!*****************************************!*\
-  !*** ./src/components/ControlQueue.jsx ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var ControlQueue =
-/*#__PURE__*/
-function (_PureComponent) {
-  _inherits(ControlQueue, _PureComponent);
-
-  function ControlQueue(props) {
-    var _this;
-
-    _classCallCheck(this, ControlQueue);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ControlQueue).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    return _this;
-  }
-
-  _createClass(ControlQueue, [{
-    key: "getQueue",
-    value: function getQueue() {
-      var queue = [];
-      var usernameMap = this.props.usernameMap;
-      var elementClass = this.props.darkTheme ? "queueItem list-group-item-dark" : "queueItem list-group-item";
-
-      if (this.props.viewerIDs.length == 0) {
-        return _react.default.createElement("li", {
-          key: "0",
-          className: elementClass,
-          "data-toggle": "popover",
-          tabIndex: "0"
-        }, "The queue is empty.");
-      }
-
-      for (var i = 0; i < this.props.viewerIDs.length; i++) {
-        var username = this.props.usernameMap[this.props.viewerIDs[i]];
-
-        var html = _react.default.createElement("li", {
-          key: i,
-          className: elementClass,
-          "data-toggle": "popover",
-          tabIndex: "0"
-        }, username);
-
-        queue.push(html);
-      }
-
-      return queue;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement("ul", {
-        id: "controlQueue" + this.props.num,
-        className: "controlQueue list-group"
-      }, this.getQueue());
-    }
-  }]);
-
-  return ControlQueue;
-}(_react.PureComponent);
-
-exports.default = ControlQueue;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/ForfeitTimer.jsx":
-/*!*****************************************!*\
-  !*** ./src/components/ForfeitTimer.jsx ***!
-  \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var TurnTimer =
-/*#__PURE__*/
-function (_PureComponent) {
-  _inherits(TurnTimer, _PureComponent);
-
-  function TurnTimer(props) {
-    var _this;
-
-    _classCallCheck(this, TurnTimer);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(TurnTimer).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    return _this;
-  }
-
-  _createClass(TurnTimer, [{
-    key: "getBarText",
-    value: function getBarText() {
-      if (this.props.name == null) {
-        return "No one is playing right now.";
-      } else {
-        return this.props.timeLeft + " seconds until turn forfeit.";
-      }
-    }
-  }, {
-    key: "getStyle",
-    value: function getStyle() {
-      if (this.props.name == null) {
-        return {
-          width: "100%"
-        };
-      } else {
-        return {
-          width: this.props.percent + "%"
-        };
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement("div", {
-        id: "forfeitTimerBar" + this.props.num,
-        className: "forfeitTimerBar progress"
-      }, _react.default.createElement("div", {
-        id: "forfeitTimerBarChild" + this.props.num,
-        className: "forfeitTimerBarChild progress-bar progress-bar-danger bg-danger progress-bar-striped progress-bar-animatedd active",
-        style: this.getStyle()
-      }, this.getBarText()));
-    }
-  }]);
-
-  return TurnTimer;
-}(_react.PureComponent);
-
-exports.default = TurnTimer;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/JoinLeaveQueueButton.jsx":
-/*!*************************************************!*\
-  !*** ./src/components/JoinLeaveQueueButton.jsx ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var JoinLeaveQueueButton =
-/*#__PURE__*/
-function (_PureComponent) {
-  _inherits(JoinLeaveQueueButton, _PureComponent);
-
-  function JoinLeaveQueueButton(props) {
-    var _this;
-
-    _classCallCheck(this, JoinLeaveQueueButton);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(JoinLeaveQueueButton).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    return _this;
-  }
-
-  _createClass(JoinLeaveQueueButton, [{
-    key: "getButton",
-    value: function getButton() {
-      var num = this.props.num;
-      var buttonText;
-      var buttonType;
-
-      if (this.props.controlQueue.indexOf(this.props.myID) > -1) {
-        buttonType = "leaveQueue";
-        buttonText = "Leave Queue";
-      } else {
-        buttonType = "joinQueue";
-        buttonText = "Join Queue";
-      }
-
-      var elementID = buttonType + this.props.num;
-      var elementClass = buttonType + " btn btn-secondary";
-      return _react.default.createElement("button", {
-        id: elementID,
-        className: elementClass
-      }, buttonText);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, this.getButton());
-    }
-  }]);
-
-  return JoinLeaveQueueButton;
-}(_react.PureComponent);
-
-exports.default = JoinLeaveQueueButton;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/LeftJoyCon.jsx":
-/*!***************************************!*\
-  !*** ./src/components/LeftJoyCon.jsx ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var VirtualProController = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
-
-var tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
-
-var LeftJoyCon =
-/*#__PURE__*/
-function (_PureComponent) {
-  _inherits(LeftJoyCon, _PureComponent);
-
-  function LeftJoyCon(props) {
-    var _this;
-
-    _classCallCheck(this, LeftJoyCon);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(LeftJoyCon).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    _this.controller = new VirtualProController();
-    return _this;
-  }
-
-  _createClass(LeftJoyCon, [{
-    key: "getJoyCon",
-    value: function getJoyCon() {
-      var controllerState = "000000000000000000 128 128 128 128";
-      this.controller.inputState(this.props.controllerState || controllerState);
-      var str = this.props.controllerState || controllerState;
-      var restPos = 128;
-      var stickPositions = str.substring(19).split(" ");
-      var LX = parseInt(stickPositions[0]) - restPos;
-      var LY = parseInt(stickPositions[1]) - restPos;
-      var RX = parseInt(stickPositions[2]) - restPos;
-      var RY = parseInt(stickPositions[3]) - restPos;
-      LY *= -1; // normalize:
-
-      var scale = 0.25;
-      var LMagnitude = Math.sqrt(LX * LX + LY * LY);
-      var max = 120;
-      LMagnitude = tools.minmax(LMagnitude, -max, max);
-      var LStick = tools.normalizeVector({
-        x: LX,
-        y: LY
-      }, LMagnitude);
-      LX = parseInt(LStick.x * scale);
-      LY = parseInt(LStick.y * scale);
-      var leftTransform = LX + "px" + "," + LY + "px";
-      return _react.default.createElement("div", {
-        id: "leftJoyCon"
-      }, _react.default.createElement("img", {
-        id: "leftJoyConImage",
-        src: "https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png"
-      }), _react.default.createElement("div", {
-        id: "leftStick",
-        className: "" + (this.controller.btns.stick_button ? " highlightedButton" : "")
-      }, _react.default.createElement("div", {
-        id: "leftStick2",
-        style: {
-          transform: "translate(" + leftTransform + ")"
-        }
-      })), _react.default.createElement("div", {
-        id: "dpadButtons"
-      }, _react.default.createElement("div", {
-        id: "upButton",
-        className: "controllerButton" + (this.controller.btns.up ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "downButton",
-        className: "controllerButton" + (this.controller.btns.down ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "leftButton",
-        className: "controllerButton" + (this.controller.btns.left ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "rightButton",
-        className: "controllerButton" + (this.controller.btns.right ? " highlightedButton" : "")
-      })), _react.default.createElement("div", {
-        id: "leftJoyConOther"
-      }, _react.default.createElement("div", {
-        id: "minusButton",
-        className: "controllerButton lessRound" + (this.controller.btns.minus ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "captureButton",
-        className: "controllerButton lessRound" + (this.controller.btns.capture ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "lButton",
-        className: "controllerButton lessRound" + (this.controller.btns.l ? " highlightedButton" : "")
-      }, _react.default.createElement("div", {
-        className: "click-passthrough"
-      }, "L")), _react.default.createElement("div", {
-        id: "zlButton",
-        className: "controllerButton lessRound" + (this.controller.btns.zl ? " highlightedButton" : "")
-      }, _react.default.createElement("div", {
-        className: "click-passthrough"
-      }, "ZL"))));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, this.getJoyCon());
-    }
-  }]);
-
-  return LeftJoyCon;
-}(_react.PureComponent);
-
-exports.default = LeftJoyCon;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/Player.jsx":
-/*!***********************************!*\
-  !*** ./src/components/Player.jsx ***!
-  \***********************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _TurnTimer = _interopRequireDefault(__webpack_require__(/*! ./TurnTimer.jsx */ "./src/components/TurnTimer.jsx"));
-
-var _ForfeitTimer = _interopRequireDefault(__webpack_require__(/*! ./ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var Player =
-/*#__PURE__*/
-function (_Component) {
-  _inherits(Player, _Component);
-
-  function Player(props) {
-    var _this;
-
-    _classCallCheck(this, Player);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(Player).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    return _this;
-  }
-
-  _createClass(Player, [{
-    key: "render",
-    value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("label", {
-        class: "playerCheckbox checkbox-inline checkbox-bootstrap checkbox-lg"
-      }, _react.default.createElement("input", {
-        id: "player" + this.props.playerNum + "Checkbox",
-        type: "checkbox"
-      }), _react.default.createElement("span", {
-        className: "checkbox-placeholder"
-      }), "Player ", this.props.playerNum), _react.default.createElement(_TurnTimer.default, null), _react.default.createElement(_ForfeitTimer.default, null), _react.default.createElement("button", {
-        id: "requestTurn1",
-        class: "requestTurn btn btn-secondary",
-        code: "0"
-      }, "Join Queue"), _react.default.createElement("ul", {
-        id: "controlQueue1",
-        class: "controlQueue list-group"
-      }));
-    }
-  }]);
-
-  return Player;
-}(_react.Component);
-
-exports.default = Player;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/RightJoyCon.jsx":
-/*!****************************************!*\
-  !*** ./src/components/RightJoyCon.jsx ***!
-  \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var VirtualProController = __webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js");
-
-var tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
-
-var RightJoyCon =
-/*#__PURE__*/
-function (_PureComponent) {
-  _inherits(RightJoyCon, _PureComponent);
-
-  function RightJoyCon(props) {
-    var _this;
-
-    _classCallCheck(this, RightJoyCon);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(RightJoyCon).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    _this.controller = new VirtualProController();
-    return _this;
-  }
-
-  _createClass(RightJoyCon, [{
-    key: "getJoyCon",
-    value: function getJoyCon() {
-      var controllerState = "000000000000000000 128 128 128 128";
-      this.controller.inputState(this.props.controllerState || controllerState);
-      var str = this.props.controllerState || controllerState;
-      var restPos = 128;
-      var stickPositions = str.substring(19).split(" ");
-      var RX = parseInt(stickPositions[2]) - restPos;
-      var RY = parseInt(stickPositions[3]) - restPos;
-      RY *= -1; // normalize:
-
-      var scale = 0.25;
-      var RMagnitude = Math.sqrt(RX * RX + RY * RY);
-      var max = 120;
-      RMagnitude = tools.minmax(RMagnitude, -max, max);
-      var RStick = tools.normalizeVector({
-        x: RX,
-        y: RY
-      }, RMagnitude);
-      RX = parseInt(RStick.x * scale);
-      RY = parseInt(RStick.y * scale);
-      var rightTransform = RX + "px" + "," + RY + "px";
-      return _react.default.createElement("div", {
-        id: "rightJoyCon"
-      }, _react.default.createElement("img", {
-        id: "rightJoyConImage",
-        src: "https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png"
-      }), _react.default.createElement("div", {
-        id: "rightStick",
-        className: "" + (this.controller.btns.stick_button2 ? " highlightedButton" : "")
-      }, _react.default.createElement("div", {
-        id: "rightStick2",
-        style: {
-          transform: "translate(" + rightTransform + ")"
-        }
-      })), _react.default.createElement("div", {
-        id: "abxyButtons"
-      }, _react.default.createElement("div", {
-        id: "aButton",
-        className: "controllerButton" + (this.controller.btns.a ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "bButton",
-        className: "controllerButton" + (this.controller.btns.b ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "xButton",
-        className: "controllerButton" + (this.controller.btns.x ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "yButton",
-        className: "controllerButton" + (this.controller.btns.y ? " highlightedButton" : "")
-      })), _react.default.createElement("div", {
-        id: "rightJoyConOther"
-      }, _react.default.createElement("div", {
-        id: "plusButton",
-        className: "controllerButton lessRound" + (this.controller.btns.plus ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "homeButton",
-        className: "controllerButton lessRound" + (this.controller.btns.home ? " highlightedButton" : "")
-      }), _react.default.createElement("div", {
-        id: "rButton",
-        className: "controllerButton lessRound" + (this.controller.btns.r ? " highlightedButton" : "")
-      }, _react.default.createElement("div", {
-        className: "click-passthrough"
-      }, "R")), _react.default.createElement("div", {
-        id: "zrButton",
-        className: "controllerButton lessRound" + (this.controller.btns.zr ? " highlightedButton" : "")
-      }, _react.default.createElement("div", {
-        className: "click-passthrough"
-      }, "ZR"))));
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, this.getJoyCon());
-    }
-  }]);
-
-  return RightJoyCon;
-}(_react.PureComponent);
-
-exports.default = RightJoyCon;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/TurnTimer.jsx":
-/*!**************************************!*\
-  !*** ./src/components/TurnTimer.jsx ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var TurnTimer =
-/*#__PURE__*/
-function (_PureComponent) {
-  _inherits(TurnTimer, _PureComponent);
-
-  function TurnTimer(props) {
-    var _this;
-
-    _classCallCheck(this, TurnTimer);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(TurnTimer).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    return _this;
-  }
-
-  _createClass(TurnTimer, [{
-    key: "getBarText",
-    value: function getBarText() {
-      if (this.props.name == null) {
-        return "No one is playing right now.";
-      } else {
-        return this.props.name + ": " + this.props.timeLeft + " seconds";
-      }
-    }
-  }, {
-    key: "getStyle",
-    value: function getStyle() {
-      if (this.props.name == null) {
-        return {
-          width: "100%"
-        };
-      } else {
-        return {
-          width: this.props.percent + "%"
-        };
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement("div", {
-        id: "turnTimerBar" + this.props.num,
-        className: "turnTimerBar progress"
-      }, _react.default.createElement("div", {
-        id: "turnTimerBarChild" + this.props.num,
-        className: "turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active",
-        style: this.getStyle()
-      }, this.getBarText()));
-    }
-  }]);
-
-  return TurnTimer;
-}(_react.PureComponent);
-
-exports.default = TurnTimer;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/ViewerList.jsx":
-/*!***************************************!*\
-  !*** ./src/components/ViewerList.jsx ***!
-  \***************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-var ViewerList =
-/*#__PURE__*/
-function (_PureComponent) {
-  _inherits(ViewerList, _PureComponent);
-
-  function ViewerList(props) {
-    var _this;
-
-    _classCallCheck(this, ViewerList);
-
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(ViewerList).call(this, props));
-
-    _defineProperty(_assertThisInitialized(_assertThisInitialized(_this)), "state", {});
-
-    return _this;
-  }
-
-  _createClass(ViewerList, [{
-    key: "getViewerList",
-    //     componentDidMount() {
-    //  		setInterval(() => {
-    //  			this.setState({});
-    //  		}, 1000);
-    //  		console.log("mounted");
-    //     }
-    // shouldComponentUpdate(nextProps, nextState) {
-    //   viewer list changed:
-    // 	if (JSON.stringify(this.props.viewerIDs) != JSON.stringify(nextProps.viewerIDs)) {
-    // 		console.log("updated");
-    // 		return true;
-    // 	} else {
-    // 		return false;
-    // 	}
-    // }
-    // 	componentDidUpdate(prevProps, prevState) {
-    // 		console.log("changed");
-    // 	}
-    // static getDerivedStateFromProps(nextProps, prevState) {
-    // 	console.log("get");
-    // 	return {};
-    // }
-    // 	componentDidUpdate(prevProps) {
-    // 	  compare props:
-    // 		if (this.props.viewerIDs !== prevProps.viewerIDs) {
-    // 			console.log("props changed.");
-    // 		}
-    // 	}
-    // 	componentWillRecieveProps(nextProps) {
-    // 	  compare props:
-    // 		if (this.props.viewerIDs !== nextProps.viewerIDs) {
-    // 			console.log("props changed.");
-    // 			this.setState({});
-    // 		}
-    // 	}
-    value: function getViewerList() {
-      var viewerNames = [];
-
-      for (var i = 0; i < this.props.viewerIDs.length; i++) {
-        viewerNames.push([]);
-
-        for (var j = 0; j < this.props.viewerIDs[i].length; j++) {
-          var name = this.props.usernameMap[this.props.viewerIDs[i][j]];
-          viewerNames[i].push(name);
-        }
-      }
-
-      var viewers = [];
-
-      for (var _i = 0; _i < viewerNames.length; _i++) {
-        if (viewerNames[_i].length > 0) {
-          viewers.push(_react.default.createElement("div", {
-            key: _i,
-            className: "dropdown-divider"
-          }, "Lagless ", _i + 1)); // 				lists.push(this.state.viewerNames.map(name => <li key={name}>{name}</li>));
-        }
-
-        for (var _j = 0; _j < viewerNames[_i].length; _j++) {
-          var html = _react.default.createElement("button", {
-            key: _i + ":" + _j,
-            className: "viewerElement dropdown-item",
-            "data-toggle": "popover",
-            tabIndex: "0",
-            uniqueid: this.props.viewerIDs[_i][_j]
-          }, viewerNames[_i][_j]);
-
-          viewers.push(html);
-        }
-      }
-
-      return viewers;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("a", {
-        className: "btn btn-secondary dropdown-toggle",
-        href: "#",
-        id: "dropdownMenuLink",
-        "data-toggle": "dropdown"
-      }, "Viewers"), _react.default.createElement("div", {
-        id: "laglessViewerDropdownDiv",
-        className: "dropdown-menu"
-      }, this.getViewerList()));
-    }
-  }]);
-
-  return ViewerList;
-}(_react.PureComponent);
-
-exports.default = ViewerList;
 module.exports = exports.default;
 
 /***/ })

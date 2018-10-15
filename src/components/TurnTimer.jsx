@@ -27,8 +27,8 @@ export default class TurnTimer extends PureComponent {
 	render() {
 
 		return (
-			<div id={"turnTimerBar" + this.props.num} className="turnTimerBar progress">
-				<div id={"turnTimerBarChild" + this.props.num} className="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" style={this.getStyle()}>
+			<div className="turnTimerBar progress">
+				<div className="turnTimerBarChild progress-bar progress-bar-striped progress-bar-animatedd active" style={this.getStyle()}>
 					{this.getBarText()}
 				</div>
 			</div>

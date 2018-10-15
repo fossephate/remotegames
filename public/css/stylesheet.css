@@ -1396,6 +1396,13 @@ border-top-right-radius: .25rem; */
 	border-bottom: 0 !important;
 }
 
+.nav-tabs .nav-item :not(.active):not(.disabled):hover {
+	background-color: #dddddd;
+	border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+
 .nav-tabs .nav-item {}
 
 /* STATUS BAR */
