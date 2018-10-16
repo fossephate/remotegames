@@ -371,7 +371,7 @@ flex-direction: column;
 .laglessView {
 	display: flex;
 	flex-direction: row;
-	justify-content: start;
+	justify-content: center;
 	position: relative;
 	margin-left: 20px;
     margin-right: 20px;
@@ -383,6 +383,10 @@ flex-direction: column;
 	/* margin-left: 12.5%; */
 	width: 73.2%;
 	align-self: center;
+}
+
+.largescreen {
+	width: 100% !important;
 }
 
 #videoCanvas3 {
@@ -1183,6 +1187,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 	width: 30%;
 	min-width: 125px;
 	border-radius: 10px;
+	align-items: center;
 	/*     margin-top: 2px; */
 	/*     margin-bottom: 2px; */
 	/* 	padding-top: 2px; */
@@ -1592,6 +1597,14 @@ visibility: visible;
 
 .click-passthrough {
 	pointer-events: none;
+}
+
+.snex-react-connect {
+	width: 180px;
+    font-size: 15;
+}
+.snex-react-connect > div:first-child {
+	height: 41px !important;
 }
 
 /* @include media-breakpoint-between(xs,sm) {

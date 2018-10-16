@@ -22,11 +22,13 @@
   },
   "homepage": "https://github.com/mfosse/twitchplays#readme",
   "dependencies": {
+    "@snex/react-connect": "^0.3.0",
     "bcrypt": "^3.0.1",
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "handlebars": "^4.0.12",
     "keycode": "^2.2.0",
+    "keymaster": "^1.6.2",
     "mongodb": "^3.1.6",
     "mongoose": "^5.3.0",
     "noty": "^3.2.0-beta",
@@ -37,11 +39,13 @@
     "passport-twitch": "github:mfosse/passport-twitch",
     "passport-youtube-v3": "github:mfosse/passport-youtube-v3",
     "performance-now": "^2.1.0",
+    "rc-slider": "^8.6.3",
     "react-fast-compare": "^2.0.2",
     "react-redux": "^5.0.7",
     "redis": "^2.8.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
+    "snex": "^0.5.0",
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
@@ -52,8 +56,10 @@
     "babel-loader": "^8.0.4",
     "babel-plugin-add-module-exports": "^1.0.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "css-loader": "^1.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "style-loader": "^0.23.1",
     "webpack": "^4.19.1",
     "webpack-cli": "^3.1.1"
   }

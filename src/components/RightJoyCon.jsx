@@ -19,7 +19,7 @@ export default class RightJoyCon extends PureComponent {
 
 		let controllerState = "000000000000000000 128 128 128 128";
 
-		this.controller.inputState(this.props.controllerState || controllerState);
+		this.controller.setState(this.props.controllerState || controllerState);
 
 
 		let str = this.props.controllerState || controllerState;
@@ -36,7 +36,7 @@ export default class RightJoyCon extends PureComponent {
 		let scale = 0.25;
 		let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
 		let max = 120;
-		RMagnitude = tools.minmax(RMagnitude, -max, max);
+		RMagnitude = tools.clamp(RMagnitude, -max, max);
 		let RStick = tools.normalizeVector({
 			x: RX,
 			y: RY

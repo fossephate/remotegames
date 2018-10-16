@@ -4,18 +4,15 @@ export default class Checkbox extends PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.state = {};
 	}
 
-	state = {};
-
-	getButton() {
-
-	}
 
 	render() {
 		return (
 			<label className="checkbox-inline checkbox-bootstrap checkbox-lg">
-				<input onChange={this.props.handleChange} type="checkbox" checked={this.props.checked}/>
+				<input onChange={(event) => {this.props.handleChange(event.target.checked)}} type="checkbox" checked={this.props.checked}/>
 				<span className="checkbox-placeholder"></span>
 				{this.props.text}
 			</label>

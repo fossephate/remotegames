@@ -19,7 +19,7 @@ export default class LeftJoyCon extends PureComponent {
 
 		let controllerState = "000000000000000000 128 128 128 128";
 
-		this.controller.inputState(this.props.controllerState || controllerState);
+		this.controller.setState(this.props.controllerState || controllerState);
 
 
 		let str = this.props.controllerState || controllerState;
@@ -39,7 +39,7 @@ export default class LeftJoyCon extends PureComponent {
 		let LMagnitude = Math.sqrt((LX * LX) + (LY * LY));
 
 		let max = 120;
-		LMagnitude = tools.minmax(LMagnitude, -max, max);
+		LMagnitude = tools.clamp(LMagnitude, -max, max);
 
 		let LStick = tools.normalizeVector({
 			x: LX,

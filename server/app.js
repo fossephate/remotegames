@@ -52,9 +52,9 @@ const SESSION_SECRET = config.SESSION_SECRET;
 
 let lagless1Settings = {
 	x1: 319 - 1920,
-	y1: 61 + 360,
+	y1: 88 + 360, // 61
 	x2: 319 + 1280 - 1920,
-	y2: 61 + 720 + 360,
+	y2: 88 + 720 + 360, // 61
 	fps: 15,
 	quality: 60,
 	scale: 30,
@@ -71,6 +71,7 @@ let channels = {};
 let restartAvailable = true;
 let lagless2ChangeAvailable = true;
 let locked = false;
+let queuesLocked = false;
 let maxPlayers = 5;
 
 let controlQueues = [
@@ -1159,6 +1160,48 @@ io.on("connection", function (socket) {
 			io.emit("unlock");
 		}
 	});
+	socket.on("lockqueues", function (data) {
+		let legit = false;
+		// check if it's coming from the controller:
+		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+			legit = true;
+		}
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.uniqueID != null) {
+			if (client.is_mod) {
+				legit = true;
+			}
+		}
+		if (legit) {
+			queuesLocked = true;
+			io.emit("lockqueues");
+		}
+	});
+	socket.on("unlockqueues", function (data) {
+		let legit = false;
+		// check if it's coming from the controller:
+		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+			legit = true;
+		}
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		client = clients[index];
+		if (client.uniqueID != null) {
+			if (client.is_mod) {
+				legit = true;
+			}
+		}
+		if (legit) {
+			queuesLocked = false;
+			io.emit("unlockqueues");
+		}
+	});
 	socket.on("kickFromQueue", function (data) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
@@ -2031,31 +2074,113 @@ setInterval(function () {
 	for (let i = 0; i < waitlists.length; i++) {
 
 
+		// // check if lagless tab is over capacity:
+		// if (laglessClientIds[i].length >= waitlistMaxes[i]) { // >= 10/12/18
+		// 	// the number of people we need to put into the waitlist:
+		// 	let numberOfPeopleToWaitlist = laglessClientIds[i].length - waitlistMaxes[i];
+		// 	let exemptCounter = 0;
+		//
+		// 	// console.log("# to waitlist: " + numberOfPeopleToWaitlist);
+		//
+		// 	// remove anyone exempt by being in a queue, with a position less than 5:
+		// 	let laglessClientIdsCopy = laglessClientIds[i].slice(0);
+		// 	console.log(laglessClientIdsCopy);
+		// 	for (let j = 0; j < laglessClientIds[i].length; j++) {
+		// 		let clientIndex = findClientByID(laglessClientIds[i][j]);
+		// 		let client = clients[clientIndex];
+		// 		if (client == null) {
+		// 			// console.log("client was null");
+		// 			continue;
+		// 		}
+		// 		// exempt if they aren't signed in:
+		// 		if (client.uniqueID == null) {
+		// 			let index = laglessClientIdsCopy.indexOf(client.id);
+		// 			if (index > -1) {
+		// 				laglessClientIdsCopy.splice(index);
+		// 			} else {
+		// 				// console.log("index was null1");
+		// 			}
+		// 		}
+		// 		if (client.uniqueID != null) {
+		// 			// mods are exempt:
+		// 			//if (client.is_mod) {
+		// 			//	laglessClientIds[0]Copy.splice(laglesss1ClientIdsCopy.indexOf(client.id));
+		// 			//	exemptCounter++;
+		// 			//} else {
+		// 			for (let k = 0; k < controlQueues.length; k++) {
+		// 				let pos = controlQueues[k].indexOf(client.uniqueID);
+		// 				// if exempt:
+		// 				if (pos > -1 && pos < minQueuePositions[i]) {
+		// 					let index = laglessClientIdsCopy.indexOf(client.id);
+		// 					if (index > -1) {
+		// 						laglessClientIdsCopy.splice(index);
+		// 					} else {
+		// 						// console.log("index was null2");
+		// 					}
+		// 					exemptCounter++;
+		// 				}
+		// 			}
+		// 			//}
+		// 		}
+		// 	}
+		//
+		// 	// console.log("exempt counter: " + exemptCounter);
+		// 	console.log(laglessClientIdsCopy);
+		//
+		//
+		// 	// now we have a list of non-auto-exempt people:
+		// 	// sort them by the time that they joined, and exempt more people until the queue limit is met
+		//
+		// 	// get the actual client objects:
+		// 	let laglessXClients = [];
+		// 	for (let j = 0; j < laglessClientIdsCopy.length; j++) {
+		// 		let clientIndex = findClientByID(laglessClientIdsCopy[j]);
+		// 		let client = clients[clientIndex];
+		// 		if (client == null) {
+		// 			// console.log("client was null2.");
+		// 		} else {
+		// 			laglessXClients.push(client);
+		// 		}
+		// 	}
+		//
+		// 	// sort by time joined:
+		// 	laglessXClients = _.sortBy(laglessXClients, "joinTime");
+		//
+		// 	// pick the first X to be exempted:
+		// 	while (laglessXClients.length > numberOfPeopleToWaitlist) {
+		// 		laglessXClients.shift();
+		// 		exemptCounter++;
+		// 	}
+		// 	// console.log(laglessXClients);
+		// 	// console.log(laglessClientIdsCopy);
+		//
+		//
+		// 	// our final waitlist is everyone in laglessXClients
+		// 	for (let j = 0; j < laglessXClients.length; j++) {
+		// 		let client = laglessXClients[j];
+		// 		if (client != null && client.uniqueID != null) {
+		// 			waitlists[i].push(client.uniqueID);
+		// 		} else {
+		// 			// io.to(client.id).emit("replaceWithTwitchLock");
+		// 		}
+		// 	}
+		// }
+
 		// check if lagless tab is over capacity:
-		if (laglessClientIds[i].length >= waitlistMaxes[i]) { // >= 10/12/18
+		if (laglessClientUniqueIds[i].length >= waitlistMaxes[i]) { // >= 10/12/18
 			// the number of people we need to put into the waitlist:
-			let numberOfPeopleToWaitlist = laglessClientIds[i].length - waitlistMaxes[i];
+			let numberOfPeopleToWaitlist = laglessClientUniqueIds[i].length - waitlistMaxes[i];
 			let exemptCounter = 0;
 
-			// console.log("# to waitlist: " + numberOfPeopleToWaitlist);
-
 			// remove anyone exempt by being in a queue, with a position less than 5:
-			let laglessClientIdsCopy = laglessClientIds[i].slice(0);
+			let laglessClientUniqueIdsCopy = laglessClientUniqueIds[i].slice(0);
+			// console.log(laglessClientUniqueIdsCopy);
 			for (let j = 0; j < laglessClientIds[i].length; j++) {
-				let clientIndex = findClientByID(laglessClientIds[i][j]);
+				let clientIndex = findClientByUniqueID(laglessClientIds[i][j]);
 				let client = clients[clientIndex];
 				if (client == null) {
 					// console.log("client was null");
 					continue;
-				}
-				// exempt if they aren't signed in:
-				if (client.uniqueID == null) {
-					let index = laglessClientIdsCopy.indexOf(client.id);
-					if (index > -1) {
-						laglessClientIdsCopy.splice(index);
-					} else {
-						// console.log("index was null1");
-					}
 				}
 				if (client.uniqueID != null) {
 					// mods are exempt:
@@ -2067,7 +2192,7 @@ setInterval(function () {
 						let pos = controlQueues[k].indexOf(client.uniqueID);
 						// if exempt:
 						if (pos > -1 && pos < minQueuePositions[i]) {
-							let index = laglessClientIdsCopy.indexOf(client.id);
+							let index = laglessClientUniqueIdsCopy.indexOf(client.uniqueID);
 							if (index > -1) {
 								laglessClientIdsCopy.splice(index);
 							} else {
@@ -2080,17 +2205,13 @@ setInterval(function () {
 				}
 			}
 
-			// console.log("exempt counter: " + exemptCounter);
-			// console.log(laglessClientIdsCopy);
-
-
 			// now we have a list of non-auto-exempt people:
 			// sort them by the time that they joined, and exempt more people until the queue limit is met
 
 			// get the actual client objects:
 			let laglessXClients = [];
-			for (let j = 0; j < laglessClientIdsCopy.length; j++) {
-				let clientIndex = findClientByID(laglessClientIdsCopy[j]);
+			for (let j = 0; j < laglessClientUniqueIdsCopy.length; j++) {
+				let clientIndex = findClientByUniqueID(laglessClientUniqueIdsCopy[j]);
 				let client = clients[clientIndex];
 				if (client == null) {
 					// console.log("client was null2.");
@@ -2107,37 +2228,32 @@ setInterval(function () {
 				laglessXClients.shift();
 				exemptCounter++;
 			}
-			// console.log(laglessXClients);
-			// console.log(laglessClientIdsCopy);
-
 
 			// our final waitlist is everyone in laglessXClients
 			for (let j = 0; j < laglessXClients.length; j++) {
 				let client = laglessXClients[j];
 				if (client != null && client.uniqueID != null) {
 					waitlists[i].push(client.uniqueID);
-				} else {
-					// 					io.to(client.id).emit("replaceWithTwitchLock");
 				}
 			}
 		}
-
-
 	}
 
 	// emit turn times left:
 	emitTurnTimesLeft();
 
-	for (let i = 0; i < forfeitTimesLeft.length; i++) {
-		if (forfeitTimesLeft[i] < -450 && controlQueues[i][0] != null) {
-			// if (forfeitTimesLeft[i] < -450) {
-			forfeitTurn(controlQueues[i][0], i);
+	if (!queuesLocked) {
+		for (let i = 0; i < forfeitTimesLeft.length; i++) {
+			if (forfeitTimesLeft[i] < -450 && controlQueues[i][0] != null) {
+				// if (forfeitTimesLeft[i] < -450) {
+				forfeitTurn(controlQueues[i][0], i);
+			}
 		}
-	}
 
-	for (let i = 0; i < turnTimesLeft.length; i++) {
-		if (turnTimesLeft[i] < -450) {
-			moveLine(i);
+		for (let i = 0; i < turnTimesLeft.length; i++) {
+			if (turnTimesLeft[i] < -450) {
+				moveLine(i);
+			}
 		}
 	}
 

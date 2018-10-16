@@ -11,7 +11,7 @@ export default class UsernameDropdown extends PureComponent {
 		let usernames = [];
 
 		for (let i = 0; i < this.props.validUsernames.length; i++) {
-			let html = <button key={i} className="username-dropdown-item dropdown-item">{this.props.validUsernames[i]}</button>;
+			let html = <button key={i} index={i} className="username-dropdown-item dropdown-item" onClick={this.props.handleClick}>{this.props.validUsernames[i]}</button>;
 			usernames.push(html);
 		}
 

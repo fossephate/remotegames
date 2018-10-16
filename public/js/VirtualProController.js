@@ -1,17 +1,14 @@
+const clamp = require("../js/tools.js").clamp;
+let restPos = 128;
+
 function VirtualProController() {
 
-	let controller = {};
-
-	let restPos = 128;
-
-	let minmax = require("../js/tools.js").minmax;
-
-	controller.btns = {
+	this.btns = {
 		up: 0,
 		down: 0,
 		left: 0,
 		right: 0,
-		stick_button: 0,
+		lstick: 0,
 		l: 0,
 		zl: 0,
 		minus: 0,
@@ -21,37 +18,39 @@ function VirtualProController() {
 		b: 0,
 		x: 0,
 		y: 0,
-		stick_button2: 0,
+		rstick: 0,
 		r: 0,
 		zr: 0,
 		plus: 0,
 		home: 0,
 	};
-	controller.LStick = {
-		x: restPos,
-		y: restPos,
-	};
-	controller.RStick = {
+
+	this.LStick = {
 		x: restPos,
 		y: restPos,
 	};
 
-	controller.reset = function () {
-		for (let prop in controller.btns) {
-			controller.btns[prop] = 0;
+	this.RStick = {
+		x: restPos,
+		y: restPos,
+	};
+
+	this.reset = function () {
+		for (let prop in this.btns) {
+			this.btns[prop] = 0;
 		}
-		controller.LStick.x = restPos;
-		controller.LStick.y = restPos;
-		controller.RStick.x = restPos;
-		controller.RStick.y = restPos;
+		this.LStick.x = restPos;
+		this.LStick.y = restPos;
+		this.RStick.x = restPos;
+		this.RStick.y = restPos;
 	}
 
-	controller.getState = function () {
+	this.getState = function () {
 
-		this.LStick.x = minmax(this.LStick.x, 0, 255);
-		this.LStick.y = minmax(this.LStick.y, 0, 255);
-		this.RStick.x = minmax(this.RStick.x, 0, 255);
-		this.RStick.y = minmax(this.RStick.y, 0, 255);
+		this.LStick.x = clamp(this.LStick.x, 0, 255);
+		this.LStick.y = clamp(this.LStick.y, 0, 255);
+		this.RStick.x = clamp(this.RStick.x, 0, 255);
+		this.RStick.y = clamp(this.RStick.y, 0, 255);
 
 		if (isNaN(this.LStick.x)) {
 			this.LStick.x = restPos;
@@ -68,31 +67,11 @@ function VirtualProController() {
 
 		let state = "";
 
-		// if (this.btns.up == 1 && this.btns.left == 1) {
-		// 	state += "7";
-		// } else if (this.btns.up == 1 && this.btns.right == 1) {
-		// 	state += "1";
-		// } else if (this.btns.down == 1 && this.btns.left == 1) {
-		// 	state += "5";
-		// } else if (this.btns.down == 1 && this.btns.right == 1) {
-		// 	state += "3";
-		// } else if (this.btns.up == 1) {
-		// 	state += "0";
-		// } else if (this.btns.down == 1) {
-		// 	state += "4";
-		// } else if (this.btns.left == 1) {
-		// 	state += "6";
-		// } else if (this.btns.right == 1) {
-		// 	state += "2";
-		// } else {
-		// 	state += "8";
-		// }
-
 		state += this.btns.up;
 		state += this.btns.down;
 		state += this.btns.left;
 		state += this.btns.right;
-		state += this.btns.stick_button;
+		state += this.btns.lstick;
 		state += this.btns.l;
 		state += this.btns.zl;
 		state += this.btns.minus;
@@ -102,7 +81,7 @@ function VirtualProController() {
 		state += this.btns.b;
 		state += this.btns.x;
 		state += this.btns.y;
-		state += this.btns.stick_button2;
+		state += this.btns.rstick;
 		state += this.btns.r;
 		state += this.btns.zr;
 		state += this.btns.plus;
@@ -119,7 +98,7 @@ function VirtualProController() {
 		return state;
 	}
 
-	controller.inputState = function (state) {
+	this.setState = function (state) {
 
 		let entireState = state.split(" ");
 
@@ -129,7 +108,7 @@ function VirtualProController() {
 		this.btns.down = parseInt(btns[1]);
 		this.btns.left = parseInt(btns[2]);
 		this.btns.right = parseInt(btns[3]);
-		this.btns.stick_button = parseInt(btns[4]);
+		this.btns.lstick = parseInt(btns[4]);
 		this.btns.l = parseInt(btns[5]);
 		this.btns.zl = parseInt(btns[6]);
 		this.btns.minus = parseInt(btns[7]);
@@ -139,7 +118,7 @@ function VirtualProController() {
 		this.btns.b = parseInt(btns[10]);
 		this.btns.x = parseInt(btns[11]);
 		this.btns.y = parseInt(btns[12]);
-		this.btns.stick_button2 = parseInt(btns[13]);
+		this.btns.rstick = parseInt(btns[13]);
 		this.btns.r = parseInt(btns[14]);
 		this.btns.zr = parseInt(btns[15]);
 		this.btns.plus = parseInt(btns[16]);
@@ -151,8 +130,7 @@ function VirtualProController() {
 		this.RStick.x = entireState[3];
 		this.RStick.y = entireState[4];
 	}
-
-	return controller;
+	return this;
 }
 
 module.exports = VirtualProController;

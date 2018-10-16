@@ -1,10 +1,4 @@
-
-
-
-
-
-
-exports.getCookie = function(name) {
+exports.getCookie = function (name) {
 	let dc = document.cookie;
 	let prefix = name + "=";
 	let begin = dc.indexOf("; " + prefix);
@@ -24,7 +18,7 @@ exports.getCookie = function(name) {
 	return decodeURI(dc.substring(begin + prefix.length, end));
 };
 
-exports.setCookie = function(name, value, seconds) {
+exports.setCookie = function (name, value, seconds) {
 	let expires = "";
 	if (seconds) {
 		let date = new Date();
@@ -34,22 +28,16 @@ exports.setCookie = function(name, value, seconds) {
 	document.cookie = name + "=" + (value || "") + expires + "; path=/";
 };
 
-exports.minmax = function(num, min, max) {
-	if (num < min) {
-		return min;
-	} else if (num > max) {
-		return max;
-	} else {
-		return num;
-	}
+exports.clamp = function (n, min, max) {
+	return Math.min(Math.max(n, min), max);
 };
 
-exports.round = function(value, precision) {
+exports.round = function (value, precision) {
 	let multiplier = Math.pow(10, precision || 0);
 	return Math.round(value * multiplier) / multiplier;
 };
 
-exports.msToTime = function(duration) {
+exports.msToTime = function (duration) {
 	// 	var milliseconds = parseInt((duration % 1000) / 100);
 	let milliseconds = parseInt((((duration / 1000) % 60) % 1) * 1000);
 	let seconds = parseInt((duration / 1000) % 60);
@@ -76,7 +64,7 @@ exports.msToTime = function(duration) {
 	return time;
 }
 
-exports.toggleFullScreen = function(elem) {
+exports.toggleFullScreen = function (elem) {
 	// ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
 	if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
 		if (elem.requestFullScreen) {
@@ -101,7 +89,7 @@ exports.toggleFullScreen = function(elem) {
 	}
 }
 
-exports.setToPercentParent = function(elem, percent) {
+exports.setToPercentParent = function (elem, percent) {
 	$(elem).height(0);
 	let parentHeight = $(elem).parent().height();
 	let newHeight = (percent / 100) * parentHeight;
@@ -109,7 +97,7 @@ exports.setToPercentParent = function(elem, percent) {
 }
 
 // like sleep, but worse:
-exports.wait = function(ms) {
+exports.wait = function (ms) {
 	var start = new Date().getTime();
 	var end = start;
 	while (end < start + ms) {
@@ -118,7 +106,7 @@ exports.wait = function(ms) {
 }
 
 // brings number closer to target by accel
-exports.mathZoom = function(current, target, accel) {
+exports.mathZoom = function (current, target, accel) {
 	if (current == target) {
 		return current;
 	}
@@ -133,7 +121,7 @@ exports.mathZoom = function(current, target, accel) {
 }
 
 
-exports.normalizeVector = function(vector, scale) {
+exports.normalizeVector = function (vector, scale) {
 	let norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 	if (norm !== 0) {
 		vector.x = scale * vector.x / norm;
@@ -142,13 +130,13 @@ exports.normalizeVector = function(vector, scale) {
 	return vector;
 }
 
-exports.abs = function(n) {
+exports.abs = function (n) {
 	return Math.abs(n);
 }
 
 // delete all cookies:
-exports.deleteAllCookies = function() {
-	
+exports.deleteAllCookies = function () {
+
 	let cookies = document.cookie.split(";");
 
 	for (let i = 0; i < cookies.length; i++) {
@@ -177,4 +165,3 @@ exports.deleteAllCookies = function() {
 // 		return a + getter.call($(b));
 // 	}, 0);
 // }
-
