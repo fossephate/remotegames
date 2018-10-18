@@ -18,8 +18,10 @@ display: none;
 	overflow: hidden;
 }
 
-html {
-	height: 100%;
+html, body {
+	margin: 0;
+	/* height: 100%; */
+	height: auto;
 }
 
 #twitchVideo {
@@ -196,9 +198,9 @@ margin-right: auto; */
 	border-top-right-radius: 0;
 }
 
-#chat {
+/* #chat {
 	flex-grow: 1;
-}
+} */
 
 #chatContainer {
 	width: 25%;
@@ -249,6 +251,7 @@ margin-right: auto; */
 
 #usernameDropdown {
 	align-self: center;
+	background: transparent;
 }
 
 .connectWithContainer {
@@ -665,9 +668,7 @@ ul {
 }
 
 #leftJoyCon {
-	/* width: 12.5%; */
-	/* height: 100%; */
-	/* position: absolute; */
+	background: transparent;
 	position: relative;
 	width: 13.4%;
 }
@@ -725,7 +726,7 @@ height: 30px; */
 
 #dpadButtons {
 	position: absolute;
-	/* 	background: rgba(50, 50, 50, 0.2); */
+	background: transparent;
 	width: 85.25%;
 	height: 27.75%;
 	left: 10%;
@@ -789,10 +790,7 @@ height: 30px; */
 }
 
 #rightJoyCon {
-	/* width: 12.5%; */
-	/* height: 100%; */
-	/* position: absolute; */
-	/* margin-left: 87.5%; */
+	background: transparent;
 	position: relative;
 	width: 13.4%;
 }
@@ -825,7 +823,7 @@ height: 30px; */
 
 #abxyButtons {
 	position: absolute;
-	/* 	background: rgba(50, 50, 50, 0.2); */
+	background: transparent;
 	width: 85.25%;
 	height: 27.75%;
 	left: 3%;
@@ -1651,19 +1649,6 @@ label {
     padding-top: 4px;
     padding-bottom: 4px;
     border-radius: 6px;
-}
-
-/* scale font size */
-
-/* https://stackoverflow.com/questions/14431411/pure-css-to-make-font-size-responsive-based-on-dynamic-amount-of-characters */
-
-.btn {
-	/* 	font-size: 1.0vw !important; */
-	/* 	font-size: calc(100% + 2vw) !important; */
-}
-
-body {
-	/* 	font-size: 1.0vw !important; */
 }
 
 /* SWEET ALERT */

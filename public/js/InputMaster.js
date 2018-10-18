@@ -59,7 +59,7 @@ function InputMaster(isMobile) {
 				updatedState = newControllerState;
 			}
 
-			// // snex:
+			// snex:
 			newControllerState = this.snexController.state.getState();
 			if (newControllerState != this.oldControllerState) {
 				this.currentInputMode = "controller";

@@ -55,7 +55,7 @@ let lagless1Settings = {
 	y1: 88 + 360, // 61
 	x2: 319 + 1280 - 1920,
 	y2: 88 + 720 + 360, // 61
-	fps: 15,
+	framerate: 15,
 	quality: 60,
 	scale: 30,
 };
@@ -558,7 +558,8 @@ let helpSite = `
 	<head>
 		<style>
 			.custom {
-				font-family: comic sans ms;
+				/*font-family: comic sans ms;*/
+				font-family: Helvetica;
 				color: white;
 				font-size: 35px;
 				text-align: center;
@@ -833,12 +834,6 @@ io.on("connection", function (socket) {
 		// 			io.emit("quit");
 		// 		}
 		io.to("lagless1").emit("viewImage", data);
-	});
-
-	socket.on("screenshot4", function (data) {
-		lastImage = data;
-		// todo: replace the viewers5 room with "joinLaglessX" rooms
-		io.to("lagless5").emit("viewImage5", data);
 	});
 
 	socket.on("sendControllerState", function (data) {
@@ -1247,7 +1242,6 @@ io.on("connection", function (socket) {
 		}, tempBanTime, client);
 
 	});
-
 	socket.on("permaBan", function (data) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
@@ -1324,8 +1318,6 @@ io.on("connection", function (socket) {
 		});
 
 	});
-
-
 	socket.on("unban", function (data) {
 		let index = findClientByID(socket.id);
 		if (index == -1) {
@@ -1399,7 +1391,6 @@ io.on("connection", function (socket) {
 
 		});
 	});
-
 	socket.on("setTurnLength", function (data) {
 		// check if it's coming from the controller:
 		if (!checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -1415,7 +1406,6 @@ io.on("connection", function (socket) {
 			// timeTillForfeitDurations[i] = parseInt(data) || 15000;
 		}
 	});
-
 	socket.on("setForfeitLength", function (data) {
 		// check if it's coming from the controller:
 		if (!checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -1429,7 +1419,6 @@ io.on("connection", function (socket) {
 			timeTillForfeitDurations[i] = parseInt(data) || 15000;
 		}
 	});
-
 	socket.on("voteStarted", function (channel) {
 		// check if it's coming from the controller:
 		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
@@ -1467,23 +1456,15 @@ io.on("connection", function (socket) {
 				obj.quality = data.quality;
 			}
 		}
-		if (typeof data.fps != "undefined") {
-			if (typeof data.fps == "number") {
-				obj.fps = data.fps;
+		if (typeof data.framerate != "undefined") {
+			if (typeof data.framerate == "number") {
+				obj.framerate = data.framerate;
 			}
 		}
 
 		lagless1Settings = Object.assign({}, lagless1Settings, obj);
 		io.emit("lagless1Settings", lagless1Settings);
 	});
-
-	// 	socket.on("setCoords", function(data) {
-	// 		lagless1Settings.x1 = data.x1 || lagless1Settings.x1;
-	// 		lagless1Settings.x2 = data.x2 || lagless1Settings.x2;
-	// 		lagless1Settings.y1 = data.y1 || lagless1Settings.y1;
-	// 		lagless1Settings.y2 = data.y2 || lagless1Settings.y2;
-	// 	});
-
 
 	/* LAGLESS2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless2Settings", function (data) {
@@ -1655,7 +1636,6 @@ io.on("connection", function (socket) {
 		}
 		socket.leave(room);
 	});
-
 	socket.on("join", function (room) {
 		// todo: add pi-proxy to this
 		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "lagless5Host", "controller", "controller2"];
@@ -1687,7 +1667,6 @@ io.on("connection", function (socket) {
 		}
 		socket.join(room);
 	});
-
 	socket.on("joinSecure", function (data, password) {
 
 		let myData = { room: "", password: "" };
@@ -1712,7 +1691,6 @@ io.on("connection", function (socket) {
 			socket.join(myData.room);
 		}
 	});
-
 	socket.on("leaveLagless", function () {
 		socket.leave("lagless1");
 		socket.leave("lagless2");
@@ -1720,57 +1698,6 @@ io.on("connection", function (socket) {
 		socket.leave("lagless4");
 		socket.leave("lagless5");
 	});
-
-
-	/* SPLIT TIMER */
-	// 	socket.on("createSplitTimer", function(data) {
-	// 		let index = findClientByID(socket.id);
-	// 		if (index == -1) {
-	// 			return;
-	// 		}
-	// 		let client = clients[index];
-	// 		// todo: improve this:
-	// 		if (client.username != "Harmjan387" && client.username != "twitchplaysconsoles") {
-	// 			return;
-	// 		}
-	// 		splitTimer = SplitTimer(data.startTime, data.splitNames, data.name);
-	// 		io.emit("clearSplitTimes");
-	// 	});
-
-	// 	socket.on("moveToNextSplit", function(data) {
-	// 		//harmjan387
-	// 		let index = findClientByID(socket.id);
-	// 		if (index == -1) {
-	// 			return;
-	// 		}
-	// 		let client = clients[index];
-	// 		// todo: improve this:
-	// 		if (client.username != "Harmjan387" && client.username != "twitchplaysconsoles") {
-	// 			return;
-	// 		}
-	// 		try {
-	// 			splitTimer.moveToNextSplit();
-	// 		} catch(error) {
-	// 		}
-	// 	});
-
-	// 	socket.on("removeLastSplit", function(data) {
-	// 		// harmjan387
-	// 		let index = findClientByID(socket.id);
-	// 		if (index == -1) {
-	// 			return;
-	// 		}
-	// 		let client = clients[index];
-	// 		// todo: improve this:
-	// 		if (client.username != "Harmjan387" && client.username != "twitchplaysconsoles") {
-	// 			return;
-	// 		}
-	// 		try {
-	// 			splitTimer.removeLastSplit();
-	// 		} catch(error) {
-	// 		}
-	// 		io.emit("clearSplitTimes");
-	// 	});
 
 	/* BAN EVASION */
 	socket.on("registerIP", function (data) {
@@ -1998,32 +1925,6 @@ setInterval(function () {
 		laglessClientIds[4] = clientIDs;
 	});
 
-	// calculate time left for each player
-	// edit: done in emitTurnTimesLeft();
-	// may actually be needed here though
-	// uncomment if stuff breaks
-	// 	for (let i = 0; i < turnStartTimes.length; i++) {
-	// 		let currentTime = Date.now();
-	// 		let elapsedTime = currentTime - turnStartTimes[i];
-	// 		let timeLeft = turnDurations[i] - elapsedTime;
-	// 		let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[i];
-	// 		let timeLeftForfeit = timeTillForfeitDurations[i] - elapsedTimeSinceLastMove;
-
-	// 		turnTimesLeft[i] = timeLeft;
-	// 		forfeitTimesLeft[i] = timeLeftForfeit;
-
-	// 		if(timeLeftForfeit < -50) {
-	// // 			console.log("forfeit system screwed up somehow by: " + timeLeftForfeit);
-	// 			// reset forfeit timer:
-	// 			forfeitStartTimes[i] = Date.now();
-	// 			clearTimeout(forfeitTimers[i]);
-	// 			forfeitTimers[i] = setTimeout(forfeitTurn, timeTillForfeitDurations[i], controlQueues[i][0], i);
-
-	// 			// set the forfeitTime left to the duration of the forfeit timer:
-	// 			forfeitTimesLeft[i] = timeTillForfeitDurations[i];
-	// 		}
-	// 	}
-
 	laglessClientUniqueIds[0] = [];
 	laglessClientUniqueIds[1] = [];
 	laglessClientUniqueIds[2] = [];
@@ -2064,6 +1965,7 @@ setInterval(function () {
 	// }
 
 	waitlists = [
+		[],
 		[],
 		[],
 		[],
@@ -2296,6 +2198,6 @@ function stream() {
 	if (laglessClientIds[0].length > 0) {
 		io.to("lagless1Host").emit("ss3", obj);
 	}
-	setTimeout(stream, 1000 / lagless1Settings.fps);
+	setTimeout(stream, 1000 / lagless1Settings.framerate);
 }
 stream();

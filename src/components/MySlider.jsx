@@ -24,9 +24,28 @@ export default class MySlider extends PureComponent {
 		return (
 			<SliderWithTooltip
 			tipFormatter={percentFormatter}
-			tipProps={{ overlayClassName: 'foo' }}
+			tipProps={{ overlayClassName: "foo" }}
+
+			// min={this.props.min || 0}
+			// max={this.props.max || 100}
+			// step={this.props.ma}
+			{...this.props}
+
 			onChange={this.props.handleChange}
 			value={this.props.value}
+			trackStyle={{
+				// backgroundColor: "blue",
+				// height: 10,
+				width: "80%",
+			}}
+			handleStyle={{
+				// borderColor: "blue",
+				// height: 28,
+				// width: 28,
+				// marginLeft: -14,
+				// marginTop: -9,
+				// backgroundColor: "black",
+			}}
 			style={{width: "80%"}}/>
 		);
 	}

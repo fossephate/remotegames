@@ -1,0 +1,12 @@
+
+#messageList {
+	overflow-y: scroll;
+}
+
+#messageList > div {
+	background-color: #EEE;
+}
+
+#messageList > div:nth-child(odd) {
+	background-color: #DDD;
+}

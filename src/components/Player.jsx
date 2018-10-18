@@ -24,7 +24,7 @@ export default class Player extends PureComponent {
 				<TurnTimer name={this.props.usernameMap[this.props.controlQueue[0]]} percent={this.props.player.turnPercent} timeLeft={this.props.player.turnTimeLeft}/>
 				<ForfeitTimer name={this.props.usernameMap[this.props.controlQueue[0]]} percent={this.props.player.forfeitPercent} timeLeft={this.props.player.forfeitTimeLeft}/>
 				<JoinLeaveQueueButton num={this.props.num} controlQueue={this.props.controlQueue} myID={this.props.myID}/>
-				<ControlQueue uniqueIDs={this.props.controlQueue} usernameMap={this.props.usernameMap} darkTheme={this.props.darkTheme}/>
+				<ControlQueue uniqueIDs={this.props.controlQueue} usernameMap={this.props.usernameMap}/>
 			</div>
 		);
 

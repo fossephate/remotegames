@@ -1,45 +1,76 @@
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
+// redux:
+import { Provider, connect } from "react-redux";
 import { combineReducers, createStore } from "redux";
+
+// import registerServiceWorker from "./registerServiceWorker";
+import MyReducer from "./reducers/MyReducer.js";
+
+const allReducers = combineReducers({
+	myReducer: MyReducer,
+});
+
+const store = createStore(
+	allReducers, {},
+);
 
 
 // components:
-const ViewerList = require("src/components/ViewerList.jsx");
-const TurnTimer = require("src/components/TurnTimer.jsx");
-const ForfeitTimer = require("src/components/ForfeitTimer.jsx");
-const Player = require("src/components/Player.jsx");
+import ViewerList from "src/components/ViewerList.jsx";
+import TurnTimer from "src/components/TurnTimer.jsx";
+import ForfeitTimer from "src/components/ForfeitTimer.jsx";
+import Player from "src/components/Player.jsx";
 
-const ControlQueue = require("src/components/ControlQueue.jsx");
-const JoinLeaveQueueButton = require("src/components/JoinLeaveQueueButton.jsx");
+import ControlQueue from "src/components/ControlQueue.jsx";
+import JoinLeaveQueueButton from "src/components/JoinLeaveQueueButton.jsx";
 
-const UsernameDropdown = require("src/components/UsernameDropdown.jsx");
+import UsernameDropdown from "src/components/UsernameDropdown.jsx";
 
-const Waitlist = require("src/components/Waitlist.jsx");
-const ConnectAccounts = require("src/components/ConnectAccounts.jsx");
-const Checkbox = require("src/components/Checkbox.jsx");
+import Waitlist from "src/components/Waitlist.jsx";
+import ConnectAccounts from "src/components/ConnectAccounts.jsx";
+import Checkbox from "src/components/Checkbox.jsx";
 
-const LeftJoyCon = require("src/components/LeftJoyCon.jsx");
-const RightJoyCon = require("src/components/RightJoyCon.jsx");
-const LaglessView = require("src/components/LaglessView.jsx");
+import LeftJoyCon from "src/components/LeftJoyCon.jsx";
+import RightJoyCon from "src/components/RightJoyCon.jsx";
+import LaglessView from "src/components/LaglessView.jsx";
 
-const MySlider = require("src/components/MySlider.jsx");
+
+import MySlider from "src/components/MySlider.jsx";
+import Chat from "src/components/Chat/Chat.jsx";
+
+import ThemeSwitch from "./components/ThemeSwitch.jsx";
+
+// import { Client } from "./parsec/src/client.js";
 
 
 // libs:
+// jquery:
+// let $ = require("jquery");
+
+// snex:
 import SNEX from "@snex/react-connect";
-const snex = require("snex");
+import snex from "snex";
+// gamepad:
+import Gamepad from "js/gamepad.js";
+import VirtualProController from "js/VirtualProController.js";
+// keyboard:
 require("js/keymaster.js");
-const Gamepad = require("js/gamepad.js");
-const VirtualProController = require("js/VirtualProController.js");
-const keycode = require("keycode");
-/*const keymaster = */
-// require("keymaster");
+import keycode from "keycode";
+// touch controls:
+import nipplejs from "nipplejs";
+const InputMaster = require("js/InputMaster.js");
+
 const textFitPercent = require("js/textfitpercent.js");
 const tools = require("js/tools.js");
-window.Noty = require("noty");
+import Noty from "noty";
+import localforage from "localforage";
+import swal from "sweetalert2";
+import SimplePeer from "simple-peer";
+import io from "socket.io-client";
 
-const InputMaster = require("js/InputMaster.js");
+window.localforage = localforage;
 
 // rest of tools:
 String.prototype.replaceAll = function (search, replacement) {
@@ -75,8 +106,9 @@ let lastSplitTime = 0;
 let lastSplitTimeMS = 0;
 let loaded = false;
 let locked = false;
-window.player = null;
+window.player = {};
 let player4;
+let audio = document.createElement("audio");
 let audioConnected = false;
 let videoConnected = false;
 let authCookie;
@@ -139,56 +171,7 @@ let gamepadCounter = 0;
 let controller = new VirtualProController();
 controller.reset();
 
-// settings:
-window.settings = {
-	enableAudioThree: true,
-	audioThree: false,
-	keyboardControls: false,
-	controllerControls: false,
-	touchControls: true,
-	mouseControls: false,
-	analogStickMode: false,
-	currentInputMode: null,
-	darkTheme: false,
-	fullscreen: false,
-	largescreen: false,
-	youtubeChat: false,
-	hideChat: false,
-	hideNav: false,
-	sticks: {
-		L: {
-			X: {
-				sensitivity: 1,
-				offset: 0,
-			},
-			Y: {
-				sensitivity: 1,
-				offset: 0,
-			},
-		},
-		R: {
-			X: {
-				sensitivity: 1,
-				offset: 0,
-			},
-			Y: {
-				sensitivity: 1,
-				offset: 0,
-			},
-		},
-	},
-	deadzone: 50,
-	stickSensitivityX: 1,
-	stickSensitivityY: 1,
-	stickAttack: 20,
-	stickReturn: 20,
-	keyboardProfiles: {},
-	tab: 1,
-	dpadSwap: false,
-	TDSConfig: false,
-	volume: 50,
-	usernameIndex: 0
-};
+let settings = {};
 
 let lagless1Settings = {};
 let lagless2Settings = {
@@ -247,13 +230,10 @@ export default class App extends Component {
 		this.toggleDpadSwap = this.toggleDpadSwap.bind(this);
 		this.toggleTDSConfig = this.toggleTDSConfig.bind(this);
 
-		this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
+		// this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
 		this.toggleFullscreen = this.toggleFullscreen.bind(this);
 		this.exitFullscreen = this.exitFullscreen.bind(this);
 		this.toggleLargescreen = this.toggleLargescreen.bind(this);
-		this.toggleYoutubeChat = this.toggleYoutubeChat.bind(this);
-		this.toggleHideChat = this.toggleHideChat.bind(this);
-		this.toggleHideNav = this.toggleHideNav.bind(this);
 
 		this.switchTabs = this.switchTabs.bind(this);
 
@@ -325,6 +305,7 @@ export default class App extends Component {
 			// lagless tab:
 			tab: 2,
 
+			// checkbox settings:
 			enableAudioThree: true,
 			audioThree: false,
 			keyboardControls: true,
@@ -338,11 +319,11 @@ export default class App extends Component {
 			darkTheme: false,
 			fullscreen: false,
 			largescreen: false,
-			youtubeChat: false,
 			hideChat: false,
 			hideNav: false,
 			deadzone: 50,
 
+			// volume:
 			volume: 1,
 
 			// controller view:
@@ -358,28 +339,50 @@ export default class App extends Component {
 					X: {
 						sensitivity: 1,
 						offset: 0,
+						deadzone: 50,
 					},
 					Y: {
 						sensitivity: 1,
 						offset: 0,
+						deadzone: 50,
 					},
 				},
 				R: {
 					X: {
 						sensitivity: 1,
 						offset: 0,
+						deadzone: 50,
 					},
 					Y: {
 						sensitivity: 1,
 						offset: 0,
+						deadzone: 50,
 					},
 				},
 			},
 			deadzone: 50,
-			stickSensitivityX: 1,
-			stickSensitivityY: 1,
+			// stickSensitivityX: 1,
+			// stickSensitivityY: 1,
 			stickAttack: 20,
 			stickReturn: 20,
+
+			// lagless settings:
+			lagless1: {
+				framerate: 15,
+				quality: 60,
+				scale: 30,
+			},
+			lagless2: {
+				framerate: 20,
+				videoBitrate: 1,
+				scale: 540,
+			},
+			lagless3: {
+				framerate: 20,
+				videoBitrate: 1,
+				scale: 540,
+			},
+
 		};
 	}
 
@@ -422,6 +425,27 @@ export default class App extends Component {
 			// debug:
 			console.log(settings);
 
+			this.setState({
+				keyboardControls: settings.keyboardControls,
+				controllerControls: settings.controllerControls,
+				touchControls: settings.touchControls,
+				mouseControls: settings.mouseControls,
+				controllerView: settings.controllerView,
+				analogStickMode: settings.analogStickMode,
+				dpadSwap: settings.dpadSwap,
+				TDSConfig: settings.TDSConfig,
+				enableAudioThree: settings.enableAudioThree,
+				audioThree: settings.audioThree,
+				darkTheme: settings.darkTheme,
+				fullscreen: settings.fullscreen,
+				largescreen: settings.largescreen,
+				hideChat: settings.hideChat,
+				hideNav: settings.hideNav,
+				// tab: settings.tab,
+				deadzone: settings.deadzone,
+				volume: settings.volume,
+			});
+
 			// if (settings.tab != 1) {
 			// 	$("#tab" + settings.tab).trigger("click");
 			// }
@@ -432,77 +456,9 @@ export default class App extends Component {
 			$("#tab" + this.state.tab).trigger("click");
 			this.switchTabs(this.state.tab);
 			// addJoyCons(settings.tab);
-
 			rebindUnbindTouchControls();
 			clearAndReplaceProfiles();
 
-			this.setState({
-				keyboardControls: settings.keyboardControls,
-				controllerControls: settings.controllerControls,
-				touchControls: settings.touchControls,
-				analogStickMode: settings.analogStickMode,
-				dpadSwap: settings.dpadSwap,
-				TDSConfig: settings.TDSConfig,
-				enableAudioThree: settings.enableAudioThree,
-				audioThree: settings.audioThree,
-				darkTheme: settings.darkTheme,
-				fullscreen: settings.fullscreen,
-				largescreen: settings.largescreen,
-				youtubeChat: settings.youtubeChat,
-				hideChat: settings.hideChat,
-				hideNav: settings.hideNav,
-				// tab: settings.tab,
-			});
-
-			// $("#deadzoneSlider").slider("value", settings.deadzone);
-			// $("#deadzone").text(settings.deadzone);
-			//
-			// $("#stickSensitivitySlider").slider("value", settings.stickSensitivityX);
-			// $("#sensitivity").text(settings.stickSensitivityX);
-			//
-			// $("#stickAttackSlider").slider("value", settings.stickAttack);
-			// $("#attack").text(settings.stickAttack);
-			//
-			// $("#stickReturnSlider").slider("value", settings.stickReturn);
-			// $("#return").text(settings.stickReturn);
-			//
-			// // volume:
-			// $("#laglessVolume").slider("value", settings.volume);
-			// $("#laglessVolume span").text(settings.volume);
-			// setTimeout(() => {
-			// 	try {
-			// 		player.volume = settings.volume / 100; // doesn't update automatically :/
-			// 	} catch (error) {}
-			// 	try {
-			// 		audio.volume = settings.volume / 100; // doesn't update automatically :/
-			// 	} catch (error) {}
-			// }, 2000);
-			// $(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
-			//
-			/* AUTH  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-			// let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-			// if (authCookie != null) {
-			// 	authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-			// 	socket.emit("registerAccount", {
-			// 		auth: authCookie,
-			// 		usernameIndex: settings.usernameIndex
-			// 	});
-			// 	$("#authenticateButton").remove();
-			// } else {
-			// 	// replace with twitch until signed in:
-			// 	replaceWithTwitch("#lagless" + settings.tab);
-			// 	$("#tab1").addClass("disabled");
-			// 	$("#tab3").addClass("disabled");
-			// 	$("#tab4").addClass("disabled");
-			// 	$("#tab5").addClass("disabled");
-			// 	// remove the logout button:
-			// 	$("#logout").remove();
-			// 	$("#loggedInStatus").remove();
-			//
-			// 	$(".disabled").on("click", function () {
-			// 		swal("You have to sign in first!");
-			// 	});
-			// }
 			//
 			// resizers.push(textFitPercent({
 			// 	selector: "#lagless2KeyboardDropdown",
@@ -577,6 +533,16 @@ export default class App extends Component {
 			// 			shard: "https://cl2.widgetbot.io",
 			// 		});
 
+		});
+
+		// save settings on close:
+		/* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+		window.addEventListener("beforeunload", (event) => {
+			event.preventDefault();
+			socket.emit("leaveLagless");
+			console.log("saving settings");
+			localforage.setItem("settings", JSON.stringify(this.state));
+			return null;
 		});
 
 
@@ -764,7 +730,7 @@ export default class App extends Component {
 			});
 		}, 5000);
 
-		socket.on("forceRefresh", function (data) {
+		socket.on("forceRefresh", (data) => {
 			swal({
 				title: "There has been a force refresh!"
 			}).then((result) => {
@@ -826,7 +792,17 @@ export default class App extends Component {
 			};
 			image.src = src;
 		});
-		$("#lagless1Refresh").on("click", function () {
+		// on settings change:
+		socket.on("lagless1Settings", (data) => {
+			this.setState({
+				lagless1: {
+					framerate: data.framerate,
+					quality: data.quality,
+					scale: data.scale,
+				},
+			});
+		});
+		$("#lagless1Refresh").on("click", () => {
 			socket.emit("restart1");
 		});
 
@@ -840,7 +816,16 @@ export default class App extends Component {
 		// player.stop();
 
 		// on settings change:
-		socket.on("lagless2SettingsChange", function (data) {
+		socket.on("lagless2Settings", (data) => {
+			this.setState({
+				lagless2: {
+					framerate: data.framerate,
+					videoBitrate: data.videoBitrate,
+					scale: data.scale,
+				},
+			});
+		});
+		socket.on("lagless2SettingsChange", (data) => {
 			try {
 				player.destroy();
 			} catch (error) {}
@@ -858,10 +843,7 @@ export default class App extends Component {
 				player.volume = 0;
 			}
 		});
-
-		//socket.emit("lagless2Settings", {videoBitrate: "2M", framerate: 20, scale: "640:360"});
-
-		$("#lagless2Refresh").on("click", function () {
+		$("#lagless2Refresh").on("click", () => {
 			socket.emit("restart2");
 		});
 
@@ -882,7 +864,7 @@ export default class App extends Component {
 		wsavc.on("stream_active", active => console.log("Stream is ", active ? "active" : "offline"));
 		wsavc.on("custom_event_from_server", event => console.log("got event from server", event));
 
-		$("#lagless3Refresh").on("click", function () {
+		$("#lagless3Refresh").on("click", () => {
 			try {
 				wsavc.disconnect();
 			} catch (error) {}
@@ -890,12 +872,21 @@ export default class App extends Component {
 			wsavc.connect(uri);
 		});
 
-		$("#lagless3Refresh").on("click", function () {
+		$("#lagless3Refresh").on("click", () => {
 			socket.emit("restart3");
 		});
 
 		// on settings change:
-		socket.on("lagless3SettingsChange", function (data) {
+		socket.on("lagless3Settings", (data) => {
+			this.setState({
+				lagless3: {
+					framerate: data.framerate,
+					videoBitrate: data.videoBitrate,
+					scale: data.scale,
+				},
+			});
+		});
+		socket.on("lagless3SettingsChange", (data) => {
 			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 			wsavc.connect(uri);
 		});
@@ -929,6 +920,206 @@ export default class App extends Component {
 			// 	canvas4.srcObj = stream;
 			canvas4.play();
 		});
+
+		// parsec:
+		// /*** API ***/
+		// async function auth(email, password) {
+		// 	const res = await fetch('https://parsecgaming.com/v1/auth', {
+		// 		method: 'post',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 		},
+		// 		body: JSON.stringify({
+		// 			email,
+		// 			password,
+		// 		}),
+		// 	});
+		//
+		// 	return await res.json();
+		// }
+		//
+		// async function serverList(sessionId) {
+		// 	const res = await fetch('https://parsecgaming.com/v1/server-list?include_managed=true', {
+		// 		method: 'get',
+		// 		headers: {
+		// 			'X-Parsec-Session-Id': sessionId,
+		// 		},
+		// 	});
+		//
+		// 	return await res.json();
+		// }
+		//
+		//
+		// /*** CLIENT ***/
+		// function toggleFullscreen(element) {
+		// 	if (document.webkitFullscreenElement) {
+		// 		document.webkitExitFullscreen();
+		//
+		// 	} else {
+		// 		element.webkitRequestFullscreen();
+		//
+		// 		if (navigator.keyboard && navigator.keyboard.lock)
+		// 			navigator.keyboard.lock();
+		// 	}
+		// }
+		//
+		// function runClient(element, sessionId, serverId) {
+		// 	return new Promise((resolve) => {
+		// 		//set up client object with an event callback: gets connect, status, chat, and shutter events
+		// 		const client = new Client(element, (event) => {
+		// 			console.log('EVENT', event);
+		//
+		// 			if (event.type === 'exit') {
+		// 				document.removeEventListener('keydown', hotkeys, true);
+		// 				resolve(event.code);
+		// 			}
+		// 		});
+		//
+		// 		//set up useful hotkeys that call client methods: destroy can also be used to cancel pending connection
+		// 		const hotkeys = (event) => {
+		// 			event.preventDefault();
+		//
+		// 			if (event.code === 'Backquote' && event.ctrlKey && event.altKey) {
+		// 				client.destroy(0);
+		//
+		// 			} else if (event.code === 'KeyW' && event.ctrlKey && event.altKey) {
+		// 				toggleFullscreen(element);
+		// 			}
+		// 		};
+		// 		document.addEventListener('keydown', hotkeys, true);
+		//
+		// 		client.connect(sessionId, serverId, {
+		// 			encoder_bitrate: 12,
+		// 		});
+		// 	});
+		// }
+		//
+		//
+		// /*** UI HELPERS ***/
+		// function addRow(table) {
+		// 	const tr = document.createElement('tr');
+		// 	table.appendChild(tr);
+		// 	return tr;
+		// }
+		//
+		// function addTextCol(tr, text) {
+		// 	const td = document.createElement('td');
+		// 	td.textContent = text;
+		// 	tr.appendChild(td);
+		// }
+		//
+		// function addButtonCol(tr, text, onclick) {
+		// 	const td = document.createElement('td');
+		// 	tr.appendChild(td);
+		//
+		// 	const button = document.createElement('button');
+		// 	button.textContent = text;
+		// 	button.onclick = onclick;
+		// 	td.appendChild(button);
+		// }
+		//
+		// function addInputCol(tr, id, type, onenter) {
+		// 	const td = document.createElement('td');
+		// 	tr.appendChild(td);
+		//
+		// 	const input = document.createElement('input');
+		// 	input.id = id;
+		// 	input.type = type;
+		// 	input.onkeyup = (event) => {
+		// 		if (event.keyCode === 13)
+		// 			onenter();
+		// 	};
+		// 	td.appendChild(input);
+		// }
+		//
+		//
+		// /*** MAIN ***/
+		// async function serverTable(sessionId) {
+		// 	const json = await serverList(sessionId);
+		// 	const table = document.querySelector('#server-list');
+		//
+		// 	for (const server of json) {
+		// 		const tr = addRow(table);
+		// 		addTextCol(tr, server.name);
+		// 		addTextCol(tr, server.build);
+		// 		addTextCol(tr, server.server_id);
+		// 		addButtonCol(tr, 'Connect', async () => {
+		// 			const container = document.querySelector('.video-container');
+		// 			const element = document.querySelector('video');
+		//
+		// 			table.style.display = 'none';
+		// 			container.style.display = 'block';
+		//
+		// 			const code = await runClient(element, sessionId, server.server_id);
+		//
+		// 			table.style.display = '';
+		// 			container.style.display = '';
+		//
+		// 			element.src = '';
+		// 			element.load();
+		//
+		// 			if (code !== 0)
+		// 				alert(`Exit code: ${code}`);
+		// 		});
+		// 	}
+		//
+		// 	const tr = addRow(table);
+		// 	addButtonCol(tr, 'Logout', () => {
+		// 		delete sessionStorage.sessionId;
+		// 		window.location.reload();
+		// 	});
+		// }
+		//
+		// function authTable() {
+		// 	async function submit() {
+		// 		const email = document.querySelector('#email').value;
+		// 		const password = document.querySelector('#password').value;
+		//
+		// 		const json = await auth(email, password);
+		// 		sessionStorage.sessionId = json.session_id;
+		// 		window.location.reload();
+		// 	}
+		//
+		// 	const table = document.querySelector('#server-list');
+		//
+		// 	let tr = addRow(table);
+		// 	addTextCol(tr, 'Email');
+		// 	addInputCol(tr, 'email', 'email', submit);
+		//
+		// 	tr = addRow(table);
+		// 	addTextCol(tr, 'Password');
+		// 	addInputCol(tr, 'password', 'password', submit);
+		//
+		// 	document.querySelector('#email').focus();
+		// }
+		//
+		// // if (!sessionStorage.sessionId) {
+		// // 	authTable();
+		// //
+		// // } else {
+		// // 	serverTable(sessionStorage.sessionId);
+		// // }
+		// //
+		// window.authTable = authTable;
+		// window.serverTable = serverTable;
+		//
+		// // conv:
+		// // window.setReactState = (obj) => {
+		// // 	this.setState(obj);
+		// // };
+
+		/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+		setInterval(() => {
+			// hack:
+			// todo: not this:
+			if (!this.state.audioThree) {
+				audio.volume = 0;
+				player.volume = this.state.volume / 100;
+			} else {
+				audio.volume = this.state.volume / 100;
+				player.volume = 0;
+			}
+		}, 1000);
 
 		sendInputTimer = setInterval(() => {
 			input.pollDevices();
@@ -987,12 +1178,15 @@ export default class App extends Component {
 	toggleKeyboardControls(state) {
 		this.setState({ keyboardControls: state }, () => {});
 	}
+
 	toggleControllerControls(state) {
 		this.setState({ controllerControls: state }, () => {});
 	}
+
 	toggleTouchControls(state) {
 		this.setState({ touchControls: state }, () => {});
 	}
+
 	toggleControllerView(state) {
 		this.setState({ controllerView: state }, () => {
 			if (this.state.controllerView && this.state.largescreen) {
@@ -1000,54 +1194,37 @@ export default class App extends Component {
 			}
 		});
 	}
+
 	toggleAnalogStickMode(state) {
 		this.setState({ analogStickMode: state }, () => {});
 	}
-	// toggleControllerView(state) {
-	// 	this.setState({ touchControls: state }, () => {
-	// 		if (this.state.largescreen) {
-	// 			this.setState({ largescreen: false });
-	// 		}
-	// 	});
-	// }
 
 	toggleDpadSwap(state) {
 		this.setState({ dpadSwap: state }, () => {});
 	}
+
 	toggleTDSConfig(state) {
 		this.setState({ TDSConfig: state }, () => {
 			if (this.state.TDSConfig) {
-				this.state.sticks.L.X.sensitivity = 1.5;
-				this.state.sticks.L.Y.sensitivity = 1.5;
-				this.state.sticks.R.X.sensitivity = 1.5;
-				this.state.sticks.R.Y.sensitivity = 1.5;
-				this.state.sticks.R.X.offset = -20;
-				this.state.sticks.R.Y.offset = -10;
+				// this.state.sticks.L.X.sensitivity = 1.5;
+				// this.state.sticks.L.Y.sensitivity = 1.5;
+				// this.state.sticks.R.X.sensitivity = 1.5;
+				// this.state.sticks.R.Y.sensitivity = 1.5;
+				// this.state.sticks.R.X.offset = -20;
+				// this.state.sticks.R.Y.offset = -10;
 			} else {
-				this.state.sticks.L.X.sensitivity = 1;
-				this.state.sticks.L.Y.sensitivity = 1;
-				this.state.sticks.R.X.sensitivity = 1;
-				this.state.sticks.R.Y.sensitivity = 1;
-				this.state.sticks.R.X.offset = 0;
-				this.state.sticks.R.Y.offset = 0;
+				// this.state.sticks.L.X.sensitivity = 1;
+				// this.state.sticks.L.Y.sensitivity = 1;
+				// this.state.sticks.R.X.sensitivity = 1;
+				// this.state.sticks.R.Y.sensitivity = 1;
+				// this.state.sticks.R.X.offset = 0;
+				// this.state.sticks.R.Y.offset = 0;
 			}
 		});
 	}
 
 	toggleAudioThree(state) {
-		this.setState({ enableAudioThree: state }, () => {
-
-		});
-	}
-
-	toggleDarkTheme(state) {
-		this.setState({ darkTheme: state }, () => {
-			if (this.state.darkTheme) {
-				$("body").addClass("dark");
-			} else {
-				$("body").removeClass("dark");
-			}
-		});
+		this.setState({ enableAudioThree: state }, () => {});
 	}
 
 	toggleFullscreen(state) {
@@ -1117,27 +1294,6 @@ export default class App extends Component {
 		});
 	}
 
-	toggleYoutubeChat(state) {
-		this.setState({ youtubeChat: state }, () => {
-			if (this.state.youtubeChat) {
-				$("#chat").attr("src", "https://www.youtube.com/live_chat?v=8jgSgQcZgGY&embed_domain=twitchplaysnintendoswitch.com");
-			} else {
-				if (this.state.darkTheme) {
-					$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat?darkpopout");
-				} else {
-					$("#chat").attr("src", "https://www.twitch.tv/embed/twitchplaysconsoles/chat");
-				}
-			}
-		});
-	}
-
-	toggleHideChat(state) {
-		this.setState({ hideChat: state }, () => {});
-	}
-	toggleHideNav(state) {
-		this.setState({ hideNav: state }, () => {});
-	}
-
 	choosePlayer(cNum) {
 		this.setState({ currentPlayerChosen: cNum });
 	}
@@ -1168,13 +1324,6 @@ export default class App extends Component {
 						audioBufferSize: audioBufferSize,
 						maxAudioLag: 0.5
 					});
-					if (!this.state.audioThree) {
-						player.volume = this.state.volume / 100;
-						audio.volume = 0;
-					} else {
-						player.volume = 0;
-						audio.volume = this.state.volume / 100;
-					}
 				} else {
 					socket.emit("leave", "lagless2");
 					// 		player.stop();
@@ -1189,13 +1338,6 @@ export default class App extends Component {
 						audioBufferSize: audioBufferSize,
 						maxAudioLag: 0.5
 					});
-					if (!settings.audioThree) {
-						player.volume = this.state.volume / 100;
-						audio.volume = 0;
-					} else {
-						player.volume = 0;
-						audio.volume = this.state.volume / 100;
-					}
 				}
 
 				// lagless 3:
@@ -1226,10 +1368,7 @@ export default class App extends Component {
 
 			}, 0);
 
-
-			localforage.setItem("settings", JSON.stringify(settings));
-
-			if (!this.state.largescreen) {
+			if (!this.state.largescreen && this.state.touchControls) {
 				addJoyCons(tab);
 				rebindUnbindTouchControls();
 			}
@@ -1242,7 +1381,6 @@ export default class App extends Component {
 			}, 5000);
 		});
 	}
-
 
 	sendControllerState() {
 
@@ -1324,30 +1462,43 @@ export default class App extends Component {
 	render() {
 
 		return (
+			<Provider store={store}>
 			<React.Fragment>
+				{this.state.darkTheme ? <ThemeSwitch/> : null}
 
-				<div id="container" className={(this.state.darkTheme ? "dark" : "light")} >
 
-					<ul id="navTabs" className={"nav nav-tabs " + (this.state.darkTheme ? "dark otborder-dark" : "light otborder")} style={{display: this.state.hideNav ? "none" : null }}>
+				<div id="loader-wrapper">
+					<div id="loader"></div>
+					<div className="loader-section section-left"></div>
+					<div className="loader-section section-right"></div>
+				</div>
+
+
+				<div id="container" className="light" >
+
+					<ul id="navTabs" className="nav nav-tabs light otborder" style={{display: this.state.hideNav ? "none" : null }}>
 						<li className="nav-item active">
-							<a id="tab1" className={(this.state.darkTheme ? "nav-link-dark" : "nav-link") + " active"} data-toggle="tab" href="#lagless1" onClick={() => {this.switchTabs(1)}}>Lagless 1</a>
+							<a id="tab1" className="nav-link active" data-toggle="tab" href="#lagless1" onClick={() => {this.switchTabs(1)}}>Lagless 1</a>
 						</li>
 						<li className="nav-item">
-							<a id="tab2" className={(this.state.darkTheme ? "nav-link-dark" : "nav-link")} data-toggle="tab" href="#lagless2" onClick={() => {this.switchTabs(2)}}>Lagless 2</a>
+							<a id="tab2" className="nav-link" data-toggle="tab" href="#lagless2" onClick={() => {this.switchTabs(2)}}>Lagless 2</a>
 						</li>
 						<li className="nav-item">
-							<a id="tab3" className={(this.state.darkTheme ? "nav-link-dark" : "nav-link") + " disabled"} data-toggle="tab" href="#lagless3" onClick={() => {this.switchTabs(3)}}>Lagless 3</a>
+							<a id="tab3" className="nav-link disabled" data-toggle="tab" href="#lagless3" onClick={() => {this.switchTabs(3)}}>Lagless 3</a>
 						</li>
 						<li className="nav-item">
-							<a id="tab4" className={(this.state.darkTheme ? "nav-link-dark" : "nav-link") + " disabled"} data-toggle="tab" href="#lagless4" onClick={() => {this.switchTabs(4)}}>Lagless 4</a>
+							<a id="tab4" className="nav-link disabled" data-toggle="tab" href="#lagless4" onClick={() => {this.switchTabs(4)}}>Lagless 4</a>
 						</li>
-						<div id="statusContainer" className={(this.state.darkTheme ? "otborder-dark" : "otborder")}>
+						<li className="nav-item">
+							<a id="tab5" className="nav-link" data-toggle="tab" href="#lagless5" onClick={() => {this.switchTabs(5)}}>Lagless 5</a>
+						</li>
+						<div id="statusContainer" className="otborder">
 							<i className="material-icons">lock_open</i>
 						</div>
 						<SNEX type="snes-us" onConnection={this.handleSnex}/>
 					</ul>
 
-					<div id="picture" className={(this.state.darkTheme ? "otborder-dark" : "otborder")} style={{width: this.state.hideChat ? "100%" : null }}>
+					<div id="picture" className="otborder" style={{width: this.state.hideChat ? "100%" : null }}>
 
 						{/* <LaglessView num={this.state.tab} controllerState={this.state.controllerViewState}/> */}
 
@@ -1362,14 +1513,18 @@ export default class App extends Component {
 								<LaglessView num={3} controllerView={this.state.controllerView && (this.state.tab == 3)} controllerState={this.state.controllerViewState} largescreen={this.state.largescreen} fullscreen={this.state.fullscreen}/>
 							</div>
 							<div id="lagless4" className="tab-pane">
-								<LaglessView num={4} controllerView={this.state.controllerView && (this.state.tab == 4)} controllerState={this.state.controllerViewState} largescreen={this.state.largescreen} fullscreen={this.state.fullscreen}/>
+								{/* <LaglessView num={4} controllerView={this.state.controllerView && (this.state.tab == 4)} controllerState={this.state.controllerViewState} largescreen={this.state.largescreen} fullscreen={this.state.fullscreen}/> */}
 							</div>
 							<div id="lagless5" className="tab-pane">
-								<LaglessView num={5} controllerView={this.state.controllerView && (this.state.tab == 5)} controllerState={this.state.controllerViewState} largescreen={this.state.largescreen} fullscreen={this.state.fullscreen}/>
+								{/* <LaglessView num={5} controllerView={this.state.controllerView && (this.state.tab == 5)} controllerState={this.state.controllerViewState} largescreen={this.state.largescreen} fullscreen={this.state.fullscreen}/> */}
+								<div className="video-container">
+									<video></video>
+								</div>
+								<table id="server-list"></table>
 							</div>
 						</div>
 
-						<div id="laglessBar" className={"laglessBar " + (this.state.darkTheme ? "otborder-dark" : "otborder")}>
+						<div id="laglessBar" className="laglessBar otborder">
 							<ViewerList uniqueIDs={this.state.viewerIDs} usernameMap={this.state.usernameMap}/>
 							{/* <div id="laglessVolumeSlider" className="volumeSlider otborder">
 								<i className="fa fa-volume-down"></i>
@@ -1378,7 +1533,7 @@ export default class App extends Component {
 							</div> */}
 							<div id="laglessVolumeSlider" className="volumeSlider otborder">
 								<i className="fa fa-volume-down" onClick={() => {this.setState({volume: 0})}}></i>
-								<MySlider handleChange={(value) => {this.setState({volume: value})}} value={this.state.volume}/>
+								<MySlider min={0} max={100} step={1} value={this.state.volume} handleChange={(value) => {this.setState({volume: value})}}/>
 								<i className="fa fa-volume-up" onClick={() => {this.setState({volume: 100})}}></i>
 							</div>
 							<label className="checkbox-inline checkbox-bootstrap checkbox-lg otborder">
@@ -1403,27 +1558,28 @@ export default class App extends Component {
 						</div>
 					</div>
 
-					<div id="chatContainer" className={(this.state.darkTheme ? "otborder-dark" : "otborder")} style={{display: this.state.hideChat ? "none" : null }}>
-						<div id="loggedInContainer" className={(this.state.darkTheme ? "otborder-dark" : "otborder")}>
-							<div id="loggedInStatus" className={(this.state.darkTheme ? "otborder-dark" : "otborder")}>
+					<div id="chatContainer" className="otborder" style={{display: this.state.hideChat ? "none" : null }}>
+						<div id="loggedInContainer" className="otborder">
+							<div id="loggedInStatus" className="otborder">
 								<UsernameDropdown validUsernames={this.state.myValidUsernames} myUsername={this.state.myUsername} handleClick={this.onUsernameChange}/>
 								<button id="logout" className="btn btn-secondary">Logout</button>
 							</div>
 							<ConnectAccounts connectedAccounts={this.state.myConnectedAccounts}/>
 						</div>
-						<iframe id="chat" frameBorder="0" scrolling="no" src={"https://www.twitch.tv/embed/twitchplaysconsoles/chat" + (this.state.darkTheme ? "?darkpopout" : "")}></iframe>
+						{/* <iframe id="chat" frameBorder="0" scrolling="no" src={"https://www.twitch.tv/embed/twitchplaysconsoles/chat" + (this.state.darkTheme ? "?darkpopout" : "")}></iframe> */}
+						<Chat/>
 					</div>
 
-					<div id="barUnderTheStream" className={(this.state.darkTheme ? "dark otborder-dark" : "light otborder")}>
+					<div id="barUnderTheStream" className="otborder">
 
-						<div id="playersContainer" className={"collapsibleContainer " + (this.state.darkTheme ? "otborder-dark" : "otborder")}>
+						<div id="playersContainer" className="otborder">
 							<button id="hidePlayers" className="btn btn-secondary collapseButton" data-toggle="" data-target="#players" collapsed="false">Hide</button>
 							<div id="players" className="collapse show collapsible">
 
-								<Player num={1} player={this.state.players[0]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[0]} darkTheme={this.state.darkTheme} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(0)}} />
-								<Player num={2} player={this.state.players[1]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[1]} darkTheme={this.state.darkTheme} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(1)}} />
-								<Player num={3} player={this.state.players[2]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[2]} darkTheme={this.state.darkTheme} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(2)}} />
-								<Player num={4} player={this.state.players[3]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[3]} darkTheme={this.state.darkTheme} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(3)}} />
+								<Player num={1} player={this.state.players[0]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[0]} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(0)}} />
+								<Player num={2} player={this.state.players[1]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[1]} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(1)}} />
+								<Player num={3} player={this.state.players[2]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[2]} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(2)}} />
+								<Player num={4} player={this.state.players[3]} myID={this.state.myUniqueID} usernameMap={this.state.usernameMap} controlQueue={this.state.controlQueues[3]} selected={this.state.currentPlayerChosen} handleChange={() => {this.choosePlayer(3)}} />
 
 			{/* <!-- 						<div id="splits">
 									<div id="splitMetaContainer">
@@ -1449,36 +1605,36 @@ export default class App extends Component {
 							</div>
 						</div>
 
-						<div id="settingsContainer" className={"collapsibleContainer " + (this.state.darkTheme ? "otborder-dark" : "otborder")}>
+						<div id="settingsContainer" className="collapsibleContainer otborder">
 							<div id="settings" className="collapse show collapsible">
 
-								<div id="checkboxSettings" className={"settingsPanel " + (this.state.darkTheme ? "otborder-dark dark" : "otborder light")}>
+								<div id="checkboxSettings" className="settingsPanel otborder">
 									<ul className="list-group">
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Enable Keyboard Controls"} handleChange={this.toggleKeyboardControls} checked={this.state.keyboardControls}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Enable Controller Controls"} handleChange={this.toggleControllerControls} checked={this.state.controllerControls}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Enable Touch Controls"} handleChange={this.toggleTouchControls} checked={this.state.TouchControls}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Enable Controller View"} handleChange={this.toggleControllerView} checked={this.state.controllerView}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Enable Mouse Controls"} handleChange={this.toggleMouseControls} checked={this.state.mouseControls}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Analog Stick Mode"} handleChange={this.toggleAnalogStickMode} checked={this.state.analogStickMode}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"DPad Swap"} handleChange={this.toggleDpadSwap} checked={this.state.dpadSwap}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"3Ds config"} handleChange={this.toggleTDS} checked={this.state.TDSconfig}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<label className="checkbox-inline checkbox-bootstrap checkbox-lg">
 												<input id="enableAudioThreeCheckbox" type="checkbox" />
 												<span className="checkbox-placeholder"></span>
@@ -1486,29 +1642,26 @@ export default class App extends Component {
 											</label>
 											{/* <Checkbox text={"Enable Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.enableAudioThree}/> */}
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
-											<Checkbox text={"Enable Dark Theme"} handleChange={this.toggleDarkTheme} checked={this.state.darkTheme}/>
+										<li className="list-group-item">
+											<Checkbox text={"Enable Dark Theme"} handleChange={(state) => {this.setState({darkTheme: state})}} checked={this.state.darkTheme}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Enable Fullscreen Mode"} handleChange={this.toggleFullscreen} checked={this.state.fullscreen}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
+										<li className="list-group-item">
 											<Checkbox text={"Enable Largescreen Mode"} handleChange={this.toggleLargescreen} checked={this.state.largescreen}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
-											<Checkbox text={"YouTube Chat"} handleChange={this.toggleYoutubeChat} checked={this.state.youtubeChat}/>
+										<li className="list-group-item">
+											<Checkbox text={"Hide Chat"} handleChange={(state) => {this.setState({ hideChat: state })}} checked={this.state.hideChat}/>
 										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
-											<Checkbox text={"Hide Chat"} handleChange={this.toggleHideChat} checked={this.state.hideChat}/>
-										</li>
-										<li className={(this.state.darkTheme ? "list-group-item-dark" : "list-group-item")}>
-											<Checkbox text={"Hide Nav Bar"} handleChange={this.toggleHideNav} checked={this.state.hideNav}/>
+										<li className="list-group-item">
+											<Checkbox text={"Hide Nav Bar"} handleChange={(state) => {this.setState({ hideNav: state })}} checked={this.state.hideNav}/>
 										</li>
 									</ul>
 
 								</div>
 
-								<div id="generalSettings" className={"settingsPanel " + (this.state.darkTheme ? "otborder-dark dark" : "otborder light")}>
+								<div id="generalSettings" className="settingsPanel otborder">
 									General Settings<br />
 									<hr />
 
@@ -1517,10 +1670,10 @@ export default class App extends Component {
 										<div id="deadzoneSlider" className="myslider"></div>
 									</div> */}
 									<div className="mysliderContainer">
-										<MySlider handleChange={(value) => {this.setState({deadzone: value})}} value={this.state.deadzone}/>
+										<MySlider min={5} max={110} step={1} value={this.state.deadzone} handleChange={(value) => {this.setState({deadzone: value})}}/>
 									</div>
 
-									Stick Sensitivity: <span id="sensitivity">1</span>
+									{/* Stick Sensitivity: <span id="sensitivity">1</span>
 									<div className="mysliderContainer">
 										<div id="stickSensitivitySlider" className="myslider"></div>
 									</div>
@@ -1531,83 +1684,96 @@ export default class App extends Component {
 									Analog Stick Return: <span id="return">20</span>
 									<div className="mysliderContainer">
 										<div id="stickReturnSlider" className="myslider"></div>
-									</div>
+									</div> */}
 									<button id="resetSettings" className="btn btn-secondary">Reset All Settings</button>
 								</div>
 
-								<div id="laglessSettingsContainer" className={"settingsPanel " + (this.state.darkTheme ? "otborder-dark dark" : "otborder light")}>
+								<div id="laglessSettingsContainer" className="settingsPanel otborder">
 
 									<div id="lagless1Settings" className="laglessSettings">
-										Lagless 1 Settings<br />
-										<hr />
-
-										Quality: <span id="quality">70</span>
+										Lagless 1 Settings<br/>
+										<hr/>
+										Quality: <span>{this.state.lagless1.quality}</span>
 										<div className="mysliderContainer">
-											<div id="qualitySlider" className="myslider"></div>
+											<MySlider min={20} max={60} step={1} value={this.state.lagless1.quality}
+												handleChange={(value) => {this.setState({lagless1: {quality: value}})}}
+												onAfterChange={(value) => {socket.emit("lagless1Settings", {quality: parseInt(value)});}}/>
 										</div>
-										Scale: <span id="scale">30</span>
+										Scale: <span>{this.state.lagless1.scale}</span>
 										<div className="mysliderContainer">
-											<div id="scaleSlider" className="myslider"></div>
+											<MySlider min={20} max={50} step={5} value={this.state.lagless1.scale}
+												handleChange={(value) => {this.setState({lagless1: {scale: value}})}}
+												onAfterChange={(value) => {socket.emit("lagless1Settings", {scale: parseInt(value)});}}/>
 										</div>
-										FPS: <span id="fps">15</span>
+										FPS: <span>{this.state.lagless1.framerate}</span>
 										<div className="mysliderContainer">
-											<div id="fpsSlider" className="myslider"></div>
+											<MySlider min={1} max={15} step={1} value={this.state.lagless1.framerate}
+												handleChange={(value) => {this.setState({lagless1: {framerate: value}})}}
+												onAfterChange={(value) => {socket.emit("lagless1Settings", {framerate: parseInt(value)});}}/>
 										</div>
 									</div>
 
 									<div id="lagless2Settings" className="laglessSettings">
-										Lagless 2 Settings<br />
-										<hr />
+										Lagless 2 Settings<br/>
+										<hr/>
 
-										FPS: <span id="fps2">20</span>
+										FPS: <span>{this.state.lagless2.framerate}</span>
 										<div className="buttonSettings">
 											<button id="20fps2" className="fpsButton btn btn-secondary">20FPS</button>
 											<button id="30fps2" className="fpsButton btn btn-secondary">30FPS</button>
 										</div>
-										Bitrate: <span id="bitrate2">1</span>
+										Bitrate: <span>{this.state.lagless2.videoBitrate}</span>
 										<div className="mysliderContainer">
-											<div id="bitrateSlider2" className="myslider"></div>
+											<MySlider min={0} max={2} step={0.05} value={this.state.lagless2.videoBitrate}
+												handleChange={(value) => {this.setState({lagless2: {videoBitrate: value}})}}
+												onAfterChange={(value) => {socket.emit("lagless2Settings", {videoBitrate: parseFloat(value)});}}/>
 										</div>
-										Scale: <span id="scale2">720</span>
+										Scale: <span>{this.state.lagless2.scale}</span>
 										<div className="mysliderContainer">
-											<div id="scaleSlider2" className="myslider"></div>
+											<MySlider min={100} max={540} step={1} value={this.state.lagless2.scale}
+												handleChange={(value) => {this.setState({lagless2: {scale: value}})}}
+												onAfterChange={(value) => {socket.emit("lagless2Settings", {scale: parseInt(value)});}}/>
 										</div>
 										<div className="buttonSettings">
 											<button id="240p2" className="resolutionButton btn btn-secondary">240p</button>
 											<button id="360p2" className="resolutionButton btn btn-secondary">360p</button>
 											<button id="540p2" className="resolutionButton btn btn-secondary">540p</button>
-											<button id="720p2" className="resolutionButton btn btn-secondary">720p</button>
+											{/* <button id="720p2" className="resolutionButton btn btn-secondary">720p</button> */}
 										</div>
 									</div>
 
 									<div id="lagless3Settings" className="laglessSettings">
-										Lagless 3 Settings<br />
-										<hr />
+										Lagless 3 Settings<br/>
+										<hr/>
 
-										FPS: <span id="fps3">20</span>
+										FPS: <span>{this.state.lagless3.framerate}</span>
 										<div className="buttonSettings">
 											<button id="20fps3" className="fpsButton btn btn-secondary">20FPS</button>
 											<button id="30fps3" className="fpsButton btn btn-secondary">30FPS</button>
 										</div>
-										Bitrate: <span id="bitrate3">1</span>
+										Bitrate: <span>{this.state.lagless3.videoBitrate}</span>
 										<div className="mysliderContainer">
-											<div id="bitrateSlider3" className="myslider"></div>
+											<MySlider min={0} max={2} step={0.05} value={this.state.lagless3.videoBitrate}
+												handleChange={(value) => {this.setState({lagless3: {videoBitrate: value}})}}
+												onAfterChange={(value) => {socket.emit("lagless3Settings", {videoBitrate: parseFloat(value)});}}/>
 										</div>
-										Scale: <span id="scale3">720</span>
+										Scale: <span>{this.state.lagless3.scale}</span>
 										<div className="mysliderContainer">
-											<div id="scaleSlider3" className="myslider"></div>
+											<MySlider min={100} max={540} step={1} value={this.state.lagless3.scale}
+												handleChange={(value) => {this.setState({lagless3: {scale: value}})}}
+												onAfterChange={(value) => {socket.emit("lagless3Settings", {scale: parseInt(value)});}}/>
 										</div>
 										<div className="buttonSettings">
 											<button id="240p3" className="resolutionButton btn btn-secondary">240p</button>
 											<button id="360p3" className="resolutionButton btn btn-secondary">360p</button>
 											<button id="540p3" className="resolutionButton btn btn-secondary">540p</button>
-											<button id="720p3" className="resolutionButton btn btn-secondary">720p</button>
+											{/* <button id="720p3" className="resolutionButton btn btn-secondary">720p</button> */}
 										</div>
 									</div>
 								</div>
 
-								<div id="waitlistContainer" className={"settingsPanel " + (this.state.darkTheme ? "otborder-dark" : "otborder")}>
-									<Waitlist tab={this.state.tab} usernameMap={this.state.usernameMap} uniqueIDs={this.state.waitlists} myID={this.state.myUniqueID} darkTheme={this.state.darkTheme}/>
+								<div id="waitlistContainer" className="settingsPanel otborder">
+									<Waitlist tab={this.state.tab} usernameMap={this.state.usernameMap} uniqueIDs={this.state.waitlists} myID={this.state.myUniqueID}/>
 								</div>
 							</div>
 						</div>
@@ -1701,6 +1867,7 @@ export default class App extends Component {
 				</div>
 				{/* <!-- END OF SETTINGS WINDOW --> */}
 			</React.Fragment>
+			</Provider>
 		);
 	}
 }
@@ -2131,379 +2298,184 @@ $("#connectWithDiscordButton").on("click", function (event) {
 
 // prevent arrow keys from messing with the slider:
 // https://stackoverflow.com/questions/2922174/jquery-ui-slider-how-to-disable-keyboard-input
-$.prototype.slider_old = $.prototype.slider;
-$.prototype.slider = function () {
-	let result = $.prototype.slider_old.apply(this, arguments);
-	this.find(".ui-slider-handle").unbind("keydown"); // disable keyboard actions
-	return result;
-}
+// $.prototype.slider_old = $.prototype.slider;
+// $.prototype.slider = function () {
+// 	let result = $.prototype.slider_old.apply(this, arguments);
+// 	this.find(".ui-slider-handle").unbind("keydown"); // disable keyboard actions
+// 	return result;
+// }
 
-// $("#laglessVolume").slider({
-// 	min: 0,
+// $("#deadzoneSlider").slider({
+// 	min: 1,
 // 	max: 100,
-// 	value: 0,
+// 	step: 1,
+// 	value: 50,
 // 	range: "min",
 // 	animate: true,
 // 	slide: function (event, ui) {
-// 		settings.volume = ui.value;
+// 		$("#deadzone").text(ui.value);
+// 	},
+// 	stop: function (event, ui) {}
+// });
+//
+// $("#stickSensitivitySlider").slider({
+// 	min: 0,
+// 	max: 3,
+// 	step: 0.01,
+// 	value: 1,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function (event, ui) {
+// 		$("#sensitivity").text(ui.value);
+// 		// settings.stickSensitivityX = ui.value;
+// 		// settings.stickSensitivityY = ui.value;
+// 		settings.sticks.L.X.sensitivity = ui.value;
+// 		settings.sticks.L.Y.sensitivity = ui.value;
+// 		settings.sticks.R.X.sensitivity = ui.value;
+// 		settings.sticks.R.Y.sensitivity = ui.value;
+// 	},
+// 	stop: function (event, ui) {
 // 		localforage.setItem("settings", JSON.stringify(settings));
-// 		if (!settings.audioThree) {
-// 			player.volume = settings.volume / 100;
-// 		} else {
-// 			audio.volume = settings.volume / 100;
-// 		}
-// 		$("#laglessVolume").slider("value", settings.volume);
-// 		$("#laglessVolume span").text(settings.volume);
+// 	},
+// });
+//
+// $("#stickAttackSlider").slider({
+// 	min: 0,
+// 	max: 40,
+// 	step: 0.1,
+// 	value: 20,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function (event, ui) {
+// 		$("#attack").text(ui.value);
+// 		settings.stickAttack = ui.value;
+// 	},
+// 	stop: function (event, ui) {
+// 		localforage.setItem("settings", JSON.stringify(settings));
 // 	}
 // });
 //
-// $("#laglessVolumeSlider").children().first().on("click", function () {
-// 	settings.volume = 0;
-// 	$("#laglessVolume").slider("value", 0);
-// 	$("#laglessVolume span").text(settings.volume);
-// 	if (!settings.audioThree) {
-// 		player.volume = 0;
-// 	} else {
-// 		audio.volume = 0;
-// 	}
-// });
-//
-// $("#laglessVolumeSlider").children().last().on("click", function () {
-// 	settings.volume = 100;
-// 	$("#laglessVolume").slider("value", 100);
-// 	$("#laglessVolume span").text(settings.volume);
-// 	if (!settings.audioThree) {
-// 		player.volume = 1;
-// 	} else {
-// 		audio.volume = 1;
+// $("#stickReturnSlider").slider({
+// 	min: 0,
+// 	max: 40,
+// 	step: 0.1,
+// 	value: 20,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function (event, ui) {
+// 		$("#return").text(ui.value);
+// 		settings.stickReturn = ui.value;
+// 	},
+// 	stop: function (event, ui) {
+// 		localforage.setItem("settings", JSON.stringify(settings));
 // 	}
 // });
 
-$("#qualitySlider").slider({
-	min: 20,
-	max: 60,
-	step: 1,
-	value: 60,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#quality").text(ui.value);
-		socket.emit("lagless1Settings", {
-			quality: parseInt(ui.value)
-		});
-	},
-	stop: function (event, ui) {}
-});
-
-$("#scaleSlider").slider({
-	min: 20,
-	max: 50,
-	step: 5,
-	value: 30,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#scale").text(ui.value);
-		socket.emit("lagless1Settings", {
-			scale: parseInt(ui.value)
-		});
-	},
-	stop: function (event, ui) {}
-});
-
-$("#fpsSlider").slider({
-	min: 1,
-	max: 15,
-	step: 1,
-	value: 15,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#fps").text(ui.value);
-		socket.emit("lagless1Settings", {
-			fps: parseInt(ui.value)
-		});
-	},
-	stop: function (event, ui) {}
-});
-
-$("#deadzoneSlider").slider({
-	min: 1,
-	max: 100,
-	step: 1,
-	value: 50,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#deadzone").text(ui.value);
-	},
-	stop: function (event, ui) {}
-});
-
-$("#stickSensitivitySlider").slider({
-	min: 0,
-	max: 3,
-	step: 0.01,
-	value: 1,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#sensitivity").text(ui.value);
-		// settings.stickSensitivityX = ui.value;
-		// settings.stickSensitivityY = ui.value;
-		settings.sticks.L.X.sensitivity = ui.value;
-		settings.sticks.L.Y.sensitivity = ui.value;
-		settings.sticks.R.X.sensitivity = ui.value;
-		settings.sticks.R.Y.sensitivity = ui.value;
-	},
-	stop: function (event, ui) {
-		localforage.setItem("settings", JSON.stringify(settings));
-	}
-});
-
-$("#stickAttackSlider").slider({
-	min: 0,
-	max: 40,
-	step: 0.1,
-	value: 20,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#attack").text(ui.value);
-		settings.stickAttack = ui.value;
-	},
-	stop: function (event, ui) {
-		localforage.setItem("settings", JSON.stringify(settings));
-	}
-});
-
-$("#stickReturnSlider").slider({
-	min: 0,
-	max: 40,
-	step: 0.1,
-	value: 20,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#return").text(ui.value);
-		settings.stickReturn = ui.value;
-	},
-	stop: function (event, ui) {
-		localforage.setItem("settings", JSON.stringify(settings));
-	}
-});
-
-socket.on("lagless1Settings", function (data) {
-	lagless1Settings = Object.assign({}, lagless1Settings, data);
-	$("#scale").text(lagless1Settings.scale);
-	$("#scaleSlider").slider("value", lagless1Settings.scale);
-	$("#quality").text(lagless1Settings.quality);
-	$("#qualitySlider").slider("value", lagless1Settings.quality);
-});
+// socket.on("lagless1Settings", function (data) {
+// 	lagless1Settings = Object.assign({}, lagless1Settings, data);
+// 	$("#scale").text(lagless1Settings.scale);
+// 	$("#scaleSlider").slider("value", lagless1Settings.scale);
+// 	$("#quality").text(lagless1Settings.quality);
+// 	$("#qualitySlider").slider("value", lagless1Settings.quality);
+// });
 
 // lagless2:
 
-$("#bitrateSlider2").slider({
-	min: 0,
-	max: 2,
-	step: 0.05,
-	value: 1,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#bitrate2").text(ui.value);
-	},
-	stop: function (event, ui) {
-		socket.emit("lagless2Settings", {
-			videoBitrate: parseFloat(ui.value)
-		});
-	}
-});
-
-$("#scaleSlider2").slider({
-	min: 100,
-	max: 720,
-	step: 1,
-	value: 720,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#scale2").text(ui.value);
-	},
-	stop: function (event, ui) {
-		socket.emit("lagless2Settings", {
-			scale: parseInt(ui.value)
-		});
-	}
-});
+// $("#bitrateSlider2").slider({
+// 	min: 0,
+// 	max: 2,
+// 	step: 0.05,
+// 	value: 1,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function (event, ui) {
+// 		$("#bitrate2").text(ui.value);
+// 	},
+// 	stop: function (event, ui) {
+// 		socket.emit("lagless2Settings", {
+// 			videoBitrate: parseFloat(ui.value)
+// 		});
+// 	}
+// });
+//
+// $("#scaleSlider2").slider({
+// 	min: 100,
+// 	max: 720,
+// 	step: 1,
+// 	value: 720,
+// 	range: "min",
+// 	animate: true,
+// 	slide: function (event, ui) {
+// 		$("#scale2").text(ui.value);
+// 	},
+// 	stop: function (event, ui) {
+// 		socket.emit("lagless2Settings", {
+// 			scale: parseInt(ui.value)
+// 		});
+// 	}
+// });
 
 $("#240p2").on("click", function (event) {
-	$("#scale2").text(240);
-	$("#scaleSlider2").slider("value", 240);
 	socket.emit("lagless2Settings", {
 		scale: 240
 	});
 });
 $("#360p2").on("click", function (event) {
-	$("#scale2").text(360);
-	$("#scaleSlider2").slider("value", 360);
 	socket.emit("lagless2Settings", {
 		scale: 360
 	});
 });
 $("#540p2").on("click", function (event) {
-	$("#scale2").text(540);
-	$("#scaleSlider2").slider("value", 540);
 	socket.emit("lagless2Settings", {
 		scale: 540
 	});
 });
 $("#720p2").on("click", function (event) {
-	$("#scale2").text(720);
-	$("#scaleSlider2").slider("value", 720);
 	socket.emit("lagless2Settings", {
 		scale: 720
 	});
 });
 
-$("#offsetXSlider2").slider({
-	min: 0,
-	max: 600,
-	step: 1,
-	value: 0,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#offsetX2").text(ui.value);
-	},
-	stop: function (event, ui) {
-		socket.emit("lagless2Settings", {
-			offsetX: parseInt(ui.value)
-		});
-	}
-});
-
-$("#offsetYSlider2").slider({
-	min: 0,
-	max: 300,
-	step: 1,
-	value: 0,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#offsetY2").text(ui.value);
-	},
-	stop: function (event, ui) {
-		socket.emit("lagless2Settings", {
-			offsetY: parseInt(ui.value)
-		});
-	}
-});
-
 $("#20fps2").on("click", function (event) {
-	$("#fps2").text(20);
 	socket.emit("lagless2Settings", {
 		framerate: 20
 	});
 });
 $("#30fps2").on("click", function (event) {
-	$("#fps2").text(30);
 	socket.emit("lagless2Settings", {
 		framerate: 30
 	});
 });
 
-socket.on("lagless2Settings", function (data) {
-	lagless2Settings = Object.assign({}, lagless2Settings, data);
-
-	$("#fps2").text(lagless2Settings.framerate);
-
-	$("#bitrate2").text(lagless2Settings.videoBitrate);
-	$("#bitrateSlider2").slider("value", lagless2Settings.videoBitrate);
-
-	$("#scale2").text(lagless2Settings.scale);
-	$("#scaleSlider2").slider("value", lagless2Settings.scale);
-
-	$("#offsetX2").text(lagless2Settings.offsetX);
-	$("#offsetXSlider2").slider("value", lagless2Settings.offsetX);
-
-	$("#offsetY2").text(lagless2Settings.offsetY);
-	$("#offsetYSlider2").slider("value", lagless2Settings.offsetY);
-});
-
 // lagless3:
 
-$("#bitrateSlider3").slider({
-	min: 0,
-	max: 2,
-	step: 0.05,
-	value: 1,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#bitrate3").text(ui.value);
-	},
-	stop: function (event, ui) {
-		socket.emit("lagless3Settings", {
-			videoBitrate: parseFloat(ui.value)
-		});
-	}
-});
-
-$("#scaleSlider3").slider({
-	min: 100,
-	max: 720,
-	step: 1,
-	value: 720,
-	range: "min",
-	animate: true,
-	slide: function (event, ui) {
-		$("#scale3").text(ui.value);
-	},
-	stop: function (event, ui) {
-		socket.emit("lagless3Settings", {
-			scale: parseInt(ui.value)
-		});
-	}
-});
-
 $("#240p3").on("click", function (event) {
-	$("#scale3").text(240);
-	$("#scaleSlider3").slider("value", 240);
 	socket.emit("lagless3Settings", {
 		scale: 240
 	});
 });
 $("#360p3").on("click", function (event) {
-	$("#scale3").text(360);
-	$("#scaleSlider3").slider("value", 360);
 	socket.emit("lagless3Settings", {
 		scale: 360
 	});
 });
 $("#540p3").on("click", function (event) {
-	$("#scale3").text(540);
-	$("#scaleSlider3").slider("value", 540);
 	socket.emit("lagless3Settings", {
 		scale: 540
 	});
 });
 $("#720p3").on("click", function (event) {
-	$("#scale3").text(720);
-	$("#scaleSlider3").slider("value", 720);
 	socket.emit("lagless3Settings", {
 		scale: 720
 	});
 });
 
 $("#20fps3").on("click", function (event) {
-	$("#fps3").text(20);
 	socket.emit("lagless3Settings", {
 		framerate: 20
 	});
 });
 $("#30fps3").on("click", function (event) {
-	$("#fps3").text(30);
 	socket.emit("lagless3Settings", {
 		framerate: 30
 	});
@@ -2513,19 +2485,19 @@ $("#30fps3").on("click", function (event) {
 
 function addJoyCons(tab, actual) {
 
-	actual = actual || false;
-
-	if (!actual) {
-		tab = "#lagless" + tab + "View";
-	}
-
-	// delete old joycons:
-	try {
-		leftStick.destroy();
-		rightStick.destroy();
-	} catch (e) {
-		console.log("JoyCon delete error.");
-	}
+	// actual = actual || false;
+	//
+	// if (!actual) {
+	// 	tab = "#lagless" + tab + "View";
+	// }
+	//
+	// // delete old joycons:
+	// try {
+	// 	leftStick.destroy();
+	// 	rightStick.destroy();
+	// } catch (e) {
+	// 	console.log("JoyCon delete error.");
+	// }
 
 	// remove previous renders:
 	// todo: implement prevTab
@@ -2541,15 +2513,15 @@ function addJoyCons(tab, actual) {
 	// 	ReactDOM.render(<RightJoyCon/>, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
 	// }
 
-	// rebind touch controls:
-	rebindUnbindTouchControls();
-
-	// rebind sticks:
-	leftJoyStick.zone = document.querySelector("#leftStick");
-	rightJoyStick.zone = document.querySelector("#rightStick");
-	leftStick = nipplejs.create(leftJoyStick);
-	rightStick = nipplejs.create(rightJoyStick);
-	bindJoysticks();
+	// // rebind touch controls:
+	// rebindUnbindTouchControls();
+	//
+	// // rebind sticks:
+	// leftJoyStick.zone = document.querySelector("#leftStick");
+	// rightJoyStick.zone = document.querySelector("#rightStick");
+	// leftStick = nipplejs.create(leftJoyStick);
+	// rightStick = nipplejs.create(rightJoyStick);
+	// bindJoysticks();
 }
 
 // todo: debounce
@@ -2711,8 +2683,6 @@ socket.on("hostPeerSignal", function (data) {
 	peer.signal(JSON.parse(data));
 });
 
-let audio = document.createElement("audio");
-
 peer.on("stream", function (stream) {
 	// got remote audio stream, then show it in an audio tag
 	audio.src = window.URL.createObjectURL(stream); // deprecated
@@ -2721,48 +2691,48 @@ peer.on("stream", function (stream) {
 	audio.volume = 0;
 });
 
-$("#enableAudioThreeCheckbox").on("change", function () {
-	settings.enableAudioThree = this.checked;
-	localforage.setItem("settings", JSON.stringify(settings));
-	if (settings.enableAudioThree) {
-		if (!audioConnected) {
-			socket.emit("requestAudio");
-			setTimeout(() => {
-				audioConnected = true;
-			}, 100);
-		}
-	} else {
-		try {
-			audio.volume = 0;
-			player.volume = settings.volume / 100;
-		} catch (error) {}
-		$("#audioThreeCheckbox").prop("checked", false);
-		$(".audioThreeCheckbox").prop("checked", false);
-	}
-});
-
-$("#audioThreeCheckbox").on("change", function () {
-	if (!settings.enableAudioThree) {
-		$("#audioThreeCheckbox").prop("checked", false);
-		swal("You have to enable Audio 3.0 first!");
-		return;
-	}
-	settings.audioThree = this.checked;
-	localforage.setItem("settings", JSON.stringify(settings));
-	if (settings.audioThree) {
-		if (!audioConnected) {
-			audio.volume = settings.volume / 100;
-		} else {
-			try {
-				audio.volume = settings.volume / 100;
-				player.volume = 0;
-			} catch (error) {}
-		}
-	} else {
-		audio.volume = 0;
-		player.volume = settings.volume / 100;
-	}
-});
+// $("#enableAudioThreeCheckbox").on("change", function () {
+// 	settings.enableAudioThree = this.checked;
+// 	localforage.setItem("settings", JSON.stringify(settings));
+// 	if (settings.enableAudioThree) {
+// 		if (!audioConnected) {
+// 			socket.emit("requestAudio");
+// 			setTimeout(() => {
+// 				audioConnected = true;
+// 			}, 100);
+// 		}
+// 	} else {
+// 		try {
+// 			audio.volume = 0;
+// 			player.volume = settings.volume / 100;
+// 		} catch (error) {}
+// 		$("#audioThreeCheckbox").prop("checked", false);
+// 		$(".audioThreeCheckbox").prop("checked", false);
+// 	}
+// });
+//
+// $("#audioThreeCheckbox").on("change", function () {
+// 	if (!settings.enableAudioThree) {
+// 		$("#audioThreeCheckbox").prop("checked", false);
+// 		swal("You have to enable Audio 3.0 first!");
+// 		return;
+// 	}
+// 	settings.audioThree = this.checked;
+// 	localforage.setItem("settings", JSON.stringify(settings));
+// 	if (settings.audioThree) {
+// 		if (!audioConnected) {
+// 			audio.volume = settings.volume / 100;
+// 		} else {
+// 			try {
+// 				audio.volume = settings.volume / 100;
+// 				player.volume = 0;
+// 			} catch (error) {}
+// 		}
+// 	} else {
+// 		audio.volume = 0;
+// 		player.volume = settings.volume / 100;
+// 	}
+// });
 
 $(".audioThreeCheckbox").on("change", function () {
 	$("#audioThreeCheckbox").trigger("click");
@@ -2889,27 +2859,6 @@ window.addEventListener("keydown", function (e) {
 setInterval(function () {
 	pingTime = Date.now();
 	socket.emit("ping2");
-
-	// hack:
-	// todo: not this:
-	if (settings.tab != 5) {
-		if (!settings.audioThree) {
-			audio.volume = 0;
-			try {
-				player.volume = settings.volume / 100;
-			} catch (error) {}
-		} else {
-			audio.volume = settings.volume / 100;
-			try {
-				player.volume = 0;
-			} catch (error) {}
-		}
-	} else {
-		audio.volume = 0;
-		try {
-			player.volume = 0;
-		} catch (error) {}
-	}
 }, 1000);
 
 socket.on("pong2", function () {
@@ -2923,14 +2872,6 @@ $("#resetSettings").on("click", function (event) {
 		location.reload(true);
 	});
 });
-
-/* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-window.onbeforeunload = closingCode;
-
-function closingCode() {
-	socket.emit("leaveLagless");
-	return null;
-}
 
 /* COLLAPSE BUTTONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // $(".collapseButton").on("click", function(event) {

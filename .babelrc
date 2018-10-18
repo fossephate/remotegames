@@ -1,4 +1,18 @@
 {
-	presets: [["@babel/env", { "modules": "commonjs" }], "@babel/preset-react"],
-	plugins: ["@babel/plugin-proposal-class-properties", "add-module-exports"],
+	presets: [
+		["@babel/env", {
+			"modules": "commonjs",
+			"targets": {
+	           "node": "current",
+	            "chrome": 66,
+	            "firefox": 60,
+	         },
+			}],
+		"@babel/preset-react",
+	],
+	plugins: [
+		"@babel/plugin-proposal-class-properties",
+		"add-module-exports",
+		"@babel/plugin-syntax-import-meta",
+	],
 }
