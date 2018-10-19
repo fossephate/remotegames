@@ -2,19 +2,10 @@ import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
 // redux:
-import { Provider, connect } from "react-redux";
-import { combineReducers, createStore } from "redux";
+import { connect } from "react-redux";
 
-// import registerServiceWorker from "./registerServiceWorker";
-import MyReducer from "./reducers/MyReducer.js";
 
-const allReducers = combineReducers({
-	myReducer: MyReducer,
-});
-
-const store = createStore(
-	allReducers, {},
-);
+import combineSocketEventHandlers from "src/sockets";
 
 
 // components:
@@ -40,7 +31,7 @@ import LaglessView from "src/components/LaglessView.jsx";
 import MySlider from "src/components/MySlider.jsx";
 import Chat from "src/components/Chat/Chat.jsx";
 
-import ThemeSwitch from "./components/ThemeSwitch.jsx";
+import ThemeSwitch from "src/components/ThemeSwitch.jsx";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -91,13 +82,6 @@ $.fn.addUp = function (getter) {
 	}, 0);
 }
 
-// let socket = io("https://twitchplaysnintendoswitch.com", {
-// 	path: "/8110/socket.io",
-// 	transports: ["websocket"]
-// });
-
-window.socket = null;
-
 let globalEventTimer = false;
 let sendInputTimer;
 let currentPlayerChosen = 0;
@@ -131,8 +115,8 @@ if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elain
 	isMobile = true;
 }
 
-window.input = new InputMaster(isMobile);
-// input.controller.init();
+window.masterInput = new InputMaster(isMobile);
+// masterInput.controller.init();
 let currentInputMode = null;
 
 let keyboardLayout = {};
@@ -173,22 +157,6 @@ controller.reset();
 
 let settings = {};
 
-let lagless1Settings = {};
-let lagless2Settings = {
-	framerate: 30,
-	videoBitrate: 1,
-	scale: 720,
-	offsetX: 0,
-	offsetY: 0,
-};
-let lagless3Settings = {
-	framerate: 30,
-	videoBitrate: 1,
-	scale: 720,
-	offsetX: 0,
-	offsetY: 0,
-};
-
 // detect firefox:
 if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
 	settings.stickSensitivityX = 1.5;
@@ -213,10 +181,7 @@ let lagless4Port = 8004;
 
 let lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
 
-
-
-
-export default class App extends Component {
+class App extends Component {
 
 	constructor(props) {
 		super(props);
@@ -545,18 +510,15 @@ export default class App extends Component {
 			return null;
 		});
 
+		// socket = io("https://twitchplaysnintendoswitch.com", {
+		// 	path: "/8110/socket.io",
+		// 	transports: ["websocket"],
+		// });
 
+		// // listen to events and dispatch actions:
+		// combineSocketEventHandlers(socket, this.props.dispatch);
 
-
-
-
-
-
-
-		socket = io("https://twitchplaysnintendoswitch.com", {
-			path: "/8110/socket.io",
-			transports: ["websocket"]
-		});
+		window.socket = this.props.socket;
 
 		socket.on("turnTimesLeft", (data) => {
 
@@ -668,7 +630,7 @@ export default class App extends Component {
 			$("#logout").remove();
 			$("#loggedInStatus").remove();
 
-			$(".disabled").on("click", function () {
+			$(".disabled").on("click", () => {
 				swal("You have to sign in first!");
 			});
 		}
@@ -711,6 +673,40 @@ export default class App extends Component {
 		setInterval(() => {
 			socket.emit("join", "lagless" + this.state.tab);
 		}, 10000);
+
+		$("#logout").on("click", function (event) {
+			tools.deleteAllCookies();
+			location.reload(true);
+		});
+
+		// $(document).on("click", ".username-dropdown-item", function (event) {
+		// 	let username = $(event.target).text();
+		// 	let index = $(event.target).index();
+		// 	$("#usernameDropdownMenuLink").text(username);
+		// 	settings.usernameIndex = index;
+		// 	localforage.setItem("settings", JSON.stringify(settings));
+		// });
+
+		function connectAccountOrSignIn(type) {
+			let url = "https://twitchplaysnintendoswitch.com/8110/auth/" + type + "/";
+			if (authCookie != null) {
+				url += "?uniqueToken=" + authCookie;
+			}
+			window.location.href = url;
+		}
+
+		$("#connectWithTwitchButton").on("click", function (event) {
+			connectAccountOrSignIn("twitch");
+		});
+		$("#connectWithGoogleButton").on("click", function (event) {
+			connectAccountOrSignIn("google");
+		});
+		$("#connectWithYoutubeButton").on("click", function (event) {
+			connectAccountOrSignIn("youtube");
+		});
+		$("#connectWithDiscordButton").on("click", function (event) {
+			connectAccountOrSignIn("discord");
+		});
 
 
 		/* IP */
@@ -826,9 +822,11 @@ export default class App extends Component {
 			});
 		});
 		socket.on("lagless2SettingsChange", (data) => {
-			try {
-				player.destroy();
-			} catch (error) {}
+			// try {
+			player.destroy();
+			// } catch (error) {
+			// 	console.log("player destroy error.");
+			// }
 			player = new JSMpeg.Player(lagless2URL, {
 				canvas: canvas2,
 				video: true,
@@ -1108,6 +1106,94 @@ export default class App extends Component {
 		// // 	this.setState(obj);
 		// // };
 
+		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
+
+		/* AUDIO 3.0 */
+		let peer = new SimplePeer({
+			initiator: false,
+			trickle: true,
+		});
+
+		peer.on("error", function (err) {
+			console.log("error", err)
+		});
+
+		peer.on("signal", function (data) {
+			console.log("SIGNAL", JSON.stringify(data));
+			socket.emit("clientPeerSignal", JSON.stringify(data));
+		});
+
+		peer.on("connect", function () {
+			console.log("CONNECT");
+			peer.send(Math.random());
+		});
+
+		peer.on("data", function (data) {
+			console.log("data: " + data)
+		});
+
+		socket.on("hostPeerSignal", function (data) {
+			peer.signal(JSON.parse(data));
+		});
+
+		peer.on("stream", function (stream) {
+			// got remote audio stream, then show it in an audio tag
+			audio.src = window.URL.createObjectURL(stream); // deprecated
+			// 			audio.srcObj = stream;
+			audio.play();
+			audio.volume = 0;
+		});
+
+		// $("#enableAudioThreeCheckbox").on("change", function () {
+		// 	settings.enableAudioThree = this.checked;
+		// 	localforage.setItem("settings", JSON.stringify(settings));
+		// 	if (settings.enableAudioThree) {
+		// 		if (!audioConnected) {
+		// 			socket.emit("requestAudio");
+		// 			setTimeout(() => {
+		// 				audioConnected = true;
+		// 			}, 100);
+		// 		}
+		// 	} else {
+		// 		try {
+		// 			audio.volume = 0;
+		// 			player.volume = settings.volume / 100;
+		// 		} catch (error) {}
+		// 		$("#audioThreeCheckbox").prop("checked", false);
+		// 		$(".audioThreeCheckbox").prop("checked", false);
+		// 	}
+		// });
+		//
+		// $("#audioThreeCheckbox").on("change", function () {
+		// 	if (!settings.enableAudioThree) {
+		// 		$("#audioThreeCheckbox").prop("checked", false);
+		// 		swal("You have to enable Audio 3.0 first!");
+		// 		return;
+		// 	}
+		// 	settings.audioThree = this.checked;
+		// 	localforage.setItem("settings", JSON.stringify(settings));
+		// 	if (settings.audioThree) {
+		// 		if (!audioConnected) {
+		// 			audio.volume = settings.volume / 100;
+		// 		} else {
+		// 			try {
+		// 				audio.volume = settings.volume / 100;
+		// 				player.volume = 0;
+		// 			} catch (error) {}
+		// 		}
+		// 	} else {
+		// 		audio.volume = 0;
+		// 		player.volume = settings.volume / 100;
+		// 	}
+		// });
+
+		$(".audioThreeCheckbox").on("change", function () {
+			$("#audioThreeCheckbox").trigger("click");
+			setTimeout(() => {
+				$(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
+			}, 100);
+		});
+
 		/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 		setInterval(() => {
 			// hack:
@@ -1122,9 +1208,298 @@ export default class App extends Component {
 		}, 1000);
 
 		sendInputTimer = setInterval(() => {
-			input.pollDevices();
+			masterInput.pollDevices();
 			this.sendControllerState();
 		}, 1000 / 120);
+
+		/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+		socket.on("voteStarted", function (data) {
+			let notification = new Noty({
+				theme: "mint",
+				type: "warning",
+				text: "A vote to change games has started!",
+				timeout: 5000,
+				sounds: {
+					volume: 0.5,
+					sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+					conditions: ["docVisible"],
+				},
+			});
+			notification.show();
+		});
+
+
+		/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+		socket.on("rickroll", function (data) {
+			if (myUsername == data || data == "everyone") {
+				let myPlayer;
+				swal({
+					html: '<canvas id="rickroll"></canvas>',
+					onOpen: () => {
+						let rickrollCanvas = $("#rickroll")[0];
+						myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
+							canvas: rickrollCanvas,
+							loop: false,
+							autoplay: true
+						});
+					},
+					onClose: () => {
+						myPlayer.destroy();
+					},
+					customClass: "swal-wide"
+				});
+
+			}
+		});
+
+		socket.on("rainbow", function (data) {
+			if (myUniqueID == data || data == "everyone") {
+				$("body").addClass("rainbow-text");
+			}
+		});
+
+		socket.on("banlist", function (data) {
+			banlist = data;
+		});
+
+		socket.on("banned", function (data) {
+			let alertMessage = $(".swal2-container")[0];
+			if (typeof alertMessage == "undefined") {
+				swal("You're banned (maybe only temporarily?)");
+			}
+		});
+
+		/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+		setInterval(function () {
+			pingTime = Date.now();
+			socket.emit("ping2");
+		}, 1000);
+
+		socket.on("pong2", function () {
+			let latency = Date.now() - pingTime;
+			$("#ping").text(latency + "ms");
+		});
+
+		$("#resetSettings").on("click", function (event) {
+			event.preventDefault();
+			localforage.clear().then(function () {
+				location.reload(true);
+			});
+		});
+
+		/* COLLAPSE BUTTONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+		$(".collapseButton").on("click", function (event) {
+			let target = $(this).attr("data-target");
+			if ($(this).attr("collapsed") == "false") {
+				$(this).attr("collapsed", "true");
+				$(target).collapse("hide");
+			} else {
+				$(this).attr("collapsed", "false");
+
+				$(target).parent().animate({
+					"margin-top": "0px"
+				});
+				// 		$(target).parent().css("width", "");
+				$(target).parent().css("height", "");
+
+				// 	$(this).parent().animate({"width": "", "height": ""});
+				let thisId = "#" + $(target).attr("id");
+				let button = $('[data-target="' + thisId + '"]');
+				button.css("align-self", "");
+				button.css("margin-left", "5px");
+
+				setTimeout(() => {
+					$(target).parent().css("width", "");
+					$(target).collapse("show");
+				}, 500);
+			}
+		});
+
+		$(".collapsible").on("show.bs.collapse", function () {
+
+			//  	$(this).parent().css("margin-top", "");
+			// 	$(this).parent().animate({"margin-top": "0px"});
+			// 	$(this).parent().css("width", "");
+			// 	$(this).parent().css("height", "");
+
+			//  	$(this).parent().animate({"width": "", "height": ""});
+			// 	let thisId = "#" + $(this).attr("id");
+			// 	let button = $('[data-target="' + thisId + '"]');
+			// 	button.css("align-self", "");
+			// 	button.css("margin-left", "5px");
+		});
+
+		$(".collapsible").on("shown.bs.collapse", function () {
+
+			let thisId = "#" + $(this).attr("id");
+			let button = $('[data-target="' + thisId + '"]');
+			button.text("Hide");
+
+		});
+
+		$(".collapsible").on("hidden.bs.collapse", function () {
+
+			let thisId = "#" + $(this).attr("id");
+			let button = $('[data-target="' + thisId + '"]');
+			button.text("Show");
+
+			let height = button.outerHeight() + 5;
+			button.parent().height(height);
+
+			let width = button.outerWidth() + 10;
+			button.parent().width(width);
+
+			button.parent().animate({
+				"margin-top": "-60px"
+			});
+
+			// 	button.parent().animate({"height" : height});
+			// 	button.parent().animate({"width": width, "height": height});
+
+			button.css("align-self", "center");
+			button.css("margin-left", "0px");
+
+		});
+
+		$("#replaceWithTwitch").on("click", function () {
+			replaceWithTwitch();
+		});
+
+		$("#replaceWithLagless").on("click", function () {
+			replaceWithLagless();
+		});
+
+		// socket.on("replaceWithTwitch", function () {
+		// 	replaceWithTwitch();
+		// });
+		//
+		// socket.on("replaceWithLagless", function () {
+		// 	replaceWithTwitch();
+		// });
+
+		/* STATUS BAR @@@@@@@@@@@@@@@@ */
+		// socket.on("lock", function() {
+		// 	replaceWithTwitch();
+		// });
+
+
+
+		/* MOD COMMANDS */
+		// selects elements in the future:
+		// https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
+
+		$("body").popover({
+			selector: ".queueItem",
+			trigger: "focus",
+			html: true,
+			toggle: "popover",
+			title: "Mod Powers",
+			boundary: "window",
+			container: "body",
+			placement: "right",
+			content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
+						<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
+						<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>'
+		});
+		// .click(function() {
+		// 	setTimeout(() => {
+		// 		$('[data-toggle="popover"]').popover("hide");
+		// 	}, 8000);
+		// });
+
+		$("#container").popover({ // must be unique
+			selector: ".viewerElement",
+			// 	trigger: "focus",
+			html: true,
+			toggle: "popover",
+			title: "Mod Powers",
+			boundary: "window",
+			container: "body",
+			placement: "right",
+			content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
+						<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
+						<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
+						<button id="unban" class="btn btn-secondary"><b>Unban</b></button>'
+		}).click(() => {
+			setTimeout(() => {
+				$('[data-toggle="popover"]').popover("hide");
+			}, 8000);
+		});
+
+		let modPowerUniqueID = "";
+		$(document).on("click", ".queueItem", function (event) {
+			$(this).effect("highlight", {}, 2000);
+			modPowerUniqueID = $(this).attr("uniqueid");
+		});
+
+		$(document).on("click", ".viewerElement", function (event) {
+			$(this).effect("highlight", {}, 2000);
+			modPowerUniqueID = $(this).attr("uniqueid");
+		});
+
+		$(document).on("click", "#kickFromQueue", function (event) {
+			socket.emit("kickFromQueue", modPowerUniqueID);
+			$("#queuePopup").remove();
+		});
+		$(document).on("click", "#tempBan", function (event) {
+			socket.emit("tempBan", modPowerUniqueID);
+			$("#queuePopup").remove();
+		});
+		$(document).on("click", "#permaBan", function (event) {
+			socket.emit("permaBan", modPowerUniqueID);
+			$("#queuePopup").remove();
+		});
+		$(document).on("click", "#unban", function (event) {
+			socket.emit("unban", modPowerUniqueID);
+			$("#queuePopup").remove();
+		});
+
+		$(document).on("click", 'i:contains("lock")', function (event) {
+			$(this).effect("highlight", {}, 2000);
+			socket.emit("unlock");
+		});
+		$(document).on("click", 'i:contains("lock_open")', function (event) {
+			$(this).effect("highlight", {}, 2000);
+			socket.emit("lock");
+		});
+
+		// todo: reimplement:
+		// setInterval(function() {
+		// 	let currentTime = Date.now();
+		// 	let elapsedTime = currentTime - lastCurrentTime;
+		// 	let timeLeftMilli = timeLeft - elapsedTime;
+		// 	let timeLeftSec = parseInt(timeLeftMilli / 1000);
+		// 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
+		// 	let progressBar = $(".progress-bar");
+		// 	progressBar.css("width", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
+		// }, 200);
+
+		$(document).on("click", ".joinQueue", function (event) {
+			let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
+			for (let i = 0; i < 4; i++) {
+				if (i == cNum) {
+					continue;
+				}
+				socket.emit("leaveQueue", i);
+			}
+			socket.emit("joinQueue", cNum);
+		});
+
+		$(document).on("click", ".leaveQueue", function (event) {
+			let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
+			socket.emit("leaveQueue", cNum);
+		});
+
+		window.addEventListener("keydown", function (e) {
+			// escape, f11
+			if ([27, 122].indexOf(e.keyCode) > -1) {
+				e.preventDefault();
+				$("body").removeClass("hideScrollbar");
+			}
+		}, false);
 
 	}
 
@@ -1141,34 +1516,34 @@ export default class App extends Component {
 		controller.on("data", data => {
 			switch (data.key) {
 				case "UP":
-					input.snexController.state.LStick.y = data.state ? 255 : 128;
+					masterInput.snexController.state.LStick.y = data.state ? 255 : 128;
 					break;
 				case "DOWN":
-					input.snexController.state.LStick.y = data.state ? 0 : 128;
+					masterInput.snexController.state.LStick.y = data.state ? 0 : 128;
 					break;
 				case "LEFT":
-					input.snexController.state.LStick.x = data.state ? 0 : 128;
+					masterInput.snexController.state.LStick.x = data.state ? 0 : 128;
 					break;
 				case "RIGHT":
-					input.snexController.state.LStick.x = data.state ? 255 : 128;
+					masterInput.snexController.state.LStick.x = data.state ? 255 : 128;
 					break;
 				case "A":
-					input.snexController.state.btns.a = data.state;
+					masterInput.snexController.state.btns.a = data.state;
 					break;
 				case "B":
-					input.snexController.state.btns.b = data.state;
+					masterInput.snexController.state.btns.b = data.state;
 					break;
 				case "X":
-					input.snexController.state.btns.x = data.state;
+					masterInput.snexController.state.btns.x = data.state;
 					break;
 				case "Y":
-					input.snexController.state.btns.y = data.state;
+					masterInput.snexController.state.btns.y = data.state;
 					break;
 				case "SELECT":
-					input.snexController.state.btns.zl = data.state;
+					masterInput.snexController.state.btns.zl = data.state;
 					break;
 				case "START":
-					input.snexController.state.btns.zr = data.state;
+					masterInput.snexController.state.btns.zr = data.state;
 					break;
 			}
 		});
@@ -1384,7 +1759,7 @@ export default class App extends Component {
 
 	sendControllerState() {
 
-		let newControllerState = input.outputController.getState();
+		let newControllerState = masterInput.outputController.getState();
 
 		if (newControllerState == oldControllerState) {
 			return;
@@ -1392,13 +1767,18 @@ export default class App extends Component {
 			oldControllerState = newControllerState;
 		}
 
-		if (input.currentInputMode == "keyboard" && !this.state.keyboardControls) {
+		if (masterInput.currentInputMode == "keyboard" && !this.state.keyboardControls) {
 			return;
 		}
-		if (input.currentInputMode == "controller" && !this.state.controllerControls) {
+		if (masterInput.currentInputMode == "controller" && !this.state.controllerControls) {
 			return;
 		}
-		if (input.currentInputMode == "touch" && !this.state.touchControls) {
+		if (masterInput.currentInputMode == "touch" && !this.state.touchControls) {
+			return;
+		}
+
+		// return if chat is focused:
+		if (document.activeElement === document.getElementById("messageBox")) {
 			return;
 		}
 
@@ -1462,7 +1842,6 @@ export default class App extends Component {
 	render() {
 
 		return (
-			<Provider store={store}>
 			<React.Fragment>
 				{this.state.darkTheme ? <ThemeSwitch/> : null}
 
@@ -1867,29 +2246,34 @@ export default class App extends Component {
 				</div>
 				{/* <!-- END OF SETTINGS WINDOW --> */}
 			</React.Fragment>
-			</Provider>
 		);
 	}
 }
 
+// const mapStateToProps = (state) => {
+// 	return state;
+// };
+//
+// const mapActionsToProps = (state) => {
+// 	return state;
+// };
 
-ReactDOM.render(<App/>, document.getElementById("root"));
+// export default connect(mapStateToProps, mapActionsToProps)(App);
+export default App;
 
-
-
-
-/* prevent arrow key scrolling */
-window.addEventListener("keydown", function (e) {
+// exit fullscreen:
+window.addEventListener("keydown", (event) => {
 	// space and arrow keys
-	if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-		e.preventDefault();
-	}
-	if ([27].indexOf(e.keyCode) > -1) {
+	// if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) {
+	// 	event.preventDefault();
+	// }
+	// escape:
+	if ([27].indexOf(event.keyCode) > -1) {
 		document.exitPointerLock();
-		document.removeEventListener("mousemove", getMouseInput);
-		document.removeEventListener("mousedown", getMouseInput2);
-		document.removeEventListener("mouseup", getMouseInput2);
-		$("#mouseControlsCheckbox").prop("checked", false).trigger("change");
+		// document.removeEventListener("mousemove", getMouseInput);
+		// document.removeEventListener("mousedown", getMouseInput2);
+		// document.removeEventListener("mouseup", getMouseInput2);
+		// $("#mouseControlsCheckbox").prop("checked", false).trigger("change");
 	}
 }, false);
 
@@ -1924,23 +2308,23 @@ function getMouseInput2(e) {
 }
 
 // todo: maybe make a virtual canvas w/ $() ? not sure if actual canvas is required
-let videoCanvas2 = $("#videoCanvas2")[0];
-videoCanvas2.requestPointerLock = videoCanvas2.requestPointerLock || videoCanvas2.mozRequestPointerLock;
-document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
-
-$("#mouseControlsCheckbox").change(function (event) {
-	if (this.checked) {
-		videoCanvas2.requestPointerLock();
-		document.addEventListener("mousemove", getMouseInput, false);
-		document.addEventListener("mousedown", getMouseInput2, false);
-		document.addEventListener("mouseup", getMouseInput2, false);
-	} else {
-		document.exitPointerLock();
-		document.removeEventListener("mousemove", getMouseInput);
-		document.removeEventListener("mousedown", getMouseInput2);
-		document.removeEventListener("mouseup", getMouseInput2);
-	}
-});
+// let videoCanvas2 = $("#videoCanvas2")[0];
+// videoCanvas2.requestPointerLock = videoCanvas2.requestPointerLock || videoCanvas2.mozRequestPointerLock;
+// document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+//
+// $("#mouseControlsCheckbox").change(function (event) {
+// 	if (this.checked) {
+// 		videoCanvas2.requestPointerLock();
+// 		document.addEventListener("mousemove", getMouseInput, false);
+// 		document.addEventListener("mousedown", getMouseInput2, false);
+// 		document.addEventListener("mouseup", getMouseInput2, false);
+// 	} else {
+// 		document.exitPointerLock();
+// 		document.removeEventListener("mousemove", getMouseInput);
+// 		document.removeEventListener("mousedown", getMouseInput2);
+// 		document.removeEventListener("mouseup", getMouseInput2);
+// 	}
+// });
 
 // https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
 
@@ -2255,165 +2639,11 @@ function rebindUnbindTouchControls() {
 	}
 }
 
-/* AUTHENTICATION */
-
-$("#logout").on("click", function (event) {
-	tools.deleteAllCookies();
-	location.reload(true);
-});
-
-// $(document).on("click", ".username-dropdown-item", function (event) {
-// 	let username = $(event.target).text();
-// 	let index = $(event.target).index();
-// 	$("#usernameDropdownMenuLink").text(username);
-// 	settings.usernameIndex = index;
-// 	localforage.setItem("settings", JSON.stringify(settings));
-// });
-
-function connectAccountOrSignIn(type) {
-	let url = "https://twitchplaysnintendoswitch.com/8110/auth/" + type + "/";
-	if (authCookie != null) {
-		url += "?uniqueToken=" + authCookie;
-	}
-	window.location.href = url;
-}
-
-$("#connectWithTwitchButton").on("click", function (event) {
-	connectAccountOrSignIn("twitch");
-});
-$("#connectWithGoogleButton").on("click", function (event) {
-	connectAccountOrSignIn("google");
-});
-$("#connectWithYoutubeButton").on("click", function (event) {
-	connectAccountOrSignIn("youtube");
-});
-$("#connectWithDiscordButton").on("click", function (event) {
-	connectAccountOrSignIn("discord");
-});
 
 
 
 
 /* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-// prevent arrow keys from messing with the slider:
-// https://stackoverflow.com/questions/2922174/jquery-ui-slider-how-to-disable-keyboard-input
-// $.prototype.slider_old = $.prototype.slider;
-// $.prototype.slider = function () {
-// 	let result = $.prototype.slider_old.apply(this, arguments);
-// 	this.find(".ui-slider-handle").unbind("keydown"); // disable keyboard actions
-// 	return result;
-// }
-
-// $("#deadzoneSlider").slider({
-// 	min: 1,
-// 	max: 100,
-// 	step: 1,
-// 	value: 50,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#deadzone").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {}
-// });
-//
-// $("#stickSensitivitySlider").slider({
-// 	min: 0,
-// 	max: 3,
-// 	step: 0.01,
-// 	value: 1,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#sensitivity").text(ui.value);
-// 		// settings.stickSensitivityX = ui.value;
-// 		// settings.stickSensitivityY = ui.value;
-// 		settings.sticks.L.X.sensitivity = ui.value;
-// 		settings.sticks.L.Y.sensitivity = ui.value;
-// 		settings.sticks.R.X.sensitivity = ui.value;
-// 		settings.sticks.R.Y.sensitivity = ui.value;
-// 	},
-// 	stop: function (event, ui) {
-// 		localforage.setItem("settings", JSON.stringify(settings));
-// 	},
-// });
-//
-// $("#stickAttackSlider").slider({
-// 	min: 0,
-// 	max: 40,
-// 	step: 0.1,
-// 	value: 20,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#attack").text(ui.value);
-// 		settings.stickAttack = ui.value;
-// 	},
-// 	stop: function (event, ui) {
-// 		localforage.setItem("settings", JSON.stringify(settings));
-// 	}
-// });
-//
-// $("#stickReturnSlider").slider({
-// 	min: 0,
-// 	max: 40,
-// 	step: 0.1,
-// 	value: 20,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#return").text(ui.value);
-// 		settings.stickReturn = ui.value;
-// 	},
-// 	stop: function (event, ui) {
-// 		localforage.setItem("settings", JSON.stringify(settings));
-// 	}
-// });
-
-// socket.on("lagless1Settings", function (data) {
-// 	lagless1Settings = Object.assign({}, lagless1Settings, data);
-// 	$("#scale").text(lagless1Settings.scale);
-// 	$("#scaleSlider").slider("value", lagless1Settings.scale);
-// 	$("#quality").text(lagless1Settings.quality);
-// 	$("#qualitySlider").slider("value", lagless1Settings.quality);
-// });
-
-// lagless2:
-
-// $("#bitrateSlider2").slider({
-// 	min: 0,
-// 	max: 2,
-// 	step: 0.05,
-// 	value: 1,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#bitrate2").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {
-// 		socket.emit("lagless2Settings", {
-// 			videoBitrate: parseFloat(ui.value)
-// 		});
-// 	}
-// });
-//
-// $("#scaleSlider2").slider({
-// 	min: 100,
-// 	max: 720,
-// 	step: 1,
-// 	value: 720,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#scale2").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {
-// 		socket.emit("lagless2Settings", {
-// 			scale: parseInt(ui.value)
-// 		});
-// 	}
-// });
 
 $("#240p2").on("click", function (event) {
 	socket.emit("lagless2Settings", {
@@ -2542,12 +2772,6 @@ $(window).resize(function (event) {
 	// 	}
 });
 
-// https://github.com/yoannmoinet/nipplejs/issues/39
-// force joysticks to recalculate the center:
-// setInterval(function() {
-// 	window.dispatchEvent(new Event("resize"));
-// }, 5000);
-
 function replaceWithTwitch(tab) {
 
 	let twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
@@ -2632,429 +2856,10 @@ function replaceWithLagless(tab) {
 	} else {}
 }
 
-$("#replaceWithTwitch").on("click", function () {
-	replaceWithTwitch();
-});
-
-$("#replaceWithLagless").on("click", function () {
-	replaceWithLagless();
-});
-
-// socket.on("replaceWithTwitch", function () {
-// 	replaceWithTwitch();
-// });
-//
-// socket.on("replaceWithLagless", function () {
-// 	replaceWithTwitch();
-// });
-
-/* STATUS BAR @@@@@@@@@@@@@@@@ */
-// socket.on("lock", function() {
-// 	replaceWithTwitch();
-// });
-
-/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-
-/* AUDIO 3.0 */
-let peer = new SimplePeer({
-	initiator: false,
-	trickle: true,
-});
-
-peer.on("error", function (err) {
-	console.log("error", err)
-});
-
-peer.on("signal", function (data) {
-	console.log("SIGNAL", JSON.stringify(data));
-	socket.emit("clientPeerSignal", JSON.stringify(data));
-});
-
-peer.on("connect", function () {
-	console.log("CONNECT");
-	peer.send(Math.random());
-});
-
-peer.on("data", function (data) {
-	console.log("data: " + data)
-});
-
-socket.on("hostPeerSignal", function (data) {
-	peer.signal(JSON.parse(data));
-});
-
-peer.on("stream", function (stream) {
-	// got remote audio stream, then show it in an audio tag
-	audio.src = window.URL.createObjectURL(stream); // deprecated
-	// 			audio.srcObj = stream;
-	audio.play();
-	audio.volume = 0;
-});
-
-// $("#enableAudioThreeCheckbox").on("change", function () {
-// 	settings.enableAudioThree = this.checked;
-// 	localforage.setItem("settings", JSON.stringify(settings));
-// 	if (settings.enableAudioThree) {
-// 		if (!audioConnected) {
-// 			socket.emit("requestAudio");
-// 			setTimeout(() => {
-// 				audioConnected = true;
-// 			}, 100);
-// 		}
-// 	} else {
-// 		try {
-// 			audio.volume = 0;
-// 			player.volume = settings.volume / 100;
-// 		} catch (error) {}
-// 		$("#audioThreeCheckbox").prop("checked", false);
-// 		$(".audioThreeCheckbox").prop("checked", false);
-// 	}
-// });
-//
-// $("#audioThreeCheckbox").on("change", function () {
-// 	if (!settings.enableAudioThree) {
-// 		$("#audioThreeCheckbox").prop("checked", false);
-// 		swal("You have to enable Audio 3.0 first!");
-// 		return;
-// 	}
-// 	settings.audioThree = this.checked;
-// 	localforage.setItem("settings", JSON.stringify(settings));
-// 	if (settings.audioThree) {
-// 		if (!audioConnected) {
-// 			audio.volume = settings.volume / 100;
-// 		} else {
-// 			try {
-// 				audio.volume = settings.volume / 100;
-// 				player.volume = 0;
-// 			} catch (error) {}
-// 		}
-// 	} else {
-// 		audio.volume = 0;
-// 		player.volume = settings.volume / 100;
-// 	}
-// });
-
-$(".audioThreeCheckbox").on("change", function () {
-	$("#audioThreeCheckbox").trigger("click");
-	setTimeout(() => {
-		$(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
-	}, 100);
-});
-
-/* MOD COMMANDS */
-// selects elements in the future:
-// https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
-
-$("body").popover({
-	selector: ".queueItem",
-	trigger: "focus",
-	html: true,
-	toggle: "popover",
-	title: "Mod Powers",
-	boundary: "window",
-	container: "body",
-	placement: "right",
-	content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
-				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
-				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>'
-});
-// .click(function() {
-// 	setTimeout(() => {
-// 		$('[data-toggle="popover"]').popover("hide");
-// 	}, 8000);
-// });
-
-$("#container").popover({ // must be unique
-	selector: ".viewerElement",
-	// 	trigger: "focus",
-	html: true,
-	toggle: "popover",
-	title: "Mod Powers",
-	boundary: "window",
-	container: "body",
-	placement: "right",
-	content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
-				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
-				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
-				<button id="unban" class="btn btn-secondary"><b>Unban</b></button>'
-}).click(() => {
-	setTimeout(() => {
-		$('[data-toggle="popover"]').popover("hide");
-	}, 8000);
-});
-
-let modPowerUniqueID = "";
-$(document).on("click", ".queueItem", function (event) {
-	$(this).effect("highlight", {}, 2000);
-	modPowerUniqueID = $(this).attr("uniqueid");
-});
-
-$(document).on("click", ".viewerElement", function (event) {
-	$(this).effect("highlight", {}, 2000);
-	modPowerUniqueID = $(this).attr("uniqueid");
-});
-
-$(document).on("click", "#kickFromQueue", function (event) {
-	socket.emit("kickFromQueue", modPowerUniqueID);
-	$("#queuePopup").remove();
-});
-$(document).on("click", "#tempBan", function (event) {
-	socket.emit("tempBan", modPowerUniqueID);
-	$("#queuePopup").remove();
-});
-$(document).on("click", "#permaBan", function (event) {
-	socket.emit("permaBan", modPowerUniqueID);
-	$("#queuePopup").remove();
-});
-$(document).on("click", "#unban", function (event) {
-	socket.emit("unban", modPowerUniqueID);
-	$("#queuePopup").remove();
-});
-
-$(document).on("click", 'i:contains("lock")', function (event) {
-	$(this).effect("highlight", {}, 2000);
-	socket.emit("unlock");
-});
-$(document).on("click", 'i:contains("lock_open")', function (event) {
-	$(this).effect("highlight", {}, 2000);
-	socket.emit("lock");
-});
-
-// todo: reimplement:
-// setInterval(function() {
-// 	let currentTime = Date.now();
-// 	let elapsedTime = currentTime - lastCurrentTime;
-// 	let timeLeftMilli = timeLeft - elapsedTime;
-// 	let timeLeftSec = parseInt(timeLeftMilli / 1000);
-// 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
-// 	let progressBar = $(".progress-bar");
-// 	progressBar.css("width", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
-// }, 200);
-
-$(document).on("click", ".joinQueue", function (event) {
-	let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
-	for (let i = 0; i < 4; i++) {
-		if (i == cNum) {
-			continue;
-		}
-		socket.emit("leaveQueue", i);
-	}
-	socket.emit("joinQueue", cNum);
-});
-
-$(document).on("click", ".leaveQueue", function (event) {
-	let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
-	socket.emit("leaveQueue", cNum);
-});
-
-window.addEventListener("keydown", function (e) {
-	// escape, f11
-	if ([27, 122].indexOf(e.keyCode) > -1) {
-		e.preventDefault();
-		$("body").removeClass("hideScrollbar");
-	}
-}, false);
-
-/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-setInterval(function () {
-	pingTime = Date.now();
-	socket.emit("ping2");
-}, 1000);
-
-socket.on("pong2", function () {
-	let latency = Date.now() - pingTime;
-	$("#ping").text(latency + "ms");
-});
-
-$("#resetSettings").on("click", function (event) {
-	event.preventDefault();
-	localforage.clear().then(function () {
-		location.reload(true);
-	});
-});
-
-/* COLLAPSE BUTTONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-// $(".collapseButton").on("click", function(event) {
-// 	event.preventDefault();
-
-// 	let self = this;
-
-// 	setTimeout(function(self) {
-
-// 		let target = $($(self).attr("data-target"));
-
-// 		if (!target.hasClass("show")) {
-// 			$(self).text("Show");
-
-// 		  make the parent height equal to the button height:
-//  			let height = $(self).outerHeight() + 5;
-//  			$(self).parent().height(height);
-
-// 		} else {
-// 			$(self).text("Hide");
-// 			$(self).parent().css("height", "");
-
-//  			let height = target.outerHeight();
-//  			$(self).parent().height(height);
-// 		}
-
-// 	}, 500, this);
-
-// });
-
-$(".collapseButton").on("click", function (event) {
-	let target = $(this).attr("data-target");
-	if ($(this).attr("collapsed") == "false") {
-		$(this).attr("collapsed", "true");
-		$(target).collapse("hide");
-	} else {
-		$(this).attr("collapsed", "false");
-
-		$(target).parent().animate({
-			"margin-top": "0px"
-		});
-		// 		$(target).parent().css("width", "");
-		$(target).parent().css("height", "");
-
-		// 	$(this).parent().animate({"width": "", "height": ""});
-		let thisId = "#" + $(target).attr("id");
-		let button = $('[data-target="' + thisId + '"]');
-		button.css("align-self", "");
-		button.css("margin-left", "5px");
-
-		setTimeout(() => {
-			$(target).parent().css("width", "");
-			$(target).collapse("show");
-		}, 500);
-	}
-});
-
-$(".collapsible").on("show.bs.collapse", function () {
-
-	//  	$(this).parent().css("margin-top", "");
-	// 	$(this).parent().animate({"margin-top": "0px"});
-	// 	$(this).parent().css("width", "");
-	// 	$(this).parent().css("height", "");
-
-	//  	$(this).parent().animate({"width": "", "height": ""});
-	// 	let thisId = "#" + $(this).attr("id");
-	// 	let button = $('[data-target="' + thisId + '"]');
-	// 	button.css("align-self", "");
-	// 	button.css("margin-left", "5px");
-});
-
-$(".collapsible").on("shown.bs.collapse", function () {
-
-	let thisId = "#" + $(this).attr("id");
-	let button = $('[data-target="' + thisId + '"]');
-	button.text("Hide");
-
-})
-
-$(".collapsible").on("hidden.bs.collapse", function () {
-
-	let thisId = "#" + $(this).attr("id");
-	let button = $('[data-target="' + thisId + '"]');
-	button.text("Show");
-
-	let height = button.outerHeight() + 5;
-	button.parent().height(height);
-
-	let width = button.outerWidth() + 10;
-	button.parent().width(width);
-
-	button.parent().animate({
-		"margin-top": "-60px"
-	});
-
-	// 	button.parent().animate({"height" : height});
-	// 	button.parent().animate({"width": width, "height": height});
-
-	button.css("align-self", "center");
-	button.css("margin-left", "0px");
-
-})
-
-// on blur, reset the controller state,
-// to prevent keys from getting stuck:
-// todo: fix
-// $(window).blur(function () {
-// 	// 	console.log("lost focus");
-// 	controller.reset();
-// 	// 	oldControllerState = controller.getState();
-// 	wasPressedKeyCodes = [];
-// 	sendControllerState();
-// 	clearInterval(sendInputTimer);
-// });
-// $(window).focus(function () {
-// 	// 	console.log("focused");
-// 	sendInputTimer = setInterval(sendInputs, 1000 / 120);
-// 	controller.reset();
-// 	// 	oldControllerState = controller.getState();
-// 	wasPressedKeyCodes = [];
-// 	sendControllerState();
-// });
-
-/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-socket.on("rickroll", function (data) {
-	if (myUsername == data || data == "everyone") {
-		let myPlayer;
-		swal({
-			html: '<canvas id="rickroll"></canvas>',
-			onOpen: () => {
-				let rickrollCanvas = $("#rickroll")[0];
-				myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
-					canvas: rickrollCanvas,
-					loop: false,
-					autoplay: true
-				});
-			},
-			onClose: () => {
-				myPlayer.destroy();
-			},
-			customClass: "swal-wide"
-		});
-
-	}
-});
-
-socket.on("rainbow", function (data) {
-	if (myUniqueID == data || data == "everyone") {
-		$("body").addClass("rainbow-text");
-	}
-});
-
-socket.on("banlist", function (data) {
-	banlist = data;
-});
-
-socket.on("banned", function (data) {
-	let alertMessage = $(".swal2-container")[0];
-	if (typeof alertMessage == "undefined") {
-		swal("You're banned (maybe only temporarily?)");
-	}
-});
+window.replaceWithTwitch = replaceWithTwitch;
+window.replaceWithLagless = replaceWithLagless;
 
 /* FORCE HTTPS */
 if (location.protocol != "https:") {
 	location.href = "https:" + window.location.href.substring(window.location.protocol.length);
 }
-
-/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-socket.on("voteStarted", function (data) {
-	let notification = new Noty({
-		theme: "mint",
-		type: "warning",
-		text: "A vote to change games has started!",
-		timeout: 5000,
-		sounds: {
-			volume: 0.5,
-			sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-			conditions: ["docVisible"],
-		},
-	});
-	notification.show();
-
-});

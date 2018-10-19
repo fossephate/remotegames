@@ -59,8 +59,8 @@ let lagless1Settings = {
 	quality: 60,
 	scale: 30,
 };
-let lagless2Settings = { framerate: 20, videoBitrate: 1, scale: 720 };
-let lagless3Settings = { framerate: 20, videoBitrate: 1, scale: 720 };
+let lagless2Settings = { framerate: 20, videoBitrate: 1, scale: 540 };
+let lagless3Settings = { framerate: 20, videoBitrate: 1, scale: 540 };
 let currentLagless2Settings;
 let currentLagless3Settings;
 
@@ -105,7 +105,7 @@ let laglessClientIds = [
 	[],
 	[],
 ];
-laglessClientUniqueIds = [
+let laglessClientUniqueIds = [
 	[],
 	[],
 	[],
@@ -797,6 +797,15 @@ io.on("connection", function (socket) {
 				clients[index].is_ban = clients[index].is_ban || account.is_ban;
 
 
+				socket.uniqueID = "" + account._id;
+				socket.uniqueID = clients[index].uniqueID.trim();
+
+				socket.is_mod = account.is_mod;
+				socket.is_plus = account.is_plus;
+				socket.is_sub = account.is_sub;
+				socket.is_ban = clients[index].is_ban || account.is_ban;
+
+
 				uniqueIDToPreferredUsernameMap[clients[index].uniqueID] = clients[index].username;
 
 				let accountInfo = {};
@@ -829,13 +838,33 @@ io.on("connection", function (socket) {
 
 	// after recieving the image, broadcast it to viewers
 	socket.on("screenshot", function (data) {
-		lastImage = data;
+		// lastImage = data;
 		// 		if (lastImage === "") {
 		// 			io.emit("quit");
 		// 		}
 		io.to("lagless1").emit("viewImage", data);
 	});
+	// setInterval(() => {
+	// 	io.to("lagless1").emit("viewImage", lastImage);
+	// }, 1000 / 15);
 
+	// chat:
+	socket.on("message", (data) => {
+		let index = findClientByID(socket.id);
+		if (index == -1) {
+			return;
+		}
+		if (clients[index].uniqueID != null) {
+			let msgObj = {
+				userid: client.uniqueID,
+				username: client.username,
+				message: data.message,
+			};
+			io.emit("message", msgObj);
+		}
+	});
+
+	// send inputs:
 	socket.on("sendControllerState", function (data) {
 
 		let index = findClientByID(socket.id);

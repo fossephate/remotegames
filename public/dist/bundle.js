@@ -9995,7 +9995,26 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\r\n#chat {\r\n\theight: 100%;\r\n    display: grid;\r\n    /* grid-template-columns: 1fr 3fr; */\r\n    /* grid-template-areas: \"sidebar main\"; */\r\n\t/* grid-template-rows: 8fr 1fr; */\r\n    /* width: 100vw;\r\n    height: 100vh; */\r\n}\r\n", ""]);
+exports.push([module.i, "\r\n#chat {\r\n\tflex-grow: 1;\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n\tjustify-content: flex-end;\r\n\t/* todo: fix: */\r\n\tmax-height: 500px;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./node_modules/css-loader/index.js!./src/components/Chat/Message.css":
+/*!*******************************************************************!*\
+  !*** ./node_modules/css-loader!./src/components/Chat/Message.css ***!
+  \*******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\r\n\r\n.message {\r\n\tword-break: break-all;\r\n}\r\n", ""]);
 
 // exports
 
@@ -10014,7 +10033,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\r\n#messageList {\r\n\toverflow-y: scroll;\r\n}\r\n\r\n#messageList > div {\r\n\tbackground-color: #EEE;\r\n}\r\n\r\n#messageList > div:nth-child(odd) {\r\n\tbackground-color: #DDD;\r\n}\r\n", ""]);
+exports.push([module.i, "\r\n#messageList {\r\n\theight: 100%;\r\n\toverflow-y: auto;\r\n}\r\n\r\n#messageList > div {\r\n\tbackground-color: #EEE;\r\n}\r\n\r\n#messageList > div:nth-child(odd) {\r\n\tbackground-color: #DDD;\r\n}\r\n", ""]);
 
 // exports
 
@@ -10033,7 +10052,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\r\n\r\n#SendMessageForm {\r\n\r\n}\r\n\r\n#messageBox {\r\n\r\n}\r\n", ""]);
+exports.push([module.i, "\r\n\r\n#SendMessageForm {\r\n\tdisplay: flex;\r\n\tflex-direction: row;\r\n\tjustify-content: center;\r\n\tmin-height: 60px;\r\n}\r\n\r\n#messageBox {\r\n\tdisplay: flex;\r\n\twidth: 90%;\r\n\tresize: none;\r\n}\r\n", ""]);
 
 // exports
 
@@ -54990,6 +55009,2443 @@ exports.PassThrough = __webpack_require__(/*! ./lib/_stream_passthrough.js */ ".
 
 /***/ }),
 
+/***/ "./node_modules/redux-saga/es/effects.js":
+/*!***********************************************!*\
+  !*** ./node_modules/redux-saga/es/effects.js ***!
+  \***********************************************/
+/*! exports provided: take, takem, put, all, race, call, apply, cps, fork, spawn, join, cancel, select, actionChannel, cancelled, flush, getContext, setContext, takeEvery, takeLatest, throttle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _internal_io__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./internal/io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "take", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["take"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "takem", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["takem"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "put", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["put"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "all", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["all"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "race", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["race"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "call", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["call"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "apply", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["apply"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "cps", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["cps"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "fork", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["fork"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "spawn", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["spawn"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "join", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["join"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "cancel", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["cancel"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "select", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["select"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "actionChannel", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["actionChannel"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "cancelled", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["cancelled"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "flush", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["flush"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "getContext", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["getContext"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "setContext", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_0__["setContext"]; });
+
+/* harmony import */ var _internal_io_helpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./internal/io-helpers */ "./node_modules/redux-saga/es/internal/io-helpers.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "takeEvery", function() { return _internal_io_helpers__WEBPACK_IMPORTED_MODULE_1__["takeEvery"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "takeLatest", function() { return _internal_io_helpers__WEBPACK_IMPORTED_MODULE_1__["takeLatest"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "throttle", function() { return _internal_io_helpers__WEBPACK_IMPORTED_MODULE_1__["throttle"]; });
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/index.js":
+/*!*********************************************!*\
+  !*** ./node_modules/redux-saga/es/index.js ***!
+  \*********************************************/
+/*! exports provided: default, runSaga, END, eventChannel, channel, buffers, takeEvery, takeLatest, throttle, delay, CANCEL, detach, effects, utils */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _internal_middleware__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./internal/middleware */ "./node_modules/redux-saga/es/internal/middleware.js");
+/* harmony import */ var _internal_runSaga__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./internal/runSaga */ "./node_modules/redux-saga/es/internal/runSaga.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "runSaga", function() { return _internal_runSaga__WEBPACK_IMPORTED_MODULE_1__["runSaga"]; });
+
+/* harmony import */ var _internal_channel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./internal/channel */ "./node_modules/redux-saga/es/internal/channel.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "END", function() { return _internal_channel__WEBPACK_IMPORTED_MODULE_2__["END"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "eventChannel", function() { return _internal_channel__WEBPACK_IMPORTED_MODULE_2__["eventChannel"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "channel", function() { return _internal_channel__WEBPACK_IMPORTED_MODULE_2__["channel"]; });
+
+/* harmony import */ var _internal_buffers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./internal/buffers */ "./node_modules/redux-saga/es/internal/buffers.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "buffers", function() { return _internal_buffers__WEBPACK_IMPORTED_MODULE_3__["buffers"]; });
+
+/* harmony import */ var _internal_sagaHelpers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./internal/sagaHelpers */ "./node_modules/redux-saga/es/internal/sagaHelpers/index.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "takeEvery", function() { return _internal_sagaHelpers__WEBPACK_IMPORTED_MODULE_4__["takeEvery"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "takeLatest", function() { return _internal_sagaHelpers__WEBPACK_IMPORTED_MODULE_4__["takeLatest"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "throttle", function() { return _internal_sagaHelpers__WEBPACK_IMPORTED_MODULE_4__["throttle"]; });
+
+/* harmony import */ var _internal_utils__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./internal/utils */ "./node_modules/redux-saga/es/internal/utils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "delay", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_5__["delay"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CANCEL", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_5__["CANCEL"]; });
+
+/* harmony import */ var _internal_io__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./internal/io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "detach", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_6__["detach"]; });
+
+/* harmony import */ var _effects__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./effects */ "./node_modules/redux-saga/es/effects.js");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "effects", function() { return _effects__WEBPACK_IMPORTED_MODULE_7__; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./utils */ "./node_modules/redux-saga/es/utils.js");
+/* harmony reexport (module object) */ __webpack_require__.d(__webpack_exports__, "utils", function() { return _utils__WEBPACK_IMPORTED_MODULE_8__; });
+
+/* harmony default export */ __webpack_exports__["default"] = (_internal_middleware__WEBPACK_IMPORTED_MODULE_0__["default"]);
+
+
+
+
+
+
+
+
+
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/buffers.js":
+/*!********************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/buffers.js ***!
+  \********************************************************/
+/*! exports provided: BUFFER_OVERFLOW, buffers */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "BUFFER_OVERFLOW", function() { return BUFFER_OVERFLOW; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "buffers", function() { return buffers; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/redux-saga/es/internal/utils.js");
+
+
+var BUFFER_OVERFLOW = "Channel's Buffer overflow!";
+
+var ON_OVERFLOW_THROW = 1;
+var ON_OVERFLOW_DROP = 2;
+var ON_OVERFLOW_SLIDE = 3;
+var ON_OVERFLOW_EXPAND = 4;
+
+var zeroBuffer = { isEmpty: _utils__WEBPACK_IMPORTED_MODULE_0__["kTrue"], put: _utils__WEBPACK_IMPORTED_MODULE_0__["noop"], take: _utils__WEBPACK_IMPORTED_MODULE_0__["noop"] };
+
+function ringBuffer() {
+  var limit = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 10;
+  var overflowAction = arguments[1];
+
+  var arr = new Array(limit);
+  var length = 0;
+  var pushIndex = 0;
+  var popIndex = 0;
+
+  var push = function push(it) {
+    arr[pushIndex] = it;
+    pushIndex = (pushIndex + 1) % limit;
+    length++;
+  };
+
+  var take = function take() {
+    if (length != 0) {
+      var it = arr[popIndex];
+      arr[popIndex] = null;
+      length--;
+      popIndex = (popIndex + 1) % limit;
+      return it;
+    }
+  };
+
+  var flush = function flush() {
+    var items = [];
+    while (length) {
+      items.push(take());
+    }
+    return items;
+  };
+
+  return {
+    isEmpty: function isEmpty() {
+      return length == 0;
+    },
+    put: function put(it) {
+      if (length < limit) {
+        push(it);
+      } else {
+        var doubledLimit = void 0;
+        switch (overflowAction) {
+          case ON_OVERFLOW_THROW:
+            throw new Error(BUFFER_OVERFLOW);
+          case ON_OVERFLOW_SLIDE:
+            arr[pushIndex] = it;
+            pushIndex = (pushIndex + 1) % limit;
+            popIndex = pushIndex;
+            break;
+          case ON_OVERFLOW_EXPAND:
+            doubledLimit = 2 * limit;
+
+            arr = flush();
+
+            length = arr.length;
+            pushIndex = arr.length;
+            popIndex = 0;
+
+            arr.length = doubledLimit;
+            limit = doubledLimit;
+
+            push(it);
+            break;
+          default:
+          // DROP
+        }
+      }
+    },
+    take: take,
+    flush: flush
+  };
+}
+
+var buffers = {
+  none: function none() {
+    return zeroBuffer;
+  },
+  fixed: function fixed(limit) {
+    return ringBuffer(limit, ON_OVERFLOW_THROW);
+  },
+  dropping: function dropping(limit) {
+    return ringBuffer(limit, ON_OVERFLOW_DROP);
+  },
+  sliding: function sliding(limit) {
+    return ringBuffer(limit, ON_OVERFLOW_SLIDE);
+  },
+  expanding: function expanding(initialSize) {
+    return ringBuffer(initialSize, ON_OVERFLOW_EXPAND);
+  }
+};
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/channel.js":
+/*!********************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/channel.js ***!
+  \********************************************************/
+/*! exports provided: END, isEnd, emitter, INVALID_BUFFER, UNDEFINED_INPUT_ERROR, channel, eventChannel, stdChannel */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "END", function() { return END; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isEnd", function() { return isEnd; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "emitter", function() { return emitter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "INVALID_BUFFER", function() { return INVALID_BUFFER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "UNDEFINED_INPUT_ERROR", function() { return UNDEFINED_INPUT_ERROR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "channel", function() { return channel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "eventChannel", function() { return eventChannel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "stdChannel", function() { return stdChannel; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/redux-saga/es/internal/utils.js");
+/* harmony import */ var _buffers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./buffers */ "./node_modules/redux-saga/es/internal/buffers.js");
+/* harmony import */ var _scheduler__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./scheduler */ "./node_modules/redux-saga/es/internal/scheduler.js");
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+
+
+
+
+var CHANNEL_END_TYPE = '@@redux-saga/CHANNEL_END';
+var END = { type: CHANNEL_END_TYPE };
+var isEnd = function isEnd(a) {
+  return a && a.type === CHANNEL_END_TYPE;
+};
+
+function emitter() {
+  var subscribers = [];
+
+  function subscribe(sub) {
+    subscribers.push(sub);
+    return function () {
+      return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["remove"])(subscribers, sub);
+    };
+  }
+
+  function emit(item) {
+    var arr = subscribers.slice();
+    for (var i = 0, len = arr.length; i < len; i++) {
+      arr[i](item);
+    }
+  }
+
+  return {
+    subscribe: subscribe,
+    emit: emit
+  };
+}
+
+var INVALID_BUFFER = 'invalid buffer passed to channel factory function';
+var UNDEFINED_INPUT_ERROR = 'Saga was provided with an undefined action';
+
+if (true) {
+  UNDEFINED_INPUT_ERROR += '\nHints:\n    - check that your Action Creator returns a non-undefined value\n    - if the Saga was started using runSaga, check that your subscribe source provides the action to its listeners\n  ';
+}
+
+function channel() {
+  var buffer = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _buffers__WEBPACK_IMPORTED_MODULE_1__["buffers"].fixed();
+
+  var closed = false;
+  var takers = [];
+
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(buffer, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].buffer, INVALID_BUFFER);
+
+  function checkForbiddenStates() {
+    if (closed && takers.length) {
+      throw Object(_utils__WEBPACK_IMPORTED_MODULE_0__["internalErr"])('Cannot have a closed channel with pending takers');
+    }
+    if (takers.length && !buffer.isEmpty()) {
+      throw Object(_utils__WEBPACK_IMPORTED_MODULE_0__["internalErr"])('Cannot have pending takers with non empty buffer');
+    }
+  }
+
+  function put(input) {
+    checkForbiddenStates();
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(input, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, UNDEFINED_INPUT_ERROR);
+    if (closed) {
+      return;
+    }
+    if (!takers.length) {
+      return buffer.put(input);
+    }
+    for (var i = 0; i < takers.length; i++) {
+      var cb = takers[i];
+      if (!cb[_utils__WEBPACK_IMPORTED_MODULE_0__["MATCH"]] || cb[_utils__WEBPACK_IMPORTED_MODULE_0__["MATCH"]](input)) {
+        takers.splice(i, 1);
+        return cb(input);
+      }
+    }
+  }
+
+  function take(cb) {
+    checkForbiddenStates();
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(cb, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func, "channel.take's callback must be a function");
+
+    if (closed && buffer.isEmpty()) {
+      cb(END);
+    } else if (!buffer.isEmpty()) {
+      cb(buffer.take());
+    } else {
+      takers.push(cb);
+      cb.cancel = function () {
+        return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["remove"])(takers, cb);
+      };
+    }
+  }
+
+  function flush(cb) {
+    checkForbiddenStates(); // TODO: check if some new state should be forbidden now
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(cb, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func, "channel.flush' callback must be a function");
+    if (closed && buffer.isEmpty()) {
+      cb(END);
+      return;
+    }
+    cb(buffer.flush());
+  }
+
+  function close() {
+    checkForbiddenStates();
+    if (!closed) {
+      closed = true;
+      if (takers.length) {
+        var arr = takers;
+        takers = [];
+        for (var i = 0, len = arr.length; i < len; i++) {
+          arr[i](END);
+        }
+      }
+    }
+  }
+
+  return {
+    take: take,
+    put: put,
+    flush: flush,
+    close: close,
+    get __takers__() {
+      return takers;
+    },
+    get __closed__() {
+      return closed;
+    }
+  };
+}
+
+function eventChannel(subscribe) {
+  var buffer = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : _buffers__WEBPACK_IMPORTED_MODULE_1__["buffers"].none();
+  var matcher = arguments[2];
+
+  /**
+    should be if(typeof matcher !== undefined) instead?
+    see PR #273 for a background discussion
+  **/
+  if (arguments.length > 2) {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(matcher, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func, 'Invalid match function passed to eventChannel');
+  }
+
+  var chan = channel(buffer);
+  var close = function close() {
+    if (!chan.__closed__) {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+      chan.close();
+    }
+  };
+  var unsubscribe = subscribe(function (input) {
+    if (isEnd(input)) {
+      close();
+      return;
+    }
+    if (matcher && !matcher(input)) {
+      return;
+    }
+    chan.put(input);
+  });
+  if (chan.__closed__) {
+    unsubscribe();
+  }
+
+  if (!_utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(unsubscribe)) {
+    throw new Error('in eventChannel: subscribe should return a function to unsubscribe');
+  }
+
+  return {
+    take: chan.take,
+    flush: chan.flush,
+    close: close
+  };
+}
+
+function stdChannel(subscribe) {
+  var chan = eventChannel(function (cb) {
+    return subscribe(function (input) {
+      if (input[_utils__WEBPACK_IMPORTED_MODULE_0__["SAGA_ACTION"]]) {
+        cb(input);
+        return;
+      }
+      Object(_scheduler__WEBPACK_IMPORTED_MODULE_2__["asap"])(function () {
+        return cb(input);
+      });
+    });
+  });
+
+  return _extends({}, chan, {
+    take: function take(cb, matcher) {
+      if (arguments.length > 1) {
+        Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(matcher, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func, "channel.take's matcher argument must be a function");
+        cb[_utils__WEBPACK_IMPORTED_MODULE_0__["MATCH"]] = matcher;
+      }
+      chan.take(cb);
+    }
+  });
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/io-helpers.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/io-helpers.js ***!
+  \***********************************************************/
+/*! exports provided: takeEvery, takeLatest, throttle */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "takeEvery", function() { return takeEvery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "takeLatest", function() { return takeLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "throttle", function() { return throttle; });
+/* harmony import */ var _io__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony import */ var _sagaHelpers__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./sagaHelpers */ "./node_modules/redux-saga/es/internal/sagaHelpers/index.js");
+
+
+
+function takeEvery(patternOrChannel, worker) {
+  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  return _io__WEBPACK_IMPORTED_MODULE_0__["fork"].apply(undefined, [_sagaHelpers__WEBPACK_IMPORTED_MODULE_1__["takeEveryHelper"], patternOrChannel, worker].concat(args));
+}
+
+function takeLatest(patternOrChannel, worker) {
+  for (var _len2 = arguments.length, args = Array(_len2 > 2 ? _len2 - 2 : 0), _key2 = 2; _key2 < _len2; _key2++) {
+    args[_key2 - 2] = arguments[_key2];
+  }
+
+  return _io__WEBPACK_IMPORTED_MODULE_0__["fork"].apply(undefined, [_sagaHelpers__WEBPACK_IMPORTED_MODULE_1__["takeLatestHelper"], patternOrChannel, worker].concat(args));
+}
+
+function throttle(ms, pattern, worker) {
+  for (var _len3 = arguments.length, args = Array(_len3 > 3 ? _len3 - 3 : 0), _key3 = 3; _key3 < _len3; _key3++) {
+    args[_key3 - 3] = arguments[_key3];
+  }
+
+  return _io__WEBPACK_IMPORTED_MODULE_0__["fork"].apply(undefined, [_sagaHelpers__WEBPACK_IMPORTED_MODULE_1__["throttleHelper"], ms, pattern, worker].concat(args));
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/io.js":
+/*!***************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/io.js ***!
+  \***************************************************/
+/*! exports provided: detach, take, takem, put, all, race, call, apply, cps, fork, spawn, join, cancel, select, actionChannel, cancelled, flush, getContext, setContext, asEffect */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "detach", function() { return detach; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "take", function() { return take; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "takem", function() { return takem; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "put", function() { return put; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "all", function() { return all; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "race", function() { return race; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "call", function() { return call; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "apply", function() { return apply; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cps", function() { return cps; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fork", function() { return fork; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "spawn", function() { return spawn; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "join", function() { return join; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cancel", function() { return cancel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "select", function() { return select; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "actionChannel", function() { return actionChannel; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cancelled", function() { return cancelled; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flush", function() { return flush; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getContext", function() { return getContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setContext", function() { return setContext; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "asEffect", function() { return asEffect; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/redux-saga/es/internal/utils.js");
+
+
+var IO = /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_0__["sym"])('IO');
+var TAKE = 'TAKE';
+var PUT = 'PUT';
+var ALL = 'ALL';
+var RACE = 'RACE';
+var CALL = 'CALL';
+var CPS = 'CPS';
+var FORK = 'FORK';
+var JOIN = 'JOIN';
+var CANCEL = 'CANCEL';
+var SELECT = 'SELECT';
+var ACTION_CHANNEL = 'ACTION_CHANNEL';
+var CANCELLED = 'CANCELLED';
+var FLUSH = 'FLUSH';
+var GET_CONTEXT = 'GET_CONTEXT';
+var SET_CONTEXT = 'SET_CONTEXT';
+
+var TEST_HINT = '\n(HINT: if you are getting this errors in tests, consider using createMockTask from redux-saga/utils)';
+
+var effect = function effect(type, payload) {
+  var _ref;
+
+  return _ref = {}, _ref[IO] = true, _ref[type] = payload, _ref;
+};
+
+var detach = function detach(eff) {
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(asEffect.fork(eff), _utils__WEBPACK_IMPORTED_MODULE_0__["is"].object, 'detach(eff): argument must be a fork effect');
+  eff[FORK].detached = true;
+  return eff;
+};
+
+function take() {
+  var patternOrChannel = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '*';
+
+  if (arguments.length) {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(arguments[0], _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'take(patternOrChannel): patternOrChannel is undefined');
+  }
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].pattern(patternOrChannel)) {
+    return effect(TAKE, { pattern: patternOrChannel });
+  }
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].channel(patternOrChannel)) {
+    return effect(TAKE, { channel: patternOrChannel });
+  }
+  throw new Error('take(patternOrChannel): argument ' + String(patternOrChannel) + ' is not valid channel or a valid pattern');
+}
+
+take.maybe = function () {
+  var eff = take.apply(undefined, arguments);
+  eff[TAKE].maybe = true;
+  return eff;
+};
+
+var takem = /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_0__["deprecate"])(take.maybe, /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_0__["updateIncentive"])('takem', 'take.maybe'));
+
+function put(channel, action) {
+  if (arguments.length > 1) {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(channel, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'put(channel, action): argument channel is undefined');
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(channel, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].channel, 'put(channel, action): argument ' + channel + ' is not a valid channel');
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(action, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'put(channel, action): argument action is undefined');
+  } else {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(channel, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'put(action): argument action is undefined');
+    action = channel;
+    channel = null;
+  }
+  return effect(PUT, { channel: channel, action: action });
+}
+
+put.resolve = function () {
+  var eff = put.apply(undefined, arguments);
+  eff[PUT].resolve = true;
+  return eff;
+};
+
+put.sync = /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_0__["deprecate"])(put.resolve, /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_0__["updateIncentive"])('put.sync', 'put.resolve'));
+
+function all(effects) {
+  return effect(ALL, effects);
+}
+
+function race(effects) {
+  return effect(RACE, effects);
+}
+
+function getFnCallDesc(meth, fn, args) {
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(fn, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, meth + ': argument fn is undefined');
+
+  var context = null;
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].array(fn)) {
+    var _fn = fn;
+    context = _fn[0];
+    fn = _fn[1];
+  } else if (fn.fn) {
+    var _fn2 = fn;
+    context = _fn2.context;
+    fn = _fn2.fn;
+  }
+  if (context && _utils__WEBPACK_IMPORTED_MODULE_0__["is"].string(fn) && _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(context[fn])) {
+    fn = context[fn];
+  }
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(fn, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func, meth + ': argument ' + fn + ' is not a function');
+
+  return { context: context, fn: fn, args: args };
+}
+
+function call(fn) {
+  for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    args[_key - 1] = arguments[_key];
+  }
+
+  return effect(CALL, getFnCallDesc('call', fn, args));
+}
+
+function apply(context, fn) {
+  var args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+
+  return effect(CALL, getFnCallDesc('apply', { context: context, fn: fn }, args));
+}
+
+function cps(fn) {
+  for (var _len2 = arguments.length, args = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+    args[_key2 - 1] = arguments[_key2];
+  }
+
+  return effect(CPS, getFnCallDesc('cps', fn, args));
+}
+
+function fork(fn) {
+  for (var _len3 = arguments.length, args = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
+    args[_key3 - 1] = arguments[_key3];
+  }
+
+  return effect(FORK, getFnCallDesc('fork', fn, args));
+}
+
+function spawn(fn) {
+  for (var _len4 = arguments.length, args = Array(_len4 > 1 ? _len4 - 1 : 0), _key4 = 1; _key4 < _len4; _key4++) {
+    args[_key4 - 1] = arguments[_key4];
+  }
+
+  return detach(fork.apply(undefined, [fn].concat(args)));
+}
+
+function join() {
+  for (var _len5 = arguments.length, tasks = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+    tasks[_key5] = arguments[_key5];
+  }
+
+  if (tasks.length > 1) {
+    return all(tasks.map(function (t) {
+      return join(t);
+    }));
+  }
+  var task = tasks[0];
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(task, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'join(task): argument task is undefined');
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(task, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].task, 'join(task): argument ' + task + ' is not a valid Task object ' + TEST_HINT);
+  return effect(JOIN, task);
+}
+
+function cancel() {
+  for (var _len6 = arguments.length, tasks = Array(_len6), _key6 = 0; _key6 < _len6; _key6++) {
+    tasks[_key6] = arguments[_key6];
+  }
+
+  if (tasks.length > 1) {
+    return all(tasks.map(function (t) {
+      return cancel(t);
+    }));
+  }
+  var task = tasks[0];
+  if (tasks.length === 1) {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(task, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'cancel(task): argument task is undefined');
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(task, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].task, 'cancel(task): argument ' + task + ' is not a valid Task object ' + TEST_HINT);
+  }
+  return effect(CANCEL, task || _utils__WEBPACK_IMPORTED_MODULE_0__["SELF_CANCELLATION"]);
+}
+
+function select(selector) {
+  for (var _len7 = arguments.length, args = Array(_len7 > 1 ? _len7 - 1 : 0), _key7 = 1; _key7 < _len7; _key7++) {
+    args[_key7 - 1] = arguments[_key7];
+  }
+
+  if (arguments.length === 0) {
+    selector = _utils__WEBPACK_IMPORTED_MODULE_0__["ident"];
+  } else {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(selector, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'select(selector,[...]): argument selector is undefined');
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(selector, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func, 'select(selector,[...]): argument ' + selector + ' is not a function');
+  }
+  return effect(SELECT, { selector: selector, args: args });
+}
+
+/**
+  channel(pattern, [buffer])    => creates an event channel for store actions
+**/
+function actionChannel(pattern, buffer) {
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(pattern, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'actionChannel(pattern,...): argument pattern is undefined');
+  if (arguments.length > 1) {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(buffer, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].notUndef, 'actionChannel(pattern, buffer): argument buffer is undefined');
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(buffer, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].buffer, 'actionChannel(pattern, buffer): argument ' + buffer + ' is not a valid buffer');
+  }
+  return effect(ACTION_CHANNEL, { pattern: pattern, buffer: buffer });
+}
+
+function cancelled() {
+  return effect(CANCELLED, {});
+}
+
+function flush(channel) {
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(channel, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].channel, 'flush(channel): argument ' + channel + ' is not valid channel');
+  return effect(FLUSH, channel);
+}
+
+function getContext(prop) {
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(prop, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].string, 'getContext(prop): argument ' + prop + ' is not a string');
+  return effect(GET_CONTEXT, prop);
+}
+
+function setContext(props) {
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(props, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].object, Object(_utils__WEBPACK_IMPORTED_MODULE_0__["createSetContextWarning"])(null, props));
+  return effect(SET_CONTEXT, props);
+}
+
+var createAsEffectType = function createAsEffectType(type) {
+  return function (effect) {
+    return effect && effect[IO] && effect[type];
+  };
+};
+
+var asEffect = {
+  take: /*#__PURE__*/createAsEffectType(TAKE),
+  put: /*#__PURE__*/createAsEffectType(PUT),
+  all: /*#__PURE__*/createAsEffectType(ALL),
+  race: /*#__PURE__*/createAsEffectType(RACE),
+  call: /*#__PURE__*/createAsEffectType(CALL),
+  cps: /*#__PURE__*/createAsEffectType(CPS),
+  fork: /*#__PURE__*/createAsEffectType(FORK),
+  join: /*#__PURE__*/createAsEffectType(JOIN),
+  cancel: /*#__PURE__*/createAsEffectType(CANCEL),
+  select: /*#__PURE__*/createAsEffectType(SELECT),
+  actionChannel: /*#__PURE__*/createAsEffectType(ACTION_CHANNEL),
+  cancelled: /*#__PURE__*/createAsEffectType(CANCELLED),
+  flush: /*#__PURE__*/createAsEffectType(FLUSH),
+  getContext: /*#__PURE__*/createAsEffectType(GET_CONTEXT),
+  setContext: /*#__PURE__*/createAsEffectType(SET_CONTEXT)
+};
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/middleware.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/middleware.js ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return sagaMiddlewareFactory; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/redux-saga/es/internal/utils.js");
+/* harmony import */ var _channel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./channel */ "./node_modules/redux-saga/es/internal/channel.js");
+/* harmony import */ var _runSaga__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./runSaga */ "./node_modules/redux-saga/es/internal/runSaga.js");
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+
+
+
+
+
+function sagaMiddlewareFactory() {
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var _ref$context = _ref.context,
+      context = _ref$context === undefined ? {} : _ref$context,
+      options = _objectWithoutProperties(_ref, ['context']);
+
+  var sagaMonitor = options.sagaMonitor,
+      logger = options.logger,
+      onError = options.onError;
+
+
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(options)) {
+    if (false) {} else {
+      throw new Error('You passed a function to the Saga middleware. You are likely trying to start a        Saga by directly passing it to the middleware. This is no longer possible starting from 0.10.0.        To run a Saga, you must do it dynamically AFTER mounting the middleware into the store.\n        Example:\n          import createSagaMiddleware from \'redux-saga\'\n          ... other imports\n\n          const sagaMiddleware = createSagaMiddleware()\n          const store = createStore(reducer, applyMiddleware(sagaMiddleware))\n          sagaMiddleware.run(saga, ...args)\n      ');
+    }
+  }
+
+  if (logger && !_utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(logger)) {
+    throw new Error('`options.logger` passed to the Saga middleware is not a function!');
+  }
+
+  if ("development" === 'development' && options.onerror) {
+    throw new Error('`options.onerror` was removed. Use `options.onError` instead.');
+  }
+
+  if (onError && !_utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(onError)) {
+    throw new Error('`options.onError` passed to the Saga middleware is not a function!');
+  }
+
+  if (options.emitter && !_utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(options.emitter)) {
+    throw new Error('`options.emitter` passed to the Saga middleware is not a function!');
+  }
+
+  function sagaMiddleware(_ref2) {
+    var getState = _ref2.getState,
+        dispatch = _ref2.dispatch;
+
+    var sagaEmitter = Object(_channel__WEBPACK_IMPORTED_MODULE_1__["emitter"])();
+    sagaEmitter.emit = (options.emitter || _utils__WEBPACK_IMPORTED_MODULE_0__["ident"])(sagaEmitter.emit);
+
+    sagaMiddleware.run = _runSaga__WEBPACK_IMPORTED_MODULE_2__["runSaga"].bind(null, {
+      context: context,
+      subscribe: sagaEmitter.subscribe,
+      dispatch: dispatch,
+      getState: getState,
+      sagaMonitor: sagaMonitor,
+      logger: logger,
+      onError: onError
+    });
+
+    return function (next) {
+      return function (action) {
+        if (sagaMonitor && sagaMonitor.actionDispatched) {
+          sagaMonitor.actionDispatched(action);
+        }
+        var result = next(action); // hit reducers
+        sagaEmitter.emit(action);
+        return result;
+      };
+    };
+  }
+
+  sagaMiddleware.run = function () {
+    throw new Error('Before running a Saga, you must mount the Saga middleware on the Store using applyMiddleware');
+  };
+
+  sagaMiddleware.setContext = function (props) {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(props, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].object, Object(_utils__WEBPACK_IMPORTED_MODULE_0__["createSetContextWarning"])('sagaMiddleware', props));
+    _utils__WEBPACK_IMPORTED_MODULE_0__["object"].assign(context, props);
+  };
+
+  return sagaMiddleware;
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/proc.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/proc.js ***!
+  \*****************************************************/
+/*! exports provided: NOT_ITERATOR_ERROR, CHANNEL_END, TASK_CANCEL, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NOT_ITERATOR_ERROR", function() { return NOT_ITERATOR_ERROR; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CHANNEL_END", function() { return CHANNEL_END; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TASK_CANCEL", function() { return TASK_CANCEL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return proc; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/redux-saga/es/internal/utils.js");
+/* harmony import */ var _scheduler__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./scheduler */ "./node_modules/redux-saga/es/internal/scheduler.js");
+/* harmony import */ var _io__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony import */ var _channel__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./channel */ "./node_modules/redux-saga/es/internal/channel.js");
+/* harmony import */ var _buffers__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./buffers */ "./node_modules/redux-saga/es/internal/buffers.js");
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+function _defineEnumerableProperties(obj, descs) { for (var key in descs) { var desc = descs[key]; desc.configurable = desc.enumerable = true; if ("value" in desc) desc.writable = true; Object.defineProperty(obj, key, desc); } return obj; }
+
+
+
+
+
+
+
+var NOT_ITERATOR_ERROR = 'proc first argument (Saga function result) must be an iterator';
+
+var CHANNEL_END = {
+  toString: function toString() {
+    return '@@redux-saga/CHANNEL_END';
+  }
+};
+var TASK_CANCEL = {
+  toString: function toString() {
+    return '@@redux-saga/TASK_CANCEL';
+  }
+};
+
+var matchers = {
+  wildcard: function wildcard() {
+    return _utils__WEBPACK_IMPORTED_MODULE_0__["kTrue"];
+  },
+  default: function _default(pattern) {
+    return (typeof pattern === 'undefined' ? 'undefined' : _typeof(pattern)) === 'symbol' ? function (input) {
+      return input.type === pattern;
+    } : function (input) {
+      return input.type === String(pattern);
+    };
+  },
+  array: function array(patterns) {
+    return function (input) {
+      return patterns.some(function (p) {
+        return matcher(p)(input);
+      });
+    };
+  },
+  predicate: function predicate(_predicate) {
+    return function (input) {
+      return _predicate(input);
+    };
+  }
+};
+
+function matcher(pattern) {
+  // prettier-ignore
+  return (pattern === '*' ? matchers.wildcard : _utils__WEBPACK_IMPORTED_MODULE_0__["is"].array(pattern) ? matchers.array : _utils__WEBPACK_IMPORTED_MODULE_0__["is"].stringableFunc(pattern) ? matchers.default : _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(pattern) ? matchers.predicate : matchers.default)(pattern);
+}
+
+/**
+  Used to track a parent task and its forks
+  In the new fork model, forked tasks are attached by default to their parent
+  We model this using the concept of Parent task && main Task
+  main task is the main flow of the current Generator, the parent tasks is the
+  aggregation of the main tasks + all its forked tasks.
+  Thus the whole model represents an execution tree with multiple branches (vs the
+  linear execution tree in sequential (non parallel) programming)
+
+  A parent tasks has the following semantics
+  - It completes if all its forks either complete or all cancelled
+  - If it's cancelled, all forks are cancelled as well
+  - It aborts if any uncaught error bubbles up from forks
+  - If it completes, the return value is the one returned by the main task
+**/
+function forkQueue(name, mainTask, cb) {
+  var tasks = [],
+      result = void 0,
+      completed = false;
+  addTask(mainTask);
+
+  function abort(err) {
+    cancelAll();
+    cb(err, true);
+  }
+
+  function addTask(task) {
+    tasks.push(task);
+    task.cont = function (res, isErr) {
+      if (completed) {
+        return;
+      }
+
+      Object(_utils__WEBPACK_IMPORTED_MODULE_0__["remove"])(tasks, task);
+      task.cont = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+      if (isErr) {
+        abort(res);
+      } else {
+        if (task === mainTask) {
+          result = res;
+        }
+        if (!tasks.length) {
+          completed = true;
+          cb(result);
+        }
+      }
+    };
+    // task.cont.cancel = task.cancel
+  }
+
+  function cancelAll() {
+    if (completed) {
+      return;
+    }
+    completed = true;
+    tasks.forEach(function (t) {
+      t.cont = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+      t.cancel();
+    });
+    tasks = [];
+  }
+
+  return {
+    addTask: addTask,
+    cancelAll: cancelAll,
+    abort: abort,
+    getTasks: function getTasks() {
+      return tasks;
+    },
+    taskNames: function taskNames() {
+      return tasks.map(function (t) {
+        return t.name;
+      });
+    }
+  };
+}
+
+function createTaskIterator(_ref) {
+  var context = _ref.context,
+      fn = _ref.fn,
+      args = _ref.args;
+
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].iterator(fn)) {
+    return fn;
+  }
+
+  // catch synchronous failures; see #152 and #441
+  var result = void 0,
+      error = void 0;
+  try {
+    result = fn.apply(context, args);
+  } catch (err) {
+    error = err;
+  }
+
+  // i.e. a generator function returns an iterator
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].iterator(result)) {
+    return result;
+  }
+
+  // do not bubble up synchronous failures for detached forks
+  // instead create a failed task. See #152 and #441
+  return error ? Object(_utils__WEBPACK_IMPORTED_MODULE_0__["makeIterator"])(function () {
+    throw error;
+  }) : Object(_utils__WEBPACK_IMPORTED_MODULE_0__["makeIterator"])(function () {
+    var pc = void 0;
+    var eff = { done: false, value: result };
+    var ret = function ret(value) {
+      return { done: true, value: value };
+    };
+    return function (arg) {
+      if (!pc) {
+        pc = true;
+        return eff;
+      } else {
+        return ret(arg);
+      }
+    };
+  }());
+}
+
+var wrapHelper = function wrapHelper(helper) {
+  return { fn: helper };
+};
+
+function proc(iterator) {
+  var subscribe = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : function () {
+    return _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+  };
+  var dispatch = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+  var getState = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+  var parentContext = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
+  var options = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : {};
+  var parentEffectId = arguments.length > 6 && arguments[6] !== undefined ? arguments[6] : 0;
+  var name = arguments.length > 7 && arguments[7] !== undefined ? arguments[7] : 'anonymous';
+  var cont = arguments[8];
+
+  Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(iterator, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].iterator, NOT_ITERATOR_ERROR);
+
+  var effectsString = '[...effects]';
+  var runParallelEffect = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["deprecate"])(runAllEffect, Object(_utils__WEBPACK_IMPORTED_MODULE_0__["updateIncentive"])(effectsString, 'all(' + effectsString + ')'));
+
+  var sagaMonitor = options.sagaMonitor,
+      logger = options.logger,
+      onError = options.onError;
+
+  var log = logger || _utils__WEBPACK_IMPORTED_MODULE_0__["log"];
+  var logError = function logError(err) {
+    var message = err.sagaStack;
+
+    if (!message && err.stack) {
+      message = err.stack.split('\n')[0].indexOf(err.message) !== -1 ? err.stack : 'Error: ' + err.message + '\n' + err.stack;
+    }
+
+    log('error', 'uncaught at ' + name, message || err.message || err);
+  };
+  var stdChannel = Object(_channel__WEBPACK_IMPORTED_MODULE_3__["stdChannel"])(subscribe);
+  var taskContext = Object.create(parentContext);
+  /**
+    Tracks the current effect cancellation
+    Each time the generator progresses. calling runEffect will set a new value
+    on it. It allows propagating cancellation to child effects
+  **/
+  next.cancel = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+
+  /**
+    Creates a new task descriptor for this generator, We'll also create a main task
+    to track the main flow (besides other forked tasks)
+  **/
+  var task = newTask(parentEffectId, name, iterator, cont);
+  var mainTask = { name: name, cancel: cancelMain, isRunning: true };
+  var taskQueue = forkQueue(name, mainTask, end);
+
+  /**
+    cancellation of the main task. We'll simply resume the Generator with a Cancel
+  **/
+  function cancelMain() {
+    if (mainTask.isRunning && !mainTask.isCancelled) {
+      mainTask.isCancelled = true;
+      next(TASK_CANCEL);
+    }
+  }
+
+  /**
+    This may be called by a parent generator to trigger/propagate cancellation
+    cancel all pending tasks (including the main task), then end the current task.
+     Cancellation propagates down to the whole execution tree holded by this Parent task
+    It's also propagated to all joiners of this task and their execution tree/joiners
+     Cancellation is noop for terminated/Cancelled tasks tasks
+  **/
+  function cancel() {
+    /**
+      We need to check both Running and Cancelled status
+      Tasks can be Cancelled but still Running
+    **/
+    if (iterator._isRunning && !iterator._isCancelled) {
+      iterator._isCancelled = true;
+      taskQueue.cancelAll();
+      /**
+        Ending with a Never result will propagate the Cancellation to all joiners
+      **/
+      end(TASK_CANCEL);
+    }
+  }
+  /**
+    attaches cancellation logic to this task's continuation
+    this will permit cancellation to propagate down the call chain
+  **/
+  cont && (cont.cancel = cancel);
+
+  // tracks the running status
+  iterator._isRunning = true;
+
+  // kicks up the generator
+  next();
+
+  // then return the task descriptor to the caller
+  return task;
+
+  /**
+    This is the generator driver
+    It's a recursive async/continuation function which calls itself
+    until the generator terminates or throws
+  **/
+  function next(arg, isErr) {
+    // Preventive measure. If we end up here, then there is really something wrong
+    if (!mainTask.isRunning) {
+      throw new Error('Trying to resume an already finished generator');
+    }
+
+    try {
+      var result = void 0;
+      if (isErr) {
+        result = iterator.throw(arg);
+      } else if (arg === TASK_CANCEL) {
+        /**
+          getting TASK_CANCEL automatically cancels the main task
+          We can get this value here
+           - By cancelling the parent task manually
+          - By joining a Cancelled task
+        **/
+        mainTask.isCancelled = true;
+        /**
+          Cancels the current effect; this will propagate the cancellation down to any called tasks
+        **/
+        next.cancel();
+        /**
+          If this Generator has a `return` method then invokes it
+          This will jump to the finally block
+        **/
+        result = _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(iterator.return) ? iterator.return(TASK_CANCEL) : { done: true, value: TASK_CANCEL };
+      } else if (arg === CHANNEL_END) {
+        // We get CHANNEL_END by taking from a channel that ended using `take` (and not `takem` used to trap End of channels)
+        result = _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(iterator.return) ? iterator.return() : { done: true };
+      } else {
+        result = iterator.next(arg);
+      }
+
+      if (!result.done) {
+        runEffect(result.value, parentEffectId, '', next);
+      } else {
+        /**
+          This Generator has ended, terminate the main task and notify the fork queue
+        **/
+        mainTask.isMainRunning = false;
+        mainTask.cont && mainTask.cont(result.value);
+      }
+    } catch (error) {
+      if (mainTask.isCancelled) {
+        logError(error);
+      }
+      mainTask.isMainRunning = false;
+      mainTask.cont(error, true);
+    }
+  }
+
+  function end(result, isErr) {
+    iterator._isRunning = false;
+    stdChannel.close();
+    if (!isErr) {
+      iterator._result = result;
+      iterator._deferredEnd && iterator._deferredEnd.resolve(result);
+    } else {
+      if (result instanceof Error) {
+        Object.defineProperty(result, 'sagaStack', {
+          value: 'at ' + name + ' \n ' + (result.sagaStack || result.stack),
+          configurable: true
+        });
+      }
+      if (!task.cont) {
+        if (result instanceof Error && onError) {
+          onError(result);
+        } else {
+          logError(result);
+        }
+      }
+      iterator._error = result;
+      iterator._isAborted = true;
+      iterator._deferredEnd && iterator._deferredEnd.reject(result);
+    }
+    task.cont && task.cont(result, isErr);
+    task.joiners.forEach(function (j) {
+      return j.cb(result, isErr);
+    });
+    task.joiners = null;
+  }
+
+  function runEffect(effect, parentEffectId) {
+    var label = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+    var cb = arguments[3];
+
+    var effectId = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["uid"])();
+    sagaMonitor && sagaMonitor.effectTriggered({ effectId: effectId, parentEffectId: parentEffectId, label: label, effect: effect });
+
+    /**
+      completion callback and cancel callback are mutually exclusive
+      We can't cancel an already completed effect
+      And We can't complete an already cancelled effectId
+    **/
+    var effectSettled = void 0;
+
+    // Completion callback passed to the appropriate effect runner
+    function currCb(res, isErr) {
+      if (effectSettled) {
+        return;
+      }
+
+      effectSettled = true;
+      cb.cancel = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"]; // defensive measure
+      if (sagaMonitor) {
+        isErr ? sagaMonitor.effectRejected(effectId, res) : sagaMonitor.effectResolved(effectId, res);
+      }
+      cb(res, isErr);
+    }
+    // tracks down the current cancel
+    currCb.cancel = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+
+    // setup cancellation logic on the parent cb
+    cb.cancel = function () {
+      // prevents cancelling an already completed effect
+      if (effectSettled) {
+        return;
+      }
+
+      effectSettled = true;
+      /**
+        propagates cancel downward
+        catch uncaught cancellations errors; since we can no longer call the completion
+        callback, log errors raised during cancellations into the console
+      **/
+      try {
+        currCb.cancel();
+      } catch (err) {
+        logError(err);
+      }
+      currCb.cancel = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"]; // defensive measure
+
+      sagaMonitor && sagaMonitor.effectCancelled(effectId);
+    };
+
+    /**
+      each effect runner must attach its own logic of cancellation to the provided callback
+      it allows this generator to propagate cancellation downward.
+       ATTENTION! effect runners must setup the cancel logic by setting cb.cancel = [cancelMethod]
+      And the setup must occur before calling the callback
+       This is a sort of inversion of control: called async functions are responsible
+      for completing the flow by calling the provided continuation; while caller functions
+      are responsible for aborting the current flow by calling the attached cancel function
+       Library users can attach their own cancellation logic to promises by defining a
+      promise[CANCEL] method in their returned promises
+      ATTENTION! calling cancel must have no effect on an already completed or cancelled effect
+    **/
+    var data = void 0;
+    // prettier-ignore
+    return (
+      // Non declarative effect
+      _utils__WEBPACK_IMPORTED_MODULE_0__["is"].promise(effect) ? resolvePromise(effect, currCb) : _utils__WEBPACK_IMPORTED_MODULE_0__["is"].helper(effect) ? runForkEffect(wrapHelper(effect), effectId, currCb) : _utils__WEBPACK_IMPORTED_MODULE_0__["is"].iterator(effect) ? resolveIterator(effect, effectId, name, currCb)
+
+      // declarative effects
+      : _utils__WEBPACK_IMPORTED_MODULE_0__["is"].array(effect) ? runParallelEffect(effect, effectId, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].take(effect)) ? runTakeEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].put(effect)) ? runPutEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].all(effect)) ? runAllEffect(data, effectId, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].race(effect)) ? runRaceEffect(data, effectId, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].call(effect)) ? runCallEffect(data, effectId, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].cps(effect)) ? runCPSEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].fork(effect)) ? runForkEffect(data, effectId, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].join(effect)) ? runJoinEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].cancel(effect)) ? runCancelEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].select(effect)) ? runSelectEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].actionChannel(effect)) ? runChannelEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].flush(effect)) ? runFlushEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].cancelled(effect)) ? runCancelledEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].getContext(effect)) ? runGetContextEffect(data, currCb) : (data = _io__WEBPACK_IMPORTED_MODULE_2__["asEffect"].setContext(effect)) ? runSetContextEffect(data, currCb) : /* anything else returned as is */currCb(effect)
+    );
+  }
+
+  function resolvePromise(promise, cb) {
+    var cancelPromise = promise[_utils__WEBPACK_IMPORTED_MODULE_0__["CANCEL"]];
+    if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(cancelPromise)) {
+      cb.cancel = cancelPromise;
+    } else if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].func(promise.abort)) {
+      cb.cancel = function () {
+        return promise.abort();
+      };
+      // TODO: add support for the fetch API, whenever they get around to
+      // adding cancel support
+    }
+    promise.then(cb, function (error) {
+      return cb(error, true);
+    });
+  }
+
+  function resolveIterator(iterator, effectId, name, cb) {
+    proc(iterator, subscribe, dispatch, getState, taskContext, options, effectId, name, cb);
+  }
+
+  function runTakeEffect(_ref2, cb) {
+    var channel = _ref2.channel,
+        pattern = _ref2.pattern,
+        maybe = _ref2.maybe;
+
+    channel = channel || stdChannel;
+    var takeCb = function takeCb(inp) {
+      return inp instanceof Error ? cb(inp, true) : Object(_channel__WEBPACK_IMPORTED_MODULE_3__["isEnd"])(inp) && !maybe ? cb(CHANNEL_END) : cb(inp);
+    };
+    try {
+      channel.take(takeCb, matcher(pattern));
+    } catch (err) {
+      return cb(err, true);
+    }
+    cb.cancel = takeCb.cancel;
+  }
+
+  function runPutEffect(_ref3, cb) {
+    var channel = _ref3.channel,
+        action = _ref3.action,
+        resolve = _ref3.resolve;
+
+    /**
+      Schedule the put in case another saga is holding a lock.
+      The put will be executed atomically. ie nested puts will execute after
+      this put has terminated.
+    **/
+    Object(_scheduler__WEBPACK_IMPORTED_MODULE_1__["asap"])(function () {
+      var result = void 0;
+      try {
+        result = (channel ? channel.put : dispatch)(action);
+      } catch (error) {
+        // If we have a channel or `put.resolve` was used then bubble up the error.
+        if (channel || resolve) return cb(error, true);
+        logError(error);
+      }
+
+      if (resolve && _utils__WEBPACK_IMPORTED_MODULE_0__["is"].promise(result)) {
+        resolvePromise(result, cb);
+      } else {
+        return cb(result);
+      }
+    });
+    // Put effects are non cancellables
+  }
+
+  function runCallEffect(_ref4, effectId, cb) {
+    var context = _ref4.context,
+        fn = _ref4.fn,
+        args = _ref4.args;
+
+    var result = void 0;
+    // catch synchronous failures; see #152
+    try {
+      result = fn.apply(context, args);
+    } catch (error) {
+      return cb(error, true);
+    }
+    return _utils__WEBPACK_IMPORTED_MODULE_0__["is"].promise(result) ? resolvePromise(result, cb) : _utils__WEBPACK_IMPORTED_MODULE_0__["is"].iterator(result) ? resolveIterator(result, effectId, fn.name, cb) : cb(result);
+  }
+
+  function runCPSEffect(_ref5, cb) {
+    var context = _ref5.context,
+        fn = _ref5.fn,
+        args = _ref5.args;
+
+    // CPS (ie node style functions) can define their own cancellation logic
+    // by setting cancel field on the cb
+
+    // catch synchronous failures; see #152
+    try {
+      var cpsCb = function cpsCb(err, res) {
+        return _utils__WEBPACK_IMPORTED_MODULE_0__["is"].undef(err) ? cb(res) : cb(err, true);
+      };
+      fn.apply(context, args.concat(cpsCb));
+      if (cpsCb.cancel) {
+        cb.cancel = function () {
+          return cpsCb.cancel();
+        };
+      }
+    } catch (error) {
+      return cb(error, true);
+    }
+  }
+
+  function runForkEffect(_ref6, effectId, cb) {
+    var context = _ref6.context,
+        fn = _ref6.fn,
+        args = _ref6.args,
+        detached = _ref6.detached;
+
+    var taskIterator = createTaskIterator({ context: context, fn: fn, args: args });
+
+    try {
+      Object(_scheduler__WEBPACK_IMPORTED_MODULE_1__["suspend"])();
+      var _task = proc(taskIterator, subscribe, dispatch, getState, taskContext, options, effectId, fn.name, detached ? null : _utils__WEBPACK_IMPORTED_MODULE_0__["noop"]);
+
+      if (detached) {
+        cb(_task);
+      } else {
+        if (taskIterator._isRunning) {
+          taskQueue.addTask(_task);
+          cb(_task);
+        } else if (taskIterator._error) {
+          taskQueue.abort(taskIterator._error);
+        } else {
+          cb(_task);
+        }
+      }
+    } finally {
+      Object(_scheduler__WEBPACK_IMPORTED_MODULE_1__["flush"])();
+    }
+    // Fork effects are non cancellables
+  }
+
+  function runJoinEffect(t, cb) {
+    if (t.isRunning()) {
+      var joiner = { task: task, cb: cb };
+      cb.cancel = function () {
+        return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["remove"])(t.joiners, joiner);
+      };
+      t.joiners.push(joiner);
+    } else {
+      t.isAborted() ? cb(t.error(), true) : cb(t.result());
+    }
+  }
+
+  function runCancelEffect(taskToCancel, cb) {
+    if (taskToCancel === _utils__WEBPACK_IMPORTED_MODULE_0__["SELF_CANCELLATION"]) {
+      taskToCancel = task;
+    }
+    if (taskToCancel.isRunning()) {
+      taskToCancel.cancel();
+    }
+    cb();
+    // cancel effects are non cancellables
+  }
+
+  function runAllEffect(effects, effectId, cb) {
+    var keys = Object.keys(effects);
+
+    if (!keys.length) {
+      return cb(_utils__WEBPACK_IMPORTED_MODULE_0__["is"].array(effects) ? [] : {});
+    }
+
+    var completedCount = 0;
+    var completed = void 0;
+    var results = {};
+    var childCbs = {};
+
+    function checkEffectEnd() {
+      if (completedCount === keys.length) {
+        completed = true;
+        cb(_utils__WEBPACK_IMPORTED_MODULE_0__["is"].array(effects) ? _utils__WEBPACK_IMPORTED_MODULE_0__["array"].from(_extends({}, results, { length: keys.length })) : results);
+      }
+    }
+
+    keys.forEach(function (key) {
+      var chCbAtKey = function chCbAtKey(res, isErr) {
+        if (completed) {
+          return;
+        }
+        if (isErr || Object(_channel__WEBPACK_IMPORTED_MODULE_3__["isEnd"])(res) || res === CHANNEL_END || res === TASK_CANCEL) {
+          cb.cancel();
+          cb(res, isErr);
+        } else {
+          results[key] = res;
+          completedCount++;
+          checkEffectEnd();
+        }
+      };
+      chCbAtKey.cancel = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+      childCbs[key] = chCbAtKey;
+    });
+
+    cb.cancel = function () {
+      if (!completed) {
+        completed = true;
+        keys.forEach(function (key) {
+          return childCbs[key].cancel();
+        });
+      }
+    };
+
+    keys.forEach(function (key) {
+      return runEffect(effects[key], effectId, key, childCbs[key]);
+    });
+  }
+
+  function runRaceEffect(effects, effectId, cb) {
+    var completed = void 0;
+    var keys = Object.keys(effects);
+    var childCbs = {};
+
+    keys.forEach(function (key) {
+      var chCbAtKey = function chCbAtKey(res, isErr) {
+        if (completed) {
+          return;
+        }
+
+        if (isErr) {
+          // Race Auto cancellation
+          cb.cancel();
+          cb(res, true);
+        } else if (!Object(_channel__WEBPACK_IMPORTED_MODULE_3__["isEnd"])(res) && res !== CHANNEL_END && res !== TASK_CANCEL) {
+          var _response;
+
+          cb.cancel();
+          completed = true;
+          var response = (_response = {}, _response[key] = res, _response);
+          cb(_utils__WEBPACK_IMPORTED_MODULE_0__["is"].array(effects) ? [].slice.call(_extends({}, response, { length: keys.length })) : response);
+        }
+      };
+      chCbAtKey.cancel = _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+      childCbs[key] = chCbAtKey;
+    });
+
+    cb.cancel = function () {
+      // prevents unnecessary cancellation
+      if (!completed) {
+        completed = true;
+        keys.forEach(function (key) {
+          return childCbs[key].cancel();
+        });
+      }
+    };
+    keys.forEach(function (key) {
+      if (completed) {
+        return;
+      }
+      runEffect(effects[key], effectId, key, childCbs[key]);
+    });
+  }
+
+  function runSelectEffect(_ref7, cb) {
+    var selector = _ref7.selector,
+        args = _ref7.args;
+
+    try {
+      var state = selector.apply(undefined, [getState()].concat(args));
+      cb(state);
+    } catch (error) {
+      cb(error, true);
+    }
+  }
+
+  function runChannelEffect(_ref8, cb) {
+    var pattern = _ref8.pattern,
+        buffer = _ref8.buffer;
+
+    var match = matcher(pattern);
+    match.pattern = pattern;
+    cb(Object(_channel__WEBPACK_IMPORTED_MODULE_3__["eventChannel"])(subscribe, buffer || _buffers__WEBPACK_IMPORTED_MODULE_4__["buffers"].fixed(), match));
+  }
+
+  function runCancelledEffect(data, cb) {
+    cb(!!mainTask.isCancelled);
+  }
+
+  function runFlushEffect(channel, cb) {
+    channel.flush(cb);
+  }
+
+  function runGetContextEffect(prop, cb) {
+    cb(taskContext[prop]);
+  }
+
+  function runSetContextEffect(props, cb) {
+    _utils__WEBPACK_IMPORTED_MODULE_0__["object"].assign(taskContext, props);
+    cb();
+  }
+
+  function newTask(id, name, iterator, cont) {
+    var _done, _ref9, _mutatorMap;
+
+    iterator._deferredEnd = null;
+    return _ref9 = {}, _ref9[_utils__WEBPACK_IMPORTED_MODULE_0__["TASK"]] = true, _ref9.id = id, _ref9.name = name, _done = 'done', _mutatorMap = {}, _mutatorMap[_done] = _mutatorMap[_done] || {}, _mutatorMap[_done].get = function () {
+      if (iterator._deferredEnd) {
+        return iterator._deferredEnd.promise;
+      } else {
+        var def = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["deferred"])();
+        iterator._deferredEnd = def;
+        if (!iterator._isRunning) {
+          iterator._error ? def.reject(iterator._error) : def.resolve(iterator._result);
+        }
+        return def.promise;
+      }
+    }, _ref9.cont = cont, _ref9.joiners = [], _ref9.cancel = cancel, _ref9.isRunning = function isRunning() {
+      return iterator._isRunning;
+    }, _ref9.isCancelled = function isCancelled() {
+      return iterator._isCancelled;
+    }, _ref9.isAborted = function isAborted() {
+      return iterator._isAborted;
+    }, _ref9.result = function result() {
+      return iterator._result;
+    }, _ref9.error = function error() {
+      return iterator._error;
+    }, _ref9.setContext = function setContext(props) {
+      Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(props, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].object, Object(_utils__WEBPACK_IMPORTED_MODULE_0__["createSetContextWarning"])('task', props));
+      _utils__WEBPACK_IMPORTED_MODULE_0__["object"].assign(taskContext, props);
+    }, _defineEnumerableProperties(_ref9, _mutatorMap), _ref9;
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/runSaga.js":
+/*!********************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/runSaga.js ***!
+  \********************************************************/
+/*! exports provided: runSaga */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "runSaga", function() { return runSaga; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils */ "./node_modules/redux-saga/es/internal/utils.js");
+/* harmony import */ var _proc__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./proc */ "./node_modules/redux-saga/es/internal/proc.js");
+
+
+
+var RUN_SAGA_SIGNATURE = 'runSaga(storeInterface, saga, ...args)';
+var NON_GENERATOR_ERR = RUN_SAGA_SIGNATURE + ': saga argument must be a Generator function!';
+
+function runSaga(storeInterface, saga) {
+  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  var iterator = void 0;
+
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].iterator(storeInterface)) {
+    if (true) {
+      Object(_utils__WEBPACK_IMPORTED_MODULE_0__["log"])('warn', 'runSaga(iterator, storeInterface) has been deprecated in favor of ' + RUN_SAGA_SIGNATURE);
+    }
+    iterator = storeInterface;
+    storeInterface = saga;
+  } else {
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(saga, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].func, NON_GENERATOR_ERR);
+    iterator = saga.apply(undefined, args);
+    Object(_utils__WEBPACK_IMPORTED_MODULE_0__["check"])(iterator, _utils__WEBPACK_IMPORTED_MODULE_0__["is"].iterator, NON_GENERATOR_ERR);
+  }
+
+  var _storeInterface = storeInterface,
+      subscribe = _storeInterface.subscribe,
+      dispatch = _storeInterface.dispatch,
+      getState = _storeInterface.getState,
+      context = _storeInterface.context,
+      sagaMonitor = _storeInterface.sagaMonitor,
+      logger = _storeInterface.logger,
+      onError = _storeInterface.onError;
+
+
+  var effectId = Object(_utils__WEBPACK_IMPORTED_MODULE_0__["uid"])();
+
+  if (sagaMonitor) {
+    // monitors are expected to have a certain interface, let's fill-in any missing ones
+    sagaMonitor.effectTriggered = sagaMonitor.effectTriggered || _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+    sagaMonitor.effectResolved = sagaMonitor.effectResolved || _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+    sagaMonitor.effectRejected = sagaMonitor.effectRejected || _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+    sagaMonitor.effectCancelled = sagaMonitor.effectCancelled || _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+    sagaMonitor.actionDispatched = sagaMonitor.actionDispatched || _utils__WEBPACK_IMPORTED_MODULE_0__["noop"];
+
+    sagaMonitor.effectTriggered({ effectId: effectId, root: true, parentEffectId: 0, effect: { root: true, saga: saga, args: args } });
+  }
+
+  var task = Object(_proc__WEBPACK_IMPORTED_MODULE_1__["default"])(iterator, subscribe, Object(_utils__WEBPACK_IMPORTED_MODULE_0__["wrapSagaDispatch"])(dispatch), getState, context, { sagaMonitor: sagaMonitor, logger: logger, onError: onError }, effectId, saga.name);
+
+  if (sagaMonitor) {
+    sagaMonitor.effectResolved(effectId, task);
+  }
+
+  return task;
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/sagaHelpers/fsmIterator.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/sagaHelpers/fsmIterator.js ***!
+  \************************************************************************/
+/*! exports provided: qEnd, safeName, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "qEnd", function() { return qEnd; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "safeName", function() { return safeName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return fsmIterator; });
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../utils */ "./node_modules/redux-saga/es/internal/utils.js");
+
+
+var done = { done: true, value: undefined };
+var qEnd = {};
+
+function safeName(patternOrChannel) {
+  if (_utils__WEBPACK_IMPORTED_MODULE_0__["is"].channel(patternOrChannel)) {
+    return 'channel';
+  } else if (Array.isArray(patternOrChannel)) {
+    return String(patternOrChannel.map(function (entry) {
+      return String(entry);
+    }));
+  } else {
+    return String(patternOrChannel);
+  }
+}
+
+function fsmIterator(fsm, q0) {
+  var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'iterator';
+
+  var updateState = void 0,
+      qNext = q0;
+
+  function next(arg, error) {
+    if (qNext === qEnd) {
+      return done;
+    }
+
+    if (error) {
+      qNext = qEnd;
+      throw error;
+    } else {
+      updateState && updateState(arg);
+
+      var _fsm$qNext = fsm[qNext](),
+          q = _fsm$qNext[0],
+          output = _fsm$qNext[1],
+          _updateState = _fsm$qNext[2];
+
+      qNext = q;
+      updateState = _updateState;
+      return qNext === qEnd ? done : output;
+    }
+  }
+
+  return Object(_utils__WEBPACK_IMPORTED_MODULE_0__["makeIterator"])(next, function (error) {
+    return next(null, error);
+  }, name, true);
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/sagaHelpers/index.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/sagaHelpers/index.js ***!
+  \******************************************************************/
+/*! exports provided: takeEvery, takeLatest, throttle, takeEveryHelper, takeLatestHelper, throttleHelper */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "takeEvery", function() { return takeEvery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "takeLatest", function() { return takeLatest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "throttle", function() { return throttle; });
+/* harmony import */ var _takeEvery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./takeEvery */ "./node_modules/redux-saga/es/internal/sagaHelpers/takeEvery.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "takeEveryHelper", function() { return _takeEvery__WEBPACK_IMPORTED_MODULE_0__["default"]; });
+
+/* harmony import */ var _takeLatest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./takeLatest */ "./node_modules/redux-saga/es/internal/sagaHelpers/takeLatest.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "takeLatestHelper", function() { return _takeLatest__WEBPACK_IMPORTED_MODULE_1__["default"]; });
+
+/* harmony import */ var _throttle__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./throttle */ "./node_modules/redux-saga/es/internal/sagaHelpers/throttle.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "throttleHelper", function() { return _throttle__WEBPACK_IMPORTED_MODULE_2__["default"]; });
+
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../utils */ "./node_modules/redux-saga/es/internal/utils.js");
+
+
+
+
+
+
+var deprecationWarning = function deprecationWarning(helperName) {
+  return 'import { ' + helperName + ' } from \'redux-saga\' has been deprecated in favor of import { ' + helperName + ' } from \'redux-saga/effects\'.\nThe latter will not work with yield*, as helper effects are wrapped automatically for you in fork effect.\nTherefore yield ' + helperName + ' will return task descriptor to your saga and execute next lines of code.';
+};
+
+var takeEvery = /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_3__["deprecate"])(_takeEvery__WEBPACK_IMPORTED_MODULE_0__["default"], /*#__PURE__*/deprecationWarning('takeEvery'));
+var takeLatest = /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_3__["deprecate"])(_takeLatest__WEBPACK_IMPORTED_MODULE_1__["default"], /*#__PURE__*/deprecationWarning('takeLatest'));
+var throttle = /*#__PURE__*/Object(_utils__WEBPACK_IMPORTED_MODULE_3__["deprecate"])(_throttle__WEBPACK_IMPORTED_MODULE_2__["default"], /*#__PURE__*/deprecationWarning('throttle'));
+
+
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/sagaHelpers/takeEvery.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/sagaHelpers/takeEvery.js ***!
+  \**********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return takeEvery; });
+/* harmony import */ var _fsmIterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fsmIterator */ "./node_modules/redux-saga/es/internal/sagaHelpers/fsmIterator.js");
+/* harmony import */ var _io__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony import */ var _channel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../channel */ "./node_modules/redux-saga/es/internal/channel.js");
+
+
+
+
+function takeEvery(patternOrChannel, worker) {
+  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  var yTake = { done: false, value: Object(_io__WEBPACK_IMPORTED_MODULE_1__["take"])(patternOrChannel) };
+  var yFork = function yFork(ac) {
+    return { done: false, value: _io__WEBPACK_IMPORTED_MODULE_1__["fork"].apply(undefined, [worker].concat(args, [ac])) };
+  };
+
+  var action = void 0,
+      setAction = function setAction(ac) {
+    return action = ac;
+  };
+
+  return Object(_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    q1: function q1() {
+      return ['q2', yTake, setAction];
+    },
+    q2: function q2() {
+      return action === _channel__WEBPACK_IMPORTED_MODULE_2__["END"] ? [_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["qEnd"]] : ['q1', yFork(action)];
+    }
+  }, 'q1', 'takeEvery(' + Object(_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["safeName"])(patternOrChannel) + ', ' + worker.name + ')');
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/sagaHelpers/takeLatest.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/sagaHelpers/takeLatest.js ***!
+  \***********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return takeLatest; });
+/* harmony import */ var _fsmIterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fsmIterator */ "./node_modules/redux-saga/es/internal/sagaHelpers/fsmIterator.js");
+/* harmony import */ var _io__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony import */ var _channel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../channel */ "./node_modules/redux-saga/es/internal/channel.js");
+
+
+
+
+function takeLatest(patternOrChannel, worker) {
+  for (var _len = arguments.length, args = Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  var yTake = { done: false, value: Object(_io__WEBPACK_IMPORTED_MODULE_1__["take"])(patternOrChannel) };
+  var yFork = function yFork(ac) {
+    return { done: false, value: _io__WEBPACK_IMPORTED_MODULE_1__["fork"].apply(undefined, [worker].concat(args, [ac])) };
+  };
+  var yCancel = function yCancel(task) {
+    return { done: false, value: Object(_io__WEBPACK_IMPORTED_MODULE_1__["cancel"])(task) };
+  };
+
+  var task = void 0,
+      action = void 0;
+  var setTask = function setTask(t) {
+    return task = t;
+  };
+  var setAction = function setAction(ac) {
+    return action = ac;
+  };
+
+  return Object(_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    q1: function q1() {
+      return ['q2', yTake, setAction];
+    },
+    q2: function q2() {
+      return action === _channel__WEBPACK_IMPORTED_MODULE_2__["END"] ? [_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["qEnd"]] : task ? ['q3', yCancel(task)] : ['q1', yFork(action), setTask];
+    },
+    q3: function q3() {
+      return ['q1', yFork(action), setTask];
+    }
+  }, 'q1', 'takeLatest(' + Object(_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["safeName"])(patternOrChannel) + ', ' + worker.name + ')');
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/sagaHelpers/throttle.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/sagaHelpers/throttle.js ***!
+  \*********************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return throttle; });
+/* harmony import */ var _fsmIterator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./fsmIterator */ "./node_modules/redux-saga/es/internal/sagaHelpers/fsmIterator.js");
+/* harmony import */ var _io__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony import */ var _channel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../channel */ "./node_modules/redux-saga/es/internal/channel.js");
+/* harmony import */ var _buffers__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../buffers */ "./node_modules/redux-saga/es/internal/buffers.js");
+/* harmony import */ var _utils__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../utils */ "./node_modules/redux-saga/es/internal/utils.js");
+
+
+
+
+
+
+function throttle(delayLength, pattern, worker) {
+  for (var _len = arguments.length, args = Array(_len > 3 ? _len - 3 : 0), _key = 3; _key < _len; _key++) {
+    args[_key - 3] = arguments[_key];
+  }
+
+  var action = void 0,
+      channel = void 0;
+
+  var yActionChannel = { done: false, value: Object(_io__WEBPACK_IMPORTED_MODULE_1__["actionChannel"])(pattern, _buffers__WEBPACK_IMPORTED_MODULE_3__["buffers"].sliding(1)) };
+  var yTake = function yTake() {
+    return { done: false, value: Object(_io__WEBPACK_IMPORTED_MODULE_1__["take"])(channel) };
+  };
+  var yFork = function yFork(ac) {
+    return { done: false, value: _io__WEBPACK_IMPORTED_MODULE_1__["fork"].apply(undefined, [worker].concat(args, [ac])) };
+  };
+  var yDelay = { done: false, value: Object(_io__WEBPACK_IMPORTED_MODULE_1__["call"])(_utils__WEBPACK_IMPORTED_MODULE_4__["delay"], delayLength) };
+
+  var setAction = function setAction(ac) {
+    return action = ac;
+  };
+  var setChannel = function setChannel(ch) {
+    return channel = ch;
+  };
+
+  return Object(_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    q1: function q1() {
+      return ['q2', yActionChannel, setChannel];
+    },
+    q2: function q2() {
+      return ['q3', yTake(), setAction];
+    },
+    q3: function q3() {
+      return action === _channel__WEBPACK_IMPORTED_MODULE_2__["END"] ? [_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["qEnd"]] : ['q4', yFork(action)];
+    },
+    q4: function q4() {
+      return ['q2', yDelay];
+    }
+  }, 'q1', 'throttle(' + Object(_fsmIterator__WEBPACK_IMPORTED_MODULE_0__["safeName"])(pattern) + ', ' + worker.name + ')');
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/scheduler.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/scheduler.js ***!
+  \**********************************************************/
+/*! exports provided: asap, suspend, flush */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "asap", function() { return asap; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "suspend", function() { return suspend; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "flush", function() { return flush; });
+var queue = [];
+/**
+  Variable to hold a counting semaphore
+  - Incrementing adds a lock and puts the scheduler in a `suspended` state (if it's not
+    already suspended)
+  - Decrementing releases a lock. Zero locks puts the scheduler in a `released` state. This
+    triggers flushing the queued tasks.
+**/
+var semaphore = 0;
+
+/**
+  Executes a task 'atomically'. Tasks scheduled during this execution will be queued
+  and flushed after this task has finished (assuming the scheduler endup in a released
+  state).
+**/
+function exec(task) {
+  try {
+    suspend();
+    task();
+  } finally {
+    release();
+  }
+}
+
+/**
+  Executes or queues a task depending on the state of the scheduler (`suspended` or `released`)
+**/
+function asap(task) {
+  queue.push(task);
+
+  if (!semaphore) {
+    suspend();
+    flush();
+  }
+}
+
+/**
+  Puts the scheduler in a `suspended` state. Scheduled tasks will be queued until the
+  scheduler is released.
+**/
+function suspend() {
+  semaphore++;
+}
+
+/**
+  Puts the scheduler in a `released` state.
+**/
+function release() {
+  semaphore--;
+}
+
+/**
+  Releases the current lock. Executes all queued tasks if the scheduler is in the released state.
+**/
+function flush() {
+  release();
+
+  var task = void 0;
+  while (!semaphore && (task = queue.shift()) !== undefined) {
+    exec(task);
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/internal/utils.js":
+/*!******************************************************!*\
+  !*** ./node_modules/redux-saga/es/internal/utils.js ***!
+  \******************************************************/
+/*! exports provided: sym, TASK, HELPER, MATCH, CANCEL, SAGA_ACTION, SELF_CANCELLATION, konst, kTrue, kFalse, noop, ident, check, hasOwn, is, object, remove, array, deferred, arrayOfDeffered, delay, createMockTask, autoInc, uid, makeIterator, log, deprecate, updateIncentive, internalErr, createSetContextWarning, wrapSagaDispatch, cloneableGenerator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sym", function() { return sym; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TASK", function() { return TASK; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HELPER", function() { return HELPER; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MATCH", function() { return MATCH; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CANCEL", function() { return CANCEL; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SAGA_ACTION", function() { return SAGA_ACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "SELF_CANCELLATION", function() { return SELF_CANCELLATION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "konst", function() { return konst; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kTrue", function() { return kTrue; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "kFalse", function() { return kFalse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "noop", function() { return noop; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ident", function() { return ident; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "check", function() { return check; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hasOwn", function() { return hasOwn; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "is", function() { return is; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "object", function() { return object; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "remove", function() { return remove; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "array", function() { return array; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deferred", function() { return deferred; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "arrayOfDeffered", function() { return arrayOfDeffered; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "delay", function() { return delay; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createMockTask", function() { return createMockTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "autoInc", function() { return autoInc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "uid", function() { return uid; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "makeIterator", function() { return makeIterator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "log", function() { return log; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deprecate", function() { return deprecate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateIncentive", function() { return updateIncentive; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "internalErr", function() { return internalErr; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSetContextWarning", function() { return createSetContextWarning; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wrapSagaDispatch", function() { return wrapSagaDispatch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "cloneableGenerator", function() { return cloneableGenerator; });
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var sym = function sym(id) {
+  return '@@redux-saga/' + id;
+};
+
+var TASK = /*#__PURE__*/sym('TASK');
+var HELPER = /*#__PURE__*/sym('HELPER');
+var MATCH = /*#__PURE__*/sym('MATCH');
+var CANCEL = /*#__PURE__*/sym('CANCEL_PROMISE');
+var SAGA_ACTION = /*#__PURE__*/sym('SAGA_ACTION');
+var SELF_CANCELLATION = /*#__PURE__*/sym('SELF_CANCELLATION');
+var konst = function konst(v) {
+  return function () {
+    return v;
+  };
+};
+var kTrue = /*#__PURE__*/konst(true);
+var kFalse = /*#__PURE__*/konst(false);
+var noop = function noop() {};
+var ident = function ident(v) {
+  return v;
+};
+
+function check(value, predicate, error) {
+  if (!predicate(value)) {
+    log('error', 'uncaught at check', error);
+    throw new Error(error);
+  }
+}
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+function hasOwn(object, property) {
+  return is.notUndef(object) && hasOwnProperty.call(object, property);
+}
+
+var is = {
+  undef: function undef(v) {
+    return v === null || v === undefined;
+  },
+  notUndef: function notUndef(v) {
+    return v !== null && v !== undefined;
+  },
+  func: function func(f) {
+    return typeof f === 'function';
+  },
+  number: function number(n) {
+    return typeof n === 'number';
+  },
+  string: function string(s) {
+    return typeof s === 'string';
+  },
+  array: Array.isArray,
+  object: function object(obj) {
+    return obj && !is.array(obj) && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object';
+  },
+  promise: function promise(p) {
+    return p && is.func(p.then);
+  },
+  iterator: function iterator(it) {
+    return it && is.func(it.next) && is.func(it.throw);
+  },
+  iterable: function iterable(it) {
+    return it && is.func(Symbol) ? is.func(it[Symbol.iterator]) : is.array(it);
+  },
+  task: function task(t) {
+    return t && t[TASK];
+  },
+  observable: function observable(ob) {
+    return ob && is.func(ob.subscribe);
+  },
+  buffer: function buffer(buf) {
+    return buf && is.func(buf.isEmpty) && is.func(buf.take) && is.func(buf.put);
+  },
+  pattern: function pattern(pat) {
+    return pat && (is.string(pat) || (typeof pat === 'undefined' ? 'undefined' : _typeof(pat)) === 'symbol' || is.func(pat) || is.array(pat));
+  },
+  channel: function channel(ch) {
+    return ch && is.func(ch.take) && is.func(ch.close);
+  },
+  helper: function helper(it) {
+    return it && it[HELPER];
+  },
+  stringableFunc: function stringableFunc(f) {
+    return is.func(f) && hasOwn(f, 'toString');
+  }
+};
+
+var object = {
+  assign: function assign(target, source) {
+    for (var i in source) {
+      if (hasOwn(source, i)) {
+        target[i] = source[i];
+      }
+    }
+  }
+};
+
+function remove(array, item) {
+  var index = array.indexOf(item);
+  if (index >= 0) {
+    array.splice(index, 1);
+  }
+}
+
+var array = {
+  from: function from(obj) {
+    var arr = Array(obj.length);
+    for (var i in obj) {
+      if (hasOwn(obj, i)) {
+        arr[i] = obj[i];
+      }
+    }
+    return arr;
+  }
+};
+
+function deferred() {
+  var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var def = _extends({}, props);
+  var promise = new Promise(function (resolve, reject) {
+    def.resolve = resolve;
+    def.reject = reject;
+  });
+  def.promise = promise;
+  return def;
+}
+
+function arrayOfDeffered(length) {
+  var arr = [];
+  for (var i = 0; i < length; i++) {
+    arr.push(deferred());
+  }
+  return arr;
+}
+
+function delay(ms) {
+  var val = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+  var timeoutId = void 0;
+  var promise = new Promise(function (resolve) {
+    timeoutId = setTimeout(function () {
+      return resolve(val);
+    }, ms);
+  });
+
+  promise[CANCEL] = function () {
+    return clearTimeout(timeoutId);
+  };
+
+  return promise;
+}
+
+function createMockTask() {
+  var _ref;
+
+  var running = true;
+  var _result = void 0,
+      _error = void 0;
+
+  return _ref = {}, _ref[TASK] = true, _ref.isRunning = function isRunning() {
+    return running;
+  }, _ref.result = function result() {
+    return _result;
+  }, _ref.error = function error() {
+    return _error;
+  }, _ref.setRunning = function setRunning(b) {
+    return running = b;
+  }, _ref.setResult = function setResult(r) {
+    return _result = r;
+  }, _ref.setError = function setError(e) {
+    return _error = e;
+  }, _ref;
+}
+
+function autoInc() {
+  var seed = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+
+  return function () {
+    return ++seed;
+  };
+}
+
+var uid = /*#__PURE__*/autoInc();
+
+var kThrow = function kThrow(err) {
+  throw err;
+};
+var kReturn = function kReturn(value) {
+  return { value: value, done: true };
+};
+function makeIterator(next) {
+  var thro = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : kThrow;
+  var name = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  var isHelper = arguments[3];
+
+  var iterator = { name: name, next: next, throw: thro, return: kReturn };
+
+  if (isHelper) {
+    iterator[HELPER] = true;
+  }
+  if (typeof Symbol !== 'undefined') {
+    iterator[Symbol.iterator] = function () {
+      return iterator;
+    };
+  }
+  return iterator;
+}
+
+/**
+  Print error in a useful way whether in a browser environment
+  (with expandable error stack traces), or in a node.js environment
+  (text-only log output)
+ **/
+function log(level, message) {
+  var error = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+  /*eslint-disable no-console*/
+  if (typeof window === 'undefined') {
+    console.log('redux-saga ' + level + ': ' + message + '\n' + (error && error.stack || error));
+  } else {
+    console[level](message, error);
+  }
+}
+
+function deprecate(fn, deprecationWarning) {
+  return function () {
+    if (true) log('warn', deprecationWarning);
+    return fn.apply(undefined, arguments);
+  };
+}
+
+var updateIncentive = function updateIncentive(deprecated, preferred) {
+  return deprecated + ' has been deprecated in favor of ' + preferred + ', please update your code';
+};
+
+var internalErr = function internalErr(err) {
+  return new Error('\n  redux-saga: Error checking hooks detected an inconsistent state. This is likely a bug\n  in redux-saga code and not yours. Thanks for reporting this in the project\'s github repo.\n  Error: ' + err + '\n');
+};
+
+var createSetContextWarning = function createSetContextWarning(ctx, props) {
+  return (ctx ? ctx + '.' : '') + 'setContext(props): argument ' + props + ' is not a plain object';
+};
+
+var wrapSagaDispatch = function wrapSagaDispatch(dispatch) {
+  return function (action) {
+    return dispatch(Object.defineProperty(action, SAGA_ACTION, { value: true }));
+  };
+};
+
+var cloneableGenerator = function cloneableGenerator(generatorFunc) {
+  return function () {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    var history = [];
+    var gen = generatorFunc.apply(undefined, args);
+    return {
+      next: function next(arg) {
+        history.push(arg);
+        return gen.next(arg);
+      },
+      clone: function clone() {
+        var clonedGen = cloneableGenerator(generatorFunc).apply(undefined, args);
+        history.forEach(function (arg) {
+          return clonedGen.next(arg);
+        });
+        return clonedGen;
+      },
+      return: function _return(value) {
+        return gen.return(value);
+      },
+      throw: function _throw(exception) {
+        return gen.throw(exception);
+      }
+    };
+  };
+};
+
+/***/ }),
+
+/***/ "./node_modules/redux-saga/es/utils.js":
+/*!*********************************************!*\
+  !*** ./node_modules/redux-saga/es/utils.js ***!
+  \*********************************************/
+/*! exports provided: TASK, SAGA_ACTION, noop, is, deferred, arrayOfDeffered, createMockTask, cloneableGenerator, asEffect, CHANNEL_END */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _internal_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./internal/utils */ "./node_modules/redux-saga/es/internal/utils.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "TASK", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["TASK"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "SAGA_ACTION", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["SAGA_ACTION"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "noop", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["noop"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "is", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["is"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "deferred", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["deferred"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "arrayOfDeffered", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["arrayOfDeffered"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "createMockTask", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["createMockTask"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "cloneableGenerator", function() { return _internal_utils__WEBPACK_IMPORTED_MODULE_0__["cloneableGenerator"]; });
+
+/* harmony import */ var _internal_io__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./internal/io */ "./node_modules/redux-saga/es/internal/io.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "asEffect", function() { return _internal_io__WEBPACK_IMPORTED_MODULE_1__["asEffect"]; });
+
+/* harmony import */ var _internal_proc__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./internal/proc */ "./node_modules/redux-saga/es/internal/proc.js");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "CHANNEL_END", function() { return _internal_proc__WEBPACK_IMPORTED_MODULE_2__["CHANNEL_END"]; });
+
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/redux/es/redux.js":
 /*!****************************************!*\
   !*** ./node_modules/redux/es/redux.js ***!
@@ -70763,6 +73219,3218 @@ exports.deleteAllCookies = function () {
 
 /***/ }),
 
+/***/ "./src/actions/chat.js":
+/*!*****************************!*\
+  !*** ./src/actions/chat.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.receiveMessage = exports.sendMessage = void 0;
+
+var types = _interopRequireWildcard(__webpack_require__(/*! ../constants/ActionTypes.js */ "./src/constants/ActionTypes.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+let nextMessageId = 0;
+const nextUserId = 0;
+
+const sendMessage = message => {
+  return {
+    type: types.SEND_MESSAGE,
+    payload: {
+      message: message
+    }
+  };
+};
+
+exports.sendMessage = sendMessage;
+
+const receiveMessage = (message, username, userid) => {
+  return {
+    type: types.RECEIVE_MESSAGE,
+    payload: {
+      id: nextMessageId++,
+      message: message,
+      username: username,
+      userid: userid
+    }
+  };
+};
+
+exports.receiveMessage = receiveMessage;
+
+/***/ }),
+
+/***/ "./src/components/App.jsx":
+/*!********************************!*\
+  !*** ./src/components/App.jsx ***!
+  \********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _reactDom = _interopRequireDefault(__webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js"));
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _sockets = _interopRequireDefault(__webpack_require__(/*! src/sockets */ "./src/sockets/index.js"));
+
+var _ViewerList = _interopRequireDefault(__webpack_require__(/*! src/components/ViewerList.jsx */ "./src/components/ViewerList.jsx"));
+
+var _TurnTimer = _interopRequireDefault(__webpack_require__(/*! src/components/TurnTimer.jsx */ "./src/components/TurnTimer.jsx"));
+
+var _ForfeitTimer = _interopRequireDefault(__webpack_require__(/*! src/components/ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx"));
+
+var _Player = _interopRequireDefault(__webpack_require__(/*! src/components/Player.jsx */ "./src/components/Player.jsx"));
+
+var _ControlQueue = _interopRequireDefault(__webpack_require__(/*! src/components/ControlQueue.jsx */ "./src/components/ControlQueue.jsx"));
+
+var _JoinLeaveQueueButton = _interopRequireDefault(__webpack_require__(/*! src/components/JoinLeaveQueueButton.jsx */ "./src/components/JoinLeaveQueueButton.jsx"));
+
+var _UsernameDropdown = _interopRequireDefault(__webpack_require__(/*! src/components/UsernameDropdown.jsx */ "./src/components/UsernameDropdown.jsx"));
+
+var _Waitlist = _interopRequireDefault(__webpack_require__(/*! src/components/Waitlist.jsx */ "./src/components/Waitlist.jsx"));
+
+var _ConnectAccounts = _interopRequireDefault(__webpack_require__(/*! src/components/ConnectAccounts.jsx */ "./src/components/ConnectAccounts.jsx"));
+
+var _Checkbox = _interopRequireDefault(__webpack_require__(/*! src/components/Checkbox.jsx */ "./src/components/Checkbox.jsx"));
+
+var _LeftJoyCon = _interopRequireDefault(__webpack_require__(/*! src/components/LeftJoyCon.jsx */ "./src/components/LeftJoyCon.jsx"));
+
+var _RightJoyCon = _interopRequireDefault(__webpack_require__(/*! src/components/RightJoyCon.jsx */ "./src/components/RightJoyCon.jsx"));
+
+var _LaglessView = _interopRequireDefault(__webpack_require__(/*! src/components/LaglessView.jsx */ "./src/components/LaglessView.jsx"));
+
+var _MySlider = _interopRequireDefault(__webpack_require__(/*! src/components/MySlider.jsx */ "./src/components/MySlider.jsx"));
+
+var _Chat = _interopRequireDefault(__webpack_require__(/*! src/components/Chat/Chat.jsx */ "./src/components/Chat/Chat.jsx"));
+
+var _ThemeSwitch = _interopRequireDefault(__webpack_require__(/*! src/components/ThemeSwitch.jsx */ "./src/components/ThemeSwitch.jsx"));
+
+var _reactConnect = _interopRequireDefault(__webpack_require__(/*! @snex/react-connect */ "./node_modules/@snex/react-connect/dist/index.js"));
+
+var _snex = _interopRequireDefault(__webpack_require__(/*! snex */ "./node_modules/snex/dist/snex.js"));
+
+var _gamepad = _interopRequireDefault(__webpack_require__(/*! js/gamepad.js */ "./public/js/gamepad.js"));
+
+var _VirtualProController = _interopRequireDefault(__webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js"));
+
+var _keycode = _interopRequireDefault(__webpack_require__(/*! keycode */ "./node_modules/keycode/index.js"));
+
+var _nipplejs = _interopRequireDefault(__webpack_require__(/*! nipplejs */ "./node_modules/nipplejs/dist/nipplejs.js"));
+
+var _noty = _interopRequireDefault(__webpack_require__(/*! noty */ "./node_modules/noty/lib/noty.js"));
+
+var _localforage = _interopRequireDefault(__webpack_require__(/*! localforage */ "./node_modules/localforage/dist/localforage.js"));
+
+var _sweetalert = _interopRequireDefault(__webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js"));
+
+var _simplePeer = _interopRequireDefault(__webpack_require__(/*! simple-peer */ "./node_modules/simple-peer/index.js"));
+
+var _socket = _interopRequireDefault(__webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// keyboard:
+__webpack_require__(/*! js/keymaster.js */ "./public/js/keymaster.js");
+
+const InputMaster = __webpack_require__(/*! js/InputMaster.js */ "./public/js/InputMaster.js");
+
+const textFitPercent = __webpack_require__(/*! js/textfitpercent.js */ "./public/js/textfitpercent.js");
+
+const tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
+
+window.localforage = _localforage.default; // rest of tools:
+
+String.prototype.replaceAll = function (search, replacement) {
+  let target = this;
+  return target.replace(new RegExp(search, "g"), replacement);
+};
+
+$.fn.sumHeights = function () {
+  let h = 0;
+  this.each(function () {
+    h += $(this).outerHeight();
+  });
+  return h;
+};
+
+$.fn.addUp = function (getter) {
+  return Array.prototype.reduce.call(this, function (a, b) {
+    return a + getter.call($(b));
+  }, 0);
+};
+
+let globalEventTimer = false;
+let sendInputTimer;
+let currentPlayerChosen = 0;
+let wasPressedKeyCodes = [];
+let lastSplitTime = 0;
+let lastSplitTimeMS = 0;
+let loaded = false;
+let locked = false;
+window.player = {};
+let player4;
+let audio = document.createElement("audio");
+let audioConnected = false;
+let videoConnected = false;
+let authCookie;
+let crate;
+let banlist = [];
+let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190"];
+let resizers = [];
+let resizeDebounceTimer;
+let resizeAvailable = true;
+let isMobile = false; // twitch lagless swap settings
+
+let isExempt = false;
+let minQueuePos = 5;
+let tabsSwappedWithTwitch = [false, false, false, false];
+/* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+// check if on mobile
+
+if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
+  isMobile = true;
+}
+
+window.masterInput = new InputMaster(isMobile); // masterInput.controller.init();
+
+let currentInputMode = null;
+let keyboardLayout = {};
+keyboardLayout.LU = "W";
+keyboardLayout.LD = "S";
+keyboardLayout.LL = "A";
+keyboardLayout.LR = "D";
+keyboardLayout.RU = "I";
+keyboardLayout.RD = "K";
+keyboardLayout.RL = "J";
+keyboardLayout.RR = "L";
+keyboardLayout.ABtn = "right";
+keyboardLayout.BBtn = "down";
+keyboardLayout.XBtn = "up";
+keyboardLayout.YBtn = "left";
+keyboardLayout.DUp = "T";
+keyboardLayout.DDown = "G";
+keyboardLayout.DLeft = "F";
+keyboardLayout.DRight = "H";
+keyboardLayout.LStick = "R";
+keyboardLayout.RStick = "Y";
+keyboardLayout.LBtn = "U";
+keyboardLayout.ZL = "Q";
+keyboardLayout.RBtn = "O";
+keyboardLayout.ZR = "E";
+keyboardLayout.Minus = "-";
+keyboardLayout.Plus = "=";
+keyboardLayout.Capture = "1";
+keyboardLayout.Home = "2"; // settings.keyboardProfiles.default = keyboardLayout;
+
+/* CONTROLLER STUFF */
+
+let gamepadCounter = 0;
+let controller = new _VirtualProController.default();
+controller.reset();
+let settings = {}; // detect firefox:
+
+if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
+  settings.stickSensitivityX = 1.5;
+  settings.stickSensitivityY = 1.5;
+}
+
+let lastCurrentTime = 0;
+let mouseMoveTimer = null;
+let pingTime = 0;
+let restPos = 128; // Default 512*1024 (512kb).
+// Default 128*1024 (128kb)
+
+let videoBufferSize = 256 * 1024;
+let audioBufferSize = 128 * 1024;
+let oldControllerState = "000000000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
+let lagless1Port = 8001;
+let lagless2Port = 8002;
+let lagless3Port = 8003;
+let lagless4Port = 8004;
+let lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
+
+class App extends _react.Component {
+  constructor(props) {
+    super(props);
+
+    _defineProperty(this, "handleSnex", controller => {
+      controller.on("data", data => {
+        switch (data.key) {
+          case "UP":
+            masterInput.snexController.state.LStick.y = data.state ? 255 : 128;
+            break;
+
+          case "DOWN":
+            masterInput.snexController.state.LStick.y = data.state ? 0 : 128;
+            break;
+
+          case "LEFT":
+            masterInput.snexController.state.LStick.x = data.state ? 0 : 128;
+            break;
+
+          case "RIGHT":
+            masterInput.snexController.state.LStick.x = data.state ? 255 : 128;
+            break;
+
+          case "A":
+            masterInput.snexController.state.btns.a = data.state;
+            break;
+
+          case "B":
+            masterInput.snexController.state.btns.b = data.state;
+            break;
+
+          case "X":
+            masterInput.snexController.state.btns.x = data.state;
+            break;
+
+          case "Y":
+            masterInput.snexController.state.btns.y = data.state;
+            break;
+
+          case "SELECT":
+            masterInput.snexController.state.btns.zl = data.state;
+            break;
+
+          case "START":
+            masterInput.snexController.state.btns.zr = data.state;
+            break;
+        }
+      });
+    });
+
+    this.toggleKeyboardControls = this.toggleKeyboardControls.bind(this);
+    this.toggleControllerControls = this.toggleControllerControls.bind(this);
+    this.toggleTouchControls = this.toggleTouchControls.bind(this);
+    this.toggleControllerView = this.toggleControllerView.bind(this);
+    this.toggleAnalogStickMode = this.toggleAnalogStickMode.bind(this);
+    this.toggleDpadSwap = this.toggleDpadSwap.bind(this);
+    this.toggleTDSConfig = this.toggleTDSConfig.bind(this); // this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
+
+    this.toggleFullscreen = this.toggleFullscreen.bind(this);
+    this.exitFullscreen = this.exitFullscreen.bind(this);
+    this.toggleLargescreen = this.toggleLargescreen.bind(this);
+    this.switchTabs = this.switchTabs.bind(this);
+    this.sendControllerState = this.sendControllerState.bind(this);
+    this.choosePlayer = this.choosePlayer.bind(this);
+    this.onUsernameChange = this.onUsernameChange.bind(this);
+    this.state = {
+      players: [{
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }, {
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }, {
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }, {
+        name: "",
+        turnTimeLeft: 0,
+        turnPercent: 0,
+        forfeitTimeLeft: 0,
+        forfeitPercent: 0
+      }],
+      currentPlayerChosen: 0,
+      waitlists: [[], [], [], [], []],
+      viewerIDs: [],
+      usernameMap: {},
+      controlQueues: [[], [], [], []],
+      // account info:
+      myUniqueID: "",
+      myConnectedAccounts: [],
+      myUsername: "???",
+      myValidUsernames: [],
+      usernameIndex: 0,
+      // lagless tab:
+      tab: 2,
+      // checkbox settings:
+      enableAudioThree: true,
+      audioThree: false,
+      keyboardControls: true,
+      controllerControls: true,
+      touchControls: true,
+      controllerView: true,
+      mouseControls: false,
+      analogStickMode: false,
+      dpadSwap: false,
+      TDSConfig: false,
+      darkTheme: false,
+      fullscreen: false,
+      largescreen: false,
+      hideChat: false,
+      hideNav: false,
+      deadzone: 50,
+      // volume:
+      volume: 1,
+      // controller view:
+      controllerViewState: "",
+      isSignedin: false,
+      // controller: new VirtualProController(),
+      // sticks:
+      sticks: {
+        L: {
+          X: {
+            sensitivity: 1,
+            offset: 0,
+            deadzone: 50
+          },
+          Y: {
+            sensitivity: 1,
+            offset: 0,
+            deadzone: 50
+          }
+        },
+        R: {
+          X: {
+            sensitivity: 1,
+            offset: 0,
+            deadzone: 50
+          },
+          Y: {
+            sensitivity: 1,
+            offset: 0,
+            deadzone: 50
+          }
+        }
+      },
+      deadzone: 50,
+      // stickSensitivityX: 1,
+      // stickSensitivityY: 1,
+      stickAttack: 20,
+      stickReturn: 20,
+      // lagless settings:
+      lagless1: {
+        framerate: 15,
+        quality: 60,
+        scale: 30
+      },
+      lagless2: {
+        framerate: 20,
+        videoBitrate: 1,
+        scale: 540
+      },
+      lagless3: {
+        framerate: 20,
+        videoBitrate: 1,
+        scale: 540
+      }
+    };
+  }
+
+  componentDidMount() {
+    console.log("restoring preferences"); // check if new:
+    // localforage.getItem("new").then(function (value) {
+    // 	if (value != "new") {
+    // 		$("#tutorialWindow").modal();
+    // 	}
+    // 	localforage.setItem("new", "new");
+    // });
+    // check for ads:
+    // 	localforage.getItem("ads").then(function(value) {
+    // 		if (value != "ads") {
+    // 			if (typeof canRunAds == "undefined") {
+    // 				console.log("test");
+    // 				swal({
+    // 					title: "Disable your adblocker! or don\'t ¯\\_(ツ)_/¯ This message won't appear again!",
+    // 				});
+    // 			}
+    // 		}
+    // 		localforage.setItem("ads", "ads");
+    // 	});
+    // Get stored preferences
+
+    _localforage.default.getItem("settings").then(value => {
+      // If they exist, write them
+      if (typeof value != "undefined") {
+        settings = Object.assign({}, settings, JSON.parse(value));
+      } // Store the preferences (so that the default values get stored)
+
+
+      _localforage.default.setItem("settings", JSON.stringify(settings)); // debug:
+
+
+      console.log(settings);
+      this.setState({
+        keyboardControls: settings.keyboardControls,
+        controllerControls: settings.controllerControls,
+        touchControls: settings.touchControls,
+        mouseControls: settings.mouseControls,
+        controllerView: settings.controllerView,
+        analogStickMode: settings.analogStickMode,
+        dpadSwap: settings.dpadSwap,
+        TDSConfig: settings.TDSConfig,
+        enableAudioThree: settings.enableAudioThree,
+        audioThree: settings.audioThree,
+        darkTheme: settings.darkTheme,
+        fullscreen: settings.fullscreen,
+        largescreen: settings.largescreen,
+        hideChat: settings.hideChat,
+        hideNav: settings.hideNav,
+        // tab: settings.tab,
+        deadzone: settings.deadzone,
+        volume: settings.volume
+      }); // if (settings.tab != 1) {
+      // 	$("#tab" + settings.tab).trigger("click");
+      // }
+      // $("#tab" + this.state.tab).trigger("click");
+      // if (this.state.tab == 1) {
+      // 	this.switchTabs(1);
+      // }
+
+      $("#tab" + this.state.tab).trigger("click");
+      this.switchTabs(this.state.tab); // addJoyCons(settings.tab);
+
+      rebindUnbindTouchControls();
+      clearAndReplaceProfiles(); //
+      // resizers.push(textFitPercent({
+      // 	selector: "#lagless2KeyboardDropdown",
+      // 	parent: "#lagless2Bar",
+      // 	percentWidth: 20,
+      // 	isFirstChild: true,
+      // 	isClass: true,
+      // 	maxTries: 20,
+      // 	increment: 0.2
+      // }));
+      //
+      // resizers.push(textFitPercent({
+      // 	selector: "#lagless2ViewerDropdown",
+      // 	parent: "#lagless2Bar",
+      // 	percentWidth: 12,
+      // 	isFirstChild: true,
+      // 	maxTries: 20,
+      // 	increment: 0.2,
+      // 	maxFontSize: 20
+      // }));
+      //
+      // resizers.push(textFitPercent({
+      // 	selector: "#lagless2Refresh",
+      // 	parent: "#lagless2Bar",
+      // 	percentWidth: 8,
+      // 	// 			isFirstChild: true,
+      // 	maxTries: 20,
+      // 	increment: 0.2,
+      // 	accuracy: 5,
+      // 	maxFontSize: 30
+      // }));
+      //
+      // resizers.push(textFitPercent({
+      // 	selector: "#lagless2KeyboardSettings",
+      // 	parent: "#lagless2Bar",
+      // 	percentWidth: 8,
+      // 	// 			isFirstChild: true,
+      // 	maxTries: 20,
+      // 	increment: 0.2,
+      // 	accuracy: 5,
+      // 	maxFontSize: 30
+      // }));
+      //
+      // resizers.push(textFitPercent({
+      // 	selector: "#hidePlayers",
+      // 	parent: "#playersContainer",
+      // 	percentWidth: 5,
+      // 	// 			isFirstChild: true,
+      // 	maxTries: 20,
+      // 	increment: 0.2,
+      // 	accuracy: 5,
+      // 	maxFontSize: 20
+      // }));
+      //
+      // for (let i = 0; i < resizers.length; i++) {
+      // 	resizers[i].resize();
+      // }
+      //
+      // wait a little longer so the joycon images load:
+
+      setTimeout(() => {
+        $("body").addClass("loaded"); // after animation is done:
+
+        setTimeout(() => {
+          $(".loaded #loader-wrapper")[0].style.visibility = "hidden";
+        }, 500);
+      }, 0);
+      /* DISCORD EMBED */
+      // 		crate = new Crate({
+      // 			server: "433874668534104065",
+      // 			channel: "487328538173767692",
+      // 			shard: "https://cl2.widgetbot.io",
+      // 		});
+    }); // save settings on close:
+
+    /* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+
+    window.addEventListener("beforeunload", event => {
+      event.preventDefault();
+      socket.emit("leaveLagless");
+      console.log("saving settings");
+
+      _localforage.default.setItem("settings", JSON.stringify(this.state));
+
+      return null;
+    }); // socket = io("https://twitchplaysnintendoswitch.com", {
+    // 	path: "/8110/socket.io",
+    // 	transports: ["websocket"],
+    // });
+    // // listen to events and dispatch actions:
+    // combineSocketEventHandlers(socket, this.props.dispatch);
+
+    window.socket = this.props.socket;
+    socket.on("turnTimesLeft", data => {
+      let newPlayers = [...this.state.players];
+
+      for (let i = 0; i < data.turnTimesLeft.length; i++) {
+        let turnTimeLeft = parseInt(data.turnTimesLeft[i] / 1000);
+        let turnPercent = parseInt(data.turnTimesLeft[i] / data.turnLengths[i] * 100);
+        let forfeitTimeLeft = parseInt(data.forfeitTimesLeft[i] / 1000);
+        let forfeitPercent = parseInt(data.forfeitTimesLeft[i] / data.forfeitLengths[i] * 100); // players[i].name
+
+        newPlayers[i].turnTimeLeft = turnTimeLeft;
+        newPlayers[i].turnPercent = turnPercent;
+        newPlayers[i].forfeitTimeLeft = forfeitTimeLeft;
+        newPlayers[i].forfeitPercent = forfeitPercent;
+      } // check if you're in the waitlist
+
+
+      if (data.waitlists[this.state.tab - 1].indexOf(this.state.myUniqueID) > -1) {
+        if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
+          tabsSwappedWithTwitch[this.state.tab - 1] = true;
+          replaceWithTwitch(this.state.tab); // setTimeout(() => {
+          // socket.emit("leaveLagless");
+          // }, 4000);
+          // swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
+
+          new _noty.default({
+            theme: "mint",
+            type: "warning",
+            text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
+            timeout: 5000,
+            sounds: {
+              volume: 0.5,
+              sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+              conditions: ["docVisible"]
+            }
+          }).show();
+        }
+      } else if (tabsSwappedWithTwitch[this.state.tab - 1]) {
+        tabsSwappedWithTwitch[this.state.tab - 1] = false;
+        new _noty.default({
+          theme: "mint",
+          type: "success",
+          text: "You're at the top of the waitlist! Switching back to lagless!",
+          timeout: 5000,
+          sounds: {
+            volume: 0.5,
+            sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+            conditions: ["docVisible"]
+          }
+        }).show();
+        replaceWithLagless(this.state.tab);
+      } // todo: update with state:
+
+
+      if (locked != data.locked) {
+        locked = data.locked;
+
+        if (locked) {
+          let iconHTML = '<i class="material-icons">lock</i>';
+          $('i:contains("lock_open")').replaceWith(iconHTML);
+        } else {
+          let iconHTML = '<i class="material-icons">lock_open</i>';
+          $('i:contains("lock")').replaceWith(iconHTML);
+        }
+      }
+
+      this.setState({
+        waitlists: data.waitlists,
+        viewerIDs: data.viewers,
+        players: newPlayers
+      });
+    });
+    socket.on("controlQueues", data => {
+      let newPlayers = [...this.state.players];
+
+      for (let i = 0; i < data.length; i++) {
+        newPlayers[i].name = data[i][0];
+      }
+
+      this.setState({
+        controlQueues: data,
+        players: newPlayers
+      });
+    });
+    socket.on("usernameMap", data => {
+      this.setState({
+        usernameMap: data
+      });
+    });
+    /* AUTHENTICATION */
+
+    let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+
+    if (authCookie != null) {
+      authCookie = authCookie.split(" ")[0].replace(/;/g, "");
+    } else {
+      // replace with twitch until signed in:
+      replaceWithTwitch(this.state.tab);
+      $("#tab1").addClass("disabled");
+      $("#tab3").addClass("disabled");
+      $("#tab4").addClass("disabled");
+      $("#tab5").addClass("disabled"); // remove the logout button:
+
+      $("#logout").remove();
+      $("#loggedInStatus").remove();
+      $(".disabled").on("click", () => {
+        (0, _sweetalert.default)("You have to sign in first!");
+      });
+    }
+
+    setInterval(() => {
+      if (authCookie != null) {
+        socket.emit("registerAccount", {
+          auth: authCookie,
+          usernameIndex: this.state.usernameIndex
+        });
+      }
+    }, 5000);
+    setTimeout(() => {
+      if (!loaded) {
+        loaded = true;
+        $.ajax({
+          url: "https://twitchplaysnintendoswitch.com/accountData/" + this.state.myUniqueID + "/" + authCookie
+        });
+      }
+    }, 5000); // response:
+
+    socket.on("accountInfo", data => {
+      this.setState({
+        myUniqueID: data.uniqueID,
+        myConnectedAccounts: data.connectedAccounts,
+        myUsername: data.username,
+        myValidUsernames: data.validUsernames,
+        isSignedin: true
+      });
+    });
+    socket.on("needToSignIn", () => {
+      (0, _sweetalert.default)("You need to sign in!");
+      setTimeout(() => {
+        tools.deleteAllCookies();
+        location.reload(true);
+      }, 1000);
+    });
+    socket.emit("join", "lagless" + this.state.tab);
+    setInterval(() => {
+      socket.emit("join", "lagless" + this.state.tab);
+    }, 10000);
+    $("#logout").on("click", function (event) {
+      tools.deleteAllCookies();
+      location.reload(true);
+    }); // $(document).on("click", ".username-dropdown-item", function (event) {
+    // 	let username = $(event.target).text();
+    // 	let index = $(event.target).index();
+    // 	$("#usernameDropdownMenuLink").text(username);
+    // 	settings.usernameIndex = index;
+    // 	localforage.setItem("settings", JSON.stringify(settings));
+    // });
+
+    function connectAccountOrSignIn(type) {
+      let url = "https://twitchplaysnintendoswitch.com/8110/auth/" + type + "/";
+
+      if (authCookie != null) {
+        url += "?uniqueToken=" + authCookie;
+      }
+
+      window.location.href = url;
+    }
+
+    $("#connectWithTwitchButton").on("click", function (event) {
+      connectAccountOrSignIn("twitch");
+    });
+    $("#connectWithGoogleButton").on("click", function (event) {
+      connectAccountOrSignIn("google");
+    });
+    $("#connectWithYoutubeButton").on("click", function (event) {
+      connectAccountOrSignIn("youtube");
+    });
+    $("#connectWithDiscordButton").on("click", function (event) {
+      connectAccountOrSignIn("discord");
+    });
+    /* IP */
+
+    setInterval(() => {
+      $.getJSON("https://jsonip.com?callback=?", data => {
+        socket.emit("registerIP", {
+          ip: data.ip,
+          id: this.state.myUniqueID,
+          username: this.state.myUsername
+        });
+
+        if (bannedIPs.indexOf(data.ip) > -1) {
+          window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        }
+
+        if (banlist.indexOf(this.state.myUsername) > -1) {
+          window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        }
+      });
+    }, 5000);
+    socket.on("forceRefresh", data => {
+      (0, _sweetalert.default)({
+        title: "There has been a force refresh!"
+      }).then(result => {
+        if (result.value) {
+          location.reload(true);
+        }
+      }); // actually force after 5 seconds:
+
+      setTimeout(() => {
+        location.reload(true);
+      }, 5000);
+    });
+    /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+    socket.on("controllerState1", data => {
+      this.setState({
+        controllerViewState: data
+      });
+    }); // fullscreen:
+
+    document.addEventListener("webkitfullscreenchange", this.exitFullscreen, false);
+    document.addEventListener("mozfullscreenchange", this.exitFullscreen, false);
+    document.addEventListener("fullscreenchange", this.exitFullscreen, false);
+    document.addEventListener("MSFullscreenChange", this.exitFullscreen, false); // lagless setup:
+
+    /* LAGLESS 1.0 */
+
+    let videoCanvas1 = $("#videoCanvas1")[0];
+    videoCanvas1.width = 1280;
+    videoCanvas1.height = 720;
+    let videoCanvas1Context = videoCanvas1.getContext("2d");
+    socket.on("viewImage", data => {
+      let src = "data:image/jpeg;base64," + data;
+
+      if (src == "data:image/jpeg;base64,") {
+        socket.emit("restart");
+        return;
+      }
+
+      let image = new Image();
+      image.style = "max-width:100%; height:auto;";
+
+      image.onload = () => {
+        let imgWidth = image.width;
+        let imgHeight = image.height;
+        let canvasWidth = videoCanvas1.width;
+        let canvasHeight = videoCanvas1.height;
+        let ratio = imgHeight / imgWidth;
+        let canvasRatio = canvasWidth / canvasHeight;
+        let ratioW = 1280 / $("#videoCanvas1").innerWidth();
+        let ratioH = 720 / $("#videoCanvas1").innerHeight();
+        let cWidth = $("#videoCanvas1").innerWidth();
+        videoCanvas1Context.clearRect(0, 0, canvasWidth, canvasHeight);
+        videoCanvas1Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
+      };
+
+      image.src = src;
+    }); // on settings change:
+
+    socket.on("lagless1Settings", data => {
+      this.setState({
+        lagless1: {
+          framerate: data.framerate,
+          quality: data.quality,
+          scale: data.scale
+        }
+      });
+    });
+    $("#lagless1Refresh").on("click", () => {
+      socket.emit("restart1");
+    });
+    /* LAGLESS 2.0 */
+    // Setup the WebSocket connection and start the player
+
+    let canvas2 = $("#videoCanvas2")[0]; // Default 512*1024 (512kb).
+    // Default 128*1024 (128kb)
+    // let player = new JSMpeg.Player(lagless2URL, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
+    // player.maxAudioLag = 0.5;
+    // player.stop();
+    // on settings change:
+
+    socket.on("lagless2Settings", data => {
+      this.setState({
+        lagless2: {
+          framerate: data.framerate,
+          videoBitrate: data.videoBitrate,
+          scale: data.scale
+        }
+      });
+    });
+    socket.on("lagless2SettingsChange", data => {
+      // try {
+      player.destroy(); // } catch (error) {
+      // 	console.log("player destroy error.");
+      // }
+
+      player = new JSMpeg.Player(lagless2URL, {
+        canvas: canvas2,
+        video: true,
+        audio: true,
+        videoBufferSize: videoBufferSize,
+        audioBufferSize: audioBufferSize,
+        maxAudioLag: 0.5
+      });
+
+      if (!this.state.audioThree) {
+        player.volume = this.state.volume / 100;
+      } else {
+        player.volume = 0;
+      }
+    });
+    $("#lagless2Refresh").on("click", () => {
+      socket.emit("restart2");
+    });
+    /* LAGLESS 3.0 */
+
+    let canvas3 = $("#videoCanvas3")[0]; // Create h264 player
+
+    let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+    let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
+    window.wsavc = wsavc;
+    wsavc.on("disconnected", () => console.log("WS Disconnected"));
+    wsavc.on("connected", () => console.log("WS connected"));
+    wsavc.on("frame_shift", fbl => {// fb.innerText = "fl: " + fbl
+    });
+    wsavc.on("initalized", payload => {
+      console.log("Initialized", payload);
+    });
+    wsavc.on("stream_active", active => console.log("Stream is ", active ? "active" : "offline"));
+    wsavc.on("custom_event_from_server", event => console.log("got event from server", event));
+    $("#lagless3Refresh").on("click", () => {
+      try {
+        wsavc.disconnect();
+      } catch (error) {}
+
+      let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+      wsavc.connect(uri);
+    });
+    $("#lagless3Refresh").on("click", () => {
+      socket.emit("restart3");
+    }); // on settings change:
+
+    socket.on("lagless3Settings", data => {
+      this.setState({
+        lagless3: {
+          framerate: data.framerate,
+          videoBitrate: data.videoBitrate,
+          scale: data.scale
+        }
+      });
+    });
+    socket.on("lagless3SettingsChange", data => {
+      let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+      wsavc.connect(uri);
+    });
+    /* LAGLESS 4.0 */
+
+    let canvas4 = $("#videoCanvas4")[0];
+    let videoPeer = new _simplePeer.default({
+      initiator: false,
+      trickle: true
+    });
+    videoPeer.on("error", function (err) {
+      console.log("error", err);
+    });
+    videoPeer.on("signal", function (data) {
+      console.log("SIGNAL", JSON.stringify(data));
+      socket.emit("clientPeerSignalV", JSON.stringify(data));
+    });
+    videoPeer.on("connect", function () {
+      console.log("CONNECT");
+      videoPeer.send(Math.random());
+    });
+    videoPeer.on("data", function (data) {
+      console.log("data: " + data);
+    });
+    socket.on("hostPeerSignalV", function (data) {
+      videoPeer.signal(JSON.parse(data));
+    });
+    videoPeer.on("stream", function (stream) {
+      // got remote video stream, then show it in a video tag
+      canvas4.src = window.URL.createObjectURL(stream); // deprecated
+      // 	canvas4.srcObj = stream;
+
+      canvas4.play();
+    }); // parsec:
+    // /*** API ***/
+    // async function auth(email, password) {
+    // 	const res = await fetch('https://parsecgaming.com/v1/auth', {
+    // 		method: 'post',
+    // 		headers: {
+    // 			'Content-Type': 'application/json',
+    // 		},
+    // 		body: JSON.stringify({
+    // 			email,
+    // 			password,
+    // 		}),
+    // 	});
+    //
+    // 	return await res.json();
+    // }
+    //
+    // async function serverList(sessionId) {
+    // 	const res = await fetch('https://parsecgaming.com/v1/server-list?include_managed=true', {
+    // 		method: 'get',
+    // 		headers: {
+    // 			'X-Parsec-Session-Id': sessionId,
+    // 		},
+    // 	});
+    //
+    // 	return await res.json();
+    // }
+    //
+    //
+    // /*** CLIENT ***/
+    // function toggleFullscreen(element) {
+    // 	if (document.webkitFullscreenElement) {
+    // 		document.webkitExitFullscreen();
+    //
+    // 	} else {
+    // 		element.webkitRequestFullscreen();
+    //
+    // 		if (navigator.keyboard && navigator.keyboard.lock)
+    // 			navigator.keyboard.lock();
+    // 	}
+    // }
+    //
+    // function runClient(element, sessionId, serverId) {
+    // 	return new Promise((resolve) => {
+    // 		//set up client object with an event callback: gets connect, status, chat, and shutter events
+    // 		const client = new Client(element, (event) => {
+    // 			console.log('EVENT', event);
+    //
+    // 			if (event.type === 'exit') {
+    // 				document.removeEventListener('keydown', hotkeys, true);
+    // 				resolve(event.code);
+    // 			}
+    // 		});
+    //
+    // 		//set up useful hotkeys that call client methods: destroy can also be used to cancel pending connection
+    // 		const hotkeys = (event) => {
+    // 			event.preventDefault();
+    //
+    // 			if (event.code === 'Backquote' && event.ctrlKey && event.altKey) {
+    // 				client.destroy(0);
+    //
+    // 			} else if (event.code === 'KeyW' && event.ctrlKey && event.altKey) {
+    // 				toggleFullscreen(element);
+    // 			}
+    // 		};
+    // 		document.addEventListener('keydown', hotkeys, true);
+    //
+    // 		client.connect(sessionId, serverId, {
+    // 			encoder_bitrate: 12,
+    // 		});
+    // 	});
+    // }
+    //
+    //
+    // /*** UI HELPERS ***/
+    // function addRow(table) {
+    // 	const tr = document.createElement('tr');
+    // 	table.appendChild(tr);
+    // 	return tr;
+    // }
+    //
+    // function addTextCol(tr, text) {
+    // 	const td = document.createElement('td');
+    // 	td.textContent = text;
+    // 	tr.appendChild(td);
+    // }
+    //
+    // function addButtonCol(tr, text, onclick) {
+    // 	const td = document.createElement('td');
+    // 	tr.appendChild(td);
+    //
+    // 	const button = document.createElement('button');
+    // 	button.textContent = text;
+    // 	button.onclick = onclick;
+    // 	td.appendChild(button);
+    // }
+    //
+    // function addInputCol(tr, id, type, onenter) {
+    // 	const td = document.createElement('td');
+    // 	tr.appendChild(td);
+    //
+    // 	const input = document.createElement('input');
+    // 	input.id = id;
+    // 	input.type = type;
+    // 	input.onkeyup = (event) => {
+    // 		if (event.keyCode === 13)
+    // 			onenter();
+    // 	};
+    // 	td.appendChild(input);
+    // }
+    //
+    //
+    // /*** MAIN ***/
+    // async function serverTable(sessionId) {
+    // 	const json = await serverList(sessionId);
+    // 	const table = document.querySelector('#server-list');
+    //
+    // 	for (const server of json) {
+    // 		const tr = addRow(table);
+    // 		addTextCol(tr, server.name);
+    // 		addTextCol(tr, server.build);
+    // 		addTextCol(tr, server.server_id);
+    // 		addButtonCol(tr, 'Connect', async () => {
+    // 			const container = document.querySelector('.video-container');
+    // 			const element = document.querySelector('video');
+    //
+    // 			table.style.display = 'none';
+    // 			container.style.display = 'block';
+    //
+    // 			const code = await runClient(element, sessionId, server.server_id);
+    //
+    // 			table.style.display = '';
+    // 			container.style.display = '';
+    //
+    // 			element.src = '';
+    // 			element.load();
+    //
+    // 			if (code !== 0)
+    // 				alert(`Exit code: ${code}`);
+    // 		});
+    // 	}
+    //
+    // 	const tr = addRow(table);
+    // 	addButtonCol(tr, 'Logout', () => {
+    // 		delete sessionStorage.sessionId;
+    // 		window.location.reload();
+    // 	});
+    // }
+    //
+    // function authTable() {
+    // 	async function submit() {
+    // 		const email = document.querySelector('#email').value;
+    // 		const password = document.querySelector('#password').value;
+    //
+    // 		const json = await auth(email, password);
+    // 		sessionStorage.sessionId = json.session_id;
+    // 		window.location.reload();
+    // 	}
+    //
+    // 	const table = document.querySelector('#server-list');
+    //
+    // 	let tr = addRow(table);
+    // 	addTextCol(tr, 'Email');
+    // 	addInputCol(tr, 'email', 'email', submit);
+    //
+    // 	tr = addRow(table);
+    // 	addTextCol(tr, 'Password');
+    // 	addInputCol(tr, 'password', 'password', submit);
+    //
+    // 	document.querySelector('#email').focus();
+    // }
+    //
+    // // if (!sessionStorage.sessionId) {
+    // // 	authTable();
+    // //
+    // // } else {
+    // // 	serverTable(sessionStorage.sessionId);
+    // // }
+    // //
+    // window.authTable = authTable;
+    // window.serverTable = serverTable;
+    //
+    // // conv:
+    // // window.setReactState = (obj) => {
+    // // 	this.setState(obj);
+    // // };
+
+    /* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
+
+    /* AUDIO 3.0 */
+
+    let peer = new _simplePeer.default({
+      initiator: false,
+      trickle: true
+    });
+    peer.on("error", function (err) {
+      console.log("error", err);
+    });
+    peer.on("signal", function (data) {
+      console.log("SIGNAL", JSON.stringify(data));
+      socket.emit("clientPeerSignal", JSON.stringify(data));
+    });
+    peer.on("connect", function () {
+      console.log("CONNECT");
+      peer.send(Math.random());
+    });
+    peer.on("data", function (data) {
+      console.log("data: " + data);
+    });
+    socket.on("hostPeerSignal", function (data) {
+      peer.signal(JSON.parse(data));
+    });
+    peer.on("stream", function (stream) {
+      // got remote audio stream, then show it in an audio tag
+      audio.src = window.URL.createObjectURL(stream); // deprecated
+      // 			audio.srcObj = stream;
+
+      audio.play();
+      audio.volume = 0;
+    }); // $("#enableAudioThreeCheckbox").on("change", function () {
+    // 	settings.enableAudioThree = this.checked;
+    // 	localforage.setItem("settings", JSON.stringify(settings));
+    // 	if (settings.enableAudioThree) {
+    // 		if (!audioConnected) {
+    // 			socket.emit("requestAudio");
+    // 			setTimeout(() => {
+    // 				audioConnected = true;
+    // 			}, 100);
+    // 		}
+    // 	} else {
+    // 		try {
+    // 			audio.volume = 0;
+    // 			player.volume = settings.volume / 100;
+    // 		} catch (error) {}
+    // 		$("#audioThreeCheckbox").prop("checked", false);
+    // 		$(".audioThreeCheckbox").prop("checked", false);
+    // 	}
+    // });
+    //
+    // $("#audioThreeCheckbox").on("change", function () {
+    // 	if (!settings.enableAudioThree) {
+    // 		$("#audioThreeCheckbox").prop("checked", false);
+    // 		swal("You have to enable Audio 3.0 first!");
+    // 		return;
+    // 	}
+    // 	settings.audioThree = this.checked;
+    // 	localforage.setItem("settings", JSON.stringify(settings));
+    // 	if (settings.audioThree) {
+    // 		if (!audioConnected) {
+    // 			audio.volume = settings.volume / 100;
+    // 		} else {
+    // 			try {
+    // 				audio.volume = settings.volume / 100;
+    // 				player.volume = 0;
+    // 			} catch (error) {}
+    // 		}
+    // 	} else {
+    // 		audio.volume = 0;
+    // 		player.volume = settings.volume / 100;
+    // 	}
+    // });
+
+    $(".audioThreeCheckbox").on("change", function () {
+      $("#audioThreeCheckbox").trigger("click");
+      setTimeout(() => {
+        $(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
+      }, 100);
+    });
+    /* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+    setInterval(() => {
+      // hack:
+      // todo: not this:
+      if (!this.state.audioThree) {
+        audio.volume = 0;
+        player.volume = this.state.volume / 100;
+      } else {
+        audio.volume = this.state.volume / 100;
+        player.volume = 0;
+      }
+    }, 1000);
+    sendInputTimer = setInterval(() => {
+      masterInput.pollDevices();
+      this.sendControllerState();
+    }, 1000 / 120);
+    /* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+    socket.on("voteStarted", function (data) {
+      let notification = new _noty.default({
+        theme: "mint",
+        type: "warning",
+        text: "A vote to change games has started!",
+        timeout: 5000,
+        sounds: {
+          volume: 0.5,
+          sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+          conditions: ["docVisible"]
+        }
+      });
+      notification.show();
+    });
+    /* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+    socket.on("rickroll", function (data) {
+      if (myUsername == data || data == "everyone") {
+        let myPlayer;
+        (0, _sweetalert.default)({
+          html: '<canvas id="rickroll"></canvas>',
+          onOpen: () => {
+            let rickrollCanvas = $("#rickroll")[0];
+            myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
+              canvas: rickrollCanvas,
+              loop: false,
+              autoplay: true
+            });
+          },
+          onClose: () => {
+            myPlayer.destroy();
+          },
+          customClass: "swal-wide"
+        });
+      }
+    });
+    socket.on("rainbow", function (data) {
+      if (myUniqueID == data || data == "everyone") {
+        $("body").addClass("rainbow-text");
+      }
+    });
+    socket.on("banlist", function (data) {
+      banlist = data;
+    });
+    socket.on("banned", function (data) {
+      let alertMessage = $(".swal2-container")[0];
+
+      if (typeof alertMessage == "undefined") {
+        (0, _sweetalert.default)("You're banned (maybe only temporarily?)");
+      }
+    });
+    /* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+    setInterval(function () {
+      pingTime = Date.now();
+      socket.emit("ping2");
+    }, 1000);
+    socket.on("pong2", function () {
+      let latency = Date.now() - pingTime;
+      $("#ping").text(latency + "ms");
+    });
+    $("#resetSettings").on("click", function (event) {
+      event.preventDefault();
+
+      _localforage.default.clear().then(function () {
+        location.reload(true);
+      });
+    });
+    /* COLLAPSE BUTTONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+    $(".collapseButton").on("click", function (event) {
+      let target = $(this).attr("data-target");
+
+      if ($(this).attr("collapsed") == "false") {
+        $(this).attr("collapsed", "true");
+        $(target).collapse("hide");
+      } else {
+        $(this).attr("collapsed", "false");
+        $(target).parent().animate({
+          "margin-top": "0px"
+        }); // 		$(target).parent().css("width", "");
+
+        $(target).parent().css("height", ""); // 	$(this).parent().animate({"width": "", "height": ""});
+
+        let thisId = "#" + $(target).attr("id");
+        let button = $('[data-target="' + thisId + '"]');
+        button.css("align-self", "");
+        button.css("margin-left", "5px");
+        setTimeout(() => {
+          $(target).parent().css("width", "");
+          $(target).collapse("show");
+        }, 500);
+      }
+    });
+    $(".collapsible").on("show.bs.collapse", function () {//  	$(this).parent().css("margin-top", "");
+      // 	$(this).parent().animate({"margin-top": "0px"});
+      // 	$(this).parent().css("width", "");
+      // 	$(this).parent().css("height", "");
+      //  	$(this).parent().animate({"width": "", "height": ""});
+      // 	let thisId = "#" + $(this).attr("id");
+      // 	let button = $('[data-target="' + thisId + '"]');
+      // 	button.css("align-self", "");
+      // 	button.css("margin-left", "5px");
+    });
+    $(".collapsible").on("shown.bs.collapse", function () {
+      let thisId = "#" + $(this).attr("id");
+      let button = $('[data-target="' + thisId + '"]');
+      button.text("Hide");
+    });
+    $(".collapsible").on("hidden.bs.collapse", function () {
+      let thisId = "#" + $(this).attr("id");
+      let button = $('[data-target="' + thisId + '"]');
+      button.text("Show");
+      let height = button.outerHeight() + 5;
+      button.parent().height(height);
+      let width = button.outerWidth() + 10;
+      button.parent().width(width);
+      button.parent().animate({
+        "margin-top": "-60px"
+      }); // 	button.parent().animate({"height" : height});
+      // 	button.parent().animate({"width": width, "height": height});
+
+      button.css("align-self", "center");
+      button.css("margin-left", "0px");
+    });
+    $("#replaceWithTwitch").on("click", function () {
+      replaceWithTwitch();
+    });
+    $("#replaceWithLagless").on("click", function () {
+      replaceWithLagless();
+    }); // socket.on("replaceWithTwitch", function () {
+    // 	replaceWithTwitch();
+    // });
+    //
+    // socket.on("replaceWithLagless", function () {
+    // 	replaceWithTwitch();
+    // });
+
+    /* STATUS BAR @@@@@@@@@@@@@@@@ */
+    // socket.on("lock", function() {
+    // 	replaceWithTwitch();
+    // });
+
+    /* MOD COMMANDS */
+    // selects elements in the future:
+    // https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
+
+    $("body").popover({
+      selector: ".queueItem",
+      trigger: "focus",
+      html: true,
+      toggle: "popover",
+      title: "Mod Powers",
+      boundary: "window",
+      container: "body",
+      placement: "right",
+      content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
+						<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
+						<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>'
+    }); // .click(function() {
+    // 	setTimeout(() => {
+    // 		$('[data-toggle="popover"]').popover("hide");
+    // 	}, 8000);
+    // });
+
+    $("#container").popover({
+      // must be unique
+      selector: ".viewerElement",
+      // 	trigger: "focus",
+      html: true,
+      toggle: "popover",
+      title: "Mod Powers",
+      boundary: "window",
+      container: "body",
+      placement: "right",
+      content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
+						<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
+						<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
+						<button id="unban" class="btn btn-secondary"><b>Unban</b></button>'
+    }).click(() => {
+      setTimeout(() => {
+        $('[data-toggle="popover"]').popover("hide");
+      }, 8000);
+    });
+    let modPowerUniqueID = "";
+    $(document).on("click", ".queueItem", function (event) {
+      $(this).effect("highlight", {}, 2000);
+      modPowerUniqueID = $(this).attr("uniqueid");
+    });
+    $(document).on("click", ".viewerElement", function (event) {
+      $(this).effect("highlight", {}, 2000);
+      modPowerUniqueID = $(this).attr("uniqueid");
+    });
+    $(document).on("click", "#kickFromQueue", function (event) {
+      socket.emit("kickFromQueue", modPowerUniqueID);
+      $("#queuePopup").remove();
+    });
+    $(document).on("click", "#tempBan", function (event) {
+      socket.emit("tempBan", modPowerUniqueID);
+      $("#queuePopup").remove();
+    });
+    $(document).on("click", "#permaBan", function (event) {
+      socket.emit("permaBan", modPowerUniqueID);
+      $("#queuePopup").remove();
+    });
+    $(document).on("click", "#unban", function (event) {
+      socket.emit("unban", modPowerUniqueID);
+      $("#queuePopup").remove();
+    });
+    $(document).on("click", 'i:contains("lock")', function (event) {
+      $(this).effect("highlight", {}, 2000);
+      socket.emit("unlock");
+    });
+    $(document).on("click", 'i:contains("lock_open")', function (event) {
+      $(this).effect("highlight", {}, 2000);
+      socket.emit("lock");
+    }); // todo: reimplement:
+    // setInterval(function() {
+    // 	let currentTime = Date.now();
+    // 	let elapsedTime = currentTime - lastCurrentTime;
+    // 	let timeLeftMilli = timeLeft - elapsedTime;
+    // 	let timeLeftSec = parseInt(timeLeftMilli / 1000);
+    // 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
+    // 	let progressBar = $(".progress-bar");
+    // 	progressBar.css("width", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
+    // }, 200);
+
+    $(document).on("click", ".joinQueue", function (event) {
+      let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
+
+      for (let i = 0; i < 4; i++) {
+        if (i == cNum) {
+          continue;
+        }
+
+        socket.emit("leaveQueue", i);
+      }
+
+      socket.emit("joinQueue", cNum);
+    });
+    $(document).on("click", ".leaveQueue", function (event) {
+      let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
+      socket.emit("leaveQueue", cNum);
+    });
+    window.addEventListener("keydown", function (e) {
+      // escape, f11
+      if ([27, 122].indexOf(e.keyCode) > -1) {
+        e.preventDefault();
+        $("body").removeClass("hideScrollbar");
+      }
+    }, false);
+  }
+
+  onUsernameChange(event) {
+    let index = event.target.getAttribute("index");
+    this.setState({
+      usernameIndex: index,
+      myUsername: this.state.myValidUsernames[index]
+    });
+  } // SNEX:
+
+
+  // checkbox settings:
+  toggleKeyboardControls(state) {
+    this.setState({
+      keyboardControls: state
+    }, () => {});
+  }
+
+  toggleControllerControls(state) {
+    this.setState({
+      controllerControls: state
+    }, () => {});
+  }
+
+  toggleTouchControls(state) {
+    this.setState({
+      touchControls: state
+    }, () => {});
+  }
+
+  toggleControllerView(state) {
+    this.setState({
+      controllerView: state
+    }, () => {
+      if (this.state.controllerView && this.state.largescreen) {
+        this.setState({
+          largescreen: false
+        });
+      }
+    });
+  }
+
+  toggleAnalogStickMode(state) {
+    this.setState({
+      analogStickMode: state
+    }, () => {});
+  }
+
+  toggleDpadSwap(state) {
+    this.setState({
+      dpadSwap: state
+    }, () => {});
+  }
+
+  toggleTDSConfig(state) {
+    this.setState({
+      TDSConfig: state
+    }, () => {
+      if (this.state.TDSConfig) {// this.state.sticks.L.X.sensitivity = 1.5;
+        // this.state.sticks.L.Y.sensitivity = 1.5;
+        // this.state.sticks.R.X.sensitivity = 1.5;
+        // this.state.sticks.R.Y.sensitivity = 1.5;
+        // this.state.sticks.R.X.offset = -20;
+        // this.state.sticks.R.Y.offset = -10;
+      } else {// this.state.sticks.L.X.sensitivity = 1;
+          // this.state.sticks.L.Y.sensitivity = 1;
+          // this.state.sticks.R.X.sensitivity = 1;
+          // this.state.sticks.R.Y.sensitivity = 1;
+          // this.state.sticks.R.X.offset = 0;
+          // this.state.sticks.R.Y.offset = 0;
+        }
+    });
+  }
+
+  toggleAudioThree(state) {
+    this.setState({
+      enableAudioThree: state
+    }, () => {});
+  }
+
+  toggleFullscreen(state) {
+    this.setState({
+      fullscreen: state
+    }, () => {
+      if (this.state.fullscreen) {
+        $("body").css("padding", "0");
+        $("#picture").css("width", "100%");
+        $("#picture").css("border", "none"); // $(".videoCanvas").css("width", "100%");
+        // $(".videoCanvas").css("margin-left", "0");
+
+        $(".laglessView").css("margin-left", "0");
+        $(".laglessView").css("margin-right", "0");
+
+        if (this.state.controllerView) {
+          this.setState({
+            controllerView: false
+          });
+        }
+
+        if (!this.state.hideChat) {
+          this.setState({
+            hideChat: true
+          });
+        }
+
+        if (!this.state.hideNav) {
+          this.setState({
+            hideNav: true
+          });
+        }
+
+        $("body").addClass("hideScrollbar");
+        $(document).scrollTop(0);
+        tools.toggleFullScreen($("body")[0]);
+      } else {
+        $("body").css("padding", "");
+        $("#picture").css("width", "");
+        $("#picture").css("border", ""); // $(".videoCanvas").css("width", "");
+        // $(".videoCanvas").css("margin-left", "");
+
+        $(".laglessView").css("margin-left", "");
+        $(".laglessView").css("margin-right", "");
+        $("body").removeClass("hideScrollbar");
+      }
+    });
+  } // https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
+
+
+  exitFullscreen() {
+    if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+      console.log("exiting fullscreen");
+      $("body").removeClass("hideScrollbar");
+      this.setState({
+        fullscreen: false,
+        hideChat: false,
+        hideNav: false,
+        controllerView: true
+      });
+    }
+  }
+
+  toggleLargescreen(state) {
+    this.setState({
+      largescreen: state
+    }, () => {
+      if (this.state.largescreen && this.state.controllerView) {
+        this.setState({
+          controllerView: false
+        });
+        rebindUnbindTouchControls();
+      } else if (!this.state.largescreen && !this.state.controllerView) {
+        this.setState({
+          controllerView: true
+        });
+      }
+    });
+  }
+
+  choosePlayer(cNum) {
+    this.setState({
+      currentPlayerChosen: cNum
+    });
+  }
+
+  switchTabs(tab) {
+    this.setState({
+      tab: tab
+    }, () => {
+      setTimeout(() => {
+        // lagless 1:
+        if (tab == 1) {
+          socket.emit("join", "lagless1");
+        } else {
+          socket.emit("leave", "lagless1");
+        } // lagless 2:
+
+
+        if (tab == 2) {
+          socket.emit("join", "lagless2"); //player.play();
+
+          try {
+            player.destroy();
+          } catch (error) {}
+
+          player = new JSMpeg.Player(lagless2URL, {
+            canvas: document.getElementById("videoCanvas2"),
+            video: true,
+            audio: true,
+            videoBufferSize: videoBufferSize,
+            audioBufferSize: audioBufferSize,
+            maxAudioLag: 0.5
+          });
+        } else {
+          socket.emit("leave", "lagless2"); // 		player.stop();
+
+          try {
+            player.destroy();
+          } catch (error) {}
+
+          player = new JSMpeg.Player(lagless2URL, {
+            canvas: document.getElementById("videoCanvas2"),
+            video: false,
+            audio: true,
+            videoBufferSize: videoBufferSize,
+            audioBufferSize: audioBufferSize,
+            maxAudioLag: 0.5
+          });
+        } // lagless 3:
+
+
+        if (tab == 3) {
+          socket.emit("join", "lagless3");
+          let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+          wsavc.connect(uri);
+        } else {
+          socket.emit("leave", "lagless3");
+
+          try {
+            wsavc.disconnect();
+          } catch (error) {}
+        } // lagless 4:
+
+
+        if (tab == 4) {
+          socket.emit("join", "lagless4");
+
+          if (!videoConnected) {
+            videoConnected = true;
+            socket.emit("requestVideo");
+          } else {
+            videoCanvas4.play();
+          }
+        } else {
+          socket.emit("leave", "lagless4"); // videoCanvas4.pause();
+        }
+      }, 0);
+
+      if (!this.state.largescreen && this.state.touchControls) {
+        addJoyCons(tab);
+        rebindUnbindTouchControls();
+      } // https://github.com/yoannmoinet/nipplejs/issues/39
+      // force joysticks to recalculate the center:
+
+
+      window.dispatchEvent(new Event("resize"));
+      setTimeout(() => {
+        window.dispatchEvent(new Event("resize"));
+      }, 5000);
+    });
+  }
+
+  sendControllerState() {
+    let newControllerState = masterInput.outputController.getState();
+
+    if (newControllerState == oldControllerState) {
+      return;
+    } else {
+      oldControllerState = newControllerState;
+    }
+
+    if (masterInput.currentInputMode == "keyboard" && !this.state.keyboardControls) {
+      return;
+    }
+
+    if (masterInput.currentInputMode == "controller" && !this.state.controllerControls) {
+      return;
+    }
+
+    if (masterInput.currentInputMode == "touch" && !this.state.touchControls) {
+      return;
+    } // return if chat is focused:
+
+
+    if (document.activeElement === document.getElementById("messageBox")) {
+      return;
+    }
+
+    if (($("#keyboardSettings").data("bs.modal") || {})._isShown) {
+      return;
+    }
+
+    if (this.state.controlQueues[this.state.currentPlayerChosen].indexOf(this.state.myUniqueID) == -1) {
+      socket.emit("joinQueue", this.state.currentPlayerChosen);
+    }
+
+    if (this.state.controlQueues[this.state.currentPlayerChosen].indexOf(this.state.myUniqueID) > 0 && this.state.controlQueues[this.state.currentPlayerChosen].length > 0) {
+      new _noty.default({
+        theme: "mint",
+        type: "warning",
+        text: "It's not your turn yet!",
+        timeout: 500
+      }).show();
+      return;
+    }
+
+    authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+
+    if (authCookie == null) {
+      new _noty.default({
+        theme: "mint",
+        type: "warning",
+        text: "You aren't signed in!",
+        timeout: 500,
+        sounds: {
+          volume: 0.5,
+          sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+          conditions: ["docVisible"]
+        }
+      }).show();
+      return;
+    } else {
+      authCookie = authCookie.split(" ")[0].replace(/;/g, "");
+    }
+
+    let obj = {
+      state: newControllerState,
+      cNum: 0
+    };
+
+    if (this.state.controlQueues[0][0] == this.state.myUniqueID) {
+      obj.cNum = 0;
+    } else if (this.state.controlQueues[1][0] == this.state.myUniqueID) {
+      obj.cNum = 1;
+    } else if (this.state.controlQueues[2][0] == this.state.myUniqueID) {
+      obj.cNum = 2;
+    } else if (this.state.controlQueues[3][0] == this.state.myUniqueID) {
+      obj.cNum = 3;
+    } else {
+      obj.cNum = this.state.currentPlayerChosen;
+    }
+
+    console.log(obj.state, obj.cNum);
+    socket.emit("sendControllerState", obj);
+  }
+
+  render() {
+    return _react.default.createElement(_react.default.Fragment, null, this.state.darkTheme ? _react.default.createElement(_ThemeSwitch.default, null) : null, _react.default.createElement("div", {
+      id: "loader-wrapper"
+    }, _react.default.createElement("div", {
+      id: "loader"
+    }), _react.default.createElement("div", {
+      className: "loader-section section-left"
+    }), _react.default.createElement("div", {
+      className: "loader-section section-right"
+    })), _react.default.createElement("div", {
+      id: "container",
+      className: "light"
+    }, _react.default.createElement("ul", {
+      id: "navTabs",
+      className: "nav nav-tabs light otborder",
+      style: {
+        display: this.state.hideNav ? "none" : null
+      }
+    }, _react.default.createElement("li", {
+      className: "nav-item active"
+    }, _react.default.createElement("a", {
+      id: "tab1",
+      className: "nav-link active",
+      "data-toggle": "tab",
+      href: "#lagless1",
+      onClick: () => {
+        this.switchTabs(1);
+      }
+    }, "Lagless 1")), _react.default.createElement("li", {
+      className: "nav-item"
+    }, _react.default.createElement("a", {
+      id: "tab2",
+      className: "nav-link",
+      "data-toggle": "tab",
+      href: "#lagless2",
+      onClick: () => {
+        this.switchTabs(2);
+      }
+    }, "Lagless 2")), _react.default.createElement("li", {
+      className: "nav-item"
+    }, _react.default.createElement("a", {
+      id: "tab3",
+      className: "nav-link disabled",
+      "data-toggle": "tab",
+      href: "#lagless3",
+      onClick: () => {
+        this.switchTabs(3);
+      }
+    }, "Lagless 3")), _react.default.createElement("li", {
+      className: "nav-item"
+    }, _react.default.createElement("a", {
+      id: "tab4",
+      className: "nav-link disabled",
+      "data-toggle": "tab",
+      href: "#lagless4",
+      onClick: () => {
+        this.switchTabs(4);
+      }
+    }, "Lagless 4")), _react.default.createElement("li", {
+      className: "nav-item"
+    }, _react.default.createElement("a", {
+      id: "tab5",
+      className: "nav-link",
+      "data-toggle": "tab",
+      href: "#lagless5",
+      onClick: () => {
+        this.switchTabs(5);
+      }
+    }, "Lagless 5")), _react.default.createElement("div", {
+      id: "statusContainer",
+      className: "otborder"
+    }, _react.default.createElement("i", {
+      className: "material-icons"
+    }, "lock_open")), _react.default.createElement(_reactConnect.default, {
+      type: "snes-us",
+      onConnection: this.handleSnex
+    })), _react.default.createElement("div", {
+      id: "picture",
+      className: "otborder",
+      style: {
+        width: this.state.hideChat ? "100%" : null
+      }
+    }, _react.default.createElement("div", {
+      className: "tab-content"
+    }, _react.default.createElement("div", {
+      id: "lagless1",
+      className: "tab-pane active"
+    }, _react.default.createElement(_LaglessView.default, {
+      num: 1,
+      controllerView: this.state.controllerView && this.state.tab == 1,
+      controllerState: this.state.controllerViewState,
+      largescreen: this.state.largescreen,
+      fullscreen: this.state.fullscreen
+    })), _react.default.createElement("div", {
+      id: "lagless2",
+      className: "tab-pane"
+    }, _react.default.createElement(_LaglessView.default, {
+      num: 2,
+      controllerView: this.state.controllerView && this.state.tab == 2,
+      controllerState: this.state.controllerViewState,
+      largescreen: this.state.largescreen,
+      fullscreen: this.state.fullscreen
+    })), _react.default.createElement("div", {
+      id: "lagless3",
+      className: "tab-pane"
+    }, _react.default.createElement(_LaglessView.default, {
+      num: 3,
+      controllerView: this.state.controllerView && this.state.tab == 3,
+      controllerState: this.state.controllerViewState,
+      largescreen: this.state.largescreen,
+      fullscreen: this.state.fullscreen
+    })), _react.default.createElement("div", {
+      id: "lagless4",
+      className: "tab-pane"
+    }), _react.default.createElement("div", {
+      id: "lagless5",
+      className: "tab-pane"
+    }, _react.default.createElement("div", {
+      className: "video-container"
+    }, _react.default.createElement("video", null)), _react.default.createElement("table", {
+      id: "server-list"
+    }))), _react.default.createElement("div", {
+      id: "laglessBar",
+      className: "laglessBar otborder"
+    }, _react.default.createElement(_ViewerList.default, {
+      uniqueIDs: this.state.viewerIDs,
+      usernameMap: this.state.usernameMap
+    }), _react.default.createElement("div", {
+      id: "laglessVolumeSlider",
+      className: "volumeSlider otborder"
+    }, _react.default.createElement("i", {
+      className: "fa fa-volume-down",
+      onClick: () => {
+        this.setState({
+          volume: 0
+        });
+      }
+    }), _react.default.createElement(_MySlider.default, {
+      min: 0,
+      max: 100,
+      step: 1,
+      value: this.state.volume,
+      handleChange: value => {
+        this.setState({
+          volume: value
+        });
+      }
+    }), _react.default.createElement("i", {
+      className: "fa fa-volume-up",
+      onClick: () => {
+        this.setState({
+          volume: 100
+        });
+      }
+    })), _react.default.createElement("label", {
+      className: "checkbox-inline checkbox-bootstrap checkbox-lg otborder"
+    }, _react.default.createElement("input", {
+      className: "audioThreeCheckbox",
+      type: "checkbox"
+    }), _react.default.createElement("span", {
+      className: "checkbox-placeholder"
+    }), "Audio 3.0"), _react.default.createElement("button", {
+      id: "laglessRefresh",
+      className: "laglessRefresh btn btn-primary btn-settings"
+    }, _react.default.createElement("i", {
+      className: "fas fa-sync-alt"
+    })), _react.default.createElement("button", {
+      id: "laglessKeyboardSettings",
+      "data-toggle": "modal",
+      "data-target": "#keyboardSettings",
+      className: "keyboardMapper btn btn-primary btn-settings"
+    }, _react.default.createElement("i", {
+      className: "fas fa-keyboard"
+    }), "|", _react.default.createElement("i", {
+      className: "fas fa-gamepad"
+    })), _react.default.createElement("div", {
+      id: "keyboardDropdown",
+      className: "keyboardDropdown dropdown show"
+    }, _react.default.createElement("a", {
+      id: "keyboardDropdownButton",
+      className: "btn btn-secondary dropdown-toggle",
+      href: "#",
+      "data-toggle": "dropdown"
+    }, "Keyboard Profiles"), _react.default.createElement("div", {
+      className: "keyboard-dropdown-menu dropdown-menu"
+    })))), _react.default.createElement("div", {
+      id: "chatContainer",
+      className: "otborder",
+      style: {
+        display: this.state.hideChat ? "none" : null
+      }
+    }, _react.default.createElement("div", {
+      id: "loggedInContainer",
+      className: "otborder"
+    }, _react.default.createElement("div", {
+      id: "loggedInStatus",
+      className: "otborder"
+    }, _react.default.createElement(_UsernameDropdown.default, {
+      validUsernames: this.state.myValidUsernames,
+      myUsername: this.state.myUsername,
+      handleClick: this.onUsernameChange
+    }), _react.default.createElement("button", {
+      id: "logout",
+      className: "btn btn-secondary"
+    }, "Logout")), _react.default.createElement(_ConnectAccounts.default, {
+      connectedAccounts: this.state.myConnectedAccounts
+    })), _react.default.createElement(_Chat.default, null)), _react.default.createElement("div", {
+      id: "barUnderTheStream",
+      className: "otborder"
+    }, _react.default.createElement("div", {
+      id: "playersContainer",
+      className: "otborder"
+    }, _react.default.createElement("button", {
+      id: "hidePlayers",
+      className: "btn btn-secondary collapseButton",
+      "data-toggle": "",
+      "data-target": "#players",
+      collapsed: "false"
+    }, "Hide"), _react.default.createElement("div", {
+      id: "players",
+      className: "collapse show collapsible"
+    }, _react.default.createElement(_Player.default, {
+      num: 1,
+      player: this.state.players[0],
+      myID: this.state.myUniqueID,
+      usernameMap: this.state.usernameMap,
+      controlQueue: this.state.controlQueues[0],
+      selected: this.state.currentPlayerChosen,
+      handleChange: () => {
+        this.choosePlayer(0);
+      }
+    }), _react.default.createElement(_Player.default, {
+      num: 2,
+      player: this.state.players[1],
+      myID: this.state.myUniqueID,
+      usernameMap: this.state.usernameMap,
+      controlQueue: this.state.controlQueues[1],
+      selected: this.state.currentPlayerChosen,
+      handleChange: () => {
+        this.choosePlayer(1);
+      }
+    }), _react.default.createElement(_Player.default, {
+      num: 3,
+      player: this.state.players[2],
+      myID: this.state.myUniqueID,
+      usernameMap: this.state.usernameMap,
+      controlQueue: this.state.controlQueues[2],
+      selected: this.state.currentPlayerChosen,
+      handleChange: () => {
+        this.choosePlayer(2);
+      }
+    }), _react.default.createElement(_Player.default, {
+      num: 4,
+      player: this.state.players[3],
+      myID: this.state.myUniqueID,
+      usernameMap: this.state.usernameMap,
+      controlQueue: this.state.controlQueues[3],
+      selected: this.state.currentPlayerChosen,
+      handleChange: () => {
+        this.choosePlayer(3);
+      }
+    }))), _react.default.createElement("div", {
+      id: "settingsContainer",
+      className: "collapsibleContainer otborder"
+    }, _react.default.createElement("div", {
+      id: "settings",
+      className: "collapse show collapsible"
+    }, _react.default.createElement("div", {
+      id: "checkboxSettings",
+      className: "settingsPanel otborder"
+    }, _react.default.createElement("ul", {
+      className: "list-group"
+    }, _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Keyboard Controls",
+      handleChange: this.toggleKeyboardControls,
+      checked: this.state.keyboardControls
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Controller Controls",
+      handleChange: this.toggleControllerControls,
+      checked: this.state.controllerControls
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Touch Controls",
+      handleChange: this.toggleTouchControls,
+      checked: this.state.TouchControls
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Controller View",
+      handleChange: this.toggleControllerView,
+      checked: this.state.controllerView
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Mouse Controls",
+      handleChange: this.toggleMouseControls,
+      checked: this.state.mouseControls
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Analog Stick Mode",
+      handleChange: this.toggleAnalogStickMode,
+      checked: this.state.analogStickMode
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "DPad Swap",
+      handleChange: this.toggleDpadSwap,
+      checked: this.state.dpadSwap
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "3Ds config",
+      handleChange: this.toggleTDS,
+      checked: this.state.TDSconfig
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement("label", {
+      className: "checkbox-inline checkbox-bootstrap checkbox-lg"
+    }, _react.default.createElement("input", {
+      id: "enableAudioThreeCheckbox",
+      type: "checkbox"
+    }), _react.default.createElement("span", {
+      className: "checkbox-placeholder"
+    }), "Enable Audio 3.0")), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Dark Theme",
+      handleChange: state => {
+        this.setState({
+          darkTheme: state
+        });
+      },
+      checked: this.state.darkTheme
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Fullscreen Mode",
+      handleChange: this.toggleFullscreen,
+      checked: this.state.fullscreen
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Enable Largescreen Mode",
+      handleChange: this.toggleLargescreen,
+      checked: this.state.largescreen
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Hide Chat",
+      handleChange: state => {
+        this.setState({
+          hideChat: state
+        });
+      },
+      checked: this.state.hideChat
+    })), _react.default.createElement("li", {
+      className: "list-group-item"
+    }, _react.default.createElement(_Checkbox.default, {
+      text: "Hide Nav Bar",
+      handleChange: state => {
+        this.setState({
+          hideNav: state
+        });
+      },
+      checked: this.state.hideNav
+    })))), _react.default.createElement("div", {
+      id: "generalSettings",
+      className: "settingsPanel otborder"
+    }, "General Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "Stick Deadzone: ", _react.default.createElement("span", {
+      id: "deadzone"
+    }, this.state.deadzone), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 5,
+      max: 110,
+      step: 1,
+      value: this.state.deadzone,
+      handleChange: value => {
+        this.setState({
+          deadzone: value
+        });
+      }
+    })), _react.default.createElement("button", {
+      id: "resetSettings",
+      className: "btn btn-secondary"
+    }, "Reset All Settings")), _react.default.createElement("div", {
+      id: "laglessSettingsContainer",
+      className: "settingsPanel otborder"
+    }, _react.default.createElement("div", {
+      id: "lagless1Settings",
+      className: "laglessSettings"
+    }, "Lagless 1 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "Quality: ", _react.default.createElement("span", null, this.state.lagless1.quality), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 20,
+      max: 60,
+      step: 1,
+      value: this.state.lagless1.quality,
+      handleChange: value => {
+        this.setState({
+          lagless1: {
+            quality: value
+          }
+        });
+      },
+      onAfterChange: value => {
+        socket.emit("lagless1Settings", {
+          quality: parseInt(value)
+        });
+      }
+    })), "Scale: ", _react.default.createElement("span", null, this.state.lagless1.scale), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 20,
+      max: 50,
+      step: 5,
+      value: this.state.lagless1.scale,
+      handleChange: value => {
+        this.setState({
+          lagless1: {
+            scale: value
+          }
+        });
+      },
+      onAfterChange: value => {
+        socket.emit("lagless1Settings", {
+          scale: parseInt(value)
+        });
+      }
+    })), "FPS: ", _react.default.createElement("span", null, this.state.lagless1.framerate), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 1,
+      max: 15,
+      step: 1,
+      value: this.state.lagless1.framerate,
+      handleChange: value => {
+        this.setState({
+          lagless1: {
+            framerate: value
+          }
+        });
+      },
+      onAfterChange: value => {
+        socket.emit("lagless1Settings", {
+          framerate: parseInt(value)
+        });
+      }
+    }))), _react.default.createElement("div", {
+      id: "lagless2Settings",
+      className: "laglessSettings"
+    }, "Lagless 2 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "FPS: ", _react.default.createElement("span", null, this.state.lagless2.framerate), _react.default.createElement("div", {
+      className: "buttonSettings"
+    }, _react.default.createElement("button", {
+      id: "20fps2",
+      className: "fpsButton btn btn-secondary"
+    }, "20FPS"), _react.default.createElement("button", {
+      id: "30fps2",
+      className: "fpsButton btn btn-secondary"
+    }, "30FPS")), "Bitrate: ", _react.default.createElement("span", null, this.state.lagless2.videoBitrate), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 0,
+      max: 2,
+      step: 0.05,
+      value: this.state.lagless2.videoBitrate,
+      handleChange: value => {
+        this.setState({
+          lagless2: {
+            videoBitrate: value
+          }
+        });
+      },
+      onAfterChange: value => {
+        socket.emit("lagless2Settings", {
+          videoBitrate: parseFloat(value)
+        });
+      }
+    })), "Scale: ", _react.default.createElement("span", null, this.state.lagless2.scale), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 100,
+      max: 540,
+      step: 1,
+      value: this.state.lagless2.scale,
+      handleChange: value => {
+        this.setState({
+          lagless2: {
+            scale: value
+          }
+        });
+      },
+      onAfterChange: value => {
+        socket.emit("lagless2Settings", {
+          scale: parseInt(value)
+        });
+      }
+    })), _react.default.createElement("div", {
+      className: "buttonSettings"
+    }, _react.default.createElement("button", {
+      id: "240p2",
+      className: "resolutionButton btn btn-secondary"
+    }, "240p"), _react.default.createElement("button", {
+      id: "360p2",
+      className: "resolutionButton btn btn-secondary"
+    }, "360p"), _react.default.createElement("button", {
+      id: "540p2",
+      className: "resolutionButton btn btn-secondary"
+    }, "540p"))), _react.default.createElement("div", {
+      id: "lagless3Settings",
+      className: "laglessSettings"
+    }, "Lagless 3 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "FPS: ", _react.default.createElement("span", null, this.state.lagless3.framerate), _react.default.createElement("div", {
+      className: "buttonSettings"
+    }, _react.default.createElement("button", {
+      id: "20fps3",
+      className: "fpsButton btn btn-secondary"
+    }, "20FPS"), _react.default.createElement("button", {
+      id: "30fps3",
+      className: "fpsButton btn btn-secondary"
+    }, "30FPS")), "Bitrate: ", _react.default.createElement("span", null, this.state.lagless3.videoBitrate), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 0,
+      max: 2,
+      step: 0.05,
+      value: this.state.lagless3.videoBitrate,
+      handleChange: value => {
+        this.setState({
+          lagless3: {
+            videoBitrate: value
+          }
+        });
+      },
+      onAfterChange: value => {
+        socket.emit("lagless3Settings", {
+          videoBitrate: parseFloat(value)
+        });
+      }
+    })), "Scale: ", _react.default.createElement("span", null, this.state.lagless3.scale), _react.default.createElement("div", {
+      className: "mysliderContainer"
+    }, _react.default.createElement(_MySlider.default, {
+      min: 100,
+      max: 540,
+      step: 1,
+      value: this.state.lagless3.scale,
+      handleChange: value => {
+        this.setState({
+          lagless3: {
+            scale: value
+          }
+        });
+      },
+      onAfterChange: value => {
+        socket.emit("lagless3Settings", {
+          scale: parseInt(value)
+        });
+      }
+    })), _react.default.createElement("div", {
+      className: "buttonSettings"
+    }, _react.default.createElement("button", {
+      id: "240p3",
+      className: "resolutionButton btn btn-secondary"
+    }, "240p"), _react.default.createElement("button", {
+      id: "360p3",
+      className: "resolutionButton btn btn-secondary"
+    }, "360p"), _react.default.createElement("button", {
+      id: "540p3",
+      className: "resolutionButton btn btn-secondary"
+    }, "540p")))), _react.default.createElement("div", {
+      id: "waitlistContainer",
+      className: "settingsPanel otborder"
+    }, _react.default.createElement(_Waitlist.default, {
+      tab: this.state.tab,
+      usernameMap: this.state.usernameMap,
+      uniqueIDs: this.state.waitlists,
+      myID: this.state.myUniqueID
+    })))))), _react.default.createElement("div", {
+      id: "keyboardSettings",
+      className: "modal fade"
+    }, _react.default.createElement("div", {
+      className: "modal-dialog modal-lg"
+    }, _react.default.createElement("div", {
+      className: "modal-content"
+    }, _react.default.createElement("div", {
+      className: "modal-header"
+    }, _react.default.createElement("h3", {
+      className: "modal-title text-center"
+    }, "Keyboard Remapper")), _react.default.createElement("div", {
+      className: "modal-body"
+    }, _react.default.createElement("button", {
+      id: "resetBindings",
+      className: "btn btn-primary"
+    }, "Reset Keyboard Bindings"), _react.default.createElement("button", {
+      id: "defaultBindings",
+      className: "btn btn-primary"
+    }, "Default Keyboard Bindings"), _react.default.createElement("form", {
+      id: "profileCreator",
+      className: "form-inline"
+    }, _react.default.createElement("div", {
+      className: "form-group"
+    }, _react.default.createElement("input", {
+      id: "profileName",
+      className: "form-control mx-sm-3",
+      type: "text",
+      placeholder: "Profile Name"
+    }), _react.default.createElement("button", {
+      id: "createProfile",
+      className: "btn btn-primary"
+    }, "Create Keyboard Profile"))), _react.default.createElement("div", {
+      id: "keyboardConfigurator",
+      className: ""
+    }, _react.default.createElement("div", {
+      id: "keyboardRemapperInstructions"
+    }, "To remap keys, click the letter you want to remap, then press the key you want to bind."), _react.default.createElement("div", {
+      id: "keyboardMapperContainer"
+    }, _react.default.createElement("div", {
+      id: "keyboardConfigCodes"
+    }, _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LU"
+    }, "Left Stick Up"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LD"
+    }, "Left Stick Down"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LL"
+    }, "Left Stick Left"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LR"
+    }, "Left Stick Right"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RU"
+    }, "Right Stick Up"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RD"
+    }, "Right Stick Down"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RL"
+    }, "Right Stick Left"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RR"
+    }, "Right Stick Right"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "ABtn"
+    }, "A"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "BBtn"
+    }, "B"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "XBtn"
+    }, "X"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "YBtn"
+    }, "Y"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DUp"
+    }, "DPad Up"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DDown"
+    }, "DPad Down"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DLeft"
+    }, "DPad Left"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DRight"
+    }, "DPad Right"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LStick"
+    }, "LStick Button"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RStick"
+    }, "RStick Button"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LBtn"
+    }, "L"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "ZL"
+    }, "ZL"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RBtn"
+    }, "R"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "ZR"
+    }, "ZR"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "Minus"
+    }, "Minus"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "Plus"
+    }, "Plus"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "Capture"
+    }, "Capture"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "Home"
+    }, "Home")), _react.default.createElement("div", {
+      id: "keyboardConfigKeys"
+    }, _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LUKey"
+    }, "W"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LDKey"
+    }, "S"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LLKey"
+    }, "A"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LRKey"
+    }, "D"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RUKey"
+    }, "I"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RDKey"
+    }, "K"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RLKey"
+    }, "J"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RRKey"
+    }, "L"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "ABtnKey"
+    }, "\u2192"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "BBtnKey"
+    }, "\u2193"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "XBtnKey"
+    }, "\u2191"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "YBtnKey"
+    }, "\u2190"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DUpKey"
+    }, "T"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DDownKey"
+    }, "G"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DLeftKey"
+    }, "F"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "DRightKey"
+    }, "H"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LStickKey"
+    }, "R"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RStickKey"
+    }, "Y"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "LBtnKey"
+    }, "U"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "ZLKey"
+    }, "Q"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "RBtnKey"
+    }, "O"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "ZRKey"
+    }, "E"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "MinusKey"
+    }, "-"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "PlusKey"
+    }, "="), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "CaptureKey"
+    }, "1"), _react.default.createElement("li", {
+      className: "buttonConfig list-group-item",
+      id: "HomeKey"
+    }, "2")))))))));
+  }
+
+} // const mapStateToProps = (state) => {
+// 	return state;
+// };
+//
+// const mapActionsToProps = (state) => {
+// 	return state;
+// };
+// export default connect(mapStateToProps, mapActionsToProps)(App);
+
+
+var _default = App; // exit fullscreen:
+
+exports.default = _default;
+window.addEventListener("keydown", event => {
+  // space and arrow keys
+  // if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) {
+  // 	event.preventDefault();
+  // }
+  // escape:
+  if ([27].indexOf(event.keyCode) > -1) {
+    document.exitPointerLock(); // document.removeEventListener("mousemove", getMouseInput);
+    // document.removeEventListener("mousedown", getMouseInput2);
+    // document.removeEventListener("mouseup", getMouseInput2);
+    // $("#mouseControlsCheckbox").prop("checked", false).trigger("change");
+  }
+}, false);
+
+function getMouseInput(e) {
+  // on mouse stop:
+  clearTimeout(mouseMoveTimer);
+  mouseMoveTimer = setTimeout(() => {
+    controller.RStick.x = restPos;
+    controller.RStick.y = restPos;
+  }, 100);
+  var x = restPos + e.movementX * 10;
+  var y = restPos - e.movementY * 10;
+  controller.RStick.x = x;
+  controller.RStick.y = y;
+  controller.RStick.x = tools.clamp(controller.RStick.x, 0, 255);
+  controller.RStick.y = tools.clamp(controller.RStick.y, 0, 255);
+}
+
+function getMouseInput2(e) {
+  let value = e.type == "mousedown" ? 1 : 0; // left button:
+
+  if (e.which === 1) {
+    controller.btns.zr = value; // right button:
+  } else if (e.which == 3) {//controller.btns.zr = value;
+  }
+} // todo: maybe make a virtual canvas w/ $() ? not sure if actual canvas is required
+// let videoCanvas2 = $("#videoCanvas2")[0];
+// videoCanvas2.requestPointerLock = videoCanvas2.requestPointerLock || videoCanvas2.mozRequestPointerLock;
+// document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
+//
+// $("#mouseControlsCheckbox").change(function (event) {
+// 	if (this.checked) {
+// 		videoCanvas2.requestPointerLock();
+// 		document.addEventListener("mousemove", getMouseInput, false);
+// 		document.addEventListener("mousedown", getMouseInput2, false);
+// 		document.addEventListener("mouseup", getMouseInput2, false);
+// 	} else {
+// 		document.exitPointerLock();
+// 		document.removeEventListener("mousemove", getMouseInput);
+// 		document.removeEventListener("mousedown", getMouseInput2);
+// 		document.removeEventListener("mouseup", getMouseInput2);
+// 	}
+// });
+// https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
+
+
+function keyDownHandler(event) {
+  keyDownHandler.element = keyDownHandler.element || "";
+  let keyString = (0, _keycode.default)(event);
+  keyDownHandler.element.text(keyString);
+  let buttonKey = keyDownHandler.element.attr("id").slice(0, -3);
+  keyboardLayout[buttonKey] = keyString;
+  document.removeEventListener("keydown", keyDownHandler, false);
+}
+
+$("#keyboardConfigKeys li").on("click", function (event) {
+  let self = $(this);
+  $(this).effect("highlight", {}, 2000);
+  document.removeEventListener("keydown", keyDownHandler, false);
+  document.addEventListener("keydown", keyDownHandler, false);
+  keyDownHandler.element = self;
+});
+$("#resetBindings").on("click", function (event) {});
+$("#defaultBindings").on("click", function (event) {
+  keyboardLayout.tempSelectedAction = "";
+  keyboardLayout.tempSelectedKey = "";
+  keyboardLayout.LU = "W";
+  keyboardLayout.LD = "S";
+  keyboardLayout.LL = "A";
+  keyboardLayout.LR = "D";
+  keyboardLayout.RU = "I";
+  keyboardLayout.RD = "K";
+  keyboardLayout.RL = "J";
+  keyboardLayout.RR = "L";
+  keyboardLayout.ABtn = "right";
+  keyboardLayout.BBtn = "down";
+  keyboardLayout.XBtn = "up";
+  keyboardLayout.YBtn = "left";
+  keyboardLayout.DUp = "T";
+  keyboardLayout.DDown = "G";
+  keyboardLayout.DLeft = "F";
+  keyboardLayout.DRight = "H";
+  keyboardLayout.LStick = "R";
+  keyboardLayout.RStick = "Y";
+  keyboardLayout.LBtn = "U";
+  keyboardLayout.ZL = "Q";
+  keyboardLayout.RBtn = "O";
+  keyboardLayout.ZR = "E";
+  keyboardLayout.Minus = "-";
+  keyboardLayout.Plus = "=";
+  keyboardLayout.Capture = "1";
+  keyboardLayout.Home = "2";
+  setKeyboardMapperClasses();
+});
+/* KEYBOARD PROFILES */
+
+$("#createProfile").on("click", function (event) {
+  event.preventDefault();
+  let profileName = $("#profileName").val();
+
+  if (profileName === "") {
+    (0, _sweetalert.default)("The profile name cannot be empty!", "", "error");
+    return;
+  } else {
+    settings.keyboardProfiles[profileName] = keyboardLayout;
+
+    _localforage.default.setItem("settings", JSON.stringify(settings));
+
+    clearAndReplaceProfiles();
+    (0, _sweetalert.default)("Profile created successfully!", "", "success");
+  }
+
+  $("#profileName").val("");
+});
+$("#deleteProfiles").on("click", function (event) {
+  event.preventDefault();
+  settings.keyboardProfiles = {};
+
+  _localforage.default.setItem("settings", JSON.stringify(settings));
+
+  (0, _sweetalert.default)("Profiles deleted successfully!", "", "success");
+});
+
+function clearAndReplaceProfiles() {
+  // clear the dropdown menu
+  $(".keyboard-dropdown-menu").children().remove(); // fill it with profiles:
+
+  for (let key in settings.keyboardProfiles) {
+    let optionHTML = "<button class='keyboard-dropdown-item'" + " config='" + JSON.stringify(settings.keyboardProfiles[key]) + "'>" + key + "</button>";
+    $(".keyboard-dropdown-menu").append(optionHTML);
+  }
+}
+
+$(document).on("click", ".keyboard-dropdown-item", function (event) {
+  let configName = $(event.target).text();
+  $("#keyboardDropdownButton").text(configName);
+  keyboardLayout = JSON.parse($(event.target).attr("config"));
+  console.log(configName);
+});
+/* TOUCH CONTROLS */
+
+/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+let leftJoyStick = {
+  zone: document.querySelector("#leftStick"),
+  mode: "static",
+  catchDistance: 10,
+  color: "#FF3C28",
+  position: {
+    left: "50%",
+    top: "50%"
+  },
+  size: 60
+};
+let rightJoyStick = {
+  zone: document.querySelector("#rightStick"),
+  mode: "static",
+  catchDistance: 10,
+  color: "#0AB9E6",
+  position: {
+    left: "50%",
+    top: "50%"
+  },
+  size: 60
+};
+let leftStick;
+let rightStick;
+
+function bindJoysticks() {
+  let stickSize = 60;
+  let s1 = stickSize;
+  let s2 = stickSize / 2;
+  leftStick.on("start", function (evt, data) {
+    let pos = data.frontPosition;
+    pos.x = parseInt((pos.x + s2) / s1 * 255);
+    pos.y = parseInt((pos.y + s2) / s1 * 255);
+    pos.y = 255 - pos.y;
+    controller.LStick.x = pos.x;
+    controller.LStick.y = pos.y;
+  }).on("end", function (evt, data) {
+    controller.LStick.x = restPos;
+    controller.LStick.y = restPos;
+  }).on("move", function (evt, data) {
+    let pos = data.instance.frontPosition;
+    pos.x = parseInt((pos.x + s2) / s1 * 255);
+    pos.y = parseInt((pos.y + s2) / s1 * 255);
+    pos.y = 255 - pos.y;
+    controller.LStick.x = pos.x;
+    controller.LStick.y = pos.y;
+  });
+  rightStick.on("start", function (evt, data) {
+    let pos = data.frontPosition;
+    pos.x = parseInt((pos.x + s2) / s1 * 255);
+    pos.y = parseInt((pos.y + s2) / s1 * 255);
+    pos.y = 255 - pos.y;
+    controller.RStick.x = pos.x;
+    controller.RStick.y = pos.y;
+  }).on("end", function (evt, data) {
+    controller.RStick.x = restPos;
+    controller.RStick.y = restPos;
+  }).on("move", function (evt, data) {
+    let pos = data.instance.frontPosition;
+    pos.x = parseInt((pos.x + s2) / s1 * 255);
+    pos.y = parseInt((pos.y + s2) / s1 * 255);
+    pos.y = 255 - pos.y;
+    controller.RStick.x = pos.x;
+    controller.RStick.y = pos.y;
+  });
+} // leftStick = nipplejs.create(leftJoyStick);
+// rightStick = nipplejs.create(rightJoyStick);
+// bindJoysticks();
+
+
+function onButtonPress(event) {
+  event.preventDefault();
+  currentInputMode = "touch";
+
+  if (event.target.id == null) {
+    return;
+  }
+
+  if (event.target.id == "dpadButtons" || event.target.id == "abxyButtons") {
+    return;
+  }
+
+  let value = 0;
+
+  if (event.type == "mousedown" || event.type == "touchstart" || event.type == "pointerdown") {
+    value = 1; //swal("touchstart");
+  } else if (event.type == "mouseup" || event.type == "mouseleave" || event.type == "touchend" || event.type == "pointerup" || event.type == "pointerout") {
+    value = 0; //swal("touchend");
+  } else if (event.type == "touchmove") {// todo: make an equivalent to mouseleave since touchleave doesn't exist :/
+  }
+
+  let button = event.target.id;
+  let oldState = JSON.stringify(controller);
+
+  switch (button) {
+    case "upButton":
+      controller.btns.up = value;
+      break;
+
+    case "downButton":
+      controller.btns.down = value;
+      break;
+
+    case "leftButton":
+      controller.btns.left = value;
+      break;
+
+    case "rightButton":
+      controller.btns.right = value;
+      break;
+
+    case "aButton":
+      controller.btns.a = value;
+      break;
+
+    case "bButton":
+      controller.btns.b = value;
+      break;
+
+    case "xButton":
+      controller.btns.x = value;
+      break;
+
+    case "yButton":
+      controller.btns.y = value;
+      break;
+
+    case "lButton":
+      controller.btns.l = value;
+      break;
+
+    case "zlButton":
+      controller.btns.zl = value;
+      break;
+
+    case "rButton":
+      controller.btns.r = value;
+      break;
+
+    case "zrButton":
+      controller.btns.zr = value;
+      break;
+
+    case "minusButton":
+      controller.btns.minus = value;
+      break;
+
+    case "captureButton":
+      controller.btns.capture = value;
+      break;
+
+    case "plusButton":
+      controller.btns.plus = value;
+      break;
+
+    case "homeButton":
+      controller.btns.home = value;
+      break;
+  }
+
+  let newState = JSON.stringify(controller);
+
+  if (newState == oldState) {
+    return;
+  } // if (controlQueues[0].indexOf(myUniqueID) == -1) {
+  // 	socket.emit("joinQueue", currentPlayerChosen);
+  // }
+
+}
+
+function rebindUnbindTouchControls() {
+  let buttonsList = ["#dpadButtons", "#abxyButtons", "#leftJoyConOther", "#rightJoyConOther"];
+
+  if (settings.touchControls) {
+    try {
+      $("#leftJoyCon")[0].style.display = "";
+      $("#rightJoyCon")[0].style.display = "";
+    } catch (error) {}
+
+    for (let i = 0; i < buttonsList.length; i++) {
+      $(buttonsList[i]).bind("touchstart", onButtonPress);
+      $(buttonsList[i]).bind("touchmove", onButtonPress);
+      $(buttonsList[i]).bind("touchend", onButtonPress);
+      $(buttonsList[i]).bind("mousedown", onButtonPress);
+      $(buttonsList[i]).bind("mouseup", onButtonPress);
+      $(buttonsList[i]).bind("mouseleave", onButtonPress);
+      $(buttonsList[i]).bind("pointerdown", onButtonPress);
+      $(buttonsList[i]).bind("pointerup", onButtonPress);
+      $(buttonsList[i]).bind("pointerout", onButtonPress);
+    }
+  } else {
+    try {
+      $("#leftJoyCon")[0].style.display = "none";
+      $("#rightJoyCon")[0].style.display = "none";
+    } catch (error) {}
+
+    for (let i = 0; i < buttonsList.length; i++) {
+      $(buttonsList[i]).unbind("touchstart", onButtonPress);
+      $(buttonsList[i]).unbind("touchmove", onButtonPress);
+      $(buttonsList[i]).unbind("touchend", onButtonPress);
+      $(buttonsList[i]).unbind("mousedown", onButtonPress);
+      $(buttonsList[i]).unbind("mouseup", onButtonPress);
+      $(buttonsList[i]).unbind("mouseleave", onButtonPress);
+      $(buttonsList[i]).unbind("pointerdown", onButtonPress);
+      $(buttonsList[i]).unbind("pointerup", onButtonPress);
+      $(buttonsList[i]).unbind("pointerout", onButtonPress);
+    }
+  }
+}
+/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+
+
+$("#240p2").on("click", function (event) {
+  socket.emit("lagless2Settings", {
+    scale: 240
+  });
+});
+$("#360p2").on("click", function (event) {
+  socket.emit("lagless2Settings", {
+    scale: 360
+  });
+});
+$("#540p2").on("click", function (event) {
+  socket.emit("lagless2Settings", {
+    scale: 540
+  });
+});
+$("#720p2").on("click", function (event) {
+  socket.emit("lagless2Settings", {
+    scale: 720
+  });
+});
+$("#20fps2").on("click", function (event) {
+  socket.emit("lagless2Settings", {
+    framerate: 20
+  });
+});
+$("#30fps2").on("click", function (event) {
+  socket.emit("lagless2Settings", {
+    framerate: 30
+  });
+}); // lagless3:
+
+$("#240p3").on("click", function (event) {
+  socket.emit("lagless3Settings", {
+    scale: 240
+  });
+});
+$("#360p3").on("click", function (event) {
+  socket.emit("lagless3Settings", {
+    scale: 360
+  });
+});
+$("#540p3").on("click", function (event) {
+  socket.emit("lagless3Settings", {
+    scale: 540
+  });
+});
+$("#720p3").on("click", function (event) {
+  socket.emit("lagless3Settings", {
+    scale: 720
+  });
+});
+$("#20fps3").on("click", function (event) {
+  socket.emit("lagless3Settings", {
+    framerate: 20
+  });
+});
+$("#30fps3").on("click", function (event) {
+  socket.emit("lagless3Settings", {
+    framerate: 30
+  });
+});
+
+function addJoyCons(tab, actual) {} // actual = actual || false;
+//
+// if (!actual) {
+// 	tab = "#lagless" + tab + "View";
+// }
+//
+// // delete old joycons:
+// try {
+// 	leftStick.destroy();
+// 	rightStick.destroy();
+// } catch (e) {
+// 	console.log("JoyCon delete error.");
+// }
+// remove previous renders:
+// todo: implement prevTab
+// for (let i = 1; i < 5; i++) {
+// 	ReactDOM.unmountComponentAtNode(document.getElementById("leftJoyConPlaceHolder" + i));
+// 	ReactDOM.unmountComponentAtNode(document.getElementById("rightJoyConPlaceHolder" + i));
+// }
+// if (document.getElementById("leftJoyConPlaceHolder" + settings.tab)) {
+// 	ReactDOM.render(<LeftJoyCon/>, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
+// }
+// if (document.getElementById("rightJoyConPlaceHolder" + settings.tab)) {
+// 	ReactDOM.render(<RightJoyCon/>, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
+// }
+// // rebind touch controls:
+// rebindUnbindTouchControls();
+//
+// // rebind sticks:
+// leftJoyStick.zone = document.querySelector("#leftStick");
+// rightJoyStick.zone = document.querySelector("#rightStick");
+// leftStick = nipplejs.create(leftJoyStick);
+// rightStick = nipplejs.create(rightJoyStick);
+// bindJoysticks();
+// todo: debounce
+
+
+$(window).resize(function (event) {
+  // hack:
+  // todo: not this:
+  $("#videoCanvas3").outerHeight($("#videoCanvas3").outerWidth() * (9 / 16)); // 	if (resizeAvailable) {
+
+  resizeAvailable = false;
+  resizeDebounceTimer = setTimeout(() => {
+    resizeAvailable = true;
+  }, 100);
+
+  for (let i = 0; i < resizers.length; i++) {
+    resizers[i].resize();
+  } // 	}
+
+});
+
+function replaceWithTwitch(tab) {
+  let twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
+
+  if (tab == 1) {
+    $("#videoCanvas1")[0].style.display = "none";
+    $("#videoCanvas1").after(twitchIFrame);
+  } else {// 		$("#tab1").addClass("disabled");
+  }
+
+  if (tab == 2) {
+    try {
+      player.stop();
+    } catch (error) {
+      console.log("player not defined");
+    }
+
+    $("#videoCanvas2")[0].style.display = "none";
+    $("#videoCanvas2").after(twitchIFrame);
+  } else {}
+
+  if (tab == 3) {
+    wsavc.disconnect();
+    $("#videoCanvas3")[0].style.display = "none";
+    $("#videoCanvas3").after(twitchIFrame);
+  } else {}
+
+  if (tab == 4) {
+    try {// 			player.stop();
+    } catch (error) {// 			console.log("player not defined");
+    }
+
+    $("#videoCanvas4")[0].style.display = "none";
+    $("#videoCanvas4").after(twitchIFrame);
+  } else {}
+
+  if (tab == 5) {
+    player5.stop();
+    $("#videoCanvas5")[0].style.display = "none";
+    $("#videoCanvas5").after(twitchIFrame);
+  } else {} // socket.emit("leaveLagless");
+
+}
+
+function replaceWithLagless(tab) {
+  if (tab == 1) {
+    socket.emit("join", "lagless1");
+    $("#videoCanvas1")[0].style.display = "";
+    $("#twitchVideo").remove();
+  } else {// 		$("#tab1").removeClass("disabled");
+  }
+
+  if (tab == 2) {
+    player.play();
+    $("#videoCanvas2")[0].style.display = "";
+    $("#twitchVideo").remove();
+  } else {}
+
+  if (tab == 3) {
+    let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
+    wsavc.connect(uri);
+    $("#videoCanvas3")[0].style.display = "";
+    $("#twitchVideo").remove();
+  } else {// 		$("#tab3").removeClass("disabled");
+  }
+
+  if (tab == 4) {
+    $("#videoCanvas4")[0].style.display = "";
+    $("#twitchVideo").remove();
+  } else {}
+
+  if (tab == 5) {
+    player.play();
+    $("#videoCanvas5")[0].style.display = "";
+    $("#twitchVideo").remove();
+  } else {}
+}
+
+window.replaceWithTwitch = replaceWithTwitch;
+window.replaceWithLagless = replaceWithLagless;
+/* FORCE HTTPS */
+
+if (location.protocol != "https:") {
+  location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+}
+
+module.exports = exports.default;
+
+/***/ }),
+
 /***/ "./src/components/Chat/Chat.css":
 /*!**************************************!*\
   !*** ./src/components/Chat/Chat.css ***!
@@ -70823,35 +76491,7 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 class Chat extends _react.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      messages: []
-    };
-  } // getWaitlist() {
-  //
-  // 	let waitlist = [];
-  //
-  // 	if (this.props.uniqueIDs[this.props.tab - 1].length == 0) {
-  // 		return <li key={0} className="list-group-item">The waitlist is empty right now</li>;
-  // 	}
-  //
-  //
-  // 	for (let i = 0; i < this.props.uniqueIDs[this.props.tab - 1].length; i++) {
-  // 		let listHTML;
-  //
-  // 		let ID = this.props.uniqueIDs[this.props.tab - 1][i];
-  //
-  // 		if (this.props.myID == ID) {
-  // 			listHTML = <li key={i} className="list-group-item-highlight">{this.props.usernameMap[ID]}</li>;
-  // 		} else {
-  // 			listHTML = <li key={i} className="list-group-item">{this.props.usernameMap[ID]}</li>;
-  // 		}
-  //
-  // 		waitlist.push(listHTML);
-  // 	}
-  //
-  // 	return waitlist;
-  // }
-
+  }
 
   render() {
     return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
@@ -70862,6 +76502,80 @@ class Chat extends _react.PureComponent {
 }
 
 exports.default = Chat;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/Chat/Message.css":
+/*!*****************************************!*\
+  !*** ./src/components/Chat/Message.css ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../node_modules/css-loader!./Message.css */ "./node_modules/css-loader/index.js!./src/components/Chat/Message.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./src/components/Chat/Message.jsx":
+/*!*****************************************!*\
+  !*** ./src/components/Chat/Message.jsx ***!
+  \*****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"));
+
+__webpack_require__(/*! ./Message.css */ "./src/components/Chat/Message.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+const Message = ({
+  message,
+  username,
+  userid
+}) => _react.default.createElement("div", {
+  className: "message"
+}, _react.default.createElement("i", null, username), ": ", message);
+
+Message.propTypes = {
+  message: _propTypes.default.string.isRequired,
+  username: _propTypes.default.string.isRequired,
+  userid: _propTypes.default.string.isRequired
+};
+var _default = Message;
+exports.default = _default;
 module.exports = exports.default;
 
 /***/ }),
@@ -70913,52 +76627,53 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"));
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
 __webpack_require__(/*! ./MessageList.css */ "./src/components/Chat/MessageList.css");
 
+var _Message = _interopRequireDefault(__webpack_require__(/*! ./Message.jsx */ "./src/components/Chat/Message.jsx"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 class MessageList extends _react.PureComponent {
   constructor(props) {
     super(props);
-    this.state = {
-      messages: []
-    };
-  } // getWaitlist() {
-  //
-  // 	let waitlist = [];
-  //
-  // 	if (this.props.uniqueIDs[this.props.tab - 1].length == 0) {
-  // 		return <li key={0} className="list-group-item">The waitlist is empty right now</li>;
-  // 	}
-  //
-  //
-  // 	for (let i = 0; i < this.props.uniqueIDs[this.props.tab - 1].length; i++) {
-  // 		let listHTML;
-  //
-  // 		let ID = this.props.uniqueIDs[this.props.tab - 1][i];
-  //
-  // 		if (this.props.myID == ID) {
-  // 			listHTML = <li key={i} className="list-group-item-highlight">{this.props.usernameMap[ID]}</li>;
-  // 		} else {
-  // 			listHTML = <li key={i} className="list-group-item">{this.props.usernameMap[ID]}</li>;
-  // 		}
-  //
-  // 		waitlist.push(listHTML);
-  // 	}
-  //
-  // 	return waitlist;
-  // }
-
+  }
 
   render() {
     return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
       id: "messageList"
-    }, _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia."), _react.default.createElement("div", null, "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo inventore ipsum quae fuga amet. Ipsum dolorum recusandae, vero quasi nihil eligendi temporibus omnis ducimus aliquid quis, iusto laudantium dolores, cupiditate hic fuga sint. Quae facere voluptates amet quos at repellat maiores sequi hic quia praesentium ipsa dolores expedita maxime quod alias nostrum nam, unde in aperiam. Sint iure, vel ducimus quae cumque incidunt, quia natus neque odit, quo possimus ipsa minima voluptates reprehenderit veniam earum sequi ipsam facilis. Atque, officia.")));
+    }, this.props.messages.map(message => _react.default.createElement(_Message.default, _extends({
+      key: message.id
+    }, message)))));
   }
 
 }
 
-exports.default = MessageList;
+MessageList.propTypes = {
+  messages: _propTypes.default.arrayOf(_propTypes.default.shape({
+    id: _propTypes.default.number.isRequired,
+    message: _propTypes.default.string.isRequired,
+    username: _propTypes.default.string.isRequired,
+    userid: _propTypes.default.string.isRequired
+  }).isRequired).isRequired
+};
+
+const mapStateToProps = function (state) {
+  return {
+    messages: state.messages
+  };
+};
+
+var _default = (0, _reactRedux.connect)(mapStateToProps)(MessageList);
+
+exports.default = _default;
 module.exports = exports.default;
 
 /***/ }),
@@ -71010,10 +76725,19 @@ exports.default = void 0;
 
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
 
+var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js"));
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _chat = __webpack_require__(/*! src/actions/chat.js */ "./src/actions/chat.js");
+
 __webpack_require__(/*! ./SendMessageForm.css */ "./src/components/Chat/SendMessageForm.css");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
+// redux:
 class SendMessageForm extends _react.PureComponent {
   constructor(props) {
     super(props);
@@ -71021,17 +76745,47 @@ class SendMessageForm extends _react.PureComponent {
   }
 
   render() {
+    let input;
     return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
       id: "SendMessageForm"
-    }, _react.default.createElement("input", {
+    }, _react.default.createElement("textarea", {
       id: "messageBox",
-      type: "text"
+      className: "otborder",
+      type: "text",
+      placeholder: "Send message",
+      onKeyPress: e => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+
+          if (input.value !== "") {
+            this.props.sendMessage(input.value);
+            input.value = "";
+          }
+        }
+      },
+      ref: node => {
+        input = node;
+      }
     })));
   }
 
 }
 
-exports.default = SendMessageForm;
+SendMessageForm.propTypes = {
+  sendMessage: _propTypes.default.func.isRequired
+};
+
+const mapActionToProps = dispatch => {
+  return {
+    sendMessage: message => {
+      dispatch((0, _chat.sendMessage)(message));
+    }
+  };
+};
+
+var _default = (0, _reactRedux.connect)(() => ({}), mapActionToProps)(SendMessageForm);
+
+exports.default = _default;
 module.exports = exports.default;
 
 /***/ }),
@@ -72205,6 +77959,33 @@ module.exports = exports.default;
 
 /***/ }),
 
+/***/ "./src/constants/ActionTypes.js":
+/*!**************************************!*\
+  !*** ./src/constants/ActionTypes.js ***!
+  \**************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.USERS_LIST = exports.ADD_USER = exports.SEND_MESSAGE = exports.RECEIVE_MESSAGE = exports.ADD_MESSAGE = void 0;
+const ADD_MESSAGE = "ADD_MESSAGE";
+exports.ADD_MESSAGE = ADD_MESSAGE;
+const RECEIVE_MESSAGE = "RECEIVE_MESSAGE";
+exports.RECEIVE_MESSAGE = RECEIVE_MESSAGE;
+const SEND_MESSAGE = "SEND_MESSAGE";
+exports.SEND_MESSAGE = SEND_MESSAGE;
+const ADD_USER = "ADD_USER";
+exports.ADD_USER = ADD_USER;
+const USERS_LIST = "USERS_LIST";
+exports.USERS_LIST = USERS_LIST;
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
@@ -72228,3320 +78009,72 @@ var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-r
 
 var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 
-var _MyReducer = _interopRequireDefault(__webpack_require__(/*! ./reducers/MyReducer.js */ "./src/reducers/MyReducer.js"));
+var _reducers = _interopRequireDefault(__webpack_require__(/*! ./reducers */ "./src/reducers/index.js"));
 
-var _ViewerList = _interopRequireDefault(__webpack_require__(/*! src/components/ViewerList.jsx */ "./src/components/ViewerList.jsx"));
+var _reduxSaga = _interopRequireDefault(__webpack_require__(/*! redux-saga */ "./node_modules/redux-saga/es/index.js"));
 
-var _TurnTimer = _interopRequireDefault(__webpack_require__(/*! src/components/TurnTimer.jsx */ "./src/components/TurnTimer.jsx"));
+var _sagas = _interopRequireDefault(__webpack_require__(/*! src/sagas */ "./src/sagas/index.js"));
 
-var _ForfeitTimer = _interopRequireDefault(__webpack_require__(/*! src/components/ForfeitTimer.jsx */ "./src/components/ForfeitTimer.jsx"));
-
-var _Player = _interopRequireDefault(__webpack_require__(/*! src/components/Player.jsx */ "./src/components/Player.jsx"));
-
-var _ControlQueue = _interopRequireDefault(__webpack_require__(/*! src/components/ControlQueue.jsx */ "./src/components/ControlQueue.jsx"));
-
-var _JoinLeaveQueueButton = _interopRequireDefault(__webpack_require__(/*! src/components/JoinLeaveQueueButton.jsx */ "./src/components/JoinLeaveQueueButton.jsx"));
-
-var _UsernameDropdown = _interopRequireDefault(__webpack_require__(/*! src/components/UsernameDropdown.jsx */ "./src/components/UsernameDropdown.jsx"));
-
-var _Waitlist = _interopRequireDefault(__webpack_require__(/*! src/components/Waitlist.jsx */ "./src/components/Waitlist.jsx"));
-
-var _ConnectAccounts = _interopRequireDefault(__webpack_require__(/*! src/components/ConnectAccounts.jsx */ "./src/components/ConnectAccounts.jsx"));
-
-var _Checkbox = _interopRequireDefault(__webpack_require__(/*! src/components/Checkbox.jsx */ "./src/components/Checkbox.jsx"));
-
-var _LeftJoyCon = _interopRequireDefault(__webpack_require__(/*! src/components/LeftJoyCon.jsx */ "./src/components/LeftJoyCon.jsx"));
-
-var _RightJoyCon = _interopRequireDefault(__webpack_require__(/*! src/components/RightJoyCon.jsx */ "./src/components/RightJoyCon.jsx"));
-
-var _LaglessView = _interopRequireDefault(__webpack_require__(/*! src/components/LaglessView.jsx */ "./src/components/LaglessView.jsx"));
-
-var _MySlider = _interopRequireDefault(__webpack_require__(/*! src/components/MySlider.jsx */ "./src/components/MySlider.jsx"));
-
-var _Chat = _interopRequireDefault(__webpack_require__(/*! src/components/Chat/Chat.jsx */ "./src/components/Chat/Chat.jsx"));
-
-var _ThemeSwitch = _interopRequireDefault(__webpack_require__(/*! ./components/ThemeSwitch.jsx */ "./src/components/ThemeSwitch.jsx"));
-
-var _reactConnect = _interopRequireDefault(__webpack_require__(/*! @snex/react-connect */ "./node_modules/@snex/react-connect/dist/index.js"));
-
-var _snex = _interopRequireDefault(__webpack_require__(/*! snex */ "./node_modules/snex/dist/snex.js"));
-
-var _gamepad = _interopRequireDefault(__webpack_require__(/*! js/gamepad.js */ "./public/js/gamepad.js"));
-
-var _VirtualProController = _interopRequireDefault(__webpack_require__(/*! js/VirtualProController.js */ "./public/js/VirtualProController.js"));
-
-var _keycode = _interopRequireDefault(__webpack_require__(/*! keycode */ "./node_modules/keycode/index.js"));
-
-var _nipplejs = _interopRequireDefault(__webpack_require__(/*! nipplejs */ "./node_modules/nipplejs/dist/nipplejs.js"));
-
-var _noty = _interopRequireDefault(__webpack_require__(/*! noty */ "./node_modules/noty/lib/noty.js"));
-
-var _localforage = _interopRequireDefault(__webpack_require__(/*! localforage */ "./node_modules/localforage/dist/localforage.js"));
-
-var _sweetalert = _interopRequireDefault(__webpack_require__(/*! sweetalert2 */ "./node_modules/sweetalert2/dist/sweetalert2.all.js"));
-
-var _simplePeer = _interopRequireDefault(__webpack_require__(/*! simple-peer */ "./node_modules/simple-peer/index.js"));
+var _sockets = _interopRequireDefault(__webpack_require__(/*! src/sockets */ "./src/sockets/index.js"));
 
 var _socket = _interopRequireDefault(__webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js"));
+
+var _App = _interopRequireDefault(__webpack_require__(/*! src/components/App.jsx */ "./src/components/App.jsx"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-const allReducers = (0, _redux.combineReducers)({
-  myReducer: _MyReducer.default
-});
-const store = (0, _redux.createStore)(allReducers, {}); // components:
-
-// keyboard:
-__webpack_require__(/*! js/keymaster.js */ "./public/js/keymaster.js");
-
-const InputMaster = __webpack_require__(/*! js/InputMaster.js */ "./public/js/InputMaster.js");
-
-const textFitPercent = __webpack_require__(/*! js/textfitpercent.js */ "./public/js/textfitpercent.js");
-
-const tools = __webpack_require__(/*! js/tools.js */ "./public/js/tools.js");
-
-window.localforage = _localforage.default; // rest of tools:
-
-String.prototype.replaceAll = function (search, replacement) {
-  let target = this;
-  return target.replace(new RegExp(search, "g"), replacement);
-};
-
-$.fn.sumHeights = function () {
-  let h = 0;
-  this.each(function () {
-    h += $(this).outerHeight();
-  });
-  return h;
-};
-
-$.fn.addUp = function (getter) {
-  return Array.prototype.reduce.call(this, function (a, b) {
-    return a + getter.call($(b));
-  }, 0);
-}; // let socket = io("https://twitchplaysnintendoswitch.com", {
-// 	path: "/8110/socket.io",
-// 	transports: ["websocket"]
+// react:
+// redux:
+// redux-saga:
+// libs:
+// const allReducers = combineReducers({
+// 	myReducer: MyReducer,
 // });
+const sagaMiddleware = (0, _reduxSaga.default)();
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || _redux.compose;
+const store = (0, _redux.createStore)(_reducers.default, composeEnhancers((0, _redux.applyMiddleware)(sagaMiddleware)));
+let socket = (0, _socket.default)("https://twitchplaysnintendoswitch.com", {
+  path: "/8110/socket.io",
+  transports: ["websocket"]
+}); // listen to events and dispatch actions:
 
+(0, _sockets.default)(socket, store.dispatch); // handle outgoing events & listen to actions:
+// and maybe dispatch more actions:
 
-window.socket = null;
-let globalEventTimer = false;
-let sendInputTimer;
-let currentPlayerChosen = 0;
-let wasPressedKeyCodes = [];
-let lastSplitTime = 0;
-let lastSplitTimeMS = 0;
-let loaded = false;
-let locked = false;
-window.player = {};
-let player4;
-let audio = document.createElement("audio");
-let audioConnected = false;
-let videoConnected = false;
-let authCookie;
-let crate;
-let banlist = [];
-let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190"];
-let resizers = [];
-let resizeDebounceTimer;
-let resizeAvailable = true;
-let isMobile = false; // twitch lagless swap settings
+sagaMiddleware.run(_sagas.default, {
+  socket
+}); // components:
 
-let isExempt = false;
-let minQueuePos = 5;
-let tabsSwappedWithTwitch = [false, false, false, false];
-/* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-// check if on mobile
-
-if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
-  isMobile = true;
-}
-
-window.input = new InputMaster(isMobile); // input.controller.init();
-
-let currentInputMode = null;
-let keyboardLayout = {};
-keyboardLayout.LU = "W";
-keyboardLayout.LD = "S";
-keyboardLayout.LL = "A";
-keyboardLayout.LR = "D";
-keyboardLayout.RU = "I";
-keyboardLayout.RD = "K";
-keyboardLayout.RL = "J";
-keyboardLayout.RR = "L";
-keyboardLayout.ABtn = "right";
-keyboardLayout.BBtn = "down";
-keyboardLayout.XBtn = "up";
-keyboardLayout.YBtn = "left";
-keyboardLayout.DUp = "T";
-keyboardLayout.DDown = "G";
-keyboardLayout.DLeft = "F";
-keyboardLayout.DRight = "H";
-keyboardLayout.LStick = "R";
-keyboardLayout.RStick = "Y";
-keyboardLayout.LBtn = "U";
-keyboardLayout.ZL = "Q";
-keyboardLayout.RBtn = "O";
-keyboardLayout.ZR = "E";
-keyboardLayout.Minus = "-";
-keyboardLayout.Plus = "=";
-keyboardLayout.Capture = "1";
-keyboardLayout.Home = "2"; // settings.keyboardProfiles.default = keyboardLayout;
-
-/* CONTROLLER STUFF */
-
-let gamepadCounter = 0;
-let controller = new _VirtualProController.default();
-controller.reset();
-let settings = {};
-let lagless1Settings = {};
-let lagless2Settings = {
-  framerate: 30,
-  videoBitrate: 1,
-  scale: 720,
-  offsetX: 0,
-  offsetY: 0
-};
-let lagless3Settings = {
-  framerate: 30,
-  videoBitrate: 1,
-  scale: 720,
-  offsetX: 0,
-  offsetY: 0
-}; // detect firefox:
-
-if (navigator.userAgent.toLowerCase().indexOf("firefox") > -1) {
-  settings.stickSensitivityX = 1.5;
-  settings.stickSensitivityY = 1.5;
-}
-
-let lastCurrentTime = 0;
-let mouseMoveTimer = null;
-let pingTime = 0;
-let restPos = 128; // Default 512*1024 (512kb).
-// Default 128*1024 (128kb)
-
-let videoBufferSize = 256 * 1024;
-let audioBufferSize = 128 * 1024;
-let oldControllerState = "000000000000000000" + " " + restPos + " " + restPos + " " + restPos + " " + restPos;
-let lagless1Port = 8001;
-let lagless2Port = 8002;
-let lagless3Port = 8003;
-let lagless4Port = 8004;
-let lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
-
-class App extends _react.Component {
+class Index extends _react.Component {
   constructor(props) {
     super(props);
-
-    _defineProperty(this, "handleSnex", controller => {
-      controller.on("data", data => {
-        switch (data.key) {
-          case "UP":
-            input.snexController.state.LStick.y = data.state ? 255 : 128;
-            break;
-
-          case "DOWN":
-            input.snexController.state.LStick.y = data.state ? 0 : 128;
-            break;
-
-          case "LEFT":
-            input.snexController.state.LStick.x = data.state ? 0 : 128;
-            break;
-
-          case "RIGHT":
-            input.snexController.state.LStick.x = data.state ? 255 : 128;
-            break;
-
-          case "A":
-            input.snexController.state.btns.a = data.state;
-            break;
-
-          case "B":
-            input.snexController.state.btns.b = data.state;
-            break;
-
-          case "X":
-            input.snexController.state.btns.x = data.state;
-            break;
-
-          case "Y":
-            input.snexController.state.btns.y = data.state;
-            break;
-
-          case "SELECT":
-            input.snexController.state.btns.zl = data.state;
-            break;
-
-          case "START":
-            input.snexController.state.btns.zr = data.state;
-            break;
-        }
-      });
-    });
-
-    this.toggleKeyboardControls = this.toggleKeyboardControls.bind(this);
-    this.toggleControllerControls = this.toggleControllerControls.bind(this);
-    this.toggleTouchControls = this.toggleTouchControls.bind(this);
-    this.toggleControllerView = this.toggleControllerView.bind(this);
-    this.toggleAnalogStickMode = this.toggleAnalogStickMode.bind(this);
-    this.toggleDpadSwap = this.toggleDpadSwap.bind(this);
-    this.toggleTDSConfig = this.toggleTDSConfig.bind(this); // this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
-
-    this.toggleFullscreen = this.toggleFullscreen.bind(this);
-    this.exitFullscreen = this.exitFullscreen.bind(this);
-    this.toggleLargescreen = this.toggleLargescreen.bind(this);
-    this.switchTabs = this.switchTabs.bind(this);
-    this.sendControllerState = this.sendControllerState.bind(this);
-    this.choosePlayer = this.choosePlayer.bind(this);
-    this.onUsernameChange = this.onUsernameChange.bind(this);
-    this.state = {
-      players: [{
-        name: "",
-        turnTimeLeft: 0,
-        turnPercent: 0,
-        forfeitTimeLeft: 0,
-        forfeitPercent: 0
-      }, {
-        name: "",
-        turnTimeLeft: 0,
-        turnPercent: 0,
-        forfeitTimeLeft: 0,
-        forfeitPercent: 0
-      }, {
-        name: "",
-        turnTimeLeft: 0,
-        turnPercent: 0,
-        forfeitTimeLeft: 0,
-        forfeitPercent: 0
-      }, {
-        name: "",
-        turnTimeLeft: 0,
-        turnPercent: 0,
-        forfeitTimeLeft: 0,
-        forfeitPercent: 0
-      }],
-      currentPlayerChosen: 0,
-      waitlists: [[], [], [], [], []],
-      viewerIDs: [],
-      usernameMap: {},
-      controlQueues: [[], [], [], []],
-      // account info:
-      myUniqueID: "",
-      myConnectedAccounts: [],
-      myUsername: "???",
-      myValidUsernames: [],
-      usernameIndex: 0,
-      // lagless tab:
-      tab: 2,
-      // checkbox settings:
-      enableAudioThree: true,
-      audioThree: false,
-      keyboardControls: true,
-      controllerControls: true,
-      touchControls: true,
-      controllerView: true,
-      mouseControls: false,
-      analogStickMode: false,
-      dpadSwap: false,
-      TDSConfig: false,
-      darkTheme: false,
-      fullscreen: false,
-      largescreen: false,
-      hideChat: false,
-      hideNav: false,
-      deadzone: 50,
-      // volume:
-      volume: 1,
-      // controller view:
-      controllerViewState: "",
-      isSignedin: false,
-      // controller: new VirtualProController(),
-      // sticks:
-      sticks: {
-        L: {
-          X: {
-            sensitivity: 1,
-            offset: 0,
-            deadzone: 50
-          },
-          Y: {
-            sensitivity: 1,
-            offset: 0,
-            deadzone: 50
-          }
-        },
-        R: {
-          X: {
-            sensitivity: 1,
-            offset: 0,
-            deadzone: 50
-          },
-          Y: {
-            sensitivity: 1,
-            offset: 0,
-            deadzone: 50
-          }
-        }
-      },
-      deadzone: 50,
-      // stickSensitivityX: 1,
-      // stickSensitivityY: 1,
-      stickAttack: 20,
-      stickReturn: 20,
-      // lagless settings:
-      lagless1: {
-        framerate: 15,
-        quality: 60,
-        scale: 30
-      },
-      lagless2: {
-        framerate: 20,
-        videoBitrate: 1,
-        scale: 540
-      },
-      lagless3: {
-        framerate: 20,
-        videoBitrate: 1,
-        scale: 540
-      }
-    };
-  }
-
-  componentDidMount() {
-    console.log("restoring preferences"); // check if new:
-    // localforage.getItem("new").then(function (value) {
-    // 	if (value != "new") {
-    // 		$("#tutorialWindow").modal();
-    // 	}
-    // 	localforage.setItem("new", "new");
-    // });
-    // check for ads:
-    // 	localforage.getItem("ads").then(function(value) {
-    // 		if (value != "ads") {
-    // 			if (typeof canRunAds == "undefined") {
-    // 				console.log("test");
-    // 				swal({
-    // 					title: "Disable your adblocker! or don\'t ¯\\_(ツ)_/¯ This message won't appear again!",
-    // 				});
-    // 			}
-    // 		}
-    // 		localforage.setItem("ads", "ads");
-    // 	});
-    // Get stored preferences
-
-    _localforage.default.getItem("settings").then(value => {
-      // If they exist, write them
-      if (typeof value != "undefined") {
-        settings = Object.assign({}, settings, JSON.parse(value));
-      } // Store the preferences (so that the default values get stored)
-
-
-      _localforage.default.setItem("settings", JSON.stringify(settings)); // debug:
-
-
-      console.log(settings);
-      this.setState({
-        keyboardControls: settings.keyboardControls,
-        controllerControls: settings.controllerControls,
-        touchControls: settings.touchControls,
-        mouseControls: settings.mouseControls,
-        controllerView: settings.controllerView,
-        analogStickMode: settings.analogStickMode,
-        dpadSwap: settings.dpadSwap,
-        TDSConfig: settings.TDSConfig,
-        enableAudioThree: settings.enableAudioThree,
-        audioThree: settings.audioThree,
-        darkTheme: settings.darkTheme,
-        fullscreen: settings.fullscreen,
-        largescreen: settings.largescreen,
-        hideChat: settings.hideChat,
-        hideNav: settings.hideNav,
-        // tab: settings.tab,
-        deadzone: settings.deadzone,
-        volume: settings.volume
-      }); // if (settings.tab != 1) {
-      // 	$("#tab" + settings.tab).trigger("click");
-      // }
-      // $("#tab" + this.state.tab).trigger("click");
-      // if (this.state.tab == 1) {
-      // 	this.switchTabs(1);
-      // }
-
-      $("#tab" + this.state.tab).trigger("click");
-      this.switchTabs(this.state.tab); // addJoyCons(settings.tab);
-
-      rebindUnbindTouchControls();
-      clearAndReplaceProfiles(); //
-      // resizers.push(textFitPercent({
-      // 	selector: "#lagless2KeyboardDropdown",
-      // 	parent: "#lagless2Bar",
-      // 	percentWidth: 20,
-      // 	isFirstChild: true,
-      // 	isClass: true,
-      // 	maxTries: 20,
-      // 	increment: 0.2
-      // }));
-      //
-      // resizers.push(textFitPercent({
-      // 	selector: "#lagless2ViewerDropdown",
-      // 	parent: "#lagless2Bar",
-      // 	percentWidth: 12,
-      // 	isFirstChild: true,
-      // 	maxTries: 20,
-      // 	increment: 0.2,
-      // 	maxFontSize: 20
-      // }));
-      //
-      // resizers.push(textFitPercent({
-      // 	selector: "#lagless2Refresh",
-      // 	parent: "#lagless2Bar",
-      // 	percentWidth: 8,
-      // 	// 			isFirstChild: true,
-      // 	maxTries: 20,
-      // 	increment: 0.2,
-      // 	accuracy: 5,
-      // 	maxFontSize: 30
-      // }));
-      //
-      // resizers.push(textFitPercent({
-      // 	selector: "#lagless2KeyboardSettings",
-      // 	parent: "#lagless2Bar",
-      // 	percentWidth: 8,
-      // 	// 			isFirstChild: true,
-      // 	maxTries: 20,
-      // 	increment: 0.2,
-      // 	accuracy: 5,
-      // 	maxFontSize: 30
-      // }));
-      //
-      // resizers.push(textFitPercent({
-      // 	selector: "#hidePlayers",
-      // 	parent: "#playersContainer",
-      // 	percentWidth: 5,
-      // 	// 			isFirstChild: true,
-      // 	maxTries: 20,
-      // 	increment: 0.2,
-      // 	accuracy: 5,
-      // 	maxFontSize: 20
-      // }));
-      //
-      // for (let i = 0; i < resizers.length; i++) {
-      // 	resizers[i].resize();
-      // }
-      //
-      // wait a little longer so the joycon images load:
-
-      setTimeout(() => {
-        $("body").addClass("loaded"); // after animation is done:
-
-        setTimeout(() => {
-          $(".loaded #loader-wrapper")[0].style.visibility = "hidden";
-        }, 500);
-      }, 0);
-      /* DISCORD EMBED */
-      // 		crate = new Crate({
-      // 			server: "433874668534104065",
-      // 			channel: "487328538173767692",
-      // 			shard: "https://cl2.widgetbot.io",
-      // 		});
-    }); // save settings on close:
-
-    /* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-
-    window.addEventListener("beforeunload", event => {
-      event.preventDefault();
-      socket.emit("leaveLagless");
-      console.log("saving settings");
-
-      _localforage.default.setItem("settings", JSON.stringify(this.state));
-
-      return null;
-    });
-    socket = (0, _socket.default)("https://twitchplaysnintendoswitch.com", {
-      path: "/8110/socket.io",
-      transports: ["websocket"]
-    });
-    socket.on("turnTimesLeft", data => {
-      let newPlayers = [...this.state.players];
-
-      for (let i = 0; i < data.turnTimesLeft.length; i++) {
-        let turnTimeLeft = parseInt(data.turnTimesLeft[i] / 1000);
-        let turnPercent = parseInt(data.turnTimesLeft[i] / data.turnLengths[i] * 100);
-        let forfeitTimeLeft = parseInt(data.forfeitTimesLeft[i] / 1000);
-        let forfeitPercent = parseInt(data.forfeitTimesLeft[i] / data.forfeitLengths[i] * 100); // players[i].name
-
-        newPlayers[i].turnTimeLeft = turnTimeLeft;
-        newPlayers[i].turnPercent = turnPercent;
-        newPlayers[i].forfeitTimeLeft = forfeitTimeLeft;
-        newPlayers[i].forfeitPercent = forfeitPercent;
-      } // check if you're in the waitlist
-
-
-      if (data.waitlists[this.state.tab - 1].indexOf(this.state.myUniqueID) > -1) {
-        if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
-          tabsSwappedWithTwitch[this.state.tab - 1] = true;
-          replaceWithTwitch(this.state.tab); // setTimeout(() => {
-          // socket.emit("leaveLagless");
-          // }, 4000);
-          // swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
-
-          new _noty.default({
-            theme: "mint",
-            type: "warning",
-            text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
-            timeout: 5000,
-            sounds: {
-              volume: 0.5,
-              sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-              conditions: ["docVisible"]
-            }
-          }).show();
-        }
-      } else if (tabsSwappedWithTwitch[this.state.tab - 1]) {
-        tabsSwappedWithTwitch[this.state.tab - 1] = false;
-        new _noty.default({
-          theme: "mint",
-          type: "success",
-          text: "You're at the top of the waitlist! Switching back to lagless!",
-          timeout: 5000,
-          sounds: {
-            volume: 0.5,
-            sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-            conditions: ["docVisible"]
-          }
-        }).show();
-        replaceWithLagless(this.state.tab);
-      } // todo: update with state:
-
-
-      if (locked != data.locked) {
-        locked = data.locked;
-
-        if (locked) {
-          let iconHTML = '<i class="material-icons">lock</i>';
-          $('i:contains("lock_open")').replaceWith(iconHTML);
-        } else {
-          let iconHTML = '<i class="material-icons">lock_open</i>';
-          $('i:contains("lock")').replaceWith(iconHTML);
-        }
-      }
-
-      this.setState({
-        waitlists: data.waitlists,
-        viewerIDs: data.viewers,
-        players: newPlayers
-      });
-    });
-    socket.on("controlQueues", data => {
-      let newPlayers = [...this.state.players];
-
-      for (let i = 0; i < data.length; i++) {
-        newPlayers[i].name = data[i][0];
-      }
-
-      this.setState({
-        controlQueues: data,
-        players: newPlayers
-      });
-    });
-    socket.on("usernameMap", data => {
-      this.setState({
-        usernameMap: data
-      });
-    });
-    /* AUTHENTICATION */
-
-    let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-
-    if (authCookie != null) {
-      authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-    } else {
-      // replace with twitch until signed in:
-      replaceWithTwitch(this.state.tab);
-      $("#tab1").addClass("disabled");
-      $("#tab3").addClass("disabled");
-      $("#tab4").addClass("disabled");
-      $("#tab5").addClass("disabled"); // remove the logout button:
-
-      $("#logout").remove();
-      $("#loggedInStatus").remove();
-      $(".disabled").on("click", function () {
-        (0, _sweetalert.default)("You have to sign in first!");
-      });
-    }
-
-    setInterval(() => {
-      if (authCookie != null) {
-        socket.emit("registerAccount", {
-          auth: authCookie,
-          usernameIndex: this.state.usernameIndex
-        });
-      }
-    }, 5000);
-    setTimeout(() => {
-      if (!loaded) {
-        loaded = true;
-        $.ajax({
-          url: "https://twitchplaysnintendoswitch.com/accountData/" + this.state.myUniqueID + "/" + authCookie
-        });
-      }
-    }, 5000); // response:
-
-    socket.on("accountInfo", data => {
-      this.setState({
-        myUniqueID: data.uniqueID,
-        myConnectedAccounts: data.connectedAccounts,
-        myUsername: data.username,
-        myValidUsernames: data.validUsernames,
-        isSignedin: true
-      });
-    });
-    socket.on("needToSignIn", () => {
-      (0, _sweetalert.default)("You need to sign in!");
-      setTimeout(() => {
-        tools.deleteAllCookies();
-        location.reload(true);
-      }, 1000);
-    });
-    socket.emit("join", "lagless" + this.state.tab);
-    setInterval(() => {
-      socket.emit("join", "lagless" + this.state.tab);
-    }, 10000);
-    /* IP */
-
-    setInterval(() => {
-      $.getJSON("https://jsonip.com?callback=?", data => {
-        socket.emit("registerIP", {
-          ip: data.ip,
-          id: this.state.myUniqueID,
-          username: this.state.myUsername
-        });
-
-        if (bannedIPs.indexOf(data.ip) > -1) {
-          window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-        }
-
-        if (banlist.indexOf(this.state.myUsername) > -1) {
-          window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-        }
-      });
-    }, 5000);
-    socket.on("forceRefresh", data => {
-      (0, _sweetalert.default)({
-        title: "There has been a force refresh!"
-      }).then(result => {
-        if (result.value) {
-          location.reload(true);
-        }
-      }); // actually force after 5 seconds:
-
-      setTimeout(() => {
-        location.reload(true);
-      }, 5000);
-    });
-    /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-    socket.on("controllerState1", data => {
-      this.setState({
-        controllerViewState: data
-      });
-    }); // fullscreen:
-
-    document.addEventListener("webkitfullscreenchange", this.exitFullscreen, false);
-    document.addEventListener("mozfullscreenchange", this.exitFullscreen, false);
-    document.addEventListener("fullscreenchange", this.exitFullscreen, false);
-    document.addEventListener("MSFullscreenChange", this.exitFullscreen, false); // lagless setup:
-
-    /* LAGLESS 1.0 */
-
-    let videoCanvas1 = $("#videoCanvas1")[0];
-    videoCanvas1.width = 1280;
-    videoCanvas1.height = 720;
-    let videoCanvas1Context = videoCanvas1.getContext("2d");
-    socket.on("viewImage", data => {
-      let src = "data:image/jpeg;base64," + data;
-
-      if (src == "data:image/jpeg;base64,") {
-        socket.emit("restart");
-        return;
-      }
-
-      let image = new Image();
-      image.style = "max-width:100%; height:auto;";
-
-      image.onload = () => {
-        let imgWidth = image.width;
-        let imgHeight = image.height;
-        let canvasWidth = videoCanvas1.width;
-        let canvasHeight = videoCanvas1.height;
-        let ratio = imgHeight / imgWidth;
-        let canvasRatio = canvasWidth / canvasHeight;
-        let ratioW = 1280 / $("#videoCanvas1").innerWidth();
-        let ratioH = 720 / $("#videoCanvas1").innerHeight();
-        let cWidth = $("#videoCanvas1").innerWidth();
-        videoCanvas1Context.clearRect(0, 0, canvasWidth, canvasHeight);
-        videoCanvas1Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-      };
-
-      image.src = src;
-    }); // on settings change:
-
-    socket.on("lagless1Settings", data => {
-      this.setState({
-        lagless1: {
-          framerate: data.framerate,
-          quality: data.quality,
-          scale: data.scale
-        }
-      });
-    });
-    $("#lagless1Refresh").on("click", () => {
-      socket.emit("restart1");
-    });
-    /* LAGLESS 2.0 */
-    // Setup the WebSocket connection and start the player
-
-    let canvas2 = $("#videoCanvas2")[0]; // Default 512*1024 (512kb).
-    // Default 128*1024 (128kb)
-    // let player = new JSMpeg.Player(lagless2URL, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
-    // player.maxAudioLag = 0.5;
-    // player.stop();
-    // on settings change:
-
-    socket.on("lagless2Settings", data => {
-      this.setState({
-        lagless2: {
-          framerate: data.framerate,
-          videoBitrate: data.videoBitrate,
-          scale: data.scale
-        }
-      });
-    });
-    socket.on("lagless2SettingsChange", data => {
-      try {
-        player.destroy();
-      } catch (error) {}
-
-      player = new JSMpeg.Player(lagless2URL, {
-        canvas: canvas2,
-        video: true,
-        audio: true,
-        videoBufferSize: videoBufferSize,
-        audioBufferSize: audioBufferSize,
-        maxAudioLag: 0.5
-      });
-
-      if (!this.state.audioThree) {
-        player.volume = this.state.volume / 100;
-      } else {
-        player.volume = 0;
-      }
-    });
-    $("#lagless2Refresh").on("click", () => {
-      socket.emit("restart2");
-    });
-    /* LAGLESS 3.0 */
-
-    let canvas3 = $("#videoCanvas3")[0]; // Create h264 player
-
-    let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-    let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
-    window.wsavc = wsavc;
-    wsavc.on("disconnected", () => console.log("WS Disconnected"));
-    wsavc.on("connected", () => console.log("WS connected"));
-    wsavc.on("frame_shift", fbl => {// fb.innerText = "fl: " + fbl
-    });
-    wsavc.on("initalized", payload => {
-      console.log("Initialized", payload);
-    });
-    wsavc.on("stream_active", active => console.log("Stream is ", active ? "active" : "offline"));
-    wsavc.on("custom_event_from_server", event => console.log("got event from server", event));
-    $("#lagless3Refresh").on("click", () => {
-      try {
-        wsavc.disconnect();
-      } catch (error) {}
-
-      let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-      wsavc.connect(uri);
-    });
-    $("#lagless3Refresh").on("click", () => {
-      socket.emit("restart3");
-    }); // on settings change:
-
-    socket.on("lagless3Settings", data => {
-      this.setState({
-        lagless3: {
-          framerate: data.framerate,
-          videoBitrate: data.videoBitrate,
-          scale: data.scale
-        }
-      });
-    });
-    socket.on("lagless3SettingsChange", data => {
-      let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-      wsavc.connect(uri);
-    });
-    /* LAGLESS 4.0 */
-
-    let canvas4 = $("#videoCanvas4")[0];
-    let videoPeer = new _simplePeer.default({
-      initiator: false,
-      trickle: true
-    });
-    videoPeer.on("error", function (err) {
-      console.log("error", err);
-    });
-    videoPeer.on("signal", function (data) {
-      console.log("SIGNAL", JSON.stringify(data));
-      socket.emit("clientPeerSignalV", JSON.stringify(data));
-    });
-    videoPeer.on("connect", function () {
-      console.log("CONNECT");
-      videoPeer.send(Math.random());
-    });
-    videoPeer.on("data", function (data) {
-      console.log("data: " + data);
-    });
-    socket.on("hostPeerSignalV", function (data) {
-      videoPeer.signal(JSON.parse(data));
-    });
-    videoPeer.on("stream", function (stream) {
-      // got remote video stream, then show it in a video tag
-      canvas4.src = window.URL.createObjectURL(stream); // deprecated
-      // 	canvas4.srcObj = stream;
-
-      canvas4.play();
-    }); // parsec:
-    // /*** API ***/
-    // async function auth(email, password) {
-    // 	const res = await fetch('https://parsecgaming.com/v1/auth', {
-    // 		method: 'post',
-    // 		headers: {
-    // 			'Content-Type': 'application/json',
-    // 		},
-    // 		body: JSON.stringify({
-    // 			email,
-    // 			password,
-    // 		}),
-    // 	});
-    //
-    // 	return await res.json();
-    // }
-    //
-    // async function serverList(sessionId) {
-    // 	const res = await fetch('https://parsecgaming.com/v1/server-list?include_managed=true', {
-    // 		method: 'get',
-    // 		headers: {
-    // 			'X-Parsec-Session-Id': sessionId,
-    // 		},
-    // 	});
-    //
-    // 	return await res.json();
-    // }
-    //
-    //
-    // /*** CLIENT ***/
-    // function toggleFullscreen(element) {
-    // 	if (document.webkitFullscreenElement) {
-    // 		document.webkitExitFullscreen();
-    //
-    // 	} else {
-    // 		element.webkitRequestFullscreen();
-    //
-    // 		if (navigator.keyboard && navigator.keyboard.lock)
-    // 			navigator.keyboard.lock();
-    // 	}
-    // }
-    //
-    // function runClient(element, sessionId, serverId) {
-    // 	return new Promise((resolve) => {
-    // 		//set up client object with an event callback: gets connect, status, chat, and shutter events
-    // 		const client = new Client(element, (event) => {
-    // 			console.log('EVENT', event);
-    //
-    // 			if (event.type === 'exit') {
-    // 				document.removeEventListener('keydown', hotkeys, true);
-    // 				resolve(event.code);
-    // 			}
-    // 		});
-    //
-    // 		//set up useful hotkeys that call client methods: destroy can also be used to cancel pending connection
-    // 		const hotkeys = (event) => {
-    // 			event.preventDefault();
-    //
-    // 			if (event.code === 'Backquote' && event.ctrlKey && event.altKey) {
-    // 				client.destroy(0);
-    //
-    // 			} else if (event.code === 'KeyW' && event.ctrlKey && event.altKey) {
-    // 				toggleFullscreen(element);
-    // 			}
-    // 		};
-    // 		document.addEventListener('keydown', hotkeys, true);
-    //
-    // 		client.connect(sessionId, serverId, {
-    // 			encoder_bitrate: 12,
-    // 		});
-    // 	});
-    // }
-    //
-    //
-    // /*** UI HELPERS ***/
-    // function addRow(table) {
-    // 	const tr = document.createElement('tr');
-    // 	table.appendChild(tr);
-    // 	return tr;
-    // }
-    //
-    // function addTextCol(tr, text) {
-    // 	const td = document.createElement('td');
-    // 	td.textContent = text;
-    // 	tr.appendChild(td);
-    // }
-    //
-    // function addButtonCol(tr, text, onclick) {
-    // 	const td = document.createElement('td');
-    // 	tr.appendChild(td);
-    //
-    // 	const button = document.createElement('button');
-    // 	button.textContent = text;
-    // 	button.onclick = onclick;
-    // 	td.appendChild(button);
-    // }
-    //
-    // function addInputCol(tr, id, type, onenter) {
-    // 	const td = document.createElement('td');
-    // 	tr.appendChild(td);
-    //
-    // 	const input = document.createElement('input');
-    // 	input.id = id;
-    // 	input.type = type;
-    // 	input.onkeyup = (event) => {
-    // 		if (event.keyCode === 13)
-    // 			onenter();
-    // 	};
-    // 	td.appendChild(input);
-    // }
-    //
-    //
-    // /*** MAIN ***/
-    // async function serverTable(sessionId) {
-    // 	const json = await serverList(sessionId);
-    // 	const table = document.querySelector('#server-list');
-    //
-    // 	for (const server of json) {
-    // 		const tr = addRow(table);
-    // 		addTextCol(tr, server.name);
-    // 		addTextCol(tr, server.build);
-    // 		addTextCol(tr, server.server_id);
-    // 		addButtonCol(tr, 'Connect', async () => {
-    // 			const container = document.querySelector('.video-container');
-    // 			const element = document.querySelector('video');
-    //
-    // 			table.style.display = 'none';
-    // 			container.style.display = 'block';
-    //
-    // 			const code = await runClient(element, sessionId, server.server_id);
-    //
-    // 			table.style.display = '';
-    // 			container.style.display = '';
-    //
-    // 			element.src = '';
-    // 			element.load();
-    //
-    // 			if (code !== 0)
-    // 				alert(`Exit code: ${code}`);
-    // 		});
-    // 	}
-    //
-    // 	const tr = addRow(table);
-    // 	addButtonCol(tr, 'Logout', () => {
-    // 		delete sessionStorage.sessionId;
-    // 		window.location.reload();
-    // 	});
-    // }
-    //
-    // function authTable() {
-    // 	async function submit() {
-    // 		const email = document.querySelector('#email').value;
-    // 		const password = document.querySelector('#password').value;
-    //
-    // 		const json = await auth(email, password);
-    // 		sessionStorage.sessionId = json.session_id;
-    // 		window.location.reload();
-    // 	}
-    //
-    // 	const table = document.querySelector('#server-list');
-    //
-    // 	let tr = addRow(table);
-    // 	addTextCol(tr, 'Email');
-    // 	addInputCol(tr, 'email', 'email', submit);
-    //
-    // 	tr = addRow(table);
-    // 	addTextCol(tr, 'Password');
-    // 	addInputCol(tr, 'password', 'password', submit);
-    //
-    // 	document.querySelector('#email').focus();
-    // }
-    //
-    // // if (!sessionStorage.sessionId) {
-    // // 	authTable();
-    // //
-    // // } else {
-    // // 	serverTable(sessionStorage.sessionId);
-    // // }
-    // //
-    // window.authTable = authTable;
-    // window.serverTable = serverTable;
-    //
-    // // conv:
-    // // window.setReactState = (obj) => {
-    // // 	this.setState(obj);
-    // // };
-
-    /* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-    setInterval(() => {
-      // hack:
-      // todo: not this:
-      if (!this.state.audioThree) {
-        audio.volume = 0;
-        player.volume = this.state.volume / 100;
-      } else {
-        audio.volume = this.state.volume / 100;
-        player.volume = 0;
-      }
-    }, 1000);
-    sendInputTimer = setInterval(() => {
-      input.pollDevices();
-      this.sendControllerState();
-    }, 1000 / 120);
-  }
-
-  onUsernameChange(event) {
-    let index = event.target.getAttribute("index");
-    this.setState({
-      usernameIndex: index,
-      myUsername: this.state.myValidUsernames[index]
-    });
-  } // SNEX:
-
-
-  // checkbox settings:
-  toggleKeyboardControls(state) {
-    this.setState({
-      keyboardControls: state
-    }, () => {});
-  }
-
-  toggleControllerControls(state) {
-    this.setState({
-      controllerControls: state
-    }, () => {});
-  }
-
-  toggleTouchControls(state) {
-    this.setState({
-      touchControls: state
-    }, () => {});
-  }
-
-  toggleControllerView(state) {
-    this.setState({
-      controllerView: state
-    }, () => {
-      if (this.state.controllerView && this.state.largescreen) {
-        this.setState({
-          largescreen: false
-        });
-      }
-    });
-  }
-
-  toggleAnalogStickMode(state) {
-    this.setState({
-      analogStickMode: state
-    }, () => {});
-  }
-
-  toggleDpadSwap(state) {
-    this.setState({
-      dpadSwap: state
-    }, () => {});
-  }
-
-  toggleTDSConfig(state) {
-    this.setState({
-      TDSConfig: state
-    }, () => {
-      if (this.state.TDSConfig) {// this.state.sticks.L.X.sensitivity = 1.5;
-        // this.state.sticks.L.Y.sensitivity = 1.5;
-        // this.state.sticks.R.X.sensitivity = 1.5;
-        // this.state.sticks.R.Y.sensitivity = 1.5;
-        // this.state.sticks.R.X.offset = -20;
-        // this.state.sticks.R.Y.offset = -10;
-      } else {// this.state.sticks.L.X.sensitivity = 1;
-          // this.state.sticks.L.Y.sensitivity = 1;
-          // this.state.sticks.R.X.sensitivity = 1;
-          // this.state.sticks.R.Y.sensitivity = 1;
-          // this.state.sticks.R.X.offset = 0;
-          // this.state.sticks.R.Y.offset = 0;
-        }
-    });
-  }
-
-  toggleAudioThree(state) {
-    this.setState({
-      enableAudioThree: state
-    }, () => {});
-  }
-
-  toggleFullscreen(state) {
-    this.setState({
-      fullscreen: state
-    }, () => {
-      if (this.state.fullscreen) {
-        $("body").css("padding", "0");
-        $("#picture").css("width", "100%");
-        $("#picture").css("border", "none"); // $(".videoCanvas").css("width", "100%");
-        // $(".videoCanvas").css("margin-left", "0");
-
-        $(".laglessView").css("margin-left", "0");
-        $(".laglessView").css("margin-right", "0");
-
-        if (this.state.controllerView) {
-          this.setState({
-            controllerView: false
-          });
-        }
-
-        if (!this.state.hideChat) {
-          this.setState({
-            hideChat: true
-          });
-        }
-
-        if (!this.state.hideNav) {
-          this.setState({
-            hideNav: true
-          });
-        }
-
-        $("body").addClass("hideScrollbar");
-        $(document).scrollTop(0);
-        tools.toggleFullScreen($("body")[0]);
-      } else {
-        $("body").css("padding", "");
-        $("#picture").css("width", "");
-        $("#picture").css("border", ""); // $(".videoCanvas").css("width", "");
-        // $(".videoCanvas").css("margin-left", "");
-
-        $(".laglessView").css("margin-left", "");
-        $(".laglessView").css("margin-right", "");
-        $("body").removeClass("hideScrollbar");
-      }
-    });
-  } // https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
-
-
-  exitFullscreen() {
-    if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-      console.log("exiting fullscreen");
-      $("body").removeClass("hideScrollbar");
-      this.setState({
-        fullscreen: false,
-        hideChat: false,
-        hideNav: false,
-        controllerView: true
-      });
-    }
-  }
-
-  toggleLargescreen(state) {
-    this.setState({
-      largescreen: state
-    }, () => {
-      if (this.state.largescreen && this.state.controllerView) {
-        this.setState({
-          controllerView: false
-        });
-        rebindUnbindTouchControls();
-      } else if (!this.state.largescreen && !this.state.controllerView) {
-        this.setState({
-          controllerView: true
-        });
-      }
-    });
-  }
-
-  choosePlayer(cNum) {
-    this.setState({
-      currentPlayerChosen: cNum
-    });
-  }
-
-  switchTabs(tab) {
-    this.setState({
-      tab: tab
-    }, () => {
-      setTimeout(() => {
-        // lagless 1:
-        if (tab == 1) {
-          socket.emit("join", "lagless1");
-        } else {
-          socket.emit("leave", "lagless1");
-        } // lagless 2:
-
-
-        if (tab == 2) {
-          socket.emit("join", "lagless2"); //player.play();
-
-          try {
-            player.destroy();
-          } catch (error) {}
-
-          player = new JSMpeg.Player(lagless2URL, {
-            canvas: document.getElementById("videoCanvas2"),
-            video: true,
-            audio: true,
-            videoBufferSize: videoBufferSize,
-            audioBufferSize: audioBufferSize,
-            maxAudioLag: 0.5
-          });
-        } else {
-          socket.emit("leave", "lagless2"); // 		player.stop();
-
-          try {
-            player.destroy();
-          } catch (error) {}
-
-          player = new JSMpeg.Player(lagless2URL, {
-            canvas: document.getElementById("videoCanvas2"),
-            video: false,
-            audio: true,
-            videoBufferSize: videoBufferSize,
-            audioBufferSize: audioBufferSize,
-            maxAudioLag: 0.5
-          });
-        } // lagless 3:
-
-
-        if (tab == 3) {
-          socket.emit("join", "lagless3");
-          let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-          wsavc.connect(uri);
-        } else {
-          socket.emit("leave", "lagless3");
-
-          try {
-            wsavc.disconnect();
-          } catch (error) {}
-        } // lagless 4:
-
-
-        if (tab == 4) {
-          socket.emit("join", "lagless4");
-
-          if (!videoConnected) {
-            videoConnected = true;
-            socket.emit("requestVideo");
-          } else {
-            videoCanvas4.play();
-          }
-        } else {
-          socket.emit("leave", "lagless4"); // videoCanvas4.pause();
-        }
-      }, 0);
-
-      if (!this.state.largescreen && this.state.touchControls) {
-        addJoyCons(tab);
-        rebindUnbindTouchControls();
-      } // https://github.com/yoannmoinet/nipplejs/issues/39
-      // force joysticks to recalculate the center:
-
-
-      window.dispatchEvent(new Event("resize"));
-      setTimeout(() => {
-        window.dispatchEvent(new Event("resize"));
-      }, 5000);
-    });
-  }
-
-  sendControllerState() {
-    let newControllerState = input.outputController.getState();
-
-    if (newControllerState == oldControllerState) {
-      return;
-    } else {
-      oldControllerState = newControllerState;
-    }
-
-    if (input.currentInputMode == "keyboard" && !this.state.keyboardControls) {
-      return;
-    }
-
-    if (input.currentInputMode == "controller" && !this.state.controllerControls) {
-      return;
-    }
-
-    if (input.currentInputMode == "touch" && !this.state.touchControls) {
-      return;
-    }
-
-    if (($("#keyboardSettings").data("bs.modal") || {})._isShown) {
-      return;
-    }
-
-    if (this.state.controlQueues[this.state.currentPlayerChosen].indexOf(this.state.myUniqueID) == -1) {
-      socket.emit("joinQueue", this.state.currentPlayerChosen);
-    }
-
-    if (this.state.controlQueues[this.state.currentPlayerChosen].indexOf(this.state.myUniqueID) > 0 && this.state.controlQueues[this.state.currentPlayerChosen].length > 0) {
-      new _noty.default({
-        theme: "mint",
-        type: "warning",
-        text: "It's not your turn yet!",
-        timeout: 500
-      }).show();
-      return;
-    }
-
-    authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-
-    if (authCookie == null) {
-      new _noty.default({
-        theme: "mint",
-        type: "warning",
-        text: "You aren't signed in!",
-        timeout: 500,
-        sounds: {
-          volume: 0.5,
-          sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-          conditions: ["docVisible"]
-        }
-      }).show();
-      return;
-    } else {
-      authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-    }
-
-    let obj = {
-      state: newControllerState,
-      cNum: 0
-    };
-
-    if (this.state.controlQueues[0][0] == this.state.myUniqueID) {
-      obj.cNum = 0;
-    } else if (this.state.controlQueues[1][0] == this.state.myUniqueID) {
-      obj.cNum = 1;
-    } else if (this.state.controlQueues[2][0] == this.state.myUniqueID) {
-      obj.cNum = 2;
-    } else if (this.state.controlQueues[3][0] == this.state.myUniqueID) {
-      obj.cNum = 3;
-    } else {
-      obj.cNum = this.state.currentPlayerChosen;
-    }
-
-    console.log(obj.state, obj.cNum);
-    socket.emit("sendControllerState", obj);
   }
 
   render() {
     return _react.default.createElement(_reactRedux.Provider, {
       store: store
-    }, _react.default.createElement(_react.default.Fragment, null, this.state.darkTheme ? _react.default.createElement(_ThemeSwitch.default, null) : null, _react.default.createElement("div", {
-      id: "loader-wrapper"
-    }, _react.default.createElement("div", {
-      id: "loader"
-    }), _react.default.createElement("div", {
-      className: "loader-section section-left"
-    }), _react.default.createElement("div", {
-      className: "loader-section section-right"
-    })), _react.default.createElement("div", {
-      id: "container",
-      className: "light"
-    }, _react.default.createElement("ul", {
-      id: "navTabs",
-      className: "nav nav-tabs light otborder",
-      style: {
-        display: this.state.hideNav ? "none" : null
-      }
-    }, _react.default.createElement("li", {
-      className: "nav-item active"
-    }, _react.default.createElement("a", {
-      id: "tab1",
-      className: "nav-link active",
-      "data-toggle": "tab",
-      href: "#lagless1",
-      onClick: () => {
-        this.switchTabs(1);
-      }
-    }, "Lagless 1")), _react.default.createElement("li", {
-      className: "nav-item"
-    }, _react.default.createElement("a", {
-      id: "tab2",
-      className: "nav-link",
-      "data-toggle": "tab",
-      href: "#lagless2",
-      onClick: () => {
-        this.switchTabs(2);
-      }
-    }, "Lagless 2")), _react.default.createElement("li", {
-      className: "nav-item"
-    }, _react.default.createElement("a", {
-      id: "tab3",
-      className: "nav-link disabled",
-      "data-toggle": "tab",
-      href: "#lagless3",
-      onClick: () => {
-        this.switchTabs(3);
-      }
-    }, "Lagless 3")), _react.default.createElement("li", {
-      className: "nav-item"
-    }, _react.default.createElement("a", {
-      id: "tab4",
-      className: "nav-link disabled",
-      "data-toggle": "tab",
-      href: "#lagless4",
-      onClick: () => {
-        this.switchTabs(4);
-      }
-    }, "Lagless 4")), _react.default.createElement("li", {
-      className: "nav-item"
-    }, _react.default.createElement("a", {
-      id: "tab5",
-      className: "nav-link",
-      "data-toggle": "tab",
-      href: "#lagless5",
-      onClick: () => {
-        this.switchTabs(5);
-      }
-    }, "Lagless 5")), _react.default.createElement("div", {
-      id: "statusContainer",
-      className: "otborder"
-    }, _react.default.createElement("i", {
-      className: "material-icons"
-    }, "lock_open")), _react.default.createElement(_reactConnect.default, {
-      type: "snes-us",
-      onConnection: this.handleSnex
-    })), _react.default.createElement("div", {
-      id: "picture",
-      className: "otborder",
-      style: {
-        width: this.state.hideChat ? "100%" : null
-      }
-    }, _react.default.createElement("div", {
-      className: "tab-content"
-    }, _react.default.createElement("div", {
-      id: "lagless1",
-      className: "tab-pane active"
-    }, _react.default.createElement(_LaglessView.default, {
-      num: 1,
-      controllerView: this.state.controllerView && this.state.tab == 1,
-      controllerState: this.state.controllerViewState,
-      largescreen: this.state.largescreen,
-      fullscreen: this.state.fullscreen
-    })), _react.default.createElement("div", {
-      id: "lagless2",
-      className: "tab-pane"
-    }, _react.default.createElement(_LaglessView.default, {
-      num: 2,
-      controllerView: this.state.controllerView && this.state.tab == 2,
-      controllerState: this.state.controllerViewState,
-      largescreen: this.state.largescreen,
-      fullscreen: this.state.fullscreen
-    })), _react.default.createElement("div", {
-      id: "lagless3",
-      className: "tab-pane"
-    }, _react.default.createElement(_LaglessView.default, {
-      num: 3,
-      controllerView: this.state.controllerView && this.state.tab == 3,
-      controllerState: this.state.controllerViewState,
-      largescreen: this.state.largescreen,
-      fullscreen: this.state.fullscreen
-    })), _react.default.createElement("div", {
-      id: "lagless4",
-      className: "tab-pane"
-    }), _react.default.createElement("div", {
-      id: "lagless5",
-      className: "tab-pane"
-    }, _react.default.createElement("div", {
-      className: "video-container"
-    }, _react.default.createElement("video", null)), _react.default.createElement("table", {
-      id: "server-list"
-    }))), _react.default.createElement("div", {
-      id: "laglessBar",
-      className: "laglessBar otborder"
-    }, _react.default.createElement(_ViewerList.default, {
-      uniqueIDs: this.state.viewerIDs,
-      usernameMap: this.state.usernameMap
-    }), _react.default.createElement("div", {
-      id: "laglessVolumeSlider",
-      className: "volumeSlider otborder"
-    }, _react.default.createElement("i", {
-      className: "fa fa-volume-down",
-      onClick: () => {
-        this.setState({
-          volume: 0
-        });
-      }
-    }), _react.default.createElement(_MySlider.default, {
-      min: 0,
-      max: 100,
-      step: 1,
-      value: this.state.volume,
-      handleChange: value => {
-        this.setState({
-          volume: value
-        });
-      }
-    }), _react.default.createElement("i", {
-      className: "fa fa-volume-up",
-      onClick: () => {
-        this.setState({
-          volume: 100
-        });
-      }
-    })), _react.default.createElement("label", {
-      className: "checkbox-inline checkbox-bootstrap checkbox-lg otborder"
-    }, _react.default.createElement("input", {
-      className: "audioThreeCheckbox",
-      type: "checkbox"
-    }), _react.default.createElement("span", {
-      className: "checkbox-placeholder"
-    }), "Audio 3.0"), _react.default.createElement("button", {
-      id: "laglessRefresh",
-      className: "laglessRefresh btn btn-primary btn-settings"
-    }, _react.default.createElement("i", {
-      className: "fas fa-sync-alt"
-    })), _react.default.createElement("button", {
-      id: "laglessKeyboardSettings",
-      "data-toggle": "modal",
-      "data-target": "#keyboardSettings",
-      className: "keyboardMapper btn btn-primary btn-settings"
-    }, _react.default.createElement("i", {
-      className: "fas fa-keyboard"
-    }), "|", _react.default.createElement("i", {
-      className: "fas fa-gamepad"
-    })), _react.default.createElement("div", {
-      id: "keyboardDropdown",
-      className: "keyboardDropdown dropdown show"
-    }, _react.default.createElement("a", {
-      id: "keyboardDropdownButton",
-      className: "btn btn-secondary dropdown-toggle",
-      href: "#",
-      "data-toggle": "dropdown"
-    }, "Keyboard Profiles"), _react.default.createElement("div", {
-      className: "keyboard-dropdown-menu dropdown-menu"
-    })))), _react.default.createElement("div", {
-      id: "chatContainer",
-      className: "otborder",
-      style: {
-        display: this.state.hideChat ? "none" : null
-      }
-    }, _react.default.createElement("div", {
-      id: "loggedInContainer",
-      className: "otborder"
-    }, _react.default.createElement("div", {
-      id: "loggedInStatus",
-      className: "otborder"
-    }, _react.default.createElement(_UsernameDropdown.default, {
-      validUsernames: this.state.myValidUsernames,
-      myUsername: this.state.myUsername,
-      handleClick: this.onUsernameChange
-    }), _react.default.createElement("button", {
-      id: "logout",
-      className: "btn btn-secondary"
-    }, "Logout")), _react.default.createElement(_ConnectAccounts.default, {
-      connectedAccounts: this.state.myConnectedAccounts
-    })), _react.default.createElement(_Chat.default, null)), _react.default.createElement("div", {
-      id: "barUnderTheStream",
-      className: "otborder"
-    }, _react.default.createElement("div", {
-      id: "playersContainer",
-      className: "otborder"
-    }, _react.default.createElement("button", {
-      id: "hidePlayers",
-      className: "btn btn-secondary collapseButton",
-      "data-toggle": "",
-      "data-target": "#players",
-      collapsed: "false"
-    }, "Hide"), _react.default.createElement("div", {
-      id: "players",
-      className: "collapse show collapsible"
-    }, _react.default.createElement(_Player.default, {
-      num: 1,
-      player: this.state.players[0],
-      myID: this.state.myUniqueID,
-      usernameMap: this.state.usernameMap,
-      controlQueue: this.state.controlQueues[0],
-      selected: this.state.currentPlayerChosen,
-      handleChange: () => {
-        this.choosePlayer(0);
-      }
-    }), _react.default.createElement(_Player.default, {
-      num: 2,
-      player: this.state.players[1],
-      myID: this.state.myUniqueID,
-      usernameMap: this.state.usernameMap,
-      controlQueue: this.state.controlQueues[1],
-      selected: this.state.currentPlayerChosen,
-      handleChange: () => {
-        this.choosePlayer(1);
-      }
-    }), _react.default.createElement(_Player.default, {
-      num: 3,
-      player: this.state.players[2],
-      myID: this.state.myUniqueID,
-      usernameMap: this.state.usernameMap,
-      controlQueue: this.state.controlQueues[2],
-      selected: this.state.currentPlayerChosen,
-      handleChange: () => {
-        this.choosePlayer(2);
-      }
-    }), _react.default.createElement(_Player.default, {
-      num: 4,
-      player: this.state.players[3],
-      myID: this.state.myUniqueID,
-      usernameMap: this.state.usernameMap,
-      controlQueue: this.state.controlQueues[3],
-      selected: this.state.currentPlayerChosen,
-      handleChange: () => {
-        this.choosePlayer(3);
-      }
-    }))), _react.default.createElement("div", {
-      id: "settingsContainer",
-      className: "collapsibleContainer otborder"
-    }, _react.default.createElement("div", {
-      id: "settings",
-      className: "collapse show collapsible"
-    }, _react.default.createElement("div", {
-      id: "checkboxSettings",
-      className: "settingsPanel otborder"
-    }, _react.default.createElement("ul", {
-      className: "list-group"
-    }, _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Keyboard Controls",
-      handleChange: this.toggleKeyboardControls,
-      checked: this.state.keyboardControls
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Controller Controls",
-      handleChange: this.toggleControllerControls,
-      checked: this.state.controllerControls
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Touch Controls",
-      handleChange: this.toggleTouchControls,
-      checked: this.state.TouchControls
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Controller View",
-      handleChange: this.toggleControllerView,
-      checked: this.state.controllerView
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Mouse Controls",
-      handleChange: this.toggleMouseControls,
-      checked: this.state.mouseControls
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Analog Stick Mode",
-      handleChange: this.toggleAnalogStickMode,
-      checked: this.state.analogStickMode
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "DPad Swap",
-      handleChange: this.toggleDpadSwap,
-      checked: this.state.dpadSwap
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "3Ds config",
-      handleChange: this.toggleTDS,
-      checked: this.state.TDSconfig
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement("label", {
-      className: "checkbox-inline checkbox-bootstrap checkbox-lg"
-    }, _react.default.createElement("input", {
-      id: "enableAudioThreeCheckbox",
-      type: "checkbox"
-    }), _react.default.createElement("span", {
-      className: "checkbox-placeholder"
-    }), "Enable Audio 3.0")), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Dark Theme",
-      handleChange: state => {
-        this.setState({
-          darkTheme: state
-        });
-      },
-      checked: this.state.darkTheme
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Fullscreen Mode",
-      handleChange: this.toggleFullscreen,
-      checked: this.state.fullscreen
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Enable Largescreen Mode",
-      handleChange: this.toggleLargescreen,
-      checked: this.state.largescreen
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Hide Chat",
-      handleChange: state => {
-        this.setState({
-          hideChat: state
-        });
-      },
-      checked: this.state.hideChat
-    })), _react.default.createElement("li", {
-      className: "list-group-item"
-    }, _react.default.createElement(_Checkbox.default, {
-      text: "Hide Nav Bar",
-      handleChange: state => {
-        this.setState({
-          hideNav: state
-        });
-      },
-      checked: this.state.hideNav
-    })))), _react.default.createElement("div", {
-      id: "generalSettings",
-      className: "settingsPanel otborder"
-    }, "General Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "Stick Deadzone: ", _react.default.createElement("span", {
-      id: "deadzone"
-    }, this.state.deadzone), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 5,
-      max: 110,
-      step: 1,
-      value: this.state.deadzone,
-      handleChange: value => {
-        this.setState({
-          deadzone: value
-        });
-      }
-    })), _react.default.createElement("button", {
-      id: "resetSettings",
-      className: "btn btn-secondary"
-    }, "Reset All Settings")), _react.default.createElement("div", {
-      id: "laglessSettingsContainer",
-      className: "settingsPanel otborder"
-    }, _react.default.createElement("div", {
-      id: "lagless1Settings",
-      className: "laglessSettings"
-    }, "Lagless 1 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "Quality: ", _react.default.createElement("span", null, this.state.lagless1.quality), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 20,
-      max: 60,
-      step: 1,
-      value: this.state.lagless1.quality,
-      handleChange: value => {
-        this.setState({
-          lagless1: {
-            quality: value
-          }
-        });
-      },
-      onAfterChange: value => {
-        socket.emit("lagless1Settings", {
-          quality: parseInt(value)
-        });
-      }
-    })), "Scale: ", _react.default.createElement("span", null, this.state.lagless1.scale), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 20,
-      max: 50,
-      step: 5,
-      value: this.state.lagless1.scale,
-      handleChange: value => {
-        this.setState({
-          lagless1: {
-            scale: value
-          }
-        });
-      },
-      onAfterChange: value => {
-        socket.emit("lagless1Settings", {
-          scale: parseInt(value)
-        });
-      }
-    })), "FPS: ", _react.default.createElement("span", null, this.state.lagless1.framerate), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 1,
-      max: 15,
-      step: 1,
-      value: this.state.lagless1.framerate,
-      handleChange: value => {
-        this.setState({
-          lagless1: {
-            framerate: value
-          }
-        });
-      },
-      onAfterChange: value => {
-        socket.emit("lagless1Settings", {
-          framerate: parseInt(value)
-        });
-      }
-    }))), _react.default.createElement("div", {
-      id: "lagless2Settings",
-      className: "laglessSettings"
-    }, "Lagless 2 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "FPS: ", _react.default.createElement("span", null, this.state.lagless2.framerate), _react.default.createElement("div", {
-      className: "buttonSettings"
-    }, _react.default.createElement("button", {
-      id: "20fps2",
-      className: "fpsButton btn btn-secondary"
-    }, "20FPS"), _react.default.createElement("button", {
-      id: "30fps2",
-      className: "fpsButton btn btn-secondary"
-    }, "30FPS")), "Bitrate: ", _react.default.createElement("span", null, this.state.lagless2.videoBitrate), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 0,
-      max: 2,
-      step: 0.05,
-      value: this.state.lagless2.videoBitrate,
-      handleChange: value => {
-        this.setState({
-          lagless2: {
-            videoBitrate: value
-          }
-        });
-      },
-      onAfterChange: value => {
-        socket.emit("lagless2Settings", {
-          videoBitrate: parseFloat(value)
-        });
-      }
-    })), "Scale: ", _react.default.createElement("span", null, this.state.lagless2.scale), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 100,
-      max: 540,
-      step: 1,
-      value: this.state.lagless2.scale,
-      handleChange: value => {
-        this.setState({
-          lagless2: {
-            scale: value
-          }
-        });
-      },
-      onAfterChange: value => {
-        socket.emit("lagless2Settings", {
-          scale: parseInt(value)
-        });
-      }
-    })), _react.default.createElement("div", {
-      className: "buttonSettings"
-    }, _react.default.createElement("button", {
-      id: "240p2",
-      className: "resolutionButton btn btn-secondary"
-    }, "240p"), _react.default.createElement("button", {
-      id: "360p2",
-      className: "resolutionButton btn btn-secondary"
-    }, "360p"), _react.default.createElement("button", {
-      id: "540p2",
-      className: "resolutionButton btn btn-secondary"
-    }, "540p"))), _react.default.createElement("div", {
-      id: "lagless3Settings",
-      className: "laglessSettings"
-    }, "Lagless 3 Settings", _react.default.createElement("br", null), _react.default.createElement("hr", null), "FPS: ", _react.default.createElement("span", null, this.state.lagless3.framerate), _react.default.createElement("div", {
-      className: "buttonSettings"
-    }, _react.default.createElement("button", {
-      id: "20fps3",
-      className: "fpsButton btn btn-secondary"
-    }, "20FPS"), _react.default.createElement("button", {
-      id: "30fps3",
-      className: "fpsButton btn btn-secondary"
-    }, "30FPS")), "Bitrate: ", _react.default.createElement("span", null, this.state.lagless3.videoBitrate), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 0,
-      max: 2,
-      step: 0.05,
-      value: this.state.lagless3.videoBitrate,
-      handleChange: value => {
-        this.setState({
-          lagless3: {
-            videoBitrate: value
-          }
-        });
-      },
-      onAfterChange: value => {
-        socket.emit("lagless3Settings", {
-          videoBitrate: parseFloat(value)
-        });
-      }
-    })), "Scale: ", _react.default.createElement("span", null, this.state.lagless3.scale), _react.default.createElement("div", {
-      className: "mysliderContainer"
-    }, _react.default.createElement(_MySlider.default, {
-      min: 100,
-      max: 540,
-      step: 1,
-      value: this.state.lagless3.scale,
-      handleChange: value => {
-        this.setState({
-          lagless3: {
-            scale: value
-          }
-        });
-      },
-      onAfterChange: value => {
-        socket.emit("lagless3Settings", {
-          scale: parseInt(value)
-        });
-      }
-    })), _react.default.createElement("div", {
-      className: "buttonSettings"
-    }, _react.default.createElement("button", {
-      id: "240p3",
-      className: "resolutionButton btn btn-secondary"
-    }, "240p"), _react.default.createElement("button", {
-      id: "360p3",
-      className: "resolutionButton btn btn-secondary"
-    }, "360p"), _react.default.createElement("button", {
-      id: "540p3",
-      className: "resolutionButton btn btn-secondary"
-    }, "540p")))), _react.default.createElement("div", {
-      id: "waitlistContainer",
-      className: "settingsPanel otborder"
-    }, _react.default.createElement(_Waitlist.default, {
-      tab: this.state.tab,
-      usernameMap: this.state.usernameMap,
-      uniqueIDs: this.state.waitlists,
-      myID: this.state.myUniqueID
-    })))))), _react.default.createElement("div", {
-      id: "keyboardSettings",
-      className: "modal fade"
-    }, _react.default.createElement("div", {
-      className: "modal-dialog modal-lg"
-    }, _react.default.createElement("div", {
-      className: "modal-content"
-    }, _react.default.createElement("div", {
-      className: "modal-header"
-    }, _react.default.createElement("h3", {
-      className: "modal-title text-center"
-    }, "Keyboard Remapper")), _react.default.createElement("div", {
-      className: "modal-body"
-    }, _react.default.createElement("button", {
-      id: "resetBindings",
-      className: "btn btn-primary"
-    }, "Reset Keyboard Bindings"), _react.default.createElement("button", {
-      id: "defaultBindings",
-      className: "btn btn-primary"
-    }, "Default Keyboard Bindings"), _react.default.createElement("form", {
-      id: "profileCreator",
-      className: "form-inline"
-    }, _react.default.createElement("div", {
-      className: "form-group"
-    }, _react.default.createElement("input", {
-      id: "profileName",
-      className: "form-control mx-sm-3",
-      type: "text",
-      placeholder: "Profile Name"
-    }), _react.default.createElement("button", {
-      id: "createProfile",
-      className: "btn btn-primary"
-    }, "Create Keyboard Profile"))), _react.default.createElement("div", {
-      id: "keyboardConfigurator",
-      className: ""
-    }, _react.default.createElement("div", {
-      id: "keyboardRemapperInstructions"
-    }, "To remap keys, click the letter you want to remap, then press the key you want to bind."), _react.default.createElement("div", {
-      id: "keyboardMapperContainer"
-    }, _react.default.createElement("div", {
-      id: "keyboardConfigCodes"
-    }, _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LU"
-    }, "Left Stick Up"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LD"
-    }, "Left Stick Down"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LL"
-    }, "Left Stick Left"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LR"
-    }, "Left Stick Right"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RU"
-    }, "Right Stick Up"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RD"
-    }, "Right Stick Down"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RL"
-    }, "Right Stick Left"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RR"
-    }, "Right Stick Right"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "ABtn"
-    }, "A"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "BBtn"
-    }, "B"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "XBtn"
-    }, "X"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "YBtn"
-    }, "Y"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DUp"
-    }, "DPad Up"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DDown"
-    }, "DPad Down"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DLeft"
-    }, "DPad Left"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DRight"
-    }, "DPad Right"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LStick"
-    }, "LStick Button"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RStick"
-    }, "RStick Button"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LBtn"
-    }, "L"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "ZL"
-    }, "ZL"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RBtn"
-    }, "R"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "ZR"
-    }, "ZR"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "Minus"
-    }, "Minus"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "Plus"
-    }, "Plus"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "Capture"
-    }, "Capture"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "Home"
-    }, "Home")), _react.default.createElement("div", {
-      id: "keyboardConfigKeys"
-    }, _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LUKey"
-    }, "W"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LDKey"
-    }, "S"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LLKey"
-    }, "A"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LRKey"
-    }, "D"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RUKey"
-    }, "I"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RDKey"
-    }, "K"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RLKey"
-    }, "J"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RRKey"
-    }, "L"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "ABtnKey"
-    }, "\u2192"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "BBtnKey"
-    }, "\u2193"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "XBtnKey"
-    }, "\u2191"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "YBtnKey"
-    }, "\u2190"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DUpKey"
-    }, "T"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DDownKey"
-    }, "G"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DLeftKey"
-    }, "F"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "DRightKey"
-    }, "H"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LStickKey"
-    }, "R"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RStickKey"
-    }, "Y"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "LBtnKey"
-    }, "U"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "ZLKey"
-    }, "Q"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "RBtnKey"
-    }, "O"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "ZRKey"
-    }, "E"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "MinusKey"
-    }, "-"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "PlusKey"
-    }, "="), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "CaptureKey"
-    }, "1"), _react.default.createElement("li", {
-      className: "buttonConfig list-group-item",
-      id: "HomeKey"
-    }, "2"))))))))));
+    }, _react.default.createElement(_App.default, {
+      dispatch: store.dispatch,
+      socket: socket
+    }));
   }
 
 }
 
-exports.default = App;
+exports.default = Index;
 
-_reactDom.default.render(_react.default.createElement(App, null), document.getElementById("root"));
-/* prevent arrow key scrolling */
+_reactDom.default.render(_react.default.createElement(Index, null), document.getElementById("root"));
 
-
-window.addEventListener("keydown", function (e) {
-  // space and arrow keys
-  if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-    e.preventDefault();
-  }
-
-  if ([27].indexOf(e.keyCode) > -1) {
-    document.exitPointerLock();
-    document.removeEventListener("mousemove", getMouseInput);
-    document.removeEventListener("mousedown", getMouseInput2);
-    document.removeEventListener("mouseup", getMouseInput2);
-    $("#mouseControlsCheckbox").prop("checked", false).trigger("change");
-  }
-}, false);
-
-function getMouseInput(e) {
-  // on mouse stop:
-  clearTimeout(mouseMoveTimer);
-  mouseMoveTimer = setTimeout(() => {
-    controller.RStick.x = restPos;
-    controller.RStick.y = restPos;
-  }, 100);
-  var x = restPos + e.movementX * 10;
-  var y = restPos - e.movementY * 10;
-  controller.RStick.x = x;
-  controller.RStick.y = y;
-  controller.RStick.x = tools.clamp(controller.RStick.x, 0, 255);
-  controller.RStick.y = tools.clamp(controller.RStick.y, 0, 255);
-}
-
-function getMouseInput2(e) {
-  let value = e.type == "mousedown" ? 1 : 0; // left button:
-
-  if (e.which === 1) {
-    controller.btns.zr = value; // right button:
-  } else if (e.which == 3) {//controller.btns.zr = value;
-  }
-} // todo: maybe make a virtual canvas w/ $() ? not sure if actual canvas is required
-
-
-let videoCanvas2 = $("#videoCanvas2")[0];
-videoCanvas2.requestPointerLock = videoCanvas2.requestPointerLock || videoCanvas2.mozRequestPointerLock;
-document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
-$("#mouseControlsCheckbox").change(function (event) {
-  if (this.checked) {
-    videoCanvas2.requestPointerLock();
-    document.addEventListener("mousemove", getMouseInput, false);
-    document.addEventListener("mousedown", getMouseInput2, false);
-    document.addEventListener("mouseup", getMouseInput2, false);
-  } else {
-    document.exitPointerLock();
-    document.removeEventListener("mousemove", getMouseInput);
-    document.removeEventListener("mousedown", getMouseInput2);
-    document.removeEventListener("mouseup", getMouseInput2);
-  }
-}); // https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
-
-function keyDownHandler(event) {
-  keyDownHandler.element = keyDownHandler.element || "";
-  let keyString = (0, _keycode.default)(event);
-  keyDownHandler.element.text(keyString);
-  let buttonKey = keyDownHandler.element.attr("id").slice(0, -3);
-  keyboardLayout[buttonKey] = keyString;
-  document.removeEventListener("keydown", keyDownHandler, false);
-}
-
-$("#keyboardConfigKeys li").on("click", function (event) {
-  let self = $(this);
-  $(this).effect("highlight", {}, 2000);
-  document.removeEventListener("keydown", keyDownHandler, false);
-  document.addEventListener("keydown", keyDownHandler, false);
-  keyDownHandler.element = self;
-});
-$("#resetBindings").on("click", function (event) {});
-$("#defaultBindings").on("click", function (event) {
-  keyboardLayout.tempSelectedAction = "";
-  keyboardLayout.tempSelectedKey = "";
-  keyboardLayout.LU = "W";
-  keyboardLayout.LD = "S";
-  keyboardLayout.LL = "A";
-  keyboardLayout.LR = "D";
-  keyboardLayout.RU = "I";
-  keyboardLayout.RD = "K";
-  keyboardLayout.RL = "J";
-  keyboardLayout.RR = "L";
-  keyboardLayout.ABtn = "right";
-  keyboardLayout.BBtn = "down";
-  keyboardLayout.XBtn = "up";
-  keyboardLayout.YBtn = "left";
-  keyboardLayout.DUp = "T";
-  keyboardLayout.DDown = "G";
-  keyboardLayout.DLeft = "F";
-  keyboardLayout.DRight = "H";
-  keyboardLayout.LStick = "R";
-  keyboardLayout.RStick = "Y";
-  keyboardLayout.LBtn = "U";
-  keyboardLayout.ZL = "Q";
-  keyboardLayout.RBtn = "O";
-  keyboardLayout.ZR = "E";
-  keyboardLayout.Minus = "-";
-  keyboardLayout.Plus = "=";
-  keyboardLayout.Capture = "1";
-  keyboardLayout.Home = "2";
-  setKeyboardMapperClasses();
-});
-/* KEYBOARD PROFILES */
-
-$("#createProfile").on("click", function (event) {
-  event.preventDefault();
-  let profileName = $("#profileName").val();
-
-  if (profileName === "") {
-    (0, _sweetalert.default)("The profile name cannot be empty!", "", "error");
-    return;
-  } else {
-    settings.keyboardProfiles[profileName] = keyboardLayout;
-
-    _localforage.default.setItem("settings", JSON.stringify(settings));
-
-    clearAndReplaceProfiles();
-    (0, _sweetalert.default)("Profile created successfully!", "", "success");
-  }
-
-  $("#profileName").val("");
-});
-$("#deleteProfiles").on("click", function (event) {
-  event.preventDefault();
-  settings.keyboardProfiles = {};
-
-  _localforage.default.setItem("settings", JSON.stringify(settings));
-
-  (0, _sweetalert.default)("Profiles deleted successfully!", "", "success");
-});
-
-function clearAndReplaceProfiles() {
-  // clear the dropdown menu
-  $(".keyboard-dropdown-menu").children().remove(); // fill it with profiles:
-
-  for (let key in settings.keyboardProfiles) {
-    let optionHTML = "<button class='keyboard-dropdown-item'" + " config='" + JSON.stringify(settings.keyboardProfiles[key]) + "'>" + key + "</button>";
-    $(".keyboard-dropdown-menu").append(optionHTML);
-  }
-}
-
-$(document).on("click", ".keyboard-dropdown-item", function (event) {
-  let configName = $(event.target).text();
-  $("#keyboardDropdownButton").text(configName);
-  keyboardLayout = JSON.parse($(event.target).attr("config"));
-  console.log(configName);
-});
-/* TOUCH CONTROLS */
-
-/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-let leftJoyStick = {
-  zone: document.querySelector("#leftStick"),
-  mode: "static",
-  catchDistance: 10,
-  color: "#FF3C28",
-  position: {
-    left: "50%",
-    top: "50%"
-  },
-  size: 60
-};
-let rightJoyStick = {
-  zone: document.querySelector("#rightStick"),
-  mode: "static",
-  catchDistance: 10,
-  color: "#0AB9E6",
-  position: {
-    left: "50%",
-    top: "50%"
-  },
-  size: 60
-};
-let leftStick;
-let rightStick;
-
-function bindJoysticks() {
-  let stickSize = 60;
-  let s1 = stickSize;
-  let s2 = stickSize / 2;
-  leftStick.on("start", function (evt, data) {
-    let pos = data.frontPosition;
-    pos.x = parseInt((pos.x + s2) / s1 * 255);
-    pos.y = parseInt((pos.y + s2) / s1 * 255);
-    pos.y = 255 - pos.y;
-    controller.LStick.x = pos.x;
-    controller.LStick.y = pos.y;
-  }).on("end", function (evt, data) {
-    controller.LStick.x = restPos;
-    controller.LStick.y = restPos;
-  }).on("move", function (evt, data) {
-    let pos = data.instance.frontPosition;
-    pos.x = parseInt((pos.x + s2) / s1 * 255);
-    pos.y = parseInt((pos.y + s2) / s1 * 255);
-    pos.y = 255 - pos.y;
-    controller.LStick.x = pos.x;
-    controller.LStick.y = pos.y;
-  });
-  rightStick.on("start", function (evt, data) {
-    let pos = data.frontPosition;
-    pos.x = parseInt((pos.x + s2) / s1 * 255);
-    pos.y = parseInt((pos.y + s2) / s1 * 255);
-    pos.y = 255 - pos.y;
-    controller.RStick.x = pos.x;
-    controller.RStick.y = pos.y;
-  }).on("end", function (evt, data) {
-    controller.RStick.x = restPos;
-    controller.RStick.y = restPos;
-  }).on("move", function (evt, data) {
-    let pos = data.instance.frontPosition;
-    pos.x = parseInt((pos.x + s2) / s1 * 255);
-    pos.y = parseInt((pos.y + s2) / s1 * 255);
-    pos.y = 255 - pos.y;
-    controller.RStick.x = pos.x;
-    controller.RStick.y = pos.y;
-  });
-} // leftStick = nipplejs.create(leftJoyStick);
-// rightStick = nipplejs.create(rightJoyStick);
-// bindJoysticks();
-
-
-function onButtonPress(event) {
-  event.preventDefault();
-  currentInputMode = "touch";
-
-  if (event.target.id == null) {
-    return;
-  }
-
-  if (event.target.id == "dpadButtons" || event.target.id == "abxyButtons") {
-    return;
-  }
-
-  let value = 0;
-
-  if (event.type == "mousedown" || event.type == "touchstart" || event.type == "pointerdown") {
-    value = 1; //swal("touchstart");
-  } else if (event.type == "mouseup" || event.type == "mouseleave" || event.type == "touchend" || event.type == "pointerup" || event.type == "pointerout") {
-    value = 0; //swal("touchend");
-  } else if (event.type == "touchmove") {// todo: make an equivalent to mouseleave since touchleave doesn't exist :/
-  }
-
-  let button = event.target.id;
-  let oldState = JSON.stringify(controller);
-
-  switch (button) {
-    case "upButton":
-      controller.btns.up = value;
-      break;
-
-    case "downButton":
-      controller.btns.down = value;
-      break;
-
-    case "leftButton":
-      controller.btns.left = value;
-      break;
-
-    case "rightButton":
-      controller.btns.right = value;
-      break;
-
-    case "aButton":
-      controller.btns.a = value;
-      break;
-
-    case "bButton":
-      controller.btns.b = value;
-      break;
-
-    case "xButton":
-      controller.btns.x = value;
-      break;
-
-    case "yButton":
-      controller.btns.y = value;
-      break;
-
-    case "lButton":
-      controller.btns.l = value;
-      break;
-
-    case "zlButton":
-      controller.btns.zl = value;
-      break;
-
-    case "rButton":
-      controller.btns.r = value;
-      break;
-
-    case "zrButton":
-      controller.btns.zr = value;
-      break;
-
-    case "minusButton":
-      controller.btns.minus = value;
-      break;
-
-    case "captureButton":
-      controller.btns.capture = value;
-      break;
-
-    case "plusButton":
-      controller.btns.plus = value;
-      break;
-
-    case "homeButton":
-      controller.btns.home = value;
-      break;
-  }
-
-  let newState = JSON.stringify(controller);
-
-  if (newState == oldState) {
-    return;
-  } // if (controlQueues[0].indexOf(myUniqueID) == -1) {
-  // 	socket.emit("joinQueue", currentPlayerChosen);
-  // }
-
-}
-
-function rebindUnbindTouchControls() {
-  let buttonsList = ["#dpadButtons", "#abxyButtons", "#leftJoyConOther", "#rightJoyConOther"];
-
-  if (settings.touchControls) {
-    try {
-      $("#leftJoyCon")[0].style.display = "";
-      $("#rightJoyCon")[0].style.display = "";
-    } catch (error) {}
-
-    for (let i = 0; i < buttonsList.length; i++) {
-      $(buttonsList[i]).bind("touchstart", onButtonPress);
-      $(buttonsList[i]).bind("touchmove", onButtonPress);
-      $(buttonsList[i]).bind("touchend", onButtonPress);
-      $(buttonsList[i]).bind("mousedown", onButtonPress);
-      $(buttonsList[i]).bind("mouseup", onButtonPress);
-      $(buttonsList[i]).bind("mouseleave", onButtonPress);
-      $(buttonsList[i]).bind("pointerdown", onButtonPress);
-      $(buttonsList[i]).bind("pointerup", onButtonPress);
-      $(buttonsList[i]).bind("pointerout", onButtonPress);
-    }
-  } else {
-    try {
-      $("#leftJoyCon")[0].style.display = "none";
-      $("#rightJoyCon")[0].style.display = "none";
-    } catch (error) {}
-
-    for (let i = 0; i < buttonsList.length; i++) {
-      $(buttonsList[i]).unbind("touchstart", onButtonPress);
-      $(buttonsList[i]).unbind("touchmove", onButtonPress);
-      $(buttonsList[i]).unbind("touchend", onButtonPress);
-      $(buttonsList[i]).unbind("mousedown", onButtonPress);
-      $(buttonsList[i]).unbind("mouseup", onButtonPress);
-      $(buttonsList[i]).unbind("mouseleave", onButtonPress);
-      $(buttonsList[i]).unbind("pointerdown", onButtonPress);
-      $(buttonsList[i]).unbind("pointerup", onButtonPress);
-      $(buttonsList[i]).unbind("pointerout", onButtonPress);
-    }
-  }
-}
-/* AUTHENTICATION */
-
-
-$("#logout").on("click", function (event) {
-  tools.deleteAllCookies();
-  location.reload(true);
-}); // $(document).on("click", ".username-dropdown-item", function (event) {
-// 	let username = $(event.target).text();
-// 	let index = $(event.target).index();
-// 	$("#usernameDropdownMenuLink").text(username);
-// 	settings.usernameIndex = index;
-// 	localforage.setItem("settings", JSON.stringify(settings));
-// });
-
-function connectAccountOrSignIn(type) {
-  let url = "https://twitchplaysnintendoswitch.com/8110/auth/" + type + "/";
-
-  if (authCookie != null) {
-    url += "?uniqueToken=" + authCookie;
-  }
-
-  window.location.href = url;
-}
-
-$("#connectWithTwitchButton").on("click", function (event) {
-  connectAccountOrSignIn("twitch");
-});
-$("#connectWithGoogleButton").on("click", function (event) {
-  connectAccountOrSignIn("google");
-});
-$("#connectWithYoutubeButton").on("click", function (event) {
-  connectAccountOrSignIn("youtube");
-});
-$("#connectWithDiscordButton").on("click", function (event) {
-  connectAccountOrSignIn("discord");
-});
-/* STREAM SETTINGS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-// prevent arrow keys from messing with the slider:
-// https://stackoverflow.com/questions/2922174/jquery-ui-slider-how-to-disable-keyboard-input
-// $.prototype.slider_old = $.prototype.slider;
-// $.prototype.slider = function () {
-// 	let result = $.prototype.slider_old.apply(this, arguments);
-// 	this.find(".ui-slider-handle").unbind("keydown"); // disable keyboard actions
-// 	return result;
-// }
-// $("#deadzoneSlider").slider({
-// 	min: 1,
-// 	max: 100,
-// 	step: 1,
-// 	value: 50,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#deadzone").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {}
-// });
-//
-// $("#stickSensitivitySlider").slider({
-// 	min: 0,
-// 	max: 3,
-// 	step: 0.01,
-// 	value: 1,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#sensitivity").text(ui.value);
-// 		// settings.stickSensitivityX = ui.value;
-// 		// settings.stickSensitivityY = ui.value;
-// 		settings.sticks.L.X.sensitivity = ui.value;
-// 		settings.sticks.L.Y.sensitivity = ui.value;
-// 		settings.sticks.R.X.sensitivity = ui.value;
-// 		settings.sticks.R.Y.sensitivity = ui.value;
-// 	},
-// 	stop: function (event, ui) {
-// 		localforage.setItem("settings", JSON.stringify(settings));
-// 	},
-// });
-//
-// $("#stickAttackSlider").slider({
-// 	min: 0,
-// 	max: 40,
-// 	step: 0.1,
-// 	value: 20,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#attack").text(ui.value);
-// 		settings.stickAttack = ui.value;
-// 	},
-// 	stop: function (event, ui) {
-// 		localforage.setItem("settings", JSON.stringify(settings));
-// 	}
-// });
-//
-// $("#stickReturnSlider").slider({
-// 	min: 0,
-// 	max: 40,
-// 	step: 0.1,
-// 	value: 20,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#return").text(ui.value);
-// 		settings.stickReturn = ui.value;
-// 	},
-// 	stop: function (event, ui) {
-// 		localforage.setItem("settings", JSON.stringify(settings));
-// 	}
-// });
-// socket.on("lagless1Settings", function (data) {
-// 	lagless1Settings = Object.assign({}, lagless1Settings, data);
-// 	$("#scale").text(lagless1Settings.scale);
-// 	$("#scaleSlider").slider("value", lagless1Settings.scale);
-// 	$("#quality").text(lagless1Settings.quality);
-// 	$("#qualitySlider").slider("value", lagless1Settings.quality);
-// });
-// lagless2:
-// $("#bitrateSlider2").slider({
-// 	min: 0,
-// 	max: 2,
-// 	step: 0.05,
-// 	value: 1,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#bitrate2").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {
-// 		socket.emit("lagless2Settings", {
-// 			videoBitrate: parseFloat(ui.value)
-// 		});
-// 	}
-// });
-//
-// $("#scaleSlider2").slider({
-// 	min: 100,
-// 	max: 720,
-// 	step: 1,
-// 	value: 720,
-// 	range: "min",
-// 	animate: true,
-// 	slide: function (event, ui) {
-// 		$("#scale2").text(ui.value);
-// 	},
-// 	stop: function (event, ui) {
-// 		socket.emit("lagless2Settings", {
-// 			scale: parseInt(ui.value)
-// 		});
-// 	}
-// });
-
-$("#240p2").on("click", function (event) {
-  socket.emit("lagless2Settings", {
-    scale: 240
-  });
-});
-$("#360p2").on("click", function (event) {
-  socket.emit("lagless2Settings", {
-    scale: 360
-  });
-});
-$("#540p2").on("click", function (event) {
-  socket.emit("lagless2Settings", {
-    scale: 540
-  });
-});
-$("#720p2").on("click", function (event) {
-  socket.emit("lagless2Settings", {
-    scale: 720
-  });
-});
-$("#20fps2").on("click", function (event) {
-  socket.emit("lagless2Settings", {
-    framerate: 20
-  });
-});
-$("#30fps2").on("click", function (event) {
-  socket.emit("lagless2Settings", {
-    framerate: 30
-  });
-}); // lagless3:
-
-$("#240p3").on("click", function (event) {
-  socket.emit("lagless3Settings", {
-    scale: 240
-  });
-});
-$("#360p3").on("click", function (event) {
-  socket.emit("lagless3Settings", {
-    scale: 360
-  });
-});
-$("#540p3").on("click", function (event) {
-  socket.emit("lagless3Settings", {
-    scale: 540
-  });
-});
-$("#720p3").on("click", function (event) {
-  socket.emit("lagless3Settings", {
-    scale: 720
-  });
-});
-$("#20fps3").on("click", function (event) {
-  socket.emit("lagless3Settings", {
-    framerate: 20
-  });
-});
-$("#30fps3").on("click", function (event) {
-  socket.emit("lagless3Settings", {
-    framerate: 30
-  });
-});
-
-function addJoyCons(tab, actual) {} // actual = actual || false;
-//
-// if (!actual) {
-// 	tab = "#lagless" + tab + "View";
-// }
-//
-// // delete old joycons:
-// try {
-// 	leftStick.destroy();
-// 	rightStick.destroy();
-// } catch (e) {
-// 	console.log("JoyCon delete error.");
-// }
-// remove previous renders:
-// todo: implement prevTab
-// for (let i = 1; i < 5; i++) {
-// 	ReactDOM.unmountComponentAtNode(document.getElementById("leftJoyConPlaceHolder" + i));
-// 	ReactDOM.unmountComponentAtNode(document.getElementById("rightJoyConPlaceHolder" + i));
-// }
-// if (document.getElementById("leftJoyConPlaceHolder" + settings.tab)) {
-// 	ReactDOM.render(<LeftJoyCon/>, document.getElementById("leftJoyConPlaceHolder" + settings.tab));
-// }
-// if (document.getElementById("rightJoyConPlaceHolder" + settings.tab)) {
-// 	ReactDOM.render(<RightJoyCon/>, document.getElementById("rightJoyConPlaceHolder" + settings.tab));
-// }
-// // rebind touch controls:
-// rebindUnbindTouchControls();
-//
-// // rebind sticks:
-// leftJoyStick.zone = document.querySelector("#leftStick");
-// rightJoyStick.zone = document.querySelector("#rightStick");
-// leftStick = nipplejs.create(leftJoyStick);
-// rightStick = nipplejs.create(rightJoyStick);
-// bindJoysticks();
-// todo: debounce
-
-
-$(window).resize(function (event) {
-  // hack:
-  // todo: not this:
-  $("#videoCanvas3").outerHeight($("#videoCanvas3").outerWidth() * (9 / 16)); // 	if (resizeAvailable) {
-
-  resizeAvailable = false;
-  resizeDebounceTimer = setTimeout(() => {
-    resizeAvailable = true;
-  }, 100);
-
-  for (let i = 0; i < resizers.length; i++) {
-    resizers[i].resize();
-  } // 	}
-
-}); // https://github.com/yoannmoinet/nipplejs/issues/39
-// force joysticks to recalculate the center:
-// setInterval(function() {
-// 	window.dispatchEvent(new Event("resize"));
-// }, 5000);
-
-function replaceWithTwitch(tab) {
-  let twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
-
-  if (tab == 1) {
-    $("#videoCanvas1")[0].style.display = "none";
-    $("#videoCanvas1").after(twitchIFrame);
-  } else {// 		$("#tab1").addClass("disabled");
-  }
-
-  if (tab == 2) {
-    try {
-      player.stop();
-    } catch (error) {
-      console.log("player not defined");
-    }
-
-    $("#videoCanvas2")[0].style.display = "none";
-    $("#videoCanvas2").after(twitchIFrame);
-  } else {}
-
-  if (tab == 3) {
-    wsavc.disconnect();
-    $("#videoCanvas3")[0].style.display = "none";
-    $("#videoCanvas3").after(twitchIFrame);
-  } else {}
-
-  if (tab == 4) {
-    try {// 			player.stop();
-    } catch (error) {// 			console.log("player not defined");
-    }
-
-    $("#videoCanvas4")[0].style.display = "none";
-    $("#videoCanvas4").after(twitchIFrame);
-  } else {}
-
-  if (tab == 5) {
-    player5.stop();
-    $("#videoCanvas5")[0].style.display = "none";
-    $("#videoCanvas5").after(twitchIFrame);
-  } else {} // socket.emit("leaveLagless");
-
-}
-
-function replaceWithLagless(tab) {
-  if (tab == 1) {
-    socket.emit("join", "lagless1");
-    $("#videoCanvas1")[0].style.display = "";
-    $("#twitchVideo").remove();
-  } else {// 		$("#tab1").removeClass("disabled");
-  }
-
-  if (tab == 2) {
-    player.play();
-    $("#videoCanvas2")[0].style.display = "";
-    $("#twitchVideo").remove();
-  } else {}
-
-  if (tab == 3) {
-    let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-    wsavc.connect(uri);
-    $("#videoCanvas3")[0].style.display = "";
-    $("#twitchVideo").remove();
-  } else {// 		$("#tab3").removeClass("disabled");
-  }
-
-  if (tab == 4) {
-    $("#videoCanvas4")[0].style.display = "";
-    $("#twitchVideo").remove();
-  } else {}
-
-  if (tab == 5) {
-    player.play();
-    $("#videoCanvas5")[0].style.display = "";
-    $("#twitchVideo").remove();
-  } else {}
-}
-
-$("#replaceWithTwitch").on("click", function () {
-  replaceWithTwitch();
-});
-$("#replaceWithLagless").on("click", function () {
-  replaceWithLagless();
-}); // socket.on("replaceWithTwitch", function () {
-// 	replaceWithTwitch();
-// });
-//
-// socket.on("replaceWithLagless", function () {
-// 	replaceWithTwitch();
-// });
-
-/* STATUS BAR @@@@@@@@@@@@@@@@ */
-// socket.on("lock", function() {
-// 	replaceWithTwitch();
-// });
-
-/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-
-/* AUDIO 3.0 */
-
-let peer = new _simplePeer.default({
-  initiator: false,
-  trickle: true
-});
-peer.on("error", function (err) {
-  console.log("error", err);
-});
-peer.on("signal", function (data) {
-  console.log("SIGNAL", JSON.stringify(data));
-  socket.emit("clientPeerSignal", JSON.stringify(data));
-});
-peer.on("connect", function () {
-  console.log("CONNECT");
-  peer.send(Math.random());
-});
-peer.on("data", function (data) {
-  console.log("data: " + data);
-});
-socket.on("hostPeerSignal", function (data) {
-  peer.signal(JSON.parse(data));
-});
-peer.on("stream", function (stream) {
-  // got remote audio stream, then show it in an audio tag
-  audio.src = window.URL.createObjectURL(stream); // deprecated
-  // 			audio.srcObj = stream;
-
-  audio.play();
-  audio.volume = 0;
-}); // $("#enableAudioThreeCheckbox").on("change", function () {
-// 	settings.enableAudioThree = this.checked;
-// 	localforage.setItem("settings", JSON.stringify(settings));
-// 	if (settings.enableAudioThree) {
-// 		if (!audioConnected) {
-// 			socket.emit("requestAudio");
-// 			setTimeout(() => {
-// 				audioConnected = true;
-// 			}, 100);
-// 		}
-// 	} else {
-// 		try {
-// 			audio.volume = 0;
-// 			player.volume = settings.volume / 100;
-// 		} catch (error) {}
-// 		$("#audioThreeCheckbox").prop("checked", false);
-// 		$(".audioThreeCheckbox").prop("checked", false);
-// 	}
-// });
-//
-// $("#audioThreeCheckbox").on("change", function () {
-// 	if (!settings.enableAudioThree) {
-// 		$("#audioThreeCheckbox").prop("checked", false);
-// 		swal("You have to enable Audio 3.0 first!");
-// 		return;
-// 	}
-// 	settings.audioThree = this.checked;
-// 	localforage.setItem("settings", JSON.stringify(settings));
-// 	if (settings.audioThree) {
-// 		if (!audioConnected) {
-// 			audio.volume = settings.volume / 100;
-// 		} else {
-// 			try {
-// 				audio.volume = settings.volume / 100;
-// 				player.volume = 0;
-// 			} catch (error) {}
-// 		}
-// 	} else {
-// 		audio.volume = 0;
-// 		player.volume = settings.volume / 100;
-// 	}
-// });
-
-$(".audioThreeCheckbox").on("change", function () {
-  $("#audioThreeCheckbox").trigger("click");
-  setTimeout(() => {
-    $(".audioThreeCheckbox").prop("checked", $("#audioThreeCheckbox").prop("checked"));
-  }, 100);
-});
-/* MOD COMMANDS */
-// selects elements in the future:
-// https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
-
-$("body").popover({
-  selector: ".queueItem",
-  trigger: "focus",
-  html: true,
-  toggle: "popover",
-  title: "Mod Powers",
-  boundary: "window",
-  container: "body",
-  placement: "right",
-  content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
-				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
-				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>'
-}); // .click(function() {
-// 	setTimeout(() => {
-// 		$('[data-toggle="popover"]').popover("hide");
-// 	}, 8000);
-// });
-
-$("#container").popover({
-  // must be unique
-  selector: ".viewerElement",
-  // 	trigger: "focus",
-  html: true,
-  toggle: "popover",
-  title: "Mod Powers",
-  boundary: "window",
-  container: "body",
-  placement: "right",
-  content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
-				<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
-				<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
-				<button id="unban" class="btn btn-secondary"><b>Unban</b></button>'
-}).click(() => {
-  setTimeout(() => {
-    $('[data-toggle="popover"]').popover("hide");
-  }, 8000);
-});
-let modPowerUniqueID = "";
-$(document).on("click", ".queueItem", function (event) {
-  $(this).effect("highlight", {}, 2000);
-  modPowerUniqueID = $(this).attr("uniqueid");
-});
-$(document).on("click", ".viewerElement", function (event) {
-  $(this).effect("highlight", {}, 2000);
-  modPowerUniqueID = $(this).attr("uniqueid");
-});
-$(document).on("click", "#kickFromQueue", function (event) {
-  socket.emit("kickFromQueue", modPowerUniqueID);
-  $("#queuePopup").remove();
-});
-$(document).on("click", "#tempBan", function (event) {
-  socket.emit("tempBan", modPowerUniqueID);
-  $("#queuePopup").remove();
-});
-$(document).on("click", "#permaBan", function (event) {
-  socket.emit("permaBan", modPowerUniqueID);
-  $("#queuePopup").remove();
-});
-$(document).on("click", "#unban", function (event) {
-  socket.emit("unban", modPowerUniqueID);
-  $("#queuePopup").remove();
-});
-$(document).on("click", 'i:contains("lock")', function (event) {
-  $(this).effect("highlight", {}, 2000);
-  socket.emit("unlock");
-});
-$(document).on("click", 'i:contains("lock_open")', function (event) {
-  $(this).effect("highlight", {}, 2000);
-  socket.emit("lock");
-}); // todo: reimplement:
-// setInterval(function() {
-// 	let currentTime = Date.now();
-// 	let elapsedTime = currentTime - lastCurrentTime;
-// 	let timeLeftMilli = timeLeft - elapsedTime;
-// 	let timeLeftSec = parseInt(timeLeftMilli / 1000);
-// 	let percent = parseInt((timeLeftMilli / turnLength) * 100);
-// 	let progressBar = $(".progress-bar");
-// 	progressBar.css("width", percent + "%").text(turnUsername + ": " + timeLeftSec + " seconds");
-// }, 200);
-
-$(document).on("click", ".joinQueue", function (event) {
-  let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
-
-  for (let i = 0; i < 4; i++) {
-    if (i == cNum) {
-      continue;
-    }
-
-    socket.emit("leaveQueue", i);
-  }
-
-  socket.emit("joinQueue", cNum);
-});
-$(document).on("click", ".leaveQueue", function (event) {
-  let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
-  socket.emit("leaveQueue", cNum);
-});
-window.addEventListener("keydown", function (e) {
-  // escape, f11
-  if ([27, 122].indexOf(e.keyCode) > -1) {
-    e.preventDefault();
-    $("body").removeClass("hideScrollbar");
-  }
-}, false);
-/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-setInterval(function () {
-  pingTime = Date.now();
-  socket.emit("ping2");
-}, 1000);
-socket.on("pong2", function () {
-  let latency = Date.now() - pingTime;
-  $("#ping").text(latency + "ms");
-});
-$("#resetSettings").on("click", function (event) {
-  event.preventDefault();
-
-  _localforage.default.clear().then(function () {
-    location.reload(true);
-  });
-});
-/* COLLAPSE BUTTONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-// $(".collapseButton").on("click", function(event) {
-// 	event.preventDefault();
-// 	let self = this;
-// 	setTimeout(function(self) {
-// 		let target = $($(self).attr("data-target"));
-// 		if (!target.hasClass("show")) {
-// 			$(self).text("Show");
-// 		  make the parent height equal to the button height:
-//  			let height = $(self).outerHeight() + 5;
-//  			$(self).parent().height(height);
-// 		} else {
-// 			$(self).text("Hide");
-// 			$(self).parent().css("height", "");
-//  			let height = target.outerHeight();
-//  			$(self).parent().height(height);
-// 		}
-// 	}, 500, this);
-// });
-
-$(".collapseButton").on("click", function (event) {
-  let target = $(this).attr("data-target");
-
-  if ($(this).attr("collapsed") == "false") {
-    $(this).attr("collapsed", "true");
-    $(target).collapse("hide");
-  } else {
-    $(this).attr("collapsed", "false");
-    $(target).parent().animate({
-      "margin-top": "0px"
-    }); // 		$(target).parent().css("width", "");
-
-    $(target).parent().css("height", ""); // 	$(this).parent().animate({"width": "", "height": ""});
-
-    let thisId = "#" + $(target).attr("id");
-    let button = $('[data-target="' + thisId + '"]');
-    button.css("align-self", "");
-    button.css("margin-left", "5px");
-    setTimeout(() => {
-      $(target).parent().css("width", "");
-      $(target).collapse("show");
-    }, 500);
-  }
-});
-$(".collapsible").on("show.bs.collapse", function () {//  	$(this).parent().css("margin-top", "");
-  // 	$(this).parent().animate({"margin-top": "0px"});
-  // 	$(this).parent().css("width", "");
-  // 	$(this).parent().css("height", "");
-  //  	$(this).parent().animate({"width": "", "height": ""});
-  // 	let thisId = "#" + $(this).attr("id");
-  // 	let button = $('[data-target="' + thisId + '"]');
-  // 	button.css("align-self", "");
-  // 	button.css("margin-left", "5px");
-});
-$(".collapsible").on("shown.bs.collapse", function () {
-  let thisId = "#" + $(this).attr("id");
-  let button = $('[data-target="' + thisId + '"]');
-  button.text("Hide");
-});
-$(".collapsible").on("hidden.bs.collapse", function () {
-  let thisId = "#" + $(this).attr("id");
-  let button = $('[data-target="' + thisId + '"]');
-  button.text("Show");
-  let height = button.outerHeight() + 5;
-  button.parent().height(height);
-  let width = button.outerWidth() + 10;
-  button.parent().width(width);
-  button.parent().animate({
-    "margin-top": "-60px"
-  }); // 	button.parent().animate({"height" : height});
-  // 	button.parent().animate({"width": width, "height": height});
-
-  button.css("align-self", "center");
-  button.css("margin-left", "0px");
-}); // on blur, reset the controller state,
-// to prevent keys from getting stuck:
-// todo: fix
-// $(window).blur(function () {
-// 	// 	console.log("lost focus");
-// 	controller.reset();
-// 	// 	oldControllerState = controller.getState();
-// 	wasPressedKeyCodes = [];
-// 	sendControllerState();
-// 	clearInterval(sendInputTimer);
-// });
-// $(window).focus(function () {
-// 	// 	console.log("focused");
-// 	sendInputTimer = setInterval(sendInputs, 1000 / 120);
-// 	controller.reset();
-// 	// 	oldControllerState = controller.getState();
-// 	wasPressedKeyCodes = [];
-// 	sendControllerState();
-// });
-
-/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-socket.on("rickroll", function (data) {
-  if (myUsername == data || data == "everyone") {
-    let myPlayer;
-    (0, _sweetalert.default)({
-      html: '<canvas id="rickroll"></canvas>',
-      onOpen: () => {
-        let rickrollCanvas = $("#rickroll")[0];
-        myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
-          canvas: rickrollCanvas,
-          loop: false,
-          autoplay: true
-        });
-      },
-      onClose: () => {
-        myPlayer.destroy();
-      },
-      customClass: "swal-wide"
-    });
-  }
-});
-socket.on("rainbow", function (data) {
-  if (myUniqueID == data || data == "everyone") {
-    $("body").addClass("rainbow-text");
-  }
-});
-socket.on("banlist", function (data) {
-  banlist = data;
-});
-socket.on("banned", function (data) {
-  let alertMessage = $(".swal2-container")[0];
-
-  if (typeof alertMessage == "undefined") {
-    (0, _sweetalert.default)("You're banned (maybe only temporarily?)");
-  }
-});
-/* FORCE HTTPS */
-
-if (location.protocol != "https:") {
-  location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-}
-/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-
-socket.on("voteStarted", function (data) {
-  let notification = new _noty.default({
-    theme: "mint",
-    type: "warning",
-    text: "A vote to change games has started!",
-    timeout: 5000,
-    sounds: {
-      volume: 0.5,
-      sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-      conditions: ["docVisible"]
-    }
-  });
-  notification.show();
-});
 module.exports = exports.default;
 
 /***/ }),
 
-/***/ "./src/reducers/MyReducer.js":
-/*!***********************************!*\
-  !*** ./src/reducers/MyReducer.js ***!
-  \***********************************/
+/***/ "./src/reducers/index.js":
+/*!*******************************!*\
+  !*** ./src/reducers/index.js ***!
+  \*******************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -75551,12 +78084,205 @@ module.exports = exports.default;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = MyReducer;
+exports.default = void 0;
 
-function MyReducer(state = [], action) {
-  return state;
-}
+var _redux = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 
+var _messages = _interopRequireDefault(__webpack_require__(/*! ./messages */ "./src/reducers/messages.js"));
+
+var _users = _interopRequireDefault(__webpack_require__(/*! ./users */ "./src/reducers/users.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+const rootReducer = (0, _redux.combineReducers)({
+  messages: _messages.default,
+  users: _users.default
+});
+var _default = rootReducer;
+exports.default = _default;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/reducers/messages.js":
+/*!**********************************!*\
+  !*** ./src/reducers/messages.js ***!
+  \**********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+const messages = (state = [], action) => {
+  switch (action.type) {
+    case "ADD_MESSAGE":
+    case "RECEIVE_MESSAGE":
+      return state.concat([{
+        id: action.payload.id,
+        userid: action.payload.userid,
+        username: action.payload.username,
+        message: action.payload.message
+      }]);
+
+    case "UPDATE_MESSAGES":
+      return action.messages;
+
+    default:
+      return state;
+  }
+};
+
+var _default = messages;
+exports.default = _default;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/reducers/users.js":
+/*!*******************************!*\
+  !*** ./src/reducers/users.js ***!
+  \*******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var types = _interopRequireWildcard(__webpack_require__(/*! ../constants/ActionTypes */ "./src/constants/ActionTypes.js"));
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+const users = (state = [], action) => {
+  switch (action.type) {
+    case types.ADD_USER:
+      return state.concat([{
+        name: action.name,
+        id: action.id
+      }]);
+
+    case types.USERS_LIST:
+      return action.users;
+
+    default:
+      return state;
+  }
+};
+
+var _default = users;
+exports.default = _default;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/sagas/index.js":
+/*!****************************!*\
+  !*** ./src/sagas/index.js ***!
+  \****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var types = _interopRequireWildcard(__webpack_require__(/*! ../constants/ActionTypes */ "./src/constants/ActionTypes.js"));
+
+var _effects = __webpack_require__(/*! redux-saga/effects */ "./node_modules/redux-saga/es/effects.js");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+const handleActions = function* (params) {
+  yield [(0, _effects.takeEvery)(types.SEND_MESSAGE, action => {
+    // modify payload:
+    // action.payload =
+    params.socket.emit("message", {
+      message: action.payload.message
+    });
+  })];
+};
+
+var _default = handleActions;
+exports.default = _default;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/sockets/chat.js":
+/*!*****************************!*\
+  !*** ./src/sockets/chat.js ***!
+  \*****************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var types = _interopRequireWildcard(__webpack_require__(/*! ../constants/ActionTypes */ "./src/constants/ActionTypes.js"));
+
+var _chat = __webpack_require__(/*! ../actions/chat.js */ "./src/actions/chat.js");
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
+
+// listen to events w/ given socket and dispatch actions accordingly:
+const setupSocket = (socket, dispatch) => {
+  socket.on("message", data => {
+    dispatch((0, _chat.receiveMessage)(data.message, data.username, data.userid));
+  });
+};
+
+var _default = setupSocket;
+exports.default = _default;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/sockets/index.js":
+/*!******************************!*\
+  !*** ./src/sockets/index.js ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _chat = _interopRequireDefault(__webpack_require__(/*! ./chat.js */ "./src/sockets/chat.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// combine socket event handlers into one socket:
+const handleEvents = (socket, dispatch) => {
+  socket = (0, _chat.default)(socket, dispatch);
+  return socket;
+};
+
+var _default = handleEvents;
+exports.default = _default;
 module.exports = exports.default;
 
 /***/ }),

@@ -1,10 +1,9 @@
 
 #chat {
-	height: 100%;
-    display: grid;
-    /* grid-template-columns: 1fr 3fr; */
-    /* grid-template-areas: "sidebar main"; */
-	/* grid-template-rows: 8fr 1fr; */
-    /* width: 100vw;
-    height: 100vh; */
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	/* todo: fix: */
+	max-height: 500px;
 }
