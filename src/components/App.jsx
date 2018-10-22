@@ -519,6 +519,17 @@ class App extends Component {
 		// combineSocketEventHandlers(socket, this.props.dispatch);
 
 		window.socket = this.props.socket;
+		// reconnect:
+		socket.on("disconnect", (data) => {
+			console.log("lost connection, attempting reconnect2.");
+			socket.connect();
+		});
+		setInterval(() => {
+			if (!socket.connected) {
+				console.log("lost connection, attempting reconnect3.");
+				socket.connect();
+			}
+		}, 5000);
 
 		socket.on("turnTimesLeft", (data) => {
 
@@ -740,6 +751,12 @@ class App extends Component {
 			}, 5000);
 		});
 
+		// chat scroll:
+		setInterval(() => {
+			let element = document.getElementById("messageList");
+			element.scrollTop = element.scrollHeight;
+		}, 2000);
+
 		/* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 		socket.on("controllerState1", (data) => {
 			this.setState({
@@ -863,15 +880,12 @@ class App extends Component {
 		wsavc.on("custom_event_from_server", event => console.log("got event from server", event));
 
 		$("#lagless3Refresh").on("click", () => {
+			socket.emit("restart3");
 			try {
 				wsavc.disconnect();
 			} catch (error) {}
 			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
 			wsavc.connect(uri);
-		});
-
-		$("#lagless3Refresh").on("click", () => {
-			socket.emit("restart3");
 		});
 
 		// on settings change:
@@ -2267,6 +2281,13 @@ window.addEventListener("keydown", (event) => {
 	// if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) {
 	// 	event.preventDefault();
 	// }
+	// prevent arrow key scrolling:
+	if ([38, 40].indexOf(event.keyCode) > -1) {
+		// check if chat isn't focused:
+		if (!(document.activeElement === document.getElementById("messageBox"))) {
+			event.preventDefault();
+		}
+	}
 	// escape:
 	if ([27].indexOf(event.keyCode) > -1) {
 		document.exitPointerLock();

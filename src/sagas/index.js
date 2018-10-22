@@ -6,7 +6,7 @@ const handleActions = function* (params) {
 		takeEvery(types.SEND_MESSAGE, (action) => {
 			// modify payload:
 			// action.payload =
-			params.socket.emit("message", { message: action.payload.message });
+			params.socket.emit("chatMessage", { message: action.payload.message });
 		}),
 		// takeEvery(types.SEND_MESSAGE,  (action) => {
 		// }),

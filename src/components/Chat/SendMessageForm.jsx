@@ -24,7 +24,7 @@ class SendMessageForm extends PureComponent {
 			<React.Fragment>
 				<div id="SendMessageForm">
 					<textarea id="messageBox" className="otborder" type="text" placeholder="Send message"
-			        onKeyPress={(e) => {
+					onKeyPress={(e) => {
 						if (e.key === "Enter") {
 							e.preventDefault();
 							if (input.value !== "") {

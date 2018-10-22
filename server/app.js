@@ -66,7 +66,7 @@ let currentLagless3Settings;
 
 let lastImage = "";
 let clientDB;
-let clients = [];
+let clients = {};
 let channels = {};
 let restartAvailable = true;
 let lagless2ChangeAvailable = true;
@@ -606,95 +606,15 @@ function Client(socket) {
 
 }
 
-function findClientByID(id) {
-	let index = -1;
-	for (let i = 0; i < clients.length; i++) {
-		if (clients[i].id == id) {
-			index = i;
-			return index;
-		}
-	}
-	return index;
-}
-
-function getClientNameByID(id) {
-	let index = -1;
-	for (let i = 0; i < clients.length; i++) {
-		if (clients[i].id == id) {
-			index = i;
-			break;
-		}
-	}
-	if (index == -1) {
-		return "";
-	} else if (clients[index].username == null) {
-		return "";
-	} else {
-		return clients[index].username;
-	}
-}
-
-function getClientUniqueIDbySocketID(id) {
-	let index = -1;
-	for (let i = 0; i < clients.length; i++) {
-		if (clients[i].id == id) {
-			index = i;
-			break;
-		}
-	}
-	if (index == -1) {
-		return "";
-	} else if (clients[index].uniqueID == null) {
-		return "";
-	} else {
-		return clients[index].uniqueID;
-	}
-}
-
-function findClientByName(name) {
-	let index = -1;
-	for (let i = 0; i < clients.length; i++) {
-		if (clients[i].name == name) {
-			index = i;
-			return index;
-		}
-	}
-	return index;
-}
-
-function findClientByUsername(username) {
-	let index = -1;
-	for (let i = 0; i < clients.length; i++) {
-		if (clients[i].username == username) {
-			index = i;
-			return index;
-		}
-	}
-	return index;
-}
-
 function findClientByUniqueID(uniqueID) {
 	let index = -1;
-	for (let i = 0; i < clients.length; i++) {
-		if (clients[i].uniqueID == uniqueID) {
-			index = i;
+	for (client in clients) {
+		if (client.uniqueID == uniqueID) {
+			index = client.id;
 			return index;
 		}
 	}
 	return index;
-}
-
-function checkIfClientIsInRoomByID(id, room) {
-	let index = findClientByID(id);
-	if (index == -1) {
-		return false;
-	}
-	let client = clients[index];
-	if (client.rooms.indexOf(room) > -1) {
-		return true;
-	} else {
-		return false;
-	}
 }
 
 function SplitTimer(startTime, splitNames, name) {
@@ -737,15 +657,12 @@ io.set("transports", [
 io.on("connection", function (socket) {
 
 	let client = new Client(socket);
-	clients.push(client);
-	console.log("number of clients connected: " + clients.length);
+	clients[socket.id] = client;
+	console.log("number of clients connected: " + Object.keys(clients).length);
 
 	socket.on("registerAccount", function (data) {
 
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
+		let client = clients[socket.id];
 
 		// get account by token:
 		Account.findOne({ "token": data.auth }).exec(function (error, account) {
@@ -760,13 +677,13 @@ io.on("connection", function (socket) {
 
 				// 				console.log("registering account.");
 
-				clients[index].validUsernames = [];
+				client.validUsernames = [];
 
 				if (account.connectedAccounts.indexOf("discord") > -1) {
-					clients[index].validUsernames.push(account.discord.username + "#" + account.discord.discriminator);
+					client.validUsernames.push(account.discord.username + "#" + account.discord.discriminator);
 				}
 				if (account.connectedAccounts.indexOf("twitch") > -1) {
-					clients[index].validUsernames.push(account.twitch.displayName);
+					client.validUsernames.push(account.twitch.displayName);
 					// todo: fix
 					if (sublist.indexOf(account.twitch.displayName) > -1) {
 						account.is_sub = true;
@@ -776,43 +693,33 @@ io.on("connection", function (socket) {
 					}
 				}
 				if (account.connectedAccounts.indexOf("youtube") > -1) {
-					clients[index].validUsernames.push(account.youtube.displayName);
+					client.validUsernames.push(account.youtube.displayName);
 				}
 				if (account.connectedAccounts.indexOf("google") > -1) {
-					clients[index].validUsernames.push(account.google.displayName);
+					client.validUsernames.push(account.google.displayName);
 				}
 
-				if (data.usernameIndex < clients[index].validUsernames.length) {
-					clients[index].username = clients[index].validUsernames[data.usernameIndex];
+				if (data.usernameIndex < client.validUsernames.length) {
+					client.username = client.validUsernames[data.usernameIndex];
 				} else {
-					clients[index].username = clients[index].validUsernames[0];
+					client.username = client.validUsernames[0];
 				}
 
-				clients[index].uniqueID = "" + account._id;
-				clients[index].uniqueID = clients[index].uniqueID.trim();
+				client.uniqueID = "" + account._id;
+				client.uniqueID = client.uniqueID.trim();
 
-				clients[index].is_mod = account.is_mod;
-				clients[index].is_plus = account.is_plus;
-				clients[index].is_sub = account.is_sub;
-				clients[index].is_ban = clients[index].is_ban || account.is_ban;
+				client.is_mod = account.is_mod;
+				client.is_plus = account.is_plus;
+				client.is_sub = account.is_sub;
+				client.is_ban = client.is_ban || account.is_ban;
 
-
-				socket.uniqueID = "" + account._id;
-				socket.uniqueID = clients[index].uniqueID.trim();
-
-				socket.is_mod = account.is_mod;
-				socket.is_plus = account.is_plus;
-				socket.is_sub = account.is_sub;
-				socket.is_ban = clients[index].is_ban || account.is_ban;
-
-
-				uniqueIDToPreferredUsernameMap[clients[index].uniqueID] = clients[index].username;
+				uniqueIDToPreferredUsernameMap[client.uniqueID] = client.username;
 
 				let accountInfo = {};
-				accountInfo.uniqueID = clients[index].uniqueID;
-				accountInfo.username = clients[index].username;
+				accountInfo.uniqueID = client.uniqueID;
+				accountInfo.username = client.username;
 				accountInfo.connectedAccounts = account.connectedAccounts;
-				accountInfo.validUsernames = clients[index].validUsernames;
+				accountInfo.validUsernames = client.validUsernames;
 
 				socket.emit("accountInfo", accountInfo);
 			}
@@ -821,7 +728,7 @@ io.on("connection", function (socket) {
 
 				console.log("account not found.");
 
-				clients[index].username = null;
+				client.username = null;
 				console.log("Invalid password.");
 				socket.emit("needToSignIn");
 				return;
@@ -832,8 +739,7 @@ io.on("connection", function (socket) {
 
 	socket.on("disconnect", function () {
 		console.log("disconnected");
-		let i = findClientByID(socket.id);
-		clients.splice(i, 1);
+		delete clients[socket.id];
 	});
 
 	// after recieving the image, broadcast it to viewers
@@ -849,29 +755,32 @@ io.on("connection", function (socket) {
 	// }, 1000 / 15);
 
 	// chat:
-	socket.on("message", (data) => {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
+	socket.on("chatMessage", (data) => {
+		let client = clients[socket.id];
+		if (client.uniqueID == null) {
 			return;
 		}
-		if (clients[index].uniqueID != null) {
-			let msgObj = {
-				userid: client.uniqueID,
-				username: client.username,
-				message: data.message,
-			};
-			io.emit("message", msgObj);
+		if (data && typeof (data.message) != "string") {
+			return;
+		} else {
+			data.message = data.message.replace(/(\r\n\t|\n|\r\t)/gm, "");
 		}
+		if (data.message.length > 400) {
+			return;
+		}
+		let msgObj = {
+			userid: client.uniqueID,
+			username: client.username,
+			message: data.message,
+		};
+		io.emit("chatMessage", msgObj);
 	});
 
 	// send inputs:
 	socket.on("sendControllerState", function (data) {
 
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		let client = clients[index];
+		let client = clients[socket.id];
+
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -909,10 +818,6 @@ io.on("connection", function (socket) {
 
 		// reset forfeit timer:
 		forfeitStartTimes[cNum] = Date.now();
-		// clearTimeout(forfeitTimers[cNum]);
-		// forfeitTimers[cNum] = setTimeout(forfeitTurn, timeTillForfeitDurations[cNum], client.uniqueID, cNum);
-
-
 
 		let valid = true;
 		if (controllerState[5 + 3] == "1" && !client.is_mod) {
@@ -940,11 +845,8 @@ io.on("connection", function (socket) {
 	/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 	socket.on("joinQueue", function (cNum) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -996,11 +898,8 @@ io.on("connection", function (socket) {
 	});
 
 	socket.on("leaveQueue", function (cNum) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1096,19 +995,20 @@ io.on("connection", function (socket) {
 
 	socket.on("pluslist", function (data) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			pluslist = data;
 		}
 	});
 	socket.on("modlist", function (data) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		// if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			modlist = data;
 		}
 	});
 	socket.on("sublist", function (data) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			sublist = data;
 		}
 	});
@@ -1117,42 +1017,39 @@ io.on("connection", function (socket) {
 	/* OTHER COMMANDS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("rickroll", function (data) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			io.emit("rickroll", data);
 		}
 	});
 	socket.on("rainbow", function (data) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			io.emit("rainbow", data);
 		}
 	});
 	socket.on("setMaxPlayers", function (data) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			maxPlayers = data;
 		}
 	});
 
 	socket.on("forceRefresh", function (channel) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			io.emit("forceRefresh");
 		} else {
 			console.log("something bad happened 1.");
 		}
 	});
 	socket.on("lock", function (data) {
+
+		let client = clients[socket.id];
 		let legit = false;
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			legit = true;
 		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
 		if (client.uniqueID != null) {
 			if (client.is_mod) {
 				legit = true;
@@ -1164,16 +1061,12 @@ io.on("connection", function (socket) {
 		}
 	});
 	socket.on("unlock", function (data) {
+		let client = clients[socket.id];
 		let legit = false;
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			legit = true;
 		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
 		if (client.uniqueID != null) {
 			if (client.is_mod) {
 				legit = true;
@@ -1185,16 +1078,12 @@ io.on("connection", function (socket) {
 		}
 	});
 	socket.on("lockqueues", function (data) {
+		let client = clients[socket.id];
 		let legit = false;
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			legit = true;
 		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
 		if (client.uniqueID != null) {
 			if (client.is_mod) {
 				legit = true;
@@ -1206,16 +1095,12 @@ io.on("connection", function (socket) {
 		}
 	});
 	socket.on("unlockqueues", function (data) {
+		let client = clients[socket.id];
 		let legit = false;
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			legit = true;
 		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
 		if (client.uniqueID != null) {
 			if (client.is_mod) {
 				legit = true;
@@ -1227,11 +1112,7 @@ io.on("connection", function (socket) {
 		}
 	});
 	socket.on("kickFromQueue", function (data) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1243,11 +1124,7 @@ io.on("connection", function (socket) {
 		}
 	});
 	socket.on("tempBan", function (data) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1256,7 +1133,7 @@ io.on("connection", function (socket) {
 			return;
 		}
 
-		index = findClientByUniqueID(data);
+		let index = findClientByUniqueID(data);
 		client = clients[index];
 		if (client.uniqueID == null) {
 			return;
@@ -1272,11 +1149,8 @@ io.on("connection", function (socket) {
 
 	});
 	socket.on("permaBan", function (data) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1348,11 +1222,7 @@ io.on("connection", function (socket) {
 
 	});
 	socket.on("unban", function (data) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1422,11 +1292,7 @@ io.on("connection", function (socket) {
 	});
 	socket.on("setTurnLength", function (data) {
 		// check if it's coming from the controller:
-		if (!checkIfClientIsInRoomByID(socket.id, "controller")) {
-			return;
-		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
+		if (clients[socket.id].rooms.indexOf("controller") == -1) {
 			return;
 		}
 		for (let i = 0; i < turnDurations.length; i++) {
@@ -1437,23 +1303,34 @@ io.on("connection", function (socket) {
 	});
 	socket.on("setForfeitLength", function (data) {
 		// check if it's coming from the controller:
-		if (!checkIfClientIsInRoomByID(socket.id, "controller")) {
-			return;
-		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
+		if (clients[socket.id].rooms.indexOf("controller") == -1) {
 			return;
 		}
 		for (let i = 0; i < turnDurations.length; i++) {
 			timeTillForfeitDurations[i] = parseInt(data) || 15000;
 		}
 	});
-	socket.on("voteStarted", function (channel) {
+	socket.on("voteStarted", function (data) {
 		// check if it's coming from the controller:
-		if (checkIfClientIsInRoomByID(socket.id, "controller")) {
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			io.emit("voteStarted");
 		} else {
 			console.log("something bad happened vote.");
+		}
+	});
+	socket.on("botMessage", function (data) {
+		if (typeof (data) != "string") {
+			return;
+		} else {
+			data = data.replace(/(\r\n\t|\n|\r\t)/gm, "");
+		}
+		// check if it's coming from the controller:
+		if (clients[socket.id].rooms.indexOf("controller") > -1) {
+			io.emit("chatMessage", {
+				message: data,
+				username: "TPNSbot",
+				userid: "TPNSbot",
+			});
 		}
 	});
 
@@ -1461,11 +1338,7 @@ io.on("connection", function (socket) {
 
 	/* LAGLESS 1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless1Settings", function (data) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1497,11 +1370,7 @@ io.on("connection", function (socket) {
 
 	/* LAGLESS2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless2Settings", function (data) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1552,11 +1421,7 @@ io.on("connection", function (socket) {
 
 	/* LAGLESS3 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless3Settings", function (data) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		client = clients[index];
+		let client = clients[socket.id];
 		if (client.uniqueID == null) {
 			return;
 		}
@@ -1654,29 +1519,22 @@ io.on("connection", function (socket) {
 	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
 
 	socket.on("leave", function (room) {
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		let client = clients[index];
-		index = client.rooms.indexOf(room);
+		let client = clients[socket.id];
+		let index = client.rooms.indexOf(room);
 		if (client.rooms.indexOf(room) > -1) {
 			client.rooms.splice(index, 1);
 		}
 		socket.leave(room);
 	});
 	socket.on("join", function (room) {
-		// todo: add pi-proxy to this
+
+		let client = clients[socket.id];
+
 		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "lagless5Host", "controller", "controller2"];
 		let laglessList = ["lagless1", "lagless2", "lagless3", "lagless4", "lagless5"];
 		if (secureList.indexOf(room) > -1) {
 			return;
 		}
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
-		let client = clients[index];
 
 		if (laglessList.indexOf(room) > -1) {
 			for (let i = 0; i < laglessList.length; i++) {
@@ -1709,11 +1567,7 @@ io.on("connection", function (socket) {
 		}
 
 		if (myData.password === config.ROOM_SECRET) {
-			let index = findClientByID(socket.id);
-			if (index == -1) {
-				return;
-			}
-			let client = clients[index];
+			let client = clients[socket.id];
 			if (client.rooms.indexOf(myData.room) == -1) {
 				client.rooms.push(myData.room);
 			}
@@ -1730,17 +1584,15 @@ io.on("connection", function (socket) {
 
 	/* BAN EVASION */
 	socket.on("registerIP", function (data) {
+
+		let client = clients[socket.id];
+
 		if (client.is_mod) {
 			return;
 		}
 		console.log("username: " + data.username + " id: " + data.id + " ip: " + data.ip);
 		// 		console.log("ip?: " + socket.conn.transport.socket._socket.remoteAddress);
 		// 		console.log("ip?2: " + socket.handshake.headers['x-forwarded-for'].split(",")[0]);
-
-		let index = findClientByID(socket.id);
-		if (index == -1) {
-			return;
-		}
 
 		if (client.uniqueID == null) {
 			console.log("not signed in.");
@@ -1749,12 +1601,12 @@ io.on("connection", function (socket) {
 
 		// return if banned:
 		if (client.is_perma_banned || client.is_temp_banned) {
-			console.log("not signed in.");
+			console.log("client is banned.");
 			return;
 		}
 
 		// get account:
-		Account.findById(client.uniqueID, function (error, account) {
+		Account.findOne({ _id: client.uniqueID }, function (error, account) {
 			if (error) {
 				console.log(error);
 				throw error;
@@ -1961,27 +1813,27 @@ setInterval(function () {
 
 	// create viewer list:
 	for (let i = 0; i < laglessClientIds[0].length; i++) {
-		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[0][i]);
-		if (uniqueID != null) {
-			laglessClientUniqueIds[0].push(uniqueID);
+		let client = clients[laglessClientIds[0][i]];
+		if (client && client.uniqueID) {
+			laglessClientUniqueIds[0].push(client.uniqueID);
 		}
 	}
 	for (let i = 0; i < laglessClientIds[1].length; i++) {
-		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[1][i]);
-		if (uniqueID != null) {
-			laglessClientUniqueIds[1].push(uniqueID);
+		let client = clients[laglessClientIds[1][i]];
+		if (client && client.uniqueID) {
+			laglessClientUniqueIds[1].push(client.uniqueID);
 		}
 	}
 	for (let i = 0; i < laglessClientIds[2].length; i++) {
-		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[2][i]);
-		if (uniqueID != null) {
-			laglessClientUniqueIds[2].push(uniqueID);
+		let client = clients[laglessClientIds[2][i]];
+		if (client && client.uniqueID) {
+			laglessClientUniqueIds[2].push(client.uniqueID);
 		}
 	}
 	for (let i = 0; i < laglessClientIds[3].length; i++) {
-		let uniqueID = getClientUniqueIDbySocketID(laglessClientIds[3][i]);
-		if (uniqueID != null) {
-			laglessClientUniqueIds[3].push(uniqueID);
+		let client = clients[laglessClientIds[3][i]];
+		if (client && client.uniqueID) {
+			laglessClientUniqueIds[3].push(client.uniqueID);
 		}
 	}
 

@@ -10014,7 +10014,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\r\n\r\n.message {\r\n\tword-break: break-all;\r\n}\r\n", ""]);
+exports.push([module.i, "\r\n\r\n.message {\r\n\tword-break: break-word;\r\n}\r\n", ""]);
 
 // exports
 
@@ -73806,7 +73806,18 @@ class App extends _react.Component {
     // // listen to events and dispatch actions:
     // combineSocketEventHandlers(socket, this.props.dispatch);
 
-    window.socket = this.props.socket;
+    window.socket = this.props.socket; // reconnect:
+
+    socket.on("disconnect", data => {
+      console.log("lost connection, attempting reconnect2.");
+      socket.connect();
+    });
+    setInterval(() => {
+      if (!socket.connected) {
+        console.log("lost connection, attempting reconnect3.");
+        socket.connect();
+      }
+    }, 5000);
     socket.on("turnTimesLeft", data => {
       let newPlayers = [...this.state.players];
 
@@ -74017,7 +74028,12 @@ class App extends _react.Component {
       setTimeout(() => {
         location.reload(true);
       }, 5000);
-    });
+    }); // chat scroll:
+
+    setInterval(() => {
+      let element = document.getElementById("messageList");
+      element.scrollTop = element.scrollHeight;
+    }, 2000);
     /* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
     socket.on("controllerState1", data => {
@@ -74137,15 +74153,14 @@ class App extends _react.Component {
     wsavc.on("stream_active", active => console.log("Stream is ", active ? "active" : "offline"));
     wsavc.on("custom_event_from_server", event => console.log("got event from server", event));
     $("#lagless3Refresh").on("click", () => {
+      socket.emit("restart3");
+
       try {
         wsavc.disconnect();
       } catch (error) {}
 
       let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
       wsavc.connect(uri);
-    });
-    $("#lagless3Refresh").on("click", () => {
-      socket.emit("restart3");
     }); // on settings change:
 
     socket.on("lagless3Settings", data => {
@@ -75866,7 +75881,15 @@ window.addEventListener("keydown", event => {
   // if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) {
   // 	event.preventDefault();
   // }
-  // escape:
+  // prevent arrow key scrolling:
+  if ([38, 40].indexOf(event.keyCode) > -1) {
+    // check if chat isn't focused:
+    if (!(document.activeElement === document.getElementById("messageBox"))) {
+      event.preventDefault();
+    }
+  } // escape:
+
+
   if ([27].indexOf(event.keyCode) > -1) {
     document.exitPointerLock(); // document.removeEventListener("mousemove", getMouseInput);
     // document.removeEventListener("mousedown", getMouseInput2);
@@ -76567,7 +76590,7 @@ const Message = ({
   userid
 }) => _react.default.createElement("div", {
   className: "message"
-}, _react.default.createElement("i", null, username), ": ", message);
+}, username, ": ", message);
 
 Message.propTypes = {
   message: _propTypes.default.string.isRequired,
@@ -78210,7 +78233,7 @@ const handleActions = function* (params) {
   yield [(0, _effects.takeEvery)(types.SEND_MESSAGE, action => {
     // modify payload:
     // action.payload =
-    params.socket.emit("message", {
+    params.socket.emit("chatMessage", {
       message: action.payload.message
     });
   })];
@@ -78244,13 +78267,14 @@ var _chat = __webpack_require__(/*! ../actions/chat.js */ "./src/actions/chat.js
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; return newObj; } }
 
 // listen to events w/ given socket and dispatch actions accordingly:
-const setupSocket = (socket, dispatch) => {
-  socket.on("message", data => {
+const chatSocketEvents = (socket, dispatch) => {
+  socket.on("chatMessage", data => {
     dispatch((0, _chat.receiveMessage)(data.message, data.username, data.userid));
   });
+  return socket;
 };
 
-var _default = setupSocket;
+var _default = chatSocketEvents;
 exports.default = _default;
 module.exports = exports.default;
 
@@ -78278,6 +78302,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 // combine socket event handlers into one socket:
 const handleEvents = (socket, dispatch) => {
   socket = (0, _chat.default)(socket, dispatch);
+  socket.on("disconnect", data => {
+    console.log("lost connection, attempting reconnect1.");
+    socket.connect();
+  });
   return socket;
 };
 
