@@ -9995,7 +9995,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\r\n#chat {\r\n\tflex-grow: 1;\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n\tjustify-content: flex-end;\r\n\t/* todo: fix: */\r\n\tmax-height: 500px;\r\n}\r\n", ""]);
+exports.push([module.i, "\r\n#chat {\r\n\tdisplay: flex;\r\n\tflex-direction: column;\r\n\tjustify-content: flex-end;\r\n\tflex: 1;\r\n}\r\n", ""]);
 
 // exports
 
@@ -13514,7 +13514,7 @@ var BrowserWebSocket = global.WebSocket || global.MozWebSocket;
 var NodeWebSocket;
 if (typeof window === 'undefined') {
   try {
-    NodeWebSocket = __webpack_require__(/*! ws */ 2);
+    NodeWebSocket = __webpack_require__(/*! ws */ 0);
   } catch (e) { }
 }
 
@@ -52912,7 +52912,7 @@ util.inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inh
 /*</replacement>*/
 
 /*<replacement>*/
-var debugUtil = __webpack_require__(/*! util */ 0);
+var debugUtil = __webpack_require__(/*! util */ 1);
 var debug = void 0;
 if (debugUtil && debugUtil.debuglog) {
   debug = debugUtil.debuglog('stream');
@@ -54801,7 +54801,7 @@ Writable.prototype._destroy = function (err, cb) {
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Buffer = __webpack_require__(/*! safe-buffer */ "./node_modules/safe-buffer/index.js").Buffer;
-var util = __webpack_require__(/*! util */ 1);
+var util = __webpack_require__(/*! util */ 2);
 
 function copyBuffer(src, target, offset) {
   src.copy(target, offset);
@@ -73674,7 +73674,7 @@ class App extends _react.Component {
     _localforage.default.getItem("settings").then(value => {
       // If they exist, write them
       if (typeof value != "undefined") {
-        settings = Object.assign({}, settings, JSON.parse(value));
+        settings = Object.assign({}, this.state, JSON.parse(value));
       } // Store the preferences (so that the default values get stored)
 
 
@@ -73698,9 +73698,9 @@ class App extends _react.Component {
         largescreen: settings.largescreen,
         hideChat: settings.hideChat,
         hideNav: settings.hideNav,
-        // tab: settings.tab,
         deadzone: settings.deadzone,
-        volume: settings.volume
+        volume: settings.volume // tab: settings.tab,
+
       }); // if (settings.tab != 1) {
       // 	$("#tab" + settings.tab).trigger("click");
       // }
@@ -73789,22 +73789,23 @@ class App extends _react.Component {
     }); // save settings on close:
 
     /* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+    // window.addEventListener("beforeunload", () => {
 
 
-    window.addEventListener("beforeunload", event => {
-      event.preventDefault();
+    window.onbeforeunload = () => {
       socket.emit("leaveLagless");
-      console.log("saving settings");
+      console.log("saving settings"); // console.log(this.state);
 
       _localforage.default.setItem("settings", JSON.stringify(this.state));
 
       return null;
-    }); // socket = io("https://twitchplaysnintendoswitch.com", {
+    }; // socket = io("https://twitchplaysnintendoswitch.com", {
     // 	path: "/8110/socket.io",
     // 	transports: ["websocket"],
     // });
     // // listen to events and dispatch actions:
     // combineSocketEventHandlers(socket, this.props.dispatch);
+
 
     window.socket = this.props.socket; // reconnect:
 
@@ -73908,11 +73909,7 @@ class App extends _react.Component {
     });
     /* AUTHENTICATION */
 
-    let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-
-    if (authCookie != null) {
-      authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-    } else {
+    let notLoggedIn = () => {
       // replace with twitch until signed in:
       replaceWithTwitch(this.state.tab);
       $("#tab1").addClass("disabled");
@@ -73925,28 +73922,45 @@ class App extends _react.Component {
       $(".disabled").on("click", () => {
         (0, _sweetalert.default)("You have to sign in first!");
       });
+    };
+
+    let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+
+    if (authCookie !== null) {
+      authCookie = authCookie.split(" ")[0].replace(/;/g, "");
     }
 
-    setInterval(() => {
-      if (authCookie != null) {
-        socket.emit("registerAccount", {
-          auth: authCookie,
-          usernameIndex: this.state.usernameIndex
-        });
-      }
-    }, 5000);
+    if (authCookie === null) {
+      notLoggedIn();
+    } else {
+      socket.emit("authenticate", {
+        auth: authCookie,
+        usernameIndex: this.state.usernameIndex
+      });
+    } // setInterval(() => {
+    // 	if (authCookie != null) {
+    // 		socket.emit("authenticate", {
+    // 			auth: authCookie,
+    // 			usernameIndex: this.state.usernameIndex,
+    // 		});
+    // 	}
+    // }, 5000);
+
+
     setTimeout(() => {
-      if (!loaded) {
-        loaded = true;
-        $.ajax({
-          url: "https://twitchplaysnintendoswitch.com/accountData/" + this.state.myUniqueID + "/" + authCookie
-        });
-      }
-    }, 5000); // response:
+      $.ajax({
+        url: "https://twitchplaysnintendoswitch.com/accountData/" + this.state.myUniqueID + "/" + authCookie
+      });
+    }, 5000);
+    socket.on("unauthorized", data => {
+      console.log("Unauthorized: " + data);
+      (0, _sweetalert.default)("Already Logged In / multiple tabs open!");
+      notLoggedIn();
+    }); // response:
 
     socket.on("accountInfo", data => {
       this.setState({
-        myUniqueID: data.uniqueID,
+        myUniqueID: data.userid,
         myConnectedAccounts: data.connectedAccounts,
         myUsername: data.username,
         myValidUsernames: data.validUsernames,
@@ -74623,14 +74637,7 @@ class App extends _react.Component {
     });
     $("#replaceWithLagless").on("click", function () {
       replaceWithLagless();
-    }); // socket.on("replaceWithTwitch", function () {
-    // 	replaceWithTwitch();
-    // });
-    //
-    // socket.on("replaceWithLagless", function () {
-    // 	replaceWithTwitch();
-    // });
-
+    });
     /* STATUS BAR @@@@@@@@@@@@@@@@ */
     // socket.on("lock", function() {
     // 	replaceWithTwitch();
@@ -75121,7 +75128,7 @@ class App extends _react.Component {
       className: "nav-item"
     }, _react.default.createElement("a", {
       id: "tab3",
-      className: "nav-link disabled",
+      className: "nav-link",
       "data-toggle": "tab",
       href: "#lagless3",
       onClick: () => {
@@ -75657,9 +75664,8 @@ class App extends _react.Component {
       id: "waitlistContainer",
       className: "settingsPanel otborder"
     }, _react.default.createElement(_Waitlist.default, {
-      tab: this.state.tab,
       usernameMap: this.state.usernameMap,
-      uniqueIDs: this.state.waitlists,
+      uniqueIDs: this.state.waitlists[this.state.tab - 1],
       myID: this.state.myUniqueID
     })))))), _react.default.createElement("div", {
       id: "keyboardSettings",
@@ -76352,7 +76358,8 @@ function addJoyCons(tab, actual) {} // actual = actual || false;
 $(window).resize(function (event) {
   // hack:
   // todo: not this:
-  $("#videoCanvas3").outerHeight($("#videoCanvas3").outerWidth() * (9 / 16)); // 	if (resizeAvailable) {
+  $("#videoCanvas3").outerHeight($("#videoCanvas3").outerWidth() * (9 / 16));
+  $("#twitchVideo").outerHeight($("#twitchVideo").outerWidth() * (9 / 16)); // 	if (resizeAvailable) {
 
   resizeAvailable = false;
   resizeDebounceTimer = setTimeout(() => {
@@ -77376,7 +77383,8 @@ function log(value) {
 }
 
 function percentFormatter(v) {
-  return `${v} %`;
+  // return `${v} %`;
+  return v;
 }
 
 class MySlider extends _react.PureComponent {
@@ -77939,16 +77947,16 @@ class Waitlist extends _react.PureComponent {
   getWaitlist() {
     let waitlist = [];
 
-    if (this.props.uniqueIDs[this.props.tab - 1].length == 0) {
+    if (this.props.uniqueIDs.length == 0) {
       return _react.default.createElement("li", {
         key: 0,
         className: "list-group-item"
       }, "The waitlist is empty right now");
     }
 
-    for (let i = 0; i < this.props.uniqueIDs[this.props.tab - 1].length; i++) {
+    for (let i = 0; i < this.props.uniqueIDs.length; i++) {
       let listHTML;
-      let ID = this.props.uniqueIDs[this.props.tab - 1][i];
+      let ID = this.props.uniqueIDs[i];
 
       if (this.props.myID == ID) {
         listHTML = _react.default.createElement("li", {
@@ -78316,9 +78324,9 @@ module.exports = exports.default;
 /***/ }),
 
 /***/ 0:
-/*!**********************!*\
-  !*** util (ignored) ***!
-  \**********************/
+/*!********************!*\
+  !*** ws (ignored) ***!
+  \********************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
@@ -78338,9 +78346,9 @@ module.exports = exports.default;
 /***/ }),
 
 /***/ 2:
-/*!********************!*\
-  !*** ws (ignored) ***!
-  \********************/
+/*!**********************!*\
+  !*** util (ignored) ***!
+  \**********************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 

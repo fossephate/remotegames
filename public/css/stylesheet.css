@@ -29,6 +29,7 @@ html, body {
 	/*   top: 0; */
 	/*   right: 0; */
 	width: 73.2%;
+	height: 100%;
 	/* margin-left: 13.4%; */
 }
 
@@ -208,7 +209,7 @@ margin-right: auto; */
 	display: flex;
 	flex-direction: column;
 	overflow-x: hidden;
-	margin-top: -42.2px;
+	margin-top: -44.2px;/* +(-2)px for #navTabs padding-top */
 	border-radius: 4px;
 	border-bottom: none;
 	border-bottom-left-radius: 0;
@@ -1384,6 +1385,7 @@ display: block;
 	border-right: none;
 	border-top-right-radius: 0;
 	border-bottom-left-radius: 0;
+	padding-top: 2px;
 }
 
 .nav-tabs .nav-item {

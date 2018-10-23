@@ -382,7 +382,7 @@ class App extends Component {
 		localforage.getItem("settings").then((value) => {
 			// If they exist, write them
 			if (typeof value != "undefined") {
-				settings = Object.assign({}, settings, JSON.parse(value));
+				settings = Object.assign({}, this.state, JSON.parse(value));
 			}
 			// Store the preferences (so that the default values get stored)
 			localforage.setItem("settings", JSON.stringify(settings));
@@ -406,9 +406,9 @@ class App extends Component {
 				largescreen: settings.largescreen,
 				hideChat: settings.hideChat,
 				hideNav: settings.hideNav,
-				// tab: settings.tab,
 				deadzone: settings.deadzone,
 				volume: settings.volume,
+				// tab: settings.tab,
 			});
 
 			// if (settings.tab != 1) {
@@ -502,13 +502,14 @@ class App extends Component {
 
 		// save settings on close:
 		/* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		window.addEventListener("beforeunload", (event) => {
-			event.preventDefault();
+		// window.addEventListener("beforeunload", () => {
+		window.onbeforeunload = () => {
 			socket.emit("leaveLagless");
 			console.log("saving settings");
+			// console.log(this.state);
 			localforage.setItem("settings", JSON.stringify(this.state));
 			return null;
-		});
+		};
 
 		// socket = io("https://twitchplaysnintendoswitch.com", {
 		// 	path: "/8110/socket.io",
@@ -627,10 +628,7 @@ class App extends Component {
 
 
 		/* AUTHENTICATION */
-		let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-		if (authCookie != null) {
-			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-		} else {
+		let notLoggedIn = () => {
 			// replace with twitch until signed in:
 			replaceWithTwitch(this.state.tab);
 			$("#tab1").addClass("disabled");
@@ -645,27 +643,42 @@ class App extends Component {
 				swal("You have to sign in first!");
 			});
 		}
-		setInterval(() => {
-			if (authCookie != null) {
-				socket.emit("registerAccount", {
-					auth: authCookie,
-					usernameIndex: this.state.usernameIndex,
-				});
-			}
-		}, 5000);
+		let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+		if (authCookie !== null) {
+			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
+		}
+		if (authCookie === null) {
+			notLoggedIn();
+		} else {
+			socket.emit("authenticate", {
+				auth: authCookie,
+				usernameIndex: this.state.usernameIndex,
+			});
+		}
+		// setInterval(() => {
+		// 	if (authCookie != null) {
+		// 		socket.emit("authenticate", {
+		// 			auth: authCookie,
+		// 			usernameIndex: this.state.usernameIndex,
+		// 		});
+		// 	}
+		// }, 5000);
 		setTimeout(() => {
-			if (!loaded) {
-				loaded = true;
-				$.ajax({
-					url: "https://twitchplaysnintendoswitch.com/accountData/" + this.state.myUniqueID + "/" + authCookie,
-				});
-			}
+			$.ajax({
+				url: "https://twitchplaysnintendoswitch.com/accountData/" + this.state.myUniqueID + "/" + authCookie,
+			});
 		}, 5000);
+
+		socket.on("unauthorized", (data) => {
+			console.log("Unauthorized: " + data);
+			swal("Already Logged In / multiple tabs open!");
+			notLoggedIn();
+		});
 
 		// response:
 		socket.on("accountInfo", (data) => {
 			this.setState({
-				myUniqueID: data.uniqueID,
+				myUniqueID: data.userid,
 				myConnectedAccounts: data.connectedAccounts,
 				myUsername: data.username,
 				myValidUsernames: data.validUsernames,
@@ -1386,14 +1399,6 @@ class App extends Component {
 			replaceWithLagless();
 		});
 
-		// socket.on("replaceWithTwitch", function () {
-		// 	replaceWithTwitch();
-		// });
-		//
-		// socket.on("replaceWithLagless", function () {
-		// 	replaceWithTwitch();
-		// });
-
 		/* STATUS BAR @@@@@@@@@@@@@@@@ */
 		// socket.on("lock", function() {
 		// 	replaceWithTwitch();
@@ -1877,7 +1882,7 @@ class App extends Component {
 							<a id="tab2" className="nav-link" data-toggle="tab" href="#lagless2" onClick={() => {this.switchTabs(2)}}>Lagless 2</a>
 						</li>
 						<li className="nav-item">
-							<a id="tab3" className="nav-link disabled" data-toggle="tab" href="#lagless3" onClick={() => {this.switchTabs(3)}}>Lagless 3</a>
+							<a id="tab3" className="nav-link" data-toggle="tab" href="#lagless3" onClick={() => {this.switchTabs(3)}}>Lagless 3</a>
 						</li>
 						<li className="nav-item">
 							<a id="tab4" className="nav-link disabled" data-toggle="tab" href="#lagless4" onClick={() => {this.switchTabs(4)}}>Lagless 4</a>
@@ -2166,7 +2171,7 @@ class App extends Component {
 								</div>
 
 								<div id="waitlistContainer" className="settingsPanel otborder">
-									<Waitlist tab={this.state.tab} usernameMap={this.state.usernameMap} uniqueIDs={this.state.waitlists} myID={this.state.myUniqueID}/>
+									<Waitlist usernameMap={this.state.usernameMap} uniqueIDs={this.state.waitlists[this.state.tab - 1]} myID={this.state.myUniqueID}/>
 								</div>
 							</div>
 						</div>
@@ -2781,6 +2786,7 @@ $(window).resize(function (event) {
 	// hack:
 	// todo: not this:
 	$("#videoCanvas3").outerHeight($("#videoCanvas3").outerWidth() * (9 / 16));
+	$("#twitchVideo").outerHeight($("#twitchVideo").outerWidth() * (9 / 16));
 
 	// 	if (resizeAvailable) {
 	resizeAvailable = false;

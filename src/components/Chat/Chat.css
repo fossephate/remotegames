@@ -1,9 +1,7 @@
 
 #chat {
-	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
 	justify-content: flex-end;
-	/* todo: fix: */
-	max-height: 500px;
+	flex: 1;
 }

@@ -9,7 +9,8 @@ function log(value) {
 }
 
 function percentFormatter(v) {
-	return `${v} %`;
+	// return `${v} %`;
+	return v;
 }
 
 export default class MySlider extends PureComponent {
