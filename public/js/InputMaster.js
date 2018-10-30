@@ -1,11 +1,9 @@
-const Gamepad = require("js/gamepad.js");
+// libs:
+
+const Gamepad = require("js/gamepad.js").default;
 
 const keycode = require("keycode");
 require("./keymaster.js");
-
-
-let currentInputMode = "keyboard";
-
 
 // input types:
 // each should handle each type of device:
@@ -16,7 +14,7 @@ const VirtualMouse = require("./VirtualMouse.js"); // todo
 const VirtualProController = require("./VirtualProController.js");
 
 
-
+// map several inputs to a single virtual controller:
 function InputMaster(isMobile) {
 
 	this.isMobile = isMobile;
@@ -39,9 +37,9 @@ function InputMaster(isMobile) {
 	// output device to be read:
 	this.outputController = new VirtualProController();
 	// previous state:
-	this.oldControllerState = "";
+	this.oldControllerState = "000000000000000000 128 128 128 128";
 
-	// // init:
+	// init:
 	this.controller.init();
 
 	this.pollDevices = function () {
@@ -57,6 +55,7 @@ function InputMaster(isMobile) {
 			if (newControllerState != this.oldControllerState) {
 				this.currentInputMode = "controller";
 				updatedState = newControllerState;
+				console.log(newControllerState);
 			}
 
 			// snex:

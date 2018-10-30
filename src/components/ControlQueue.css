@@ -1,0 +1,33 @@
+/* control queue */
+
+.controlQueue {
+	overflow-y: auto;
+	max-height: 100px;
+	text-align: center;
+	margin-top: 5px;
+	flex-grow: 1;
+}
+
+.queueItem {
+	cursor: pointer;
+	-webkit-user-select: none;
+	/* Safari */
+	-moz-user-select: none;
+	/* Firefox */
+	-ms-user-select: none;
+	/* IE10+/Edge */
+	user-select: none;
+	/* Standard */
+	width: 100%;
+}
+
+#controlQueues {
+	display: flex;
+}
+
+
+/* .queue {
+	display: flex;
+	flex-grow: 1;
+	flex-wrap: wrap;
+} */

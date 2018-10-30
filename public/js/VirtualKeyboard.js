@@ -1,5 +1,6 @@
 require("./keymaster.js");
 const keycode = require("keycode");
+import keyboardJS from "keyboardjs";
 
 const VirtualProController = require("./VirtualProController.js");
 let restPos = 128;
@@ -10,40 +11,48 @@ function VirtualKeyboard() {
 	// this.getState = this.state.getState;
 	// this.setState = this.state.setState;
 
-	this.keyboardMapping = {};
-	this.keyboardMapping.LU = "W";
-	this.keyboardMapping.LD = "S";
-	this.keyboardMapping.LL = "A";
-	this.keyboardMapping.LR = "D";
-	this.keyboardMapping.RU = "I";
-	this.keyboardMapping.RD = "K";
-	this.keyboardMapping.RL = "J";
-	this.keyboardMapping.RR = "L";
-	this.keyboardMapping.ABtn = "right";
-	this.keyboardMapping.BBtn = "down";
-	this.keyboardMapping.XBtn = "up";
-	this.keyboardMapping.YBtn = "left";
-	this.keyboardMapping.DUp = "T";
-	this.keyboardMapping.DDown = "G";
-	this.keyboardMapping.DLeft = "F";
-	this.keyboardMapping.DRight = "H";
-	this.keyboardMapping.LStick = "R";
-	this.keyboardMapping.RStick = "Y";
-	this.keyboardMapping.LBtn = "U";
-	this.keyboardMapping.ZL = "Q";
-	this.keyboardMapping.RBtn = "O";
-	this.keyboardMapping.ZR = "E";
-	this.keyboardMapping.Minus = "-";
-	this.keyboardMapping.Plus = "=";
-	this.keyboardMapping.Capture = "1";
-	this.keyboardMapping.Home = "2";
+	// a list of keys to keep track of:
+	this.keysToTrack = [];
+
+	// function to call when state updates:
+	// this.updateParentState = () => {};
+
+	this.keyboardMapping = {
+		LU: "W",
+		LD: "S",
+		LL: "A",
+		LR: "D",
+		RU: "I",
+		RD: "K",
+		RL: "J",
+		RR: "L",
+		ABtn: "right",
+		BBtn: "down",
+		XBtn: "up",
+		YBtn: "left",
+		DUp: "T",
+		DDown: "G",
+		DLeft: "F",
+		DRight: "H",
+		lstick: "R",
+		rstick: "Y",
+		LBtn: "U",
+		ZL: "Q",
+		RBtn: "O",
+		ZR: "E",
+		Minus: "-",
+		Plus: "=",
+		Capture: "1",
+		Home: "2",
+	};
 
 	this.wasPressedKeyCodes = [];
 
-
 	this.settings = {
 		analogStickMode: false,
-	}
+	};
+
+
 
 	// get controller state:
 	this.poll = function () {
@@ -56,24 +65,24 @@ function VirtualKeyboard() {
 
 		if (!this.settings.analogStickMode) {
 			if (key.isPressed(this.keyboardMapping.LU)) {
-				this.state.LStick.y = 255;
+				this.state.lstick.y = 255;
 			} else if (key.wasPressed(this.keyboardMapping.LU, this.wasPressedKeyCodes)) {
-				this.state.LStick.y = restPos;
+				this.state.lstick.y = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.LD)) {
-				this.state.LStick.y = 0;
+				this.state.lstick.y = 0;
 			} else if (key.wasPressed(this.keyboardMapping.LD, this.wasPressedKeyCodes)) {
-				this.state.LStick.y = restPos;
+				this.state.lstick.y = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.LL)) {
-				this.state.LStick.x = 0;
+				this.state.lstick.x = 0;
 			} else if (key.wasPressed(this.keyboardMapping.LL, this.wasPressedKeyCodes)) {
-				this.state.LStick.x = restPos;
+				this.state.lstick.x = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.LR)) {
-				this.state.LStick.x = 255;
+				this.state.lstick.x = 255;
 			} else if (key.wasPressed(this.keyboardMapping.LR, this.wasPressedKeyCodes)) {
-				this.state.LStick.x = restPos;
+				this.state.lstick.x = restPos;
 			}
 		} else {
 
@@ -81,27 +90,27 @@ function VirtualKeyboard() {
 			let upDown = false;
 
 			if (key.isPressed(this.keyboardMapping.LU)) {
-				this.state.LStick.y = Math.round(parseInt(this.state.LStick.y) + settings.stickAttack);
+				this.state.lstick.y = Math.round(parseInt(this.state.lstick.y) + settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.LD)) {
-				this.state.LStick.y = Math.round(parseInt(this.state.LStick.y) - settings.stickAttack);
+				this.state.lstick.y = Math.round(parseInt(this.state.lstick.y) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.LL)) {
-				this.state.LStick.x = Math.round(parseInt(this.state.LStick.x) - settings.stickAttack);
+				this.state.lstick.x = Math.round(parseInt(this.state.lstick.x) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.LR)) {
-				this.state.LStick.x = Math.round(parseInt(this.state.LStick.x) + settings.stickAttack);
+				this.state.lstick.x = Math.round(parseInt(this.state.lstick.x) + settings.stickAttack);
 			}
 
 			upDown = key.isPressed(this.keyboardMapping.LU) || key.isPressed(this.keyboardMapping.LD);
 			leftRight = key.isPressed(this.keyboardMapping.LL) || key.isPressed(this.keyboardMapping.LR);
 
 			if (!upDown) {
-				this.state.LStick.y = Math.round(tools.mathZoom(parseInt(this.state.LStick.y), restPos, settings.stickReturn));
+				this.state.lstick.y = Math.round(tools.mathZoom(parseInt(this.state.lstick.y), restPos, settings.stickReturn));
 			}
 
 			if (!leftRight) {
-				this.state.LStick.x = Math.round(tools.mathZoom(parseInt(this.state.LStick.x), restPos, settings.stickReturn));
+				this.state.lstick.x = Math.round(tools.mathZoom(parseInt(this.state.lstick.x), restPos, settings.stickReturn));
 			}
 		}
 
@@ -149,51 +158,51 @@ function VirtualKeyboard() {
 
 		if (!this.settings.analogStickMode) {
 			if (key.isPressed(this.keyboardMapping.RU)) {
-				this.state.RStick.y = 255;
+				this.state.rstick.y = 255;
 			} else if (key.wasPressed(this.keyboardMapping.RU, this.wasPressedKeyCodes)) {
-				this.state.RStick.y = restPos;
+				this.state.rstick.y = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.RD)) {
-				this.state.RStick.y = 0;
+				this.state.rstick.y = 0;
 			} else if (key.wasPressed(this.keyboardMapping.RD, this.wasPressedKeyCodes)) {
-				this.state.RStick.y = restPos;
+				this.state.rstick.y = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.RL)) {
-				this.state.RStick.x = 0;
+				this.state.rstick.x = 0;
 			} else if (key.wasPressed(this.keyboardMapping.RL, this.wasPressedKeyCodes)) {
-				this.state.RStick.x = restPos;
+				this.state.rstick.x = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.RR)) {
-				this.state.RStick.x = 255;
+				this.state.rstick.x = 255;
 			} else if (key.wasPressed(this.keyboardMapping.RR, this.wasPressedKeyCodes)) {
-				this.state.RStick.x = restPos;
+				this.state.rstick.x = restPos;
 			}
 		} else {
 			let leftRight = false;
 			let upDown = false;
 
 			if (key.isPressed(this.keyboardMapping.RU)) {
-				this.state.RStick.y = Math.round(parseInt(this.state.RStick.y) + settings.stickAttack);
+				this.state.rstick.y = Math.round(parseInt(this.state.rstick.y) + settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.RD)) {
-				this.state.RStick.y = Math.round(parseInt(this.state.RStick.y) - settings.stickAttack);
+				this.state.rstick.y = Math.round(parseInt(this.state.rstick.y) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.RL)) {
-				this.state.RStick.x = Math.round(parseInt(this.state.RStick.x) - settings.stickAttack);
+				this.state.rstick.x = Math.round(parseInt(this.state.rstick.x) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.RR)) {
-				this.state.RStick.x = Math.round(parseInt(this.state.RStick.x) + settings.stickAttack);
+				this.state.rstick.x = Math.round(parseInt(this.state.rstick.x) + settings.stickAttack);
 			}
 
 			upDown = key.isPressed(this.keyboardMapping.RU) || key.isPressed(this.keyboardMapping.RD);
 			leftRight = key.isPressed(this.keyboardMapping.RL) || key.isPressed(this.keyboardMapping.RR);
 
 			if (!upDown) {
-				this.state.RStick.y = Math.round(tools.mathZoom(parseInt(this.state.RStick.y), restPos, settings.stickReturn));
+				this.state.rstick.y = Math.round(tools.mathZoom(parseInt(this.state.rstick.y), restPos, settings.stickReturn));
 			}
 
 			if (!leftRight) {
-				this.state.RStick.x = Math.round(tools.mathZoom(parseInt(this.state.RStick.x), restPos, settings.stickReturn));
+				this.state.rstick.x = Math.round(tools.mathZoom(parseInt(this.state.rstick.x), restPos, settings.stickReturn));
 			}
 		}
 
@@ -241,14 +250,14 @@ function VirtualKeyboard() {
 			this.state.btns.zr = 0;
 		}
 
-		if (key.isPressed(this.keyboardMapping.LStick)) {
+		if (key.isPressed(this.keyboardMapping.lstick)) {
 			this.state.btns.lstick = 1;
-		} else if (key.wasPressed(this.keyboardMapping.LStick, this.wasPressedKeyCodes)) {
+		} else if (key.wasPressed(this.keyboardMapping.lstick, this.wasPressedKeyCodes)) {
 			this.state.btns.lstick = 0;
 		}
-		if (key.isPressed(this.keyboardMapping.RStick)) {
+		if (key.isPressed(this.keyboardMapping.rstick)) {
 			this.state.btns.rstick = 1;
-		} else if (key.wasPressed(this.keyboardMapping.RStick, this.wasPressedKeyCodes)) {
+		} else if (key.wasPressed(this.keyboardMapping.rstick, this.wasPressedKeyCodes)) {
 			this.state.btns.rstick = 0;
 		}
 

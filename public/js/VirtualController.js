@@ -1,7 +1,20 @@
-const Gamepad = require("js/gamepad.js");
+import Gamepad from "js/gamepad.js";
 
 const VirtualProController = require("./VirtualProController.js");
 let restPos = 128;
+
+// let controllerMapping = function (type, rest, active, released, which) {
+// 	this.type = type;
+//
+// 	if (type == "button") {
+// 		this.rest = rest;
+// 	} else if (type == "axis") {
+// 		this.rest = rest;
+// 		this.active = active;
+// 		this.released = released;
+// 		this.index = which;
+// 	}
+// };
 
 let VirtualController = function () {
 
@@ -36,209 +49,238 @@ let VirtualController = function () {
 				},
 			},
 		},
+
+		map: {
+			// up: new controllerMapping("button", ),
+			up: "up",
+			down: "down",
+			left: "left",
+			right: "right",
+			lstick: "lstick",
+			l: "l",
+			zl: "zl",
+			minus: "minus",
+			capture: "capture",
+
+			a: "a",
+			b: "b",
+			x: "x",
+			y: "y",
+			rstick: "rstick",
+			r: "r",
+			zr: "zr",
+			plus: "plus",
+			home: "home",
+
+			axes: [
+				[0, 0],
+				[1, 1],
+			],
+		},
+
 	}
 
 	this.init = function () {
 
-		const gamepad = new Gamepad();
+		window.gamepad = new Gamepad();
 
-		gamepad.on("connect", e => {
+		gamepad.on("connect", (e) => {
 			console.log(`controller ${e.index} connected!`);
 		});
-		gamepad.on("disconnect", e => {
+		gamepad.on("disconnect", (e) => {
 			console.log(`controller ${e.index} disconnected!`);
 		});
-		gamepad.on("press", "button_1", e => {
-			this.state.btns.b = 1;
+		gamepad.on("press", "button_1", (e) => {
+			this.state.btns[this.settings.map.b] = 1;
 		});
-		gamepad.on("release", "button_1", e => {
-			this.state.btns.b = 0;
+		gamepad.on("release", "button_1", (e) => {
+			this.state.btns[this.settings.map.b] = 0;
 		});
-		gamepad.on("press", "button_2", e => {
-			this.state.btns.a = 1;
+		gamepad.on("press", "button_2", (e) => {
+			this.state.btns[this.settings.map.a] = 1;
 		});
-		gamepad.on("release", "button_2", e => {
-			this.state.btns.a = 0;
+		gamepad.on("release", "button_2", (e) => {
+			this.state.btns[this.settings.map.a] = 0;
 		});
-		gamepad.on("press", "button_3", e => {
-			this.state.btns.y = 1;
+		gamepad.on("press", "button_3", (e) => {
+			this.state.btns[this.settings.map.y] = 1;
 		});
-		gamepad.on("release", "button_3", e => {
-			this.state.btns.y = 0;
+		gamepad.on("release", "button_3", (e) => {
+			this.state.btns[this.settings.map.y] = 0;
 		});
-		gamepad.on("press", "button_4", e => {
-			this.state.btns.x = 1;
+		gamepad.on("press", "button_4", (e) => {
+			this.state.btns[this.settings.map.x] = 1;
 		});
-		gamepad.on("release", "button_4", e => {
-			this.state.btns.x = 0;
+		gamepad.on("release", "button_4", (e) => {
+			this.state.btns[this.settings.map.x] = 0;
 		});
-		gamepad.on("press", "shoulder_top_left", e => {
-			this.state.btns.l = 1;
+		gamepad.on("press", "shoulder_top_left", (e) => {
+			this.state.btns[this.settings.map.l] = 1;
 		});
-		gamepad.on("release", "shoulder_top_left", e => {
-			this.state.btns.l = 0;
+		gamepad.on("release", "shoulder_top_left", (e) => {
+			this.state.btns[this.settings.map.l] = 0;
 		});
-		gamepad.on("press", "shoulder_top_right", e => {
-			this.state.btns.r = 1;
+		gamepad.on("press", "shoulder_top_right", (e) => {
+			this.state.btns[this.settings.map.r] = 1;
 		});
-		gamepad.on("release", "shoulder_top_right", e => {
-			this.state.btns.r = 0;
+		gamepad.on("release", "shoulder_top_right", (e) => {
+			this.state.btns[this.settings.map.r] = 0;
 		});
-		gamepad.on("press", "shoulder_bottom_left", e => {
-			this.state.btns.zl = 1;
+		gamepad.on("press", "shoulder_bottom_left", (e) => {
+			this.state.btns[this.settings.map.zl] = 1;
 		});
-		gamepad.on("release", "shoulder_bottom_left", e => {
-			this.state.btns.zl = 0;
+		gamepad.on("release", "shoulder_bottom_left", (e) => {
+			this.state.btns[this.settings.map.zl] = 0;
 		});
-		gamepad.on("press", "shoulder_bottom_right", e => {
-			this.state.btns.zr = 1;
+		gamepad.on("press", "shoulder_bottom_right", (e) => {
+			this.state.btns[this.settings.map.zr] = 1;
 		});
-		gamepad.on("release", "shoulder_bottom_right", e => {
-			this.state.btns.zr = 0;
+		gamepad.on("release", "shoulder_bottom_right", (e) => {
+			this.state.btns[this.settings.map.zr] = 0;
 		});
-		gamepad.on("press", "select", e => {
-			this.state.btns.minus = 1;
+		gamepad.on("press", "select", (e) => {
+			this.state.btns[this.settings.map.minus] = 1;
 		});
-		gamepad.on("release", "select", e => {
-			this.state.btns.minus = 0;
+		gamepad.on("release", "select", (e) => {
+			this.state.btns[this.settings.map.minus] = 0;
 		});
-		gamepad.on("press", "start", e => {
-			this.state.btns.plus = 1;
+		gamepad.on("press", "start", (e) => {
+			this.state.btns[this.settings.map.plus] = 1;
 		});
-		gamepad.on("release", "start", e => {
-			this.state.btns.plus = 0;
+		gamepad.on("release", "start", (e) => {
+			this.state.btns[this.settings.map.plus] = 0;
 		});
-		gamepad.on("press", "d_pad_up", e => {
-			this.state.btns.left = 1;
+		gamepad.on("press", "d_pad_up", (e) => {
+			this.state.btns[this.settings.map.up] = 1;
 		});
-		gamepad.on("release", "d_pad_up", e => {
-			this.state.btns.left = 0;
+		gamepad.on("release", "d_pad_up", (e) => {
+			this.state.btns[this.settings.map.up] = 0;
 		});
-		gamepad.on("press", "d_pad_down", e => {
-			this.state.btns.right = 1;
+		gamepad.on("press", "d_pad_down", (e) => {
+			this.state.btns[this.settings.map.down] = 1;
 		});
-		gamepad.on("release", "d_pad_down", e => {
-			this.state.btns.right = 0;
+		gamepad.on("release", "d_pad_down", (e) => {
+			this.state.btns[this.settings.map.down] = 0;
 		});
-		gamepad.on("press", "d_pad_left", e => {
-			this.state.btns.left = 1;
+		gamepad.on("press", "d_pad_left", (e) => {
+			this.state.btns[this.settings.map.left] = 1;
 		});
-		gamepad.on("release", "d_pad_left", e => {
-			this.state.btns.left = 0;
+		gamepad.on("release", "d_pad_left", (e) => {
+			this.state.btns[this.settings.map.left] = 0;
 		});
-		gamepad.on("press", "d_pad_right", e => {
-			this.state.btns.right = 1;
+		gamepad.on("press", "d_pad_right", (e) => {
+			this.state.btns[this.settings.map.right] = 1;
 		});
-		gamepad.on("release", "d_pad_right", e => {
-			this.state.btns.right = 0;
+		gamepad.on("release", "d_pad_right", (e) => {
+			this.state.btns[this.settings.map.right] = 0;
 		});
-		gamepad.on("press", "stick_button_left", e => {
-			this.state.btns.lstick = 1;
+		gamepad.on("press", "stick_button_left", (e) => {
+			this.state.btns[this.settings.map.lstick] = 1;
 		});
-		gamepad.on("release", "stick_button_left", e => {
-			this.state.btns.lstick = 0;
+		gamepad.on("release", "stick_button_left", (e) => {
+			this.state.btns[this.settings.map.lstick] = 0;
 		});
-		gamepad.on("press", "stick_button_right", e => {
-			this.state.btns.rstick = 1;
+		gamepad.on("press", "stick_button_right", (e) => {
+			this.state.btns[this.settings.map.right] = 1;
 		});
-		gamepad.on("release", "stick_button_right", e => {
-			this.state.btns.rstick = 0;
+		gamepad.on("release", "stick_button_right", (e) => {
+			this.state.btns[this.settings.map.right] = 0;
 		});
 
-		gamepad.on("hold", "stick_axis_left", e => {
+		gamepad.on("hold", "stick_axis_left", (e) => {
 			let x = (e.value[0] * this.settings.sticks.L.X.sensitivity);
 			let y = (e.value[1] * this.settings.sticks.L.Y.sensitivity);
 			x = (x / 2) + 0.5;
 			y = (-y / 2) + 0.5;
 			x *= 255;
 			y *= 255;
-			this.state.LStick.x = parseInt(x) + this.settings.sticks.L.X.offset;
-			this.state.LStick.y = parseInt(y) + this.settings.sticks.L.Y.offset;
-			if (Math.abs(restPos - this.state.LStick.x) < this.settings.sticks.L.X.deadzone) {
-				this.state.LStick.x = restPos;
+			this.state.lstick.x = parseInt(x) + this.settings.sticks.L.X.offset;
+			this.state.lstick.y = parseInt(y) + this.settings.sticks.L.Y.offset;
+			if (Math.abs(restPos - this.state.lstick.x) < this.settings.sticks.L.X.deadzone) {
+				this.state.lstick.x = restPos;
 			}
-			if (Math.abs(restPos - this.state.LStick.y) < this.settings.sticks.L.Y.deadzone) {
-				this.state.LStick.y = restPos;
+			if (Math.abs(restPos - this.state.lstick.y) < this.settings.sticks.L.Y.deadzone) {
+				this.state.lstick.y = restPos;
 			}
 		});
-		gamepad.on("press", "stick_axis_left", e => {
+		gamepad.on("press", "stick_axis_left", (e) => {
 			let x = (e.value[0] * this.settings.sticks.L.X.sensitivity);
 			let y = (e.value[1] * this.settings.sticks.L.Y.sensitivity);
 			x = (x / 2) + 0.5;
 			y = (-y / 2) + 0.5;
 			x *= 255;
 			y *= 255;
-			this.state.LStick.x = parseInt(x) + this.settings.sticks.L.X.offset;
-			this.state.LStick.y = parseInt(y) + this.settings.sticks.L.Y.offset;
-			if (Math.abs(restPos - this.state.LStick.x) < this.settings.sticks.L.X.deadzone) {
-				this.state.LStick.x = restPos;
+			this.state.lstick.x = parseInt(x) + this.settings.sticks.L.X.offset;
+			this.state.lstick.y = parseInt(y) + this.settings.sticks.L.Y.offset;
+			if (Math.abs(restPos - this.state.lstick.x) < this.settings.sticks.L.X.deadzone) {
+				this.state.lstick.x = restPos;
 			}
-			if (Math.abs(restPos - this.state.LStick.y) < this.settings.sticks.L.Y.deadzone) {
-				this.state.LStick.y = restPos;
+			if (Math.abs(restPos - this.state.lstick.y) < this.settings.sticks.L.Y.deadzone) {
+				this.state.lstick.y = restPos;
 			}
 		});
-		gamepad.on("release", "stick_axis_left", e => {
+		gamepad.on("release", "stick_axis_left", (e) => {
 			let x = (e.value[0] * this.settings.sticks.L.X.sensitivity);
 			let y = (e.value[1] * this.settings.sticks.L.Y.sensitivity);
 			x = (x / 2) + 0.5;
 			y = (-y / 2) + 0.5;
 			x *= 255;
 			y *= 255;
-			this.state.LStick.x = parseInt(x) + this.settings.sticks.L.X.offset;
-			this.state.LStick.y = parseInt(y) + this.settings.sticks.L.Y.offset;
-			if (Math.abs(restPos - this.state.LStick.x) < this.settings.sticks.L.X.deadzone) {
-				this.state.LStick.x = restPos;
+			this.state.lstick.x = parseInt(x) + this.settings.sticks.L.X.offset;
+			this.state.lstick.y = parseInt(y) + this.settings.sticks.L.Y.offset;
+			if (Math.abs(restPos - this.state.lstick.x) < this.settings.sticks.L.X.deadzone) {
+				this.state.lstick.x = restPos;
 			}
-			if (Math.abs(restPos - this.state.LStick.y) < this.settings.sticks.L.Y.deadzone) {
-				this.state.LStick.y = restPos;
+			if (Math.abs(restPos - this.state.lstick.y) < this.settings.sticks.L.Y.deadzone) {
+				this.state.lstick.y = restPos;
 			}
 		});
-		gamepad.on("hold", "stick_axis_right", e => {
+		gamepad.on("hold", "stick_axis_right", (e) => {
 			let x = (e.value[0] * this.settings.sticks.R.X.sensitivity);
 			let y = (e.value[1] * this.settings.sticks.R.Y.sensitivity);
 			x = (x / 2) + 0.5;
 			y = (-y / 2) + 0.5;
 			x *= 255;
 			y *= 255;
-			this.state.RStick.x = parseInt(x) + this.settings.sticks.R.X.offset;
-			this.state.RStick.y = parseInt(y) + this.settings.sticks.R.Y.offset;
-			if (Math.abs(restPos - this.state.RStick.x) < this.settings.sticks.R.X.deadzone) {
-				this.state.RStick.x = restPos;
+			this.state.rstick.x = parseInt(x) + this.settings.sticks.R.X.offset;
+			this.state.rstick.y = parseInt(y) + this.settings.sticks.R.Y.offset;
+			if (Math.abs(restPos - this.state.rstick.x) < this.settings.sticks.R.X.deadzone) {
+				this.state.rstick.x = restPos;
 			}
-			if (Math.abs(restPos - this.state.RStick.y) < this.settings.sticks.R.Y.deadzone) {
-				this.state.RStick.y = restPos;
+			if (Math.abs(restPos - this.state.rstick.y) < this.settings.sticks.R.Y.deadzone) {
+				this.state.rstick.y = restPos;
 			}
 		});
-		gamepad.on("press", "stick_axis_right", e => {
+		gamepad.on("press", "stick_axis_right", (e) => {
 			let x = (e.value[0] * this.settings.sticks.R.X.sensitivity);
 			let y = (e.value[1] * this.settings.sticks.R.Y.sensitivity);
 			x = (x / 2) + 0.5;
 			y = (-y / 2) + 0.5;
 			x *= 255;
 			y *= 255;
-			this.state.RStick.x = parseInt(x) + this.settings.sticks.R.X.offset;
-			this.state.RStick.y = parseInt(y) + this.settings.sticks.R.Y.offset;
-			if (Math.abs(restPos - this.state.RStick.x) < this.settings.sticks.R.X.deadzone) {
-				this.state.RStick.x = restPos;
+			this.state.rstick.x = parseInt(x) + this.settings.sticks.R.X.offset;
+			this.state.rstick.y = parseInt(y) + this.settings.sticks.R.Y.offset;
+			if (Math.abs(restPos - this.state.rstick.x) < this.settings.sticks.R.X.deadzone) {
+				this.state.rstick.x = restPos;
 			}
-			if (Math.abs(restPos - this.state.RStick.y) < this.settings.sticks.R.Y.deadzone) {
-				this.state.RStick.y = restPos;
+			if (Math.abs(restPos - this.state.rstick.y) < this.settings.sticks.R.Y.deadzone) {
+				this.state.rstick.y = restPos;
 			}
 		});
-		gamepad.on("release", "stick_axis_right", e => {
+		gamepad.on("release", "stick_axis_right", (e) => {
 			let x = (e.value[0] * this.settings.sticks.R.X.sensitivity);
 			let y = (e.value[1] * this.settings.sticks.R.Y.sensitivity);
 			x = (x / 2) + 0.5;
 			y = (-y / 2) + 0.5;
 			x *= 255;
 			y *= 255;
-			this.state.RStick.x = parseInt(x) + this.settings.sticks.R.X.offset;
-			this.state.RStick.y = parseInt(y) + this.settings.sticks.R.Y.offset;
-			if (Math.abs(restPos - this.state.RStick.x) < this.settings.sticks.R.X.deadzone) {
-				this.state.RStick.x = restPos;
+			this.state.rstick.x = parseInt(x) + this.settings.sticks.R.X.offset;
+			this.state.rstick.y = parseInt(y) + this.settings.sticks.R.Y.offset;
+			if (Math.abs(restPos - this.state.rstick.x) < this.settings.sticks.R.X.deadzone) {
+				this.state.rstick.x = restPos;
 			}
-			if (Math.abs(restPos - this.state.RStick.y) < this.settings.sticks.R.Y.deadzone) {
-				this.state.RStick.y = restPos;
+			if (Math.abs(restPos - this.state.rstick.y) < this.settings.sticks.R.Y.deadzone) {
+				this.state.rstick.y = restPos;
 			}
 		});
 	}

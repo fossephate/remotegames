@@ -7,7 +7,7 @@ class ThemeSwitch extends Component {
 		this.css = `
 		html { filter: invert(100%); background: #efeef1 !important; }
 		* { background-color: inherit }
-		img:not([src*=".svg"]), video, canvas, #chat, #loggedInContainer, .logo { filter: invert(100%) }`;
+		img:not(#ytLogo), video, canvas, #loggedInContainer, .logo { filter: invert(100%) }`;
 	}
 
 	render() {

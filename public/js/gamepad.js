@@ -274,6 +274,15 @@ Gamepad.prototype._loop = function () {
 
 		for (i = 0; i < length; i = i + 1) {
 
+			if (gamepads[i] && gamepads[i].id.indexOf("vJoy") > -1) {
+				// console.log("vJoy device found, disconnecting.");
+				// // disconnect:
+				// self._handleGamepadDisconnected(i);
+				// self._events.gamepad[i] = null;
+				// self._events.axes[i] = null;
+				continue;
+			}
+
 			if (gamepads[i]) {
 
 				if (!self._events.gamepad[i]) {

@@ -68,12 +68,6 @@ margin-right: auto; */
 	margin-bottom: 8px;
 }
 
-/* .playerCheckbox:last-of-type { */
-
-#wiiUPlayerCheckbox {
-	/* 	margin-left: 40%; */
-}
-
 .joinQueue {
 	width: 100%;
 	height: fit-content;
@@ -118,6 +112,7 @@ margin-right: auto; */
 }
 
 #barUnderTheStream {
+	grid-column: 1/3;
 	display: flex;
 	flex-direction: column;
 	min-height: 125px;
@@ -169,8 +164,10 @@ margin-right: auto; */
 }
 
 #container {
-	display: flex;
-	flex-direction: row;
+	display: grid;
+	grid-template-columns: 75% 25%;
+	/* display: flex; */
+	/* flex-direction: row; */
 	width: 100%;
 	margin: auto;
 	padding: 0;
@@ -178,16 +175,11 @@ margin-right: auto; */
 	border-radius: 4px;
 }
 
-#description {
-	text-align: center;
-	/* 	width: 50%; */
-}
-
 #picture {
 	display: flex;
 	flex-direction: column;
-	/* 	width: 100%; */
-	width: 75%;
+	width: 100%;
+	/* width: 75%; */
 	/* 	flex-grow: 1; */
 	padding: 0;
 	margin: 0;
@@ -197,207 +189,13 @@ margin-right: auto; */
 	border-right: none;
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
-}
-
-/* #chat {
-	flex-grow: 1;
-} */
-
-#chatContainer {
-	width: 25%;
-	/* 	min-width: 340px; */
-	display: flex;
-	flex-direction: column;
-	overflow-x: hidden;
-	margin-top: -44.2px;/* +(-2)px for #navTabs padding-top */
-	border-radius: 4px;
-	border-bottom: none;
-	border-bottom-left-radius: 0;
-	border-top-left-radius: 0;
-}
-
-/* LOGGED IN INDICATOR */
-
-#loggedInIndicator {
-	width: 100%;
-/* 	border: 1px solid #888;
-	border-radius: 5px; */
-	text-align: center;
-	display: flex;
-	justify-content: space-evenly;
-	flex-wrap: wrap;
-}
-
-#loggedInStatus {
-	width: 100%;
-	border-radius: 4px;
-	text-align: center;
-	display: flex;
-	justify-content: center;
-	/* 	overflow-x: hidden; */
-	overflow-y: visible;
-	margin: 5px;
-}
-
-#loggedInContainer {
-	display: flex;
-	flex-wrap: wrap;
-	font-size: 12px;
-	border-top: none;
-	border-left: none;
-	border-right: none;
-	min-height: 42.2px;
-	border-bottom-left-radius: 0;
-}
-
-#usernameDropdown {
-	align-self: center;
-	background: transparent;
-}
-
-.connectWithContainer {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-evenly;
-	width: 48%;
-	margin-top: 4px;
-	margin-bottom: 4px;
-}
-
-.connectWithButton {
-	display: flex;
-	align-self: center;
-	justify-content: space-evenly;
-	border: 1px solid #888;
-	border-radius: 5px;
-	box-shadow: 1px 1px 1px grey;
-	text-decoration: none !important;
-	color: #282828;
-	white-space: nowrap;
-	min-height: 40px;
-	width: 100%;
-	cursor: pointer;
-}
-
-.connectWithButton>* {
-	display: flex;
-	align-self: center;
-	color: #282828;
-	/* 	max-width: 150px; */
-	/* 	padding: 6px; */
-}
-
-#twitchLogo {
-	/* 	width: 80px; */
-	/* 	filter: drop-shadow(3px 3px 2px #333); */
-	width: 60px;
-	margin-left: 10px;
-	margin-right: 10px;
-	/*     width: 50px;
-margin-left: 5px;
-margin-right: 5px; */
-	/* 	width: 50px; */
-}
-
-#googleLogo {
-	width: 80px;
-}
-
-#ytLogo {
-	width: 80px;
-}
-
-#discordLogo {
-	width: 80px;
-}
-
-#connectWithTwitch {}
-
-#connectWithTwitchButton {}
-
-#connectWithYoutube {}
-
-#connectWithGoogle {}
-
-#connectWithDiscord {}
-
-/* CONNECT WITH GOOGLE BUTTON */
-
-#googleConnectButton {
-	display: flex;
-	justify-content: space-evenly;
-/* 	background: white; */
-	color: #444;
-	/* 	width: 80px; */
-	width: 75px;
-	margin-left: 0px;
-	margin-right: 5px;
-	white-space: nowrap;
-}
-
-#googleConnectButton:hover {
-	cursor: pointer;
-}
-
-span.googleLabel {
-	font-family: serif;
-	font-weight: normal;
-}
-
-span.googleIcon {
-	background: url(/images/g-transparent.png) transparent 0px 50% no-repeat;
-	width: 32px;
-	height: 32px;
-}
-
-span.googleButtonText {
-	display: flex;
-	align-self: center;
-	font-size: 14px;
-	font-weight: bold;
-	/* Use the Roboto font that is loaded in the <head> */
-	font-family: "Roboto", sans-serif;
-}
-
-#logout {
-	width: 30%;
+	grid-column: 1;
+	grid-row: 2;
 }
 
 /* VIDEO CONTAINERS */
 
 /* LAGLESS */
-
-/* .lagless {
-display: flex;
-flex-direction: column;
-} */
-
-.laglessView {
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	position: relative;
-	margin-left: 20px;
-    margin-right: 20px;
-	text-align: center;
-}
-
-.videoCanvas {
-	/* width: 75%; */
-	/* margin-left: 12.5%; */
-	width: 73.2%;
-	align-self: center;
-}
-
-.largescreen {
-	width: 100% !important;
-}
-
-#videoCanvas3 {
-	align-self: unset;
-	/* width: unset; */
-	/* height: unset; */
-}
 
 
 .laglessBar {
@@ -416,14 +214,6 @@ flex-direction: column;
 	justify-content: space-evenly;
 	align-self: center;
 	padding: 10px;
-}
-
-.laglessRefresh {
-	align-self: center;
-}
-
-.keyboardMapper {
-	align-self: center;
 }
 
 .tunnel {
@@ -915,46 +705,6 @@ float: left; */
 width: 40%; */
 }
 
-/* control queue */
-
-.controlQueue {
-	overflow-y: auto;
-	max-height: 100px;
-	text-align: center;
-	margin-top: 5px;
-	flex-grow: 1;
-}
-
-.queueItem {
-	cursor: pointer;
-	-webkit-user-select: none;
-	/* Safari */
-	-moz-user-select: none;
-	/* Firefox */
-	-ms-user-select: none;
-	/* IE10+/Edge */
-	user-select: none;
-	/* Standard */
-}
-
-#controlQueue1 {}
-
-#controlQueue2 {}
-
-#controlQueue3 {}
-
-#controlQueue4 {}
-
-#controlQueues {
-	display: flex;
-}
-
-.queue {
-	display: flex;
-	/* flex-direction: column; */
-	flex-grow: 1;
-	flex-wrap: wrap;
-}
 
 /* Dark Theme */
 
@@ -1169,80 +919,6 @@ border: 1px solid #ddd; */
 	border-width: 0 3px 3px 0;
 }
 
-/* Volume Slider */
-
-/* https://codepen.io/emilcarlsson/pres/PPNLPy */
-
-/*
-Copyright (c) 2018 by Emil (https://codepen.io/emilcarlsson/pen/PPNLPy)
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/
-
-.volumeSlider {
-	display: flex;
-	justify-content: space-evenly;
-	width: 30%;
-	min-width: 125px;
-	border-radius: 10px;
-	align-items: center;
-	/*     margin-top: 2px; */
-	/*     margin-bottom: 2px; */
-	/* 	padding-top: 2px; */
-	/* 	padding-bottom: 2px; */
-}
-
-.volumeSlider i {
-	color: #333;
-	align-self: center;
-	border: 2px solid #333;
-	border-radius: 4px;
-	padding: 4px;
-	cursor: pointer;
-}
-
-.fa.fa-volume-down {
-	padding-left: 7px;
-	padding-right: 7px;
-}
-
-.volume {
-	height: 5px;
-	width: 70%;
-	position: relative;
-	background: #555;
-	border-radius: 15px;
-	align-self: center;
-}
-
-.volume .ui-slider-range-min {
-	height: 5px;
-	background: #2ecc71;
-	border: none;
-	border-radius: 10px;
-	outline: none;
-}
-
-.volume .ui-slider-handle {
-	width: 20px;
-	height: 20px;
-	border-radius: 20px;
-	background: #FFF;
-	position: absolute;
-	margin-left: -10px;
-	margin-top: -12px;
-	cursor: pointer;
-	outline: none;
-}
-
-.volume span {
-	font-size: 10px;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-}
-
 /* GENERIC SLIDER */
 
 .mysliderContainer {
@@ -1376,9 +1052,11 @@ display: block;
 /* NAV TABS */
 
 #navTabs {
+	grid-column: 1;
+	grid-row: 1;
 	justify-content: center;
 	flex-wrap: nowrap;
-	width: 75%;
+	/* width: 75%; */
 	border-top-left-radius: 4px;
 	border-top-right-radius: 4px;
 	border-bottom: none;

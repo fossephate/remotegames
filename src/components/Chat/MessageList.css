@@ -1,6 +1,7 @@
 
 #messageList {
 	height: 100%;
+	/* position: absolute; */
 	overflow-y: auto;
 }
 

@@ -1,6 +1,8 @@
 // react:
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+// react-router:
+import { Router, Route, Switch } from "react-router";
 
 // redux:
 import { Provider } from "react-redux";
@@ -23,8 +25,62 @@ import io from "socket.io-client";
 const sagaMiddleware = createSagaMiddleware();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+let preloadedState = {
+
+	messages: [],
+
+	controlQueues: [
+		[],
+		[],
+		[],
+		[],
+	],
+	turnTimers: [{
+			turnExpiration: 0,
+			forfeitExpiration: 0,
+			turnLength: 0,
+			forfeitLength: 0,
+		},
+		{
+			turnExpiration: 0,
+			forfeitExpiration: 0,
+			turnLength: 0,
+			forfeitLength: 0,
+		},
+		{
+			turnExpiration: 0,
+			forfeitExpiration: 0,
+			turnLength: 0,
+			forfeitLength: 0,
+		},
+		{
+			turnExpiration: 0,
+			forfeitExpiration: 0,
+			turnLength: 0,
+			forfeitLength: 0,
+		},
+	],
+	viewers: [
+		[],
+		[],
+		[],
+		[],
+		[],
+	],
+	userInfo: {
+		authToken: null,
+		loggedIn: false,
+		userid: "",
+		connectedAccounts: [],
+		username: "???",
+		validUsernames: [],
+		usernameIndex: 0,
+	},
+};
+
 const store = createStore(
-	rootReducer,
+	rootReducer, preloadedState,
 	composeEnhancers(
 		applyMiddleware(sagaMiddleware),
 	)

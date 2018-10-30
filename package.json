@@ -11,6 +11,7 @@
     "start": "./start.sh 2>&1 | tee -a ./server/log.txt",
     "poststop": "./poststop.sh"
   },
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mfosse/twitchplays.git"
@@ -22,6 +23,8 @@
   },
   "homepage": "https://github.com/mfosse/twitchplays#readme",
   "dependencies": {
+    "@material-ui/core": "^3.3.0",
+    "@material-ui/icons": "^3.0.1",
     "@snex/react-connect": "^0.3.0",
     "bcrypt": "^3.0.1",
     "express": "^4.16.3",
@@ -29,9 +32,11 @@
     "gamepad-listener": "^0.4.0",
     "handlebars": "^4.0.12",
     "jquery": "^3.3.1",
+    "keyboardjs": "^2.4.1",
     "keycode": "^2.2.0",
     "keymaster": "^1.6.2",
     "localforage": "^1.7.2",
+    "lodash": "^4.17.11",
     "mongodb": "^3.1.6",
     "mongoose": "^5.3.0",
     "nipplejs": "^0.7.1",
@@ -47,6 +52,9 @@
     "react-fast-compare": "^2.0.2",
     "react-popper": "^1.0.0-beta.6",
     "react-redux": "^5.0.7",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "recompose": "^0.30.0",
     "redis": "^2.8.0",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
@@ -69,7 +77,7 @@
     "react-dom": "^16.5.2",
     "redux-saga": "^0.16.2",
     "style-loader": "^0.23.1",
-    "webpack": "^4.19.1",
-    "webpack-cli": "^3.1.1"
+    "webpack": "^4.23.1",
+    "webpack-cli": "^3.1.2"
   }
 }

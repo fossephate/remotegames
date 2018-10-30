@@ -14,6 +14,9 @@ class MessageList extends PureComponent {
 		super(props);
 	}
 
+	// let element = document.getElementById("messageList");
+	// element.scrollTop = element.scrollHeight;
+
 	render() {
 
 		return (
@@ -45,7 +48,7 @@ MessageList.propTypes = {
 	).isRequired
 };
 
-const mapStateToProps = function (state) {
+const mapStateToProps = (state) => {
 	return {
 		messages: state.messages,
 	};

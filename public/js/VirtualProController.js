@@ -25,44 +25,56 @@ function VirtualProController() {
 		home: 0,
 	};
 
-	this.LStick = {
+	this.lstick = {
 		x: restPos,
 		y: restPos,
 	};
 
-	this.RStick = {
+	this.rstick = {
 		x: restPos,
 		y: restPos,
+	};
+
+	this.gyro = {
+		x: 0,
+		y: 0,
+		z: 0,
+	};
+
+	this.accel = {
+		x: 0,
+		y: 0,
+		z: 0,
 	};
 
 	this.reset = function () {
 		for (let prop in this.btns) {
 			this.btns[prop] = 0;
 		}
-		this.LStick.x = restPos;
-		this.LStick.y = restPos;
-		this.RStick.x = restPos;
-		this.RStick.y = restPos;
+		this.lstick.x = restPos;
+		this.lstick.y = restPos;
+		this.rstick.x = restPos;
+		this.rstick.y = restPos;
 	}
 
 	this.getState = function () {
 
-		this.LStick.x = clamp(this.LStick.x, 0, 255);
-		this.LStick.y = clamp(this.LStick.y, 0, 255);
-		this.RStick.x = clamp(this.RStick.x, 0, 255);
-		this.RStick.y = clamp(this.RStick.y, 0, 255);
+		this.lstick.x = clamp(this.lstick.x, 0, 255);
+		this.lstick.y = clamp(this.lstick.y, 0, 255);
+		this.rstick.x = clamp(this.rstick.x, 0, 255);
+		this.rstick.y = clamp(this.rstick.y, 0, 255);
 
-		if (isNaN(this.LStick.x)) {
-			this.LStick.x = restPos;
+		if (isNaN(this.lstick.x)) {
+			this.lstick.x = restPos;
 		}
-		if (isNaN(this.LStick.y)) {
-			this.LStick.y = restPos;
+		if (isNaN(this.lstick.y)) {
+			this.lstick.y = restPos;
 		}
-		if (isNaN(this.RStick.x)) {
-			this.RStick.x = restPos;
+		if (isNaN(this.rstick.x)) {
+			this.rstick.x = restPos;
 		}
-		if (isNaN(this.RStick.y)) {
-			this.RStick.y = restPos;
+		if (isNaN(this.rstick.y)) {
+			this.rstick.y = restPos;
 		}
 
 		let state = "";
@@ -88,10 +100,10 @@ function VirtualProController() {
 		state += this.btns.home;
 
 
-		let LX = this.LStick.x;
-		let LY = this.LStick.y;
-		let RX = this.RStick.x;
-		let RY = this.RStick.y;
+		let LX = this.lstick.x;
+		let LY = this.lstick.y;
+		let RX = this.rstick.x;
+		let RY = this.rstick.y;
 
 		state += " " + LX + " " + LY + " " + RX + " " + RY;
 
@@ -124,11 +136,11 @@ function VirtualProController() {
 		this.btns.plus = parseInt(btns[16]);
 		this.btns.home = parseInt(btns[17]);
 
-		this.LStick.x = entireState[1];
-		this.LStick.y = entireState[2];
+		this.lstick.x = entireState[1];
+		this.lstick.y = entireState[2];
 
-		this.RStick.x = entireState[3];
-		this.RStick.y = entireState[4];
+		this.rstick.x = entireState[3];
+		this.rstick.y = entireState[4];
 	}
 	return this;
 }

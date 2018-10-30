@@ -88,7 +88,7 @@ let waitlists = [
 let waitlistMaxes = [5, 5, 5, 5, 5];
 let minQueuePositions = [5, 5, 5, 5, 5];
 
-let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190"];
+let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190", "103.217.104.246"];
 
 let banlist = [];
 let modlist = [];
@@ -115,15 +115,15 @@ let normalTime = 30000;
 let subTime = 60000;
 let tempBanTime = 5 * 1000 * 60; // 5 minutes
 
-let turnDurations = [30000, 30000, 30000, 30000];
-let timeTillForfeitDurations = [15000, 15000, 15000, 15000];
+let turnLengths = [30000, 30000, 30000, 30000];
+let forfeitLengths = [15000, 15000, 15000, 15000];
 let turnStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
 let forfeitStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
 let moveLineTimers = [null, null, null, null];
 let forfeitTimers = [null, null, null, null];
 
-let turnTimesLeft = [0, 0, 0, 0];
-let forfeitTimesLeft = [0, 0, 0, 0];
+let turnExpirations = [0, 0, 0, 0];
+let forfeitExpirations = [0, 0, 0, 0];
 
 let splitTimer = null;
 let afkTimer = Date.now();
@@ -727,13 +727,13 @@ io.on("connection", function (socket) {
 
 				uniqueIDToPreferredUsernameMap[client.userid] = client.username;
 
-				let accountInfo = {};
-				accountInfo.userid = client.userid;
-				accountInfo.username = client.username;
-				accountInfo.connectedAccounts = account.connectedAccounts;
-				accountInfo.validUsernames = client.validUsernames;
+				let userInfo = {};
+				userInfo.userid = client.userid;
+				userInfo.username = client.username;
+				userInfo.connectedAccounts = account.connectedAccounts;
+				userInfo.validUsernames = client.validUsernames;
 
-				socket.emit("accountInfo", accountInfo);
+				socket.emit("userInfo", userInfo);
 
 			});
 		});
@@ -829,9 +829,9 @@ io.on("connection", function (socket) {
 
 		// sub perk:
 		if (client.is_sub) {
-			turnDurations[cNum] = normalTime * 2;
+			turnLengths[cNum] = normalTime * 2;
 		} else {
-			turnDurations[cNum] = normalTime;
+			turnLengths[cNum] = normalTime;
 		}
 
 		// reset forfeit timer:
@@ -942,7 +942,7 @@ io.on("connection", function (socket) {
 		}
 
 		// emit turn times left:
-		emitTurnTimesLeft();
+		emitTurnExpirations();
 
 	});
 
@@ -990,13 +990,18 @@ io.on("connection", function (socket) {
 		io.emit("lagless3SettingsChange");
 	});
 
-	socket.on("restart server", () => {
+	socket.on("restartServer", () => {
 		if (!restartAvailable) {
 			return;
 		}
 		restartAvailable = false;
-		console.log("restarting server");
+		console.log("restarting the server");
 		io.emit("quit");
+		io.emit("chatMessage", {
+			message: "restarting the server!",
+			username: "TPNSbot",
+			userid: "TPNSbot",
+		});
 		process.exit();
 	});
 
@@ -1179,7 +1184,7 @@ io.on("connection", function (socket) {
 
 		index = findClientByUniqueID(data);
 		client = clients[index];
-		if (client.userid == null) {
+		if ((!client) || client && client.userid == null) {
 			return;
 		}
 
@@ -1313,10 +1318,10 @@ io.on("connection", function (socket) {
 		if (clients[socket.id].rooms.indexOf("controller") == -1) {
 			return;
 		}
-		for (let i = 0; i < turnDurations.length; i++) {
-			turnDurations[i] = parseInt(data) || 30000;
+		for (let i = 0; i < turnLengths.length; i++) {
+			turnLengths[i] = parseInt(data) || 30000;
 			normalTime = parseInt(data) || 30000;
-			// timeTillForfeitDurations[i] = parseInt(data) || 15000;
+			// forfeitLengths[i] = parseInt(data) || 15000;
 		}
 	});
 	socket.on("setForfeitLength", (data) => {
@@ -1324,8 +1329,8 @@ io.on("connection", function (socket) {
 		if (clients[socket.id].rooms.indexOf("controller") == -1) {
 			return;
 		}
-		for (let i = 0; i < turnDurations.length; i++) {
-			timeTillForfeitDurations[i] = parseInt(data) || 15000;
+		for (let i = 0; i < turnLengths.length; i++) {
+			forfeitLengths[i] = parseInt(data) || 15000;
 		}
 	});
 	socket.on("voteStarted", (data) => {
@@ -1616,7 +1621,8 @@ io.on("connection", function (socket) {
 	});
 
 	// send on connect:
-	// 	io.emit("banlist", banlist);
+	io.emit("banlist", banlist);
+	io.emit("bannedIPs", bannedIPs);
 	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
 });
 
@@ -1654,28 +1660,33 @@ function forfeitTurn(userid, cNum) {
 	let client = clients[index];
 	if (client != null && client.userid != null) {
 		if (client.is_sub) {
-			turnDurations[cNum] = normalTime * 2;
+			turnLengths[cNum] = normalTime * 2;
 		} else {
-			turnDurations[cNum] = normalTime;
+			turnLengths[cNum] = normalTime;
 		}
 	}
 
 
 	// emit turn times left:
-	emitTurnTimesLeft();
+	emitTurnExpirations();
 }
 
 
-function emitTurnTimesLeft() {
+function emitTurnExpirations() {
 	// calculate time left for each player
-	for (let i = 0; i < turnDurations.length; i++) {
+	for (let i = 0; i < turnLengths.length; i++) {
+		if (controlQueues[i].length == 0) {
+			turnExpirations[i] = turnLengths[i];
+			forfeitExpirations[i] = forfeitLengths[i];
+			continue;
+		}
 		let currentTime = Date.now();
 		let elapsedTime = currentTime - turnStartTimes[i];
-		let timeLeft = turnDurations[i] - elapsedTime;
+		let timeLeft = turnLengths[i] - elapsedTime;
 		let elapsedTimeSinceLastMove = currentTime - forfeitStartTimes[i];
-		let timeLeftForfeit = timeTillForfeitDurations[i] - elapsedTimeSinceLastMove;
-		turnTimesLeft[i] = timeLeft;
-		forfeitTimesLeft[i] = timeLeftForfeit;
+		let timeLeftForfeit = forfeitLengths[i] - elapsedTimeSinceLastMove;
+		turnExpirations[i] = timeLeft;
+		forfeitExpirations[i] = timeLeftForfeit;
 	}
 
 	// create current players list:
@@ -1686,17 +1697,18 @@ function emitTurnTimesLeft() {
 
 	// remove waitlisted people from viewer list:
 
-
 	io.emit("turnTimesLeft", {
-		turnTimesLeft: turnTimesLeft,
-		forfeitTimesLeft: forfeitTimesLeft,
-		turnLengths: turnDurations,
-		forfeitLengths: timeTillForfeitDurations,
-		viewers: [laglessClientUniqueIds[0], laglessClientUniqueIds[1], laglessClientUniqueIds[2], laglessClientUniqueIds[3], laglessClientUniqueIds[4]],
+		// todo: update:
 		currentPlayers: currentPlayers,
 		waitlists: waitlists,
 		locked: locked,
 	});
+
+	io.emit("turnExpirations", {
+		turnExpirations: turnExpirations,
+		forfeitExpirations: forfeitExpirations,
+	});
+
 }
 
 function resetTimers(userid, cNum) {
@@ -1706,9 +1718,9 @@ function resetTimers(userid, cNum) {
 	let client = clients[index];
 	if (client != null && client.userid != null) {
 		if (client.is_sub) {
-			turnDurations[cNum] = normalTime * 2;
+			turnLengths[cNum] = normalTime * 2;
 		} else {
-			turnDurations[cNum] = normalTime;
+			turnLengths[cNum] = normalTime;
 		}
 	}
 
@@ -1735,9 +1747,9 @@ function moveLine(cNum) {
 	let client = clients[index];
 	if (client != null && client.userid != null) {
 		if (client.is_sub) {
-			turnDurations[cNum] = normalTime * 2;
+			turnLengths[cNum] = normalTime * 2;
 		} else {
-			turnDurations[cNum] = normalTime;
+			turnLengths[cNum] = normalTime;
 		}
 	}
 
@@ -2007,24 +2019,32 @@ setInterval(function () {
 	}
 
 	// emit turn times left:
-	emitTurnTimesLeft();
+	emitTurnExpirations();
 
 	if (!queuesLocked) {
-		for (let i = 0; i < forfeitTimesLeft.length; i++) {
-			if (forfeitTimesLeft[i] < -450 && controlQueues[i][0] != null) {
-				// if (forfeitTimesLeft[i] < -450) {
+		for (let i = 0; i < forfeitExpirations.length; i++) {
+			if (forfeitExpirations[i] < -450 && controlQueues[i][0] != null) {
+				// if (forfeitExpirations[i] < -450) {
 				forfeitTurn(controlQueues[i][0], i);
 			}
 		}
 
-		for (let i = 0; i < turnTimesLeft.length; i++) {
-			if (turnTimesLeft[i] < -450) {
+		for (let i = 0; i < turnExpirations.length; i++) {
+			if (turnExpirations[i] < -450) {
 				moveLine(i);
 			}
 		}
 	}
 
-	io.emit("controlQueues", controlQueues);
+	let send = false;
+	for (let i = 0; i < controlQueues.length; i++) {
+		if (controlQueues[i].length > 0) {
+			send = true;
+		}
+	}
+	if (send) {
+		io.emit("controlQueues", controlQueues);
+	}
 
 	if (splitTimer != null) {
 		splitTimer.getCurrentTime();
@@ -2046,10 +2066,20 @@ setInterval(function () {
 }, 500);
 
 // do every once in a while:
-setInterval(function () {
+setInterval(() => {
 	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
 	io.emit("bannedIPs", bannedIPs);
 }, 10000);
+
+setInterval(() => {
+	io.emit("turnLengths", {
+		turnLengths: turnLengths,
+		forfeitLengths: forfeitLengths,
+	});
+	io.emit("viewers", {
+		viewers: [laglessClientUniqueIds[0], laglessClientUniqueIds[1], laglessClientUniqueIds[2], laglessClientUniqueIds[3], laglessClientUniqueIds[4]],
+	});
+}, 5000);
 
 function stream() {
 	if (laglessClientIds[0].length > 0) {

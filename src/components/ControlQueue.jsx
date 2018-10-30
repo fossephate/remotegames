@@ -1,25 +1,46 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 
-export default class ControlQueue extends PureComponent {
+// redux:
+import { connect } from "react-redux";
+
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+
+import { compose } from "recompose";
+import { withTheme } from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
+
+import "./ControlQueue.css";
+
+const styles = (theme) => ({
+	root: {
+		width: "100%",
+		backgroundColor: theme.palette.background.paper,
+	},
+});
+
+class ControlQueue extends PureComponent {
 
 	constructor(props) {
 		super(props);
 	}
 
-	state = {};
-
 	getQueue() {
 
 		let queue = [];
 		let usernameMap = this.props.usernameMap;
+		let userids = this.props.controlQueues[this.props.num - 1];
 
-		if (this.props.uniqueIDs.length == 0) {
-			return <li key="0" className="queueItem list-group-item" data-toggle="popover" tabIndex="0">The queue is empty.</li>
+		if (userids.length == 0) {
+			return <ListItem key="0">The queue is empty.</ListItem>;
 		}
 
-		for (let i = 0; i < this.props.uniqueIDs.length; i++) {
-			let username = this.props.usernameMap[this.props.uniqueIDs[i]];
-			let html = <li key={i} className="queueItem list-group-item" data-toggle="popover" tabIndex="0" uniqueid={this.props.uniqueIDs[i]}>{username}</li>;
+		for (let i = 0; i < userids.length; i++) {
+			let username = this.props.usernameMap[userids[i]];
+			let html = <ListItem button key={i} className="queueItem" data-toggle="popover" tabIndex="0" userid={userids[i]}><ListItemText primary={username}/></ListItem>;
 			queue.push(html);
 		}
 
@@ -27,12 +48,34 @@ export default class ControlQueue extends PureComponent {
 	}
 
 	render() {
-
+		const { classes } = this.props;
 		return (
-			<ul className="controlQueue list-group">
-				{this.getQueue()}
-			</ul>
+			<div className={classes.root}>
+				<List>
+					{this.getQueue()}
+				</List>
+			</div>
 		);
 	}
 
 }
+
+// ControlQueue.propTypes = {
+// 	controlQueues: PropTypes.arrayOf(
+// 		PropTypes.arrayOf(
+// 			PropTypes.string.isRequired
+// 		),
+// 	).isRequired
+// };
+
+const mapStateToProps = (state) => {
+	return {
+		controlQueues: state.controlQueues,
+	};
+};
+
+export default compose(
+	withTheme(),
+	withStyles(styles),
+	connect(mapStateToProps),
+)(ControlQueue);

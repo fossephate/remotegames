@@ -2,6 +2,9 @@
 #chat {
 	display: flex;
 	flex-direction: column;
-	justify-content: flex-end;
+	justify-content: space-between;
 	flex: 1;
+	/* max-height: 400px; */
+	grid-column: 2;
+	grid-row: 2;
 }

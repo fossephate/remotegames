@@ -3,6 +3,7 @@ import { takeEvery } from "redux-saga/effects";
 
 const handleActions = function* (params) {
 	yield [
+		// should be in chat.js:
 		takeEvery(types.SEND_MESSAGE, (action) => {
 			// modify payload:
 			// action.payload =

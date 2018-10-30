@@ -1,6 +1,8 @@
 import React, { PureComponent } from "react";
 
-export default class JoinLeaveQueueButton extends PureComponent {
+import Button from "@material-ui/core/Button";
+
+class JoinLeaveQueueButton extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -18,16 +20,13 @@ export default class JoinLeaveQueueButton extends PureComponent {
 		if (this.props.controlQueue.indexOf(this.props.myID) > -1) {
 			buttonType = "leaveQueue";
 			buttonText = "Leave Queue";
-
 		} else {
 			buttonType = "joinQueue"
 			buttonText = "Join Queue";
 		}
 
 		let elementID = buttonType + this.props.num;
-		let elementClass = buttonType + " btn btn-secondary";
-
-		return <button id={elementID} className={elementClass}>{buttonText}</button>;
+		return <Button variant="contained" id={elementID} className={buttonType}>{buttonText}</Button>;
 	}
 
 	render() {
@@ -39,3 +38,6 @@ export default class JoinLeaveQueueButton extends PureComponent {
 	}
 
 }
+
+
+export default JoinLeaveQueueButton;
