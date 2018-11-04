@@ -16,12 +16,10 @@ export default class Chat extends PureComponent {
 	render() {
 
 		return (
-			<React.Fragment>
-				<div id="chat" className="otborder">
-					<MessageList/>
-					<SendMessageForm/>
-				</div>
-			</React.Fragment>
+			<div id="chat" className="otborder" style={this.props.hide ? {display: "none"} : null}>
+				<MessageList/>
+				<SendMessageForm/>
+			</div>
 		);
 	}
 

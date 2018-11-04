@@ -2,7 +2,7 @@
 	width: 30%;
 }
 
-#loggedInStatus {
+#loggedInArea {
 	width: 100%;
 	border-radius: 4px;
 	text-align: center;
@@ -11,11 +11,15 @@
 	/* 	overflow-x: hidden; */
 	overflow-y: visible;
 	/* margin: 5px; */
+	max-height: 44px;
+	padding: 3px;
 }
 
 #logInRegister {
 	display: flex;
 	justify-content: space-evenly;
+	max-height: 44px;
+	padding: 3px;
 }
 
 #usernameDropdown {

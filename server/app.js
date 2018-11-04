@@ -1478,7 +1478,7 @@ io.on("connection", function (socket) {
 	socket.on("hostPeerSignalReply", function (data) {
 		io.to(data.id).emit("hostPeerSignal", data.data);
 	});
-
+	// video:
 	socket.on("hostPeerSignalV", function (data) {
 		io.emit("hostPeerSignalV", data);
 	});
@@ -1507,11 +1507,6 @@ io.on("connection", function (socket) {
 	/* ROOMS @@@@@@@@@@@@@@@@@@@@@@@@ */
 
 	socket.on("leave", function (room) {
-		let client = clients[socket.id];
-		let index = client.rooms.indexOf(room);
-		if (client.rooms.indexOf(room) > -1) {
-			client.rooms.splice(index, 1);
-		}
 		socket.leave(room);
 	});
 	socket.on("join", function (room) {
@@ -1529,16 +1524,7 @@ io.on("connection", function (socket) {
 				if (laglessList[i] != room) {
 					socket.leave(laglessList[i]);
 				}
-
-				let laglessIndex = client.rooms.indexOf(laglessList[i]);
-				if (client.rooms.indexOf(laglessList[i]) > -1) {
-					client.rooms.splice(laglessIndex, 1);
-				}
 			}
-		}
-
-		if (client.rooms.indexOf(room) == -1) {
-			client.rooms.push(room);
 		}
 		socket.join(room);
 	});
@@ -2024,7 +2010,6 @@ setInterval(function () {
 	if (!queuesLocked) {
 		for (let i = 0; i < forfeitExpirations.length; i++) {
 			if (forfeitExpirations[i] < -450 && controlQueues[i][0] != null) {
-				// if (forfeitExpirations[i] < -450) {
 				forfeitTurn(controlQueues[i][0], i);
 			}
 		}

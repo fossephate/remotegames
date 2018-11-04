@@ -28,8 +28,10 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let preloadedState = {
 
-	messages: [],
-
+	chat: {
+		messages: [],
+		userids: [],
+	},
 	controlQueues: [
 		[],
 		[],

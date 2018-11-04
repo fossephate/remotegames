@@ -1,18 +1,17 @@
 import * as types from "../constants/ActionTypes";
 import { takeEvery } from "redux-saga/effects";
 
+import handleChatActions from "./chat.js";
+
+// combine sagas?:
+// handles any outgoing actions w/ access to socket.io:
 const handleActions = function* (params) {
-	yield [
-		// should be in chat.js:
-		takeEvery(types.SEND_MESSAGE, (action) => {
-			// modify payload:
-			// action.payload =
-			params.socket.emit("chatMessage", { message: action.payload.message });
-		}),
-		// takeEvery(types.SEND_MESSAGE,  (action) => {
-		// }),
-	];
-}
+	let list = [];
+	list = list.concat(handleChatActions(params));
+
+	// yield to entire list:
+	yield list;
+};
 
 
 export default handleActions;
