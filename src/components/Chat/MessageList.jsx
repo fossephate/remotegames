@@ -17,18 +17,22 @@ class MessageList extends PureComponent {
 	// let element = document.getElementById("messageList");
 	// element.scrollTop = element.scrollHeight;
 
+	mapMessages() {
+		let messages = [];
+		for (let i = 0; i < this.props.messages.length; i++) {
+
+			messages.push(<Message key={this.props.messages[i].id} {...this.props.messages[i]}/>);
+		}
+		return messages;
+	}
+
 	render() {
 
 		return (
 			<React.Fragment>
 				<div id="messageList">
 					{
-						this.props.messages.map(message => (
-							<Message
-							key={message.id}
-							{...message}
-							/>
-						))
+						this.mapMessages()
 					}
 				</div>
 			</React.Fragment>
@@ -50,7 +54,7 @@ MessageList.propTypes = {
 
 const mapStateToProps = (state) => {
 	return {
-		messages: state.messages,
+		messages: state.chat.messages,
 	};
 };
 

@@ -5,10 +5,10 @@
 	flex-direction: row;
 	justify-content: center;
 	min-height: 60px;
+	width: 100%;
 }
 
 #messageBox {
-	display: flex;
-	width: 90%;
-	resize: none;
+	/* display: flex;
+	resize: none; */
 }

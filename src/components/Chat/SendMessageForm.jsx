@@ -18,6 +18,7 @@ class SendMessageForm extends PureComponent {
 
 		this.handleTextChange = this.handleTextChange.bind(this);
 		this.handleKeyPress = this.handleKeyPress.bind(this);
+		this.sendMessage = this.sendMessage.bind(this);
 
 		this.state = {
 			text: "",
@@ -30,36 +31,38 @@ class SendMessageForm extends PureComponent {
 		});
 	}
 
+	sendMessage() {
+		if (this.state.text !== "") {
+			this.props.sendMessage(this.state.text);
+			this.setState({ text: "" });
+		}
+	}
+
 	handleKeyPress(event) {
-		// if (event.key === "Enter") {
-		// 	event.preventDefault();
-		// 	if (input.value !== "") {
-		// 		this.props.sendMessage(input.value);
-		// 		input.value = "";
-		// 	}
-		// }
-		console.log(event);
+		if (event.key === "Enter") {
+			event.preventDefault();
+			this.sendMessage();
+		}
 	}
 
 
 	render() {
 
-		let input;
-
 		return (
 			<React.Fragment>
 				<div id="SendMessageForm">
-					{/* <TextField
+					<TextField
+						fullWidth
 						id="messageBox"
 						className="otborder"
 						placeholder="Send a message"
 						type="text"
 						margin="normal"
 						variant="outlined"
+						value={this.state.text}
 						onChange={this.handleTextChange}
-						onKeyPress={this.handleKeyPress}
-						/> */}
-					<textarea id="messageBox" className="otborder" type="text" placeholder="Send message"
+						onKeyPress={this.handleKeyPress}/>
+					{/*<textarea id="messageBox" className="otborder" type="text" placeholder="Send message"
 						onKeyPress={(e) => {
 						if (e.key === "Enter") {
 							e.preventDefault();
@@ -71,7 +74,8 @@ class SendMessageForm extends PureComponent {
 					}}
 					ref={(node) => {
 						input = node;
-					}}></textarea>
+					}}></textarea>*/}
+					<Button variant="contained" color="primary" onClick={this.sendMessage}>Send</Button>
 				</div>
 			</React.Fragment>
 		);

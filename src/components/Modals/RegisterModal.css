@@ -12,6 +12,7 @@
 
 .connectAnAccount {
 	display: flex;
-    justify-content: center;
     flex-direction: column;
+	justify-content: start;
+	margin-left: 50px;
 }

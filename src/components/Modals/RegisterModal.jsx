@@ -10,6 +10,7 @@ import Paper from "@material-ui/core/Paper";
 // components:
 import Modal from "./Modal.jsx";
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
+import MyCheckbox from "src/components/MyCheckbox.jsx"
 
 import "./RegisterModal.css";
 
@@ -33,6 +34,7 @@ export default class RegisterModal extends PureComponent {
 								<TextField id="registerEmail" className="" label="Email" type="email" autoComplete="email" margin="normal" variant="outlined"/>
 								<TextField id="registerPassword" className="" label="Password" type="password" autoComplete="current-password" margin="normal" variant="outlined"/>
 								<TextField id="registerPassword2" className="" label="Password" type="password" autoComplete="current-password" margin="normal" variant="outlined"/>
+								<MyCheckbox text={"I am over 13 years old"} handleChange={() => {}} checked={false}/>
 								<Button id="registerSubmit" className="" variant="contained" color="primary" onClick={() => {alert("Not yet implemented!")}}>Create Account</Button>
 							</div>
 

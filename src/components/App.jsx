@@ -1,3 +1,4 @@
+// react:
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
 
@@ -28,14 +29,12 @@ import ConnectAccounts from "src/components/ConnectAccounts.jsx";
 import Chat from "src/components/Chat/Chat.jsx";
 import LogInArea from "src/components/LogInArea.jsx";
 import ModalConductor from "src/components/Modals/ModalConductor.jsx";
-
 import LaglessView from "src/components/LaglessView.jsx";
 
-
+// secondary components:
 import MySlider from "src/components/MySlider.jsx";
 import VolumeSlider from "src/components/VolumeSlider.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx";
-
 
 
 import ThemeSwitch from "src/components/ThemeSwitch.jsx";
@@ -66,7 +65,11 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 // libs:
 // jquery:
-// let $ = require("jquery");
+let $ = require("jquery");
+window.$ = $;
+// bootstrap:
+import "bootstrap";
+import "bootstrap/dist/css/bootstrap.css";
 
 // snex:
 import SNEX from "@snex/react-connect";
@@ -81,11 +84,20 @@ const InputMaster = require("js/InputMaster.js");
 const textFitPercent = require("js/textfitpercent.js");
 const tools = require("js/tools.js");
 import Noty from "noty";
+import "noty/lib/noty.css";
 import localforage from "localforage";
 import swal from "sweetalert2";
 import SimplePeer from "simple-peer";
 import io from "socket.io-client";
 import _ from "lodash";
+
+// require("js/jsmpeg.min.js");
+// require("js/WSAvcPlayer.js");
+
+import Lagless1 from "js/lagless/lagless1.js";
+import Lagless2 from "js/lagless/lagless2.js";
+import Lagless3 from "js/lagless/lagless3.js";
+import Lagless4 from "js/lagless/lagless4.js";
 
 window.localforage = localforage;
 
@@ -96,7 +108,6 @@ let lastSplitTimeMS = 0;
 let loaded = false;
 let locked = false;
 window.player = {};
-let player4;
 let audio = document.createElement("audio");
 let audioConnected = false;
 let videoConnected = false;
@@ -108,6 +119,12 @@ let resizers = [];
 let resizeDebounceTimer;
 let resizeAvailable = true;
 let isMobile = false;
+
+window.lagless1 = null;
+window.lagless2 = null;
+window.lagless3 = null;
+window.lagless4 = null;
+let videoCanvas = null;
 
 // twitch lagless swap settings
 let tabsSwappedWithTwitch = [false, false, false, false];
@@ -137,16 +154,16 @@ let pingTime = 0;
 let restPos = 128;
 // Default 512*1024 (512kb).
 // Default 128*1024 (128kb)
-let videoBufferSize = 256 * 1024;
-let audioBufferSize = 128 * 1024;
+// let videoBufferSize = 256 * 1024;
+// let audioBufferSize = 128 * 1024;
 
 // "000000000000000000 128 128 128 128";
-let lagless1Port = 8001;
-let lagless2Port = 8002;
-let lagless3Port = 8003;
-let lagless4Port = 8004;
-
-let lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
+// let lagless1Port = 8001;
+// let lagless2Port = 8002;
+// let lagless3Port = 8003;
+// let lagless4Port = 8004;
+//
+// let lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
 
 // todo:
 // https://stackoverflow.com/questions/22624379/how-to-convert-letters-to-numbers-with-javascript
@@ -185,6 +202,7 @@ class App extends Component {
 		this.toggleLargescreen = this.toggleLargescreen.bind(this);
 
 		this.switchTabs = this.switchTabs.bind(this);
+		this.handleCanvas = this.handleCanvas.bind(this);
 
 		this.sendControllerState = this.sendControllerState.bind(this);
 
@@ -194,6 +212,7 @@ class App extends Component {
 
 		this.login = this.login.bind(this);
 		this.register = this.register.bind(this);
+		this.viewAccount = this.viewAccount.bind(this);
 
 		this.state = {
 
@@ -295,7 +314,6 @@ class App extends Component {
 
 	componentDidMount() {
 
-
 		console.log("restoring preferences");
 
 		// check if new:
@@ -361,8 +379,6 @@ class App extends Component {
 			$("#tab" + this.state.tab).trigger("click");
 			this.switchTabs(this.state.tab);
 
-			rebindUnbindTouchControls();
-
 			// wait a little longer so the joycon images load:
 			setTimeout(() => {
 				$("body").addClass("loaded");
@@ -415,7 +431,7 @@ class App extends Component {
 
 				if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
 					tabsSwappedWithTwitch[this.state.tab - 1] = true;
-					replaceWithTwitch(this.state.tab);
+					// replaceWithTwitch(this.state.tab);
 					// setTimeout(() => {
 					// socket.emit("leaveLagless");
 					// }, 4000);
@@ -446,7 +462,7 @@ class App extends Component {
 						conditions: ["docVisible"],
 					},
 				}).show();
-				replaceWithLagless(this.state.tab);
+				// replaceWithLagless(this.state.tab);
 			}
 			// todo: update with state:
 			if (locked != data.locked) {
@@ -478,7 +494,7 @@ class App extends Component {
 		let notLoggedIn = () => {
 			// todo: dispatch logout?
 			// replace with twitch until signed in:
-			replaceWithTwitch(this.state.tab);
+			// replaceWithTwitch(this.state.tab);
 			$("#tab1").addClass("disabled");
 			$("#tab3").addClass("disabled");
 			$("#tab4").addClass("disabled");
@@ -591,36 +607,8 @@ class App extends Component {
 
 		/* LAGLESS 1.0 */
 
-		let videoCanvas1 = $("#videoCanvas1")[0];
-		videoCanvas1.width = 1280;
-		videoCanvas1.height = 720;
-		let videoCanvas1Context = videoCanvas1.getContext("2d");
+		lagless1 = new Lagless1(socket);
 
-
-		socket.on("viewImage", (data) => {
-
-			let src = "data:image/jpeg;base64," + data;
-			if (src == "data:image/jpeg;base64,") {
-				socket.emit("restart");
-				return;
-			}
-			let image = new Image();
-			image.style = "max-width:100%; height:auto;";
-			image.onload = () => {
-				let imgWidth = image.width;
-				let imgHeight = image.height;
-				let canvasWidth = videoCanvas1.width;
-				let canvasHeight = videoCanvas1.height;
-				let ratio = (imgHeight / imgWidth);
-				let canvasRatio = canvasWidth / canvasHeight;
-				let ratioW = 1280 / $("#videoCanvas1").innerWidth();
-				let ratioH = 720 / $("#videoCanvas1").innerHeight();
-				let cWidth = $("#videoCanvas1").innerWidth();
-				videoCanvas1Context.clearRect(0, 0, canvasWidth, canvasHeight);
-				videoCanvas1Context.drawImage(image, 0, 0, cWidth * ratioW, cWidth * ratio * ratioH);
-			};
-			image.src = src;
-		});
 		// on settings change:
 		socket.on("lagless1Settings", (data) => {
 			this.setState({
@@ -633,15 +621,9 @@ class App extends Component {
 		});
 
 		/* LAGLESS 2.0 */
-		// Setup the WebSocket connection and start the player
-		let canvas2 = $("#videoCanvas2")[0];
-		// Default 512*1024 (512kb).
-		// Default 128*1024 (128kb)
-		// let player = new JSMpeg.Player(lagless2URL, {canvas: canvas2, video: true, audio: true, videoBufferSize: 256*1024, audioBufferSize: 128*1024, maxAudioLag: 0.5});
-		// player.maxAudioLag = 0.5;
-		// player.stop();
+		lagless2 = new Lagless2();
 
-		// on settings change:
+		// // on settings change:
 		socket.on("lagless2Settings", (data) => {
 			this.setState({
 				lagless2: {
@@ -651,94 +633,52 @@ class App extends Component {
 				},
 			});
 		});
-		socket.on("lagless2SettingsChange", (data) => {
-			if (this.state.tab != 2) {
-				return;
-			}
-			// try {
-			player.destroy();
-			// } catch (error) {
-			// 	console.log("player destroy error.");
-			// }
-			player = new JSMpeg.Player(lagless2URL, {
-				canvas: canvas2,
-				video: true,
-				audio: true,
-				videoBufferSize: videoBufferSize,
-				audioBufferSize: audioBufferSize,
-				maxAudioLag: 0.5
-			});
-			if (!this.state.audioThree) {
-				player.volume = this.state.volume / 100;
-			} else {
-				player.volume = 0;
-			}
-		});
+		// socket.on("lagless2SettingsChange", (data) => {
+		// 	if (this.state.tab != 2) {
+		// 		return;
+		// 	}
+		// 	// try {
+		// 	player.destroy();
+		// 	// } catch (error) {
+		// 	// 	console.log("player destroy error.");
+		// 	// }
+		// 	player = new JSMpeg.Player(lagless2URL, {
+		// 		canvas: canvas2,
+		// 		video: true,
+		// 		audio: true,
+		// 		videoBufferSize: videoBufferSize,
+		// 		audioBufferSize: audioBufferSize,
+		// 		maxAudioLag: 0.5
+		// 	});
+		// 	if (!this.state.audioThree) {
+		// 		player.volume = this.state.volume / 100;
+		// 	} else {
+		// 		player.volume = 0;
+		// 	}
+		// });
 
 		/* LAGLESS 3.0 */
-		let canvas3 = $("#videoCanvas3")[0];
-		// Create h264 player
-		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-		let wsavc = new WSAvcPlayer(canvas3, "webgl", 1, 35);
-		window.wsavc = wsavc;
-		wsavc.on("disconnected", () => console.log("WS Disconnected"));
-		wsavc.on("connected", () => console.log("WS connected"));
-		wsavc.on("frame_shift", (fbl) => {
-			// fb.innerText = "fl: " + fbl
-		});
-		wsavc.on("initalized", (payload) => {
-			console.log("Initialized", payload);
-		});
-		wsavc.on("stream_active", active => console.log("Stream is ", active ? "active" : "offline"));
-		wsavc.on("custom_event_from_server", event => console.log("got event from server", event));
 
-		// on settings change:
-		socket.on("lagless3Settings", (data) => {
-			this.setState({
-				lagless3: {
-					framerate: data.framerate,
-					videoBitrate: data.videoBitrate,
-					scale: data.scale,
-				},
-			});
-		});
-		socket.on("lagless3SettingsChange", (data) => {
-			if (this.state.tab != 3) {
-				return;
-			}
-			let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-			wsavc.connect(uri);
-		});
+		lagless3 = new Lagless3();
+		// // on settings change:
+		// socket.on("lagless3Settings", (data) => {
+		// 	this.setState({
+		// 		lagless3: {
+		// 			framerate: data.framerate,
+		// 			videoBitrate: data.videoBitrate,
+		// 			scale: data.scale,
+		// 		},
+		// 	});
+		// });
+		// socket.on("lagless3SettingsChange", (data) => {
+		// 	if (this.state.tab != 3) {
+		// 		return;
+		// 	}
+		// 	// wsavc.connect("wss://twitchplaysnintendoswitch.com/8003/");
+		// });
 
 		/* LAGLESS 4.0 */
-		let canvas4 = $("#videoCanvas4")[0];
-		let videoPeer = new SimplePeer({
-			initiator: false,
-			trickle: true
-		});
-		videoPeer.on("error", function (err) {
-			console.log("error", err)
-		});
-		videoPeer.on("signal", function (data) {
-			console.log("SIGNAL", JSON.stringify(data));
-			socket.emit("clientPeerSignalV", JSON.stringify(data));
-		});
-		videoPeer.on("connect", function () {
-			console.log("CONNECT");
-			videoPeer.send(Math.random());
-		});
-		videoPeer.on("data", function (data) {
-			console.log("data: " + data)
-		});
-		socket.on("hostPeerSignalV", function (data) {
-			videoPeer.signal(JSON.parse(data));
-		});
-		videoPeer.on("stream", function (stream) {
-			// got remote video stream, then show it in a video tag
-			canvas4.src = window.URL.createObjectURL(stream); // deprecated
-			// 	canvas4.srcObj = stream;
-			canvas4.play();
-		});
+		lagless4 = new Lagless4(socket);
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 
@@ -1005,22 +945,25 @@ class App extends Component {
 	register() {
 		this.setState({ currentModal: "REGISTER" });
 	}
+	viewAccount() {
+		this.setState({ currentModal: "ACCOUNT" });
+	}
 
 	// SNEX:
 	handleSnex = (controller) => {
 		controller.on("data", data => {
 			switch (data.key) {
 				case "UP":
-					masterInput.snexController.state.LStick.y = data.state ? 255 : 128;
+					masterInput.snexController.state.lstick.y = data.state ? 255 : 128;
 					break;
 				case "DOWN":
-					masterInput.snexController.state.LStick.y = data.state ? 0 : 128;
+					masterInput.snexController.state.lstick.y = data.state ? 0 : 128;
 					break;
 				case "LEFT":
-					masterInput.snexController.state.LStick.x = data.state ? 0 : 128;
+					masterInput.snexController.state.lstick.x = data.state ? 0 : 128;
 					break;
 				case "RIGHT":
-					masterInput.snexController.state.LStick.x = data.state ? 255 : 128;
+					masterInput.snexController.state.lstick.x = data.state ? 255 : 128;
 					break;
 				case "A":
 					masterInput.snexController.state.btns.a = data.state;
@@ -1109,6 +1052,7 @@ class App extends Component {
 
 			if (this.state.fullscreen) {
 				$("body").css("padding", "0");
+				$("#picture").css("grid-row", "1");
 				$("#picture").css("grid-column", "1/3");
 				this.setState({
 					controllerView: false,
@@ -1119,11 +1063,12 @@ class App extends Component {
 				$("body").addClass("hideScrollbar");
 				$(document).scrollTop(0);
 
-				tools.toggleFullScreen($("html")[0]);
+				tools.toggleFullscreen($("html")[0]);
 
 			} else {
 				console.log("exiting fullscreen");
 				$("body").css("padding", "");
+				$("#picture").css("grid-row", "");
 				$("#picture").css("grid-column", "");
 				$("body").removeClass("hideScrollbar");
 				this.setState({
@@ -1140,7 +1085,7 @@ class App extends Component {
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
 	exitFullscreen() {
 		if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-			this.toggleFullScreen(false);
+			this.toggleFullscreen(false);
 		}
 	}
 
@@ -1148,7 +1093,6 @@ class App extends Component {
 		this.setState({ largescreen: state }, () => {
 			if (this.state.largescreen && this.state.controllerView) {
 				this.setState({ controllerView: false });
-				rebindUnbindTouchControls();
 			} else if (!this.state.largescreen && !this.state.controllerView) {
 				this.setState({ controllerView: true });
 			}
@@ -1159,78 +1103,57 @@ class App extends Component {
 		this.setState({ currentPlayerChosen: cNum });
 	}
 
+	handleCanvas(ref) {
+		videoCanvas = ref;
+		console.log(ref);
+	}
+
 	switchTabs(tab) {
+
+		// first clean up / destroy instances before we switch:
+		// lagless 1:
+		if (tab != 1) {
+			socket.emit("leave", "lagless1");
+			lagless1.pause();
+		}
+		// lagless 2:
+		if (tab != 2) {
+			socket.emit("leave", "lagless2");
+			lagless2.pause();
+		}
+		// lagless 3:
+		if (tab != 3) {
+			socket.emit("leave", "lagless3");
+			lagless3.pause();
+		}
+		// lagless 4:
+		if (tab != 4) {
+			socket.emit("leave", "lagless4");
+			lagless4.pause();
+		}
+
+		// actually switch:
 		this.setState({ tab: tab }, () => {
 
-			setTimeout(() => {
-				// lagless 1:
-				if (tab == 1) {
-					socket.emit("join", "lagless1");
-				} else {
-					socket.emit("leave", "lagless1");
-				}
-
-				// lagless 2:
-				if (tab == 2) {
-					socket.emit("join", "lagless2");
-					//player.play();
-					try {
-						player.destroy();
-					} catch (error) {}
-					player = new JSMpeg.Player(lagless2URL, {
-						canvas: document.getElementById("videoCanvas2"),
-						video: true,
-						audio: true,
-						videoBufferSize: videoBufferSize,
-						audioBufferSize: audioBufferSize,
-						maxAudioLag: 0.5
-					});
-				} else {
-					socket.emit("leave", "lagless2");
-					// 		player.stop();
-					try {
-						player.destroy();
-					} catch (error) {}
-					player = new JSMpeg.Player(lagless2URL, {
-						canvas: document.getElementById("videoCanvas2"),
-						video: false,
-						audio: true,
-						videoBufferSize: videoBufferSize,
-						audioBufferSize: audioBufferSize,
-						maxAudioLag: 0.5
-					});
-				}
-
-				// lagless 3:
-				if (tab == 3) {
-					socket.emit("join", "lagless3");
-					let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-					wsavc.connect(uri);
-				} else {
-					socket.emit("leave", "lagless3");
-					try {
-						wsavc.disconnect();
-					} catch (error) {}
-				}
-
-				// lagless 4:
-				if (tab == 4) {
-					socket.emit("join", "lagless4");
-					if (!videoConnected) {
-						videoConnected = true;
-						socket.emit("requestVideo");
-					} else {
-						videoCanvas4.play();
-					}
-				} else {
-					socket.emit("leave", "lagless4");
-					// videoCanvas4.pause();
-				}
-
-			}, 0);
-
-			if (!this.state.largescreen && this.state.controllerView) {
-				rebindUnbindTouchControls();
+			// lagless 1:
+			if (tab == 1) {
+				socket.emit("join", "lagless1");
+				lagless1.resume(document.getElementById("videoCanvas1"));
+			}
+			// lagless 2:
+			if (tab == 2) {
+				socket.emit("join", "lagless2");
+				lagless2.resume(document.getElementById("videoCanvas2"));
+			}
+			// lagless 3:
+			if (tab == 3) {
+				socket.emit("join", "lagless3");
+				lagless3.resume(document.getElementById("videoCanvas3"));
+			}
+			// lagless 4:
+			if (tab == 4) {
+				socket.emit("join", "lagless4");
+				lagless4.resume(document.getElementById("videoCanvas4"));
 			}
 
 			// https://github.com/yoannmoinet/nipplejs/issues/39
@@ -1353,7 +1276,7 @@ class App extends Component {
 							<a id="tab3" className="nav-link" data-toggle="tab" href="#lagless3" onClick={() => {this.switchTabs(3)}}>Lagless 3</a>
 						</li>
 						<li className="nav-item">
-							<a id="tab4" className="nav-link disabled" data-toggle="tab" href="#lagless4" onClick={() => {this.switchTabs(4)}}>Lagless 4</a>
+							<a id="tab4" className="nav-link" data-toggle="tab" href="#lagless4" onClick={() => {this.switchTabs(4)}}>Lagless 4</a>
 						</li>
 						<li className="nav-item">
 							<a id="tab5" className="nav-link" data-toggle="tab" href="#lagless5" onClick={() => {this.switchTabs(5)}}>Lagless 5</a>
@@ -1364,56 +1287,26 @@ class App extends Component {
 						<SNEX type="snes-us" onConnection={this.handleSnex}/>
 					</ul>
 
-					<div id="picture" className="otborder" style={{width: this.state.hideChat ? "100%" : null }}>
+					<LogInArea
+						{...this.state}
+						userInfo={this.props.userInfo}
+						handleUsernameChange={this.onUsernameChange}
+						handleLogout={this.logout}
+						handleLogin={this.login}
+						handleRegister={this.register}
+						handleAccount={this.viewAccount}/>
 
-						{/* <LaglessView num={this.state.tab} controllerState={this.state.controllerViewState}/> */}
+					<div id="picture" className="otborder" style={{"gridColumn": this.state.hideChat ? "1/3" : null }}>
 
-						<div className="tab-content">
-							<div id="lagless1" className="tab-pane active">
-								<LaglessView
-									num={1}
-									controllerView={this.state.controllerView && (this.state.tab == 1)}
-									controllerState={this.state.controllerViewState}
-									largescreen={this.state.largescreen}
-									fullscreen={this.state.fullscreen}/>
-							</div>
-							<div id="lagless2" className="tab-pane">
-								<LaglessView
-									num={2}
-									controllerView={this.state.controllerView && (this.state.tab == 2)}
-									controllerState={this.state.controllerViewState}
-									largescreen={this.state.largescreen}
-									fullscreen={this.state.fullscreen}/>
-							</div>
-							<div id="lagless3" className="tab-pane">
-								<LaglessView
-									num={3}
-									controllerView={this.state.controllerView && (this.state.tab == 3)}
-									controllerState={this.state.controllerViewState}
-									largescreen={this.state.largescreen}
-									fullscreen={this.state.fullscreen}/>
-							</div>
-							<div id="lagless4" className="tab-pane">
-								{/* <LaglessView
-									num={4}
-									controllerView={this.state.controllerView && (this.state.tab == 4)}
-									controllerState={this.state.controllerViewState}
-									largescreen={this.state.largescreen}
-									fullscreen={this.state.fullscreen}/> */}
-							</div>
-							<div id="lagless5" className="tab-pane">
-								{/* <LaglessView
-									num={5}
-									controllerView={this.state.controllerView && (this.state.tab == 5)}
-									controllerState={this.state.controllerViewState}
-									largescreen={this.state.largescreen}
-									fullscreen={this.state.fullscreen}/> */}
-								<div className="video-container">
-									<video></video>
-								</div>
-								<table id="server-list"></table>
-							</div>
-						</div>
+						<LaglessView
+							num={this.state.tab}
+							controllerView={this.state.controllerView}
+							controllerState={this.state.controllerViewState}
+							largescreen={this.state.largescreen}
+							fullscreen={this.state.fullscreen}
+							getCanvasRef={this.handleCanvas}
+							loggedIn={this.props.userInfo.loggedIn}
+							tabsSwappedWithTwitch={tabsSwappedWithTwitch}/>
 
 						<div id="laglessBar" className="laglessBar otborder">
 							<ViewerList uniqueIDs={this.props.viewers} usernameMap={this.state.usernameMap}/>
@@ -1438,20 +1331,11 @@ class App extends Component {
 						</div>
 					</div>
 
-					<LogInArea
-						{...this.state}
-						userInfo={this.props.userInfo}
-						handleUsernameChange={this.onUsernameChange}
-						handleLogout={this.logout}
-						handleLogin={this.login}
-						handleRegister={this.register}/>
-
-					<Chat/>
+					<Chat hide={this.state.hideChat}/>
 
 					<div id="barUnderTheStream" className="otborder">
 
 						<div id="playersContainer" className="otborder">
-							<button id="hidePlayers" className="btn btn-secondary collapseButton" data-toggle="" data-target="#players" collapsed="false">Hide</button>
 							<div id="players" className="collapse show collapsible">
 
 								<Player
@@ -1573,7 +1457,7 @@ class App extends Component {
 												handleChange={(value) => {this.setState({lagless1: {scale: value}})}}
 												onAfterChange={(value) => {socket.emit("lagless1Settings", {scale: parseInt(value)});}}/>
 										</div>
-										FPS: <span>{this.state.lagless1.framerate}</span>
+										FPS: <span>{this.state.lagless1.framerate}</span><br/>
 										<div className="mysliderContainer">
 											<MySlider min={1} max={15} step={1} value={this.state.lagless1.framerate}
 												handleChange={(value) => {this.setState({lagless1: {framerate: value}})}}
@@ -1585,7 +1469,7 @@ class App extends Component {
 										Lagless 2 Settings<br/>
 										<hr/>
 
-										FPS: <span>{this.state.lagless2.framerate}</span>
+										FPS: <span>{this.state.lagless2.framerate}</span><br/>
 										Bitrate: <span>{this.state.lagless2.videoBitrate}</span>
 										<div className="mysliderContainer">
 											<MySlider min={0} max={2} step={0.05} value={this.state.lagless2.videoBitrate}
@@ -1604,7 +1488,7 @@ class App extends Component {
 										Lagless 3 Settings<br/>
 										<hr/>
 
-										FPS: <span>{this.state.lagless3.framerate}</span>
+										FPS: <span>{this.state.lagless3.framerate}</span><br/>
 										Bitrate: <span>{this.state.lagless3.videoBitrate}</span>
 										<div className="mysliderContainer">
 											<MySlider min={0} max={2} step={0.05} value={this.state.lagless3.videoBitrate}
@@ -1621,7 +1505,7 @@ class App extends Component {
 								</div>
 
 								<div id="waitlistContainer" className="settingsPanel otborder">
-									<Waitlist usernameMap={this.state.usernameMap} uniqueIDs={this.state.waitlists[this.state.tab - 1]} myID={this.state.myUniqueID}/>
+									<Waitlist usernameMap={this.state.usernameMap} userids={this.state.waitlists[this.state.tab - 1]} myID={this.props.userInfo.userid}/>
 								</div>
 							</div>
 						</div>
@@ -1816,208 +1700,6 @@ function getMouseInput2(e) {
 // https://stackoverflow.com/questions/10000083/javascript-event-handler-with-parameters
 
 
-/* TOUCH CONTROLS */
-
-/* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-let leftJoyStick = {
-	zone: document.querySelector("#leftStick"),
-	mode: "static",
-	catchDistance: 10,
-	color: "#FF3C28",
-	position: {
-		left: "50%",
-		top: "50%"
-	},
-	size: 60
-};
-let rightJoyStick = {
-	zone: document.querySelector("#rightStick"),
-	mode: "static",
-	catchDistance: 10,
-	color: "#0AB9E6",
-	position: {
-		left: "50%",
-		top: "50%"
-	},
-	size: 60
-};
-
-let leftStick;
-let rightStick;
-
-function bindJoysticks() {
-	let stickSize = 60;
-	let s1 = stickSize;
-	let s2 = stickSize / 2;
-	leftStick.on("start", function (evt, data) {
-		let pos = data.frontPosition;
-		pos.x = parseInt(((pos.x + s2) / s1) * 255);
-		pos.y = parseInt(((pos.y + s2) / s1) * 255);
-		pos.y = 255 - pos.y;
-		controller.lstick.x = pos.x;
-		controller.lstick.y = pos.y;
-	}).on("end", function (evt, data) {
-		controller.lstick.x = restPos;
-		controller.lstick.y = restPos;
-	}).on("move", function (evt, data) {
-		let pos = data.instance.frontPosition;
-		pos.x = parseInt(((pos.x + s2) / s1) * 255);
-		pos.y = parseInt(((pos.y + s2) / s1) * 255);
-		pos.y = 255 - pos.y;
-		controller.lstick.x = pos.x;
-		controller.lstick.y = pos.y;
-	})
-
-	rightStick.on("start", function (evt, data) {
-		let pos = data.frontPosition;
-		pos.x = parseInt(((pos.x + s2) / s1) * 255);
-		pos.y = parseInt(((pos.y + s2) / s1) * 255);
-		pos.y = 255 - pos.y;
-		controller.rstick.x = pos.x;
-		controller.rstick.y = pos.y;
-	}).on("end", function (evt, data) {
-		controller.rstick.x = restPos;
-		controller.rstick.y = restPos;
-	}).on("move", function (evt, data) {
-		let pos = data.instance.frontPosition;
-		pos.x = parseInt(((pos.x + s2) / s1) * 255);
-		pos.y = parseInt(((pos.y + s2) / s1) * 255);
-		pos.y = 255 - pos.y;
-		controller.rstick.x = pos.x;
-		controller.rstick.y = pos.y;
-	})
-}
-// leftStick = nipplejs.create(leftJoyStick);
-// rightStick = nipplejs.create(rightJoyStick);
-// bindJoysticks();
-
-function onButtonPress(event) {
-
-	event.preventDefault();
-
-	masterInput.currentInputMode = "touch";
-
-	if (event.target.id == null) {
-		return;
-	}
-	if (event.target.id == "dpadButtons" || event.target.id == "abxyButtons") {
-		return;
-	}
-
-	let value = 0;
-	if (event.type == "mousedown" || event.type == "touchstart" || event.type == "pointerdown") {
-		value = 1;
-		//swal("touchstart");
-	} else if (event.type == "mouseup" || event.type == "mouseleave" || event.type == "touchend" || event.type == "pointerup" || event.type == "pointerout") {
-		value = 0;
-		//swal("touchend");
-	} else if (event.type == "touchmove") {
-		// todo: make an equivalent to mouseleave since touchleave doesn't exist :/
-	}
-
-	let button = event.target.id;
-
-	let oldState = JSON.stringify(controller);
-
-	switch (button) {
-		case "upButton":
-			controller.btns.up = value;
-			break;
-		case "downButton":
-			controller.btns.down = value;
-			break;
-		case "leftButton":
-			controller.btns.left = value;
-			break;
-		case "rightButton":
-			controller.btns.right = value;
-			break;
-		case "aButton":
-			controller.btns.a = value;
-			break;
-		case "bButton":
-			controller.btns.b = value;
-			break;
-		case "xButton":
-			controller.btns.x = value;
-			break;
-		case "yButton":
-			controller.btns.y = value;
-			break;
-
-		case "lButton":
-			controller.btns.l = value;
-			break;
-		case "zlButton":
-			controller.btns.zl = value;
-			break;
-		case "rButton":
-			controller.btns.r = value;
-			break;
-		case "zrButton":
-			controller.btns.zr = value;
-			break;
-
-		case "minusButton":
-			controller.btns.minus = value;
-			break;
-		case "captureButton":
-			controller.btns.capture = value;
-			break;
-
-		case "plusButton":
-			controller.btns.plus = value;
-			break;
-		case "homeButton":
-			controller.btns.home = value;
-			break;
-	}
-
-	let newState = JSON.stringify(controller);
-
-	if (newState == oldState) {
-		return;
-	}
-
-	// if (controlQueues[0].indexOf(myUniqueID) == -1) {
-	// 	socket.emit("joinQueue", currentPlayerChosen);
-	// }
-}
-
-function rebindUnbindTouchControls() {
-	let buttonsList = ["#dpadButtons", "#abxyButtons", "#leftJoyConOther", "#rightJoyConOther"];
-
-	if (settings.touchControls) {
-
-		for (let i = 0; i < buttonsList.length; i++) {
-			$(buttonsList[i]).bind("touchstart", onButtonPress);
-			$(buttonsList[i]).bind("touchmove", onButtonPress);
-			$(buttonsList[i]).bind("touchend", onButtonPress);
-			$(buttonsList[i]).bind("mousedown", onButtonPress);
-			$(buttonsList[i]).bind("mouseup", onButtonPress);
-			$(buttonsList[i]).bind("mouseleave", onButtonPress);
-			$(buttonsList[i]).bind("pointerdown", onButtonPress);
-			$(buttonsList[i]).bind("pointerup", onButtonPress);
-			$(buttonsList[i]).bind("pointerout", onButtonPress);
-		}
-
-	} else {
-
-		for (let i = 0; i < buttonsList.length; i++) {
-			$(buttonsList[i]).unbind("touchstart", onButtonPress);
-			$(buttonsList[i]).unbind("touchmove", onButtonPress);
-			$(buttonsList[i]).unbind("touchend", onButtonPress);
-			$(buttonsList[i]).unbind("mousedown", onButtonPress);
-			$(buttonsList[i]).unbind("mouseup", onButtonPress);
-			$(buttonsList[i]).unbind("mouseleave", onButtonPress);
-			$(buttonsList[i]).unbind("pointerdown", onButtonPress);
-			$(buttonsList[i]).unbind("pointerup", onButtonPress);
-			$(buttonsList[i]).unbind("pointerout", onButtonPress);
-		}
-
-	}
-}
-
 $(window).resize(_.throttle((event) => {
 	// console.log("resizing.");
 	// hack:
@@ -2032,93 +1714,6 @@ $(window).resize(_.throttle((event) => {
 		resizers[i].resize();
 	}
 }, 1000));
-
-function replaceWithTwitch(tab) {
-
-	let twitchIFrame = '<iframe id="twitchVideo" class="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameborder="0" scrolling="no" allowfullscreen="true"></iframe>';
-
-	if (tab == 1) {
-		$("#videoCanvas1")[0].style.display = "none";
-		$("#videoCanvas1").after(twitchIFrame);
-	} else {
-		// 		$("#tab1").addClass("disabled");
-	}
-
-	if (tab == 2) {
-		try {
-			player.stop();
-		} catch (error) {
-			console.log("player not defined");
-		}
-		$("#videoCanvas2")[0].style.display = "none";
-		$("#videoCanvas2").after(twitchIFrame);
-	} else {}
-
-	if (tab == 3) {
-		wsavc.disconnect();
-		$("#videoCanvas3")[0].style.display = "none";
-		$("#videoCanvas3").after(twitchIFrame);
-	} else {}
-
-	if (tab == 4) {
-		try {
-			// 			player.stop();
-		} catch (error) {
-			// 			console.log("player not defined");
-		}
-		$("#videoCanvas4")[0].style.display = "none";
-		$("#videoCanvas4").after(twitchIFrame);
-	} else {}
-
-	if (tab == 5) {
-		player5.stop();
-		$("#videoCanvas5")[0].style.display = "none";
-		$("#videoCanvas5").after(twitchIFrame);
-	} else {}
-
-	// socket.emit("leaveLagless");
-}
-
-function replaceWithLagless(tab) {
-
-	if (tab == 1) {
-		socket.emit("join", "lagless1");
-		$("#videoCanvas1")[0].style.display = "";
-		$("#twitchVideo").remove();
-	} else {
-		// 		$("#tab1").removeClass("disabled");
-	}
-
-	if (tab == 2) {
-		player.play();
-		$("#videoCanvas2")[0].style.display = "";
-		$("#twitchVideo").remove();
-	} else {}
-
-	if (tab == 3) {
-		let uri = "wss://twitchplaysnintendoswitch.com/" + lagless3Port + "/";
-		wsavc.connect(uri);
-
-		$("#videoCanvas3")[0].style.display = "";
-		$("#twitchVideo").remove();
-	} else {
-		// 		$("#tab3").removeClass("disabled");
-	}
-
-	if (tab == 4) {
-		$("#videoCanvas4")[0].style.display = "";
-		$("#twitchVideo").remove();
-	} else {}
-
-	if (tab == 5) {
-		player.play();
-		$("#videoCanvas5")[0].style.display = "";
-		$("#twitchVideo").remove();
-	} else {}
-}
-
-window.replaceWithTwitch = replaceWithTwitch;
-window.replaceWithLagless = replaceWithLagless;
 
 /* FORCE HTTPS */
 if (location.protocol != "https:") {

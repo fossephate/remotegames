@@ -5,7 +5,7 @@ import "./Message.css";
 
 const Message = ({ message, username, userid }) => (
 	<div className="message">
-		{username}: {message}
+		<b>{username}</b> {message}
 	</div>
 );
 

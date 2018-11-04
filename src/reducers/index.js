@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import messages from "./messages.js";
+import chat from "./chat.js";
 import controlQueues from "./controlQueues.js";
 import viewers from "./viewers.js";
 import turnTimers from "./turnTimers.js";
@@ -7,7 +7,7 @@ import turnTimers from "./turnTimers.js";
 import userInfo from "./userInfo.js";
 
 const rootReducer = combineReducers({
-	messages,
+	chat,
 	controlQueues,
 	viewers,
 	turnTimers,

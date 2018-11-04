@@ -4,6 +4,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 // import FormHelperText from "@material-ui/core/FormHelperText";
 // import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+// import InputLabel from "@material-ui/core/InputLabel";
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import FilledInput from "@material-ui/core/FilledInput";
 
 export default class UsernameDropdown extends PureComponent {
 
@@ -44,19 +47,19 @@ export default class UsernameDropdown extends PureComponent {
 		}
 		return (
 			<React.Fragment>
-				{/* <div id="usernameDropdown" className="dropdown show"> */}
-					<span className="align-self-center">Logged in as: </span>
-					<Select
-						variant="filled"
-						value={usernameIndex}
-						onChange={this.props.handleChange}
-						inputProps={{
-							name: "username",
-							id: "usernameDropdown",
-			            }}>
-						{this.getUsernameList()}
-					</Select>
-				{/* </div> */}
+				{/* <InputLabel htmlFor="usernameDropdown">
+					Logged in as
+				</InputLabel> */}
+				<Select
+					value={usernameIndex}
+					onChange={this.props.handleChange}
+					input={<OutlinedInput labelWidth={0}/>}
+					inputProps={{
+						name: "username",
+						id: "usernameDropdown",
+		            }}>
+					{this.getUsernameList()}
+				</Select>
 			</React.Fragment>
 		);
 	}
