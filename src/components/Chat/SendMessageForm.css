@@ -3,12 +3,33 @@
 #SendMessageForm {
 	display: flex;
 	flex-direction: row;
-	justify-content: center;
-	min-height: 60px;
+	justify-content: space-evenly;
+	align-items: center;
 	width: 100%;
+	min-height: 45px;
+	height: 10%;
 }
 
 #messageBox {
-	/* display: flex;
-	resize: none; */
+	display: flex;
+	resize: none;
+	width: 100%;
+	border-radius: 6px;
+}
+
+#messageBox:focus {
+	/* border-color: #0AB9E655; */
+	outline-offset: 0px !important;
+	outline: none !important;
+
+	box-shadow: 0 0 3px blue !important;
+	-moz-box-shadow: 0 0 3px blue !important;
+	-webkit-box-shadow: 0 0 3px blue !important;
+}
+
+.messageBoxContainer {
+	width: 70%;
+	/* font-size: 18px; */
+	line-height: 20px;
+	font-size: inherit !important;
 }

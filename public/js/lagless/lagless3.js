@@ -3,8 +3,6 @@
 export default class Lagless3 {
 
 	constructor() {
-		// this.canvas = canvas;
-		// this.context = this.canvas.getContext("2d");
 		this.canvas = null;
 		this.player = null;
 
@@ -14,7 +12,7 @@ export default class Lagless3 {
 
 	pause() {
 		try {
-			this.player.destroy();
+			this.player.disconnect();
 		} catch (error) {}
 	}
 

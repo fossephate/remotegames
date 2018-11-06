@@ -17,7 +17,7 @@ class JoinLeaveQueueButton extends PureComponent {
 		let buttonText;
 		let buttonType;
 
-		if (this.props.controlQueue.indexOf(this.props.myID) > -1) {
+		if (this.props.controlQueue.indexOf(this.props.userid) > -1) {
 			buttonType = "leaveQueue";
 			buttonText = "Leave Queue";
 		} else {

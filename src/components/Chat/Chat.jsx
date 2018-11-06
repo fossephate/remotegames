@@ -1,13 +1,30 @@
+// react:
 import React, { PureComponent } from "react";
-
-import "./Chat.css";
 
 import MessageList from "./MessageList.jsx";
 import SendMessageForm from "./SendMessageForm.jsx";
 
+// material ui:
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
 
 
-export default class Chat extends PureComponent {
+// jss:
+
+const styles = (theme) => ({
+	root: {
+		display: "flex",
+		flexDirection: "column",
+		justifyContent: "space-between",
+		flex: "1",
+		gridColumn: "2",
+		gridRow: "2",
+		padding: "5px",
+	},
+});
+
+// @withStyles(styles)
+class Chat extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -15,12 +32,19 @@ export default class Chat extends PureComponent {
 
 	render() {
 
+		const { classes } = this.props;
+
 		return (
-			<div id="chat" className="otborder" style={this.props.hide ? {display: "none"} : null}>
+			<Paper id="chat" className={classes.root} style={this.props.hide ? {display: "none"} : null}>
 				<MessageList/>
 				<SendMessageForm/>
-			</div>
+			</Paper>
 		);
 	}
 
 }
+
+
+
+// export default Chat;
+export default withStyles(styles)(Chat);

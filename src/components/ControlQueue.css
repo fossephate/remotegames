@@ -21,6 +21,10 @@
 	width: 100%;
 }
 
+.queueItemHighlighted {
+	background-color: #DDE263;
+}
+
 #controlQueues {
 	display: flex;
 }

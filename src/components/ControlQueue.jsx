@@ -1,9 +1,11 @@
+// react:
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
 // redux:
 import { connect } from "react-redux";
 
+// material ui:
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -35,12 +37,13 @@ class ControlQueue extends PureComponent {
 		let userids = this.props.controlQueues[this.props.num - 1];
 
 		if (userids.length == 0) {
-			return <ListItem key="0">The queue is empty.</ListItem>;
+			return <ListItem key="0"><ListItemText primary="The queue is empty."/></ListItem>;
 		}
 
 		for (let i = 0; i < userids.length; i++) {
 			let username = this.props.usernameMap[userids[i]];
-			let html = <ListItem button key={i} className="queueItem" data-toggle="popover" tabIndex="0" userid={userids[i]}><ListItemText primary={username}/></ListItem>;
+			let listItemClass = (this.props.userid == userids[i]) ? "queueItem queueItemHighlighted" : "queueItem";
+			let html = <ListItem button key={i} className={listItemClass} userid={userids[i]}><ListItemText primary={username}/></ListItem>;
 			queue.push(html);
 		}
 
@@ -70,6 +73,7 @@ class ControlQueue extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
+		userid: state.userInfo.userid,
 		controlQueues: state.controlQueues,
 	};
 };

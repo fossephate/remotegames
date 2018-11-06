@@ -122,6 +122,9 @@ let forfeitStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
 let moveLineTimers = [null, null, null, null];
 let forfeitTimers = [null, null, null, null];
 
+let numberOfLastFewMessages = 5;
+let lastFewMessages = [];
+
 let turnExpirations = [0, 0, 0, 0];
 let forfeitExpirations = [0, 0, 0, 0];
 
@@ -791,6 +794,13 @@ io.on("connection", function (socket) {
 			username: client.username,
 			message: data.message,
 		};
+		// store for when people refresh:
+		lastFewMessages.push(msgObj);
+		// keep only #numberOfLastFewMessages
+		if (lastFewMessages.length > numberOfLastFewMessages) {
+			lastFewMessages.shift();
+		}
+		// send to everyone:
 		io.emit("chatMessage", msgObj);
 	});
 
@@ -1570,9 +1580,9 @@ io.on("connection", function (socket) {
 			return;
 		}
 
-		// 		console.log("ip?: " + socket.conn.transport.socket._socket.remoteAddress);
-		// 		console.log("ip?2: " + socket.handshake.headers['x-forwarded-for'].split(",")[0]);
-		console.log("username: " + data.username + " id: " + data.id + " ip: " + data.ip);
+		// console.log("ip?: " + socket.conn.transport.socket._socket.remoteAddress);
+		// console.log("ip?2: " + socket.handshake.headers['x-forwarded-for'].split(",")[0]);
+		// console.log("username: " + data.username + " id: " + data.id + " ip: " + data.ip);
 
 		// return if banned:
 		if (client.is_perma_banned || client.is_temp_banned) {
@@ -1607,9 +1617,12 @@ io.on("connection", function (socket) {
 	});
 
 	// send on connect:
-	io.emit("banlist", banlist);
-	io.emit("bannedIPs", bannedIPs);
-	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
+	socket.emit("banlist", banlist);
+	socket.emit("bannedIPs", bannedIPs);
+	socket.emit("usernameMap", uniqueIDToPreferredUsernameMap);
+	for (let i = 0; i < lastFewMessages.length; i++) {
+		socket.emit("chatMessage", lastFewMessages[i]);
+	}
 });
 
 setInterval(function () {
@@ -1686,8 +1699,8 @@ function emitTurnExpirations() {
 	io.emit("turnTimesLeft", {
 		// todo: update:
 		currentPlayers: currentPlayers,
-		waitlists: waitlists,
-		locked: locked,
+		// waitlists: waitlists,
+		// locked: locked,
 	});
 
 	io.emit("turnExpirations", {
@@ -1758,15 +1771,6 @@ moveLine(3);
 
 setInterval(function () {
 
-
-	// get all connected id's
-	let ids = Object.keys(io.sockets.sockets);
-
-	// 	// remove any clients not still connected:
-	// 	for (let i = 0; i < laglessClientIds.length; i++) {
-	// 		laglessClientIds[i] = laglessClientIds[i].filter(value => -1 !== ids.indexOf(value));
-	// 	}
-
 	io.in("lagless1").clients((error, clientIDs) => {
 		if (error) throw error;
 		laglessClientIds[0] = clientIDs;
@@ -1788,44 +1792,19 @@ setInterval(function () {
 		laglessClientIds[4] = clientIDs;
 	});
 
-	laglessClientUniqueIds[0] = [];
-	laglessClientUniqueIds[1] = [];
-	laglessClientUniqueIds[2] = [];
-	laglessClientUniqueIds[3] = [];
-
 	// create viewer list:
-	for (let i = 0; i < laglessClientIds[0].length; i++) {
-		let client = clients[laglessClientIds[0][i]];
-		if (client && client.userid) {
-			laglessClientUniqueIds[0].push(client.userid);
+	// for each lagless:
+	for (let i = 0; i < laglessClientIds.length; i++) {
+		// reset:
+		laglessClientUniqueIds[i] = [];
+		// for each user:
+		for (let j = 0; j < laglessClientIds[i].length; j++) {
+			let client = clients[laglessClientIds[i][j]];
+			if (client && client.userid) {
+				laglessClientUniqueIds[i].push(client.userid);
+			}
 		}
 	}
-	for (let i = 0; i < laglessClientIds[1].length; i++) {
-		let client = clients[laglessClientIds[1][i]];
-		if (client && client.userid) {
-			laglessClientUniqueIds[1].push(client.userid);
-		}
-	}
-	for (let i = 0; i < laglessClientIds[2].length; i++) {
-		let client = clients[laglessClientIds[2][i]];
-		if (client && client.userid) {
-			laglessClientUniqueIds[2].push(client.userid);
-		}
-	}
-	for (let i = 0; i < laglessClientIds[3].length; i++) {
-		let client = clients[laglessClientIds[3][i]];
-		if (client && client.userid) {
-			laglessClientUniqueIds[3].push(client.userid);
-		}
-	}
-
-
-	// reset / copy waitlists:
-	// let oldWaitlists = [];
-	//
-	// for (var i = 0; i < waitlists.length; i++) {
-	// 	oldWaitlists.push(waitlists[i].slice());
-	// }
 
 	waitlists = [
 		[],
@@ -1835,101 +1814,8 @@ setInterval(function () {
 		[],
 	];
 
-
+	// for each lagless:
 	for (let i = 0; i < waitlists.length; i++) {
-
-
-		// // check if lagless tab is over capacity:
-		// if (laglessClientIds[i].length >= waitlistMaxes[i]) { // >= 10/12/18
-		// 	// the number of people we need to put into the waitlist:
-		// 	let numberOfPeopleToWaitlist = laglessClientIds[i].length - waitlistMaxes[i];
-		// 	let exemptCounter = 0;
-		//
-		// 	// console.log("# to waitlist: " + numberOfPeopleToWaitlist);
-		//
-		// 	// remove anyone exempt by being in a queue, with a position less than 5:
-		// 	let laglessClientIdsCopy = laglessClientIds[i].slice(0);
-		// 	console.log(laglessClientIdsCopy);
-		// 	for (let j = 0; j < laglessClientIds[i].length; j++) {
-		// 		let clientIndex = findClientByID(laglessClientIds[i][j]);
-		// 		let client = clients[clientIndex];
-		// 		if (client == null) {
-		// 			// console.log("client was null");
-		// 			continue;
-		// 		}
-		// 		// exempt if they aren't signed in:
-		// 		if (client.userid == null) {
-		// 			let index = laglessClientIdsCopy.indexOf(client.id);
-		// 			if (index > -1) {
-		// 				laglessClientIdsCopy.splice(index);
-		// 			} else {
-		// 				// console.log("index was null1");
-		// 			}
-		// 		}
-		// 		if (client.userid != null) {
-		// 			// mods are exempt:
-		// 			//if (client.is_mod) {
-		// 			//	laglessClientIds[0]Copy.splice(laglesss1ClientIdsCopy.indexOf(client.id));
-		// 			//	exemptCounter++;
-		// 			//} else {
-		// 			for (let k = 0; k < controlQueues.length; k++) {
-		// 				let pos = controlQueues[k].indexOf(client.userid);
-		// 				// if exempt:
-		// 				if (pos > -1 && pos < minQueuePositions[i]) {
-		// 					let index = laglessClientIdsCopy.indexOf(client.id);
-		// 					if (index > -1) {
-		// 						laglessClientIdsCopy.splice(index);
-		// 					} else {
-		// 						// console.log("index was null2");
-		// 					}
-		// 					exemptCounter++;
-		// 				}
-		// 			}
-		// 			//}
-		// 		}
-		// 	}
-		//
-		// 	// console.log("exempt counter: " + exemptCounter);
-		// 	console.log(laglessClientIdsCopy);
-		//
-		//
-		// 	// now we have a list of non-auto-exempt people:
-		// 	// sort them by the time that they joined, and exempt more people until the queue limit is met
-		//
-		// 	// get the actual client objects:
-		// 	let laglessXClients = [];
-		// 	for (let j = 0; j < laglessClientIdsCopy.length; j++) {
-		// 		let clientIndex = findClientByID(laglessClientIdsCopy[j]);
-		// 		let client = clients[clientIndex];
-		// 		if (client == null) {
-		// 			// console.log("client was null2.");
-		// 		} else {
-		// 			laglessXClients.push(client);
-		// 		}
-		// 	}
-		//
-		// 	// sort by time joined:
-		// 	laglessXClients = _.sortBy(laglessXClients, "joinTime");
-		//
-		// 	// pick the first X to be exempted:
-		// 	while (laglessXClients.length > numberOfPeopleToWaitlist) {
-		// 		laglessXClients.shift();
-		// 		exemptCounter++;
-		// 	}
-		// 	// console.log(laglessXClients);
-		// 	// console.log(laglessClientIdsCopy);
-		//
-		//
-		// 	// our final waitlist is everyone in laglessXClients
-		// 	for (let j = 0; j < laglessXClients.length; j++) {
-		// 		let client = laglessXClients[j];
-		// 		if (client != null && client.userid != null) {
-		// 			waitlists[i].push(client.userid);
-		// 		} else {
-		// 			// io.to(client.id).emit("replaceWithTwitchLock");
-		// 		}
-		// 	}
-		// }
 
 		// check if lagless tab is over capacity:
 		if (laglessClientUniqueIds[i].length >= waitlistMaxes[i]) { // >= 10/12/18
@@ -2048,13 +1934,16 @@ setInterval(function () {
 		io.to("controller").emit("afk");
 	}
 
-}, 500);
+}, 1000);
 
 // do every once in a while:
 setInterval(() => {
 	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
 	io.emit("bannedIPs", bannedIPs);
-}, 10000);
+	io.emit("waitlists", {
+		waitlists: waitlists,
+	});
+}, 30000);
 
 setInterval(() => {
 	io.emit("turnLengths", {

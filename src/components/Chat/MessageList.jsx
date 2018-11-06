@@ -1,12 +1,37 @@
+// react:
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
+
+// components:
+import Message from "./Message.jsx";
+
+// recompose:
+import { compose } from "recompose";
+
+// material ui:
+import { withStyles } from "@material-ui/core/styles";
 
 // redux:
 import { connect } from "react-redux";
 
-import "./MessageList.css";
 
-import Message from "./Message.jsx";
+// jss:
+
+const styles = (theme) => ({
+	root: {
+		"overflow-y": "auto",
+		"border-radius": "8px",
+		"flex-grow": "1",
+		"margin-bottom": "15px",
+		"& > div": {
+			"background-color": "#FF3C28A4",
+		},
+		"& > div:nth-child(odd)": {
+			"background-color": "#0AB9E6A4",
+		},
+	},
+});
+
 
 class MessageList extends PureComponent {
 
@@ -20,7 +45,6 @@ class MessageList extends PureComponent {
 	mapMessages() {
 		let messages = [];
 		for (let i = 0; i < this.props.messages.length; i++) {
-
 			messages.push(<Message key={this.props.messages[i].id} {...this.props.messages[i]}/>);
 		}
 		return messages;
@@ -28,9 +52,11 @@ class MessageList extends PureComponent {
 
 	render() {
 
+		const { classes } = this.props;
+
 		return (
 			<React.Fragment>
-				<div id="messageList">
+				<div id="messageList" className={classes.root}>
 					{
 						this.mapMessages()
 					}
@@ -58,4 +84,7 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default connect(mapStateToProps)(MessageList);
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps),
+)(MessageList);

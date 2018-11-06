@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 
-export default class LaglessView extends PureComponent {
+export default class LaglessCanvas extends PureComponent {
 
 	constructor(props) {
 		super(props);

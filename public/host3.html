@@ -225,7 +225,7 @@
 
 			var bandwidth = {
 				screen: 300, // 300kbits minimum
-				audio: 500, // 500kbits  minimum
+				audio: 200, // 500kbits  minimum
 				video: 256 // 256kbits (both min-max)
 			};
 			var isScreenSharing = true;
@@ -281,8 +281,8 @@
 
 
 		// get video/voice stream
-		
-		let scale = 50;
+
+		let scale = 30;
 		let fps = 20;
 
 // 		let canvas = document.querySelector("canvas");
@@ -292,12 +292,12 @@
 		canvas.width = 1280 * (scale / 100);
 		canvas.height = 720 * (scale / 100);
 		let ctx = canvas.getContext("2d");
-		
+
 		function drawToCanvas() {
 			// draw the current frame of localVideo onto the canvas,
 			// starting at 0, 0 (top-left corner)
 			let sx = 320;
-			let sy = 65;
+			let sy = 66;
 			let swidth = 1280;
 			let sheight = 720;
 			let dx = 0;
@@ -307,7 +307,7 @@
 			ctx.drawImage(localVideo, sx, sy, swidth, sheight, dx, dy, dwidth, dheight);
 
 			//repeat this every time a new frame becomes available using
-			//the browser's build-in requestAnimationFrame method
+			//the browser's built-in requestAnimationFrame method
 			requestAnimationFrame(drawToCanvas);
 		}
 

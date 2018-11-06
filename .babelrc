@@ -14,5 +14,6 @@
 		"@babel/plugin-proposal-class-properties",
 		"add-module-exports",
 		"@babel/plugin-syntax-import-meta",
+		["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true, legacy: false }],
 	],
 }

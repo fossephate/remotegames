@@ -32,7 +32,21 @@ let preloadedState = {
 		messages: [],
 		userids: [],
 	},
+	waitlists: [
+		[],
+		[],
+		[],
+		[],
+		[],
+	],
 	controlQueues: [
+		[],
+		[],
+		[],
+		[],
+	],
+	viewers: [
+		[],
 		[],
 		[],
 		[],
@@ -63,13 +77,6 @@ let preloadedState = {
 			forfeitLength: 0,
 		},
 	],
-	viewers: [
-		[],
-		[],
-		[],
-		[],
-		[],
-	],
 	userInfo: {
 		authToken: null,
 		loggedIn: false,
@@ -78,6 +85,12 @@ let preloadedState = {
 		username: "???",
 		validUsernames: [],
 		usernameIndex: 0,
+	},
+	usernameMap: {},
+	controllerState: "",
+
+	settings: {
+		volume: 0,
 	},
 };
 

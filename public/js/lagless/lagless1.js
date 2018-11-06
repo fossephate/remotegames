@@ -26,6 +26,9 @@ export default class Lagless1 {
 	}
 
 	resume(canvas) {
+		if (canvas == null) {
+			return;
+		}
 		this.canvas = canvas;
 		this.canvas.width = 1280;
 		this.canvas.height = 720;

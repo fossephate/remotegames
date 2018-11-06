@@ -33,16 +33,13 @@ html, body {
 	/* margin-left: 13.4%; */
 }
 
-#playersContainer {
-	margin-bottom: 10px;
-}
-
 #players {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
 	/* 	margin-bottom: 20px; */
 	overflow-x: hidden;
+	padding: 10px;
 }
 
 .player {
@@ -173,6 +170,7 @@ margin-right: auto; */
 	padding: 0;
 	flex-wrap: wrap;
 	border-radius: 4px;
+	grid-gap: 5px;
 }
 
 #picture {
@@ -198,141 +196,29 @@ margin-right: auto; */
 /* LAGLESS */
 
 
-.laglessBar {
-	display: flex;
-	justify-content: space-evenly;
-	align-self: center;
-	width: 80%;
-	min-width: min-content;
-	padding-top: 2px;
-	padding-bottom: 2px;
-	margin: 5px;
-}
-
-.laglessViewerCount {
-	display: flex;
-	justify-content: space-evenly;
-	align-self: center;
-	padding: 10px;
-}
-
-.tunnel {
-	/*   overflow: visible; */
-	height: 100%;
-}
-
-#namesList {
-	width: 80%;
-	height: 100px;
-	overflow: auto;
-}
-
-ul {
-	text-align: left;
-}
-
 /* STREAM SETTINGS */
-
-.slider {
-	-webkit-appearance: none;
-	width: 100%;
-	height: 15px;
-	border-radius: 5px;
-	background: #d3d3d3;
-	outline: none;
-	opacity: 0.7;
-	-webkit-transition: .2s;
-	transition: opacity .2s;
-	margin-top: 10px;
-}
-
-.slider::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	appearance: none;
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	/* 	background: #4CAF50; */
-	background: #606060;
-	cursor: pointer;
-}
-
-.slider::-moz-range-thumb {
-	width: 25px;
-	height: 25px;
-	border-radius: 50%;
-	background: #4CAF50;
-	cursor: pointer;
-}
 
 #streamSettings {
 	text-align: center;
 }
 
-.sliderContainer {
-	/* 	width: 75%; */
-	margin: 0 auto;
-	padding: 5px;
-}
-
-.container3 {
-	width: 100%;
-	/*     overflow-y: scroll; */
-	display: flex;
-	justify-content: space-evenly;
-}
-
-.three {
-	width: 40%;
-}
-
-.four {
-	width: 40%;
-	/* 	height: 100%; */
-}
-
-#settingsContainer {
-	padding: 2px;
-}
-
 #settings {
 	width: 100%;
-	margin: auto;
-	padding: 0;
+	/* margin: auto; */
 	overflow-y: hidden;
 	display: flex;
 	justify-content: space-evenly;
-	padding-top: 20px;
-	/* 	padding-top: 40px; */
-	padding-bottom: 20px;
-}
-
-#checkboxSettings {
-	/* 	width: 25%; */
-	min-width: 250px;
-	padding: 0;
-}
-
-#checkboxSettings li {
-	padding-left: 35px;
-}
-
-#checkboxSettings2 {
-	width: 25%;
-	padding: 0;
-}
-
-#checkboxSettings2 li {
-	padding-left: 35px;
-	list-style-type: none;
+	/* margin-top: 20px; */
+	/* padding-top: 2px; */
+	padding: 10px;
 }
 
 .settingsPanel {
 	width: 24%;
 	/* 	flex-grow: 1; */
-	padding: 5px !important;
-	border: 1.2px solid #333;
-	border-radius: 4px;
+	/* padding: 5px !important; */
+	/* border: 1.2px solid #333; */
+	/* border-radius: 4px; */
 }
 
 .laglessSettings {}
@@ -345,22 +231,9 @@ ul {
 	margin-top: 10px;
 }
 
-#controlsLabel {
-	margin-bottom: 10px;
-}
 
 #settingsLabel {
 	margin-bottom: 10px;
-}
-
-/* test */
-
-.clearfix:after {
-	content: ".";
-	display: block;
-	height: 0;
-	clear: both;
-	visibility: hidden;
 }
 
 /* JOYSTICKS */
@@ -685,24 +558,6 @@ height: 30px; */
 	background: rgba(0, 255, 0, 0.2);
 	height: 100px;
 	width: 100%;
-}
-
-.container6 {
-	width: 100%;
-	margin: auto;
-	padding: 0;
-}
-
-.nine {
-	/* 	width: 40%;
-padding: 0;
-margin-left: 5%;
-float: left; */
-}
-
-.ten {
-	/* 	margin-left: 55%;
-width: 40%; */
 }
 
 
@@ -1049,45 +904,6 @@ display: block;
 
 /* TUTORIAL */
 
-/* NAV TABS */
-
-#navTabs {
-	grid-column: 1;
-	grid-row: 1;
-	justify-content: center;
-	flex-wrap: nowrap;
-	/* width: 75%; */
-	border-top-left-radius: 4px;
-	border-top-right-radius: 4px;
-	border-bottom: none;
-	border-right: none;
-	border-top-right-radius: 0;
-	border-bottom-left-radius: 0;
-	padding-top: 2px;
-}
-
-.nav-tabs .nav-item {
-	width: 150px;
-	text-align: center;
-	margin-bottom: 0 !important;
-}
-
-.nav-tabs .nav-item :not(active) {
-	/* 	border: 1px solid #333;
-border-top-left-radius: .25rem;
-border-top-right-radius: .25rem; */
-	border-bottom: 0 !important;
-}
-
-.nav-tabs .nav-item :not(.active):not(.disabled):hover {
-	background-color: #dddddd;
-	border: 1px solid transparent;
-    border-top-left-radius: .25rem;
-    border-top-right-radius: .25rem;
-}
-
-.nav-tabs .nav-item {}
-
 /* STATUS BAR */
 
 #statusContainer {
@@ -1335,176 +1151,4 @@ label {
 
 .swal-wide {
 	width: 1000px !important;
-}
-
-/* RAINBOW TEXT */
-
-@keyframes rainbow-text {
-	0% {
-		color: #e87d7d;
-	}
-	2% {
-		color: #e88a7d;
-	}
-	4% {
-		color: #e8977d;
-	}
-	6% {
-		color: #e8a47d;
-	}
-	8% {
-		color: #e8b07d;
-	}
-	10% {
-		color: #e8bd7d;
-	}
-	12% {
-		color: #e8ca7d;
-	}
-	14% {
-		color: #e8d77d;
-	}
-	16% {
-		color: #e8e47d;
-	}
-	18% {
-		color: #dfe87d;
-	}
-	20% {
-		color: #d3e87d;
-	}
-	22% {
-		color: #c6e87d;
-	}
-	24% {
-		color: #b9e87d;
-	}
-	26% {
-		color: #ace87d;
-	}
-	28% {
-		color: #9fe87d;
-	}
-	30% {
-		color: #92e87d;
-	}
-	32% {
-		color: #86e87d;
-	}
-	34% {
-		color: #7de881;
-	}
-	36% {
-		color: #7de88e;
-	}
-	38% {
-		color: #7de89b;
-	}
-	40% {
-		color: #7de8a8;
-	}
-	42% {
-		color: #7de8b5;
-	}
-	44% {
-		color: #7de8c1;
-	}
-	46% {
-		color: #7de8ce;
-	}
-	48% {
-		color: #7de8db;
-	}
-	50% {
-		color: #7de8e8;
-	}
-	52% {
-		color: #7ddbe8;
-	}
-	54% {
-		color: #7dcee8;
-	}
-	56% {
-		color: #7dc1e8;
-	}
-	58% {
-		color: #7db5e8;
-	}
-	60% {
-		color: #7da8e8;
-	}
-	62% {
-		color: #7d9be8;
-	}
-	64% {
-		color: #7d8ee8;
-	}
-	66% {
-		color: #7d81e8;
-	}
-	68% {
-		color: #867de8;
-	}
-	70% {
-		color: #927de8;
-	}
-	72% {
-		color: #9f7de8;
-	}
-	74% {
-		color: #ac7de8;
-	}
-	76% {
-		color: #b97de8;
-	}
-	78% {
-		color: #c67de8;
-	}
-	80% {
-		color: #d37de8;
-	}
-	82% {
-		color: #df7de8;
-	}
-	84% {
-		color: #e87de4;
-	}
-	86% {
-		color: #e87dd7;
-	}
-	88% {
-		color: #e87dca;
-	}
-	90% {
-		color: #e87dbd;
-	}
-	92% {
-		color: #e87db0;
-	}
-	94% {
-		color: #e87da4;
-	}
-	96% {
-		color: #e87d97;
-	}
-	98% {
-		color: #e87d8a;
-	}
-	100% {
-		color: #e87d7d;
-	}
-}
-
-.rainbow-text {
-	animation: rainbow-text 3s infinite;
-}
-
-.rainbow-text2 {
-	font-family: "Bangers", cursive;
-	letter-spacing: 0px;
-	text-shadow: 3px 3px 120px rgba(255, 255, 255, .65), 2px 2px 2px rgba(255, 255, 255, .5);
-	margin: 0;
-	position: relative;
-	top: 50%;
-	transform: translateY(-50%);
 }

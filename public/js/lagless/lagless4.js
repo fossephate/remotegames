@@ -3,8 +3,7 @@ import SimplePeer from "simple-peer";
 export default class Lagless4 {
 
 	constructor(socket) {
-		// this.canvas = canvas;
-		// this.context = this.canvas.getContext("2d");
+
 		this.canvas = null;
 		this.player = null;
 		this.socket = socket;
@@ -21,7 +20,7 @@ export default class Lagless4 {
 			console.log("SIGNAL", JSON.stringify(data));
 			this.socket.emit("clientPeerSignalV", JSON.stringify(data));
 		});
-		videoPeer.on("connect", function () {
+		videoPeer.on("connect", () => {
 			console.log("CONNECT");
 			videoPeer.send(Math.random());
 		});
@@ -32,15 +31,19 @@ export default class Lagless4 {
 			videoPeer.signal(JSON.parse(data));
 		});
 		videoPeer.on("stream", (stream) => {
-			// // got remote video stream, then show it in a video tag
-			// this.canvas.src = window.URL.createObjectURL(stream); // deprecated
-			// // 	canvas4.srcObj = stream;
-			// this.canvas.play();
-			let canvas4 = $("#videoCanvas4")[0];
+			// if (canvas == null) {
+			// 	return;
+			// }
 			// got remote video stream, then show it in a video tag
-			// canvas4.src = window.URL.createObjectURL(stream); // deprecated
-			canvas4.srcObj = stream;
-			canvas4.play();
+			this.canvas.src = window.URL.createObjectURL(stream); // deprecated
+			this.canvas.srcObj = stream;
+			this.canvas.play();
+
+			// let canvas4 = $("#videoCanvas4")[0];
+			// // got remote video stream, then show it in a video tag
+			// // canvas4.src = window.URL.createObjectURL(stream); // deprecated
+			// canvas4.srcObj = stream;
+			// canvas4.play();
 		});
 
 		this.pause = this.pause.bind(this);

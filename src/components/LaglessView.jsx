@@ -1,14 +1,19 @@
+// react:
 import React, { PureComponent } from "react";
 
 import LeftJoyCon from "./LeftJoyCon.jsx";
 import RightJoyCon from "./RightJoyCon.jsx";
 import LaglessCanvas from "./LaglessCanvas.jsx";
 
+// redux:
+import { connect } from "react-redux";
+
+// css:
 import "./LaglessView.css";
 
 
 
-export default class LaglessView extends PureComponent {
+class LaglessView extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -25,7 +30,7 @@ export default class LaglessView extends PureComponent {
 				{(this.props.loggedIn && (!this.props.tabsSwappedWithTwitch[this.props.num-1])) ?
 					<LaglessCanvas num={this.props.num} fullscreen={this.props.fullscreen} largescreen={this.props.largescreen}/>
 					:
-					<iframe id="twitchVideo" className="" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameBorder="0" scrolling="no" allowFullScreen={true}></iframe>
+					<iframe id="twitchVideo" src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" frameBorder="0" scrolling="no" allowFullScreen={true}></iframe>
 				}
 				{this.props.controllerView ? <RightJoyCon controllerState={this.props.controllerState}/> : null}
 			</div>
@@ -33,3 +38,11 @@ export default class LaglessView extends PureComponent {
 	}
 
 }
+
+const mapStateToProps = (state) => {
+	return {
+		controllerState: state.controllerState,
+	};
+};
+
+export default connect(mapStateToProps)(LaglessView);

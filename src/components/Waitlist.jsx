@@ -1,6 +1,16 @@
+// react:
 import React, { PureComponent } from "react";
 
-export default class Waitlist extends PureComponent {
+// redux:
+import { connect } from "react-redux";
+
+// material ui:
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+
+class Waitlist extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -10,23 +20,17 @@ export default class Waitlist extends PureComponent {
 
 		let waitlist = [];
 
-		if (this.props.userids.length == 0) {
-			return <li key={0} className="list-group-item">The waitlist is empty right now</li>;
+		let userids = this.props.userids[this.props.tab - 1];
+
+		if (userids.length == 0) {
+			return <ListItem key="0"><ListItemText primary="The waitlist is empty right now."/></ListItem>;
 		}
 
-
-		for (let i = 0; i < this.props.userids.length; i++) {
-			let listHTML;
-
-			let ID = this.props.userids[i];
-
-			if (this.props.myID == ID) {
-				listHTML = <li key={i} className="list-group-item-highlight">{this.props.usernameMap[ID]}</li>;
-			} else {
-				listHTML = <li key={i} className="list-group-item">{this.props.usernameMap[ID]}</li>;
-			}
-
-			waitlist.push(listHTML);
+		for (let i = 0; i < userids.length; i++) {
+			let username = this.props.usernameMap[userid];
+			let listItemClass = (this.props.userid == userids[i]) ? "queueItem queueItemHighlighted" : "queueItem";
+			let html = <ListItem button key={i} className={listItemClass}><ListItemText primary={username}/></ListItem>;
+			waitlist.push(html);
 		}
 
 		return waitlist;
@@ -35,10 +39,19 @@ export default class Waitlist extends PureComponent {
 	render() {
 
 		return (
-			<ul id="waitlist" className="list-group">
+			<List>
 				{this.getWaitlist()}
-			</ul>
+			</List>
 		);
 	}
 
 }
+
+const mapStateToProps = (state) => {
+	return {
+		userid: state.userInfo.userid,
+		userids: state.waitlists,
+	};
+};
+
+export default connect(mapStateToProps)(Waitlist);

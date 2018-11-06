@@ -17,6 +17,10 @@ const chat = (state = {}, action) => {
 					messageList.scrollTop = messageList.scrollHeight;
 				}, 500);
 			}
+			// todo: fix chat so this isn't needed:
+			setTimeout(() => {
+				window.dispatchEvent(new Event("resize"));
+			}, 1000);
 			// add message to messages:
 			state.messages = state.messages.concat([{
 				id: action.payload.id,
@@ -24,6 +28,12 @@ const chat = (state = {}, action) => {
 				username: action.payload.username,
 				message: action.payload.message,
 			}]);
+			// state.messages.push({
+			// 	id: action.payload.id,
+			// 	userid: action.payload.userid,
+			// 	username: action.payload.username,
+			// 	message: action.payload.message,
+			// });
 			// add the userid if not already in the state:
 			if (state.userids.indexOf(action.payload.userid) == -1) {
 				state.userids.push(action.payload.userid);

@@ -11,47 +11,45 @@ import combineSocketEventHandlers from "src/sockets";
 import { changeUsername } from "src/actions/userInfo";
 import { updateUserInfo } from "src/actions/userInfo";
 
-// components:
-import ViewerList from "src/components/ViewerList.jsx";
-import TurnTimer from "src/components/TurnTimer.jsx";
-import ForfeitTimer from "src/components/ForfeitTimer.jsx";
-import Player from "src/components/Player.jsx";
-
-import ControlQueue from "src/components/ControlQueue.jsx";
-import JoinLeaveQueueButton from "src/components/JoinLeaveQueueButton.jsx";
-
-import UsernameDropdown from "src/components/UsernameDropdown.jsx";
-
-import Waitlist from "src/components/Waitlist.jsx";
-import ConnectAccounts from "src/components/ConnectAccounts.jsx";
-
 // main components:
+import NavTabs from "src/components/NavTabs.jsx";
 import Chat from "src/components/Chat/Chat.jsx";
-import LogInArea from "src/components/LogInArea.jsx";
+import LoginArea from "src/components/LoginArea.jsx";
 import ModalConductor from "src/components/Modals/ModalConductor.jsx";
+
+// todo: picture component:
 import LaglessView from "src/components/LaglessView.jsx";
+import LaglessBar from "src/components/LaglessBar.jsx";
+
+// components:
+import Player from "src/components/Player.jsx";
+import Waitlist from "src/components/Waitlist.jsx";
 
 // secondary components:
 import MySlider from "src/components/MySlider.jsx";
-import VolumeSlider from "src/components/VolumeSlider.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx";
 
-
-import ThemeSwitch from "src/components/ThemeSwitch.jsx";
 
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import indigo from "@material-ui/core/colors/indigo";
+import pink from "@material-ui/core/colors/pink";
+import red from "@material-ui/core/colors/red";
 // icons:
 // todo: configure tree shaking:
 // import { Keyboard } from "@material-ui/icons";
-import Keyboard from "@material-ui/icons/Keyboard";
-import VideogameAsset from "@material-ui/icons/VideogameAsset";
-import Refresh from "@material-ui/icons/Refresh";
+// import Keyboard from "@material-ui/icons/Keyboard";
+// import VideogameAsset from "@material-ui/icons/VideogameAsset";
+// import Refresh from "@material-ui/icons/Refresh";
+
 // components:
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Button from "@material-ui/core/Button";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Paper from "@material-ui/core/Paper";
 // import MenuItem from "@material-ui/core/MenuItem";
 // import FormHelperText from "@material-ui/core/FormHelperText";
 // import FormControl from "@material-ui/core/FormControl";
@@ -84,20 +82,23 @@ const InputMaster = require("js/InputMaster.js");
 const textFitPercent = require("js/textfitpercent.js");
 const tools = require("js/tools.js");
 import Noty from "noty";
-import "noty/lib/noty.css";
+// import "noty/lib/noty.css";
+// import "noty/lib/themes/light.css";
 import localforage from "localforage";
 import swal from "sweetalert2";
 import SimplePeer from "simple-peer";
 import io from "socket.io-client";
 import _ from "lodash";
+import merge from "deepmerge";
 
-// require("js/jsmpeg.min.js");
+// import JSMpeg from "js/jsmpeg.min.js";
 // require("js/WSAvcPlayer.js");
 
 import Lagless1 from "js/lagless/lagless1.js";
 import Lagless2 from "js/lagless/lagless2.js";
 import Lagless3 from "js/lagless/lagless3.js";
 import Lagless4 from "js/lagless/lagless4.js";
+import LaglessAudio from "js/lagless/laglessAudio.js";
 
 window.localforage = localforage;
 
@@ -107,8 +108,6 @@ let lastSplitTime = 0;
 let lastSplitTimeMS = 0;
 let loaded = false;
 let locked = false;
-window.player = {};
-let audio = document.createElement("audio");
 let audioConnected = false;
 let videoConnected = false;
 let authCookie;
@@ -124,7 +123,7 @@ window.lagless1 = null;
 window.lagless2 = null;
 window.lagless3 = null;
 window.lagless4 = null;
-let videoCanvas = null;
+window.laglessAudio = null;
 
 // twitch lagless swap settings
 let tabsSwappedWithTwitch = [false, false, false, false];
@@ -171,16 +170,6 @@ let restPos = 128;
 // String.fromCharCode(n);
 // s.charCodeAt(0) - 97
 
-
-const theme = createMuiTheme({
-	typography: {
-		useNextVariants: true,
-	},
-	// palette: {
-	// 	type: "dark",
-	// },
-});
-
 class App extends Component {
 
 	constructor(props) {
@@ -196,13 +185,12 @@ class App extends Component {
 		this.toggleTDSConfig = this.toggleTDSConfig.bind(this);
 		this.toggleAudioThree = this.toggleAudioThree.bind(this);
 
-		// this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
+		this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
 		this.toggleFullscreen = this.toggleFullscreen.bind(this);
 		this.exitFullscreen = this.exitFullscreen.bind(this);
 		this.toggleLargescreen = this.toggleLargescreen.bind(this);
 
 		this.switchTabs = this.switchTabs.bind(this);
-		this.handleCanvas = this.handleCanvas.bind(this);
 
 		this.sendControllerState = this.sendControllerState.bind(this);
 
@@ -214,18 +202,13 @@ class App extends Component {
 		this.register = this.register.bind(this);
 		this.viewAccount = this.viewAccount.bind(this);
 
+		this.getTheme = this.getTheme.bind(this);
+
 		this.state = {
 
-			currentPlayerChosen: 0,
+			theme: "light",
 
-			waitlists: [
-				[],
-				[],
-				[],
-				[],
-				[],
-			],
-			usernameMap: {},
+			currentPlayerChosen: 0,
 
 			// lagless tab:
 			tab: 2,
@@ -366,18 +349,11 @@ class App extends Component {
 				hideNav: settings.hideNav,
 				deadzone: settings.deadzone,
 				volume: settings.volume,
+				theme: settings.theme,
 				// tab: settings.tab,
 			});
 
-			// if (settings.tab != 1) {
-			// 	$("#tab" + settings.tab).trigger("click");
-			// }
-			// $("#tab" + this.state.tab).trigger("click");
-			// if (this.state.tab == 1) {
-			// 	this.switchTabs(1);
-			// }
-			$("#tab" + this.state.tab).trigger("click");
-			this.switchTabs(this.state.tab);
+			this.switchTabs(settings.tab);
 
 			// wait a little longer so the joycon images load:
 			setTimeout(() => {
@@ -424,95 +400,59 @@ class App extends Component {
 			}
 		}, 5000);
 
-		socket.on("turnTimesLeft", (data) => {
-
-			// check if you're in the waitlist
-			if (data.waitlists[this.state.tab - 1].indexOf(this.props.userInfo.userid) > -1) {
-
-				if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
-					tabsSwappedWithTwitch[this.state.tab - 1] = true;
-					// replaceWithTwitch(this.state.tab);
-					// setTimeout(() => {
-					// socket.emit("leaveLagless");
-					// }, 4000);
-					// swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
-					new Noty({
-						theme: "mint",
-						type: "warning",
-						text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
-						timeout: 5000,
-						sounds: {
-							volume: 0.5,
-							sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-							conditions: ["docVisible"],
-						},
-					}).show();
-				}
-
-			} else if (tabsSwappedWithTwitch[this.state.tab - 1]) {
-				tabsSwappedWithTwitch[this.state.tab - 1] = false;
-				new Noty({
-					theme: "mint",
-					type: "success",
-					text: "You're at the top of the waitlist! Switching back to lagless!",
-					timeout: 5000,
-					sounds: {
-						volume: 0.5,
-						sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-						conditions: ["docVisible"],
-					},
-				}).show();
-				// replaceWithLagless(this.state.tab);
-			}
-			// todo: update with state:
-			if (locked != data.locked) {
-				locked = data.locked;
-				if (locked) {
-					let iconHTML = '<i class="material-icons">lock</i>';
-					$('i:contains("lock_open")').replaceWith(iconHTML);
-				} else {
-					let iconHTML = '<i class="material-icons">lock_open</i>';
-					$('i:contains("lock")').replaceWith(iconHTML);
-				}
-			}
-
-			this.setState({
-				waitlists: data.waitlists,
-			});
-		});
-
-		socket.on("usernameMap", (data) => {
-			this.setState({
-				usernameMap: data,
-			});
-		});
-
-
-
+		// socket.on("turnTimesLeft", (data) => {
+		//
+		// 	// check if you're in the waitlist
+		// 	if (data.waitlists[this.state.tab - 1].indexOf(this.props.userInfo.userid) > -1) {
+		//
+		// 		if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
+		// 			tabsSwappedWithTwitch[this.state.tab - 1] = true;
+		// 			// replaceWithTwitch(this.state.tab);
+		// 			// setTimeout(() => {
+		// 			// socket.emit("leaveLagless");
+		// 			// }, 4000);
+		// 			// swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
+		// 			new Noty({
+		// 				theme: "mint",
+		// 				type: "warning",
+		// 				text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
+		// 				timeout: 5000,
+		// 				sounds: {
+		// 					volume: 0.5,
+		// 					sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+		// 					conditions: ["docVisible"],
+		// 				},
+		// 			}).show();
+		// 		}
+		//
+		// 	} else if (tabsSwappedWithTwitch[this.state.tab - 1]) {
+		// 		tabsSwappedWithTwitch[this.state.tab - 1] = false;
+		// 		new Noty({
+		// 			theme: "mint",
+		// 			type: "success",
+		// 			text: "You're at the top of the waitlist! Switching back to lagless!",
+		// 			timeout: 5000,
+		// 			sounds: {
+		// 				volume: 0.5,
+		// 				sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+		// 				conditions: ["docVisible"],
+		// 			},
+		// 		}).show();
+		// 	}
+		//
+		// 	this.setState({
+		// 		waitlists: data.waitlists,
+		// 	});
+		// });
 
 		/* AUTHENTICATION */
-		let notLoggedIn = () => {
-			// todo: dispatch logout?
-			// replace with twitch until signed in:
-			// replaceWithTwitch(this.state.tab);
-			$("#tab1").addClass("disabled");
-			$("#tab3").addClass("disabled");
-			$("#tab4").addClass("disabled");
-			$("#tab5").addClass("disabled");
-
-			$(".disabled").on("click", () => {
-				swal("You have to log in first!");
-			});
-		}
 		let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 		if (authCookie !== null) {
 			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
 			this.props.dispatch(updateUserInfo({ authToken: authCookie }));
 		}
 
-		if (authCookie === null) {
-			notLoggedIn();
-		} else {
+		if (authCookie !== null) {
 			socket.emit("authenticate", {
 				auth: authCookie,
 				usernameIndex: this.props.userInfo.usernameIndex,
@@ -559,21 +499,21 @@ class App extends Component {
 
 
 		/* IP */
-		setInterval(() => {
-			$.getJSON("https://jsonip.com?callback=?", (data) => {
-				socket.emit("registerIP", {
-					ip: data.ip,
-					id: this.props.userInfo.userid,
-					username: this.props.userInfo.username,
-				});
-				if (bannedIPs.indexOf(data.ip) > -1) {
-					window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-				}
-				if (banlist.indexOf(this.props.userInfo.username) > -1) {
-					window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-				}
-			});
-		}, 5000);
+		// setInterval(() => {
+		// 	$.getJSON("https://jsonip.com?callback=?", (data) => {
+		// 		socket.emit("registerIP", {
+		// 			ip: data.ip,
+		// 			id: this.props.userInfo.userid,
+		// 			username: this.props.userInfo.username,
+		// 		});
+		// 		if (bannedIPs.indexOf(data.ip) > -1) {
+		// 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+		// 		}
+		// 		if (banlist.indexOf(this.props.userInfo.username) > -1) {
+		// 			window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+		// 		}
+		// 	});
+		// }, 5000);
 
 		socket.on("forceRefresh", (data) => {
 			swal({
@@ -587,13 +527,6 @@ class App extends Component {
 			setTimeout(() => {
 				location.reload(true);
 			}, 5000);
-		});
-
-		/* CONTROLLER VIEW @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		socket.on("controllerState1", (data) => {
-			this.setState({
-				controllerViewState: data,
-			})
 		});
 
 		// fullscreen:
@@ -681,48 +614,10 @@ class App extends Component {
 		lagless4 = new Lagless4(socket);
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-
-		/* AUDIO 3.0 */
-		let peer = new SimplePeer({
-			initiator: false,
-			trickle: true,
-		});
-
-		peer.on("error", function (err) {
-			console.log("error", err)
-		});
-
-		peer.on("signal", function (data) {
-			console.log("SIGNAL", JSON.stringify(data));
-			socket.emit("clientPeerSignal", JSON.stringify(data));
-		});
-
-		peer.on("connect", function () {
-			console.log("CONNECT");
-			peer.send(Math.random());
-		});
-
-		peer.on("data", function (data) {
-			console.log("data: " + data)
-		});
-
-		socket.on("hostPeerSignal", function (data) {
-			peer.signal(JSON.parse(data));
-		});
-
-		peer.on("stream", function (stream) {
-			// got remote audio stream, then show it in an audio tag
-			audio.src = window.URL.createObjectURL(stream); // deprecated
-			// 			audio.srcObj = stream;
-			audio.play();
-			audio.volume = 0;
-		});
+		laglessAudio = new LaglessAudio(socket);
 
 		if (this.state.audioThree && !audioConnected) {
-			socket.emit("requestAudio");
-			setTimeout(() => {
-				audioConnected = true;
-			}, 100);
+			laglessAudio.resume();
 		}
 
 		/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -730,11 +625,11 @@ class App extends Component {
 			// hack:
 			// todo: not this:
 			if (!this.state.audioThree) {
-				audio.volume = 0;
-				player.volume = this.state.volume / 100;
+				laglessAudio.audio.volume = 0;
+				lagless2.player.volume = this.state.volume / 100;
 			} else {
-				audio.volume = this.state.volume / 100;
-				player.volume = 0;
+				laglessAudio.audio.volume = this.state.volume / 100;
+				lagless2.player.volume = 0;
 			}
 		}, 1000);
 
@@ -1047,6 +942,16 @@ class App extends Component {
 		});
 	}
 
+	toggleDarkTheme(state) {
+		this.setState({ darkTheme: state }, () => {
+			if (this.state.darkTheme) {
+				this.setState({ theme: "dark" });
+			} else {
+				this.setState({ theme: "light" });
+			}
+		});
+	}
+
 	toggleFullscreen(state) {
 		this.setState({ fullscreen: state }, () => {
 
@@ -1103,12 +1008,16 @@ class App extends Component {
 		this.setState({ currentPlayerChosen: cNum });
 	}
 
-	handleCanvas(ref) {
-		videoCanvas = ref;
-		console.log(ref);
-	}
-
 	switchTabs(tab) {
+
+		// if (this.state.tab == tab) {
+		// 	return;
+		// }
+
+		if (!this.props.userInfo.loggedIn) {
+			swal("You have to login / register first!");
+			return;
+		}
 
 		// first clean up / destroy instances before we switch:
 		// lagless 1:
@@ -1247,14 +1156,106 @@ class App extends Component {
 		socket.emit("sendControllerState", obj);
 	}
 
+	getTheme() {
+		let theme = {
+			typography: {
+				useNextVariants: true,
+			},
+			palette: {
+				type: "light",
+				primary: indigo,
+				secondary: pink,
+				error: red,
+				// Used by `getContrastText()` to maximize the contrast between the background and
+				// the text.
+				contrastThreshold: 3,
+				// Used to shift a color's luminance by approximately
+				// two indexes within its tonal palette.
+				// E.g., shift from Red 500 to Red 300 or Red 700.
+				tonalOffset: 0.2,
+			},
+		};
+		// main:
+		theme = merge(theme, {
+			palette: {
+				type: "dark",
+				primary: {
+					main: "#2181ff", // #2181ff
+				},
+				secondary: {
+					main: "#ff3b3b",
+				}
+			}
+		});
+		if (this.state.theme == "light") {
+			theme = merge(theme, {
+				palette: {
+					type: "light",
+					// primary: {
+					// 	main: "#bf4040",
+					// },
+					// secondary: {
+					// 	main: "#bf4040",
+					// }
+				}
+			});
+		} else if (this.state.theme == "dark") {
+			theme = merge(theme, {
+				palette: {
+					type: "dark",
+					// primary: {
+					// 	main: "#bf4040",
+					// },
+					// secondary: {
+					// 	main: "#bf4040",
+					// },
+				}
+			});
+		}
+		return createMuiTheme(theme);
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+
+		if (JSON.stringify(this.props.userInfo) != JSON.stringify(nextProps.userInfo)) {
+			return true;
+		}
+
+		if (this.state.tab != nextState.tab) {
+			return true;
+		}
+
+		// if (this.state.tab != nextState.tab) {
+		// 	return true;
+		// }
+		// if (this.state.theme != nextState.theme) {
+		// 	return true;
+		// }
+
+		if (this.state != nextState) {
+			return true;
+		}
+
+		// console.log(nextProps);
+		return false;
+	}
+
+	// componentWillReceiveProps(nextProps) {
+	// 	const changedProps = _.reduce(this.props, function (result, value, key) {
+	// 		return _.isEqual(value, nextProps[key]) ?
+	// 			result :
+	// 			result.concat(key)
+	// 	}, [])
+	// 	console.log('changedProps: ', changedProps)
+	// }
 
 	render() {
 
-		return (
-			<MuiThemeProvider theme={theme}>
-				<CssBaseline/>
-				{this.state.darkTheme ? <ThemeSwitch/> : null}
+		console.log("re-rendering");
 
+		return (
+			<MuiThemeProvider theme={this.getTheme()}>
+				<CssBaseline/>
 
 				<div id="loader-wrapper">
 					<div id="loader"></div>
@@ -1263,31 +1264,11 @@ class App extends Component {
 				</div>
 
 
-				<div id="container" className="light" >
+				<div id="container">
 
-					<ul id="navTabs" className="nav nav-tabs light otborder" style={{display: this.state.hideNav ? "none" : null }}>
-						<li className="nav-item active">
-							<a id="tab1" className="nav-link active" data-toggle="tab" href="#lagless1" onClick={() => {this.switchTabs(1)}}>Lagless 1</a>
-						</li>
-						<li className="nav-item">
-							<a id="tab2" className="nav-link" data-toggle="tab" href="#lagless2" onClick={() => {this.switchTabs(2)}}>Lagless 2</a>
-						</li>
-						<li className="nav-item">
-							<a id="tab3" className="nav-link" data-toggle="tab" href="#lagless3" onClick={() => {this.switchTabs(3)}}>Lagless 3</a>
-						</li>
-						<li className="nav-item">
-							<a id="tab4" className="nav-link" data-toggle="tab" href="#lagless4" onClick={() => {this.switchTabs(4)}}>Lagless 4</a>
-						</li>
-						<li className="nav-item">
-							<a id="tab5" className="nav-link" data-toggle="tab" href="#lagless5" onClick={() => {this.switchTabs(5)}}>Lagless 5</a>
-						</li>
-						<div id="statusContainer" className="otborder">
-							<i className="material-icons">lock_open</i>
-						</div>
-						<SNEX type="snes-us" onConnection={this.handleSnex}/>
-					</ul>
+					<NavTabs value={this.state.tab} handleChange={this.switchTabs}/>
 
-					<LogInArea
+					<LoginArea
 						{...this.state}
 						userInfo={this.props.userInfo}
 						handleUsernameChange={this.onUsernameChange}
@@ -1296,309 +1277,187 @@ class App extends Component {
 						handleRegister={this.register}
 						handleAccount={this.viewAccount}/>
 
-					<div id="picture" className="otborder" style={{"gridColumn": this.state.hideChat ? "1/3" : null }}>
+					<Paper id="picture" style={{"gridColumn": this.state.hideChat ? "1/3" : null }} elevation={3}>
 
 						<LaglessView
 							num={this.state.tab}
 							controllerView={this.state.controllerView}
-							controllerState={this.state.controllerViewState}
 							largescreen={this.state.largescreen}
 							fullscreen={this.state.fullscreen}
-							getCanvasRef={this.handleCanvas}
 							loggedIn={this.props.userInfo.loggedIn}
 							tabsSwappedWithTwitch={tabsSwappedWithTwitch}/>
 
-						<div id="laglessBar" className="laglessBar otborder">
-							<ViewerList uniqueIDs={this.props.viewers} usernameMap={this.state.usernameMap}/>
-							<VolumeSlider
-								value={this.state.volume}
-								onMute={() => {this.setState({volume: 0})}}
-								onMax={() => {this.setState({volume: 100})}}
-								handleChange={(value) => {this.setState({volume: value})}}/>
-							{/* <MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/> */}
-							<Button id="laglessRefresh" className="laglessRefresh" variant="contained" color="primary">
-								<Refresh/>
-							</Button>
-							<Button variant="contained" color="primary">
-								<Keyboard/>|<VideogameAsset/>
-							</Button>
-							<div id="keyboardDropdown" className="keyboardDropdown dropdown show">
-								<a id="keyboardDropdownButton" className="btn btn-secondary dropdown-toggle" href="#" data-toggle="dropdown">
-									Keyboard Profiles
-								</a>
-								<div className="keyboard-dropdown-menu dropdown-menu"></div>
-							</div>
-						</div>
-					</div>
+						<LaglessBar/>
+
+					</Paper>
 
 					<Chat hide={this.state.hideChat}/>
 
-					<div id="barUnderTheStream" className="otborder">
+					<Paper id="barUnderTheStream">
 
-						<div id="playersContainer" className="otborder">
-							<div id="players" className="collapse show collapsible">
+						<Paper id="players" elevation={0}>
+							<Player
+								num={1}
+								selected={this.state.currentPlayerChosen}
+								handleChange={() => {this.choosePlayer(0)}}/>
+							<Player
+								num={2}
+								selected={this.state.currentPlayerChosen}
+								handleChange={() => {this.choosePlayer(1)}}/>
+							<Player
+								num={3}
+								selected={this.state.currentPlayerChosen}
+								handleChange={() => {this.choosePlayer(2)}}/>
+							<Player
+								num={4}
+								selected={this.state.currentPlayerChosen}
+								handleChange={() => {this.choosePlayer(3)}}/>
+						</Paper>
 
-								<Player
-									num={1}
-									myID={this.props.userInfo.userid}
-									usernameMap={this.state.usernameMap}
-									selected={this.state.currentPlayerChosen}
-									handleChange={() => {this.choosePlayer(0)}} />
-								<Player
-									num={2}
-									myID={this.props.userInfo.userid}
-									usernameMap={this.state.usernameMap}
-									selected={this.state.currentPlayerChosen}
-									handleChange={() => {this.choosePlayer(1)}} />
-								<Player
-									num={3}
-									myID={this.props.userInfo.userid}
-									usernameMap={this.state.usernameMap}
-									selected={this.state.currentPlayerChosen}
-									handleChange={() => {this.choosePlayer(2)}} />
-								<Player
-									num={4}
-									myID={this.props.userInfo.userid}
-									usernameMap={this.state.usernameMap}
-									selected={this.state.currentPlayerChosen}
-									handleChange={() => {this.choosePlayer(3)}} />
-							</div>
-						</div>
+						<Paper id="settings" elevation={0}>
 
-						<div id="settingsContainer" className="collapsibleContainer otborder">
-							<div id="settings" className="collapse show collapsible">
+							<Paper id="checkboxSettings" className="settingsPanel" elevation={5}>
+								<List>
+									<ListItem>
+										<MyCheckbox text={"Enable Keyboard Controls"} handleChange={this.toggleKeyboardControls} checked={this.state.keyboardControls}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Enable Controller Controls"} handleChange={this.toggleControllerControls} checked={this.state.controllerControls}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Enable Controller View"} handleChange={this.toggleControllerView} checked={this.state.controllerView}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Enable Dark Theme"} handleChange={this.toggleDarkTheme} checked={this.state.darkTheme}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Enable Fullscreen Mode"} handleChange={this.toggleFullscreen} checked={this.state.fullscreen}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Enable Largescreen Mode"} handleChange={this.toggleLargescreen} checked={this.state.largescreen}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Enable Mouse Controls"} handleChange={this.toggleMouseControls} checked={this.state.mouseControls}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Enable Touch Controls"} handleChange={this.toggleTouchControls} checked={this.state.touchControls}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Analog Stick Mode"} handleChange={this.toggleAnalogStickMode} checked={this.state.analogStickMode}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"DPad Swap"} handleChange={this.toggleDpadSwap} checked={this.state.dpadSwap}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"3Ds config"} handleChange={this.toggleTDS} checked={this.state.TDSconfig}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Hide Chat"} handleChange={(state) => {this.setState({ hideChat: state })}} checked={this.state.hideChat}/>
+									</ListItem>
+									<ListItem>
+										<MyCheckbox text={"Hide Nav Bar"} handleChange={(state) => {this.setState({ hideNav: state })}} checked={this.state.hideNav}/>
+									</ListItem>
+								</List>
+							</Paper>
 
-								<div id="checkboxSettings" className="settingsPanel otborder">
-									<List>
-										<ListItem>
-											<MyCheckbox text={"Enable Keyboard Controls"} handleChange={this.toggleKeyboardControls} checked={this.state.keyboardControls}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Enable Controller Controls"} handleChange={this.toggleControllerControls} checked={this.state.controllerControls}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Enable Controller View"} handleChange={this.toggleControllerView} checked={this.state.controllerView}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Enable Dark Theme"} handleChange={(state) => {this.setState({darkTheme: state})}} checked={this.state.darkTheme}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Enable Fullscreen Mode"} handleChange={this.toggleFullscreen} checked={this.state.fullscreen}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Enable Largescreen Mode"} handleChange={this.toggleLargescreen} checked={this.state.largescreen}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Enable Mouse Controls"} handleChange={this.toggleMouseControls} checked={this.state.mouseControls}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Enable Touch Controls"} handleChange={this.toggleTouchControls} checked={this.state.touchControls}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Analog Stick Mode"} handleChange={this.toggleAnalogStickMode} checked={this.state.analogStickMode}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"DPad Swap"} handleChange={this.toggleDpadSwap} checked={this.state.dpadSwap}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"3Ds config"} handleChange={this.toggleTDS} checked={this.state.TDSconfig}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Hide Chat"} handleChange={(state) => {this.setState({ hideChat: state })}} checked={this.state.hideChat}/>
-										</ListItem>
-										<ListItem>
-											<MyCheckbox text={"Hide Nav Bar"} handleChange={(state) => {this.setState({ hideNav: state })}} checked={this.state.hideNav}/>
-										</ListItem>
-									</List>
+							<Paper id="generalSettings" className="settingsPanel" elevation={5}>
+								General Settings<br/>
+								<hr/>
+
+								Stick Deadzone: <span id="deadzone">{this.state.deadzone}</span>
+								<div className="mysliderContainer">
+									<MySlider min={5} max={110} step={1} value={this.state.deadzone}
+										handleChange={(value) => {this.setState({deadzone: value})}}/>
 								</div>
 
-								<div id="generalSettings" className="settingsPanel otborder">
-									General Settings<br />
-									<hr />
-
-									Stick Deadzone: <span id="deadzone">{this.state.deadzone}</span>
-									<div className="mysliderContainer">
-										<MySlider min={5} max={110} step={1} value={this.state.deadzone}
-											handleChange={(value) => {this.setState({deadzone: value})}}/>
-									</div>
-
-									{/* Stick Sensitivity: <span id="sensitivity">1</span>
-									<div className="mysliderContainer">
-										<div id="stickSensitivitySlider" className="myslider"></div>
-									</div>
-									Analog Stick Attack: <span id="attack">20</span>
-									<div className="mysliderContainer">
-										<div id="stickAttackSlider" className="myslider"></div>
-									</div>
-									Analog Stick Return: <span id="return">20</span>
-									<div className="mysliderContainer">
-										<div id="stickReturnSlider" className="myslider"></div>
-									</div> */}
-									<button id="resetSettings" className="btn btn-secondary">Reset All Settings</button>
+								{/* Stick Sensitivity: <span id="sensitivity">1</span>
+								<div className="mysliderContainer">
+									<div id="stickSensitivitySlider" className="myslider"></div>
 								</div>
-
-								<div id="laglessSettingsContainer" className="settingsPanel otborder">
-
-									<div id="lagless1Settings" className="laglessSettings">
-										Lagless 1 Settings<br/>
-										<hr/>
-										Quality: <span>{this.state.lagless1.quality}</span>
-										<div className="mysliderContainer">
-											<MySlider min={20} max={60} step={1} value={this.state.lagless1.quality}
-												handleChange={(value) => {this.setState({lagless1: {quality: value}})}}
-												onAfterChange={(value) => {socket.emit("lagless1Settings", {quality: parseInt(value)});}}/>
-										</div>
-										Scale: <span>{this.state.lagless1.scale}</span>
-										<div className="mysliderContainer">
-											<MySlider min={20} max={50} step={5} value={this.state.lagless1.scale}
-												handleChange={(value) => {this.setState({lagless1: {scale: value}})}}
-												onAfterChange={(value) => {socket.emit("lagless1Settings", {scale: parseInt(value)});}}/>
-										</div>
-										FPS: <span>{this.state.lagless1.framerate}</span><br/>
-										<div className="mysliderContainer">
-											<MySlider min={1} max={15} step={1} value={this.state.lagless1.framerate}
-												handleChange={(value) => {this.setState({lagless1: {framerate: value}})}}
-												onAfterChange={(value) => {socket.emit("lagless1Settings", {framerate: parseInt(value)});}}/>
-										</div>
-									</div>
-
-									<div id="lagless2Settings" className="laglessSettings">
-										Lagless 2 Settings<br/>
-										<hr/>
-
-										FPS: <span>{this.state.lagless2.framerate}</span><br/>
-										Bitrate: <span>{this.state.lagless2.videoBitrate}</span>
-										<div className="mysliderContainer">
-											<MySlider min={0} max={2} step={0.05} value={this.state.lagless2.videoBitrate}
-												handleChange={(value) => {this.setState({lagless2: {videoBitrate: value}})}}
-												onAfterChange={(value) => {socket.emit("lagless2Settings", {videoBitrate: parseFloat(value)});}}/>
-										</div>
-										Scale: <span>{this.state.lagless2.scale}</span>
-										<div className="mysliderContainer">
-											<MySlider min={100} max={540} step={1} value={this.state.lagless2.scale}
-												handleChange={(value) => {this.setState({lagless2: {scale: value}})}}
-												onAfterChange={(value) => {socket.emit("lagless2Settings", {scale: parseInt(value)});}}/>
-										</div>
-									</div>
-
-									<div id="lagless3Settings" className="laglessSettings">
-										Lagless 3 Settings<br/>
-										<hr/>
-
-										FPS: <span>{this.state.lagless3.framerate}</span><br/>
-										Bitrate: <span>{this.state.lagless3.videoBitrate}</span>
-										<div className="mysliderContainer">
-											<MySlider min={0} max={2} step={0.05} value={this.state.lagless3.videoBitrate}
-												handleChange={(value) => {this.setState({lagless3: {videoBitrate: value}})}}
-												onAfterChange={(value) => {socket.emit("lagless3Settings", {videoBitrate: parseFloat(value)});}}/>
-										</div>
-										Scale: <span>{this.state.lagless3.scale}</span>
-										<div className="mysliderContainer">
-											<MySlider min={100} max={540} step={1} value={this.state.lagless3.scale}
-												handleChange={(value) => {this.setState({lagless3: {scale: value}})}}
-												onAfterChange={(value) => {socket.emit("lagless3Settings", {scale: parseInt(value)});}}/>
-										</div>
-									</div>
+								Analog Stick Attack: <span id="attack">20</span>
+								<div className="mysliderContainer">
+									<div id="stickAttackSlider" className="myslider"></div>
 								</div>
+								Analog Stick Return: <span id="return">20</span>
+								<div className="mysliderContainer">
+									<div id="stickReturnSlider" className="myslider"></div>
+								</div> */}
+								<Button id="resetSettings" variant="contained">Reset All Settings</Button>
+							</Paper>
 
-								<div id="waitlistContainer" className="settingsPanel otborder">
-									<Waitlist usernameMap={this.state.usernameMap} userids={this.state.waitlists[this.state.tab - 1]} myID={this.props.userInfo.userid}/>
-								</div>
-							</div>
-						</div>
-					</div>
+							<Paper id="laglessSettingsContainer" className="settingsPanel" elevation={0}>
+
+								<Paper id="lagless1Settings" className="laglessSettings" elevation={3}>
+									Lagless 1 Settings<br/>
+									<hr/>
+									Quality: <span>{this.state.lagless1.quality}</span>
+									<div className="mysliderContainer">
+										<MySlider min={20} max={60} step={1} value={this.state.lagless1.quality}
+											handleChange={(value) => {this.setState({lagless1: {quality: value}})}}
+											onAfterChange={(value) => {socket.emit("lagless1Settings", {quality: parseInt(value)});}}/>
+									</div>
+									Scale: <span>{this.state.lagless1.scale}</span>
+									<div className="mysliderContainer">
+										<MySlider min={20} max={50} step={5} value={this.state.lagless1.scale}
+											handleChange={(value) => {this.setState({lagless1: {scale: value}})}}
+											onAfterChange={(value) => {socket.emit("lagless1Settings", {scale: parseInt(value)});}}/>
+									</div>
+									FPS: <span>{this.state.lagless1.framerate}</span><br/>
+									<div className="mysliderContainer">
+										<MySlider min={1} max={15} step={1} value={this.state.lagless1.framerate}
+											handleChange={(value) => {this.setState({lagless1: {framerate: value}})}}
+											onAfterChange={(value) => {socket.emit("lagless1Settings", {framerate: parseInt(value)});}}/>
+									</div>
+								</Paper>
+
+								<Paper id="lagless2Settings" className="laglessSettings" elevation={3}>
+									Lagless 2 Settings<br/>
+									<hr/>
+
+									FPS: <span>{this.state.lagless2.framerate}</span><br/>
+									Bitrate: <span>{this.state.lagless2.videoBitrate}</span>
+									<div className="mysliderContainer">
+										<MySlider min={0} max={2} step={0.05} value={this.state.lagless2.videoBitrate}
+											handleChange={(value) => {this.setState({lagless2: {videoBitrate: value}})}}
+											onAfterChange={(value) => {socket.emit("lagless2Settings", {videoBitrate: parseFloat(value)});}}/>
+									</div>
+									Scale: <span>{this.state.lagless2.scale}</span>
+									<div className="mysliderContainer">
+										<MySlider min={100} max={540} step={1} value={this.state.lagless2.scale}
+											handleChange={(value) => {this.setState({lagless2: {scale: value}})}}
+											onAfterChange={(value) => {socket.emit("lagless2Settings", {scale: parseInt(value)});}}/>
+									</div>
+								</Paper>
+
+								<Paper id="lagless3Settings" className="laglessSettings" elevation={3}>
+									Lagless 3 Settings<br/>
+									<hr/>
+
+									FPS: <span>{this.state.lagless3.framerate}</span><br/>
+									Bitrate: <span>{this.state.lagless3.videoBitrate}</span>
+									<div className="mysliderContainer">
+										<MySlider min={0} max={2} step={0.05} value={this.state.lagless3.videoBitrate}
+											handleChange={(value) => {this.setState({lagless3: {videoBitrate: value}})}}
+											onAfterChange={(value) => {socket.emit("lagless3Settings", {videoBitrate: parseFloat(value)});}}/>
+									</div>
+									Scale: <span>{this.state.lagless3.scale}</span>
+									<div className="mysliderContainer">
+										<MySlider min={100} max={540} step={1} value={this.state.lagless3.scale}
+											handleChange={(value) => {this.setState({lagless3: {scale: value}})}}
+											onAfterChange={(value) => {socket.emit("lagless3Settings", {scale: parseInt(value)});}}/>
+									</div>
+								</Paper>
+							</Paper>
+
+							<Paper id="waitlistContainer" className="settingsPanel" elevation={5}>
+								<Waitlist tab={this.state.tab}/>
+							</Paper>
+						</Paper>
+					</Paper>
 				</div>
-
-				{/* <!-- SETTINGS WINDOW --> */}
-				<div id="keyboardSettings" className="modal fade">
-					<div className="modal-dialog modal-lg">
-						<div className="modal-content">
-
-							<div className="modal-header">
-								<h3 className="modal-title text-center">Keyboard Remapper</h3>
-							</div>
-
-							<div className="modal-body">
-								<button id="resetBindings" className="btn btn-primary">Reset Keyboard Bindings</button>
-								<button id="defaultBindings" className="btn btn-primary">Default Keyboard Bindings</button>
-								<form id="profileCreator" className="form-inline">
-									<div className="form-group">
-										<input id="profileName" className="form-control mx-sm-3" type="text" placeholder="Profile Name"/>
-										<button id="createProfile" className="btn btn-primary">Create Keyboard Profile</button>
-									</div>
-								</form>
-								<div id="keyboardConfigurator" className="">
-									<div id="keyboardRemapperInstructions">
-										To remap keys, click the letter you want to remap, then press the key you want to bind.
-									</div>
-									<div id="keyboardMapperContainer">
-										<div id="keyboardConfigCodes">
-											<li className="buttonConfig list-group-item" id="LU">Left Stick Up</li>
-											<li className="buttonConfig list-group-item" id="LD">Left Stick Down</li>
-											<li className="buttonConfig list-group-item" id="LL">Left Stick Left</li>
-											<li className="buttonConfig list-group-item" id="LR">Left Stick Right</li>
-											<li className="buttonConfig list-group-item" id="RU">Right Stick Up</li>
-											<li className="buttonConfig list-group-item" id="RD">Right Stick Down</li>
-											<li className="buttonConfig list-group-item" id="RL">Right Stick Left</li>
-											<li className="buttonConfig list-group-item" id="RR">Right Stick Right</li>
-											<li className="buttonConfig list-group-item" id="ABtn">A</li>
-											<li className="buttonConfig list-group-item" id="BBtn">B</li>
-											<li className="buttonConfig list-group-item" id="XBtn">X</li>
-											<li className="buttonConfig list-group-item" id="YBtn">Y</li>
-											<li className="buttonConfig list-group-item" id="DUp">DPad Up</li>
-											<li className="buttonConfig list-group-item" id="DDown">DPad Down</li>
-											<li className="buttonConfig list-group-item" id="DLeft">DPad Left</li>
-											<li className="buttonConfig list-group-item" id="DRight">DPad Right</li>
-											<li className="buttonConfig list-group-item" id="LStick">LStick Button</li>
-											<li className="buttonConfig list-group-item" id="RStick">RStick Button</li>
-											<li className="buttonConfig list-group-item" id="LBtn">L</li>
-											<li className="buttonConfig list-group-item" id="ZL">ZL</li>
-											<li className="buttonConfig list-group-item" id="RBtn">R</li>
-											<li className="buttonConfig list-group-item" id="ZR">ZR</li>
-											<li className="buttonConfig list-group-item" id="Minus">Minus</li>
-											<li className="buttonConfig list-group-item" id="Plus">Plus</li>
-											<li className="buttonConfig list-group-item" id="Capture">Capture</li>
-											<li className="buttonConfig list-group-item" id="Home">Home</li>
-										</div>
-										<div id="keyboardConfigKeys">
-											<li className="buttonConfig list-group-item" id="LUKey">W</li>
-											<li className="buttonConfig list-group-item" id="LDKey">S</li>
-											<li className="buttonConfig list-group-item" id="LLKey">A</li>
-											<li className="buttonConfig list-group-item" id="LRKey">D</li>
-											<li className="buttonConfig list-group-item" id="RUKey">I</li>
-											<li className="buttonConfig list-group-item" id="RDKey">K</li>
-											<li className="buttonConfig list-group-item" id="RLKey">J</li>
-											<li className="buttonConfig list-group-item" id="RRKey">L</li>
-											<li className="buttonConfig list-group-item" id="ABtnKey">&rarr;</li>
-											<li className="buttonConfig list-group-item" id="BBtnKey">&darr;</li>
-											<li className="buttonConfig list-group-item" id="XBtnKey">&uarr;</li>
-											<li className="buttonConfig list-group-item" id="YBtnKey">&larr;</li>
-											<li className="buttonConfig list-group-item" id="DUpKey">T</li>
-											<li className="buttonConfig list-group-item" id="DDownKey">G</li>
-											<li className="buttonConfig list-group-item" id="DLeftKey">F</li>
-											<li className="buttonConfig list-group-item" id="DRightKey">H</li>
-											<li className="buttonConfig list-group-item" id="LStickKey">R</li>
-											<li className="buttonConfig list-group-item" id="RStickKey">Y</li>
-											<li className="buttonConfig list-group-item" id="LBtnKey">U</li>
-											<li className="buttonConfig list-group-item" id="ZLKey">Q</li>
-											<li className="buttonConfig list-group-item" id="RBtnKey">O</li>
-											<li className="buttonConfig list-group-item" id="ZRKey">E</li>
-											<li className="buttonConfig list-group-item" id="MinusKey">-</li>
-											<li className="buttonConfig list-group-item" id="PlusKey">=</li>
-											<li className="buttonConfig list-group-item" id="CaptureKey">1</li>
-											<li className="buttonConfig list-group-item" id="HomeKey">2</li>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				{/* <!-- END OF SETTINGS WINDOW --> */}
-
 
 				<ModalConductor
 					currentModal={this.state.currentModal}
@@ -1612,8 +1471,8 @@ class App extends Component {
 const mapStateToProps = (state) => {
 	return {
 		controlQueues: state.controlQueues,
-		viewers: state.viewers,
 		userInfo: state.userInfo,
+		settings: state.settings,
 	};
 };
 //
