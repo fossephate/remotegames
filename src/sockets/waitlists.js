@@ -1,4 +1,4 @@
-import * as types from "../constants/ActionTypes"
+import * as types from "../actions/ActionTypes.js";
 import { updateWaitlists } from "../actions/waitlists.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:

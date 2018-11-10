@@ -1,4 +1,4 @@
-import * as types from "../constants/ActionTypes"
+import * as types from "../actions/ActionTypes.js";
 import { updateControllerState } from "../actions/controllerState.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:

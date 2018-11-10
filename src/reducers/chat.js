@@ -22,25 +22,21 @@ const chat = (state = {}, action) => {
 				window.dispatchEvent(new Event("resize"));
 			}, 1000);
 			// add message to messages:
-			state.messages = state.messages.concat([{
+			let messages = state.messages.concat([{
 				id: action.payload.id,
 				userid: action.payload.userid,
 				username: action.payload.username,
 				message: action.payload.message,
+				time: action.payload.time,
 			}]);
-			// state.messages.push({
-			// 	id: action.payload.id,
-			// 	userid: action.payload.userid,
-			// 	username: action.payload.username,
-			// 	message: action.payload.message,
-			// });
+			let userids = state.userids.splice(0);
 			// add the userid if not already in the state:
-			if (state.userids.indexOf(action.payload.userid) == -1) {
-				state.userids.push(action.payload.userid);
+			if (userids.indexOf(action.payload.userid) == -1) {
+				userids.push(action.payload.userid);
 			}
-			return state;
+			return { ...state, userids: userids, messages: messages };
 		case "UPDATE_MESSAGES":
-			return Object.assign({ ...state }, { messages: action.payload.messages });
+			return { ...state, messages: action.payload.messages };
 		default:
 			return state;
 	}

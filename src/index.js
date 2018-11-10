@@ -17,11 +17,6 @@ import handleEvents from "src/sockets";
 // libs:
 import io from "socket.io-client";
 
-
-// const allReducers = combineReducers({
-// 	myReducer: MyReducer,
-// });
-
 const sagaMiddleware = createSagaMiddleware();
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -39,12 +34,6 @@ let preloadedState = {
 		[],
 		[],
 	],
-	controlQueues: [
-		[],
-		[],
-		[],
-		[],
-	],
 	viewers: [
 		[],
 		[],
@@ -52,31 +41,45 @@ let preloadedState = {
 		[],
 		[],
 	],
-	turnTimers: [{
-			turnExpiration: 0,
-			forfeitExpiration: 0,
-			turnLength: 0,
-			forfeitLength: 0,
-		},
-		{
-			turnExpiration: 0,
-			forfeitExpiration: 0,
-			turnLength: 0,
-			forfeitLength: 0,
-		},
-		{
-			turnExpiration: 0,
-			forfeitExpiration: 0,
-			turnLength: 0,
-			forfeitLength: 0,
-		},
-		{
-			turnExpiration: 0,
-			forfeitExpiration: 0,
-			turnLength: 0,
-			forfeitLength: 0,
-		},
-	],
+	players: {
+		controlQueues: [
+			[],
+			[],
+			[],
+			[],
+		],
+		turnTimers: [{
+				turnStartTime: 0,
+				forfeitStartTime: 0,
+				turnLength: 0,
+				forfeitLength: 0,
+			},
+			{
+				turnStartTime: 0,
+				forfeitStartTime: 0,
+				turnLength: 0,
+				forfeitLength: 0,
+			},
+			{
+				turnStartTime: 0,
+				forfeitStartTime: 0,
+				turnLength: 0,
+				forfeitLength: 0,
+			},
+			{
+				turnStartTime: 0,
+				forfeitStartTime: 0,
+				turnLength: 0,
+				forfeitLength: 0,
+			},
+		],
+		controllerStates: [
+			"",
+			"",
+			"",
+			"",
+		],
+	},
 	userInfo: {
 		authToken: null,
 		loggedIn: false,
@@ -85,13 +88,27 @@ let preloadedState = {
 		username: "???",
 		validUsernames: [],
 		usernameIndex: 0,
+		// banTime: 0,
+		// currentPlayer: 0,
 	},
 	usernameMap: {},
 	controllerState: "",
 
 	settings: {
 		volume: 0,
+
+		keyboardControls: true,
+		controllerControls: true,
+		touchControls: false,
+
+
+		currentPlayer: 0,
 	},
+
+	time: {
+		server: 0, // server time (in ms)
+		lastServerUpdate: 0, // when it was last updated (in ms)
+	}
 };
 
 const store = createStore(

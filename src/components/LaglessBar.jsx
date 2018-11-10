@@ -16,12 +16,28 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
+import { withStyles } from "@material-ui/core/styles";
+
+import { compose } from "recompose";
+
 // redux:
 import { connect } from "react-redux";
 import { updateSettings } from "src/actions/settings.js";
 
-// css:
-import "./LaglessBar.css";
+// jss:
+
+const styles = () => ({
+	root: {
+		display: "flex",
+		justifyContent: "space-evenly",
+		alignSelf: "center",
+		width: "80%",
+		minWidth: "min-content",
+		paddingTop: "2px",
+		paddingBottom: "2px",
+		margin: "5px",
+	},
+});
 
 class LaglessBar extends PureComponent {
 
@@ -48,8 +64,9 @@ class LaglessBar extends PureComponent {
 	}
 
 	render() {
+		const { classes } = this.props;
 		return (
-			<Paper className="laglessBar" elevation={3}>
+			<Paper className={classes.root} elevation={3}>
 				<ViewerDropdown userids={this.props.viewers} usernameMap={this.props.usernameMap}/>
 				<VolumeSlider
 					value={this.changing ? this.state.volume : this.props.volume}
@@ -88,4 +105,8 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(LaglessBar);
+// export default connect(mapStateToProps, mapDispatchToProps)(LaglessBar);
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps),
+)(LaglessBar);

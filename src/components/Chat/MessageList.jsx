@@ -10,6 +10,10 @@ import { compose } from "recompose";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
 // redux:
 import { connect } from "react-redux";
@@ -57,9 +61,11 @@ class MessageList extends PureComponent {
 		return (
 			<React.Fragment>
 				<div id="messageList" className={classes.root}>
+				{/* <List id="messageList" className={classes.root}> */}
 					{
 						this.mapMessages()
 					}
+				{/* </List> */}
 				</div>
 			</React.Fragment>
 		);

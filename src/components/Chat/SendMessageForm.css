@@ -7,7 +7,7 @@
 	align-items: center;
 	width: 100%;
 	min-height: 45px;
-	height: 10%;
+	height: 12%;
 }
 
 #messageBox {
@@ -29,6 +29,7 @@
 
 .messageBoxContainer {
 	width: 70%;
+	height: 70%;
 	/* font-size: 18px; */
 	line-height: 20px;
 	font-size: inherit !important;

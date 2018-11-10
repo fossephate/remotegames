@@ -1,4 +1,4 @@
-import * as types from "../constants/ActionTypes.js";
+import * as types from "./ActionTypes.js";
 
 let nextMessageId = 0;
 const nextUserId = 0;
@@ -12,14 +12,15 @@ export const sendMessage = (message) => {
 	};
 };
 
-export const receiveMessage = (message, username, userid) => {
+export const receiveMessage = (data) => {
 	return {
 		type: types.RECEIVE_MESSAGE,
 		payload: {
 			id: nextMessageId++,
-			message: message,
-			username: username,
-			userid: userid,
+			message: data.message,
+			username: data.username,
+			userid: data.userid,
+			time: data.time,
 		},
 	};
 };

@@ -1,4 +1,4 @@
-import * as types from "../constants/ActionTypes.js";
+import * as types from "./ActionTypes.js";
 
 export const receiveUsernameMap = (map) => {
 	return {

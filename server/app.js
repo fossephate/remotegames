@@ -78,13 +78,17 @@ let controlQueues = [
 	[],
 	[],
 ];
-let waitlists = [
-	[],
-	[],
-	[],
-	[],
-	[],
-];
+// let waitlists = [
+// 	[],
+// 	[],
+// 	[],
+// 	[],
+// 	[],
+// ];
+// let waitlistMaxes = [5, 5, 5, 5, 5];
+// let minQueuePositions = [5, 5, 5, 5, 5];
+
+let waitlist = [];
 let waitlistMaxes = [5, 5, 5, 5, 5];
 let minQueuePositions = [5, 5, 5, 5, 5];
 
@@ -793,6 +797,7 @@ io.on("connection", function (socket) {
 			userid: client.userid,
 			username: client.username,
 			message: data.message,
+			time: Date.now(),
 		};
 		// store for when people refresh:
 		lastFewMessages.push(msgObj);
@@ -815,6 +820,17 @@ io.on("connection", function (socket) {
 
 		let cNum = data.cNum;
 		let controllerState = data.state;
+
+		// make sure it's a valid cNum:
+		if ([0, 1, 2, 3, 4].indexOf(cNum) == -1) {
+			console.log("weird cNum1: " + cNum);
+			return;
+		}
+
+		if (controlQueues[cNum] == null) {
+			console.log("weird cNum2: " + cNum);
+			return;
+		}
 
 		if (controlQueues[cNum].length === 0) {
 			return;
@@ -846,6 +862,7 @@ io.on("connection", function (socket) {
 
 		// reset forfeit timer:
 		forfeitStartTimes[cNum] = Date.now();
+		// emitForfeitStartTimes();
 
 		let valid = true;
 		if (controllerState[5 + 3] == "1" && !client.is_mod) {
@@ -952,7 +969,7 @@ io.on("connection", function (socket) {
 		}
 
 		// emit turn times left:
-		emitTurnExpirations();
+		calculateTurnExpirations();
 
 	});
 
@@ -1011,6 +1028,7 @@ io.on("connection", function (socket) {
 			message: "restarting the server!",
 			username: "TPNSbot",
 			userid: "TPNSbot",
+			time: Date.now(),
 		});
 		process.exit();
 	});
@@ -1363,6 +1381,7 @@ io.on("connection", function (socket) {
 				message: data,
 				username: "TPNSbot",
 				userid: "TPNSbot",
+				time: Date.now(),
 			});
 		}
 	});
@@ -1620,6 +1639,15 @@ io.on("connection", function (socket) {
 	socket.emit("banlist", banlist);
 	socket.emit("bannedIPs", bannedIPs);
 	socket.emit("usernameMap", uniqueIDToPreferredUsernameMap);
+	socket.emit("controlQueues", controlQueues);
+	socket.emit("turnLengths", {
+		turnLengths: turnLengths,
+		forfeitLengths: forfeitLengths,
+	});
+	socket.emit("turnStartTimes", {
+		turnStartTimes: turnStartTimes,
+		forfeitStartTimes: forfeitStartTimes,
+	});
 	for (let i = 0; i < lastFewMessages.length; i++) {
 		socket.emit("chatMessage", lastFewMessages[i]);
 	}
@@ -1665,13 +1693,12 @@ function forfeitTurn(userid, cNum) {
 		}
 	}
 
-
 	// emit turn times left:
-	emitTurnExpirations();
+	calculateTurnExpirations();
 }
 
 
-function emitTurnExpirations() {
+function calculateTurnExpirations() {
 	// calculate time left for each player
 	for (let i = 0; i < turnLengths.length; i++) {
 		if (controlQueues[i].length == 0) {
@@ -1703,11 +1730,25 @@ function emitTurnExpirations() {
 		// locked: locked,
 	});
 
-	io.emit("turnExpirations", {
-		turnExpirations: turnExpirations,
-		forfeitExpirations: forfeitExpirations,
-	});
+	// io.emit("turnExpirations", {
+	// 	turnExpirations: turnExpirations,
+	// 	forfeitExpirations: forfeitExpirations,
+	// });
 
+}
+
+// todo: only send the diff of what changed / make it only reset the cNum
+function emitTurnStartTimes() {
+	io.emit("turnStartTimes", {
+		turnStartTimes: turnStartTimes,
+		forfeitStartTimes: forfeitStartTimes,
+	});
+}
+
+function emitForfeitStartTimes() {
+	io.emit("turnStartTimes", {
+		forfeitStartTimes: forfeitStartTimes,
+	});
 }
 
 function resetTimers(userid, cNum) {
@@ -1728,6 +1769,9 @@ function resetTimers(userid, cNum) {
 
 	// reset forfeit timer:
 	forfeitStartTimes[cNum] = Date.now();
+
+	emitTurnStartTimes();
+	emitForfeitStartTimes();
 }
 
 function moveLine(cNum) {
@@ -1738,8 +1782,8 @@ function moveLine(cNum) {
 		controlQueues[cNum].shift();
 		// stop the controller
 		io.to("controller").emit("controllerState", "800000000000000 128 128 128 128");
+		io.emit("controlQueues", controlQueues);
 	}
-	io.emit("controlQueues", controlQueues);
 
 	// sub perk:
 	let index = findClientByUniqueID(controlQueues[cNum][0]);
@@ -1752,14 +1796,15 @@ function moveLine(cNum) {
 		}
 	}
 
-
 	// reset turn time:
 	turnStartTimes[cNum] = Date.now();
+	emitTurnStartTimes();
 
 	// if the queue length is more than one person
 	if (controlQueues[cNum].length > 1) {
 		// reset forfeit timer:
 		forfeitStartTimes[cNum] = Date.now();
+		emitForfeitStartTimes();
 	}
 }
 
@@ -1891,7 +1936,7 @@ setInterval(function () {
 	}
 
 	// emit turn times left:
-	emitTurnExpirations();
+	calculateTurnExpirations();
 
 	if (!queuesLocked) {
 		for (let i = 0; i < forfeitExpirations.length; i++) {
@@ -1905,16 +1950,6 @@ setInterval(function () {
 				moveLine(i);
 			}
 		}
-	}
-
-	let send = false;
-	for (let i = 0; i < controlQueues.length; i++) {
-		if (controlQueues[i].length > 0) {
-			send = true;
-		}
-	}
-	if (send) {
-		io.emit("controlQueues", controlQueues);
 	}
 
 	if (splitTimer != null) {
@@ -1943,6 +1978,7 @@ setInterval(() => {
 	io.emit("waitlists", {
 		waitlists: waitlists,
 	});
+	io.emit("serverTime", Date.now());
 }, 30000);
 
 setInterval(() => {
@@ -1953,6 +1989,7 @@ setInterval(() => {
 	io.emit("viewers", {
 		viewers: [laglessClientUniqueIds[0], laglessClientUniqueIds[1], laglessClientUniqueIds[2], laglessClientUniqueIds[3], laglessClientUniqueIds[4]],
 	});
+	emitForfeitStartTimes();
 }, 5000);
 
 function stream() {

@@ -5,13 +5,17 @@
   "main": "server/app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --progress --mode=development",
-    "watch": "webpack --progress --watch",
+    "build:dev": "webpack --progress --config webpack.dev.js",
+    "watch:dev": "webpack --env dev --progress --watch --config webpack.dev.js",
+    "build:prod": "webpack --progress --config webpack.prod.js",
+    "watch:prod": "webpack --env prod --progress --watch --config webpack.prod.js",
     "prestart": "./prestart.sh",
     "start": "./start.sh 2>&1 | tee -a ./server/log.txt",
     "poststop": "./poststop.sh"
   },
-  "sideEffects": false,
+  "sideEffects": [
+    "*.css"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/mfosse/twitchplays.git"
@@ -51,9 +55,11 @@
     "passport-twitch": "github:mfosse/passport-twitch",
     "passport-youtube-v3": "github:mfosse/passport-youtube-v3",
     "performance-now": "^2.1.0",
+    "prop-types": "^15.6.2",
     "rc-slider": "^8.6.3",
     "react-fast-compare": "^2.0.2",
     "react-input-trigger": "^1.1.2",
+    "react-linkify": "^0.2.2",
     "react-mentions": "^2.3.1",
     "react-popper": "^1.0.0-beta.6",
     "react-redux": "^5.0.7",
@@ -66,7 +72,8 @@
     "simple-peer": "^9.1.2",
     "snex": "^0.5.0",
     "socket.io": "^2.1.1",
-    "sweetalert2": "^7.28.5"
+    "sweetalert2": "^7.28.5",
+    "timesync": "^1.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
@@ -85,6 +92,7 @@
     "redux-saga": "^0.16.2",
     "style-loader": "^0.23.1",
     "webpack": "^4.23.1",
-    "webpack-cli": "^3.1.2"
+    "webpack-cli": "^3.1.2",
+    "webpack-merge": "^4.1.4"
   }
 }

@@ -10,6 +10,9 @@ import Button from "@material-ui/core/Button";
 // import Select from "@material-ui/core/Select";
 // import Divider from "@material-ui/core/Divider";
 
+// icons:
+import DropDownIcon from "@material-ui/icons/ArrowDropDown";
+
 // redux:
 // import { connect } from "react-redux";
 
@@ -33,8 +36,6 @@ export default class ViewerDropdown extends PureComponent {
 	handleClose() {
 		this.setState({ anchorEl: null });
 	}
-
-
 
 	getViewerList() {
 
@@ -77,13 +78,7 @@ export default class ViewerDropdown extends PureComponent {
 
 		return (
 			<React.Fragment>
-				{/* <a className="btn btn-secondary dropdown-toggle" href="#" id="dropdownMenuLink" data-toggle="dropdown">
-					Viewers
-				</a>
-				<div id="laglessViewerDropdownDiv" className="dropdown-menu">
-					{this.getViewerList()}
-				</div> */}
-				<Button variant="outlined" onClick={this.handleClick}>Viewers</Button>
+				<Button variant="outlined" onClick={this.handleClick}>Viewers<DropDownIcon/></Button>
 				<Menu
 					id="viewerDropdown"
 					anchorEl={this.state.anchorEl}

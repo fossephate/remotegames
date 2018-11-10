@@ -31,9 +31,6 @@ function InputMaster(isMobile) {
 	// the touch controls state:
 	// this.touch = new ???(); // todo
 
-	// snex:
-	this.snexController = new VirtualController();
-
 	// output device to be read:
 	this.outputController = new VirtualProController();
 	// previous state:
@@ -58,13 +55,6 @@ function InputMaster(isMobile) {
 				console.log(newControllerState);
 			}
 
-			// snex:
-			newControllerState = this.snexController.state.getState();
-			if (newControllerState != this.oldControllerState) {
-				this.currentInputMode = "controller";
-				updatedState = newControllerState;
-			}
-
 			// keyboard:
 			this.keyboard.poll();
 			newControllerState = this.keyboard.state.getState();
@@ -79,7 +69,7 @@ function InputMaster(isMobile) {
 
 			this.controller.state.setState(updatedState);
 			this.keyboard.state.setState(updatedState);
-			this.snexController.state.setState(updatedState);
+
 			this.outputController.setState(updatedState);
 
 			this.oldControllerState = updatedState;

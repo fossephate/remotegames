@@ -1,4 +1,4 @@
-import * as types from "../constants/ActionTypes"
+import * as types from "../actions/ActionTypes.js";
 import { receiveUsernameMap } from "../actions/usernameMap.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:

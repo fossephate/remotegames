@@ -1,6 +1,9 @@
 // react:
 import React, { Component, PureComponent } from "react";
 
+// redux:
+import { connect } from "react-redux";
+
 export default class TurnTimer extends PureComponent {
 
 	constructor(props) {
@@ -13,9 +16,9 @@ export default class TurnTimer extends PureComponent {
 			return "No one is playing right now.";
 		} else {
 			if (this.props.type == "turn") {
-				return this.props.name + ": " + this.props.timeLeft + " seconds";
+				return `${this.props.name}: ${this.props.timeLeft} seconds`;
 			} else if (this.props.type == "forfeit") {
-				return this.props.timeLeft + " seconds until turn forfeit.";
+				return `${this.props.timeLeft} seconds until turn forfeit.`;
 			}
 		}
 	}
@@ -29,7 +32,6 @@ export default class TurnTimer extends PureComponent {
 	}
 
 	render() {
-
 		return (
 			<React.Fragment>
 				{
@@ -52,3 +54,17 @@ export default class TurnTimer extends PureComponent {
 	}
 
 }
+
+// 
+// const mapStateToProps = (state) => {
+// 	return {
+// 		time: state.time,
+// 		turnTimers: state.players.turnTimers,
+// 	};
+// };
+//
+// const mapDispatchToProps = (dispatch) => {
+// 	return {};
+// };
+//
+// export default connect(mapStateToProps, mapDispatchToProps)(TurnTimer);

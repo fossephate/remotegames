@@ -11,9 +11,11 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
-import { compose } from "recompose";
+
 import { withTheme } from "@material-ui/core/styles";
 import { withStyles } from '@material-ui/core/styles';
+
+import { compose } from "recompose";
 
 import "./ControlQueue.css";
 
@@ -74,7 +76,7 @@ class ControlQueue extends PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		userid: state.userInfo.userid,
-		controlQueues: state.controlQueues,
+		controlQueues: state.players.controlQueues,
 	};
 };
 

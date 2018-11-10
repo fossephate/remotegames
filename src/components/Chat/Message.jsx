@@ -2,8 +2,11 @@
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
 
+import Linkify from "react-linkify";
+
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
+import ListItemText from "@material-ui/core/ListItemText";
 
 const styles = (theme) => ({
 	root: {
@@ -12,9 +15,23 @@ const styles = (theme) => ({
 	},
 });
 
+function pad(t) {
+	let s = "" + t;
+	while (s.length < 2) {
+		s = "0" + s;
+	}
+	return s;
+}
+
+function getTimeStamp(t) {
+	let time = new Date(t);
+	let s = time.getHours() + ":" + pad(time.getMinutes()) + " ";
+	return s;
+}
+
 // class Message extends PureComponent {
 const Message = (props) => {
-	const { classes, message, username, userid } = props;
+	let { classes, message, username, userid, time } = props;
 	// if it's a relayed message:
 	if (userid === "TPNSbot" && message[0] == "[") {
 		let r = /\[(.+):(.+)\](.+)/;
@@ -25,9 +42,15 @@ const Message = (props) => {
 		username = source.substr(0, 2) + ":" + user;
 		message = msg;
 	}
+
+	let messageContent = `${getTimeStamp(time)}<b>${username}</b>${message}`;
 	return (
 		<div className={classes.root} userid={userid}>
-			<b>{username}</b> {message}
+			<Linkify>
+				<ListItemText>
+					{getTimeStamp(time)}<b>{username}</b> {message}
+				</ListItemText>
+			</Linkify>
 		</div>
 	);
 };

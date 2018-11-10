@@ -69,9 +69,6 @@ window.$ = $;
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 
-// snex:
-import SNEX from "@snex/react-connect";
-import snex from "snex";
 // keyboard:
 import keycode from "keycode";
 // touch controls:
@@ -195,7 +192,6 @@ class App extends Component {
 		this.sendControllerState = this.sendControllerState.bind(this);
 
 
-		this.choosePlayer = this.choosePlayer.bind(this);
 		this.onUsernameChange = this.onUsernameChange.bind(this);
 
 		this.login = this.login.bind(this);
@@ -207,8 +203,6 @@ class App extends Component {
 		this.state = {
 
 			theme: "light",
-
-			currentPlayerChosen: 0,
 
 			// lagless tab:
 			tab: 2,
@@ -230,41 +224,12 @@ class App extends Component {
 			hideNav: false,
 			deadzone: 50,
 
-			// volume:
-			volume: 1,
-
 			// controller view:
 			controllerViewState: "",
 
 			// controller: new VirtualProController(),
 
 			// sticks:
-			sticks: {
-				L: {
-					X: {
-						sensitivity: 1,
-						offset: 0,
-						deadzone: 50,
-					},
-					Y: {
-						sensitivity: 1,
-						offset: 0,
-						deadzone: 50,
-					},
-				},
-				R: {
-					X: {
-						sensitivity: 1,
-						offset: 0,
-						deadzone: 50,
-					},
-					Y: {
-						sensitivity: 1,
-						offset: 0,
-						deadzone: 50,
-					},
-				},
-			},
 			deadzone: 50,
 			// stickSensitivityX: 1,
 			// stickSensitivityY: 1,
@@ -445,6 +410,50 @@ class App extends Component {
 		// 	});
 		// });
 
+		socket.on("waitlists", (data) => {
+
+			// check if you're in the waitlist
+			if (data.waitlists[this.state.tab - 1].indexOf(this.props.userInfo.userid) > -1) {
+
+				if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
+					tabsSwappedWithTwitch[this.state.tab - 1] = true;
+					// replaceWithTwitch(this.state.tab);
+					// setTimeout(() => {
+					// socket.emit("leaveLagless");
+					// }, 4000);
+					// swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
+					new Noty({
+						theme: "mint",
+						type: "warning",
+						text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
+						timeout: 5000,
+						sounds: {
+							volume: 0.5,
+							sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+							conditions: ["docVisible"],
+						},
+					}).show();
+				}
+
+			} else if (tabsSwappedWithTwitch[this.state.tab - 1]) {
+				tabsSwappedWithTwitch[this.state.tab - 1] = false;
+				new Noty({
+					theme: "mint",
+					type: "success",
+					text: "You're at the top of the waitlist! Switching back to lagless!",
+					timeout: 5000,
+					sounds: {
+						volume: 0.5,
+						sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+						conditions: ["docVisible"],
+					},
+				}).show();
+			}
+			// this.setState({
+			// 	waitlists: data.waitlists,
+			// });
+		});
+
 		/* AUTHENTICATION */
 		let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 		if (authCookie !== null) {
@@ -556,7 +565,7 @@ class App extends Component {
 		/* LAGLESS 2.0 */
 		lagless2 = new Lagless2();
 
-		// // on settings change:
+		// on settings change:
 		socket.on("lagless2Settings", (data) => {
 			this.setState({
 				lagless2: {
@@ -566,29 +575,11 @@ class App extends Component {
 				},
 			});
 		});
-		// socket.on("lagless2SettingsChange", (data) => {
-		// 	if (this.state.tab != 2) {
-		// 		return;
-		// 	}
-		// 	// try {
-		// 	player.destroy();
-		// 	// } catch (error) {
-		// 	// 	console.log("player destroy error.");
-		// 	// }
-		// 	player = new JSMpeg.Player(lagless2URL, {
-		// 		canvas: canvas2,
-		// 		video: true,
-		// 		audio: true,
-		// 		videoBufferSize: videoBufferSize,
-		// 		audioBufferSize: audioBufferSize,
-		// 		maxAudioLag: 0.5
-		// 	});
-		// 	if (!this.state.audioThree) {
-		// 		player.volume = this.state.volume / 100;
-		// 	} else {
-		// 		player.volume = 0;
-		// 	}
-		// });
+		socket.on("lagless2SettingsChange", (data) => {
+			if (this.state.tab == 2) {
+				lagless2.resume();
+			}
+		});
 
 		/* LAGLESS 3.0 */
 
@@ -626,9 +617,9 @@ class App extends Component {
 			// todo: not this:
 			if (!this.state.audioThree) {
 				laglessAudio.audio.volume = 0;
-				lagless2.player.volume = this.state.volume / 100;
+				lagless2.player.volume = this.props.settings.volume / 100;
 			} else {
-				laglessAudio.audio.volume = this.state.volume / 100;
+				laglessAudio.audio.volume = this.props.settings.volume / 100;
 				lagless2.player.volume = 0;
 			}
 		}, 1000);
@@ -641,7 +632,7 @@ class App extends Component {
 		/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 		socket.on("voteStarted", function (data) {
-			let notification = new Noty({
+			new Noty({
 				theme: "mint",
 				type: "warning",
 				text: "A vote to change games has started!",
@@ -651,12 +642,11 @@ class App extends Component {
 					sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
 					conditions: ["docVisible"],
 				},
-			});
-			notification.show();
+			}).show();
 		});
 
 
-		/* BAN EVASION / FUN @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+		/* BAN EVASION @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
 		socket.on("rickroll", (data) => {
 			if (this.props.userInfo.username == data || data == "everyone") {
@@ -702,118 +692,15 @@ class App extends Component {
 		});
 
 		/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		setInterval(function () {
-			pingTime = Date.now();
-			socket.emit("ping2");
-		}, 1000);
-
-		socket.on("pong2", function () {
-			let latency = Date.now() - pingTime;
-			$("#ping").text(latency + "ms");
-		});
-
-		$("#resetSettings").on("click", function (event) {
-			event.preventDefault();
-			tools.deleteAllCookies();
-			localforage.clear().then(function () {
-				location.reload(true);
-			});
-		});
-
-		/* MOD COMMANDS */
-		// selects elements in the future:
-		// https://stackoverflow.com/questions/8191064/jquery-on-function-for-future-elements-as-live-is-deprecated
-
-		$("body").popover({
-			selector: ".queueItem",
-			trigger: "focus",
-			html: true,
-			toggle: "popover",
-			title: "Mod Powers",
-			boundary: "window",
-			container: "body",
-			placement: "right",
-			content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
-						<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
-						<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>'
-		});
-		// .click(function() {
-		// 	setTimeout(() => {
-		// 		$('[data-toggle="popover"]').popover("hide");
-		// 	}, 8000);
+		// setInterval(function () {
+		// 	pingTime = Date.now();
+		// 	socket.emit("ping2");
+		// }, 1000);
+		//
+		// socket.on("pong2", function () {
+		// 	let latency = Date.now() - pingTime;
+		// 	$("#ping").text(latency + "ms");
 		// });
-
-		$("#container").popover({ // must be unique
-			selector: ".viewerElement",
-			// 	trigger: "focus",
-			html: true,
-			toggle: "popover",
-			title: "Mod Powers",
-			boundary: "window",
-			container: "body",
-			placement: "right",
-			content: '<button id="kickFromQueue" class="btn btn-secondary">Kick From Queue</button>\
-						<button id="tempBan" class="btn btn-secondary">Temporary Ban (5 min)</button>\
-						<button id="permaBan" class="btn btn-secondary"><b>Permanent Ban</b></button>\
-						<button id="unban" class="btn btn-secondary"><b>Unban</b></button>'
-		}).click(() => {
-			setTimeout(() => {
-				$('[data-toggle="popover"]').popover("hide");
-			}, 8000);
-		});
-
-		let modPowerUniqueID = "";
-		$(document).on("click", ".queueItem", function (event) {
-			// $(this).effect("highlight", {}, 2000);
-			modPowerUniqueID = $(this).attr("userid");
-		});
-
-		$(document).on("click", ".viewerElement", function (event) {
-			// $(this).effect("highlight", {}, 2000);
-			modPowerUniqueID = $(this).attr("userid");
-		});
-
-		$(document).on("click", "#kickFromQueue", function (event) {
-			socket.emit("kickFromQueue", modPowerUniqueID);
-			$("#queuePopup").remove();
-		});
-		$(document).on("click", "#tempBan", function (event) {
-			socket.emit("tempBan", modPowerUniqueID);
-			$("#queuePopup").remove();
-		});
-		$(document).on("click", "#permaBan", function (event) {
-			socket.emit("permaBan", modPowerUniqueID);
-			$("#queuePopup").remove();
-		});
-		$(document).on("click", "#unban", function (event) {
-			socket.emit("unban", modPowerUniqueID);
-			$("#queuePopup").remove();
-		});
-
-		$(document).on("click", 'i:contains("lock")', function (event) {
-			// $(this).effect("highlight", {}, 2000);
-			socket.emit("unlock");
-		});
-		$(document).on("click", 'i:contains("lock_open")', function (event) {
-			// $(this).effect("highlight", {}, 2000);
-			socket.emit("lock");
-		});
-
-		$(document).on("click", ".joinQueue", function (event) {
-			let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
-			for (let i = 0; i < 4; i++) {
-				if (i == cNum) {
-					continue;
-				}
-				socket.emit("leaveQueue", i);
-			}
-			socket.emit("joinQueue", cNum);
-		});
-
-		$(document).on("click", ".leaveQueue", function (event) {
-			let cNum = parseInt($(this).attr("id").slice(-1)) - 1;
-			socket.emit("leaveQueue", cNum);
-		});
 
 		window.addEventListener("keydown", function (e) {
 			// escape, f11
@@ -844,44 +731,6 @@ class App extends Component {
 		this.setState({ currentModal: "ACCOUNT" });
 	}
 
-	// SNEX:
-	handleSnex = (controller) => {
-		controller.on("data", data => {
-			switch (data.key) {
-				case "UP":
-					masterInput.snexController.state.lstick.y = data.state ? 255 : 128;
-					break;
-				case "DOWN":
-					masterInput.snexController.state.lstick.y = data.state ? 0 : 128;
-					break;
-				case "LEFT":
-					masterInput.snexController.state.lstick.x = data.state ? 0 : 128;
-					break;
-				case "RIGHT":
-					masterInput.snexController.state.lstick.x = data.state ? 255 : 128;
-					break;
-				case "A":
-					masterInput.snexController.state.btns.a = data.state;
-					break;
-				case "B":
-					masterInput.snexController.state.btns.b = data.state;
-					break;
-				case "X":
-					masterInput.snexController.state.btns.x = data.state;
-					break;
-				case "Y":
-					masterInput.snexController.state.btns.y = data.state;
-					break;
-				case "SELECT":
-					masterInput.snexController.state.btns.zl = data.state;
-					break;
-				case "START":
-					masterInput.snexController.state.btns.zr = data.state;
-					break;
-			}
-		});
-	}
-
 	// checkbox settings:
 	toggleKeyboardControls(state) {
 		this.setState({ keyboardControls: state }, () => {});
@@ -904,7 +753,9 @@ class App extends Component {
 	}
 
 	toggleAnalogStickMode(state) {
-		this.setState({ analogStickMode: state }, () => {});
+		this.setState({ analogStickMode: state }, () => {
+			inputMaster.keyboard.settings.analogStickMode = state;
+		});
 	}
 
 	toggleDpadSwap(state) {
@@ -914,31 +765,45 @@ class App extends Component {
 	toggleTDSConfig(state) {
 		this.setState({ TDSConfig: state }, () => {
 			if (this.state.TDSConfig) {
-				// this.state.sticks.L.X.sensitivity = 1.5;
-				// this.state.sticks.L.Y.sensitivity = 1.5;
-				// this.state.sticks.R.X.sensitivity = 1.5;
-				// this.state.sticks.R.Y.sensitivity = 1.5;
-				// this.state.sticks.R.X.offset = -20;
-				// this.state.sticks.R.Y.offset = -10;
+				inputMaster.controller.settings.map.a = "b";
+				inputMaster.controller.settings.map.b = "a";
+				inputMaster.controller.settings.map.x = "y";
+				inputMaster.controller.settings.map.y = "x";
+				inputMaster.controller.settings.sticks.L.X.sensitivity = 1.5;
+				inputMaster.controller.settings.sticks.L.Y.sensitivity = 1.5;
+				inputMaster.controller.settings.sticks.R.X.sensitivity = 1.5;
+				inputMaster.controller.settings.sticks.R.Y.sensitivity = 1.5;
+				inputMaster.controller.settings.sticks.R.X.offset = -20;
+				inputMaster.controller.settings.sticks.R.Y.offset = -10;
 			} else {
-				// this.state.sticks.L.X.sensitivity = 1;
-				// this.state.sticks.L.Y.sensitivity = 1;
-				// this.state.sticks.R.X.sensitivity = 1;
-				// this.state.sticks.R.Y.sensitivity = 1;
-				// this.state.sticks.R.X.offset = 0;
-				// this.state.sticks.R.Y.offset = 0;
+				inputMaster.controller.settings.map.a = "a";
+				inputMaster.controller.settings.map.b = "b";
+				inputMaster.controller.settings.map.x = "x";
+				inputMaster.controller.settings.map.y = "y";
+				inputMaster.controller.settings.L.X.sensitivity = 1;
+				inputMaster.controller.settings.L.X.sensitivity = 1;
+				inputMaster.controller.settings.L.X.sensitivity = 1;
+				inputMaster.controller.settings.L.Y.sensitivity = 1;
+				inputMaster.controller.settings.R.X.sensitivity = 1;
+				inputMaster.controller.settings.R.Y.sensitivity = 1;
+				inputMaster.controller.settings.R.X.offset = 0;
+				inputMaster.controller.settings.R.Y.offset = 0;
 			}
 		});
 	}
 
 	toggleAudioThree(state) {
 		this.setState({ audioThree: state }, () => {
-			if (this.state.audioThree && !audioConnected) {
-				socket.emit("requestAudio");
-				setTimeout(() => {
-					audioConnected = true;
-				}, 100);
+			// if (this.state.audioThree && !audioConnected) {
+			// 	socket.emit("requestAudio");
+			// 	setTimeout(() => {
+			// 		audioConnected = true;
+			// 	}, 100);
+			// }
+			if (this.state.audioThree) {
+				laglessAudio.resume();
 			}
+
 		});
 	}
 
@@ -992,6 +857,7 @@ class App extends Component {
 		if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
 			this.toggleFullscreen(false);
 		}
+		window.dispatchEvent(new Event("resize"));
 	}
 
 	toggleLargescreen(state) {
@@ -1004,8 +870,11 @@ class App extends Component {
 		});
 	}
 
-	choosePlayer(cNum) {
-		this.setState({ currentPlayerChosen: cNum });
+	resetSettings() {
+		tools.deleteAllCookies();
+		localforage.clear().then(function () {
+			location.reload(true);
+		});
 	}
 
 	switchTabs(tab) {
@@ -1104,11 +973,11 @@ class App extends Component {
 			return;
 		}
 
-		if (this.props.controlQueues[this.state.currentPlayerChosen].indexOf(this.props.userInfo.userid) == -1) {
-			socket.emit("joinQueue", this.state.currentPlayerChosen);
+		if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.userInfo.userid) == -1) {
+			socket.emit("joinQueue", this.props.settings.currentPlayer);
 		}
 
-		if (this.props.controlQueues[this.state.currentPlayerChosen].indexOf(this.props.userInfo.userid) > 0 && this.props.controlQueues[this.state.currentPlayerChosen].length > 0) {
+		if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.userInfo.userid) > 0 && this.props.controlQueues[this.props.settings.currentPlayer].length > 0) {
 			new Noty({
 				theme: "mint",
 				type: "warning",
@@ -1150,7 +1019,7 @@ class App extends Component {
 		} else if (this.props.controlQueues[3][0] == this.props.userInfo.userid) {
 			obj.cNum = 3;
 		} else {
-			obj.cNum = this.state.currentPlayerChosen;
+			obj.cNum = this.props.settings.currentPlayer;
 		}
 		console.log(obj.state, obj.cNum);
 		socket.emit("sendControllerState", obj);
@@ -1296,22 +1165,10 @@ class App extends Component {
 					<Paper id="barUnderTheStream">
 
 						<Paper id="players" elevation={0}>
-							<Player
-								num={1}
-								selected={this.state.currentPlayerChosen}
-								handleChange={() => {this.choosePlayer(0)}}/>
-							<Player
-								num={2}
-								selected={this.state.currentPlayerChosen}
-								handleChange={() => {this.choosePlayer(1)}}/>
-							<Player
-								num={3}
-								selected={this.state.currentPlayerChosen}
-								handleChange={() => {this.choosePlayer(2)}}/>
-							<Player
-								num={4}
-								selected={this.state.currentPlayerChosen}
-								handleChange={() => {this.choosePlayer(3)}}/>
+							<Player num={1}/>
+							<Player num={2}/>
+							<Player num={3}/>
+							<Player num={4}/>
 						</Paper>
 
 						<Paper id="settings" elevation={0}>
@@ -1364,7 +1221,7 @@ class App extends Component {
 							</Paper>
 
 							<Paper id="generalSettings" className="settingsPanel" elevation={5}>
-								General Settings<br/>
+								<span>General Settings</span>
 								<hr/>
 
 								Stick Deadzone: <span id="deadzone">{this.state.deadzone}</span>
@@ -1385,7 +1242,7 @@ class App extends Component {
 								<div className="mysliderContainer">
 									<div id="stickReturnSlider" className="myslider"></div>
 								</div> */}
-								<Button id="resetSettings" variant="contained">Reset All Settings</Button>
+								<Button variant="contained" onClick={this.resetSettings}>Reset All Settings</Button>
 							</Paper>
 
 							<Paper id="laglessSettingsContainer" className="settingsPanel" elevation={0}>
@@ -1470,7 +1327,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		controlQueues: state.controlQueues,
+		controlQueues: state.players.controlQueues,
 		userInfo: state.userInfo,
 		settings: state.settings,
 	};

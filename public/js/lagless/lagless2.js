@@ -15,13 +15,13 @@ export default class Lagless2 {
 	pause() {
 		try {
 			this.player.destroy();
-			// let audioBufferSize = 128 * 1024;
-			// this.player = new JSMpeg.Player("wss://twitchplaysnintendoswitch.com/8002/", {
-			// 	video: false,
-			// 	audio: true,
-			// 	audioBufferSize: audioBufferSize,
-			// 	maxAudioLag: 0.5,
-			// });
+			let audioBufferSize = 128 * 1024;
+			this.player = new JSMpeg.Player("wss://twitchplaysnintendoswitch.com/8002/", {
+				video: false,
+				audio: true,
+				audioBufferSize: audioBufferSize,
+				maxAudioLag: 0.5,
+			});
 		} catch (error) {}
 	}
 
@@ -33,6 +33,12 @@ export default class Lagless2 {
 	resume(canvas) {
 		this.canvas = canvas;
 		// this.context = this.canvas.getContext("2d");
+
+		// destroy audio instance if it exists:
+		try {
+			this.player.destroy();
+		} catch (error) {}
+
 		let videoBufferSize = 256 * 1024;
 		let audioBufferSize = 128 * 1024;
 		this.player = new JSMpeg.Player("wss://twitchplaysnintendoswitch.com/8002/", {
