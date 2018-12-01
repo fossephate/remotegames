@@ -5,18 +5,19 @@ import PropTypes from "prop-types";
 // components:
 import Message from "./Message.jsx";
 
-// recompose:
-import { compose } from "recompose";
-
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Paper from "@material-ui/core/Paper";
 
 // redux:
 import { connect } from "react-redux";
+
+// recompose:
+import { compose } from "recompose";
 
 
 // jss:
@@ -24,14 +25,16 @@ import { connect } from "react-redux";
 const styles = (theme) => ({
 	root: {
 		"overflow-y": "auto",
-		"border-radius": "8px",
-		"flex-grow": "1",
-		"margin-bottom": "15px",
+		// borderRadius: "8px",
+		flexGrow: "1",
+		marginBottom: "15px",
 		"& > div": {
-			"background-color": "#FF3C28A4",
+			// backgroundColor: "#FF3C28A4",
+			backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
 		},
 		"& > div:nth-child(odd)": {
-			"background-color": "#0AB9E6A4",
+			// backgroundColor: "#0AB9E6A4",
+			backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light,
 		},
 	},
 });
@@ -59,15 +62,13 @@ class MessageList extends PureComponent {
 		const { classes } = this.props;
 
 		return (
-			<React.Fragment>
-				<div id="messageList" className={classes.root}>
-				{/* <List id="messageList" className={classes.root}> */}
-					{
-						this.mapMessages()
-					}
-				{/* </List> */}
-				</div>
-			</React.Fragment>
+			<Paper id="messageList" className={classes.root} elevation={4}>
+			{/* <List id="messageList" className={classes.root}> */}
+				{
+					this.mapMessages()
+				}
+			{/* </List> */}
+			</Paper>
 		);
 	}
 

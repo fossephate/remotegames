@@ -83,7 +83,7 @@ socketServer.broadcast = function (data) {
 
 
 io.on("connection", function (socket) {
-	socket.on("videoData3", function (data) {
+	socket.on("videoData", function (data) {
 		socketServer.broadcast(data);
 	});
 });

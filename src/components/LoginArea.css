@@ -4,6 +4,7 @@
 
 
 #loginArea {
+	grid-area: "login";
 	width: 100%;
 	text-align: center;
 	display: flex;

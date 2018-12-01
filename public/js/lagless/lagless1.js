@@ -1,8 +1,14 @@
+// libs:
+import io from "socket.io-client";
+
 export default class Lagless1 {
 
-	constructor(socket) {
+	constructor() {
 
-		this.socket = socket;
+		this.socket = io("https://twitchplaysnintendoswitch.com", {
+			path: "/8001/socket.io",
+			transports: ["websocket"],
+		});
 		this.canvas = null;
 		this.context = null;
 
@@ -13,7 +19,7 @@ export default class Lagless1 {
 				this.context.drawImage(this.image, 0, 0, 1280, 720);
 			}
 		};
-		this.socket.on("viewImage", (data) => {
+		this.socket.on("image", (data) => {
 			this.render(data);
 		});
 
@@ -23,12 +29,16 @@ export default class Lagless1 {
 
 	pause() {
 		this.context = null;
+		if (this.socket.close) {
+			this.socket.close();
+		}
 	}
 
 	resume(canvas) {
 		if (canvas == null) {
 			return;
 		}
+		this.socket.connect();
 		this.canvas = canvas;
 		this.canvas.width = 1280;
 		this.canvas.height = 720;

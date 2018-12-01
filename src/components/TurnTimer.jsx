@@ -13,7 +13,11 @@ export default class TurnTimer extends PureComponent {
 
 	getBarText() {
 		if (this.props.name == null) {
-			return "No one is playing right now.";
+			if (this.props.type == "turn") {
+				return "No one is playing right now.";
+			} else if (this.props.type == "forfeit") {
+				return null;
+			}
 		} else {
 			if (this.props.type == "turn") {
 				return `${this.props.name}: ${this.props.timeLeft} seconds`;
@@ -55,7 +59,7 @@ export default class TurnTimer extends PureComponent {
 
 }
 
-// 
+//
 // const mapStateToProps = (state) => {
 // 	return {
 // 		time: state.time,

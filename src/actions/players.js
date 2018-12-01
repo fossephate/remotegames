@@ -48,12 +48,13 @@ export const leavePlayerControlQueue = (controllerNumber) => {
 	};
 };
 
-// export const updatePlayerControllerStates = (data) => {
-// 	return {
-// 		type: types.UPDATE_PLAYER_CONTROLLER_STATES,
-// 		payload: {
-// 			turnLengths: data.turnLengths,
-// 			forfeitLengths: data.forfeitLengths,
-// 		},
-// 	};
-// };
+export const updatePlayerControllerState = (data) => {
+	return {
+		type: types.UPDATE_PLAYER_CONTROLLER_STATE,
+		payload: {
+			cNum: data.cNum,
+			btns: data.btns,
+			sticks: data.sticks,
+		},
+	};
+};

@@ -5,7 +5,7 @@ import {
 	updatePlayerControlQueues,
 	updatePlayerTurnStartTimes,
 	updatePlayerTurnLengths,
-	// updatePlayerControllerState,
+	updatePlayerControllerState,
 } from "../actions/players.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:
@@ -39,9 +39,9 @@ const playersEvents = (socket, dispatch) => {
 		dispatch(updatePlayerTurnLengths(data));
 	});
 
-	// socket.on("controllerState1", (data) => {
-	// 	dispatch(updatePlayerControllerState(data));
-	// });
+	socket.on("controllerState", (data) => {
+		dispatch(updatePlayerControllerState(data));
+	});
 
 	return socket;
 };

@@ -20,7 +20,7 @@ class Waitlist extends PureComponent {
 
 		let waitlist = [];
 
-		let userids = this.props.userids[this.props.tab - 1];
+		let userids = this.props.userids;
 
 		if (userids.length == 0) {
 			return <ListItem key="0"><ListItemText primary="The waitlist is empty right now."/></ListItem>;
@@ -50,7 +50,7 @@ class Waitlist extends PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		userid: state.userInfo.userid,
-		userids: state.waitlists,
+		userids: state.waitlist,
 	};
 };
 

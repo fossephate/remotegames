@@ -1,7 +1,9 @@
+// react:
 import React, { PureComponent } from "react";
 
 // import "./LogInArea.css";
 
+// material ui:
 import Button from "@material-ui/core/Button";
 
 import "./Modal.css";
@@ -22,7 +24,7 @@ export default class Modal extends PureComponent {
 
 		return (
 			<React.Fragment>
-				<div>
+				{/* <div> */}
 					<div className="modal-overlay-div" onClick={this.props.handleClose}>
 						<div className="modal-content-div">
 							<div className="modal-dialog-div" onClick={this.onDialogClick}>
@@ -30,7 +32,7 @@ export default class Modal extends PureComponent {
 							</div>
 						</div>
 					</div>
-				</div>
+				{/* </div> */}
 			</React.Fragment>
 		);
 	}

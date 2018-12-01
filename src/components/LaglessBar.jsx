@@ -24,18 +24,20 @@ import { compose } from "recompose";
 import { connect } from "react-redux";
 import { updateSettings } from "src/actions/settings.js";
 
+import _ from "lodash";
+
 // jss:
 
-const styles = () => ({
+const styles = (theme) => ({
 	root: {
 		display: "flex",
 		justifyContent: "space-evenly",
 		alignSelf: "center",
-		width: "80%",
-		minWidth: "min-content",
+		width: "100%",
 		paddingTop: "2px",
 		paddingBottom: "2px",
 		margin: "5px",
+		backgroundColor: theme.palette.primary.light,
 	},
 });
 
@@ -44,23 +46,17 @@ class LaglessBar extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.changing = false;
-		this.timer = null;
-
-		this.state = {
-			volume: 0,
-		};
-
 		this.handleChange = this.handleChange.bind(this);
+
+		this.state = {};
 	}
 
 	handleChange(value) {
-		this.changing = true;
-		clearTimeout(this.timer);
-		this.timer = setTimeout(() => {
-			this.changing = false;
-		}, 1000);
-		this.setState({ volume: value });
+		// _.throttle(() => {
+		// 	console.log(value)
+		// 	this.props.setVolume(parseInt(value));
+		// }, 100);
+		this.props.setVolume(parseInt(value));
 	}
 
 	render() {
@@ -69,17 +65,15 @@ class LaglessBar extends PureComponent {
 			<Paper className={classes.root} elevation={3}>
 				<ViewerDropdown userids={this.props.viewers} usernameMap={this.props.usernameMap}/>
 				<VolumeSlider
-					value={this.changing ? this.state.volume : this.props.volume}
-					onMute={() => {this.props.setVolume(0)}}
-					onMax={() => {this.props.setVolume(100)}}
+					value={this.props.volume}
 					handleChange={this.handleChange}
-					onAfterChange={(value) => {this.props.setVolume(value)}}/>
-				{/* handleChange={(value) => {this.setState({volume: value})}}/> */}
+					onMute={() => {this.props.setVolume(0)}}
+					onMax={() => {this.props.setVolume(100)}}/>
 				{/* <MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/> */}
 				<Button id="laglessRefresh" className="laglessRefresh" variant="contained" color="primary">
 					<RefreshIcon/>
 				</Button>
-				<Button variant="contained" color="primary">
+				<Button variant="contained" color="primary" onClick={this.props.openInputMapper}>
 					<KeyboardIcon/>|<VideogameAssetIcon/>
 				</Button>
 			</Paper>
@@ -100,7 +94,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		setVolume: (volume) => {
-			dispatch(updateSettings({ volume: volume }))
+			dispatch(updateSettings({ volume: volume }));
+		},
+		openInputMapper: () => {
+			dispatch(updateSettings({ modal: "INPUT_MAPPER" }));
 		},
 	};
 };

@@ -1,12 +1,25 @@
 // react:
-import React, { Component } from "react";
+import React, {
+	Component
+} from "react";
 import ReactDOM from "react-dom";
 // react-router:
-import { Router, Route, Switch } from "react-router";
+import {
+	Router,
+	Route,
+	Switch
+} from "react-router";
 
 // redux:
-import { Provider } from "react-redux";
-import { combineReducers, createStore, applyMiddleware, compose } from "redux";
+import {
+	Provider
+} from "react-redux";
+import {
+	combineReducers,
+	createStore,
+	applyMiddleware,
+	compose
+} from "redux";
 import rootReducer from "./reducers";
 
 // redux-saga:
@@ -27,13 +40,7 @@ let preloadedState = {
 		messages: [],
 		userids: [],
 	},
-	waitlists: [
-		[],
-		[],
-		[],
-		[],
-		[],
-	],
+	waitlist: [],
 	viewers: [
 		[],
 		[],
@@ -74,35 +81,76 @@ let preloadedState = {
 			},
 		],
 		controllerStates: [
-			"",
-			"",
-			"",
-			"",
+			{
+				btns: 0,
+				sticks: [[128, 128], [128, 128]],
+			},
+			{
+				btns: 0,
+				sticks: [[128, 128], [128, 128]],
+			},
+			{
+				btns: 0,
+				sticks: [[128, 128], [128, 128]],
+			},
+			{
+				btns: 0,
+				sticks: [[128, 128], [128, 128]],
+			},
 		],
 	},
+	players2: [{
+		controlQueue: [],
+		controllerState: {
+			btns: 0,
+			sticks: [[128, 128], [128, 128]],
+		},
+		turnTimers: {
+			turnStartTime: 0,
+			forfeitStartTime: 0,
+			turnLength: 0,
+			forfeitLength: 0,
+		},
+	}, ],
 	userInfo: {
 		authToken: null,
 		loggedIn: false,
 		userid: "",
-		connectedAccounts: [],
 		username: "???",
+		connectedAccounts: [],
 		validUsernames: [],
 		usernameIndex: 0,
 		// banTime: 0,
 		// currentPlayer: 0,
+		waitlisted: false,
 	},
+
 	usernameMap: {},
-	controllerState: "",
 
 	settings: {
+
 		volume: 0,
 
 		keyboardControls: true,
 		controllerControls: true,
+		mouseControls: false,
 		touchControls: false,
+		controllerView: true,
+		fullscreen: false,
+		largescreen: false,
 
+		audioThree: false,
+		analogStickMode: false,
+		dpadSwap: false,
+		TDSConfig: false,
+
+		deadzone: 50,
+
+		theme: "dark",
 
 		currentPlayer: 0,
+
+		modal: null,
 	},
 
 	time: {
@@ -119,7 +167,7 @@ const store = createStore(
 );
 
 let socket = io("https://twitchplaysnintendoswitch.com", {
-	path: "/8110/socket.io",
+	path: "/8100/socket.io",
 	transports: ["websocket"],
 });
 
@@ -128,7 +176,9 @@ handleEvents(socket, store.dispatch);
 
 // handle outgoing events & listen to actions:
 // and maybe dispatch more actions:
-sagaMiddleware.run(handleActions, { socket });
+sagaMiddleware.run(handleActions, {
+	socket
+});
 
 
 // components:
@@ -139,7 +189,6 @@ export default class Index extends Component {
 
 	constructor(props) {
 		super(props);
-
 	}
 
 	render() {

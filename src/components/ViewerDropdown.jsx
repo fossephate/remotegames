@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 // import Select from "@material-ui/core/Select";
 // import Divider from "@material-ui/core/Divider";
+// import Fade from "@material-ui/core/Fade";
 
 // icons:
 import DropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -78,12 +79,13 @@ export default class ViewerDropdown extends PureComponent {
 
 		return (
 			<React.Fragment>
-				<Button variant="outlined" onClick={this.handleClick}>Viewers<DropDownIcon/></Button>
+				<Button variant="contained" color="primary" onClick={this.handleClick}>Viewers<DropDownIcon/></Button>
 				<Menu
 					id="viewerDropdown"
 					anchorEl={this.state.anchorEl}
 					open={open}
 					onClose={this.handleClose}
+					// TransitionComponent={Fade}
 					PaperProps={{
 						style: {
 							maxHeight: 48 * 4.5,

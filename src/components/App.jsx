@@ -5,25 +5,23 @@ import ReactDOM from "react-dom";
 // redux:
 import { connect } from "react-redux";
 
-
 import combineSocketEventHandlers from "src/sockets";
 
-import { changeUsername } from "src/actions/userInfo";
-import { updateUserInfo } from "src/actions/userInfo";
+import { changeUsername } from "src/actions/userInfo.js";
+import { updateUserInfo } from "src/actions/userInfo.js";
+import { updateSettings } from "src/actions/settings.js";
 
 // main components:
 import NavTabs from "src/components/NavTabs.jsx";
+import Picture from "src/components/Picture.jsx";
 import Chat from "src/components/Chat/Chat.jsx";
 import LoginArea from "src/components/LoginArea.jsx";
 import ModalConductor from "src/components/Modals/ModalConductor.jsx";
 
-// todo: picture component:
-import LaglessView from "src/components/LaglessView.jsx";
-import LaglessBar from "src/components/LaglessBar.jsx";
-
 // components:
-import Player from "src/components/Player.jsx";
+import PlayerInfo from "src/components/PlayerInfo.jsx";
 import Waitlist from "src/components/Waitlist.jsx";
+import ThemeSelector from "src/components/ThemeSelector.jsx";
 
 // secondary components:
 import MySlider from "src/components/MySlider.jsx";
@@ -33,6 +31,7 @@ import MyCheckbox from "src/components/MyCheckbox.jsx";
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 import indigo from "@material-ui/core/colors/indigo";
 import pink from "@material-ui/core/colors/pink";
 import red from "@material-ui/core/colors/red";
@@ -46,6 +45,7 @@ import red from "@material-ui/core/colors/red";
 // components:
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
@@ -60,6 +60,8 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 // import { Client } from "./parsec/src/client.js";
 
+// device sizes:
+import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
 // jquery:
@@ -103,10 +105,8 @@ let globalEventTimer = false;
 let sendInputTimer;
 let lastSplitTime = 0;
 let lastSplitTimeMS = 0;
-let loaded = false;
 let locked = false;
-let audioConnected = false;
-let videoConnected = false;
+let loaded = false;
 let authCookie;
 let crate;
 let banlist = [];
@@ -122,9 +122,6 @@ window.lagless3 = null;
 window.lagless4 = null;
 window.laglessAudio = null;
 
-// twitch lagless swap settings
-let tabsSwappedWithTwitch = [false, false, false, false];
-
 /* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // check if on mobile
 if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent) || /1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(navigator.userAgent.substr(0, 4))) {
@@ -132,6 +129,11 @@ if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elain
 }
 
 window.masterInput = new InputMaster(isMobile);
+
+// mobile warning messages:
+if (isMobile) {
+	swal("This site isn't really designed for mobile, I'll improve it in the future but for now consider using a desktop / laptop.");
+}
 
 /* CONTROLLER STUFF */
 
@@ -167,6 +169,41 @@ let restPos = 128;
 // String.fromCharCode(n);
 // s.charCodeAt(0) - 97
 
+// jss:
+const styles = (theme) => ({
+	container: {
+		display: "grid",
+		"grid-template-columns": "minmax(50%, 75%) minmax(100px, 25%)",
+		"gridTemplateAreas": `
+			"nav login"
+			"picture picture"
+			"chat chat"
+			"bar bar"`,
+		width: "100%",
+		gridGap: "5px",
+	},
+	[device.tablet]: {
+		container: {
+			"grid-template-columns": "minmax(50%, 75%) minmax(300px, 25%)",
+			"gridTemplateAreas": `
+				"nav login"
+				"picture chat"
+				"bar bar"`,
+		},
+	},
+	[device.laptop]: {
+		container: {},
+	},
+});
+
+const Container = withStyles(styles)(({ classes, children }) => (
+	<div className={classes.container}>
+		{children}
+	</div>
+));
+
+
+
 class App extends Component {
 
 	constructor(props) {
@@ -175,6 +212,7 @@ class App extends Component {
 		this.toggleKeyboardControls = this.toggleKeyboardControls.bind(this);
 		this.toggleControllerControls = this.toggleControllerControls.bind(this);
 		this.toggleTouchControls = this.toggleTouchControls.bind(this);
+		this.toggleMouseControls = this.toggleMouseControls.bind(this);
 		this.toggleControllerView = this.toggleControllerView.bind(this);
 
 		this.toggleAnalogStickMode = this.toggleAnalogStickMode.bind(this);
@@ -182,7 +220,8 @@ class App extends Component {
 		this.toggleTDSConfig = this.toggleTDSConfig.bind(this);
 		this.toggleAudioThree = this.toggleAudioThree.bind(this);
 
-		this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
+		// this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
+		this.switchThemes = this.switchThemes.bind(this);
 		this.toggleFullscreen = this.toggleFullscreen.bind(this);
 		this.exitFullscreen = this.exitFullscreen.bind(this);
 		this.toggleLargescreen = this.toggleLargescreen.bind(this);
@@ -192,7 +231,7 @@ class App extends Component {
 		this.sendControllerState = this.sendControllerState.bind(this);
 
 
-		this.onUsernameChange = this.onUsernameChange.bind(this);
+		// this.onUsernameChange = this.onUsernameChange.bind(this);
 
 		this.login = this.login.bind(this);
 		this.register = this.register.bind(this);
@@ -202,39 +241,10 @@ class App extends Component {
 
 		this.state = {
 
-			theme: "light",
+			// theme: "light",
 
 			// lagless tab:
 			tab: 2,
-
-			// checkbox settings:
-			audioThree: false,
-			keyboardControls: true,
-			controllerControls: true,
-			touchControls: false,
-			controllerView: true,
-			mouseControls: false,
-			analogStickMode: false,
-			dpadSwap: false,
-			TDSConfig: false,
-			darkTheme: false,
-			fullscreen: false,
-			largescreen: false,
-			hideChat: false,
-			hideNav: false,
-			deadzone: 50,
-
-			// controller view:
-			controllerViewState: "",
-
-			// controller: new VirtualProController(),
-
-			// sticks:
-			deadzone: 50,
-			// stickSensitivityX: 1,
-			// stickSensitivityY: 1,
-			stickAttack: 20,
-			stickReturn: 20,
 
 			// lagless settings:
 			lagless1: {
@@ -254,7 +264,7 @@ class App extends Component {
 			},
 
 			// modal:
-			currentModal: null,
+			// currentModal: null,
 
 		};
 	}
@@ -297,7 +307,7 @@ class App extends Component {
 			// debug:
 			console.log(settings);
 
-			this.setState({
+			this.props.updateSettings({
 				keyboardControls: settings.keyboardControls,
 				controllerControls: settings.controllerControls,
 				touchControls: settings.touchControls,
@@ -307,7 +317,6 @@ class App extends Component {
 				dpadSwap: settings.dpadSwap,
 				TDSConfig: settings.TDSConfig,
 				audioThree: settings.audioThree,
-				darkTheme: settings.darkTheme,
 				fullscreen: settings.fullscreen,
 				largescreen: settings.largescreen,
 				hideChat: settings.hideChat,
@@ -315,7 +324,6 @@ class App extends Component {
 				deadzone: settings.deadzone,
 				volume: settings.volume,
 				theme: settings.theme,
-				// tab: settings.tab,
 			});
 
 			this.switchTabs(settings.tab);
@@ -337,8 +345,7 @@ class App extends Component {
 		window.onbeforeunload = () => {
 			socket.emit("leaveLagless");
 			console.log("saving settings");
-			// console.log(this.state);
-			localforage.setItem("settings", JSON.stringify(this.state));
+			localforage.setItem("settings", JSON.stringify(this.props.settings));
 			return null;
 		};
 
@@ -349,7 +356,7 @@ class App extends Component {
 			console.log("lost connection, attempting reconnect2.");
 			socket.connect();
 		});
-		setInterval(() => {
+		window.reconnectTimer = setInterval(() => {
 			if (!socket.connected) {
 				console.log("lost connection, attempting reconnect3.");
 				socket.connect();
@@ -365,63 +372,13 @@ class App extends Component {
 			}
 		}, 5000);
 
-		// socket.on("turnTimesLeft", (data) => {
-		//
-		// 	// check if you're in the waitlist
-		// 	if (data.waitlists[this.state.tab - 1].indexOf(this.props.userInfo.userid) > -1) {
-		//
-		// 		if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
-		// 			tabsSwappedWithTwitch[this.state.tab - 1] = true;
-		// 			// replaceWithTwitch(this.state.tab);
-		// 			// setTimeout(() => {
-		// 			// socket.emit("leaveLagless");
-		// 			// }, 4000);
-		// 			// swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
-		// 			new Noty({
-		// 				theme: "mint",
-		// 				type: "warning",
-		// 				text: "The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
-		// 				timeout: 5000,
-		// 				sounds: {
-		// 					volume: 0.5,
-		// 					sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-		// 					conditions: ["docVisible"],
-		// 				},
-		// 			}).show();
-		// 		}
-		//
-		// 	} else if (tabsSwappedWithTwitch[this.state.tab - 1]) {
-		// 		tabsSwappedWithTwitch[this.state.tab - 1] = false;
-		// 		new Noty({
-		// 			theme: "mint",
-		// 			type: "success",
-		// 			text: "You're at the top of the waitlist! Switching back to lagless!",
-		// 			timeout: 5000,
-		// 			sounds: {
-		// 				volume: 0.5,
-		// 				sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-		// 				conditions: ["docVisible"],
-		// 			},
-		// 		}).show();
-		// 	}
-		//
-		// 	this.setState({
-		// 		waitlists: data.waitlists,
-		// 	});
-		// });
-
-		socket.on("waitlists", (data) => {
-
+		socket.on("waitlist", (data) => {
+			let waitlist = data.waitlist;
 			// check if you're in the waitlist
-			if (data.waitlists[this.state.tab - 1].indexOf(this.props.userInfo.userid) > -1) {
+			if (waitlist.indexOf(this.props.userInfo.userid) > -1) {
 
-				if (!tabsSwappedWithTwitch[this.state.tab - 1]) {
-					tabsSwappedWithTwitch[this.state.tab - 1] = true;
-					// replaceWithTwitch(this.state.tab);
-					// setTimeout(() => {
-					// socket.emit("leaveLagless");
-					// }, 4000);
-					// swal("The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.");
+				if (!this.props.userInfo.waitlisted) {
+					this.props.updateUserInfo({ waitlisted: true });
 					new Noty({
 						theme: "mint",
 						type: "warning",
@@ -434,9 +391,9 @@ class App extends Component {
 						},
 					}).show();
 				}
-
-			} else if (tabsSwappedWithTwitch[this.state.tab - 1]) {
-				tabsSwappedWithTwitch[this.state.tab - 1] = false;
+				// no longer waitlisted:
+			} else if (this.props.userInfo.waitlisted) {
+				this.props.updateUserInfo({ waitlisted: false });
 				new Noty({
 					theme: "mint",
 					type: "success",
@@ -449,9 +406,6 @@ class App extends Component {
 					},
 				}).show();
 			}
-			// this.setState({
-			// 	waitlists: data.waitlists,
-			// });
 		});
 
 		/* AUTHENTICATION */
@@ -607,7 +561,7 @@ class App extends Component {
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 		laglessAudio = new LaglessAudio(socket);
 
-		if (this.state.audioThree && !audioConnected) {
+		if (this.props.settings.audioThree) {
 			laglessAudio.resume();
 		}
 
@@ -615,7 +569,7 @@ class App extends Component {
 		setInterval(() => {
 			// hack:
 			// todo: not this:
-			if (!this.state.audioThree) {
+			if (!this.props.settings.audioThree) {
 				laglessAudio.audio.volume = 0;
 				lagless2.player.volume = this.props.settings.volume / 100;
 			} else {
@@ -712,144 +666,130 @@ class App extends Component {
 
 	}
 
-	onUsernameChange(event) {
-		let index = event.target.value;
-		this.props.dispatch(changeUsername(index));
-	}
-
 	logout() {
 		tools.deleteAllCookies();
 		location.reload(true);
 	}
 	login() {
-		this.setState({ currentModal: "LOGIN" });
+		// this.setState({ currentModal: "LOGIN" });
+		this.props.updateSettings({ modal: "LOGIN" });
 	}
 	register() {
-		this.setState({ currentModal: "REGISTER" });
+		// this.setState({ currentModal: "REGISTER" });
+		this.props.updateSettings({ modal: "REGISTER" });
 	}
 	viewAccount() {
-		this.setState({ currentModal: "ACCOUNT" });
+		// this.setState({ currentModal: "ACCOUNT" });
+		this.props.updateSettings({ modal: "ACCOUNT" });
 	}
 
 	// checkbox settings:
 	toggleKeyboardControls(state) {
-		this.setState({ keyboardControls: state }, () => {});
+		this.props.updateSettings({ keyboardControls: state });
 	}
 
 	toggleControllerControls(state) {
-		this.setState({ controllerControls: state }, () => {});
+		this.props.updateSettings({ controllerControls: state });
 	}
 
 	toggleTouchControls(state) {
-		this.setState({ touchControls: state }, () => {});
+		this.props.updateSettings({ touchControls: state });
+	}
+
+	toggleMouseControls(state) {
+		this.props.updateSettings({ mouseControls: state });
 	}
 
 	toggleControllerView(state) {
-		this.setState({ controllerView: state }, () => {
-			if (this.state.controllerView && this.state.largescreen) {
-				this.setState({ largescreen: false });
-			}
-		});
+		this.props.updateSettings({ controllerView: state });
+		if (state && this.props.settings.largescreen) {
+			this.props.updateSettings({ largescreen: false });
+		}
 	}
 
 	toggleAnalogStickMode(state) {
-		this.setState({ analogStickMode: state }, () => {
-			inputMaster.keyboard.settings.analogStickMode = state;
-		});
+		this.props.updateSettings({ analogStickMode: state });
+		masterInput.keyboard.settings.analogStickMode = state;
 	}
 
 	toggleDpadSwap(state) {
-		this.setState({ dpadSwap: state }, () => {});
+		this.props.updateSettings({ dpadSwap: state });
 	}
 
 	toggleTDSConfig(state) {
-		this.setState({ TDSConfig: state }, () => {
-			if (this.state.TDSConfig) {
-				inputMaster.controller.settings.map.a = "b";
-				inputMaster.controller.settings.map.b = "a";
-				inputMaster.controller.settings.map.x = "y";
-				inputMaster.controller.settings.map.y = "x";
-				inputMaster.controller.settings.sticks.L.X.sensitivity = 1.5;
-				inputMaster.controller.settings.sticks.L.Y.sensitivity = 1.5;
-				inputMaster.controller.settings.sticks.R.X.sensitivity = 1.5;
-				inputMaster.controller.settings.sticks.R.Y.sensitivity = 1.5;
-				inputMaster.controller.settings.sticks.R.X.offset = -20;
-				inputMaster.controller.settings.sticks.R.Y.offset = -10;
-			} else {
-				inputMaster.controller.settings.map.a = "a";
-				inputMaster.controller.settings.map.b = "b";
-				inputMaster.controller.settings.map.x = "x";
-				inputMaster.controller.settings.map.y = "y";
-				inputMaster.controller.settings.L.X.sensitivity = 1;
-				inputMaster.controller.settings.L.X.sensitivity = 1;
-				inputMaster.controller.settings.L.X.sensitivity = 1;
-				inputMaster.controller.settings.L.Y.sensitivity = 1;
-				inputMaster.controller.settings.R.X.sensitivity = 1;
-				inputMaster.controller.settings.R.Y.sensitivity = 1;
-				inputMaster.controller.settings.R.X.offset = 0;
-				inputMaster.controller.settings.R.Y.offset = 0;
-			}
-		});
+		this.props.updateSettings({ TDSConfig: state });
+		if (state) {
+			masterInput.controller.settings.map.a = "b";
+			masterInput.controller.settings.map.b = "a";
+			masterInput.controller.settings.map.x = "y";
+			masterInput.controller.settings.map.y = "x";
+			masterInput.controller.settings.sticks.L.X.sensitivity = 1.5;
+			masterInput.controller.settings.sticks.L.Y.sensitivity = 1.5;
+			masterInput.controller.settings.sticks.R.X.sensitivity = 1.5;
+			masterInput.controller.settings.sticks.R.Y.sensitivity = 1.5;
+			masterInput.controller.settings.sticks.R.X.offset = -20;
+			masterInput.controller.settings.sticks.R.Y.offset = -10;
+		} else {
+			masterInput.controller.settings.map.a = "a";
+			masterInput.controller.settings.map.b = "b";
+			masterInput.controller.settings.map.x = "x";
+			masterInput.controller.settings.map.y = "y";
+			masterInput.controller.settings.sticks.L.X.sensitivity = 1;
+			masterInput.controller.settings.sticks.L.X.sensitivity = 1;
+			masterInput.controller.settings.sticks.L.X.sensitivity = 1;
+			masterInput.controller.settings.sticks.L.Y.sensitivity = 1;
+			masterInput.controller.settings.sticks.R.X.sensitivity = 1;
+			masterInput.controller.settings.sticks.R.Y.sensitivity = 1;
+			masterInput.controller.settings.sticks.R.X.offset = 0;
+			masterInput.controller.settings.sticks.R.Y.offset = 0;
+		}
 	}
 
 	toggleAudioThree(state) {
-		this.setState({ audioThree: state }, () => {
-			// if (this.state.audioThree && !audioConnected) {
-			// 	socket.emit("requestAudio");
-			// 	setTimeout(() => {
-			// 		audioConnected = true;
-			// 	}, 100);
-			// }
-			if (this.state.audioThree) {
-				laglessAudio.resume();
-			}
-
-		});
+		this.props.updateSettings({ audioThree: state });
+		if (state) {
+			laglessAudio.resume();
+		}
 	}
 
-	toggleDarkTheme(state) {
-		this.setState({ darkTheme: state }, () => {
-			if (this.state.darkTheme) {
-				this.setState({ theme: "dark" });
-			} else {
-				this.setState({ theme: "light" });
-			}
-		});
+	switchThemes(theme) {
+		this.props.updateSettings({ theme: theme });
 	}
 
 	toggleFullscreen(state) {
-		this.setState({ fullscreen: state }, () => {
 
-			if (this.state.fullscreen) {
-				$("body").css("padding", "0");
-				$("#picture").css("grid-row", "1");
-				$("#picture").css("grid-column", "1/3");
-				this.setState({
-					controllerView: false,
-					hideChat: true,
-					hideNav: true,
-				})
+		this.props.updateSettings({ fullscreen: state });
 
-				$("body").addClass("hideScrollbar");
-				$(document).scrollTop(0);
+		if (state) {
+			$("body").css("padding", "0");
+			$("body").addClass("hideScrollbar");
+			$("#picture").css("grid-row", "1");
+			$("#picture").css("grid-column", "1/3");
 
-				tools.toggleFullscreen($("html")[0]);
+			$(document).scrollTop(0);
 
-			} else {
-				console.log("exiting fullscreen");
-				$("body").css("padding", "");
-				$("#picture").css("grid-row", "");
-				$("#picture").css("grid-column", "");
-				$("body").removeClass("hideScrollbar");
-				this.setState({
-					fullscreen: false,
-					largescreen: false,
-					controllerView: true,
-					hideChat: false,
-					hideNav: false,
-				});
-			}
-		});
+			this.props.updateSettings({
+				controllerView: false,
+				hideChat: true,
+				hideNav: true,
+			});
+
+			tools.toggleFullscreen($("html")[0]);
+
+		} else {
+
+			console.log("exiting fullscreen");
+			$("body").css("padding", "");
+			$("#picture").css("grid-row", "");
+			$("#picture").css("grid-column", "");
+			$("body").removeClass("hideScrollbar");
+			this.props.updateSettings({
+				largescreen: false,
+				controllerView: true,
+				hideChat: false,
+				hideNav: false,
+			});
+		}
 	}
 
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
@@ -861,13 +801,13 @@ class App extends Component {
 	}
 
 	toggleLargescreen(state) {
-		this.setState({ largescreen: state }, () => {
-			if (this.state.largescreen && this.state.controllerView) {
-				this.setState({ controllerView: false });
-			} else if (!this.state.largescreen && !this.state.controllerView) {
-				this.setState({ controllerView: true });
-			}
-		});
+		this.props.updateSettings({ largescreen: state });
+		window.dispatchEvent(new Event("resize"));
+		if (state && this.props.settings.controllerView) {
+			this.props.updateSettings({ controllerView: false });
+		} else if (!state && !this.props.settings.controllerView) {
+			this.props.updateSettings({ controllerView: true });
+		}
 	}
 
 	resetSettings() {
@@ -947,10 +887,10 @@ class App extends Component {
 
 		if (!this.init) {
 			this.init = true;
-			this.oldControllerState = "000000000000000000 128 128 128 128";
+			this.oldControllerState = JSON.stringify(masterInput.outputController.getState2());
 		}
 
-		let newControllerState = masterInput.outputController.getState();
+		let newControllerState = JSON.stringify(masterInput.outputController.getState2());
 
 		if (newControllerState == this.oldControllerState) {
 			return;
@@ -958,13 +898,13 @@ class App extends Component {
 			this.oldControllerState = newControllerState;
 		}
 
-		if (masterInput.currentInputMode == "keyboard" && !this.state.keyboardControls) {
+		if (masterInput.currentInputMode == "keyboard" && !this.props.settings.keyboardControls) {
 			return;
 		}
-		if (masterInput.currentInputMode == "controller" && !this.state.controllerControls) {
+		if (masterInput.currentInputMode == "controller" && !this.props.settings.controllerControls) {
 			return;
 		}
-		if (masterInput.currentInputMode == "touch" && !this.state.touchControls) {
+		if (masterInput.currentInputMode == "touch" && !this.props.settings.touchControls) {
 			return;
 		}
 
@@ -1006,9 +946,9 @@ class App extends Component {
 		}
 
 		let obj = {
-			state: newControllerState,
+			...masterInput.outputController.getState2(),
 			cNum: 0
-		}
+		};
 
 		if (this.props.controlQueues[0][0] == this.props.userInfo.userid) {
 			obj.cNum = 0;
@@ -1021,31 +961,17 @@ class App extends Component {
 		} else {
 			obj.cNum = this.props.settings.currentPlayer;
 		}
-		console.log(obj.state, obj.cNum);
+		console.log(obj.cNum, (obj.btns).toString(2));
+
 		socket.emit("sendControllerState", obj);
 	}
 
 	getTheme() {
+		// default:
 		let theme = {
 			typography: {
 				useNextVariants: true,
 			},
-			palette: {
-				type: "light",
-				primary: indigo,
-				secondary: pink,
-				error: red,
-				// Used by `getContrastText()` to maximize the contrast between the background and
-				// the text.
-				contrastThreshold: 3,
-				// Used to shift a color's luminance by approximately
-				// two indexes within its tonal palette.
-				// E.g., shift from Red 500 to Red 300 or Red 700.
-				tonalOffset: 0.2,
-			},
-		};
-		// main:
-		theme = merge(theme, {
 			palette: {
 				type: "dark",
 				primary: {
@@ -1055,31 +981,50 @@ class App extends Component {
 					main: "#ff3b3b",
 				}
 			}
-		});
-		if (this.state.theme == "light") {
-			theme = merge(theme, {
-				palette: {
-					type: "light",
-					// primary: {
-					// 	main: "#bf4040",
-					// },
-					// secondary: {
-					// 	main: "#bf4040",
-					// }
-				}
-			});
-		} else if (this.state.theme == "dark") {
-			theme = merge(theme, {
-				palette: {
-					type: "dark",
-					// primary: {
-					// 	main: "#bf4040",
-					// },
-					// secondary: {
-					// 	main: "#bf4040",
-					// },
-				}
-			});
+		};
+		switch (this.props.settings.theme) {
+			case "light":
+				theme = merge(theme, {
+					palette: {
+						type: "light",
+						// primary: {
+						// 	main: "#bf4040",
+						// },
+						// secondary: {
+						// 	main: "#bf4040",
+						// }
+					}
+				});
+				break;
+			case "dark":
+				theme = merge(theme, {
+					palette: {
+						type: "dark",
+						// primary: {
+						// 	main: "#bf4040",
+						// },
+						// secondary: {
+						// 	main: "#bf4040",
+						// },
+					}
+				});
+				break;
+			case "mint":
+				theme = merge(theme, {
+					palette: {
+						type: "light",
+						primary: {
+							main: "#16d0f4",
+						},
+						secondary: {
+							main: "#24d2ac",
+						},
+						background: {
+							paper: "#5ae097",
+						},
+					}
+				});
+				break;
 		}
 		return createMuiTheme(theme);
 	}
@@ -1090,9 +1035,22 @@ class App extends Component {
 			return true;
 		}
 
-		if (this.state.tab != nextState.tab) {
+		if (this.props.settings.volume != nextProps.settings.volume) {
+			return false; // test
+		}
+
+		if (this.props.settings.theme != nextProps.settings.theme) {
 			return true;
 		}
+
+		// all settings:
+		if (JSON.stringify(this.props.settings) != JSON.stringify(nextProps.settings)) {
+			return true;
+		}
+
+		// if (this.state.tab != nextState.tab) {
+		// 	return true;
+		// }
 
 		// if (this.state.tab != nextState.tab) {
 		// 	return true;
@@ -1132,102 +1090,83 @@ class App extends Component {
 					<div className="loader-section section-right"></div>
 				</div>
 
-
-				<div id="container">
+				<Container>
+				{/* <div id="container"> */}
 
 					<NavTabs value={this.state.tab} handleChange={this.switchTabs}/>
 
 					<LoginArea
-						{...this.state}
-						userInfo={this.props.userInfo}
-						handleUsernameChange={this.onUsernameChange}
+						// handleUsernameChange={this.onUsernameChange}
 						handleLogout={this.logout}
 						handleLogin={this.login}
 						handleRegister={this.register}
 						handleAccount={this.viewAccount}/>
 
-					<Paper id="picture" style={{"gridColumn": this.state.hideChat ? "1/3" : null }} elevation={3}>
+					<Picture tab={this.state.tab}/>
 
-						<LaglessView
-							num={this.state.tab}
-							controllerView={this.state.controllerView}
-							largescreen={this.state.largescreen}
-							fullscreen={this.state.fullscreen}
-							loggedIn={this.props.userInfo.loggedIn}
-							tabsSwappedWithTwitch={tabsSwappedWithTwitch}/>
-
-						<LaglessBar/>
-
-					</Paper>
-
-					<Chat hide={this.state.hideChat}/>
+					<Chat hide={this.props.settings.hideChat}/>
 
 					<Paper id="barUnderTheStream">
 
-						<Paper id="players" elevation={0}>
-							<Player num={1}/>
-							<Player num={2}/>
-							<Player num={3}/>
-							<Player num={4}/>
-						</Paper>
+						<PlayerInfo/>
 
 						<Paper id="settings" elevation={0}>
 
 							<Paper id="checkboxSettings" className="settingsPanel" elevation={5}>
 								<List>
 									<ListItem>
-										<MyCheckbox text={"Enable Keyboard Controls"} handleChange={this.toggleKeyboardControls} checked={this.state.keyboardControls}/>
+										<MyCheckbox text={"Enable Keyboard Controls"} handleChange={this.toggleKeyboardControls} checked={this.props.settings.keyboardControls}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Enable Controller Controls"} handleChange={this.toggleControllerControls} checked={this.state.controllerControls}/>
+										<MyCheckbox text={"Enable Controller Controls"} handleChange={this.toggleControllerControls} checked={this.props.settings.controllerControls}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Enable Controller View"} handleChange={this.toggleControllerView} checked={this.state.controllerView}/>
+										<MyCheckbox text={"Enable Controller View"} handleChange={this.toggleControllerView} checked={this.props.settings.controllerView}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/>
+										<MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.props.settings.audioThree}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Enable Dark Theme"} handleChange={this.toggleDarkTheme} checked={this.state.darkTheme}/>
+										<ThemeSelector/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Enable Fullscreen Mode"} handleChange={this.toggleFullscreen} checked={this.state.fullscreen}/>
+										<MyCheckbox text={"Enable Fullscreen Mode"} handleChange={this.toggleFullscreen} checked={this.props.settings.fullscreen}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Enable Largescreen Mode"} handleChange={this.toggleLargescreen} checked={this.state.largescreen}/>
+										<MyCheckbox text={"Enable Largescreen Mode"} handleChange={this.toggleLargescreen} checked={this.props.settings.largescreen}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Enable Mouse Controls"} handleChange={this.toggleMouseControls} checked={this.state.mouseControls}/>
+										<MyCheckbox text={"Enable Mouse Controls"} handleChange={this.toggleMouseControls} checked={this.props.settings.mouseControls}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Enable Touch Controls"} handleChange={this.toggleTouchControls} checked={this.state.touchControls}/>
+										<MyCheckbox text={"Enable Touch Controls"} handleChange={this.toggleTouchControls} checked={this.props.settings.touchControls}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Analog Stick Mode"} handleChange={this.toggleAnalogStickMode} checked={this.state.analogStickMode}/>
+										<MyCheckbox text={"Analog Stick Mode"} handleChange={this.toggleAnalogStickMode} checked={this.props.settings.analogStickMode}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"DPad Swap"} handleChange={this.toggleDpadSwap} checked={this.state.dpadSwap}/>
+										<MyCheckbox text={"DPad Swap"} handleChange={this.toggleDpadSwap} checked={this.props.settings.dpadSwap}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"3Ds config"} handleChange={this.toggleTDS} checked={this.state.TDSconfig}/>
+										<MyCheckbox text={"3Ds config"} handleChange={this.toggleTDSConfig} checked={this.props.settings.TDSConfig}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Hide Chat"} handleChange={(state) => {this.setState({ hideChat: state })}} checked={this.state.hideChat}/>
+										<MyCheckbox text={"Hide Chat"} handleChange={(state) => {this.props.updateSettings({ hideChat: state })}} checked={this.props.settings.hideChat}/>
 									</ListItem>
 									<ListItem>
-										<MyCheckbox text={"Hide Nav Bar"} handleChange={(state) => {this.setState({ hideNav: state })}} checked={this.state.hideNav}/>
+										<MyCheckbox text={"Hide Nav Bar"} handleChange={(state) => {this.props.updateSettings({ hideNav: state })}} checked={this.props.settings.hideNav}/>
 									</ListItem>
 								</List>
 							</Paper>
 
 							<Paper id="generalSettings" className="settingsPanel" elevation={5}>
-								<span>General Settings</span>
+								<ListItemText>General Settings</ListItemText>
 								<hr/>
 
-								Stick Deadzone: <span id="deadzone">{this.state.deadzone}</span>
+								<ListItemText id="deadzone">Stick Deadzone: {this.props.settings.deadzone}</ListItemText>
 								<div className="mysliderContainer">
-									<MySlider min={5} max={110} step={1} value={this.state.deadzone}
-										handleChange={(value) => {this.setState({deadzone: value})}}/>
+									<MySlider min={5} max={110} step={1} value={this.props.settings.deadzone}
+										handleChange={(value) => {this.props.updateSettings({deadzone: value})}}/>
 								</div>
 
 								{/* Stick Sensitivity: <span id="sensitivity">1</span>
@@ -1248,77 +1187,71 @@ class App extends Component {
 							<Paper id="laglessSettingsContainer" className="settingsPanel" elevation={0}>
 
 								<Paper id="lagless1Settings" className="laglessSettings" elevation={3}>
-									Lagless 1 Settings<br/>
+									<ListItemText>Lagless 1 Settings</ListItemText>
 									<hr/>
-									Quality: <span>{this.state.lagless1.quality}</span>
+									<ListItemText>Quality: {this.state.lagless1.quality}</ListItemText>
 									<div className="mysliderContainer">
-										<MySlider min={20} max={60} step={1} value={this.state.lagless1.quality}
-											handleChange={(value) => {this.setState({lagless1: {quality: value}})}}
-											onAfterChange={(value) => {socket.emit("lagless1Settings", {quality: parseInt(value)});}}/>
+										<MySlider min={20} max={60} step={1} delay={1000} value={this.state.lagless1.quality}
+											handleAfterChange={(value) => {socket.emit("lagless1Settings", {quality: parseInt(value)});}}/>
 									</div>
-									Scale: <span>{this.state.lagless1.scale}</span>
+									<ListItemText>Scale: {this.state.lagless1.scale}</ListItemText>
 									<div className="mysliderContainer">
-										<MySlider min={20} max={50} step={5} value={this.state.lagless1.scale}
-											handleChange={(value) => {this.setState({lagless1: {scale: value}})}}
-											onAfterChange={(value) => {socket.emit("lagless1Settings", {scale: parseInt(value)});}}/>
+										<MySlider min={20} max={50} step={5} delay={1000} value={this.state.lagless1.scale}
+											handleAfterChange={(value) => {socket.emit("lagless1Settings", {scale: parseInt(value)});}}/>
 									</div>
-									FPS: <span>{this.state.lagless1.framerate}</span><br/>
+									<ListItemText>FPS: {this.state.lagless1.framerate}</ListItemText><br/>
 									<div className="mysliderContainer">
-										<MySlider min={1} max={15} step={1} value={this.state.lagless1.framerate}
-											handleChange={(value) => {this.setState({lagless1: {framerate: value}})}}
-											onAfterChange={(value) => {socket.emit("lagless1Settings", {framerate: parseInt(value)});}}/>
+										<MySlider min={1} max={15} step={1} delay={1000} value={this.state.lagless1.framerate}
+											handleAfterChange={(value) => {socket.emit("lagless1Settings", {framerate: parseInt(value)});}}/>
 									</div>
 								</Paper>
 
 								<Paper id="lagless2Settings" className="laglessSettings" elevation={3}>
-									Lagless 2 Settings<br/>
+									<ListItemText>Lagless 2 Settings</ListItemText>
 									<hr/>
 
-									FPS: <span>{this.state.lagless2.framerate}</span><br/>
-									Bitrate: <span>{this.state.lagless2.videoBitrate}</span>
+									<ListItemText>FPS: {this.state.lagless2.framerate}</ListItemText>
+									<ListItemText>Bitrate: {this.state.lagless2.videoBitrate}</ListItemText>
 									<div className="mysliderContainer">
-										<MySlider min={0} max={2} step={0.05} value={this.state.lagless2.videoBitrate}
-											handleChange={(value) => {this.setState({lagless2: {videoBitrate: value}})}}
-											onAfterChange={(value) => {socket.emit("lagless2Settings", {videoBitrate: parseFloat(value)});}}/>
+										<MySlider min={0} max={2} step={0.05} delay={1000} value={this.state.lagless2.videoBitrate}
+											handleAfterChange={(value) => {socket.emit("lagless2Settings", {videoBitrate: parseFloat(value)});}}/>
 									</div>
-									Scale: <span>{this.state.lagless2.scale}</span>
+									<ListItemText>Scale: {this.state.lagless2.scale}</ListItemText>
 									<div className="mysliderContainer">
-										<MySlider min={100} max={540} step={1} value={this.state.lagless2.scale}
-											handleChange={(value) => {this.setState({lagless2: {scale: value}})}}
-											onAfterChange={(value) => {socket.emit("lagless2Settings", {scale: parseInt(value)});}}/>
+										<MySlider min={100} max={540} step={1} delay={1000} value={this.state.lagless2.scale}
+											handleAfterChange={(value) => {socket.emit("lagless2Settings", {scale: parseInt(value)});}}/>
 									</div>
 								</Paper>
 
 								<Paper id="lagless3Settings" className="laglessSettings" elevation={3}>
-									Lagless 3 Settings<br/>
+									<ListItemText>Lagless 3 Settings</ListItemText>
 									<hr/>
 
-									FPS: <span>{this.state.lagless3.framerate}</span><br/>
-									Bitrate: <span>{this.state.lagless3.videoBitrate}</span>
+									<ListItemText>FPS: {this.state.lagless3.framerate}</ListItemText>
+									<ListItemText>Bitrate: {this.state.lagless3.videoBitrate}</ListItemText>
 									<div className="mysliderContainer">
-										<MySlider min={0} max={2} step={0.05} value={this.state.lagless3.videoBitrate}
-											handleChange={(value) => {this.setState({lagless3: {videoBitrate: value}})}}
-											onAfterChange={(value) => {socket.emit("lagless3Settings", {videoBitrate: parseFloat(value)});}}/>
+										<MySlider min={0} max={2} step={0.05} delay={1000} value={this.state.lagless3.videoBitrate}
+											handleAfterChange={(value) => {socket.emit("lagless3Settings", {videoBitrate: parseFloat(value)});}}/>
 									</div>
-									Scale: <span>{this.state.lagless3.scale}</span>
+									<ListItemText>Scale: {this.state.lagless3.scale}</ListItemText>
 									<div className="mysliderContainer">
-										<MySlider min={100} max={540} step={1} value={this.state.lagless3.scale}
-											handleChange={(value) => {this.setState({lagless3: {scale: value}})}}
-											onAfterChange={(value) => {socket.emit("lagless3Settings", {scale: parseInt(value)});}}/>
+										<MySlider min={100} max={540} step={1} delay={1000} value={this.state.lagless3.scale}
+											handleAfterChange={(value) => {socket.emit("lagless3Settings", {scale: parseInt(value)});}}/>
 									</div>
 								</Paper>
 							</Paper>
 
 							<Paper id="waitlistContainer" className="settingsPanel" elevation={5}>
-								<Waitlist tab={this.state.tab}/>
+								<Waitlist/>
 							</Paper>
 						</Paper>
 					</Paper>
-				</div>
+				</Container>
+				{/* </div> */}
 
 				<ModalConductor
-					currentModal={this.state.currentModal}
-					handleClose={() => {this.setState({currentModal: null})}}/>
+					currentModal={this.props.settings.modal}
+					handleClose={() => {this.props.updateSettings({ modal: null })}}/>
 
 			</MuiThemeProvider>
 		);
@@ -1330,16 +1263,19 @@ const mapStateToProps = (state) => {
 		controlQueues: state.players.controlQueues,
 		userInfo: state.userInfo,
 		settings: state.settings,
+		// todo: modal
 	};
 };
-//
-// const mapActionsToProps = (state) => {
-// 	return state;
-// };
 
-// export default connect(mapStateToProps, mapActionsToProps)(App);
-// export default App;
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		updateSettings: (settings) => {
+			dispatch(updateSettings(settings))
+		},
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
 
 // exit fullscreen:
 window.addEventListener("keydown", (event) => {
@@ -1387,10 +1323,10 @@ function getMouseInput2(e) {
 	let value = e.type == "mousedown" ? 1 : 0;
 	// left button:
 	if (e.which === 1) {
-		controller.btns.zr = value;
+		controller.buttons.zr = value;
 		// right button:
 	} else if (e.which == 3) {
-		//controller.btns.zr = value;
+		//controller.buttons.zr = value;
 	}
 }
 

@@ -32,9 +32,10 @@
 	min-height: 40px;
 	width: 100%;
 	cursor: pointer;
+	background-color: #fff;
 }
 
-.connectWithButton>* {
+.connectWithButton > * {
 	display: flex;
 	align-self: center;
 	color: #282828;
@@ -65,16 +66,6 @@ margin-right: 5px; */
 #discordLogo {
 	width: 80px;
 }
-
-#connectWithTwitch {}
-
-#connectWithTwitchButton {}
-
-#connectWithYoutube {}
-
-#connectWithGoogle {}
-
-#connectWithDiscord {}
 
 /* CONNECT WITH GOOGLE BUTTON */
 

@@ -2,6 +2,7 @@
 import React, { PureComponent } from "react";
 
 // material ui:
+import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
 // redux:
@@ -10,6 +11,19 @@ import { connect } from "react-redux";
 // actions:
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "../actions/players.js";
 
+// recompose:
+import { compose } from "recompose";
+
+
+let classNames = require("classnames");
+
+// jss:
+const styles = (theme) => ({
+	root: {
+		width: "100%",
+		height: "fit-content",
+	},
+});
 
 class PlayerQueueButton extends PureComponent {
 
@@ -31,38 +45,27 @@ class PlayerQueueButton extends PureComponent {
 		}
 	}
 
-	getButton() {
+	render() {
+
+		const { classes } = this.props;
 
 		let num = this.props.num;
 
 		let buttonText;
-		let buttonType;
 
 		if (this.props.controlQueue.indexOf(this.props.userid) > -1) {
-			buttonType = "leaveQueue";
 			buttonText = "Leave Queue";
-			// this.setState({ isLeaveQueue: true });
 		} else {
-			buttonType = "joinQueue"
 			buttonText = "Join Queue";
-			// this.setState({ isLeaveQueue: false });
 		}
 
-		return <Button className={buttonType} variant="contained" onClick={this.joinLeaveQueue}>{buttonText}</Button>;
-	}
-
-	render() {
 		return (
-			<React.Fragment>
-				{this.getButton()}
-			</React.Fragment>
+			<Button className={classes.root} variant="contained" onClick={this.joinLeaveQueue}>{buttonText}</Button>
 		);
 	}
 
 }
 
-
-// export default JoinLeaveQueueButton;
 const mapStateToProps = (state) => {
 	return {};
 };
@@ -78,4 +81,7 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerQueueButton);
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps),
+)(PlayerQueueButton);

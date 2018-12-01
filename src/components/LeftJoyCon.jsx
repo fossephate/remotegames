@@ -1,36 +1,147 @@
+// react:
 import React, { PureComponent } from "react";
+
+// material ui:
+import { withStyles } from "@material-ui/core/styles";
+
 
 const VirtualProController = require("js/VirtualProController.js");
 const tools = require("js/tools.js");
+let classNames = require("classnames");
 
-export default class LeftJoyCon extends PureComponent {
+// jss:
+const styles = (theme) => ({
+	root: {
+		background: "transparent",
+		position: "relative",
+		width: "13.4%",
+	},
+	stick: {
+		position: "absolute",
+		/* 	background: rgba(50, 50, 50, 0.2); */
+		width: "37%",
+		height: "12%",
+		left: "34.9%",
+		top: "19.8%",
+		borderRadius: "50%",
+	},
+	stick2: {
+		position: "absolute",
+		background: "#FF3C28",
+		/*#bb5050;*/
+		width: "50%",
+		height: "50%",
+		left: "25%",
+		top: "25%",
+		pointerEvents: "none",
+		borderRadius: "50%",
+	},
+	image: {
+		width: "100%",
+	},
+	dpad: {
+		position: "absolute",
+		background: "transparent",
+		width: "85.25%",
+		height: "27.75%",
+		left: "10%",
+		top: "39%",
+		"& .up": {
+			position: "absolute",
+			left: "34.8%",
+			top: "9.5%",
+		},
+		"& .down": {
+			position: "absolute",
+			left: "34.8%",
+			top: "62.5%",
+		},
+		"& .left": {
+			position: "absolute",
+			left: "7%",
+			top: "36%",
+		},
+		"& .right": {
+			position: "absolute",
+			left: "63%",
+			top: "36%",
+		},
+	},
+	button: {
+		background: "rgba(50, 50, 50, 0.2)",
+		/* width: 30px;
+		height: 30px; */
+		width: "32%",
+		height: "32%",
+		border: "2px solid #333",
+		borderRadius: "50%",
+		display: "flex",
+		justifyContent: "space-evenly",
+		flexDirection: "column",
+	},
+	otherButtons: {
+		color: "#FFFFFF",
+		textShadow: "2px 2px 4px #000000",
+		/* less round */
+		borderRadius: "10px !important",
+		"& .minus": {
+			position: "absolute",
+			left: "66%",
+			top: "6%",
+			width: "32%",
+			height: "9%",
+		},
+		"& .capture": {
+			position: "absolute",
+			left: "54%",
+			top: "67.5%",
+			width: "32%",
+			height: "9%",
+		},
+		"& .l": {
+			position: "absolute",
+			left: "1%",
+			top: "6%",
+			width: "60%",
+			height: "6%",
+		},
+		"& .zl": {
+			position: "absolute",
+			left: "1%",
+			top: "0%",
+			width: "60%",
+			height: "6%",
+		},
+	},
+	highlighted: {
+		background: "rgba(80, 187, 80, 0.7)",
+	},
+});
+
+class LeftJoyCon extends PureComponent {
 
 	constructor(props) {
 		super(props);
 
 		this.controller = new VirtualProController();
+
+		this.state = {};
 	}
 
-	state = {};
+	render() {
 
+		const { classes } = this.props;
 
-
-	getJoyCon() {
-
-		let controllerState = "000000000000000000 128 128 128 128";
-
-		this.controller.setState(this.props.controllerState || controllerState);
-
-
-		let str = this.props.controllerState || controllerState;
 		let restPos = 128;
 
-		let stickPositions = str.substring(19).split(" ");
+		if (!this.props.controllerState) {
+			this.controller.reset();
+		} else {
+			this.controller.setState2(this.props.controllerState[0]);
+		}
 
-		let LX = (parseInt(stickPositions[0]) - restPos);
-		let LY = (parseInt(stickPositions[1]) - restPos);
-		let RX = (parseInt(stickPositions[2]) - restPos);
-		let RY = (parseInt(stickPositions[3]) - restPos);
+		let LX = (this.controller.sticks[0][0] - restPos);
+		let LY = (this.controller.sticks[0][1] - restPos);
 
 		LY *= -1;
 
@@ -43,7 +154,7 @@ export default class LeftJoyCon extends PureComponent {
 
 		let LStick = tools.normalizeVector({
 			x: LX,
-			y: LY
+			y: LY,
 		}, LMagnitude);
 
 		LX = parseInt(LStick.x * scale);
@@ -51,38 +162,33 @@ export default class LeftJoyCon extends PureComponent {
 
 		let leftTransform = LX + "px" + "," + LY + "px";
 
-
 		return (
-			<div id="leftJoyCon">
-				<img id="leftJoyConImage" src="https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png" />
-				<div id="leftStick" className={"" + (this.controller.btns.stick_button ? " highlightedButton" : "")}>
-					<div id="leftStick2" style={{transform: "translate(" + leftTransform + ")"}}></div>
+			<div className={classes.root}>
+				<img className={classes.image} src="https://twitchplaysnintendoswitch.com/images/leftJoyCon2.png"/>
+				<div className={classNames(classes.stick, {[classes.highlighted]: (this.controller.buttons.lstick)})}>
+					<div className={classes.stick2} style={{transform: "translate(" + leftTransform + ")"}}></div>
 				</div>
 
-				<div id="dpadButtons">
-					<div id="upButton" className={"controllerButton" + (this.controller.btns.up ? " highlightedButton" : "")}></div>
-					<div id="downButton" className={"controllerButton" + (this.controller.btns.down ? " highlightedButton" : "")}></div>
-					<div id="leftButton" className={"controllerButton" + (this.controller.btns.left ? " highlightedButton" : "")}></div>
-					<div id="rightButton" className={"controllerButton" + (this.controller.btns.right ? " highlightedButton" : "")}></div>
+				<div className={classes.dpad}>
+					<div className={classNames(classes.button, "up", {[classes.highlighted]: (this.controller.buttons.up)})}></div>
+					<div className={classNames(classes.button, "down", {[classes.highlighted]: (this.controller.buttons.down)})}></div>
+					<div className={classNames(classes.button, "left", {[classes.highlighted]: (this.controller.buttons.left)})}></div>
+					<div className={classNames(classes.button, "right", {[classes.highlighted]: (this.controller.buttons.right)})}></div>
 				</div>
-				<div id="leftJoyConOther">
-					<div id="minusButton" className={"controllerButton lessRound" + (this.controller.btns.minus ? " highlightedButton" : "")}></div>
-					<div id="captureButton" className={"controllerButton lessRound" + (this.controller.btns.capture ? " highlightedButton" : "")}></div>
-					<div id="lButton" className={"controllerButton lessRound" + (this.controller.btns.l ? " highlightedButton" : "")}><div className="click-passthrough">L</div></div>
-					<div id="zlButton" className={"controllerButton lessRound" + (this.controller.btns.zl ? " highlightedButton" : "")}><div className="click-passthrough">ZL</div></div>
+				<div className={classes.otherButtons}>
+					<div className={classNames(classes.button, classes.otherButtons, "minus", {[classes.highlighted]: (this.controller.buttons.minus)})}></div>
+					<div className={classNames(classes.button, classes.otherButtons, "capture", {[classes.highlighted]: (this.controller.buttons.capture)})}></div>
+					<div className={classNames(classes.button, classes.otherButtons, "l", {[classes.highlighted]: (this.controller.buttons.l)})}>
+						<div className="click-passthrough">L</div>
+					</div>
+					<div className={classNames(classes.button, classes.otherButtons, "zl", {[classes.highlighted]: (this.controller.buttons.zl)})}>
+						<div className="click-passthrough">ZL</div>
+					</div>
 				</div>
 			</div>
-		);
-
-
-	}
-
-	render() {
-		return (
-			<React.Fragment>
-				{this.getJoyCon()}
-			</React.Fragment>
 		);
 	}
 
 }
+
+export default withStyles(styles)(LeftJoyCon);

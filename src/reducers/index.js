@@ -2,9 +2,8 @@ import { combineReducers } from "redux";
 import chat from "./chat.js";
 
 import viewers from "./viewers.js";
-import waitlists from "./waitlists.js";
+import waitlist from "./waitlist.js";
 
-import controllerState from "./controllerState.js";
 import players from "./players.js";
 
 import userInfo from "./userInfo.js";
@@ -18,11 +17,10 @@ import time from "./time.js";
 const rootReducer = combineReducers({
 	chat,
 	viewers,
-	waitlists,
+	waitlist,
 	userInfo,
 	usernameMap,
 	settings,
-	controllerState,
 	players,
 	time,
 });

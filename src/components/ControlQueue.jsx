@@ -11,20 +11,32 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
+// import { withTheme } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/core/styles";
 
-import { withTheme } from "@material-ui/core/styles";
-import { withStyles } from '@material-ui/core/styles';
-
+// recompose:
 import { compose } from "recompose";
 
-import "./ControlQueue.css";
+let classNames = require("classnames");
 
+// jss:
 const styles = (theme) => ({
 	root: {
 		width: "100%",
 		backgroundColor: theme.palette.background.paper,
 	},
+	listItem: {
+		cursor: "pointer",
+		userSelect: "none",
+		width: "100%",
+	},
+	highlighted: {
+		// backgroundColor: "#DDE263",
+		backgroundColor: theme.palette.secondary.light,
+	},
 });
+
+
 
 class ControlQueue extends PureComponent {
 
@@ -33,6 +45,8 @@ class ControlQueue extends PureComponent {
 	}
 
 	getQueue() {
+
+		const { classes } = this.props;
 
 		let queue = [];
 		let usernameMap = this.props.usernameMap;
@@ -43,10 +57,13 @@ class ControlQueue extends PureComponent {
 		}
 
 		for (let i = 0; i < userids.length; i++) {
-			let username = this.props.usernameMap[userids[i]];
-			let listItemClass = (this.props.userid == userids[i]) ? "queueItem queueItemHighlighted" : "queueItem";
-			let html = <ListItem button key={i} className={listItemClass} userid={userids[i]}><ListItemText primary={username}/></ListItem>;
-			queue.push(html);
+			let username = usernameMap[userids[i]];
+			let listItemClasses = classNames(classes.listItem, {
+				[classes.highlighted]: (this.props.userid == userids[i]),
+			});
+			queue.push(
+				<ListItem button key={i} className={listItemClasses} userid={userids[i]}><ListItemText primary={username}/></ListItem>
+			);
 		}
 
 		return queue;
@@ -55,11 +72,9 @@ class ControlQueue extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (
-			<div className={classes.root}>
-				<List>
-					{this.getQueue()}
-				</List>
-			</div>
+			<List className={classes.root}>
+				{this.getQueue()}
+			</List>
 		);
 	}
 
@@ -81,7 +96,6 @@ const mapStateToProps = (state) => {
 };
 
 export default compose(
-	withTheme(),
 	withStyles(styles),
 	connect(mapStateToProps),
 )(ControlQueue);

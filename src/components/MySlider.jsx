@@ -1,54 +1,73 @@
+// react:
 import React, { PureComponent } from "react";
 
-import Slider, { createSliderWithTooltip } from "rc-slider";
-const SliderWithTooltip = createSliderWithTooltip(Slider);
-import "rc-slider/assets/index.css";
+// material ui:
+import { withStyles } from "@material-ui/core/styles";
+import Slider from "@material-ui/lab/Slider";
 
-function log(value) {
-	console.log(value); //eslint-disable-line
-}
+// jss:
+const styles = (theme) => ({
+	slider: {
+		width: "70%",
+	},
+});
 
-function percentFormatter(v) {
-	// return `${v} %`;
-	return v;
-}
-
-export default class MySlider extends PureComponent {
+class MySlider extends PureComponent {
 
 	constructor(props) {
 		super(props);
 
-		this.state = {};
+		this.handleLocalChange = this.handleLocalChange.bind(this);
+
+		this.state = {
+			value: 0,
+			active: false,
+		};
+
+		this.active = false;
+		this.timer = null;
+	}
+
+	handleLocalChange(event, value) {
+
+		this.setState({ value: value });
+		if (typeof this.props.handleChange != "undefined") {
+			this.props.handleChange(value);
+		}
+		// if (!this.active && typeof this.props.handleAfterChange != "undefined") {
+		// 	this.props.handleAfterChange(value);
+		// }
+
+		// debounce:
+		this.active = true;
+		clearTimeout(this.timer);
+		this.timer = setTimeout(() => {
+			this.active = false;
+			if (typeof this.props.handleAfterChange != "undefined") {
+				this.props.handleAfterChange(value);
+				// trigger a re-render after the handleAfterChange:
+				setTimeout(() => {
+					this.setState({ value: Math.random() });
+				}, 500);
+			}
+		}, (this.props.delay || 500));
 	}
 
 	render() {
+		const { classes } = this.props;
 		return (
-			<SliderWithTooltip
-			tipFormatter={percentFormatter}
-			tipProps={{ overlayClassName: "foo" }}
-
-			// min={this.props.min || 0}
-			// max={this.props.max || 100}
-			// step={this.props.ma}
-			{...this.props}
-
-			onChange={this.props.handleChange}
-			value={this.props.value}
-			trackStyle={{
-				// backgroundColor: "blue",
-				// height: 10,
-				width: "80%",
-			}}
-			handleStyle={{
-				// borderColor: "blue",
-				// height: 28,
-				// width: 28,
-				// marginLeft: -14,
-				// marginTop: -9,
-				// backgroundColor: "black",
-			}}
-			style={{width: "80%"}}/>
+			<Slider
+				classes={{
+					root: this.props.rootClasses || classes.slider,
+				}}
+				min={this.props.min}
+				max={this.props.max}
+				step={this.props.step}
+				onChange={this.handleLocalChange}
+				value={(this.active ? this.state.value : this.props.value) || 0}/>
 		);
 	}
 
 }
+
+export default withStyles(styles)(MySlider);

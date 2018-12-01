@@ -8,18 +8,33 @@ import SendMessageForm from "./SendMessageForm.jsx";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
+// device sizes:
+import { device } from "src/constants/DeviceSizes.js";
 
 // jss:
-
 const styles = (theme) => ({
 	root: {
+		gridArea: "chat",
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-between",
 		flex: "1",
-		gridColumn: "2",
-		gridRow: "2",
 		padding: "5px",
+	},
+	[device.tablet]: {
+		root: {
+			// position: "absolute",
+			// width: "60%",
+			// width: "100%",
+			// padding: "5px",
+		},
+	},
+	[device.laptop]: {
+		root: {
+			// position: "",
+			// width: "100%",
+			// padding: "5px",
+		},
 	},
 });
 
@@ -34,8 +49,12 @@ class Chat extends PureComponent {
 
 		const { classes } = this.props;
 
+		if (this.props.hide) {
+			return null;
+		}
+
 		return (
-			<Paper id="chat" className={classes.root} style={this.props.hide ? {display: "none"} : null}>
+			<Paper id="chat" className={classes.root}>
 				<MessageList/>
 				<SendMessageForm/>
 			</Paper>

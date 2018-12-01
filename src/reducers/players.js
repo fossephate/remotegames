@@ -3,6 +3,7 @@ const players = (state = {}, action) => {
 	switch (action.type) {
 		case "UPDATE_PLAYER_TURN_START_TIMES":
 			newState = [{}, {}, {}, {}];
+			// newState = [...state.turnTimers];
 			for (let i = 0; i < state.turnTimers.length; i++) {
 				if (action.payload.turnStartTimes != null) {
 					newState[i].turnStartTime = action.payload.turnStartTimes[i];
@@ -20,6 +21,7 @@ const players = (state = {}, action) => {
 			return { ...state, turnTimers: newState };
 		case "UPDATE_PLAYER_TURN_LENGTHS":
 			newState = [{}, {}, {}, {}];
+			// newState = [...state.turnTimers];
 			for (let i = 0; i < state.turnTimers.length; i++) {
 				newState[i].turnStartTime = state.turnTimers[i].turnStartTime;
 				newState[i].forfeitStartTime = state.turnTimers[i].forfeitStartTime;
@@ -28,10 +30,12 @@ const players = (state = {}, action) => {
 			}
 			return { ...state, turnTimers: newState };
 		case "UPDATE_PLAYER_CONTROL_QUEUES":
-			// return Object.assign({ ...state }, { controlQueues: action.payload.queues });
 			return { ...state, controlQueues: action.payload.queues };
-			// state.controlQueues = action.payload.queues;
-			return state;
+		case "UPDATE_PLAYER_CONTROLLER_STATE":
+			newState = [...state.controllerStates];
+			newState[action.payload.cNum].btns = action.payload.btns;
+			newState[action.payload.cNum].sticks = action.payload.sticks;
+			return { ...state, controllerStates: newState };
 		default:
 			return state;
 	}

@@ -9,6 +9,7 @@ import PlayerQueueButton from "./PlayerQueueButton.jsx";
 import ControlQueue from "./ControlQueue.jsx";
 
 // material ui:
+import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
 // redux:
@@ -16,12 +17,40 @@ import { connect } from "react-redux";
 
 import { updateSettings } from "src/actions/settings.js";
 
+// recompose:
+import { compose } from "recompose";
+
+// device sizes:
+import { device } from "src/constants/DeviceSizes.js";
+
+// jss:
+const styles = (theme) => ({
+	root: {
+		width: "100%",
+		padding: "5px",
+	},
+	[device.tablet]: {
+		root: {
+			width: "100%",
+			// padding: "5px",
+		}
+	},
+	[device.laptop]: {
+		root: {
+			width: "24%",
+			// padding: "5px",
+		}
+	},
+});
+
 
 
 class Player extends PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.choosePlayer = this.choosePlayer.bind(this);
 
 		this.state = {};
 	}
@@ -32,6 +61,8 @@ class Player extends PureComponent {
 
 	render() {
 
+		const { classes } = this.props;
+
 		let n = this.props.num - 1;
 		// let turnExpiration = parseInt(this.props.turnTimers[n].turnExpiration / 1000);
 		// let turnPercent = parseInt((this.props.turnTimers[n].turnExpiration / this.props.turnTimers[n].turnLength) * 100);
@@ -39,7 +70,7 @@ class Player extends PureComponent {
 		// let forfeitPercent = parseInt((this.props.turnTimers[n].forfeitExpiration / this.props.turnTimers[n].forfeitLength) * 100);
 
 		return (
-			<Paper elevation={4} style={{width: "24%", padding: "5px"}}>
+			<Paper elevation={4} className={classes.root}>
 				<MyCheckbox
 					text={"Player " + this.props.num}
 					handleChange={this.choosePlayer}
@@ -81,4 +112,7 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Player);
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps),
+)(Player);

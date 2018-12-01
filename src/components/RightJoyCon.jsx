@@ -1,34 +1,147 @@
+// react:
 import React, { PureComponent } from "react";
+
+// material ui:
+import { withStyles } from "@material-ui/core/styles";
+
 
 const VirtualProController = require("js/VirtualProController.js");
 const tools = require("js/tools.js");
+let classNames = require("classnames");
 
-export default class RightJoyCon extends PureComponent {
+// jss:
+const styles = (theme) => ({
+	root: {
+		background: "transparent",
+		position: "relative",
+		width: "13.4%",
+	},
+	stick: {
+		position: "absolute",
+		/* 	background: rgba(50, 50, 50, 0.2); */
+		width: "37%",
+		height: "12%",
+		left: "28%",
+		top: "47.2%",
+		borderRadius: "50%",
+	},
+	stick2: {
+		position: "absolute",
+		background: "#0AB9E6",
+		/*#bb5050;*/
+		width: "50%",
+		height: "50%",
+		left: "25%",
+		top: "25%",
+		pointerEvents: "none",
+		borderRadius: "50%",
+	},
+	image: {
+		width: "100%",
+	},
+	abxy: {
+		position: "absolute",
+		background: "transparent",
+		width: "85.25%",
+		height: "27.75%",
+		left: "3%",
+		top: "12%",
+		"& .a": {
+			position: "absolute",
+			left: "63.2%",
+			top: "34.5%",
+		},
+		"& .b": {
+			position: "absolute",
+			left: "35.2%",
+			top: "61%",
+		},
+		"& .x": {
+			position: "absolute",
+			left: "35.2%",
+			top: "8%",
+		},
+		"& .y": {
+			position: "absolute",
+			left: "7.2%",
+			top: "34.5%",
+		},
+	},
+	button: {
+		background: "rgba(50, 50, 50, 0.2)",
+		/* width: 30px;
+		height: 30px; */
+		width: "32%",
+		height: "32%",
+		border: "2px solid #333",
+		borderRadius: "50%",
+		display: "flex",
+		justifyContent: "space-evenly",
+		flexDirection: "column",
+	},
+	otherButtons: {
+		color: "#FFFFFF",
+		textShadow: "2px 2px 4px #000000",
+		/* less round */
+		borderRadius: "10px !important",
+		"& .plus": {
+			position: "absolute",
+			left: "1%",
+			top: "6%",
+			width: "32%",
+			height: "9%",
+		},
+		"& .home": {
+			position: "absolute",
+			left: "14%",
+			top: "67.5%",
+			width: "32%",
+			height: "9%",
+		},
+		"& .r": {
+			position: "absolute",
+			left: "40%",
+			top: "6%",
+			width: "60%",
+			height: "6%",
+		},
+		"& .zr": {
+			position: "absolute",
+			left: "40%",
+			top: "0%",
+			width: "60%",
+			height: "6%",
+		},
+	},
+	highlighted: {
+		background: "rgba(80, 187, 80, 0.7)",
+	},
+});
+
+class RightJoyCon extends PureComponent {
 
 	constructor(props) {
 		super(props);
 
 		this.controller = new VirtualProController();
+
+		this.state = {};
 	}
 
-	state = {};
+	render() {
 
+		const { classes } = this.props;
 
-
-	getJoyCon() {
-
-		let controllerState = "000000000000000000 128 128 128 128";
-
-		this.controller.setState(this.props.controllerState || controllerState);
-
-
-		let str = this.props.controllerState || controllerState;
 		let restPos = 128;
 
-		let stickPositions = str.substring(19).split(" ");
+		if (!this.props.controllerState[0]) {
+			this.controller.reset();
+		} else {
+			this.controller.setState2(this.props.controllerState[0]);
+		}
 
-		let RX = (parseInt(stickPositions[2]) - restPos);
-		let RY = (parseInt(stickPositions[3]) - restPos);
+		let RX = (this.controller.sticks[1][0] - restPos);
+		let RY = (this.controller.sticks[1][1] - restPos);
 
 		RY *= -1;
 
@@ -39,43 +152,39 @@ export default class RightJoyCon extends PureComponent {
 		RMagnitude = tools.clamp(RMagnitude, -max, max);
 		let RStick = tools.normalizeVector({
 			x: RX,
-			y: RY
+			y: RY,
 		}, RMagnitude);
 		RX = parseInt(RStick.x * scale);
 		RY = parseInt(RStick.y * scale);
 		let rightTransform = RX + "px" + "," + RY + "px";
 
 		return (
-			<div id="rightJoyCon">
-				<img id="rightJoyConImage" src="https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png" />
-				<div id="rightStick" className={"" + (this.controller.btns.stick_button2 ? " highlightedButton" : "")}>
-					<div id="rightStick2" style={{transform: "translate(" + rightTransform + ")"}}></div>
+			<div className={classes.root}>
+				<img className={classes.image} src="https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png"/>
+				<div className={classNames(classes.stick, {[classes.highlighted]: (this.controller.buttons.rstick)})}>
+					<div className={classes.stick2} style={{transform: "translate(" + rightTransform + ")"}}></div>
 				</div>
 
-				<div id="abxyButtons">
-					<div id="aButton" className={"controllerButton" + (this.controller.btns.a ? " highlightedButton" : "")} ></div>
-					<div id="bButton" className={"controllerButton" + (this.controller.btns.b ? " highlightedButton" : "")}></div>
-					<div id="xButton" className={"controllerButton" + (this.controller.btns.x ? " highlightedButton" : "")}></div>
-					<div id="yButton" className={"controllerButton" + (this.controller.btns.y ? " highlightedButton" : "")}></div>
+				<div className={classes.abxy}>
+					<div className={classNames(classes.button, "a", {[classes.highlighted]: (this.controller.buttons.a)})}></div>
+					<div className={classNames(classes.button, "b", {[classes.highlighted]: (this.controller.buttons.b)})}></div>
+					<div className={classNames(classes.button, "x", {[classes.highlighted]: (this.controller.buttons.x)})}></div>
+					<div className={classNames(classes.button, "y", {[classes.highlighted]: (this.controller.buttons.y)})}></div>
 				</div>
-				<div id="rightJoyConOther">
-					<div id="plusButton" className={"controllerButton lessRound" + (this.controller.btns.plus ? " highlightedButton" : "")}></div>
-					<div id="homeButton" className={"controllerButton lessRound" + (this.controller.btns.home ? " highlightedButton" : "")}></div>
-					<div id="rButton" className={"controllerButton lessRound" + (this.controller.btns.r ? " highlightedButton" : "")}><div className="click-passthrough">R</div></div>
-					<div id="zrButton" className={"controllerButton lessRound" + (this.controller.btns.zr ? " highlightedButton" : "")}><div className="click-passthrough">ZR</div></div>
+				<div className={classes.otherButtons}>
+					<div className={classNames(classes.button, classes.otherButtons, "plus", {[classes.highlighted]: (this.controller.buttons.plus)})}></div>
+					<div className={classNames(classes.button, classes.otherButtons, "home", {[classes.highlighted]: (this.controller.buttons.home)})}></div>
+					<div className={classNames(classes.button, classes.otherButtons, "r", {[classes.highlighted]: (this.controller.buttons.r)})}>
+						<div className="click-passthrough">R</div>
+					</div>
+					<div className={classNames(classes.button, classes.otherButtons, "zr", {[classes.highlighted]: (this.controller.buttons.zr)})}>
+						<div className="click-passthrough">ZR</div>
+					</div>
 				</div>
 			</div>
-		);
-
-
-	}
-
-	render() {
-		return (
-			<React.Fragment>
-				{this.getJoyCon()}
-			</React.Fragment>
 		);
 	}
 
 }
+
+export default withStyles(styles)(RightJoyCon);

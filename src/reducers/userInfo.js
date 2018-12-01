@@ -3,8 +3,7 @@ const userInfo = (state = {}, action) => {
 		case "CHANGE_USERNAME":
 			return { ...state, usernameIndex: action.payload.usernameIndex };
 		case "UPDATE_USER_INFO":
-			// return { ...state, action.payload.userInfo };
-			return Object.assign({ ...state }, action.payload.userInfo);
+			return { ...state, ...action.payload.userInfo };
 		default:
 			return state;
 	}

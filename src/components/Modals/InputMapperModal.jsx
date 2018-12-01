@@ -1,6 +1,8 @@
+// react:
 import React, { PureComponent } from "react";
 
 // material ui:
+import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -12,7 +14,35 @@ import MyCheckbox from "src/components/MyCheckbox.jsx"
 
 // import "./RegisterModal.css";
 
-export default class InputMapperModal extends PureComponent {
+// jss:
+const styles = (theme) => ({
+	root: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "center",
+		position: "relative",
+		marginLeft: "5px",
+		marginRight: "5px",
+		textAlign: "center",
+	},
+	canvas: {
+		width: "73.2%",
+		alignSelf: "center",
+	},
+	twitch: {
+		width: "73.2%",
+		height: "100%",
+	},
+	fullscreen: {
+		width: "100% !important",
+		margin: "0",
+		padding: "0",
+		border: "none",
+	},
+});
+
+
+class InputMapperModal extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -115,3 +145,5 @@ export default class InputMapperModal extends PureComponent {
 	}
 
 }
+
+export default withStyles(styles)(InputMapperModal);

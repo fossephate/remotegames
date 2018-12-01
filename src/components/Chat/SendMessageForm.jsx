@@ -149,12 +149,12 @@ class SendMessageForm extends PureComponent {
 		for (let i = 0; i < this.props.userids.length; i++) {
 			let userid = this.props.userids[i];
 			let username = this.props.usernameMap[userid];
-			if (username == null || username.indexOf(token) == -1) {
+			if (username == null || username.toLowerCase().indexOf(token) == -1) {
 				continue;
 			}
 			suggestions.push({ name: username, char: ("@" + username) });
 		}
-		return suggestions;
+		return suggestions.slice(0, 5);
 	}
 
 	renderCommandSuggestions(token) {
@@ -166,7 +166,7 @@ class SendMessageForm extends PureComponent {
 			}
 			suggestions.push({ name: command, char: ("!" + command) });
 		}
-		return suggestions;
+		return suggestions.slice(0, 5);
 	}
 
 	render() {

@@ -181,7 +181,7 @@
 			};
 		})();
 
-		
+
 		// example:
 // 		var bandwidth = {
 // 			screen: 300, // 300kbits minimum
@@ -206,7 +206,7 @@
 // 			'usedtx': 1, // use dtx
 // 			'maxptime': 3
 // 		});
-		
+
 		function mySDPTransform(sdp) {
 // 			sdp = BandwidthHandler.setOpusAttributes(sdp, {
 // 				'stereo': 0, // to disable stereo (to force mono audio)
@@ -218,7 +218,7 @@
 // 				'usedtx': 1, // use dtx
 // 				'maxptime': 3
 // 			});
-			
+
 			var bandwidth = {
 				screen: 300, // 300kbits minimum
 				audio: 500,   // 500kbits  minimum
@@ -232,12 +232,12 @@
 				max: bandwidth.video
 			});
 			sdp = BandwidthHandler.setOpusAttributes(sdp);
-			
+
 			return sdp;
 		}
 
 		let socket = io("https://twitchplaysnintendoswitch.com", {
-			path: "/8110/socket.io/",
+			path: "/8100/socket.io/",
 		});
 
 		socket.emit("join", "audioHost");

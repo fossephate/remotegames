@@ -7,11 +7,16 @@ import Linkify from "react-linkify";
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import ListItemText from "@material-ui/core/ListItemText";
+import Button from "@material-ui/core/Button";
 
 const styles = (theme) => ({
 	root: {
 		wordBreak: "break-word",
 		padding: "4px",
+	},
+	links: {
+		// todo: use primary / secondary based on which it should be:
+		color: theme.palette.primary.contrastText,
 	},
 });
 
@@ -46,7 +51,7 @@ const Message = (props) => {
 	let messageContent = `${getTimeStamp(time)}<b>${username}</b>${message}`;
 	return (
 		<div className={classes.root} userid={userid}>
-			<Linkify>
+			<Linkify properties={{className: classes.links}}>
 				<ListItemText>
 					{getTimeStamp(time)}<b>{username}</b> {message}
 				</ListItemText>
@@ -62,3 +67,7 @@ Message.propTypes = {
 };
 
 export default withStyles(styles)(Message);
+// export default compose(
+// 	withTheme()
+// 	withStyles(styles),
+// )(Message);

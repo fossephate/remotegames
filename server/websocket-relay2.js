@@ -42,7 +42,7 @@ socketServer.broadcast = function (data) {
 };
 
 io.on("connection", function (socket) {
-	socket.on("videoData2", function (data) {
+	socket.on("videoData", function (data) {
 		socketServer.broadcast((data));
 	});
 });
