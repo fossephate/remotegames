@@ -55,9 +55,9 @@ class NavTabs extends PureComponent {
 
 					<Tab label="Lagless1"/>
 					<Tab label="Lagless2"/>
-					<Tab label="Lagless3" disabled/>
-					<Tab label="Lagless4" disabled/>
-					<Tab label="Lagless5" disabled/>
+					{/* <Tab label="Lagless3"/> */}
+					{/* <Tab label="Lagless4"/> */}
+					{/* <Tab label="Lagless5"/> */}
 				</Tabs>
 			</Paper>
 		);

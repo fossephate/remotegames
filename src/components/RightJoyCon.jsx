@@ -137,11 +137,11 @@ class RightJoyCon extends PureComponent {
 		if (!this.props.controllerState[0]) {
 			this.controller.reset();
 		} else {
-			this.controller.setState2(this.props.controllerState[0]);
+			this.controller.setState(this.props.controllerState[0]);
 		}
 
-		let RX = (this.controller.sticks[1][0] - restPos);
-		let RY = (this.controller.sticks[1][1] - restPos);
+		let RX = (this.controller.axes[2] - restPos);
+		let RY = (this.controller.axes[3] - restPos);
 
 		RY *= -1;
 

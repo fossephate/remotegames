@@ -137,11 +137,11 @@ class LeftJoyCon extends PureComponent {
 		if (!this.props.controllerState) {
 			this.controller.reset();
 		} else {
-			this.controller.setState2(this.props.controllerState[0]);
+			this.controller.setState(this.props.controllerState[0]);
 		}
 
-		let LX = (this.controller.sticks[0][0] - restPos);
-		let LY = (this.controller.sticks[0][1] - restPos);
+		let LX = (this.controller.axes[0] - restPos);
+		let LY = (this.controller.axes[1] - restPos);
 
 		LY *= -1;
 

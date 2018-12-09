@@ -68,24 +68,24 @@ class VirtualKeyboard {
 
 		if (!this.settings.analogStickMode) {
 			if (key.isPressed(this.keyboardMapping.LU)) {
-				this.state.sticks[0][1] = 255;
+				this.state.axes[1] = 255;
 			} else if (key.wasPressed(this.keyboardMapping.LU, this.wasPressedKeyCodes)) {
-				this.state.sticks[0][1] = restPos;
+				this.state.axes[1] = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.LD)) {
-				this.state.sticks[0][1] = 0;
+				this.state.axes[1] = 0;
 			} else if (key.wasPressed(this.keyboardMapping.LD, this.wasPressedKeyCodes)) {
-				this.state.sticks[0][1] = restPos;
+				this.state.axes[1] = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.LL)) {
-				this.state.sticks[0][0] = 0;
+				this.state.axes[0] = 0;
 			} else if (key.wasPressed(this.keyboardMapping.LL, this.wasPressedKeyCodes)) {
-				this.state.sticks[0][0] = restPos;
+				this.state.axes[0] = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.LR)) {
-				this.state.sticks[0][0] = 255;
+				this.state.axes[0] = 255;
 			} else if (key.wasPressed(this.keyboardMapping.LR, this.wasPressedKeyCodes)) {
-				this.state.sticks[0][0] = restPos;
+				this.state.axes[0] = restPos;
 			}
 
 		} else {
@@ -94,27 +94,27 @@ class VirtualKeyboard {
 			let upDown = false;
 
 			if (key.isPressed(this.keyboardMapping.LU)) {
-				this.state.sticks[0][1] = Math.round(parseInt(this.state.sticks[0][1]) + settings.stickAttack);
+				this.state.axes[1] = Math.round(parseInt(this.state.axes[1]) + settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.LD)) {
-				this.state.sticks[0][1] = Math.round(parseInt(this.state.sticks[0][1]) - settings.stickAttack);
+				this.state.axes[1] = Math.round(parseInt(this.state.axes[1]) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.LL)) {
-				this.state.sticks[0][0] = Math.round(parseInt(this.state.sticks[0][0]) - settings.stickAttack);
+				this.state.axes[0] = Math.round(parseInt(this.state.axes[0]) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.LR)) {
-				this.state.sticks[0][0] = Math.round(parseInt(this.state.sticks[0][0]) + settings.stickAttack);
+				this.state.axes[0] = Math.round(parseInt(this.state.axes[0]) + settings.stickAttack);
 			}
 
 			upDown = key.isPressed(this.keyboardMapping.LU) || key.isPressed(this.keyboardMapping.LD);
 			leftRight = key.isPressed(this.keyboardMapping.LL) || key.isPressed(this.keyboardMapping.LR);
 
 			if (!upDown) {
-				this.state.sticks[0][1] = Math.round(mathZoom(parseInt(this.state.sticks[0][1]), restPos, settings.stickReturn));
+				this.state.axes[1] = Math.round(mathZoom(parseInt(this.state.axes[1]), restPos, settings.stickReturn));
 			}
 
 			if (!leftRight) {
-				this.state.sticks[0][0] = Math.round(mathZoom(parseInt(this.state.sticks[0][0]), restPos, settings.stickReturn));
+				this.state.axes[0] = Math.round(mathZoom(parseInt(this.state.axes[0]), restPos, settings.stickReturn));
 			}
 		}
 
@@ -164,51 +164,51 @@ class VirtualKeyboard {
 
 		if (!this.settings.analogStickMode) {
 			if (key.isPressed(this.keyboardMapping.RU)) {
-				this.state.sticks[1][1] = 255;
+				this.state.axes[3] = 255;
 			} else if (key.wasPressed(this.keyboardMapping.RU, this.wasPressedKeyCodes)) {
-				this.state.sticks[1][1] = restPos;
+				this.state.axes[3] = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.RD)) {
-				this.state.sticks[1][1] = 0;
+				this.state.axes[3] = 0;
 			} else if (key.wasPressed(this.keyboardMapping.RD, this.wasPressedKeyCodes)) {
-				this.state.sticks[1][1] = restPos;
+				this.state.axes[3] = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.RL)) {
-				this.state.sticks[1][0] = 0;
+				this.state.axes[2] = 0;
 			} else if (key.wasPressed(this.keyboardMapping.RL, this.wasPressedKeyCodes)) {
-				this.state.sticks[1][0] = restPos;
+				this.state.axes[2] = restPos;
 			}
 			if (key.isPressed(this.keyboardMapping.RR)) {
-				this.state.sticks[1][0] = 255;
+				this.state.axes[2] = 255;
 			} else if (key.wasPressed(this.keyboardMapping.RR, this.wasPressedKeyCodes)) {
-				this.state.sticks[1][0] = restPos;
+				this.state.axes[2] = restPos;
 			}
 		} else {
 			let leftRight = false;
 			let upDown = false;
 
 			if (key.isPressed(this.keyboardMapping.RU)) {
-				this.state.sticks[1][1] = Math.round(parseInt(this.state.sticks[1][1]) + settings.stickAttack);
+				this.state.axes[3] = Math.round(parseInt(this.state.axes[3]) + settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.RD)) {
-				this.state.sticks[1][1] = Math.round(parseInt(this.state.sticks[1][1]) - settings.stickAttack);
+				this.state.axes[3] = Math.round(parseInt(this.state.axes[3]) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.RL)) {
-				this.state.sticks[1][0] = Math.round(parseInt(this.state.sticks[1][0]) - settings.stickAttack);
+				this.state.axes[2] = Math.round(parseInt(this.state.axes[2]) - settings.stickAttack);
 			}
 			if (key.isPressed(this.keyboardMapping.RR)) {
-				this.state.sticks[1][0] = Math.round(parseInt(this.state.sticks[1][0]) + settings.stickAttack);
+				this.state.axes[2] = Math.round(parseInt(this.state.axes[2]) + settings.stickAttack);
 			}
 
 			upDown = key.isPressed(this.keyboardMapping.RU) || key.isPressed(this.keyboardMapping.RD);
 			leftRight = key.isPressed(this.keyboardMapping.RL) || key.isPressed(this.keyboardMapping.RR);
 
 			if (!upDown) {
-				this.state.sticks[1][1] = Math.round(mathZoom(parseInt(this.state.sticks[1][1]), restPos, settings.stickReturn));
+				this.state.axes[3] = Math.round(mathZoom(parseInt(this.state.axes[3]), restPos, settings.stickReturn));
 			}
 
 			if (!leftRight) {
-				this.state.sticks[1][0] = Math.round(mathZoom(parseInt(this.state.sticks[1][0]), restPos, settings.stickReturn));
+				this.state.axes[2] = Math.round(mathZoom(parseInt(this.state.axes[2]), restPos, settings.stickReturn));
 			}
 		}
 
@@ -272,7 +272,7 @@ class VirtualKeyboard {
 		let newControllerState = this.state.getState();
 
 		// reset if nothing changed:
-		if (newControllerState == oldControllerState) {
+		if (JSON.stringify(newControllerState) == JSON.stringify(oldControllerState)) {
 			this.state.setState(oldControllerState);
 		}
 	}

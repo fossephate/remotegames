@@ -6,20 +6,25 @@ const server2 = require("http").createServer(app2);
 const io = require("socket.io-client");
 const io1 = require("socket.io")(server);
 const io2 = require("socket.io")(server2);
-const port = 8110;
+const port1 = 8110;
 const port2 = 8001;
 
 const config = require("./config.js");
 
-server.listen(port, function () {
-	console.log("Server listening at port %d", port);
+server.listen(port1, () => {
+	console.log("Server listening at port %d", port1);
 });
 
-server2.listen(port2, function () {
+server2.listen(port2, () => {
 	console.log("Server listening at port %d", port2);
 });
 
-let socket3 = io("localhost", {
+// let socket3 = io("localhost", {
+// 	path: "/8100/socket.io",
+// 	transports: ["websocket"],
+// 	reconnect: true,
+// });
+let socket3 = io("https://twitchplaysnintendoswitch.com", {
 	path: "/8100/socket.io",
 	transports: ["websocket"],
 	reconnect: true,

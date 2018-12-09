@@ -76,7 +76,7 @@ import keycode from "keycode";
 // touch controls:
 import nipplejs from "nipplejs";
 // input master:
-const InputMaster = require("js/InputMaster.js");
+import InputHandler from "js/InputHandler.js";
 
 const textFitPercent = require("js/textfitpercent.js");
 const tools = require("js/tools.js");
@@ -128,11 +128,11 @@ if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elain
 	isMobile = true;
 }
 
-window.masterInput = new InputMaster(isMobile);
+window.inputHandler = new InputHandler(isMobile);
 
 // mobile warning messages:
 if (isMobile) {
-	swal("This site isn't really designed for mobile, I'll improve it in the future but for now consider using a desktop / laptop.");
+	// swal("This site isn't really designed for mobile, I'll improve it in the future but for now consider using a desktop / laptop.");
 }
 
 /* CONTROLLER STUFF */
@@ -233,9 +233,9 @@ class App extends Component {
 
 		// this.onUsernameChange = this.onUsernameChange.bind(this);
 
-		this.login = this.login.bind(this);
-		this.register = this.register.bind(this);
-		this.viewAccount = this.viewAccount.bind(this);
+		// this.login = this.login.bind(this);
+		// this.register = this.register.bind(this);
+		// this.viewAccount = this.viewAccount.bind(this);
 
 		this.getTheme = this.getTheme.bind(this);
 
@@ -294,6 +294,7 @@ class App extends Component {
 		// 		}
 		// 		localforage.setItem("ads", "ads");
 		// 	});
+		window.dispatchEvent(new Event("resize"));
 
 		// Get stored preferences
 		localforage.getItem("settings").then((value) => {
@@ -353,8 +354,8 @@ class App extends Component {
 
 		// reconnect:
 		socket.on("disconnect", (data) => {
-			console.log("lost connection, attempting reconnect2.");
-			socket.connect();
+			// console.log("lost connection, attempting reconnect2.");
+			// socket.connect();
 		});
 		window.reconnectTimer = setInterval(() => {
 			if (!socket.connected) {
@@ -579,9 +580,9 @@ class App extends Component {
 		}, 1000);
 
 		sendInputTimer = setInterval(() => {
-			masterInput.pollDevices();
+			inputHandler.pollDevices();
 			this.sendControllerState();
-		}, 1000 / 240);
+		}, 1000 / 120);
 
 		/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -670,18 +671,18 @@ class App extends Component {
 		tools.deleteAllCookies();
 		location.reload(true);
 	}
-	login() {
-		// this.setState({ currentModal: "LOGIN" });
-		this.props.updateSettings({ modal: "LOGIN" });
-	}
-	register() {
-		// this.setState({ currentModal: "REGISTER" });
-		this.props.updateSettings({ modal: "REGISTER" });
-	}
-	viewAccount() {
-		// this.setState({ currentModal: "ACCOUNT" });
-		this.props.updateSettings({ modal: "ACCOUNT" });
-	}
+	// login() {
+	// 	// this.setState({ currentModal: "LOGIN" });
+	// 	this.props.updateSettings({ modal: "LOGIN" });
+	// }
+	// register() {
+	// 	// this.setState({ currentModal: "REGISTER" });
+	// 	this.props.updateSettings({ modal: "REGISTER" });
+	// }
+	// viewAccount() {
+	// 	// this.setState({ currentModal: "ACCOUNT" });
+	// 	this.props.updateSettings({ modal: "ACCOUNT" });
+	// }
 
 	// checkbox settings:
 	toggleKeyboardControls(state) {
@@ -709,7 +710,7 @@ class App extends Component {
 
 	toggleAnalogStickMode(state) {
 		this.props.updateSettings({ analogStickMode: state });
-		masterInput.keyboard.settings.analogStickMode = state;
+		// masterInput.keyboard.settings.analogStickMode = state;
 	}
 
 	toggleDpadSwap(state) {
@@ -718,31 +719,31 @@ class App extends Component {
 
 	toggleTDSConfig(state) {
 		this.props.updateSettings({ TDSConfig: state });
-		if (state) {
-			masterInput.controller.settings.map.a = "b";
-			masterInput.controller.settings.map.b = "a";
-			masterInput.controller.settings.map.x = "y";
-			masterInput.controller.settings.map.y = "x";
-			masterInput.controller.settings.sticks.L.X.sensitivity = 1.5;
-			masterInput.controller.settings.sticks.L.Y.sensitivity = 1.5;
-			masterInput.controller.settings.sticks.R.X.sensitivity = 1.5;
-			masterInput.controller.settings.sticks.R.Y.sensitivity = 1.5;
-			masterInput.controller.settings.sticks.R.X.offset = -20;
-			masterInput.controller.settings.sticks.R.Y.offset = -10;
-		} else {
-			masterInput.controller.settings.map.a = "a";
-			masterInput.controller.settings.map.b = "b";
-			masterInput.controller.settings.map.x = "x";
-			masterInput.controller.settings.map.y = "y";
-			masterInput.controller.settings.sticks.L.X.sensitivity = 1;
-			masterInput.controller.settings.sticks.L.X.sensitivity = 1;
-			masterInput.controller.settings.sticks.L.X.sensitivity = 1;
-			masterInput.controller.settings.sticks.L.Y.sensitivity = 1;
-			masterInput.controller.settings.sticks.R.X.sensitivity = 1;
-			masterInput.controller.settings.sticks.R.Y.sensitivity = 1;
-			masterInput.controller.settings.sticks.R.X.offset = 0;
-			masterInput.controller.settings.sticks.R.Y.offset = 0;
-		}
+		// if (state) {
+		// 	masterInput.controller.settings.map.a = "b";
+		// 	masterInput.controller.settings.map.b = "a";
+		// 	masterInput.controller.settings.map.x = "y";
+		// 	masterInput.controller.settings.map.y = "x";
+		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1.5;
+		// 	masterInput.controller.settings.sticks.L.Y.sensitivity = 1.5;
+		// 	masterInput.controller.settings.sticks.R.X.sensitivity = 1.5;
+		// 	masterInput.controller.settings.sticks.R.Y.sensitivity = 1.5;
+		// 	masterInput.controller.settings.sticks.R.X.offset = -20;
+		// 	masterInput.controller.settings.sticks.R.Y.offset = -10;
+		// } else {
+		// 	masterInput.controller.settings.map.a = "a";
+		// 	masterInput.controller.settings.map.b = "b";
+		// 	masterInput.controller.settings.map.x = "x";
+		// 	masterInput.controller.settings.map.y = "y";
+		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1;
+		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1;
+		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1;
+		// 	masterInput.controller.settings.sticks.L.Y.sensitivity = 1;
+		// 	masterInput.controller.settings.sticks.R.X.sensitivity = 1;
+		// 	masterInput.controller.settings.sticks.R.Y.sensitivity = 1;
+		// 	masterInput.controller.settings.sticks.R.X.offset = 0;
+		// 	masterInput.controller.settings.sticks.R.Y.offset = 0;
+		// }
 	}
 
 	toggleAudioThree(state) {
@@ -853,24 +854,22 @@ class App extends Component {
 		// actually switch:
 		this.setState({ tab: tab }, () => {
 
+			socket.emit("join", `lagless${tab}`);
+
 			// lagless 1:
 			if (tab == 1) {
-				socket.emit("join", "lagless1");
 				lagless1.resume(document.getElementById("videoCanvas1"));
 			}
 			// lagless 2:
 			if (tab == 2) {
-				socket.emit("join", "lagless2");
 				lagless2.resume(document.getElementById("videoCanvas2"));
 			}
 			// lagless 3:
 			if (tab == 3) {
-				socket.emit("join", "lagless3");
 				lagless3.resume(document.getElementById("videoCanvas3"));
 			}
 			// lagless 4:
 			if (tab == 4) {
-				socket.emit("join", "lagless4");
 				lagless4.resume(document.getElementById("videoCanvas4"));
 			}
 
@@ -887,24 +886,24 @@ class App extends Component {
 
 		if (!this.init) {
 			this.init = true;
-			this.oldControllerState = JSON.stringify(masterInput.outputController.getState2());
+			this.oldInputState = JSON.stringify(inputHandler.getState());
 		}
 
-		let newControllerState = JSON.stringify(masterInput.outputController.getState2());
+		let newInputState = JSON.stringify(inputHandler.getState());
 
-		if (newControllerState == this.oldControllerState) {
+		if (newInputState == this.oldInputState) {
 			return;
 		} else {
-			this.oldControllerState = newControllerState;
+			this.oldInputState = newInputState;
 		}
 
-		if (masterInput.currentInputMode == "keyboard" && !this.props.settings.keyboardControls) {
+		if (inputHandler.currentInputMode == "keyboard" && !this.props.settings.keyboardControls) {
 			return;
 		}
-		if (masterInput.currentInputMode == "controller" && !this.props.settings.controllerControls) {
+		if (inputHandler.currentInputMode == "controller" && !this.props.settings.controllerControls) {
 			return;
 		}
-		if (masterInput.currentInputMode == "touch" && !this.props.settings.touchControls) {
+		if (inputHandler.currentInputMode == "touch" && !this.props.settings.touchControls) {
 			return;
 		}
 
@@ -914,6 +913,11 @@ class App extends Component {
 		}
 
 		if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.userInfo.userid) == -1) {
+			// let players = [0, 1, 2, 3, 4, 5, 6, 7];
+			// players.splice(players.indexOf(this.props.settings.currentPlayer), 1);
+			// players.forEach((cNum) => {
+			// 	socket.emit("leaveQueue", cNum);
+			// });
 			socket.emit("joinQueue", this.props.settings.currentPlayer);
 		}
 
@@ -946,8 +950,8 @@ class App extends Component {
 		}
 
 		let obj = {
-			...masterInput.outputController.getState2(),
-			cNum: 0
+			...inputHandler.getState(),
+			cNum: 0,
 		};
 
 		if (this.props.controlQueues[0][0] == this.props.userInfo.userid) {
@@ -961,7 +965,11 @@ class App extends Component {
 		} else {
 			obj.cNum = this.props.settings.currentPlayer;
 		}
-		console.log(obj.cNum, (obj.btns).toString(2));
+		let buttons = (obj.btns).toString(2);
+		buttons = ("0".repeat(16)).substr(buttons.length) + buttons;
+
+		console.log(obj.cNum, buttons, tools.fixedLengthString(obj.axes[0], "0", 3), tools.fixedLengthString(obj.axes[1], "0", 3),
+		tools.fixedLengthString(obj.axes[2], "0", 3), tools.fixedLengthString(obj.axes[3], "0", 3));
 
 		socket.emit("sendControllerState", obj);
 	}
@@ -1091,16 +1099,15 @@ class App extends Component {
 				</div>
 
 				<Container>
-				{/* <div id="container"> */}
 
 					<NavTabs value={this.state.tab} handleChange={this.switchTabs}/>
 
 					<LoginArea
 						// handleUsernameChange={this.onUsernameChange}
 						handleLogout={this.logout}
-						handleLogin={this.login}
-						handleRegister={this.register}
-						handleAccount={this.viewAccount}/>
+						handleLogin={() => {this.props.updateSettings({ modal: "LOGIN" })}}
+						handleRegister={() => {this.props.updateSettings({ modal: "REGISTER" })}}
+						handleAccount={() => {this.props.updateSettings({ modal: "ACCOUNT" })}}/>
 
 					<Picture tab={this.state.tab}/>
 
@@ -1247,7 +1254,6 @@ class App extends Component {
 						</Paper>
 					</Paper>
 				</Container>
-				{/* </div> */}
 
 				<ModalConductor
 					currentModal={this.props.settings.modal}

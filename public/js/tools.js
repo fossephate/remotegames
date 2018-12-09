@@ -147,6 +147,14 @@ exports.deleteAllCookies = function () {
 	}
 }
 
+exports.fixedLengthString = function (string, pad, length) {
+	string = string + "";
+	while (string.length < length) {
+		string = pad + string;
+	}
+	return string;
+}
+
 
 // String.prototype.replaceAll = function(search, replacement) {
 // 	let target = this;

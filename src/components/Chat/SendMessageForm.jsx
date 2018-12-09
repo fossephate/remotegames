@@ -152,6 +152,10 @@ class SendMessageForm extends PureComponent {
 			if (username == null || username.toLowerCase().indexOf(token) == -1) {
 				continue;
 			}
+			if (token.indexOf(username) > -1) {
+				suggestions = [];
+				break;
+			}
 			suggestions.push({ name: username, char: ("@" + username) });
 		}
 		return suggestions.slice(0, 5);
@@ -163,6 +167,10 @@ class SendMessageForm extends PureComponent {
 			let command = this.state.commands[i];
 			if (command.indexOf(token) == -1) {
 				continue;
+			}
+			if (token.indexOf(command) > -1) {
+				suggestions = [];
+				break;
 			}
 			suggestions.push({ name: command, char: ("!" + command) });
 		}

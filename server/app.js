@@ -816,7 +816,7 @@ io.on("connection", (socket) => {
 
 		let cNum = data.cNum;
 		let btns = data.btns;
-		let sticks = data.sticks;
+		let axes = data.axes;
 
 		// make sure it's a valid cNum:
 		if ([0, 1, 2, 3, 4].indexOf(cNum) == -1) {
@@ -880,7 +880,7 @@ io.on("connection", (socket) => {
 		io.emit("controllerState", {
 			cNum: data.cNum,
 			btns: data.btns,
-			sticks: data.sticks,
+			axes: data.axes,
 		});
 	});
 
@@ -903,7 +903,7 @@ io.on("connection", (socket) => {
 		}
 
 		// make sure it's a valid cNum:
-		if ([0, 1, 2, 3, 4].indexOf(cNum) == -1) {
+		if ([0, 1, 2, 3].indexOf(cNum) == -1) {
 			return;
 		}
 
@@ -947,7 +947,7 @@ io.on("connection", (socket) => {
 		}
 
 		// make sure it's a valid cNum:
-		if ([0, 1, 2, 3, 4].indexOf(cNum) == -1) {
+		if ([0, 1, 2, 3].indexOf(cNum) == -1) {
 			return;
 		}
 
@@ -970,7 +970,7 @@ io.on("connection", (socket) => {
 			io.emit("controllerState", {
 				cNum: cNum,
 				btns: 0,
-				sticks: [[restPos, restPos], [restPos, restPos]],
+				axes: [restPos, restPos, restPos, restPos],
 			});
 		}
 
@@ -1695,7 +1695,7 @@ function forfeitTurn(userid, cNum) {
 	io.emit("controllerState", {
 		cNum: cNum,
 		btns: 0,
-		sticks: [[restPos, restPos], [restPos, restPos]],
+		axes: [restPos, restPos, restPos, restPos],
 	});
 
 	// reset the timers if the person forfeiting is first in line:
@@ -1802,7 +1802,7 @@ function moveLine(cNum) {
 		io.emit("controllerState", {
 			cNum: cNum,
 			btns: 0,
-			sticks: [[restPos, restPos], [restPos, restPos]],
+			axes: [restPos, restPos, restPos, restPos],
 		});
 		io.emit("controlQueues", controlQueues);
 	}

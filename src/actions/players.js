@@ -54,7 +54,7 @@ export const updatePlayerControllerState = (data) => {
 		payload: {
 			cNum: data.cNum,
 			btns: data.btns,
-			sticks: data.sticks,
+			axes: data.axes,
 		},
 	};
 };

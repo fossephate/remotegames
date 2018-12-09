@@ -8,6 +8,7 @@ import MyCheckbox from "src/components/MyCheckbox.jsx";
 import ViewerDropdown from "src/components/ViewerDropdown.jsx";
 
 // material ui:
+import { withStyles } from "@material-ui/core/styles";
 // icons:
 import KeyboardIcon from "@material-ui/icons/Keyboard";
 import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
@@ -16,8 +17,8 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 
-import { withStyles } from "@material-ui/core/styles";
 
+// recompose:
 import { compose } from "recompose";
 
 // redux:

@@ -83,19 +83,19 @@ let preloadedState = {
 		controllerStates: [
 			{
 				btns: 0,
-				sticks: [[128, 128], [128, 128]],
+				axes: [128, 128, 128, 128],
 			},
 			{
 				btns: 0,
-				sticks: [[128, 128], [128, 128]],
+				axes: [128, 128, 128, 128],
 			},
 			{
 				btns: 0,
-				sticks: [[128, 128], [128, 128]],
+				axes: [128, 128, 128, 128],
 			},
 			{
 				btns: 0,
-				sticks: [[128, 128], [128, 128]],
+				axes: [128, 128, 128, 128],
 			},
 		],
 	},
@@ -103,7 +103,7 @@ let preloadedState = {
 		controlQueue: [],
 		controllerState: {
 			btns: 0,
-			sticks: [[128, 128], [128, 128]],
+			axes: [128, 128, 128, 128],
 		},
 		turnTimers: {
 			turnStartTime: 0,
