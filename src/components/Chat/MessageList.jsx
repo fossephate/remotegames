@@ -19,22 +19,29 @@ import { connect } from "react-redux";
 // recompose:
 import { compose } from "recompose";
 
+// libs:
+import swal from "sweetalert2";
+// import ScrollableFeed from "react-scrollable-feed";
+
 
 // jss:
 
 const styles = (theme) => ({
 	root: {
-		"overflow-y": "auto",
+		overflowY: "auto",
 		// borderRadius: "8px",
 		flexGrow: "1",
 		marginBottom: "15px",
-		"& > div": {
+		"& > div:nth-child(even)": {
 			// backgroundColor: "#FF3C28A4",
-			backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
+			// backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
+			color: theme.palette.type === "dark" ? "#FFF" : "#000",
 		},
 		"& > div:nth-child(odd)": {
 			// backgroundColor: "#0AB9E6A4",
-			backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light,
+			backgroundColor: "#2d2d2dA4",
+			// backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light,
+			color: theme.palette.type === "dark" ? "#FFF" : "#000",
 		},
 	},
 });
@@ -44,6 +51,48 @@ class MessageList extends PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.messagesEnd = null;
+		this.rootRef = null;
+		this.handleClick = this.handleClick.bind(this);
+		this.shouldScroll = false;
+		// this.scrollToBottom = this.scrollToBottom.bind(this);
+	}
+
+	handleClick(event) {
+		// if (event.nativeEvent.which === 1) {
+		// 	swal(this.props.messages[i].userid);
+		// } else if(event.nativeEvent.which === 3) {
+		// 	swal(this.props.messages[i].userid);
+		// }
+	}
+
+	// scrollToBottom() {
+	// 	this.messagesEnd.scrollIntoView({ behavior: "smooth" });
+	// }
+	//
+	// componentDidMount() {
+	// 	this.scrollToBottom();
+	// }
+	//
+
+	getSnapshotBeforeUpdate(prevProps, prevState) {
+
+		if (prevProps.messages.length < this.props.messages.length) {
+			let messageList = document.getElementById("messageList");
+			if (messageList && Math.abs((messageList.scrollHeight - messageList.scrollTop) - (messageList.offsetHeight)) < 2) {
+				this.shouldScroll = true;
+			}
+		}
+		return null;
+    }
+
+	componentDidUpdate(prevProps, prevState, snapshot) {
+		if (this.shouldScroll) {
+			let messageList = document.getElementById("messageList");
+			messageList.scrollTop = messageList.scrollHeight;
+		}
+		this.shouldScroll = false;
 	}
 
 	// let element = document.getElementById("messageList");
@@ -52,7 +101,13 @@ class MessageList extends PureComponent {
 	mapMessages() {
 		let messages = [];
 		for (let i = 0; i < this.props.messages.length; i++) {
-			messages.push(<Message key={this.props.messages[i].id} {...this.props.messages[i]}/>);
+			messages.push(
+				<Message
+					key={this.props.messages[i].id}
+					{...this.props.messages[i]}
+					onClick={() => {swal(this.props.messages[i].userid)}}
+					onContextMenu={this.handleClick}/>
+			);
 		}
 		return messages;
 	}
@@ -62,12 +117,17 @@ class MessageList extends PureComponent {
 		const { classes } = this.props;
 
 		return (
-			<Paper id="messageList" className={classes.root} elevation={4}>
+			<Paper id="messageList" className={classes.root} elevation={4}
+				ref={(el) => { this.rootRef = el; }}>
 			{/* <List id="messageList" className={classes.root}> */}
-				{
-					this.mapMessages()
-				}
+				{/* <ScrollableFeed> */}
+					{this.mapMessages()}
+				{/* </ScrollableFeed> */}
 			{/* </List> */}
+				<div
+					style={{ float:"left", clear: "both" }}
+					ref={(el) => { this.messagesEnd = el; }}>
+				</div>
 			</Paper>
 		);
 	}

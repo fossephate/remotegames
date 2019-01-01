@@ -15,7 +15,9 @@ import Paper from "@material-ui/core/Paper";
 // redux:
 import { connect } from "react-redux";
 
+// actions:
 import { updateSettings } from "src/actions/settings.js";
+import { leavePlayerControlQueue } from "../actions/players.js";
 
 // recompose:
 import { compose } from "recompose";
@@ -56,25 +58,25 @@ class Player extends PureComponent {
 	}
 
 	choosePlayer() {
-		this.props.choosePlayer(this.props.num - 1);
+		let players = [0, 1, 2, 3, 4, 5, 6, 7];
+		players.forEach((cNum) => {
+			this.props.leavePlayerControlQueue(cNum);
+		});
+		this.props.choosePlayer(this.props.num);
 	}
 
 	render() {
 
 		const { classes } = this.props;
 
-		let n = this.props.num - 1;
-		// let turnExpiration = parseInt(this.props.turnTimers[n].turnExpiration / 1000);
-		// let turnPercent = parseInt((this.props.turnTimers[n].turnExpiration / this.props.turnTimers[n].turnLength) * 100);
-		// let forfeitExpiration = parseInt(this.props.turnTimers[n].forfeitExpiration / 1000);
-		// let forfeitPercent = parseInt((this.props.turnTimers[n].forfeitExpiration / this.props.turnTimers[n].forfeitLength) * 100);
-
+		let n = this.props.num;
+		
 		return (
 			<Paper elevation={4} className={classes.root}>
 				<MyCheckbox
-					text={"Player " + this.props.num}
+					text={this.props.text}
 					handleChange={this.choosePlayer}
-					checked={(this.props.currentPlayer + 1) == this.props.num}
+					checked={this.props.currentPlayer == this.props.num}
 				/>
 				<TurnTimers	num={this.props.num}/>
 				<PlayerQueueButton
@@ -108,6 +110,9 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		choosePlayer: (index) => {
 			dispatch(updateSettings({ currentPlayer: index }))
+		},
+		leavePlayerControlQueue: (controllerNumber) => {
+			dispatch(leavePlayerControlQueue(controllerNumber))
 		},
 	};
 };

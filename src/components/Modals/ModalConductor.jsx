@@ -11,13 +11,13 @@ import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 const ModalConductor = (props) => {
 	switch (props.currentModal) {
 		case "ACCOUNT":
-			return <ViewAccountModal open={true} handleClose={props.handleClose}/>;
+			return <ViewAccountModal handleClose={props.handleClose}/>;
 		case "LOGIN":
-			return <LoginModal open={true} handleClose={props.handleClose}/>;
+			return <LoginModal handleClose={props.handleClose}/>;
 		case "REGISTER":
-			return <RegisterModal open={true} handleClose={props.handleClose}/>;
+			return <RegisterModal handleClose={props.handleClose}/>;
 		case "INPUT_MAPPER":
-			return <InputMapperModal open={true} handleClose={props.handleClose}/>;
+			return <InputMapperModal handleClose={props.handleClose}/>;
 		default:
 			return null;
 	}

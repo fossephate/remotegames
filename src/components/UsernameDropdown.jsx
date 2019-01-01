@@ -56,10 +56,11 @@ export default class UsernameDropdown extends PureComponent {
 					value={usernameIndex}
 					onChange={this.props.handleChange}
 					input={<OutlinedInput labelWidth={0}/>}
-					inputProps={{
-						name: "username",
-						id: "usernameDropdown",
-		            }}>
+					// inputProps={{
+					// 	name: "username",
+					// 	id: "usernameDropdown",
+		            // }}
+					>
 					{this.getUsernameList()}
 				</Select>
 			</React.Fragment>

@@ -55,12 +55,21 @@ class PlayerInfo extends PureComponent {
 
 	render() {
 		const { classes } = this.props;
+
+		if (this.props.streamNumber == 0) {
+			return (
+				<Paper className={classes.root} elevation={0}>
+					<Player num={0} text="Player 1"/>
+					<Player num={1} text="Player 2"/>
+					<Player num={2} text="Player 3"/>
+					<Player num={3} text="Player 4"/>
+				</Paper>
+			);
+		}
+
 		return (
 			<Paper className={classes.root} elevation={0}>
-				<Player num={1}/>
-				<Player num={2}/>
-				<Player num={3}/>
-				<Player num={4}/>
+				<Player num={4} text="Player 1"/>
 			</Paper>
 		);
 	}
@@ -68,7 +77,9 @@ class PlayerInfo extends PureComponent {
 
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		streamNumber: state.settings.streamNumber,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {

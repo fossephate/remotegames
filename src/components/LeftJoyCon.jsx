@@ -116,6 +116,26 @@ const styles = (theme) => ({
 	highlighted: {
 		background: "rgba(80, 187, 80, 0.7)",
 	},
+	// trigger: {
+	// 	position: "absolute",
+	// 	height: "100%",
+	// 	background: "rgba(80, 187, 80, 0.7)",
+	// 	borderRadius: "10px !important",
+	// },
+	trigger1: {
+		height: "50%",
+		borderRadius: "10px",
+		borderBottomLeftRadius: "0",
+		borderBottomRightRadius: "0",
+		zIndex: "100",
+	},
+	trigger2: {
+		height: "50%",
+		background: "rgba(80, 187, 80, 0.7)",
+		borderRadius: "10px",
+		borderTopLeftRadius: "0",
+		borderTopRightRadius: "0",
+	},
 });
 
 class LeftJoyCon extends PureComponent {
@@ -134,11 +154,7 @@ class LeftJoyCon extends PureComponent {
 
 		let restPos = 128;
 
-		if (!this.props.controllerState) {
-			this.controller.reset();
-		} else {
-			this.controller.setState(this.props.controllerState[0]);
-		}
+		this.controller.setState(this.props.controllerState);
 
 		let LX = (this.controller.axes[0] - restPos);
 		let LY = (this.controller.axes[1] - restPos);
@@ -181,8 +197,13 @@ class LeftJoyCon extends PureComponent {
 					<div className={classNames(classes.button, classes.otherButtons, "l", {[classes.highlighted]: (this.controller.buttons.l)})}>
 						<div className="click-passthrough">L</div>
 					</div>
-					<div className={classNames(classes.button, classes.otherButtons, "zl", {[classes.highlighted]: (this.controller.buttons.zl)})}>
+					{/* <div className={classNames(classes.button, classes.otherButtons, "zl", {[classes.highlighted]: (this.controller.buttons.zl)})}>
 						<div className="click-passthrough">ZL</div>
+						<div className={classes.trigger} style={{width: (this.controller.axes[4] * 100) + "%"}}></div>
+					</div> */}
+					<div className={classNames(classes.button, classes.otherButtons, "zl")}>
+						<div className={classNames(classes.trigger1, {[classes.highlighted]: (this.controller.buttons.zl)})}>ZL</div>
+						<div className={classes.trigger2} style={{width: (this.controller.axes[4] * 100) + "%"}}></div>
 					</div>
 				</div>
 			</div>

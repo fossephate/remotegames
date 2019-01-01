@@ -9,6 +9,7 @@ import {
 	Route,
 	Switch
 } from "react-router";
+import { HashRouter, BrowserRouter } from "react-router-dom";
 
 // redux:
 import {
@@ -54,8 +55,15 @@ let preloadedState = {
 			[],
 			[],
 			[],
+			[],
 		],
 		turnTimers: [{
+				turnStartTime: 0,
+				forfeitStartTime: 0,
+				turnLength: 0,
+				forfeitLength: 0,
+			},
+			{
 				turnStartTime: 0,
 				forfeitStartTime: 0,
 				turnLength: 0,
@@ -83,19 +91,23 @@ let preloadedState = {
 		controllerStates: [
 			{
 				btns: 0,
-				axes: [128, 128, 128, 128],
+				axes: [128, 128, 128, 128, 0, 0],
 			},
 			{
 				btns: 0,
-				axes: [128, 128, 128, 128],
+				axes: [128, 128, 128, 128, 0, 0],
 			},
 			{
 				btns: 0,
-				axes: [128, 128, 128, 128],
+				axes: [128, 128, 128, 128, 0, 0],
 			},
 			{
 				btns: 0,
-				axes: [128, 128, 128, 128],
+				axes: [128, 128, 128, 128, 0, 0],
+			},
+			{
+				btns: 0,
+				axes: [128, 128, 128, 128, 0, 0],
 			},
 		],
 	},
@@ -103,7 +115,7 @@ let preloadedState = {
 		controlQueue: [],
 		controllerState: {
 			btns: 0,
-			axes: [128, 128, 128, 128],
+			axes: [128, 128, 128, 128, 0, 0],
 		},
 		turnTimers: {
 			turnStartTime: 0,
@@ -129,7 +141,9 @@ let preloadedState = {
 
 	settings: {
 
-		volume: 0,
+		streamNumber: 0,
+
+		volume: 50,
 
 		keyboardControls: true,
 		controllerControls: true,
@@ -177,18 +191,23 @@ handleEvents(socket, store.dispatch);
 // handle outgoing events & listen to actions:
 // and maybe dispatch more actions:
 sagaMiddleware.run(handleActions, {
-	socket
+	socket,
 });
 
 
 // components:
-import App from "src/components/App.jsx";
+import App from "src/App.jsx";
 
 
 export default class Index extends Component {
 
 	constructor(props) {
 		super(props);
+		this.reRender = this.reRender.bind(this);
+	}
+
+	reRender() {
+		this.setState({});
 	}
 
 	render() {
@@ -196,7 +215,9 @@ export default class Index extends Component {
 		return (
 			<Provider store={store}>
 				{/* there may be a better way to pass store.dispatch, but for now it's probably not that big of a problem: */}
-				<App dispatch={store.dispatch} socket={socket}/>
+				<BrowserRouter>
+					<App dispatch={store.dispatch} socket={socket} reRender={this.reRender}/>
+				</BrowserRouter>
 			</Provider>
 		);
 	}

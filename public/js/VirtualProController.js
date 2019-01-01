@@ -37,7 +37,7 @@ class VirtualProController {
 		// 	[restPos, restPos],
 		// ];
 
-		this.axes = [restPos, restPos, restPos, restPos];
+		this.axes = [restPos, restPos, restPos, restPos, 0, 0];
 
 		this.gyro = {
 			x: 0,
@@ -55,19 +55,19 @@ class VirtualProController {
 	}
 
 	reset() {
-		for (let prop in this.btns) {
-			this.btns[prop] = 0;
+
+		this.btns = 0;
+		for (let prop in this.buttons) {
+			this.buttons[prop] = 0;
 		}
-
-		// this.sticks[0][0] = restPos;
-		// this.sticks[0][1] = restPos;
-		// this.sticks[1][0] = restPos;
-		// this.sticks[1][1] = restPos;
-
+		
+		this.axes = [0, 0, 0, 0, 0, 0];
 		this.axes[0] = restPos;
 		this.axes[1] = restPos;
 		this.axes[2] = restPos;
 		this.axes[3] = restPos;
+		this.axes[4] = 0;
+		this.axes[5] = 0;
 	}
 
 	isPressed(n) {
@@ -85,10 +85,12 @@ class VirtualProController {
 		this.axes[1] = clamp(this.axes[1], 0, 255);
 		this.axes[2] = clamp(this.axes[2], 0, 255);
 		this.axes[3] = clamp(this.axes[3], 0, 255);
+		// this.axes[4] = this.axes[4];
+		// this.axes[5] = this.axes[5];
 
 		let state = {
 			btns: 0,
-			axes: [0, 0, 0, 0],
+			axes: [0, 0, 0, 0, 0, 0],
 			// sticks: [
 			// 	[0, 0],
 			// 	[0, 0],
@@ -129,6 +131,15 @@ class VirtualProController {
 
 	setState(state) {
 
+		// if (state.btns) {
+		// 	this.btns = state.btns;
+		// if (state.axes) {
+		// 	this.axes = state.axes;
+		// }
+		if (state.btns == null) {
+			console.log(state);
+			throw error;
+		}
 		this.btns = state.btns;
 		this.axes = state.axes;
 		// this.sticks = state.sticks;

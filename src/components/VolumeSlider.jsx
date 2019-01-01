@@ -24,8 +24,8 @@ const styles = (theme) => ({
 		alignItems: "center",
 		paddingLeft: "6px",
 		paddingRight: "6px",
-		// backgroundColor: theme.palette.primary.main,
-		backgroundColor: theme.palette.primary.dark,
+		backgroundColor: theme.palette.primary.main,
+		// backgroundColor: theme.palette.primary.dark,
 	},
 	svg: {
 		// color: "#333",
@@ -38,6 +38,25 @@ const styles = (theme) => ({
 	},
 	slider: {
 		width: "70%",
+	},
+	container: {
+		// first part of track:
+		"& :first-child": {
+			backgroundColor: "#FFF",
+		},
+		// thumb icon:
+		"& :nth-child(2)": {
+			"& :first-child": {
+				backgroundColor: "#FFF",
+			},
+		},
+		// last part of track:
+		"& :last-child": {
+			backgroundColor: "#FFF",
+		},
+	},
+	thumbIconWrapper: {
+		backgroundColor: "#FFF !important",
 	},
 });
 
@@ -55,7 +74,9 @@ class VolumeSlider extends PureComponent {
 			<Paper className={classes.root} elevation={3}>
 				<VolumeDown className={classes.svg} onClick={this.props.onMute}/>
 				<MySlider
-					rootClasses={classes.slider}
+					sliderClass={classes.slider}
+					containerClass={classes.container}
+					thumbIconWrapperClass={classes.thumbIconWrapper}
 					min={0}
 					max={100}
 					step={1}

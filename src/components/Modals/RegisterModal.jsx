@@ -30,19 +30,10 @@ const styles = (theme) => ({
 		borderRadius: "5px",
 	},
 	center: {
-		// display: "flex",
-		// justifyContent: "center",
-		// alignItems: "center",
-		// height: "100%",
-		// pointerEvents: "none",
 		position: "fixed",
 	    top: "50%",
 	    left: "50%",
 	    transform: "translate(-50%, -50%)",
-	    // -webkit-transform: translate(-50%, -50%)",
-	    // -moz-transform: translate(-50%, -50%)",
-	    // -o-transform: translate(-50%, -50%)",
-	    // -ms-transform: translate(-50%, -50%)",
 	},
 	createAnAccount: {
 		display: "flex",
@@ -61,18 +52,6 @@ class RegisterModal extends PureComponent {
 
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			open: false,
-		};
-	}
-
-	handleOpen() {
-		this.setState({ open: true });
-	}
-
-	handleClose() {
-		this.setState({ open: false });
 	}
 
 	render() {
@@ -81,10 +60,9 @@ class RegisterModal extends PureComponent {
 
 		return (
 			<Modal
-				open={this.props.open}
-				onClose={() => {this.handleClose();this.props.handleClose()}}>
+				open={true}
+				onClose={this.props.handleClose}>
 
-				{/* <div className={classes.center}> */}
 				<div className={classNames(classes.root, classes.center)}>
 
 					<div className={classes.createAnAccount}>
@@ -103,7 +81,6 @@ class RegisterModal extends PureComponent {
 					</div>
 
 				</div>
-				{/* </div> */}
 			</Modal>
 		);
 	}

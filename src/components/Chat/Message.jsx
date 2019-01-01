@@ -13,10 +13,13 @@ const styles = (theme) => ({
 	root: {
 		wordBreak: "break-word",
 		padding: "4px",
+		fontSize: "14px !important",
+		// color: theme.palette.primary.contrastText,
 	},
 	links: {
 		// todo: use primary / secondary based on which it should be:
-		color: theme.palette.primary.contrastText,
+		// color: theme.palette.primary.contrastText,
+		color: "#0000FF",
 	},
 });
 
@@ -50,11 +53,11 @@ const Message = (props) => {
 
 	let messageContent = `${getTimeStamp(time)}<b>${username}</b>${message}`;
 	return (
-		<div className={classes.root} userid={userid}>
+		<div className={classes.root} userid={userid} onClick={props.onClick}>
 			<Linkify properties={{className: classes.links}}>
-				<ListItemText>
+				{/* <ListItemText> */}
 					{getTimeStamp(time)}<b>{username}</b> {message}
-				</ListItemText>
+				{/* </ListItemText> */}
 			</Linkify>
 		</div>
 	);

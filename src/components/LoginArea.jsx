@@ -25,7 +25,7 @@ const styles = (theme) => ({
 		display: "flex",
 		justifyContent: "space-evenly",
 		overflowY: "visible",
-		maxHeight: "44px",
+		maxHeight: "50px",
 		padding: "3px",
 		gridColumn: 2,
 	},
@@ -54,7 +54,7 @@ class LoginArea extends PureComponent {
 		// }
 
 		return (
-			<Paper id="loginArea" elevation={4} className={classes.root}>
+			<Paper elevation={4} className={classes.root}>
 				{
 					this.props.userInfo.loggedIn ?
 						<>
@@ -63,13 +63,13 @@ class LoginArea extends PureComponent {
 								validUsernames={this.props.userInfo.validUsernames}
 								myUsername={this.props.userInfo.username}
 								handleChange={this.props.handleUsernameChange}/>
-							<Button id="myAccount" variant="contained" color="primary" onClick={this.props.handleAccount}>Account</Button>
-							<Button id="logOut" className={classes.logout} variant="contained" color="secondary" onClick={this.props.handleLogout}>Logout</Button>
+							<Button variant="contained" color="primary" onClick={this.props.handleAccount}>Account</Button>
+							<Button className={classes.logout} variant="contained" color="secondary" onClick={this.props.handleLogout}>Logout</Button>
 						</>
 					:
 						<>
-							<Button id="login" variant="contained" color="primary" onClick={this.props.handleLogin}>Login</Button>
-							<Button id="register" variant="contained" color="secondary" onClick={this.props.handleRegister}>Register</Button>
+							<Button variant="contained" color="primary" onClick={this.props.handleLogin}>Login</Button>
+							<Button variant="contained" color="secondary" onClick={this.props.handleRegister}>Register</Button>
 						</>
 				}
 			</Paper>

@@ -72,13 +72,6 @@ let locked = false;
 let queuesLocked = false;
 let maxPlayers = 5;
 let restPos = 128;
-
-let controlQueues = [
-	[],
-	[],
-	[],
-	[],
-];
 let waitlist = [];
 let siteCapacity = 10;
 let waitlistMax = 5;
@@ -99,7 +92,7 @@ let laglessClientIds = [
 	[],
 	[],
 ];
-let laglessClientUniqueIds = [
+let laglessClientUserids = [
 	[],
 	[],
 	[],
@@ -111,18 +104,43 @@ let normalTime = 30000;
 let subTime = 60000;
 let tempBanTime = 5 * 1000 * 60; // 5 minutes
 
-let turnLengths = [30000, 30000, 30000, 30000];
-let forfeitLengths = [15000, 15000, 15000, 15000];
-let turnStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
-let forfeitStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
-let moveLineTimers = [null, null, null, null];
-let forfeitTimers = [null, null, null, null];
+const NUM_PLAYERS = 5;
+
+// let turnLengths = [30000, 30000, 30000, 30000];
+// let forfeitLengths = [15000, 15000, 15000, 15000];
+// let turnStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
+// let forfeitStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
+// let moveLineTimers = [null, null, null, null];
+// let forfeitTimers = [null, null, null, null];
+// let turnExpirations = [0, 0, 0, 0];
+// let forfeitExpirations = [0, 0, 0, 0];
+
+let turnLengths = [];
+let forfeitLengths = [];
+let turnStartTimes = [];
+let forfeitStartTimes = [];
+let moveLineTimers = [];
+let forfeitTimers = [];
+let turnExpirations = [];
+let forfeitExpirations = [];
+let controllerList = [];
+let controlQueues = [];
+
+for (let i = 0; i < NUM_PLAYERS; i++) {
+	turnLengths.push(30000);
+	forfeitLengths.push(15000);
+	turnStartTimes.push(Date.now());
+	forfeitStartTimes.push(Date.now());
+	moveLineTimers.push(null);
+	forfeitTimers.push(null);
+	turnExpirations.push(0);
+	forfeitExpirations.push(0);
+	controllerList.push(i);
+	controlQueues.push([]);
+}
 
 let numberOfLastFewMessages = 5;
 let lastFewMessages = [];
-
-let turnExpirations = [0, 0, 0, 0];
-let forfeitExpirations = [0, 0, 0, 0];
 
 let splitTimer = null;
 let afkTimer = Date.now();
@@ -605,9 +623,9 @@ function Client(socket) {
 
 function findClientByUniqueID(userid) {
 	let index = -1;
-	for (client in clients) {
-		if (client.userid == userid) {
-			index = client.id;
+	for (key in clients) {
+		if (clients[key].userid == userid) {
+			index = clients[key].id;
 			return index;
 		}
 	}
@@ -773,7 +791,7 @@ io.on("connection", (socket) => {
 	// chat:
 	socket.on("chatMessage", (data) => {
 		let client = clients[socket.id];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 		if (data && typeof (data.message) != "string") {
@@ -810,7 +828,7 @@ io.on("connection", (socket) => {
 
 		let client = clients[socket.id];
 
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 
@@ -819,7 +837,7 @@ io.on("connection", (socket) => {
 		let axes = data.axes;
 
 		// make sure it's a valid cNum:
-		if ([0, 1, 2, 3, 4].indexOf(cNum) == -1) {
+		if (controllerList.indexOf(cNum) == -1) {
 			console.log("weird cNum1: " + cNum);
 			return;
 		}
@@ -889,7 +907,7 @@ io.on("connection", (socket) => {
 	socket.on("joinQueue", (cNum) => {
 
 		let client = clients[socket.id];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 		// return if banned
@@ -903,7 +921,7 @@ io.on("connection", (socket) => {
 		}
 
 		// make sure it's a valid cNum:
-		if ([0, 1, 2, 3].indexOf(cNum) == -1) {
+		if (controllerList.indexOf(cNum) == -1) {
 			return;
 		}
 
@@ -913,8 +931,6 @@ io.on("connection", (socket) => {
 		}
 
 		// check to make sure user isn't already in another queue
-		let controllerList = [0, 1, 2, 3];
-		// 		controllerList.splice(controllerList.indexOf(cNum), 1);
 		for (let i = 0; i < controllerList.length; i++) {
 			let listNum = controllerList[i];
 			if (controlQueues[listNum].indexOf(client.userid) > -1) {
@@ -942,12 +958,12 @@ io.on("connection", (socket) => {
 	socket.on("leaveQueue", (cNum) => {
 
 		let client = clients[socket.id];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 
 		// make sure it's a valid cNum:
-		if ([0, 1, 2, 3].indexOf(cNum) == -1) {
+		if (controllerList.indexOf(cNum) == -1) {
 			return;
 		}
 
@@ -1001,6 +1017,7 @@ io.on("connection", (socket) => {
 		// todo: resend settings
 		setTimeout(() => {
 			io.to("lagless2Host").emit("settings", lagless2Settings);
+			io.to("lagless4Host").emit("settings", lagless2Settings);
 		}, 3000);
 
 		// notify client to restart:
@@ -1173,7 +1190,7 @@ io.on("connection", (socket) => {
 	});
 	socket.on("kickFromQueue", (data) => {
 		let client = clients[socket.id];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 
@@ -1185,17 +1202,22 @@ io.on("connection", (socket) => {
 	});
 	socket.on("tempBan", (data) => {
 		let client = clients[socket.id];
-		if (client.userid == null) {
-			return;
-		}
 
-		if (!client.is_mod) {
-			return;
+		// check if it's coming from the controller:
+		if (clients[socket.id].rooms.indexOf("controller") == -1) {
+			if (client == null || client.userid == null) {
+				return;
+			}
+
+			if (!client.is_mod) {
+				return;
+			}
 		}
 
 		let index = findClientByUniqueID(data);
 		client = clients[index];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
+			console.log("client was null.");
 			return;
 		}
 
@@ -1211,17 +1233,21 @@ io.on("connection", (socket) => {
 	socket.on("permaBan", (data) => {
 
 		let client = clients[socket.id];
-		if (client.userid == null) {
-			return;
-		}
 
-		if (!client.is_mod) {
-			return;
+		// check if it's coming from the controller:
+		if (clients[socket.id].rooms.indexOf("controller") == -1) {
+			if (client == null || client.userid == null) {
+				return;
+			}
+
+			if (!client.is_mod) {
+				return;
+			}
 		}
 
 		index = findClientByUniqueID(data);
 		client = clients[index];
-		if ((!client) || client && client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 
@@ -1283,17 +1309,21 @@ io.on("connection", (socket) => {
 	});
 	socket.on("unban", (data) => {
 		let client = clients[socket.id];
-		if (client.userid == null) {
-			return;
-		}
 
-		if (!client.is_mod) {
-			return;
+		// check if it's coming from the controller:
+		if (clients[socket.id].rooms.indexOf("controller") == -1) {
+			if (client == null || client.userid == null) {
+				return;
+			}
+
+			if (!client.is_mod) {
+				return;
+			}
 		}
 
 		index = findClientByUniqueID(data);
 		client = clients[index];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 
@@ -1407,7 +1437,7 @@ io.on("connection", (socket) => {
 	/* LAGLESS 1 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless1Settings", (data) => {
 		let client = clients[socket.id];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 		if (client.userid != controlQueues[0][0] && controlQueues[0].length > 0 && !client.is_mod) {
@@ -1436,7 +1466,7 @@ io.on("connection", (socket) => {
 	/* LAGLESS2 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless2Settings", (data) => {
 		let client = clients[socket.id];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 		if (client.userid != controlQueues[0][0] && controlQueues[0].length > 0 && !client.is_mod) {
@@ -1464,6 +1494,7 @@ io.on("connection", (socket) => {
 			lagless2Settings = Object.assign({}, lagless2Settings, obj);
 			io.emit("lagless2SettingsChange");
 			io.to("lagless2Host").emit("settings", lagless2Settings);
+			io.to("lagless4Host").emit("settings", lagless2Settings);
 			io.emit("lagless2Settings", lagless2Settings);
 		}
 	});
@@ -1471,7 +1502,7 @@ io.on("connection", (socket) => {
 	/* LAGLESS3 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("lagless3Settings", (data) => {
 		let client = clients[socket.id];
-		if (client.userid == null) {
+		if (client == null || client.userid == null) {
 			return;
 		}
 		if (client.userid != controlQueues[0][0] && controlQueues[0].length > 0 && !client.is_mod) {
@@ -1555,15 +1586,15 @@ io.on("connection", (socket) => {
 		let client = clients[socket.id];
 
 		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "lagless5Host", "controller", "controller2"];
-		let laglessList = ["lagless1", "lagless2", "lagless3", "lagless4", "lagless5"];
+		let streamList = ["stream0", "stream1", "stream2", "stream3", "stream4"];
 		if (secureList.indexOf(room) > -1) {
 			return;
 		}
 
-		if (laglessList.indexOf(room) > -1) {
-			for (let i = 0; i < laglessList.length; i++) {
-				if (laglessList[i] != room) {
-					socket.leave(laglessList[i]);
+		if (streamList.indexOf(room) > -1) {
+			for (let i = 0; i < streamList.length; i++) {
+				if (streamList[i] != room) {
+					socket.leave(streamList[i]);
 				}
 			}
 		}
@@ -1589,12 +1620,11 @@ io.on("connection", (socket) => {
 			socket.join(myData.room);
 		}
 	});
-	socket.on("leaveLagless", function () {
-		socket.leave("lagless1");
-		socket.leave("lagless2");
-		socket.leave("lagless3");
-		socket.leave("lagless4");
-		socket.leave("lagless5");
+	
+	socket.on("leaveStreams", function () {
+		for(let i = 0; i < 5; i++) {
+			socket.leave("stream" + i);
+		}
 	});
 
 	/* BAN EVASION */
@@ -1602,12 +1632,12 @@ io.on("connection", (socket) => {
 
 		let client = clients[socket.id];
 
-		if (client.is_mod) {
+		if (client == null || client.userid == null) {
+			console.log("not signed in.");
 			return;
 		}
 
-		if (client.userid == null) {
-			console.log("not signed in.");
+		if (client.is_mod) {
 			return;
 		}
 
@@ -1653,6 +1683,7 @@ io.on("connection", (socket) => {
 	socket.emit("lagless1Settings", lagless1Settings);
 	socket.emit("lagless2Settings", lagless2Settings);
 	socket.emit("lagless3Settings", lagless2Settings);
+	// socket.emit("lagless4Settings", lagless4Settings);
 
 	socket.emit("banlist", banlist);
 	socket.emit("bannedIPs", bannedIPs);
@@ -1832,37 +1863,23 @@ function moveLine(cNum) {
 
 setInterval(function () {
 
-	io.in("lagless1").clients((error, clientIDs) => {
-		if (error) throw error;
-		laglessClientIds[0] = clientIDs;
-	});
-	io.in("lagless2").clients((error, clientIDs) => {
-		if (error) throw error;
-		laglessClientIds[1] = clientIDs;
-	});
-	io.in("lagless3").clients((error, clientIDs) => {
-		if (error) throw error;
-		laglessClientIds[2] = clientIDs;
-	});
-	io.in("lagless4").clients((error, clientIDs) => {
-		if (error) throw error;
-		laglessClientIds[3] = clientIDs;
-	});
-	io.in("lagless5").clients((error, clientIDs) => {
-		if (error) throw error;
-		laglessClientIds[4] = clientIDs;
-	});
+	for (let i = 0; i < 5; i++) {
+		io.in("stream" + i).clients((error, clientIDs) => {
+			if (error) throw error;
+			laglessClientIds[i] = clientIDs;
+		});
+	}
 
 	// create viewer list:
-	// for each lagless:
+	// for each stream:
 	for (let i = 0; i < laglessClientIds.length; i++) {
 		// reset:
-		laglessClientUniqueIds[i] = [];
+		laglessClientUserids[i] = [];
 		// for each user:
 		for (let j = 0; j < laglessClientIds[i].length; j++) {
 			let client = clients[laglessClientIds[i][j]];
 			if (client && client.userid) {
-				laglessClientUniqueIds[i].push(client.userid);
+				laglessClientUserids[i].push(client.userid);
 			}
 		}
 	}
@@ -1874,7 +1891,7 @@ setInterval(function () {
 	// get list of logged in clients:
 	for (let key in clients) {
 		let client = clients[key];
-		if (client.userid != null && clients[client.id] != null && client.id != null) {
+		if (client != null && client.userid != null && clients[client.id] != null && client.id != null) {
 			loggedInClientIDs.push(client.id);
 		}
 		// todo: remove invalid users if they exist:
@@ -2003,7 +2020,7 @@ setInterval(() => {
 		forfeitLengths: forfeitLengths,
 	});
 	io.emit("viewers", {
-		viewers: [laglessClientUniqueIds[0], laglessClientUniqueIds[1], laglessClientUniqueIds[2], laglessClientUniqueIds[3], laglessClientUniqueIds[4]],
+		viewers: [laglessClientUserids[0], laglessClientUserids[1], laglessClientUserids[2], laglessClientUserids[3], laglessClientUserids[4]],
 	});
 	emitForfeitStartTimes();
 }, 5000);

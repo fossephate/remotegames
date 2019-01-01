@@ -27,7 +27,7 @@ class TurnTimers extends PureComponent {
 
 	render() {
 
-		let n = this.props.num - 1;
+		let n = this.props.num;
 
 		let serverTime = this.props.time.server;
 		let now = (Date.now() - this.props.time.lastServerUpdate) + serverTime;

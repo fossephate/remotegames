@@ -31,7 +31,7 @@ class GamepadWrapper {
 
 		this.pollTimer = setInterval(this.pollGamepads, (1000 / 120));
 
-		this.callbackAfterPoll = null;
+		this.callbacksAfterPoll = [];
 	}
 
 	addGamepad(gamepad) {
@@ -99,8 +99,8 @@ class GamepadWrapper {
 		// 	// }
 		// }
 
-		if (this.callbackAfterPoll) {
-			this.callbackAfterPoll();
+		for (let i = 0; i < this.callbacksAfterPoll.length; i++) {
+			this.callbacksAfterPoll[i]();
 		}
 	}
 

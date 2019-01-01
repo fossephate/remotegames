@@ -11,13 +11,16 @@ const VirtualMouse = require("./VirtualMouse.js"); // todo
 
 const VirtualProController = require("./VirtualProController.js");
 
+import GamepadWrapper from "js/GamepadWrapper.js";
+window.gamepadWrapper = new GamepadWrapper();
+
 export class InputState {
 
 	constructor() {
 
 		this.btns = 0;
 
-		this.axes = [0, 0, 0, 0];
+		this.axes = [0, 0, 0, 0, 0, 0];
 
 		this.gyro = {
 			x: 0,
@@ -37,6 +40,7 @@ export class InputState {
 			dx: 0,
 			dy: 0,
 		};
+
 		this.keys = [];
 	}
 
@@ -90,7 +94,7 @@ export default class InputHandler {
 		// current device being used:
 		this.currentInputMode = "keyboard";
 
-		// represents any controller's current state:
+		// represents a controller's current state:
 		this.controller = new VirtualController();
 		// the current state of the keyboard:
 		this.keyboard = new VirtualKeyboard();
@@ -114,13 +118,14 @@ export default class InputHandler {
 
 		let newInputState;
 		let updatedState = this.oldInputState;
+		let oldStateString = JSON.stringify(this.oldInputState);
 
 		if (!this.isMobile) {
 
 			// controller:
 			this.controller.poll();
 			newInputState = this.controller.state.getState();
-			if (JSON.stringify(newInputState) != JSON.stringify(this.oldInputState)) {
+			if (JSON.stringify(newInputState) != oldStateString) {
 				this.currentInputMode = "controller";
 				updatedState = newInputState;
 				// console.log(newInputState);
@@ -129,14 +134,14 @@ export default class InputHandler {
 			// keyboard:
 			this.keyboard.poll();
 			newInputState = this.keyboard.state.getState();
-			if (JSON.stringify(newInputState) != JSON.stringify(this.oldInputState)) {
+			if (JSON.stringify(newInputState) != oldStateString) {
 				this.currentInputMode = "keyboard";
 				updatedState = newInputState;
 			}
 
 		}
 
-		if (JSON.stringify(updatedState) != JSON.stringify(this.oldInputState)) {
+		if (JSON.stringify(updatedState) != oldStateString) {
 
 			this.controller.state.setState(updatedState);
 			this.keyboard.state.setState(updatedState);

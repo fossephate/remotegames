@@ -50,7 +50,7 @@ class ControlQueue extends PureComponent {
 
 		let queue = [];
 		let usernameMap = this.props.usernameMap;
-		let userids = this.props.controlQueues[this.props.num - 1];
+		let userids = this.props.controlQueues[this.props.num];
 
 		if (userids.length == 0) {
 			return <ListItem key="0"><ListItemText primary="The queue is empty."/></ListItem>;

@@ -23,8 +23,8 @@ const styles = (theme) => ({
 		flexDirection: "row",
 		justifyContent: "center",
 		position: "relative",
-		marginLeft: "5px",
-		marginRight: "5px",
+		// marginLeft: "5px",
+		// marginRight: "5px",
 		textAlign: "center",
 	},
 	canvas: {
@@ -65,9 +65,14 @@ class LaglessView extends PureComponent {
 			[classes.fullscreen]: (this.props.largescreen || this.props.fullscreen),
 		});
 
+		let controllerNumber = 0;
+		if (this.props.streamNumber == 1) {
+			controllerNumber = 4;
+		}
+
 		return (
 			<div className={laglessClasses}>
-				{this.props.controllerView ? <LeftJoyCon controllerState={this.props.controllerStates}/> : null}
+				{this.props.controllerView ? <LeftJoyCon controllerState={this.props.controllerStates[controllerNumber]}/> : null}
 
 				{displayLagless ? <LaglessCanvas num={this.props.num} classes={videoClasses}/> : null}
 				<iframe
@@ -80,7 +85,7 @@ class LaglessView extends PureComponent {
 					style={twitchStyle}>
 				</iframe>
 
-				{this.props.controllerView ? <RightJoyCon controllerState={this.props.controllerStates}/> : null}
+				{this.props.controllerView ? <RightJoyCon controllerState={this.props.controllerStates[controllerNumber]}/> : null}
 			</div>
 		);
 	}
@@ -95,6 +100,7 @@ const mapStateToProps = (state) => {
 		controllerView: state.settings.controllerView, // whether to render the joycons
 		fullscreen: state.settings.fullscreen,
 		largescreen: state.settings.largescreen,
+		streamNumber: state.settings.streamNumber,
 	};
 };
 

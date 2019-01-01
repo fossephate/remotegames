@@ -37,8 +37,8 @@ const styles = (theme) => ({
 		width: "100%",
 		paddingTop: "2px",
 		paddingBottom: "2px",
-		margin: "5px",
-		backgroundColor: theme.palette.primary.light,
+		// marginTop: "5px",
+		backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
 	},
 });
 

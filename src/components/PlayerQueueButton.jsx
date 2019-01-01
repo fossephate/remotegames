@@ -39,14 +39,14 @@ class PlayerQueueButton extends PureComponent {
 
 	joinLeaveQueue() {
 		if (this.props.controlQueue.indexOf(this.props.userid) > -1) {
-			this.props.leavePlayerControlQueue(this.props.num - 1);
+			this.props.leavePlayerControlQueue(this.props.num);
 		} else {
 			let players = [0, 1, 2, 3, 4, 5, 6, 7];
-			players.splice(players.indexOf(this.props.num - 1), 1);
+			players.splice(players.indexOf(this.props.num), 1);
 			players.forEach((cNum) => {
-				socket.emit("leaveQueue", cNum);
+				this.props.leavePlayerControlQueue(cNum);
 			});
-			this.props.joinPlayerControlQueue(this.props.num - 1);
+			this.props.joinPlayerControlQueue(this.props.num);
 		}
 	}
 

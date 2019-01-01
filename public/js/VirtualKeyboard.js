@@ -247,13 +247,17 @@ class VirtualKeyboard {
 
 		if (key.isPressed(this.keyboardMapping.ZLBtn)) {
 			this.state.buttons.zl = 1;
+			this.state.axes[4] = 1;
 		} else if (key.wasPressed(this.keyboardMapping.ZLBtn, this.wasPressedKeyCodes)) {
 			this.state.buttons.zl = 0;
+			this.state.axes[4] = 0;
 		}
 		if (key.isPressed(this.keyboardMapping.ZRBtn)) {
 			this.state.buttons.zr = 1;
+			this.state.axes[5] = 1;
 		} else if (key.wasPressed(this.keyboardMapping.ZRBtn, this.wasPressedKeyCodes)) {
 			this.state.buttons.zr = 0;
+			this.state.axes[5] = 0;
 		}
 
 		if (key.isPressed(this.keyboardMapping.lstick)) {

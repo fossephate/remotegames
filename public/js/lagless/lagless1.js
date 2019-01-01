@@ -3,10 +3,13 @@ import io from "socket.io-client";
 
 export default class Lagless1 {
 
-	constructor() {
+	constructor(url, path) {
 
-		this.socket = io("https://twitchplaysnintendoswitch.com", {
-			path: "/8001/socket.io",
+		this.url = url;
+		this.path = path;
+
+		this.socket = io(this.url, {
+			path: this.path,
 			transports: ["websocket"],
 		});
 		this.canvas = null;
@@ -24,6 +27,7 @@ export default class Lagless1 {
 		});
 
 		this.pause = this.pause.bind(this);
+		this.stop = this.stop.bind(this);
 		this.resume = this.resume.bind(this);
 	}
 
@@ -32,6 +36,10 @@ export default class Lagless1 {
 		if (this.socket.close) {
 			this.socket.close();
 		}
+	}
+
+	stop() {
+		this.pause();
 	}
 
 	resume(canvas) {

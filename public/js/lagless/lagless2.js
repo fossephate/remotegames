@@ -2,7 +2,13 @@ import JSMpeg from "js/jsmpeg.min.js";
 
 export default class Lagless2 {
 
-	constructor() {
+	constructor(url, hasAudio) {
+		this.url = url;
+		if (typeof(hasAudio) == "undefined") {
+			this.hasAudio = true;
+		} else {
+			this.hasAudio = hasAudio;
+		}
 		this.canvas = null;
 		this.context = null;
 		this.player = {};
@@ -15,13 +21,21 @@ export default class Lagless2 {
 	pause() {
 		try {
 			this.player.destroy();
-			let audioBufferSize = 128 * 1024;
-			this.player = new JSMpeg.Player("wss://twitchplaysnintendoswitch.com/8002/", {
-				video: false,
-				audio: true,
-				audioBufferSize: audioBufferSize,
-				maxAudioLag: 0.5,
-			});
+			// if (this.hasAudio) {
+			// 	let audioBufferSize = 128 * 1024;
+			// 	this.player = new JSMpeg.Player(this.url, {
+			// 		video: false,
+			// 		audio: true,
+			// 		audioBufferSize: audioBufferSize,
+			// 		maxAudioLag: 0.5,
+			// 	});
+			// }
+		} catch (error) {}
+	}
+
+	stop() {
+		try {
+			this.player.destroy();
 		} catch (error) {}
 	}
 
@@ -41,10 +55,10 @@ export default class Lagless2 {
 
 		let videoBufferSize = 256 * 1024;
 		let audioBufferSize = 128 * 1024;
-		this.player = new JSMpeg.Player("wss://twitchplaysnintendoswitch.com/8002/", {
+		this.player = new JSMpeg.Player(this.url, {
 			canvas: this.canvas,
 			video: true,
-			audio: true,
+			audio: this.hasAudio,
 			videoBufferSize: videoBufferSize,
 			audioBufferSize: audioBufferSize,
 			maxAudioLag: 0.5,

@@ -51,10 +51,11 @@ class LaglessCanvas extends PureComponent {
 
 		return (
 			<React.Fragment>
+				<canvas id="videoCanvas0" className={this.props.classes} style={{display: (this.props.num != 0) ? "none" : null }}></canvas>
 				<canvas id="videoCanvas1" className={this.props.classes} style={{display: (this.props.num != 1) ? "none" : null }}></canvas>
 				<canvas id="videoCanvas2" className={this.props.classes} style={{display: (this.props.num != 2) ? "none" : null }}></canvas>
+				{/* <video id="videoCanvas3" className={this.props.classes} style={{display: (this.props.num != 3) ? "none" : null }}></video> */}
 				<canvas id="videoCanvas3" className={this.props.classes} style={{display: (this.props.num != 3) ? "none" : null }}></canvas>
-				<video id="videoCanvas4" className={this.props.classes} style={{display: (this.props.num != 4) ? "none" : null }}></video>
 			</React.Fragment>
 		);
 	}

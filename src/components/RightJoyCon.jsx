@@ -116,6 +116,20 @@ const styles = (theme) => ({
 	highlighted: {
 		background: "rgba(80, 187, 80, 0.7)",
 	},
+	trigger1: {
+		height: "50%",
+		borderRadius: "10px",
+		borderBottomLeftRadius: "0",
+		borderBottomRightRadius: "0",
+		zIndex: "100",
+	},
+	trigger2: {
+		height: "50%",
+		background: "rgba(80, 187, 80, 0.7)",
+		borderRadius: "10px",
+		borderTopLeftRadius: "0",
+		borderTopRightRadius: "0",
+	},
 });
 
 class RightJoyCon extends PureComponent {
@@ -134,11 +148,7 @@ class RightJoyCon extends PureComponent {
 
 		let restPos = 128;
 
-		if (!this.props.controllerState[0]) {
-			this.controller.reset();
-		} else {
-			this.controller.setState(this.props.controllerState[0]);
-		}
+		this.controller.setState(this.props.controllerState);
 
 		let RX = (this.controller.axes[2] - restPos);
 		let RY = (this.controller.axes[3] - restPos);
@@ -177,8 +187,9 @@ class RightJoyCon extends PureComponent {
 					<div className={classNames(classes.button, classes.otherButtons, "r", {[classes.highlighted]: (this.controller.buttons.r)})}>
 						<div className="click-passthrough">R</div>
 					</div>
-					<div className={classNames(classes.button, classes.otherButtons, "zr", {[classes.highlighted]: (this.controller.buttons.zr)})}>
-						<div className="click-passthrough">ZR</div>
+					<div className={classNames(classes.button, classes.otherButtons, "zr")}>
+						<div className={classNames(classes.trigger1, {[classes.highlighted]: (this.controller.buttons.zr)})}>ZR</div>
+						<div className={classes.trigger2} style={{width: (this.controller.axes[5] * 100) + "%"}}></div>
 					</div>
 				</div>
 			</div>
