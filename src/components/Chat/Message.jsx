@@ -19,7 +19,8 @@ const styles = (theme) => ({
 	links: {
 		// todo: use primary / secondary based on which it should be:
 		// color: theme.palette.primary.contrastText,
-		color: "#0000FF",
+		// color: "#1a0dab",
+		color: "#0000ee",
 	},
 });
 

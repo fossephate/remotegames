@@ -51,10 +51,10 @@ const DISCORD_CALLBACK_URL = config.DISCORD_CALLBACK_URL;
 const SESSION_SECRET = config.SESSION_SECRET;
 
 let lagless1Settings = {
-	x1: 319 - 1920,
-	y1: 88 + 360, // 61
-	x2: 319 + 1280 - 1920,
-	y2: 88 + 720 + 360, // 61
+	x1: -2560,
+	y1: 0,
+	x2: 0,
+	y2: 1080,
 	framerate: 15,
 	quality: 60,
 	scale: 30,
@@ -1620,7 +1620,7 @@ io.on("connection", (socket) => {
 			socket.join(myData.room);
 		}
 	});
-	
+
 	socket.on("leaveStreams", function () {
 		for(let i = 0; i < 5; i++) {
 			socket.leave("stream" + i);
@@ -2026,7 +2026,7 @@ setInterval(() => {
 }, 5000);
 
 function stream() {
-	if (laglessClientIds[0].length > 0) {
+	if (laglessClientIds[1].length > 0) {
 		io.to("lagless1Host").emit("start");
 	} else {
 		io.to("lagless1Host").emit("stop");

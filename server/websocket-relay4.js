@@ -1,6 +1,6 @@
 const server = require("http").createServer();
 const io = require("socket.io")(server);
-const port = 8130;
+const port = 8140;
 const ws = require("ws");
 
 server.listen(port, function () {
@@ -16,7 +16,7 @@ io.set("transports", [
 
 // Websocket Server
 let socketServer = new ws.Server({
-	port: 8003,
+	port: 8004,
 	perMessageDeflate: false
 });
 socketServer.connectionCount = 0;

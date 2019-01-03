@@ -1,7 +1,7 @@
 // libs:
 
-const keycode = require("keycode");
-require("./keymaster.js");
+// const keycode = require("keycode");
+// require("./keymaster.js");
 
 // input types:
 // each should handle each type of device:

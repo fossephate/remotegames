@@ -82,7 +82,7 @@ import "bootstrap/dist/css/bootstrap.css";
 // keyboard:
 import keycode from "keycode";
 // touch controls:
-import nipplejs from "nipplejs";
+// import nipplejs from "nipplejs";
 // input master:
 import InputHandler from "js/InputHandler.js";
 
@@ -93,7 +93,6 @@ import Noty from "noty";
 // import "noty/lib/themes/light.css";
 import localforage from "localforage";
 import swal from "sweetalert2";
-import SimplePeer from "simple-peer";
 import io from "socket.io-client";
 import _ from "lodash";
 import merge from "deepmerge";
@@ -101,7 +100,7 @@ import merge from "deepmerge";
 // import JSMpeg from "js/jsmpeg.min.js";
 // require("js/WSAvcPlayer.js");
 
-import Lagless1 from "js/lagless/lagless1.js";
+// import Lagless1 from "js/lagless/lagless1.js";
 import Lagless2 from "js/lagless/lagless2.js";
 // import Lagless3 from "js/lagless/lagless3.js";
 // import Lagless4 from "js/lagless/lagless4.js";
@@ -144,24 +143,6 @@ if (isMobile) {
 let mouseMoveTimer = null;
 let pingTime = 0;
 let restPos = 128;
-// Default 512*1024 (512kb).
-// Default 128*1024 (128kb)
-// let videoBufferSize = 256 * 1024;
-// let audioBufferSize = 128 * 1024;
-
-// "000000000000000000 128 128 128 128";
-// let lagless1Port = 8001;
-// let lagless2Port = 8002;
-// let lagless3Port = 8003;
-// let lagless4Port = 8004;
-//
-// let lagless2URL = "wss://twitchplaysnintendoswitch.com/" + lagless2Port + "/";
-
-// todo:
-// https://stackoverflow.com/questions/22624379/how-to-convert-letters-to-numbers-with-javascript
-// var n = Math.pow(2, 99);
-// String.fromCharCode(n);
-// s.charCodeAt(0) - 97
 
 // jss:
 const styles = (theme) => ({
@@ -233,34 +214,7 @@ class App extends Component {
 
 		this.getTheme = this.getTheme.bind(this);
 
-		this.state = {
-
-			// theme: "light",
-
-			// lagless tab:
-			// tab: 0,
-
-			// lagless settings:
-			// lagless1: {
-			// 	framerate: 15,
-			// 	quality: 60,
-			// 	scale: 30,
-			// },
-			// lagless2: {
-			// 	framerate: 20,
-			// 	videoBitrate: 1,
-			// 	scale: 540,
-			// },
-			// lagless3: {
-			// 	framerate: 20,
-			// 	videoBitrate: 1,
-			// 	scale: 540,
-			// },
-
-			// modal:
-			// currentModal: null,
-
-		};
+		this.state = {};
 	}
 
 
@@ -271,24 +225,12 @@ class App extends Component {
 		// check if new:
 		// localforage.getItem("new").then(function (value) {
 		// 	if (value != "new") {
-		// 		$("#tutorialWindow").modal();
+		//	// first time message:
 		// 	}
 		// 	localforage.setItem("new", "new");
 		// });
 
-		// check for ads:
-		// 	localforage.getItem("ads").then(function(value) {
-		// 		if (value != "ads") {
-		// 			if (typeof canRunAds == "undefined") {
-		// 				console.log("test");
-		// 				swal({
-		// 					title: "Disable your adblocker! or don\'t ¯\\_(ツ)_/¯ This message won't appear again!",
-		// 				});
-		// 			}
-		// 		}
-		// 		localforage.setItem("ads", "ads");
-		// 	});
-		window.dispatchEvent(new Event("resize"));
+		// window.dispatchEvent(new Event("resize"));
 
 		// Get stored preferences
 		localforage.getItem("settings").then((value) => {
@@ -335,6 +277,8 @@ class App extends Component {
 
 		});
 
+		window.socket = this.props.socket;
+
 		// save settings on close:
 		/* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 		// window.addEventListener("beforeunload", () => {
@@ -345,7 +289,7 @@ class App extends Component {
 			return null;
 		};
 
-		window.socket = this.props.socket;
+
 
 		// reconnect:
 		socket.on("disconnect", (data) => {
@@ -532,10 +476,9 @@ class App extends Component {
 			}
 		});
 
-		// xbox 2.0:
-		// streams.push(new Lagless2("wss://twitchplaysnintendoswitch.com/8004/", false));
+		// xbox 2.0
 		// streams.push(new Lagless1("https://twitchplaysnintendoswitch.com", "/8001/socket.io"));
-		streams.push(new Lagless2("wss://twitchplaysnintendoswitch.com/8003/", true));
+		streams.push(new Lagless2("wss://twitchplaysnintendoswitch.com/8004/", true));
 
 		/* LAGLESS 3.0 */
 
@@ -577,20 +520,25 @@ class App extends Component {
 			// todo: not this:
 			if (!this.props.settings.audioThree) {
 				laglessAudio.audio.volume = 0;
+				// for (let i = 0; i < 0)
 				streams[0].player.volume = this.props.settings.volume / 100;
-				streams[1].player.volume = this.props.settings.volume / 100;
+				if (streams[1].player != null) {
+					streams[1].player.volume = this.props.settings.volume / 100;
+				}
 			} else {
 				laglessAudio.audio.volume = this.props.settings.volume / 100;
 				streams[0].player.volume = 0;
-				streams[1].player.volume = 0;
+				if (streams[1].player != null) {
+					streams[1].player.volume = 0;
+				}
 			}
 		}, 1000);
 
 		sendInputTimer = setInterval(() => {
+			if (!this.props.userInfo.loggedIn) {return;}
 			inputHandler.pollDevices();
 			this.sendControllerState();
-		// }, 1000 / 120);
-		}, 1000 / 30);
+		}, 1000 / 60);
 
 		/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -665,12 +613,16 @@ class App extends Component {
 		// 	$("#ping").text(latency + "ms");
 		// });
 
-		window.addEventListener("keydown", function (e) {
+		window.addEventListener("keydown", function (event) {
 			// escape, f11
-			if ([27, 122].indexOf(e.keyCode) > -1) {
-				e.preventDefault();
+			if ([27, 122].indexOf(event.keyCode) > -1) {
+				event.preventDefault();
 				$("body").removeClass("hideScrollbar");
 			}
+			// prevent space bar scrolling:
+			// if ([32].indexOf(event.keyCode) > -1) {
+			// 	event.preventDefault();
+			// }
 		}, false);
 
 	}

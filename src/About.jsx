@@ -227,7 +227,7 @@ class About extends PureComponent {
 							src="https://twitchplaysnintendoswitch.com/images/about/ppdonatebutton.png"
 							className={classes.image}
 							onClick={() => {
-								window.location = "https://paypal.me/matthewfosse/";
+								window.location = "https://paypal.me/fossephate/";
 							}}/>
 
 						{/* https://streamlabs.com/twitchplaysconsoles */}
