@@ -89,7 +89,8 @@ class About extends PureComponent {
 						variant="contained"
 						className={classes.back}
 						onClick={() => {
-							window.location = "https://twitchplaysnintendoswitch.com";
+							// window.location = "https://twitchplaysnintendoswitch.com";
+							this.props.history.push("/");
 						}}>Back</Button>
 
 					<h2>About the project</h2>
@@ -235,7 +236,7 @@ class About extends PureComponent {
 
 					</div>
 
-					<iframe className={classes.twitch} src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameBorder="0" scrolling="no" allowFullscreen="true"></iframe>
+					<iframe className={classes.twitch} src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameBorder="0" scrolling="no" allowFullScreen={true}></iframe>
 
 				</Paper>
 
@@ -252,7 +253,15 @@ const mapStateToProps = (state) => {
 	};
 };
 
+const mapDispatchToProps = (dispatch) => {
+	return {
+		updateSettings: (settings) => {
+			dispatch(updateSettings(settings))
+		},
+	};
+};
+
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps),
+	connect(mapStateToProps, mapDispatchToProps),
 )(About);

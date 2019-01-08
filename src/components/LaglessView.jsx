@@ -78,7 +78,7 @@ class LaglessView extends PureComponent {
 				<iframe
 					id="twitchVideo"
 					className={classes.twitch}
-					src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true"
+					src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=true&autoplay=true"
 					frameBorder="0"
 					scrolling="no"
 					allowFullScreen={true}

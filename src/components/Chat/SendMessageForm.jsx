@@ -140,6 +140,8 @@ class SendMessageForm extends PureComponent {
 				"xboxgames",
 				"xboxgamelist",
 				"xboxforcegoto",
+				"giveplus",
+				"removeplus",
 			],
 			emotes: [],
 		};

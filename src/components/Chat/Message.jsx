@@ -4,6 +4,9 @@ import PropTypes from "prop-types";
 
 import Linkify from "react-linkify";
 
+// twitch icon:
+import TwitchIcon from "src/components/Icons/TwitchIcon.jsx";
+
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -41,23 +44,31 @@ function getTimeStamp(t) {
 // class Message extends PureComponent {
 const Message = (props) => {
 	let { classes, message, username, userid, time } = props;
+	let source = "";
 	// if it's a relayed message:
 	if (userid === "TPNSbot" && message[0] == "[") {
 		let r = /\[(.+):(.+)\](.+)/;
 		let split = message.match(r);
-		let source = split[1];
+		source = split[1];
 		let user = split[2];
 		let msg = split[3];
-		username = source.substr(0, 2) + ":" + user;
+		// username = source.substr(0, 2) + ":" + user;
+		username = user;
 		message = msg;
 	}
 
-	let messageContent = `${getTimeStamp(time)}<b>${username}</b>${message}`;
+	let icons = [];
+	if (source == "twitch") {
+		icons.push(<TwitchIcon/>);
+	}
+
+	icons = React.Children.toArray(icons);
+
 	return (
 		<div className={classes.root} userid={userid} onClick={props.onClick}>
 			<Linkify properties={{className: classes.links}}>
 				{/* <ListItemText> */}
-					{getTimeStamp(time)}<b>{username}</b> {message}
+					{getTimeStamp(time)}{icons}<b>{username}</b> {message}
 				{/* </ListItemText> */}
 			</Linkify>
 		</div>

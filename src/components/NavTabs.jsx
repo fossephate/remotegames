@@ -47,13 +47,16 @@ class NavTabs extends PureComponent {
 			<Paper className={classes.root} elevation={4}>
 				<Tabs
 					centered
-					value={this.props.value}
+					value={this.props.tabNumber}
 					indicatorColor="primary"
 					textColor="primary"
 					// scrollable
 		            // scrollButtons="auto"
 					onChange={(event, value) => {
 						this.props.handleChange(value);
+						if (value == 2) {
+							this.props.history.push("/about");
+						}
 					}}>
 
 					{!this.props.loggedIn ? <Tab label="Twitch"/> : null}
@@ -79,6 +82,7 @@ const mapStateToProps = (state) => {
 	return {
 		loggedIn: state.userInfo.loggedIn,
 		hideNav: state.settings.hideNav,
+		tabNumber: state.settings.streamNumber,
 	};
 };
 

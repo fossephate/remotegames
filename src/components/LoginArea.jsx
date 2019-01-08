@@ -1,6 +1,9 @@
 // react:
 import React, { PureComponent } from "react";
 
+// react-router:
+import { withRouter } from "react-router";
+
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -15,6 +18,9 @@ import { connect } from "react-redux";
 
 // recompose:
 import { compose } from "recompose";
+
+// libs:
+const tools = require("js/tools.js");
 
 // jss:
 const styles = (theme) => ({
@@ -43,6 +49,31 @@ class LoginArea extends PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.handleAccount = this.handleAccount.bind(this);
+		this.handleLogout = this.handleLogout.bind(this);
+		this.handleLogin = this.handleLogin.bind(this);
+		this.handleRegister = this.handleRegister.bind(this);
+	}
+
+	handleAccount() {
+		window.swal("This doesn't do anything yet.");
+		// this.props.history.push("/account");
+	}
+
+	handleLogin() {
+		window.swal("This doesn't do anything yet, just use the register button for now.");
+		this.props.history.push("/login");
+	}
+
+	handleRegister() {
+		this.props.history.push("/register");
+		// this.props.updateSettings({ modal: "REGISTER" });
+	}
+
+	handleLogout() {
+		tools.deleteAllCookies();
+		location.reload(true);
 	}
 
 	render() {
@@ -63,13 +94,13 @@ class LoginArea extends PureComponent {
 								validUsernames={this.props.userInfo.validUsernames}
 								myUsername={this.props.userInfo.username}
 								handleChange={this.props.handleUsernameChange}/>
-							<Button variant="contained" color="primary" onClick={this.props.handleAccount}>Account</Button>
-							<Button className={classes.logout} variant="contained" color="secondary" onClick={this.props.handleLogout}>Logout</Button>
+							<Button variant="contained" color="primary" onClick={this.handleAccount}>Account</Button>
+							<Button className={classes.logout} variant="contained" color="secondary" onClick={this.handleLogout}>Logout</Button>
 						</>
 					:
 						<>
-							<Button variant="contained" color="primary" onClick={this.props.handleLogin}>Login</Button>
-							<Button variant="contained" color="secondary" onClick={this.props.handleRegister}>Register</Button>
+							<Button variant="contained" color="primary" onClick={this.handleLogin}>Login</Button>
+							<Button variant="contained" color="secondary" onClick={this.handleRegister}>Register</Button>
 						</>
 				}
 			</Paper>
@@ -86,10 +117,15 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return {};
+	return {
+		updateSettings: (settings) => {
+			dispatch(updateSettings(settings))
+		},
+	};
 };
 
 export default compose(
+	withRouter,
 	withStyles(styles),
 	connect(mapStateToProps, mapDispatchToProps),
 )(LoginArea);

@@ -23,7 +23,7 @@ const styles = (theme) => ({
 		display: "flex",
 		flexDirection: "column",
 		width: "100%",
-		padding: 0,
+		padding: "5px",
 		margin: 0,
 		overflowX: "hidden",
 	},

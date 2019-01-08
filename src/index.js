@@ -11,6 +11,10 @@ import {
 } from "react-router";
 import { HashRouter, BrowserRouter } from "react-router-dom";
 
+// material ui:
+import CssBaseline from "@material-ui/core/CssBaseline";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+
 // redux:
 import {
 	Provider
@@ -30,6 +34,7 @@ import handleEvents from "src/sockets";
 
 // libs:
 import io from "socket.io-client";
+import merge from "deepmerge";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -197,27 +202,107 @@ sagaMiddleware.run(handleActions, {
 
 // components:
 import App from "src/App.jsx";
+import About from "src/About.jsx";
+import FAQ from "src/FAQ.jsx";
 
 
-export default class Index extends Component {
+class Index extends Component {
 
 	constructor(props) {
 		super(props);
-		this.reRender = this.reRender.bind(this);
+		this.getTheme = this.getTheme.bind(this);
 	}
 
-	reRender() {
-		this.setState({});
+	getTheme() {
+
+		let themeName = store.getState().settings.theme;
+
+		// default:
+		let theme = {
+			typography: {
+				useNextVariants: true,
+			},
+			palette: {
+				type: "dark",
+				primary: {
+					main: "#2181ff", // #2181ff
+				},
+				secondary: {
+					main: "#ff3b3b",
+				}
+			}
+		};
+		switch (themeName) {
+			case "light":
+				theme = merge(theme, {
+					palette: {
+						type: "light",
+						// primary: {
+						// 	main: "#bf4040",
+						// },
+						// secondary: {
+						// 	main: "#bf4040",
+						// }
+					}
+				});
+				break;
+			case "dark":
+				theme = merge(theme, {
+					palette: {
+						type: "dark",
+						// primary: {
+						// 	main: "#bf4040",
+						// },
+						// secondary: {
+						// 	main: "#bf4040",
+						// },
+					}
+				});
+				break;
+			case "mint":
+				theme = merge(theme, {
+					palette: {
+						type: "light",
+						primary: {
+							main: "#16d0f4",
+						},
+						secondary: {
+							main: "#24d2ac",
+						},
+						background: {
+							paper: "#5ae097",
+						},
+					}
+				});
+				break;
+		}
+		return createMuiTheme(theme);
 	}
 
 	render() {
 
 		return (
 			<Provider store={store}>
-				{/* there may be a better way to pass store.dispatch, but for now it's probably not that big of a problem: */}
-				<BrowserRouter>
-					<App dispatch={store.dispatch} socket={socket} reRender={this.reRender}/>
-				</BrowserRouter>
+				<MuiThemeProvider theme={this.getTheme()}>
+					<CssBaseline/>
+					<BrowserRouter>
+						<Switch>
+
+							<Route path="/" render={(props) => {
+								return <App {...props} socket={socket}/>;
+							}}/>
+
+							<Route path="/about" render={(props) => {
+								return <About {...props}/>;
+							}}/>
+							//
+							// <Route path="/FAQ">
+							// 	<FAQ/>
+							// </Route>
+
+						</Switch>
+					</BrowserRouter>
+				</MuiThemeProvider>
 			</Provider>
 		);
 	}

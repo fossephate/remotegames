@@ -1,10 +1,13 @@
 // react:
-import React, { Component } from "react";
+import React, { Component, Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 
 // react-router:
-import { Switch, Route } from "react-router-dom";
-import { Link } from "react-router-dom";
+import {
+	Router,
+	Route,
+	Switch,
+} from "react-router";
 
 // redux:
 import { connect } from "react-redux";
@@ -17,23 +20,28 @@ import { updateSettings } from "src/actions/settings.js";
 import { leavePlayerControlQueue } from "src/actions/players.js";
 
 // main components:
-import NavTabs from "src/components/NavTabs.jsx";
-import Picture from "src/components/Picture.jsx";
-import Chat from "src/components/Chat/Chat.jsx";
-import LoginArea from "src/components/LoginArea.jsx";
-import ModalConductor from "src/components/Modals/ModalConductor.jsx";
+const LoginArea = lazy(() => import("src/components/LoginArea.jsx"));
+const NavTabs = lazy(() => import("src/components/NavTabs.jsx"));
+const Picture = lazy(() => import("src/components/Picture.jsx"));
+const Chat = lazy(() => import("src/components/Chat/Chat.jsx"));
+// loading circle:
+import LoadingCircle from "src/components/LoadingCircle.jsx";
 
-import About from "src/About.jsx";
-import FAQ from "src/FAQ.jsx";
+import CheckboxSettings from "src/components/CheckboxSettings.jsx";
 
 // components:
 import PlayerInfo from "src/components/PlayerInfo.jsx";
 import Waitlist from "src/components/Waitlist.jsx";
-import ThemeSelector from "src/components/ThemeSelector.jsx";
+// import ThemeSelector from "src/components/ThemeSelector.jsx";
 
 // secondary components:
 import MySlider from "src/components/MySlider.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx";
+
+// modals:
+import LoginModal from "src/components/Modals/LoginModal.jsx";
+import RegisterModal from "src/components/Modals/RegisterModal.jsx";
+import AccountModal from "src/components/Modals/AccountModal.jsx";
 
 
 // material ui:
@@ -68,6 +76,9 @@ import Checkbox from "@material-ui/core/Checkbox";
 
 // import { Client } from "./parsec/src/client.js";
 
+// recompose:
+import { compose } from "recompose";
+
 // device sizes:
 import { device } from "src/constants/DeviceSizes.js";
 
@@ -93,9 +104,9 @@ import Noty from "noty";
 // import "noty/lib/themes/light.css";
 import localforage from "localforage";
 import swal from "sweetalert2";
+window.swal = swal;
 import io from "socket.io-client";
 import _ from "lodash";
-import merge from "deepmerge";
 
 // import JSMpeg from "js/jsmpeg.min.js";
 // require("js/WSAvcPlayer.js");
@@ -113,7 +124,6 @@ let sendInputTimer;
 let lastSplitTime = 0;
 let lastSplitTimeMS = 0;
 let locked = false;
-let loaded = false;
 let authCookie;
 let banlist = [];
 let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190", "103.217.104.246"];
@@ -146,7 +156,7 @@ let restPos = 128;
 
 // jss:
 const styles = (theme) => ({
-	container: {
+	root: {
 		display: "grid",
 		"grid-template-columns": "minmax(50%, 75%) minmax(100px, 25%)",
 		"gridTemplateAreas": `
@@ -158,7 +168,7 @@ const styles = (theme) => ({
 		gridGap: "5px",
 	},
 	[device.tablet]: {
-		container: {
+		root: {
 			"grid-template-columns": "minmax(50%, 75%) minmax(300px, 25%)",
 			"gridTemplateAreas": `
 				"nav login"
@@ -167,16 +177,9 @@ const styles = (theme) => ({
 		},
 	},
 	[device.laptop]: {
-		container: {},
+		root: {},
 	},
 });
-
-const Container = withStyles(styles)(({ classes, children }) => (
-	<div className={classes.container}>
-		{children}
-	</div>
-));
-
 
 
 class App extends Component {
@@ -184,35 +187,13 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		this.toggleKeyboardControls = this.toggleKeyboardControls.bind(this);
-		this.toggleControllerControls = this.toggleControllerControls.bind(this);
-		this.toggleTouchControls = this.toggleTouchControls.bind(this);
-		this.toggleMouseControls = this.toggleMouseControls.bind(this);
-		this.toggleControllerView = this.toggleControllerView.bind(this);
+		// this.toggleAudioThree = this.toggleAudioThree.bind(this);
 
-		this.toggleAnalogStickMode = this.toggleAnalogStickMode.bind(this);
-		this.toggleDpadSwap = this.toggleDpadSwap.bind(this);
-		this.toggleTDSConfig = this.toggleTDSConfig.bind(this);
-		this.toggleAudioThree = this.toggleAudioThree.bind(this);
-
-		// this.toggleDarkTheme = this.toggleDarkTheme.bind(this);
-		this.switchThemes = this.switchThemes.bind(this);
-		this.toggleFullscreen = this.toggleFullscreen.bind(this);
 		this.exitFullscreen = this.exitFullscreen.bind(this);
-		this.toggleLargescreen = this.toggleLargescreen.bind(this);
 
 		this.switchTabs = this.switchTabs.bind(this);
 
 		this.sendControllerState = this.sendControllerState.bind(this);
-
-
-		// this.onUsernameChange = this.onUsernameChange.bind(this);
-
-		// this.login = this.login.bind(this);
-		// this.register = this.register.bind(this);
-		// this.viewAccount = this.viewAccount.bind(this);
-
-		this.getTheme = this.getTheme.bind(this);
 
 		this.state = {};
 	}
@@ -266,15 +247,6 @@ class App extends Component {
 
 			this.switchTabs(this.props.settings.streamNumber);
 
-			// wait a little longer so the joycon images load:
-			setTimeout(() => {
-				$("body").addClass("loaded");
-				// after animation is done:
-				setTimeout(() => {
-					$(".loaded #loader-wrapper")[0].style.visibility = "hidden";
-				}, 500);
-			}, 0);
-
 		});
 
 		window.socket = this.props.socket;
@@ -288,8 +260,6 @@ class App extends Component {
 			localforage.setItem("settings", JSON.stringify(this.props.settings));
 			return null;
 		};
-
-
 
 		// reconnect:
 		socket.on("disconnect", (data) => {
@@ -352,7 +322,7 @@ class App extends Component {
 		let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
 		if (authCookie !== null) {
 			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-			this.props.dispatch(updateUserInfo({ authToken: authCookie }));
+			this.props.updateUserInfo({ authToken: authCookie });
 		}
 
 		if (authCookie !== null) {
@@ -384,9 +354,9 @@ class App extends Component {
 				location.reload(true);
 			}, 1000);
 		});
-		socket.emit("join", "lagless" + this.state.tab);
+		socket.emit("join", "stream" + this.props.settings.streamNumber);
 		setInterval(() => {
-			socket.emit("join", "lagless" + this.state.tab);
+			socket.emit("join", "stream" + this.props.settings.streamNumber);
 		}, 10000);
 
 		window.state = this.state;
@@ -442,34 +412,8 @@ class App extends Component {
 
 		// lagless setup:
 
-		/* LAGLESS 1.0 */
-
-		// streams.push(new Lagless1(socket));
-		//
-		// // on settings change:
-		// socket.on("lagless1Settings", (data) => {
-		// 	this.setState({
-		// 		lagless1: {
-		// 			framerate: data.framerate,
-		// 			quality: data.quality,
-		// 			scale: data.scale,
-		// 		},
-		// 	});
-		// });
-
 		/* switch 2.0 */
 		streams.push(new Lagless2("wss://twitchplaysnintendoswitch.com/8002/"));
-
-		// on settings change:
-		socket.on("lagless2Settings", (data) => {
-			// this.setState({
-			// 	lagless2: {
-			// 		framerate: data.framerate,
-			// 		videoBitrate: data.videoBitrate,
-			// 		scale: data.scale,
-			// 	},
-			// });
-		});
 		socket.on("lagless2SettingsChange", (data) => {
 			if (this.props.settings.streamNumber == 0) {
 				streams[0].resume();
@@ -479,29 +423,6 @@ class App extends Component {
 		// xbox 2.0
 		// streams.push(new Lagless1("https://twitchplaysnintendoswitch.com", "/8001/socket.io"));
 		streams.push(new Lagless2("wss://twitchplaysnintendoswitch.com/8004/", true));
-
-		/* LAGLESS 3.0 */
-
-		// lagless3 = new Lagless3();
-		// // on settings change:
-		// socket.on("lagless3Settings", (data) => {
-		// 	this.setState({
-		// 		lagless3: {
-		// 			framerate: data.framerate,
-		// 			videoBitrate: data.videoBitrate,
-		// 			scale: data.scale,
-		// 		},
-		// 	});
-		// });
-		// socket.on("lagless3SettingsChange", (data) => {
-		// 	if (this.state.tab != 3) {
-		// 		return;
-		// 	}
-		// 	// wsavc.connect("wss://twitchplaysnintendoswitch.com/8003/");
-		// });
-
-		/* LAGLESS 4.0 */
-		// lagless4 = new Lagless4(socket);
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 		laglessAudio = new LaglessAudio(socket);
@@ -559,27 +480,27 @@ class App extends Component {
 
 		/* BAN EVASION @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-		socket.on("rickroll", (data) => {
-			if (this.props.userInfo.username == data || data == "everyone") {
-				let myPlayer;
-				swal({
-					html: '<canvas id="rickroll"></canvas>',
-					onOpen: () => {
-						let rickrollCanvas = $("#rickroll")[0];
-						myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
-							canvas: rickrollCanvas,
-							loop: false,
-							autoplay: true
-						});
-					},
-					onClose: () => {
-						myPlayer.destroy();
-					},
-					customClass: "swal-wide"
-				});
-
-			}
-		});
+		// socket.on("rickroll", (data) => {
+		// 	if (this.props.userInfo.username == data || data == "everyone") {
+		// 		let myPlayer;
+		// 		swal({
+		// 			html: '<canvas id="rickroll"></canvas>',
+		// 			onOpen: () => {
+		// 				let rickrollCanvas = $("#rickroll")[0];
+		// 				myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
+		// 					canvas: rickrollCanvas,
+		// 					loop: false,
+		// 					autoplay: true
+		// 				});
+		// 			},
+		// 			onClose: () => {
+		// 				myPlayer.destroy();
+		// 			},
+		// 			customClass: "swal-wide"
+		// 		});
+		//
+		// 	}
+		// });
 
 		socket.on("rainbow", function (data) {
 			if (this.props.userInfo.username == data || data == "everyone") {
@@ -627,117 +548,12 @@ class App extends Component {
 
 	}
 
-	logout() {
-		tools.deleteAllCookies();
-		location.reload(true);
-	}
-
 	// checkbox settings:
-	toggleKeyboardControls(state) {
-		this.props.updateSettings({ keyboardControls: state });
-	}
-
-	toggleControllerControls(state) {
-		this.props.updateSettings({ controllerControls: state });
-	}
-
-	toggleTouchControls(state) {
-		this.props.updateSettings({ touchControls: state });
-	}
-
-	toggleMouseControls(state) {
-		this.props.updateSettings({ mouseControls: state });
-	}
-
-	toggleControllerView(state) {
-		this.props.updateSettings({ controllerView: state });
-		if (state && this.props.settings.largescreen) {
-			this.props.updateSettings({ largescreen: false });
-		}
-	}
-
-	toggleAnalogStickMode(state) {
-		this.props.updateSettings({ analogStickMode: state });
-		// masterInput.keyboard.settings.analogStickMode = state;
-	}
-
-	toggleDpadSwap(state) {
-		this.props.updateSettings({ dpadSwap: state });
-	}
-
-	toggleTDSConfig(state) {
-		this.props.updateSettings({ TDSConfig: state });
-		// if (state) {
-		// 	masterInput.controller.settings.map.a = "b";
-		// 	masterInput.controller.settings.map.b = "a";
-		// 	masterInput.controller.settings.map.x = "y";
-		// 	masterInput.controller.settings.map.y = "x";
-		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1.5;
-		// 	masterInput.controller.settings.sticks.L.Y.sensitivity = 1.5;
-		// 	masterInput.controller.settings.sticks.R.X.sensitivity = 1.5;
-		// 	masterInput.controller.settings.sticks.R.Y.sensitivity = 1.5;
-		// 	masterInput.controller.settings.sticks.R.X.offset = -20;
-		// 	masterInput.controller.settings.sticks.R.Y.offset = -10;
-		// } else {
-		// 	masterInput.controller.settings.map.a = "a";
-		// 	masterInput.controller.settings.map.b = "b";
-		// 	masterInput.controller.settings.map.x = "x";
-		// 	masterInput.controller.settings.map.y = "y";
-		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1;
-		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1;
-		// 	masterInput.controller.settings.sticks.L.X.sensitivity = 1;
-		// 	masterInput.controller.settings.sticks.L.Y.sensitivity = 1;
-		// 	masterInput.controller.settings.sticks.R.X.sensitivity = 1;
-		// 	masterInput.controller.settings.sticks.R.Y.sensitivity = 1;
-		// 	masterInput.controller.settings.sticks.R.X.offset = 0;
-		// 	masterInput.controller.settings.sticks.R.Y.offset = 0;
-		// }
-	}
 
 	toggleAudioThree(state) {
 		this.props.updateSettings({ audioThree: state });
 		if (state) {
 			laglessAudio.resume();
-		}
-	}
-
-	switchThemes(theme) {
-		this.props.updateSettings({ theme: theme });
-	}
-
-	toggleFullscreen(state) {
-
-		this.props.updateSettings({ fullscreen: state });
-
-		if (state) {
-			$("body").css("padding", "0");
-			$("body").addClass("hideScrollbar");
-			$("#picture").css("grid-row", "1");
-			$("#picture").css("grid-column", "1/3");
-
-			$(document).scrollTop(0);
-
-			this.props.updateSettings({
-				controllerView: false,
-				hideChat: true,
-				hideNav: true,
-			});
-
-			tools.toggleFullscreen($("html")[0]);
-
-		} else {
-
-			console.log("exiting fullscreen");
-			$("body").css("padding", "");
-			$("#picture").css("grid-row", "");
-			$("#picture").css("grid-column", "");
-			$("body").removeClass("hideScrollbar");
-			this.props.updateSettings({
-				largescreen: false,
-				controllerView: true,
-				hideChat: false,
-				hideNav: false,
-			});
 		}
 	}
 
@@ -747,16 +563,6 @@ class App extends Component {
 			this.toggleFullscreen(false);
 		}
 		window.dispatchEvent(new Event("resize"));
-	}
-
-	toggleLargescreen(state) {
-		this.props.updateSettings({ largescreen: state });
-		window.dispatchEvent(new Event("resize"));
-		if (state && this.props.settings.controllerView) {
-			this.props.updateSettings({ controllerView: false });
-		} else if (!state && !this.props.settings.controllerView) {
-			this.props.updateSettings({ controllerView: true });
-		}
 	}
 
 	resetSettings() {
@@ -772,19 +578,19 @@ class App extends Component {
 		// 	return;
 		// }
 
-		if (sNum == 2) {
-			window.location = "https://twitchplaysnintendoswitch.com/about";
-			// history.replaceState("data", "About", "/about");
-			// this.setState({});
-			// this.props.reRender();
-			// return;
-		}
-		if (sNum == 3) {
-			window.location = "https://twitchplaysnintendoswitch.com/FAQ";
-			// history.replaceState("data", "FAQ", "/FAQ");
-			// this.setState({});
-			// this.props.reRender();
-		}
+		// if (sNum == 2) {
+		// 	window.location = "https://twitchplaysnintendoswitch.com/about";
+		// 	// history.replaceState("data", "About", "/about");
+		// 	// this.setState({});
+		// 	// this.props.reRender();
+		// 	// return;
+		// }
+		// if (sNum == 3) {
+		// 	window.location = "https://twitchplaysnintendoswitch.com/FAQ";
+		// 	// history.replaceState("data", "FAQ", "/FAQ");
+		// 	// this.setState({});
+		// 	// this.props.reRender();
+		// }
 
 		if (!this.props.userInfo.loggedIn) {
 			swal("You have to login / register first!");
@@ -923,69 +729,6 @@ class App extends Component {
 		socket.emit("sendControllerState", obj);
 	}
 
-	getTheme() {
-		// default:
-		let theme = {
-			typography: {
-				useNextVariants: true,
-			},
-			palette: {
-				type: "dark",
-				primary: {
-					main: "#2181ff", // #2181ff
-				},
-				secondary: {
-					main: "#ff3b3b",
-				}
-			}
-		};
-		switch (this.props.settings.theme) {
-			case "light":
-				theme = merge(theme, {
-					palette: {
-						type: "light",
-						// primary: {
-						// 	main: "#bf4040",
-						// },
-						// secondary: {
-						// 	main: "#bf4040",
-						// }
-					}
-				});
-				break;
-			case "dark":
-				theme = merge(theme, {
-					palette: {
-						type: "dark",
-						// primary: {
-						// 	main: "#bf4040",
-						// },
-						// secondary: {
-						// 	main: "#bf4040",
-						// },
-					}
-				});
-				break;
-			case "mint":
-				theme = merge(theme, {
-					palette: {
-						type: "light",
-						primary: {
-							main: "#16d0f4",
-						},
-						secondary: {
-							main: "#24d2ac",
-						},
-						background: {
-							paper: "#5ae097",
-						},
-					}
-				});
-				break;
-		}
-		return createMuiTheme(theme);
-	}
-
 	shouldComponentUpdate(nextProps, nextState) {
 
 		if (JSON.stringify(this.props.userInfo) != JSON.stringify(nextProps.userInfo)) {
@@ -993,28 +736,21 @@ class App extends Component {
 		}
 
 		if (this.props.settings.volume != nextProps.settings.volume) {
-			return false; // test
+			return false;
 		}
 
 		if (this.props.settings.theme != nextProps.settings.theme) {
 			return true;
 		}
 
-		// all settings:
-		if (JSON.stringify(this.props.settings) != JSON.stringify(nextProps.settings)) {
+		if (this.props.settings.streamNumber != nextProps.settings.streamNumber) {
 			return true;
 		}
 
-		// if (this.state.tab != nextState.tab) {
-		// 	return true;
-		// }
-
-		// if (this.state.tab != nextState.tab) {
-		// 	return true;
-		// }
-		// if (this.state.theme != nextState.theme) {
-		// 	return true;
-		// }
+		// all settings:
+		if (JSON.stringify(this.props.settings) != JSON.stringify(nextProps.settings)) {
+			return false;
+		}
 
 		if (this.state != nextState) {
 			return true;
@@ -1037,194 +773,66 @@ class App extends Component {
 
 		console.log("re-rendering");
 
+		const { classes } = this.props;
+
 		return (
-			<MuiThemeProvider theme={this.getTheme()}>
-				<CssBaseline/>
+			<div className={classes.root}>
 
-				<div id="loader-wrapper">
-					<div id="loader"></div>
-					<div className="loader-section section-left"></div>
-					<div className="loader-section section-right"></div>
-				</div>
+				<Suspense fallback={
+					<LoadingCircle/>
+				}>
 
-				<Switch>
+					<Suspense fallback={<LoadingCircle/>}>
+						<NavTabs handleChange={this.switchTabs} history={this.props.history}/>
+					</Suspense>
 
-					<Route exact path="/">
+					<Suspense fallback={<LoadingCircle/>}>
+						<LoginArea/>
+					</Suspense>
 
-						<Container>
+					<Suspense fallback={<LoadingCircle/>}>
+						<Picture tab={this.props.settings.streamNumber}/>
+					</Suspense>
 
-							<NavTabs value={this.props.settings.streamNumber} handleChange={this.switchTabs}/>
+					<Suspense fallback={<LoadingCircle/>}>
+						<Chat hide={this.props.settings.hideChat}/>
+					</Suspense>
 
-							<LoginArea
-								// handleUsernameChange={this.onUsernameChange}
-								handleLogout={this.logout}
-								handleLogin={() => {swal("This is broken, just register for now.");this.props.updateSettings({ modal: "LOGIN" })}}
-								handleRegister={() => {this.props.updateSettings({ modal: "REGISTER" })}}
-								handleAccount={() => {this.props.updateSettings({ modal: "ACCOUNT" })}}/>
+					<Paper id="barUnderTheStream">
 
-							<Picture tab={this.props.settings.streamNumber}/>
+						<PlayerInfo/>
 
-							<Chat hide={this.props.settings.hideChat}/>
+						<Paper id="settings" elevation={0}>
 
-							<Paper id="barUnderTheStream">
+							<CheckboxSettings/>
 
-								<PlayerInfo/>
-
-								<Paper id="settings" elevation={0}>
-
-									<Paper id="checkboxSettings" className="settingsPanel" elevation={5}>
-										<List>
-											<ListItem>
-												<MyCheckbox text={"Enable Keyboard Controls"} handleChange={this.toggleKeyboardControls} checked={this.props.settings.keyboardControls}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Enable Controller Controls"} handleChange={this.toggleControllerControls} checked={this.props.settings.controllerControls}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Enable Controller View"} handleChange={this.toggleControllerView} checked={this.props.settings.controllerView}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.props.settings.audioThree}/>
-											</ListItem>
-											<ListItem>
-												<ThemeSelector/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Enable Fullscreen Mode"} handleChange={this.toggleFullscreen} checked={this.props.settings.fullscreen}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Enable Largescreen Mode"} handleChange={this.toggleLargescreen} checked={this.props.settings.largescreen}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Enable Mouse Controls"} handleChange={this.toggleMouseControls} checked={this.props.settings.mouseControls}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Enable Touch Controls"} handleChange={this.toggleTouchControls} checked={this.props.settings.touchControls}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Analog Stick Mode"} handleChange={this.toggleAnalogStickMode} checked={this.props.settings.analogStickMode}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"DPad Swap"} handleChange={this.toggleDpadSwap} checked={this.props.settings.dpadSwap}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"3Ds config"} handleChange={this.toggleTDSConfig} checked={this.props.settings.TDSConfig}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Hide Chat"} handleChange={(state) => {this.props.updateSettings({ hideChat: state })}} checked={this.props.settings.hideChat}/>
-											</ListItem>
-											<ListItem>
-												<MyCheckbox text={"Hide Nav Bar"} handleChange={(state) => {this.props.updateSettings({ hideNav: state })}} checked={this.props.settings.hideNav}/>
-											</ListItem>
-										</List>
-									</Paper>
-
-									<Paper id="generalSettings" className="settingsPanel" elevation={5}>
-										<ListItemText>General Settings</ListItemText>
-										<hr/>
-
-										{/* <ListItemText id="deadzone">Stick Deadzone: {this.props.settings.deadzone}</ListItemText>
-										<div className="mysliderContainer">
-											<MySlider min={5} max={110} step={1} value={this.props.settings.deadzone}
-												handleChange={(value) => {this.props.updateSettings({deadzone: value})}}/>
-										</div> */}
-
-										{/* Stick Sensitivity: <span id="sensitivity">1</span>
-										<div className="mysliderContainer">
-											<div id="stickSensitivitySlider" className="myslider"></div>
-										</div>
-										Analog Stick Attack: <span id="attack">20</span>
-										<div className="mysliderContainer">
-											<div id="stickAttackSlider" className="myslider"></div>
-										</div>
-										Analog Stick Return: <span id="return">20</span>
-										<div className="mysliderContainer">
-											<div id="stickReturnSlider" className="myslider"></div>
-										</div> */}
-										<Button variant="contained" onClick={this.resetSettings}>Reset All Settings</Button>
-									</Paper>
-
-									{/* <Paper id="laglessSettingsContainer" className="settingsPanel" elevation={0}>
-
-										<Paper id="lagless1Settings" className="laglessSettings" elevation={3}>
-											<ListItemText>Lagless 1 Settings</ListItemText>
-											<hr/>
-											<ListItemText>Quality: {this.state.lagless1.quality}</ListItemText>
-											<div className="mysliderContainer">
-												<MySlider min={20} max={60} step={1} delay={1000} value={this.state.lagless1.quality}
-													handleAfterChange={(value) => {socket.emit("lagless1Settings", {quality: parseInt(value)});}}/>
-											</div>
-											<ListItemText>Scale: {this.state.lagless1.scale}</ListItemText>
-											<div className="mysliderContainer">
-												<MySlider min={20} max={50} step={5} delay={1000} value={this.state.lagless1.scale}
-													handleAfterChange={(value) => {socket.emit("lagless1Settings", {scale: parseInt(value)});}}/>
-											</div>
-											<ListItemText>FPS: {this.state.lagless1.framerate}</ListItemText><br/>
-											<div className="mysliderContainer">
-												<MySlider min={1} max={15} step={1} delay={1000} value={this.state.lagless1.framerate}
-													handleAfterChange={(value) => {socket.emit("lagless1Settings", {framerate: parseInt(value)});}}/>
-											</div>
-										</Paper>
-
-										<Paper id="lagless2Settings" className="laglessSettings" elevation={3}>
-											<ListItemText>Lagless 2 Settings</ListItemText>
-											<hr/>
-
-											<ListItemText>FPS: {this.state.lagless2.framerate}</ListItemText>
-											<ListItemText>Bitrate: {this.state.lagless2.videoBitrate}</ListItemText>
-											<div className="mysliderContainer">
-												<MySlider min={0} max={2} step={0.05} delay={1000} value={this.state.lagless2.videoBitrate}
-													handleAfterChange={(value) => {socket.emit("lagless2Settings", {videoBitrate: parseFloat(value)});}}/>
-											</div>
-											<ListItemText>Scale: {this.state.lagless2.scale}</ListItemText>
-											<div className="mysliderContainer">
-												<MySlider min={100} max={540} step={1} delay={1000} value={this.state.lagless2.scale}
-													handleAfterChange={(value) => {socket.emit("lagless2Settings", {scale: parseInt(value)});}}/>
-											</div>
-										</Paper>
-
-										<Paper id="lagless3Settings" className="laglessSettings" elevation={3}>
-											<ListItemText>Lagless 3 Settings</ListItemText>
-											<hr/>
-
-											<ListItemText>FPS: {this.state.lagless3.framerate}</ListItemText>
-											<ListItemText>Bitrate: {this.state.lagless3.videoBitrate}</ListItemText>
-											<div className="mysliderContainer">
-												<MySlider min={0} max={2} step={0.05} delay={1000} value={this.state.lagless3.videoBitrate}
-													handleAfterChange={(value) => {socket.emit("lagless3Settings", {videoBitrate: parseFloat(value)});}}/>
-											</div>
-											<ListItemText>Scale: {this.state.lagless3.scale}</ListItemText>
-											<div className="mysliderContainer">
-												<MySlider min={100} max={540} step={1} delay={1000} value={this.state.lagless3.scale}
-													handleAfterChange={(value) => {socket.emit("lagless3Settings", {scale: parseInt(value)});}}/>
-											</div>
-										</Paper>
-									</Paper> */}
-
-									<Paper id="waitlistContainer" className="settingsPanel" elevation={5}>
-										<Waitlist/>
-									</Paper>
-								</Paper>
+							<Paper id="generalSettings" className="settingsPanel" elevation={5}>
+								<ListItemText>General Settings</ListItemText>
+								<hr/>
+								<Button variant="contained" onClick={this.resetSettings}>Reset All Settings</Button>
 							</Paper>
 
-							<ModalConductor
-								currentModal={this.props.settings.modal}
-								handleClose={() => {this.props.updateSettings({ modal: null })}}/>
-						</Container>
-					</Route>
-
-					<Route path="/about">
-						<About/>
-					</Route>
-
-					<Route path="/FAQ">
-						<FAQ/>
-					</Route>
-
-				</Switch>
+							<Paper id="waitlistContainer" className="settingsPanel" elevation={5}>
+								<Waitlist/>
+							</Paper>
+						</Paper>
+					</Paper>
 
 
-			</MuiThemeProvider>
+					<Switch>
+						<Route path="/login" render={(props) => {
+							return <LoginModal/>;
+						}}/>
+						<Route path="/register" render={(props) => {
+							return (<RegisterModal/>);
+						}}/>
+						<Route path="/account" render={(props) => {
+							return <AccountModal/>;
+						}}/>
+					</Switch>
+
+				</Suspense>
+			</div>
 		);
 	}
 }
@@ -1246,10 +854,16 @@ const mapDispatchToProps = (dispatch) => {
 		leavePlayerControlQueue: (controllerNumber) => {
 			dispatch(leavePlayerControlQueue(controllerNumber))
 		},
+		updateUserInfo: (userInfo) => {
+			dispatch(updateUserInfo(userInfo))
+		},
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps),
+)(App);
 
 // exit fullscreen:
 window.addEventListener("keydown", (event) => {

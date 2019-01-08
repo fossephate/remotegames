@@ -1,6 +1,9 @@
 // react:
 import React, { PureComponent } from "react";
 
+// react-router:
+import { withRouter } from "react-router";
+
 // components:
 // import Modal from "./Modal.jsx";
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
@@ -14,7 +17,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Modal from "@material-ui/core/Modal";
 
 
-// import "./LogInArea.css";
+// recompose:
+import { compose } from "recompose";
+
 
 // jss:
 const styles = (theme) => ({
@@ -43,10 +48,16 @@ const styles = (theme) => ({
 	},
 });
 
-class LogInModal extends PureComponent {
+class LoginModal extends PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.handleClose = this.handleClose.bind(this);
+	}
+
+	handleClose() {
+		this.props.history.push("/");
 	}
 
 	render() {
@@ -75,4 +86,7 @@ class LogInModal extends PureComponent {
 
 }
 
-export default withStyles(styles)(LogInModal);
+export default compose(
+	withRouter,
+	withStyles(styles),
+)(LoginModal);

@@ -794,6 +794,10 @@ io.on("connection", (socket) => {
 		if (client == null || client.userid == null) {
 			return;
 		}
+		if (client.is_ban) {
+			socket.emit("banned");
+			return;
+		}
 		if (data && typeof (data.message) != "string") {
 			return;
 		} else {

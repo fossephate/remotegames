@@ -1,6 +1,9 @@
 // react:
 import React, { PureComponent } from "react";
 
+// react-router:
+import { withRouter } from "react-router";
+
 // components:
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx"
@@ -13,6 +16,10 @@ import Paper from "@material-ui/core/Paper";
 import ListItemText from "@material-ui/core/ListItemText";
 import Modal from "@material-ui/core/Modal";
 
+// recompose:
+import { compose } from "recompose";
+
+// libs:
 const classNames = require("classnames");
 
 // jss:
@@ -52,6 +59,12 @@ class RegisterModal extends PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.handleClose = this.handleClose.bind(this);
+	}
+
+	handleClose() {
+		this.props.history.push("/");
 	}
 
 	render() {
@@ -87,4 +100,7 @@ class RegisterModal extends PureComponent {
 
 }
 
-export default withStyles(styles)(RegisterModal);
+export default compose(
+	withRouter,
+	withStyles(styles),
+)(RegisterModal);
