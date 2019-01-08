@@ -14,11 +14,11 @@ module.exports = {
 		// `publicPath` is where Webpack will load your bundles from (optional)
 		publicPath: "dist/",
 	},
-	// optimization: {
-	// 	splitChunks: {
-	// 		chunks: "all"
-	// 	}
-	// },
+	optimization: {
+		splitChunks: {
+			chunks: "async"// all, async, and initial
+		}
+	},
 	module: {
 		rules: [{
 				test: /\.(js|jsx)$/,

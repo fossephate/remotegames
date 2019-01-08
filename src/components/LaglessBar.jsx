@@ -2,6 +2,9 @@
 import React, { Component, PureComponent } from "react";
 import PropTypes from "prop-types";
 
+// react-router:
+import { withRouter } from "react-router";
+
 // components:
 import VolumeSlider from "src/components/VolumeSlider.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx";
@@ -16,7 +19,6 @@ import RefreshIcon from "@material-ui/icons/Refresh";
 // components:
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-
 
 // recompose:
 import { compose } from "recompose";
@@ -74,7 +76,7 @@ class LaglessBar extends PureComponent {
 				<Button id="laglessRefresh" className="laglessRefresh" variant="contained" color="primary">
 					<RefreshIcon/>
 				</Button>
-				<Button variant="contained" color="primary" onClick={this.props.openInputMapper}>
+				<Button variant="contained" color="primary" onClick={() => {this.props.history.push("/remap")}}>
 					<KeyboardIcon/>|<VideogameAssetIcon/>
 				</Button>
 			</Paper>
@@ -97,14 +99,12 @@ const mapDispatchToProps = (dispatch) => {
 		setVolume: (volume) => {
 			dispatch(updateSettings({ volume: volume }));
 		},
-		openInputMapper: () => {
-			dispatch(updateSettings({ modal: "INPUT_MAPPER" }));
-		},
 	};
 };
 
 // export default connect(mapStateToProps, mapDispatchToProps)(LaglessBar);
 export default compose(
+	withRouter,
 	withStyles(styles),
 	connect(mapStateToProps, mapDispatchToProps),
 )(LaglessBar);

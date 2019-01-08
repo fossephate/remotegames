@@ -22,7 +22,7 @@ let restPos = 128;
 // 	}
 // }
 
-class AxisSettings {
+export const AxisSettings = class AxisSettings {
 	constructor(sensitivity, offset, deadzone) {
 		this.sensitivity = sensitivity;
 		this.offset = offset;
@@ -79,7 +79,7 @@ class ButtonState {
 	}
 }
 
-class VirtualController {
+export default class VirtualController {
 
 	constructor() {
 
@@ -301,5 +301,3 @@ class VirtualController {
 	}
 
 }
-
-module.exports = VirtualController;

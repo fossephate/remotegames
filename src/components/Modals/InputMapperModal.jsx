@@ -1,6 +1,9 @@
 // react:
 import React, { PureComponent } from "react";
 
+// react-router:
+import { withRouter } from "react-router";
+
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
@@ -18,6 +21,9 @@ import Modal from "@material-ui/core/Modal";
 // components:
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx"
+
+// recompose:
+import { compose } from "recompose";
 
 const classNames = require("classnames");
 
@@ -295,6 +301,11 @@ class InputMapperModal extends PureComponent {
 
 		this.handleChange = this.handleChange.bind(this);
 		this.update = this.update.bind(this);
+		this.handleClose = this.handleClose.bind(this);
+	}
+
+	handleClose() {
+		this.props.history.push("/");
 	}
 
 	handleChange(event) {
@@ -335,7 +346,7 @@ class InputMapperModal extends PureComponent {
 		return (
 			<Modal
 				open={true}
-				onClose={() => {this.props.handleClose()}}>
+				onClose={this.handleClose}>
 
 				<div className={classNames(classes.root, classes.center)}>
 
@@ -415,4 +426,7 @@ class InputMapperModal extends PureComponent {
 
 }
 
-export default withStyles(styles)(InputMapperModal);
+export default compose(
+	withRouter,
+	withStyles(styles),
+)(InputMapperModal);

@@ -4,8 +4,7 @@ import React, { PureComponent } from "react";
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
-
-const VirtualProController = require("js/VirtualProController.js");
+import VirtualProController from "js/VirtualProController.js";
 const tools = require("js/tools.js");
 let classNames = require("classnames");
 

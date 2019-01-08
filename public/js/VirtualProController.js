@@ -1,7 +1,7 @@
 import { clamp } from "../js/tools.js";
 let restPos = 128;
 
-class VirtualProController {
+export default class VirtualProController {
 
 	constructor() {
 
@@ -60,7 +60,7 @@ class VirtualProController {
 		for (let prop in this.buttons) {
 			this.buttons[prop] = 0;
 		}
-		
+
 		this.axes = [0, 0, 0, 0, 0, 0];
 		this.axes[0] = restPos;
 		this.axes[1] = restPos;
@@ -166,5 +166,3 @@ class VirtualProController {
 
 	}
 }
-
-module.exports = VirtualProController;

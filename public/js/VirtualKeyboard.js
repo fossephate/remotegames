@@ -1,12 +1,11 @@
 require("./keymaster.js");
 const keycode = require("keycode");
-import keyboardJS from "keyboardjs";
 import { mathZoom } from "./tools.js";
 
-const VirtualProController = require("./VirtualProController.js");
+import VirtualProController from "./VirtualProController.js";
 let restPos = 128;
 
-class VirtualKeyboard {
+export default class VirtualKeyboard {
 
 	constructor() {
 
@@ -357,5 +356,3 @@ class VirtualKeyboard {
 		}
 	}
 }
-
-module.exports = VirtualKeyboard;

@@ -7,6 +7,7 @@ import {
 	Router,
 	Route,
 	Switch,
+	withRouter,
 } from "react-router";
 
 // redux:
@@ -39,9 +40,10 @@ import MySlider from "src/components/MySlider.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx";
 
 // modals:
-import LoginModal from "src/components/Modals/LoginModal.jsx";
-import RegisterModal from "src/components/Modals/RegisterModal.jsx";
-import AccountModal from "src/components/Modals/AccountModal.jsx";
+const LoginModal = lazy(() => import("src/components/Modals/LoginModal.jsx"));
+const RegisterModal = lazy(() => import("src/components/Modals/RegisterModal.jsx"));
+const AccountModal = lazy(() => import("src/components/Modals/AccountModal.jsx"));
+const InputMapperModal = lazy(() => import("src/components/Modals/InputMapperModal.jsx"));
 
 
 // material ui:
@@ -539,6 +541,9 @@ class App extends Component {
 			if ([27, 122].indexOf(event.keyCode) > -1) {
 				event.preventDefault();
 				$("body").removeClass("hideScrollbar");
+
+				// turn off mouse controls:
+				window.inputHandler.mouse.toggle(false);
 			}
 			// prevent space bar scrolling:
 			// if ([32].indexOf(event.keyCode) > -1) {
@@ -560,7 +565,10 @@ class App extends Component {
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
 	exitFullscreen() {
 		if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-			this.toggleFullscreen(false);
+			// this.toggleFullscreen(false);
+
+			// turn off mouse controls:
+			window.inputHandler.mouse.toggle(false);
 		}
 		window.dispatchEvent(new Event("resize"));
 	}
@@ -576,20 +584,6 @@ class App extends Component {
 
 		// if (this.state.tab == tab) {
 		// 	return;
-		// }
-
-		// if (sNum == 2) {
-		// 	window.location = "https://twitchplaysnintendoswitch.com/about";
-		// 	// history.replaceState("data", "About", "/about");
-		// 	// this.setState({});
-		// 	// this.props.reRender();
-		// 	// return;
-		// }
-		// if (sNum == 3) {
-		// 	window.location = "https://twitchplaysnintendoswitch.com/FAQ";
-		// 	// history.replaceState("data", "FAQ", "/FAQ");
-		// 	// this.setState({});
-		// 	// this.props.reRender();
 		// }
 
 		if (!this.props.userInfo.loggedIn) {
@@ -662,7 +656,7 @@ class App extends Component {
 			return;
 		}
 		// return if trying to re-map inputs:
-		if (this.props.settings.modal == "INPUT_MAPPER") {
+		if (location.pathname == "/remap") {
 			return;
 		}
 
@@ -744,6 +738,10 @@ class App extends Component {
 		}
 
 		if (this.props.settings.streamNumber != nextProps.settings.streamNumber) {
+			return true;
+		}
+
+		if (JSON.stringify(this.props.location) != JSON.stringify(nextProps.location)) {
 			return true;
 		}
 
@@ -829,6 +827,9 @@ class App extends Component {
 						<Route path="/account" render={(props) => {
 							return <AccountModal/>;
 						}}/>
+						<Route path="/remap" render={(props) => {
+							return <InputMapperModal/>;
+						}}/>
 					</Switch>
 
 				</Suspense>
@@ -861,6 +862,7 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default compose(
+	withRouter,
 	withStyles(styles),
 	connect(mapStateToProps, mapDispatchToProps),
 )(App);

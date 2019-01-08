@@ -5,9 +5,9 @@
 
 // input types:
 // each should handle each type of device:
-const VirtualController = require("./VirtualController.js");
-const VirtualKeyboard = require("./VirtualKeyboard.js");
-const VirtualMouse = require("./VirtualMouse.js"); // todo
+import VirtualController from "./VirtualController.js";
+import VirtualKeyboard from "./VirtualKeyboard.js";
+import VirtualMouse from "./VirtualMouse.js";
 
 const VirtualProController = require("./VirtualProController.js");
 
@@ -99,7 +99,7 @@ export default class InputHandler {
 		// the current state of the keyboard:
 		this.keyboard = new VirtualKeyboard();
 		// the current state of the mouse:
-		// this.mouse = new VirtualMouse(); // todo
+		this.mouse = new VirtualMouse(); // todo
 		// the touch controls state:
 		// this.touch = new ???(); // todo
 
@@ -137,6 +137,11 @@ export default class InputHandler {
 			if (JSON.stringify(newInputState) != oldStateString) {
 				this.currentInputMode = "keyboard";
 				updatedState = newInputState;
+			}
+
+			if (this.mouse.settings.enabled && Math.random() > 0.4) {
+				updatedState.axes[2] = this.mouse.state.axes[2];
+				updatedState.axes[3] = this.mouse.state.axes[3];
 			}
 
 		}
