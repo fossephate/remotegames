@@ -15,9 +15,8 @@ const styles = (theme) => ({
 		position: "relative",
 		width: "13.4%",
 	},
-	stick: {
+	stick1: {
 		position: "absolute",
-		/* 	background: rgba(50, 50, 50, 0.2); */
 		width: "37%",
 		height: "12%",
 		left: "28%",
@@ -27,7 +26,6 @@ const styles = (theme) => ({
 	stick2: {
 		position: "absolute",
 		background: "#0AB9E6",
-		/*#bb5050;*/
 		width: "50%",
 		height: "50%",
 		left: "25%",
@@ -68,8 +66,6 @@ const styles = (theme) => ({
 	},
 	button: {
 		background: "rgba(50, 50, 50, 0.2)",
-		/* width: 30px;
-		height: 30px; */
 		width: "32%",
 		height: "32%",
 		border: "2px solid #333",
@@ -170,7 +166,7 @@ class RightJoyCon extends PureComponent {
 		return (
 			<div className={classes.root}>
 				<img className={classes.image} src="https://twitchplaysnintendoswitch.com/images/rightJoyCon2.png"/>
-				<div className={classNames(classes.stick, {[classes.highlighted]: (this.controller.buttons.rstick)})}>
+				<div className={classNames(classes.stick1, {[classes.highlighted]: (this.controller.buttons.rstick)})}>
 					<div className={classes.stick2} style={{transform: "translate(" + rightTransform + ")"}}></div>
 				</div>
 

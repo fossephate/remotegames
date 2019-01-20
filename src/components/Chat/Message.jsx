@@ -7,15 +7,36 @@ import Linkify from "react-linkify";
 // twitch icon:
 import TwitchIcon from "src/components/Icons/TwitchIcon.jsx";
 
+// // mod badge:
+// import ModBadge from "src/components/Icons/ModBadge.jsx";
+// // plus badge:
+// import PlusBadge from "src/components/Icons/PlusBadge.jsx";
+// // sub badge:
+// import SubBadge1 from "src/components/Icons/SubBadge1.jsx";
+// // dev badge:
+// import SubBadge1 from "src/components/Icons/DevBadge.jsx";
+import Badge from "src/components/Icons/Badge.jsx";
+
+
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 
+// redux:
+import { connect } from "react-redux";
+
+// recompose:
+import { compose } from "recompose";
+
 const styles = (theme) => ({
 	root: {
 		wordBreak: "break-word",
-		padding: "4px",
+		// padding: "4px",
+		paddingLeft: "10px",
+		paddingRight: "10px",
+		paddingTop: "5px",
+		paddingBottom: "5px",
 		fontSize: "14px !important",
 		// color: theme.palette.primary.contrastText,
 	},
@@ -37,16 +58,22 @@ function pad(t) {
 
 function getTimeStamp(t) {
 	let time = new Date(t);
-	let s = time.getHours() + ":" + pad(time.getMinutes()) + " ";
+	let s = time.getHours() + ":" + pad(time.getMinutes());
 	return s;
 }
 
 // class Message extends PureComponent {
 const Message = (props) => {
-	let { classes, message, username, userid, time } = props;
+
+	let { classes, message, username, userid, time, accountMap } = props;
+
 	let source = "";
+
+	let is_relay = false;
 	// if it's a relayed message:
 	if (userid === "TPNSbot" && message[0] == "[") {
+
+		is_relay = true;
 		let r = /\[(.+):(.+)\](.+)/;
 		let split = message.match(r);
 		source = split[1];
@@ -57,9 +84,31 @@ const Message = (props) => {
 		message = msg;
 	}
 
+	let is_dev = false;
+	if (username == "twitchplaysconsoles" || username == "fossephate") {
+		username = "fosse";
+		is_dev = true;
+	}
+
 	let icons = [];
 	if (source == "twitch") {
 		icons.push(<TwitchIcon/>);
+	}
+
+	let account = accountMap[userid];
+	if (account) {
+		if (is_dev) {
+			icons.push(<Badge type="dev"/>);
+		}
+		if (account.is_mod && !is_dev && !is_relay) {
+			icons.push(<Badge type="mod"/>);
+		}
+		if (account.is_plus && !account.is_mod) {
+			icons.push(<Badge type="plus"/>);
+		}
+		if (account.is_sub) {
+			icons.push(<Badge type="sub1"/>);
+		}
 	}
 
 	icons = React.Children.toArray(icons);
@@ -68,7 +117,7 @@ const Message = (props) => {
 		<div className={classes.root} userid={userid} onClick={props.onClick}>
 			<Linkify properties={{className: classes.links}}>
 				{/* <ListItemText> */}
-					{getTimeStamp(time)}{icons}<b>{username}</b> {message}
+					{getTimeStamp(time)}{icons}{(icons.length == 0) ? " " : null}<b>{username}</b> {message}
 				{/* </ListItemText> */}
 			</Linkify>
 		</div>
@@ -81,8 +130,13 @@ Message.propTypes = {
 	userid: PropTypes.string.isRequired,
 };
 
-export default withStyles(styles)(Message);
-// export default compose(
-// 	withTheme()
-// 	withStyles(styles),
-// )(Message);
+const mapStateToProps = (state) => {
+	return {
+		accountMap: state.accountMap,
+	};
+};
+
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps),
+)(Message);

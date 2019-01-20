@@ -65,7 +65,10 @@ class LoginModal extends PureComponent {
 		// const { classes } = this.props;
 
 		return (
-			<Modal onClose={this.props.handleClose}>
+			<Modal
+				open={true}
+				onClose={this.handleClose}>
+
 				<div className="loginContainer">
 					<div className="login">
 						<h2><ListItemText>Login</ListItemText></h2>

@@ -21,7 +21,6 @@ let classNames = require("classnames");
 const styles = (theme) => ({
 	root: {
 		width: "100%",
-		height: "fit-content",
 	},
 });
 

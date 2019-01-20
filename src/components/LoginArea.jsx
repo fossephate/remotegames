@@ -57,8 +57,7 @@ class LoginArea extends PureComponent {
 	}
 
 	handleAccount() {
-		window.swal("This doesn't do anything yet.");
-		// this.props.history.push("/account");
+		this.props.history.push("/account");
 	}
 
 	handleLogin() {

@@ -58,7 +58,7 @@ class ThemeSelector extends PureComponent {
 	handleMenuItemClick(event, index) {
 		// this.setState({ selectedIndex: index, anchorEl: null });
 		this.setState({ anchorEl: null });
-		this.props.switchTheme(options2[index])
+		this.props.switchTheme(options2[index]);
 	}
 
 	handleClose() {

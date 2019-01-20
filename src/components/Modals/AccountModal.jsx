@@ -1,45 +1,113 @@
 // react:
 import React, { PureComponent } from "react";
 
+// react-router:
+import { withRouter } from "react-router";
+
+// components:
+import ConnectAccounts from "src/components/ConnectAccounts.jsx";
+import MyCheckbox from "src/components/MyCheckbox.jsx"
+
 // material ui:
-
-
-// import "./LogInArea.css";
-
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import Modal from "@material-ui/core/Modal";
+import ListItemText from "@material-ui/core/ListItemText";
+import TextField from "@material-ui/core/TextField";
+
+// redux:
+import { connect } from "react-redux";
+
+// recompose:
+import { compose } from "recompose";
+
+// libs:
+let classNames = require("classnames");
 
 
-export default class AccountModal extends PureComponent {
+// jss:
+const styles = (theme) => ({
+	root: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-evenly",
+		width: "95%",
+		maxWidth: "950px",
+		// padding: "30px",
+		// position: "absolute",
+		// width: theme.spacing.unit * 50,
+		backgroundColor: theme.palette.background.paper,
+		boxShadow: theme.shadows[5],
+		padding: theme.spacing.unit * 4,
+		borderRadius: "5px",
+	},
+	center: {
+		position: "fixed",
+	    top: "50%",
+	    left: "50%",
+	    transform: "translate(-50%, -50%)",
+	},
+	controllerRemapper: {
+		display: "flex",
+		flexDirection: "column",
+		padding: "15px",
+	},
+	keyboardRemapper: {
+		display: "flex",
+		flexDirection: "column",
+		padding: "15px",
+	},
+	list: {
+		maxHeight: "400px",
+		overflowY: "auto",
+	},
+});
+
+class AccountModal extends PureComponent {
 
 	constructor(props) {
 		super(props);
+
+		this.handleClose = this.handleClose.bind(this);
+	}
+
+	handleClose() {
+		this.props.history.push("/");
 	}
 
 	render() {
 
+		const { classes } = this.props;
+
 		return (
-			<Modal handleClose={this.props.handleClose}>
-				<Paper elevation={4} className="paper">
+			<Modal
+				open={true}
+				onClose={this.handleClose}>
 
-					<div className="registerContainer">
-						<div className="createAnAccount">
-							<h2><ListItemText>Create an Account</ListItemText></h2>
-							<TextField id="registerUsername" className="" label="Username" type="name" margin="normal" variant="outlined"/>
-							<TextField id="registerEmail" className="" label="Email" type="email" autoComplete="email" margin="normal" variant="outlined"/>
-							<TextField id="registerPassword" className="" label="Password" type="password" autoComplete="current-password" margin="normal" variant="outlined"/>
-							<TextField id="registerPassword2" className="" label="Password" type="password" autoComplete="current-password" margin="normal" variant="outlined"/>
-							<MyCheckbox text={"I am over 13 years old"} handleChange={() => {}} checked={false}/>
-							<Button id="registerSubmit" className="" variant="contained" color="primary" onClick={() => {alert("Coming soon™")}}>Create Account</Button>
-						</div>
+				<div className={classNames(classes.root, classes.center)}>
 
-						<div className="connectAnAccount">
-							<h2><ListItemText>Connect an Account</ListItemText></h2>
-							<ConnectAccounts/>
-						</div>
-					</div>
-				</Paper>
+					<Paper className="" elevation={4}>
+
+						<ListItemText>Time Played: {(this.props.timePlayed / 60).toFixed(1)} minutes</ListItemText>
+
+					</Paper>
+
+				</div>
 			</Modal>
 		);
 	}
 
 }
+
+const mapStateToProps = (state) => {
+	return {
+		timePlayed: state.userInfo.timePlayed,
+	};
+};
+
+export default compose(
+	withRouter,
+	withStyles(styles),
+	connect(mapStateToProps),
+)(AccountModal);

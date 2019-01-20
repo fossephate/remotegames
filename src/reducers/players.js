@@ -1,7 +1,7 @@
 import produce from "immer";
 
 const players = (state = {}, action) => {
-	return produce(state, draft => {
+	return produce(state, (draft) => {
 		switch (action.type) {
 			case "UPDATE_PLAYER_TURN_START_TIMES":
 				for (let i = 0; i < draft.turnTimers.length; i++) {

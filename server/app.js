@@ -100,8 +100,9 @@ let laglessClientUserids = [
 	[],
 ];
 
-let normalTime = 30000;
-let subTime = 60000;
+let normalTime = 1000 * 60 * 2;// 2 minutes
+let subTime = normalTime * 2;
+let forfeitTime = 1000 * 15;// 15 seconds
 let tempBanTime = 5 * 1000 * 60; // 5 minutes
 
 const NUM_PLAYERS = 5;
@@ -127,8 +128,8 @@ let controllerList = [];
 let controlQueues = [];
 
 for (let i = 0; i < NUM_PLAYERS; i++) {
-	turnLengths.push(30000);
-	forfeitLengths.push(15000);
+	turnLengths.push(normalTime);
+	forfeitLengths.push(forfeitTime);
 	turnStartTimes.push(Date.now());
 	forfeitStartTimes.push(Date.now());
 	moveLineTimers.push(null);
@@ -158,8 +159,13 @@ app.use(passport.session());
 
 let redisClient = redis.createClient({ host: "localhost", port: 6379 });
 
-let IDToUniqueMap = {};
 let uniqueIDToPreferredUsernameMap = {};
+let useridToSocketidMap = {};
+let accountMap = {
+	TPNSbot: {
+		is_mod: true,
+	},
+};
 
 let mongoURL = "mongodb://localhost:27017/db";
 mongoose.connect(mongoURL);
@@ -169,19 +175,19 @@ mongoose.Promise = global.Promise;
 
 // get banned IPs:
 redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
-	let dataBaseIPs;
-	if (dbBannedIPs == null) {
+	let databaseIPs;
+	if (databaseIPs == null) {
 		console.log("Creating IP DB.");
-		dataBaseIPs = bannedIPs;
+		databaseIPs = bannedIPs;
 	} else {
-		dataBaseIPs = JSON.parse(dbBannedIPs);
+		databaseIPs = JSON.parse(dbBannedIPs);
 	}
-	bannedIPs = dataBaseIPs;
+	bannedIPs = databaseIPs;
 	// re-stringify:
-	let dataBaseIPsString = JSON.stringify(dataBaseIPs);
+	let databaseIPsString = JSON.stringify(databaseIPs);
 	// store back in database:
 	// store account at uniqueID location, at clients key:
-	redisClient.setAsync("bannedIPs", dataBaseIPsString).then((success) => {
+	redisClient.setAsync("bannedIPs", databaseIPsString).then((success) => {
 		console.log("stored banned IPs: " + success);
 	});
 });
@@ -246,6 +252,9 @@ let accountSchema = Schema({
 	is_ban: Boolean,
 	is_perma_ban: Boolean,
 	is_temp_ban: Boolean,
+
+	// stats:
+	timePlayed: Number,
 
 	IPs: [],
 
@@ -534,6 +543,9 @@ app.get("/redirect", (req, res) => {
 			// acount doesn't exist:
 			if (!account) {
 				console.log("account doesn't exist, something went wrong.");
+				res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com/reset";</script>`);
+			} else {
+				res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 			}
 
 		});
@@ -550,61 +562,23 @@ app.get("/redirect", (req, res) => {
 		// 		});
 
 	}
-	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
+	// res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 });
 
 app.get("/deleteDB", (req, res) => {
 	console.log("deleting DB");
-	Account.remove({}, function () {});
+	Account.remove({}, () => {});
 	// 	res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
 });
 
-
-app.get("/stats/", (req, res) => {});
-
-app.get("/img/", (req, res) => {
-	let imgSrc = "data:image/jpeg;base64," + lastImage;
-	let html = '<img id="screenshot" src="' + imgSrc + '">';
-	res.send(html);
-});
-
-let helpSite = `
-<html>
-	<head>
-		<style>
-			.custom {
-				/*font-family: comic sans ms;*/
-				font-family: Helvetica;
-				color: white;
-				font-size: 35px;
-				text-align: center;
-				vertical-align: middle;
-				/*text-shadow: 2px 2px #000000;*/
-				text-shadow: -1px 0 1px black, 0 1px 1px black, 1px 0 1px black, 0 -1px 1px black;
-			}
-		</style>
-	</head>
-	<body>
-		<!--   <marquee scrolldelay="0" scrollamount="10"> -->
-		<div class="custom">
-			Type !help for help
-		</div>
-		<!--   </marquee> -->
-	</body>
-	<script>
-	</script>
-</html>`;
-app.get("/help/", (req, res) => {
-	res.send(helpSite);
-});
-
-server.listen(port, function () {
+server.listen(port, () => {
 	console.log("Server listening at port %d", port);
 });
 
 //console.log(util.inspect(clientDB, false, null));
 
 function Client(socket) {
+
 	this.socket = socket;
 	this.id = socket.id;
 	this.userid = null;
@@ -613,19 +587,31 @@ function Client(socket) {
 	this.validUsernames = [];
 	this.rooms = [];
 	this.joinTime = new Date();
+	this.timePlayed = 0;
+
+	this.ip = this.socket.handshake.headers["x-real-ip"];
+	this.port = this.socket.handshake.headers["x-real-port"];
 
 	this.is_mod = false;
 	this.is_plus = false;
 	this.is_sub = false;
 	this.is_ban = false;
+
 	return this;
 }
 
-function findClientByUniqueID(userid) {
+function findClientByUserid(userid) {
+
+	let socketid = useridToSocketidMap[userid];
+	if (socketid != null && clients[socketid] != null) {
+		return socketid;
+	}
+
 	let index = -1;
 	for (key in clients) {
 		if (clients[key].userid == userid) {
 			index = clients[key].id;
+			useridToSocketidMap[userid] = index;
 			return index;
 		}
 	}
@@ -644,17 +630,17 @@ function SplitTimer(startTime, splitNames, name) {
 	this.addSplit = (splitName) => {
 		this.splitNames.push(splitName);
 	}
-	this.moveToNextSplit = function () {
+	this.moveToNextSplit = () => {
 		this.currentSplit += 1;
 		let time = (new Date()) - this.startTime;
 		this.times.push(time);
 		this.currentTime = time;
 	}
-	this.removeLastSplit = function () {
+	this.removeLastSplit = () => {
 		this.currentSplit -= 1;
 		this.times.pop();
 	}
-	this.getCurrentTime = function () {
+	this.getCurrentTime = () => {
 		let time = (new Date() - this.startTime);
 		this.currentTime = time;
 		return time;
@@ -672,8 +658,9 @@ io.set("transports", [
 io.on("connection", (socket) => {
 
 	clients[socket.id] = new Client(socket);
-	console.log("number of clients connected: " + Object.keys(clients).length);
+	console.log("#clients: " + Object.keys(clients).length);
 
+	// authenticate:
 	socket.on("authenticate", (data) => {
 
 		let client = clients[socket.id];
@@ -689,7 +676,7 @@ io.on("connection", (socket) => {
 				client.username = null;
 				client.userid = null;
 				console.log("account not found.");
-				console.log("Invalid password.");
+				console.log("invalid password.");
 				socket.emit("needToSignIn");
 				return;
 			}
@@ -740,14 +727,38 @@ io.on("connection", (socket) => {
 				client.is_plus = account.is_plus;
 				client.is_sub = account.is_sub;
 				client.is_ban = client.is_ban || account.is_ban;
+				client.timePlayed = (account.timePlayed || 0);
+
+				// save IP if not known:
+				if (account.IPs.indexOf(client.ip) == -1) {
+					account.IPs.push(client.ip);
+				}
+
+				// todo: maybe ban the account if using a banned IP: (or keep as is)
+				for (let i = 0; i < account.IPs.length; i++) {
+					if (bannedIPs.indexOf(account.IPs[i]) > -1) {
+						client.is_ban = true;
+					}
+				}
 
 				uniqueIDToPreferredUsernameMap[client.userid] = client.username;
+				accountMap[client.userid] = {
+					username: client.username,
+					is_sub: client.is_sub,
+					is_plus: client.is_plus,
+					is_mod: client.is_mod,
+					is_ban: client.is_ban,
+					timePlayed: client.timePlayed,
+					validUsernames: client.validUsernames,
+				};
+
 
 				let userInfo = {};
 				userInfo.userid = client.userid;
 				userInfo.username = client.username;
 				userInfo.connectedAccounts = account.connectedAccounts;
 				userInfo.validUsernames = client.validUsernames;
+				userInfo.timePlayed = client.timePlayed;
 
 				socket.emit("userInfo", userInfo);
 
@@ -766,27 +777,44 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("disconnect", () => {
-		console.log("disconnected");
+		// console.log("disconnected");
+
 		let client = clients[socket.id];
 		if (client) {
+
+			// update timePlayed:
+			// get account:
+			Account.findOne({ _id: client.userid }, (error, account) => {
+				if (error) {
+					console.log(error);
+					throw error;
+				}
+				// account exists:
+				if (account) {
+					// update info:
+					account.timePlayed = client.timePlayed;
+					// save:
+					account.save((err) => {
+						if (err) {
+							console.log(err);
+							throw err;
+						}
+					});
+				}
+			});
+
+			// remove from account map:
+			delete accountMap[client.userid];
+			// remove from socketid map (if there):
+			delete useridToSocketidMap[client.userid];
+			// delete:
 			delete clients[socket.id];
 			if (client.userid != null) {
 				redisClient.delAsync(`users:${client.userid}`);
 			}
 		}
+		console.log("#clients: " + Object.keys(clients).length);
 	});
-
-	// after recieving the image, broadcast it to viewers
-	// socket.on("videoData", (data) => {
-	// 	// lastImage = data;
-	// 	// 		if (lastImage === "") {
-	// 	// 			io.emit("quit");
-	// 	// 		}
-	// 	io.to("lagless1").emit("viewImage", data);
-	// });
-	// setInterval(() => {
-	// 	io.to("lagless1").emit("viewImage", lastImage);
-	// }, 1000 / 15);
 
 	// chat:
 	socket.on("chatMessage", (data) => {
@@ -990,7 +1018,7 @@ io.on("connection", (socket) => {
 			io.emit("controllerState", {
 				cNum: cNum,
 				btns: 0,
-				axes: [restPos, restPos, restPos, restPos],
+				axes: [restPos, restPos, restPos, restPos, 0, 0],
 			});
 		}
 
@@ -1218,7 +1246,7 @@ io.on("connection", (socket) => {
 			}
 		}
 
-		let index = findClientByUniqueID(data);
+		let index = findClientByUserid(data);
 		client = clients[index];
 		if (client == null || client.userid == null) {
 			console.log("client was null.");
@@ -1249,7 +1277,7 @@ io.on("connection", (socket) => {
 			}
 		}
 
-		index = findClientByUniqueID(data);
+		index = findClientByUserid(data);
 		client = clients[index];
 		if (client == null || client.userid == null) {
 			return;
@@ -1290,6 +1318,7 @@ io.on("connection", (socket) => {
 							dataBaseIPs.push(account.IPs[i]);
 						}
 					}
+					// dataBaseIPs.push(client.ip);
 					bannedIPs = dataBaseIPs;
 					// re-stringify:
 					let dataBaseIPsString = JSON.stringify(dataBaseIPs);
@@ -1325,7 +1354,7 @@ io.on("connection", (socket) => {
 			}
 		}
 
-		index = findClientByUniqueID(data);
+		index = findClientByUserid(data);
 		client = clients[index];
 		if (client == null || client.userid == null) {
 			return;
@@ -1333,8 +1362,6 @@ io.on("connection", (socket) => {
 
 		client.is_ban = false;
 		client.is_perma_ban = false;
-
-
 
 		// unban:
 
@@ -1360,9 +1387,12 @@ io.on("connection", (socket) => {
 					} else {
 						dataBaseIPs = JSON.parse(dbBannedIPs);
 					}
-					dataBaseIPs = dataBaseIPs.filter((el) => {
-						return !account.IPs.includes(el);
-					});
+					// dataBaseIPs = dataBaseIPs.filter((el) => {
+					// 	return !account.IPs.includes(el);
+					// });
+					if (database.indexOf(client.ip) > -1) {
+						databaseIPs.splice(database.indexOf(client.ip), 1);
+					}
 					bannedIPs = dataBaseIPs;
 					// re-stringify:
 					let dataBaseIPsString = JSON.stringify(dataBaseIPs);
@@ -1390,8 +1420,8 @@ io.on("connection", (socket) => {
 			return;
 		}
 		for (let i = 0; i < turnLengths.length; i++) {
-			turnLengths[i] = parseInt(data) || 30000;
-			normalTime = parseInt(data) || 30000;
+			turnLengths[i] = parseInt(data) || normalTime;
+			normalTime = parseInt(data) || normalTime;
 			// forfeitLengths[i] = parseInt(data) || 15000;
 		}
 	});
@@ -1575,7 +1605,7 @@ io.on("connection", (socket) => {
 	});
 
 	/* LATENCY @@@@@@@@@@@@@@@@@@@@@@@@ */
-	socket.on("ping2", function () {
+	socket.on("ping2", () => {
 		socket.emit("pong2");
 	});
 
@@ -1625,61 +1655,58 @@ io.on("connection", (socket) => {
 		}
 	});
 
-	socket.on("leaveStreams", function () {
+	socket.on("leaveStreams", () => {
 		for(let i = 0; i < 5; i++) {
 			socket.leave("stream" + i);
 		}
 	});
 
 	/* BAN EVASION */
-	socket.on("registerIP", (data) => {
-
-		let client = clients[socket.id];
-
-		if (client == null || client.userid == null) {
-			console.log("not signed in.");
-			return;
-		}
-
-		if (client.is_mod) {
-			return;
-		}
-
-		// console.log("ip?: " + socket.conn.transport.socket._socket.remoteAddress);
-		// console.log("ip?2: " + socket.handshake.headers['x-forwarded-for'].split(",")[0]);
-		// console.log("username: " + data.username + " id: " + data.id + " ip: " + data.ip);
-
-		// return if banned:
-		if (client.is_perma_banned || client.is_temp_banned) {
-			console.log("client is banned.");
-			return;
-		}
-
-		// get account:
-		Account.findOne({ _id: client.userid }, (error, account) => {
-			if (error) {
-				console.log(error);
-				throw error;
-			}
-			// account exists:
-			if (account) {
-				// update info:
-				if (account.IPs.indexOf(data.ip) == -1) {
-					account.IPs.push(data.ip);
-				}
-				// save:
-				account.save((err) => {
-					if (err) {
-						console.log(err);
-						throw err;
-					}
-				});
-			}
-		});
-
-
-
-	});
+	// socket.on("registerIP", (data) => {
+	//
+	// 	let client = clients[socket.id];
+	//
+	// 	if (client == null || client.userid == null) {
+	// 		console.log("not signed in.");
+	// 		return;
+	// 	}
+	//
+	// 	if (client.is_mod) {
+	// 		return;
+	// 	}
+	//
+	// 	// console.log("ip?: " + socket.conn.transport.socket._socket.remoteAddress);
+	// 	// console.log("ip?2: " + socket.handshake.headers['x-forwarded-for'].split(",")[0]);
+	// 	// console.log("username: " + data.username + " id: " + data.id + " ip: " + data.ip);
+	//
+	// 	// return if banned:
+	// 	if (client.is_perma_banned || client.is_temp_banned) {
+	// 		console.log("client is banned.");
+	// 		return;
+	// 	}
+	//
+	// 	// get account:
+	// 	Account.findOne({ _id: client.userid }, (error, account) => {
+	// 		if (error) {
+	// 			console.log(error);
+	// 			throw error;
+	// 		}
+	// 		// account exists:
+	// 		if (account) {
+	// 			// update info:
+	// 			if (account.IPs.indexOf(data.ip) == -1) {
+	// 				account.IPs.push(data.ip);
+	// 			}
+	// 			// save:
+	// 			account.save((err) => {
+	// 				if (err) {
+	// 					console.log(err);
+	// 					throw err;
+	// 				}
+	// 			});
+	// 		}
+	// 	});
+	// });
 
 	// send on connect:
 
@@ -1692,6 +1719,7 @@ io.on("connection", (socket) => {
 	socket.emit("banlist", banlist);
 	socket.emit("bannedIPs", bannedIPs);
 	socket.emit("usernameMap", uniqueIDToPreferredUsernameMap);
+	socket.emit("accountMap", accountMap);
 	socket.emit("controlQueues", controlQueues);
 	socket.emit("turnLengths", {
 		turnLengths: turnLengths,
@@ -1706,10 +1734,10 @@ io.on("connection", (socket) => {
 	}
 });
 
-setInterval(function () {
+setInterval(() => {
 	restartAvailable = true;
 }, 10000);
-setInterval(function () {
+setInterval(() => {
 	lagless2ChangeAvailable = true;
 }, 300);
 
@@ -1730,7 +1758,7 @@ function forfeitTurn(userid, cNum) {
 	io.emit("controllerState", {
 		cNum: cNum,
 		btns: 0,
-		axes: [restPos, restPos, restPos, restPos],
+		axes: [restPos, restPos, restPos, restPos, 0, 0],
 	});
 
 	// reset the timers if the person forfeiting is first in line:
@@ -1739,7 +1767,7 @@ function forfeitTurn(userid, cNum) {
 	}
 
 	// sub perk:
-	index = findClientByUniqueID(controlQueues[cNum][0]);
+	index = findClientByUserid(controlQueues[cNum][0]);
 	let client = clients[index];
 	if (client != null && client.userid != null) {
 		if (client.is_sub) {
@@ -1807,7 +1835,7 @@ function emitForfeitStartTimes() {
 function resetTimers(userid, cNum) {
 
 	// sub perk:
-	let index = findClientByUniqueID(controlQueues[cNum][0]);
+	let index = findClientByUserid(controlQueues[cNum][0]);
 	let client = clients[index];
 	if (client != null && client.userid != null) {
 		if (client.is_sub) {
@@ -1837,13 +1865,13 @@ function moveLine(cNum) {
 		io.emit("controllerState", {
 			cNum: cNum,
 			btns: 0,
-			axes: [restPos, restPos, restPos, restPos],
+			axes: [restPos, restPos, restPos, restPos, 0, 0],
 		});
 		io.emit("controlQueues", controlQueues);
 	}
 
 	// sub perk:
-	let index = findClientByUniqueID(controlQueues[cNum][0]);
+	let index = findClientByUserid(controlQueues[cNum][0]);
 	let client = clients[index];
 	if (client != null && client.userid != null) {
 		if (client.is_sub) {
@@ -1865,7 +1893,7 @@ function moveLine(cNum) {
 	}
 }
 
-setInterval(function () {
+setInterval(() => {
 
 	for (let i = 0; i < 5; i++) {
 		io.in("stream" + i).clients((error, clientIDs) => {
@@ -2000,17 +2028,18 @@ setInterval(function () {
 	}
 
 	// afkTimer:
-	let elapsedTime = Date.now() - afkTimer;
-	if (elapsedTime > afkTime) {
-		afkTimer = Date.now();
-		io.to("controller").emit("afk");
-	}
+	// let elapsedTime = Date.now() - afkTimer;
+	// if (elapsedTime > afkTime) {
+	// 	afkTimer = Date.now();
+	// 	io.to("controller").emit("afk");
+	// }
 
 }, 1000);
 
 // do every once in a while:
 setInterval(() => {
 	io.emit("usernameMap", uniqueIDToPreferredUsernameMap);
+	io.emit("accountMap", accountMap);
 	io.emit("bannedIPs", bannedIPs);
 	io.emit("waitlist", {
 		waitlist: waitlist,
@@ -2028,6 +2057,43 @@ setInterval(() => {
 	});
 	emitForfeitStartTimes();
 }, 5000);
+
+setInterval(() => {
+	io.to("controller").emit("stayConnected");
+}, 4000);
+
+// add to timePlayed:
+function addTimePlayed() {
+	for (let i = 0; i < controlQueues.length; i++) {
+		let controlQueue = controlQueues[i];
+		let userid = controlQueues[i][0];
+		if (userid == null) {
+			continue;
+		}
+		let index = findClientByUserid(userid);
+		if (index == -1) {
+			continue;
+		}
+		clients[index].timePlayed += 1;
+	}
+}
+function customSetInterval(func, time){
+    var lastTime = Date.now(),
+        lastDelay = time,
+        outp = {};
+    function tick(){
+        func();
+        var now = Date.now(),
+            dTime = now - lastTime;
+
+        lastTime = now;
+        lastDelay = time + lastDelay - dTime;
+        outp.id = setTimeout(tick, lastDelay);
+    }
+    outp.id = setTimeout(tick, time);
+    return outp;
+}
+let timer = customSetInterval(addTimePlayed, 1000);
 
 function stream() {
 	if (laglessClientIds[1].length > 0) {

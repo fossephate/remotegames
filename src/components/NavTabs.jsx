@@ -14,6 +14,9 @@ import Paper from "@material-ui/core/Paper";
 // redux:
 import { connect } from "react-redux";
 
+// actions:
+import { updateSettings } from "src/actions/settings.js";
+
 // recompose:
 import { compose } from "recompose";
 
@@ -55,7 +58,18 @@ class NavTabs extends PureComponent {
 					onChange={(event, value) => {
 						this.props.handleChange(value);
 						if (value == 2) {
+							this.props.updateSettings({streamNumber: 0});
 							this.props.history.push("/about");
+						}
+						if (value == 3) {
+							this.props.updateSettings({streamNumber: 0});
+							this.props.history.push("/FAQ");
+						}
+						if (value == 0) {
+							this.props.updateSettings({currentPlayer: 0});
+						}
+						if (value == 1) {
+							this.props.updateSettings({currentPlayer: 4});
 						}
 					}}>
 
@@ -65,7 +79,7 @@ class NavTabs extends PureComponent {
 					<Tab label="Switch"/>
 					<Tab label="Xbox"/>
 					<Tab label="About"/>
-					{/* <Tab label="FAQ"/> */}
+					<Tab label="FAQ"/>
 					{/* <Link to="/about">About</Link> */}
 					{/* <Tab label="Wii U2"/> */}
 					{/* <Tab label="Lagless3"/> */}
@@ -86,7 +100,15 @@ const mapStateToProps = (state) => {
 	};
 };
 
+const mapDispatchToProps = (dispatch) => {
+	return {
+		updateSettings: (settings) => {
+			dispatch(updateSettings(settings))
+		},
+	};
+};
+
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps),
+	connect(mapStateToProps, mapDispatchToProps),
 )(NavTabs);

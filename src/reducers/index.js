@@ -8,6 +8,7 @@ import players from "./players.js";
 
 import userInfo from "./userInfo.js";
 import usernameMap from "./usernameMap.js";
+import accountMap from "./accountMap.js";
 
 import settings from "./settings.js";
 
@@ -20,6 +21,7 @@ const rootReducer = combineReducers({
 	waitlist,
 	userInfo,
 	usernameMap,
+	accountMap,
 	settings,
 	players,
 	time,

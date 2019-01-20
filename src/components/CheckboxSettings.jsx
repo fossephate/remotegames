@@ -48,14 +48,19 @@ class CheckboxSettings extends PureComponent {
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
-							text={"Enable Controller View"}
+							text={"Enable Largescreen Mode"}
 							handleChange={(state) => {
-								this.props.updateSettings({ controllerView: state });
-								if (state && this.props.settings.largescreen) {
-									this.props.updateSettings({ largescreen: false });
+								this.props.updateSettings({ largescreen: state });
+								if (state && this.props.settings.controllerView) {
+									this.props.updateSettings({ controllerView: false });
+								} else if (!state && !this.props.settings.controllerView) {
+									this.props.updateSettings({ controllerView: true });
 								}
+								setTimeout(() => {
+									window.dispatchEvent(new Event("resize"));
+								}, 200);
 							}}
-							checked={this.props.settings.controllerView}/>
+							checked={this.props.settings.largescreen}/>
 					</ListItem>
 					{/* <ListItem>
 						<MyCheckbox
@@ -99,20 +104,6 @@ class CheckboxSettings extends PureComponent {
 							}}
 							checked={this.props.settings.fullscreen}/>
 					</ListItem>
-					<ListItem>
-						<MyCheckbox
-							text={"Enable Largescreen Mode"}
-							handleChange={(state) => {
-								this.props.updateSettings({ largescreen: state });
-								window.dispatchEvent(new Event("resize"));
-								if (state && this.props.settings.controllerView) {
-									this.props.updateSettings({ controllerView: false });
-								} else if (!state && !this.props.settings.controllerView) {
-									this.props.updateSettings({ controllerView: true });
-								}
-							}}
-							checked={this.props.settings.largescreen}/>
-					</ListItem>
 					{/* <ListItem>
 						<MyCheckbox
 							text={"Enable Mouse Controls"}
@@ -155,6 +146,17 @@ class CheckboxSettings extends PureComponent {
 							handleChange={(state) => {this.props.updateSettings({ hideNav: state })}}
 							checked={this.props.settings.hideNav}/>
 					</ListItem>
+					{/* <ListItem>
+						<MyCheckbox
+							text={"Enable Controller View"}
+							handleChange={(state) => {
+								this.props.updateSettings({ controllerView: state });
+								if (state && this.props.settings.largescreen) {
+									this.props.updateSettings({ largescreen: false });
+								}
+							}}
+							checked={this.props.settings.controllerView}/>
+					</ListItem> */}
 				</List>
 			</Paper>
 		);

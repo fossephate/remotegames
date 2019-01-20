@@ -23,9 +23,13 @@ import { compose } from "recompose";
 // jss:
 const styles = (theme) => ({
 	root: {
-		width: "18px",
+		width: "22px",
 		marginLeft: "2px",
 		marginRight: "2px",
+		backgroundColor: "#FFF",
+		border: "1px solid #333",
+		borderRadius: "4px",
+		padding: "2px",
 	},
 });
 

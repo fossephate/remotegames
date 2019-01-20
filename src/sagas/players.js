@@ -10,7 +10,7 @@ const handlePlayersActions = function (params) {
 	);
 	list.push(
 		takeEvery(types.JOIN_PLAYER_CONTROL_QUEUE, (action) => {
-			const NUM_CONTROLLERS = 4;
+			const NUM_CONTROLLERS = 9;
 			for (let i = 0; i < NUM_CONTROLLERS; i++) {
 				if (i == action.payload.controllerNumber) {
 					continue;

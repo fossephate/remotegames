@@ -87,26 +87,26 @@ class LaglessCanvas extends PureComponent {
 				<canvas id="videoCanvas2" onClick={this.handleClick} className={this.props.classes} style={{display: (this.props.num != 2) ? "none" : null }}></canvas>
 				<canvas id="videoCanvas3" onClick={this.handleClick} className={this.props.classes} style={{display: (this.props.num != 3) ? "none" : null }}></canvas>
 				<Dialog
-		           open={this.state.alertOpen}
-		           onClose={this.handleClose}
-		           aria-labelledby="alert-dialog-title"
-		           aria-describedby="alert-dialog-description"
-		         >
-		           <DialogTitle id="alert-dialog-title">{"Activate Mouse Controls?"}</DialogTitle>
-		           <DialogContent>
-		             <DialogContentText id="alert-dialog-description">
-		               By default, the mouse will move the right stick, you can remap and change settings for it in the remap menu.
-		             </DialogContentText>
-		           </DialogContent>
-		           <DialogActions>
-		             <Button onClick={this.handleClose} color="primary">
-		               No
-		             </Button>
-		             <Button onClick={this.enableMouseControls} variant="contained" color="primary" autoFocus>
-		               Yes
-		             </Button>
-		           </DialogActions>
-		         </Dialog>
+					open={this.state.alertOpen}
+					onClose={this.handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description">
+
+					<DialogTitle id="alert-dialog-title">{"Activate Mouse Controls?"}</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							By default, the mouse will move the right stick, you can remap and change settings for it in the remap menu.
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={this.handleClose} color="primary">
+							No
+						</Button>
+						<Button onClick={this.enableMouseControls} variant="contained" color="primary" autoFocus>
+							Yes
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</React.Fragment>
 		);
 	}

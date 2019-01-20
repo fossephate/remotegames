@@ -7,21 +7,6 @@
 const VirtualProController = require("./VirtualProController.js");
 let restPos = 128;
 
-// class ControllerMapping {
-// 	constructor(type, rest, activated, released, which) {
-// 		this.type = type;
-//
-// 		if (type == "button") {
-// 			this.rest = rest;
-// 		} else if (type == "axis") {
-// 			this.rest = rest;
-// 			this.activated = active;
-// 			this.released = released;
-// 			this.index = which;
-// 		}
-// 	}
-// }
-
 export const AxisSettings = class AxisSettings {
 	constructor(sensitivity, offset, deadzone) {
 		this.sensitivity = sensitivity;
@@ -94,6 +79,8 @@ export default class VirtualController {
 			this.oldState.buttons.push(new ButtonState(0, 0));
 			this.oldState.axes.push(0);
 		}
+
+		this.changed = false;
 
 		// this.gamepadWrapper = new GamepadWrapper();
 		// this.getState = this.state.getState;
@@ -194,7 +181,7 @@ export default class VirtualController {
 				keys.push(key);
 			}
 			// didn't find a known controller, just pick the first one if there is one:
-			if (keys.length > 0) {
+			if (this.settings.controllerIndex == null && keys.length > 0) {
 				this.settings.controllerIndex = keys[0];
 			}
 		}, 2000);
@@ -212,6 +199,8 @@ export default class VirtualController {
 		if (!controller) {
 			return;
 		}
+
+		let oldState = JSON.stringify(this.state.getState());
 
 		// map buttons and axes to VirtualProController:
 
@@ -296,6 +285,12 @@ export default class VirtualController {
 				}
 			}
 
+		}
+
+
+		let newState = JSON.stringify(this.state.getState());
+		if (newState != oldState) {
+			this.changed = true;
 		}
 
 	}

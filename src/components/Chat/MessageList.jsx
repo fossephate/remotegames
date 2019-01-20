@@ -67,15 +67,6 @@ class MessageList extends PureComponent {
 		// }
 	}
 
-	// scrollToBottom() {
-	// 	this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-	// }
-	//
-	// componentDidMount() {
-	// 	this.scrollToBottom();
-	// }
-	//
-
 	getSnapshotBeforeUpdate(prevProps, prevState) {
 
 		if (prevProps.messages.length < this.props.messages.length) {
@@ -94,9 +85,6 @@ class MessageList extends PureComponent {
 		}
 		this.shouldScroll = false;
 	}
-
-	// let element = document.getElementById("messageList");
-	// element.scrollTop = element.scrollHeight;
 
 	mapMessages() {
 		let messages = [];
@@ -117,17 +105,17 @@ class MessageList extends PureComponent {
 		const { classes } = this.props;
 
 		return (
-			<Paper id="messageList" className={classes.root} elevation={4}
+			<Paper
+				id="messageList"
+				className={classes.root}
+				elevation={4}
 				ref={(el) => { this.rootRef = el; }}>
-			{/* <List id="messageList" className={classes.root}> */}
-				{/* <ScrollableFeed> */}
+
 					{this.mapMessages()}
-				{/* </ScrollableFeed> */}
-			{/* </List> */}
-				<div
-					style={{ float:"left", clear: "both" }}
-					ref={(el) => { this.messagesEnd = el; }}>
-				</div>
+					<div
+						style={{ float:"left", clear: "both" }}
+						ref={(el) => { this.messagesEnd = el; }}>
+					</div>
 			</Paper>
 		);
 	}

@@ -21,10 +21,15 @@ import { updateSettings } from "src/actions/settings.js";
 import { leavePlayerControlQueue } from "src/actions/players.js";
 
 // main components:
-const LoginArea = lazy(() => import("src/components/LoginArea.jsx"));
-const NavTabs = lazy(() => import("src/components/NavTabs.jsx"));
-const Picture = lazy(() => import("src/components/Picture.jsx"));
-const Chat = lazy(() => import("src/components/Chat/Chat.jsx"));
+// const LoginArea = lazy(() => import("src/components/LoginArea.jsx"));
+// const NavTabs = lazy(() => import("src/components/NavTabs.jsx"));
+// const Picture = lazy(() => import("src/components/Picture.jsx"));
+// const Chat = lazy(() => import("src/components/Chat/Chat.jsx"));
+import LoginArea from "src/components/LoginArea.jsx";
+import NavTabs from "src/components/NavTabs.jsx";
+import Picture from "src/components/Picture.jsx";
+import Chat from "src/components/Chat/Chat.jsx";
+
 // loading circle:
 import LoadingCircle from "src/components/LoadingCircle.jsx";
 
@@ -40,10 +45,14 @@ import MySlider from "src/components/MySlider.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx";
 
 // modals:
-const LoginModal = lazy(() => import("src/components/Modals/LoginModal.jsx"));
-const RegisterModal = lazy(() => import("src/components/Modals/RegisterModal.jsx"));
-const AccountModal = lazy(() => import("src/components/Modals/AccountModal.jsx"));
-const InputMapperModal = lazy(() => import("src/components/Modals/InputMapperModal.jsx"));
+// const LoginModal = lazy(() => import("src/components/Modals/LoginModal.jsx"));
+// const RegisterModal = lazy(() => import("src/components/Modals/RegisterModal.jsx"));
+// const AccountModal = lazy(() => import("src/components/Modals/AccountModal.jsx"));
+// const InputMapperModal = lazy(() => import("src/components/Modals/InputMapperModal.jsx"));
+import LoginModal from "src/components/Modals/LoginModal.jsx";
+import RegisterModal from "src/components/Modals/RegisterModal.jsx";
+import AccountModal from "src/components/Modals/AccountModal.jsx";
+import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 
 // material ui:
@@ -73,8 +82,6 @@ import Paper from "@material-ui/core/Paper";
 // import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Checkbox from "@material-ui/core/Checkbox";
-// import ListItemIcon from "@material-ui/core/ListItemIcon";
-// import ListItemText from "@material-ui/core/ListItemText";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -110,6 +117,9 @@ window.swal = swal;
 import io from "socket.io-client";
 import _ from "lodash";
 
+// rr:
+import JSMpeg from "js/jsmpeg.min.js";
+
 // import JSMpeg from "js/jsmpeg.min.js";
 // require("js/WSAvcPlayer.js");
 
@@ -123,8 +133,6 @@ window.localforage = localforage;
 
 let globalEventTimer = false;
 let sendInputTimer;
-let lastSplitTime = 0;
-let lastSplitTimeMS = 0;
 let locked = false;
 let authCookie;
 let banlist = [];
@@ -133,6 +141,7 @@ let resizers = [];
 let resizeDebounceTimer;
 let resizeAvailable = true;
 let isMobile = false;
+window.ping = 0;
 
 window.laglessAudio = null;
 window.streams = [];
@@ -150,11 +159,6 @@ window.inputHandler = new InputHandler(isMobile);
 if (isMobile) {
 	// swal("This site isn't really designed for mobile, I'll improve it in the future but for now consider using a desktop / laptop.");
 }
-
-/* CONTROLLER STUFF */
-let mouseMoveTimer = null;
-let pingTime = 0;
-let restPos = 128;
 
 // jss:
 const styles = (theme) => ({
@@ -200,10 +204,12 @@ class App extends Component {
 		this.state = {};
 	}
 
+	// static getDerivedStateFromProps(props, state) {
+	// // ...
+	// }
+
 
 	componentDidMount() {
-
-		console.log("restoring preferences");
 
 		// check if new:
 		// localforage.getItem("new").then(function (value) {
@@ -215,41 +221,7 @@ class App extends Component {
 
 		// window.dispatchEvent(new Event("resize"));
 
-		// Get stored preferences
-		localforage.getItem("settings").then((value) => {
-			// If they exist, write them
-			if (typeof value != "undefined") {
-				settings = Object.assign({}, JSON.parse(value));
-			}
-			// Store the preferences (so that the default values get stored)
-			localforage.setItem("settings", JSON.stringify(settings));
 
-			// debug:
-			console.log(settings);
-
-			this.props.updateSettings({
-				keyboardControls: settings.keyboardControls,
-				controllerControls: settings.controllerControls,
-				touchControls: settings.touchControls,
-				mouseControls: settings.mouseControls,
-				controllerView: settings.controllerView,
-				analogStickMode: settings.analogStickMode,
-				dpadSwap: settings.dpadSwap,
-				TDSConfig: settings.TDSConfig,
-				audioThree: settings.audioThree,
-				// fullscreen: settings.fullscreen,
-				// largescreen: settings.largescreen,
-				// hideChat: settings.hideChat,
-				// hideNav: settings.hideNav,
-				deadzone: settings.deadzone,
-				volume: settings.volume,
-				theme: settings.theme,
-				// streamNumber: settings.streamNumber,
-			});
-
-			this.switchTabs(this.props.settings.streamNumber);
-
-		});
 
 		window.socket = this.props.socket;
 
@@ -273,14 +245,14 @@ class App extends Component {
 				console.log("lost connection, attempting reconnect3.");
 				socket.connect();
 				// re-authenticate if the connection was successful
-				setTimeout(() => {
-					if (socket.connected) {
-						socket.emit("authenticate", {
-							auth: authCookie,
-							usernameIndex: this.props.userInfo.usernameIndex,
-						});
-					}
-				}, 1000);
+				// setTimeout(() => {
+				// 	if (socket.connected) {
+				// 		socket.emit("authenticate", {
+				// 			auth: authCookie,
+				// 			usernameIndex: this.props.userInfo.usernameIndex,
+				// 		});
+				// 	}
+				// }, 1000);
 			}
 		}, 5000);
 
@@ -322,32 +294,11 @@ class App extends Component {
 
 		/* AUTHENTICATION */
 		let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-		if (authCookie !== null) {
-			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-			this.props.updateUserInfo({ authToken: authCookie });
-		}
-
-		if (authCookie !== null) {
-			socket.emit("authenticate", {
-				auth: authCookie,
-				usernameIndex: this.props.userInfo.usernameIndex,
-			});
-		}
-		// setInterval(() => {
-		// 	if (authCookie != null) {
-		// 		socket.emit("authenticate", {
-		// 			auth: authCookie,
-		// 			usernameIndex: this.state.usernameIndex,
-		// 		});
-		// 	}
-		// }, 5000);
 		setTimeout(() => {
 			$.ajax({
-				url: "https://twitchplaysnintendoswitch.com/accountData/" + this.props.userInfo.userid + "/" + authCookie,
+				url: "https://twitchplaysnintendoswitch.com/accountData/" + this.props.userInfo.username + "/" + this.props.userInfo.userid + "/" + authCookie,
 			});
 		}, 5000);
-
-
 
 		socket.on("needToLogIn", () => {
 			swal("You need to log in!");
@@ -363,14 +314,6 @@ class App extends Component {
 
 		window.state = this.state;
 		window.props = this.props;
-
-		// $(document).on("click", ".username-dropdown-item", function (event) {
-		// 	let username = $(event.target).text();
-		// 	let index = $(event.target).index();
-		// 	$("#usernameDropdownMenuLink").text(username);
-		// 	settings.usernameIndex = index;
-		// 	localforage.setItem("settings", JSON.stringify(settings));
-		// });
 
 
 		/* BAN / IP */
@@ -396,12 +339,12 @@ class App extends Component {
 				title: "There has been a force refresh!"
 			}).then((result) => {
 				if (result.value) {
-					location.reload(true);
+					window.location.reload(true);
 				}
 			});
 			// actually force after 5 seconds:
 			setTimeout(() => {
-				location.reload(true);
+				window.location.reload(true);
 			}, 5000);
 		});
 
@@ -482,27 +425,27 @@ class App extends Component {
 
 		/* BAN EVASION @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-		// socket.on("rickroll", (data) => {
-		// 	if (this.props.userInfo.username == data || data == "everyone") {
-		// 		let myPlayer;
-		// 		swal({
-		// 			html: '<canvas id="rickroll"></canvas>',
-		// 			onOpen: () => {
-		// 				let rickrollCanvas = $("#rickroll")[0];
-		// 				myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
-		// 					canvas: rickrollCanvas,
-		// 					loop: false,
-		// 					autoplay: true
-		// 				});
-		// 			},
-		// 			onClose: () => {
-		// 				myPlayer.destroy();
-		// 			},
-		// 			customClass: "swal-wide"
-		// 		});
-		//
-		// 	}
-		// });
+		socket.on("rickroll", (data) => {
+			if (this.props.userInfo.username == data || data == "everyone") {
+				let myPlayer;
+				swal({
+					html: '<canvas id="rickroll"></canvas>',
+					onOpen: () => {
+						let rickrollCanvas = $("#rickroll")[0];
+						myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
+							canvas: rickrollCanvas,
+							loop: false,
+							autoplay: true
+						});
+					},
+					onClose: () => {
+						myPlayer.destroy();
+					},
+					customClass: "swal-wide"
+				});
+
+			}
+		});
 
 		socket.on("rainbow", function (data) {
 			if (this.props.userInfo.username == data || data == "everyone") {
@@ -518,25 +461,15 @@ class App extends Component {
 			bannedIPs = data;
 		});
 
-		socket.on("banned", function (data) {
+		socket.on("banned", (data) => {
 			let alertMessage = $(".swal2-container")[0];
 			if (typeof alertMessage == "undefined") {
 				swal("You're banned, you can appeal the ban on the discord server, though it may be only temporary.");
 			}
+			localforage.setItem("banned", "banned");
 		});
 
-		/* PING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		// setInterval(function () {
-		// 	pingTime = Date.now();
-		// 	socket.emit("ping2");
-		// }, 1000);
-		//
-		// socket.on("pong2", function () {
-		// 	let latency = Date.now() - pingTime;
-		// 	$("#ping").text(latency + "ms");
-		// });
-
-		window.addEventListener("keydown", function (event) {
+		window.addEventListener("keydown", (event) => {
 			// escape, f11
 			if ([27, 122].indexOf(event.keyCode) > -1) {
 				event.preventDefault();
@@ -550,6 +483,10 @@ class App extends Component {
 			// 	event.preventDefault();
 			// }
 		}, false);
+
+		setTimeout(() => {
+			this.switchTabs(this.props.settings.streamNumber);
+		}, 2000);
 
 	}
 
@@ -575,8 +512,8 @@ class App extends Component {
 
 	resetSettings() {
 		tools.deleteAllCookies();
-		localforage.clear().then(function () {
-			location.reload(true);
+		localforage.clear().then(() => {
+			window.location.href = "https://twitchplaysnintendoswitch.com";
 		});
 	}
 
@@ -656,7 +593,7 @@ class App extends Component {
 			return;
 		}
 		// return if trying to re-map inputs:
-		if (location.pathname == "/remap") {
+		if (window.location.pathname == "/remap") {
 			return;
 		}
 
@@ -675,7 +612,7 @@ class App extends Component {
 				theme: "mint",
 				type: "warning",
 				text: "It's not your turn yet!",
-				timeout: 500,
+				timeout: 250,
 			}).show();
 			return;
 		}
@@ -713,7 +650,7 @@ class App extends Component {
 		}
 
 		let buttons = (obj.btns).toString(2);
-		buttons = ("0".repeat(16)).substr(buttons.length) + buttons;
+		buttons = ("0".repeat(18)).substr(buttons.length) + buttons;
 
 		console.log(obj.cNum, buttons,
 		tools.fixedLengthString(obj.axes[0], "0", 3), tools.fixedLengthString(obj.axes[1], "0", 3),
@@ -772,6 +709,10 @@ class App extends Component {
 		console.log("re-rendering");
 
 		const { classes } = this.props;
+
+		if (window.location.pathname == "/reset") {
+			this.resetSettings();
+		}
 
 		return (
 			<div className={classes.root}>
@@ -868,13 +809,13 @@ export default compose(
 )(App);
 
 // exit fullscreen:
-window.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", (event) => {
 	// space and arrow keys
 	// if ([32, 37, 38, 39, 40].indexOf(event.keyCode) > -1) {
 	// 	event.preventDefault();
 	// }
-	// prevent arrow key scrolling:
-	if ([38, 40].indexOf(event.keyCode) > -1) {
+	// prevent arrow key & spacebar scrolling:
+	if ([38, 40, 32].indexOf(event.keyCode) > -1) {
 		// check if chat isn't focused:
 		if (!(document.activeElement === document.getElementById("messageBox"))) {
 			event.preventDefault();
@@ -883,10 +824,6 @@ window.addEventListener("keydown", (event) => {
 	// escape:
 	if ([27].indexOf(event.keyCode) > -1) {
 		document.exitPointerLock();
-		// document.removeEventListener("mousemove", getMouseInput);
-		// document.removeEventListener("mousedown", getMouseInput2);
-		// document.removeEventListener("mouseup", getMouseInput2);
-		// $("#mouseControlsCheckbox").prop("checked", false).trigger("change");
 	}
 }, false);
 
@@ -907,6 +844,6 @@ $(window).resize(_.throttle((event) => {
 }, 1000));
 
 /* FORCE HTTPS */
-if (location.protocol != "https:") {
-	location.href = "https:" + window.location.href.substring(window.location.protocol.length);
+if (window.location.protocol != "https:") {
+	window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
 }

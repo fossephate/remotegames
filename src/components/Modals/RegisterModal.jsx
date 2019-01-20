@@ -74,7 +74,7 @@ class RegisterModal extends PureComponent {
 		return (
 			<Modal
 				open={true}
-				onClose={this.props.handleClose}>
+				onClose={this.handleClose}>
 
 				<div className={classNames(classes.root, classes.center)}>
 

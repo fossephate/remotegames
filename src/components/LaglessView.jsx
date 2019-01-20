@@ -5,6 +5,9 @@ import LeftJoyCon from "./LeftJoyCon.jsx";
 import RightJoyCon from "./RightJoyCon.jsx";
 import LaglessCanvas from "./LaglessCanvas.jsx";
 
+import LeftXbox from "./LeftXbox.jsx";
+import RightXbox from "./RightXbox.jsx";
+
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
@@ -14,6 +17,7 @@ import { connect } from "react-redux";
 // recompose:
 import { compose } from "recompose";
 
+// libs:
 let classNames = require("classnames");
 
 // jss:
@@ -70,9 +74,13 @@ class LaglessView extends PureComponent {
 			controllerNumber = 4;
 		}
 
+		let isXbox = this.props.streamNumber == 1;
+		let Left = (isXbox) ? LeftXbox : LeftJoyCon;
+		let Right = (isXbox) ? RightXbox : RightJoyCon;
+
 		return (
 			<div className={laglessClasses}>
-				{this.props.controllerView ? <LeftJoyCon controllerState={this.props.controllerStates[controllerNumber]}/> : null}
+				{this.props.controllerView ? <Left controllerState={this.props.controllerStates[controllerNumber]}/> : null}
 
 				{displayLagless ? <LaglessCanvas num={this.props.num} classes={videoClasses}/> : null}
 				<iframe
@@ -85,7 +93,7 @@ class LaglessView extends PureComponent {
 					style={twitchStyle}>
 				</iframe>
 
-				{this.props.controllerView ? <RightJoyCon controllerState={this.props.controllerStates[controllerNumber]}/> : null}
+				{this.props.controllerView ? <Right controllerState={this.props.controllerStates[controllerNumber]}/> : null}
 			</div>
 		);
 	}

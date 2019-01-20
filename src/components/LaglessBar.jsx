@@ -9,6 +9,7 @@ import { withRouter } from "react-router";
 import VolumeSlider from "src/components/VolumeSlider.jsx";
 import MyCheckbox from "src/components/MyCheckbox.jsx";
 import ViewerDropdown from "src/components/ViewerDropdown.jsx";
+import Ping from "src/components/Lagless/LaglessBar/Ping.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
@@ -37,9 +38,9 @@ const styles = (theme) => ({
 		justifyContent: "space-evenly",
 		alignSelf: "center",
 		width: "100%",
-		paddingTop: "2px",
-		paddingBottom: "2px",
-		// marginTop: "5px",
+		paddingTop: "4px",
+		paddingBottom: "4px",
+		marginTop: "4px",
 		backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
 	},
 });
@@ -73,12 +74,15 @@ class LaglessBar extends PureComponent {
 					onMute={() => {this.props.setVolume(0)}}
 					onMax={() => {this.props.setVolume(100)}}/>
 				{/* <MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/> */}
-				<Button id="laglessRefresh" className="laglessRefresh" variant="contained" color="primary">
+				{/* <Button id="laglessRefresh" className="laglessRefresh" variant="contained" color="primary">
 					<RefreshIcon/>
-				</Button>
+				</Button> */}
 				<Button variant="contained" color="primary" onClick={() => {this.props.history.push("/remap")}}>
 					<KeyboardIcon/>|<VideogameAssetIcon/>
 				</Button>
+
+				<Ping/>
+
 			</Paper>
 		);
 

@@ -13,6 +13,8 @@ export default class VirtualKeyboard {
 		// this.getState = this.state.getState;
 		// this.setState = this.state.setState;
 
+		this.changed = false;
+
 		// a list of keys to keep track of:
 		this.keysToTrack = [];
 
@@ -353,6 +355,8 @@ export default class VirtualKeyboard {
 		// reset if nothing changed:
 		if (JSON.stringify(newControllerState) == JSON.stringify(oldControllerState)) {
 			this.state.setState(oldControllerState);
+		} else {
+			this.changed = true;
 		}
 	}
 }

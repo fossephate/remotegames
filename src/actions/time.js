@@ -17,3 +17,12 @@ export const updateLastServerUpdate = (time) => {
 		},
 	};
 };
+
+export const updatePing = (time) => {
+	return {
+		type: types.UPDATE_PING,
+		payload: {
+			time: time,
+		},
+	};
+};

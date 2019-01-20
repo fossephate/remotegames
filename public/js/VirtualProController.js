@@ -28,14 +28,6 @@ export default class VirtualProController {
 		};
 
 		this.btns = 0;
-		// let btns = parseInt("000011111", 2);
-		// let n = 5;
-		// (btns & (2 << n)) >> (n + 1);
-
-		// this.sticks = [
-		// 	[restPos, restPos],
-		// 	[restPos, restPos],
-		// ];
 
 		this.axes = [restPos, restPos, restPos, restPos, 0, 0];
 
@@ -76,11 +68,6 @@ export default class VirtualProController {
 
 	getState() {
 
-		// this.sticks[0][0] = clamp(this.sticks[0][0], 0, 255);
-		// this.sticks[0][1] = clamp(this.sticks[0][1], 0, 255);
-		// this.sticks[1][0] = clamp(this.sticks[1][0], 0, 255);
-		// this.sticks[1][1] = clamp(this.sticks[1][1], 0, 255);
-
 		this.axes[0] = clamp(this.axes[0], 0, 255);
 		this.axes[1] = clamp(this.axes[1], 0, 255);
 		this.axes[2] = clamp(this.axes[2], 0, 255);
@@ -104,7 +91,6 @@ export default class VirtualProController {
 		state.btns |= (this.buttons.left << 2);
 		state.btns |= (this.buttons.right << 3);
 
-
 		state.btns |= (this.buttons.l << 4);
 		state.btns |= (this.buttons.zl << 5);
 		state.btns |= (this.buttons.lstick << 6);
@@ -116,7 +102,6 @@ export default class VirtualProController {
 		state.btns |= (this.buttons.x << 11);
 		state.btns |= (this.buttons.y << 12);
 
-
 		state.btns |= (this.buttons.r << 13);
 		state.btns |= (this.buttons.zr << 14);
 		state.btns |= (this.buttons.rstick << 15);
@@ -125,6 +110,10 @@ export default class VirtualProController {
 
 		// state.sticks = this.sticks;
 		state.axes = this.axes;
+
+		// triggers:
+		state.axes[4] = (this.buttons.zl) ? 1 : state.axes[4];
+		state.axes[5] = (this.buttons.zr) ? 1 : state.axes[5];
 
 		return state;
 	}
@@ -142,7 +131,10 @@ export default class VirtualProController {
 		}
 		this.btns = state.btns;
 		this.axes = state.axes;
-		// this.sticks = state.sticks;
+		if (state.axes.length == 4) {
+			this.axes.push(0);
+			this.axes.push(0);
+		}
 
 		this.buttons.up = this.isPressed(0);
 		this.buttons.down = this.isPressed(1);
@@ -163,6 +155,10 @@ export default class VirtualProController {
 		this.buttons.rstick = this.isPressed(15);
 		this.buttons.plus = this.isPressed(16);
 		this.buttons.home = this.isPressed(17);
+
+		// triggers:
+		this.axes[4] = (this.buttons.zl) ? 1 : this.axes[4];
+		this.axes[5] = (this.buttons.zr) ? 1 : this.axes[5];
 
 	}
 }

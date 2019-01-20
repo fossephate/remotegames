@@ -323,7 +323,7 @@ class InputMapperModal extends PureComponent {
 
 		const { classes } = this.props;
 
-		let activeGamepadIndex = inputHandler.controller.settings.controllerIndex;
+		let activeGamepadIndex = inputHandler.controller.settings.controllerIndex || 0;
 		let activeGamepad = window.gamepadWrapper.controllers[activeGamepadIndex];
 		// console.log(activeGamepad, activeGamepadIndex);
 
@@ -415,6 +415,7 @@ class InputMapperModal extends PureComponent {
 							<KeyboardMapper update={this.update} type="button" which="22"/>
 							<KeyboardMapper update={this.update} type="button" which="23"/>
 							<KeyboardMapper update={this.update} type="button" which="24"/>
+							<KeyboardMapper update={this.update} type="button" which="25"/>
 						</List>
 					</Paper>
 

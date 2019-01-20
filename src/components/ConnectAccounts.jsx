@@ -17,6 +17,9 @@ class ConnectAccounts extends PureComponent {
 	}
 
 	connectAccountOrLogIn(type) {
+		if (window.banned) {
+			return;
+		}
 		let url = "https://twitchplaysnintendoswitch.com/8100/auth/" + type + "/";
 		if (this.props.authToken != null) {
 			url += "?uniqueToken=" + this.props.authToken;

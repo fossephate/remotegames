@@ -18,21 +18,22 @@ export default class VirtualMouse {
 		this.state = new VirtualProController();
 
 		this.mouseMoveTimer = null;
+		this.changed = false;
 
 		this.settings = {
 
 			enabled: false,
 
 			axes: [
-				new AxisSettings(15, 0, 0),
+				new AxisSettings(15, 0, 0),// 15
 				new AxisSettings(15, 0, 0),
 			],
 
 			map: {
 				buttons: [
-					"zl",
-					"x",
 					"zr",
+					"x",
+					"zl",
 				],
 			},
 
@@ -51,21 +52,24 @@ export default class VirtualMouse {
 		// on mouse stop:
 		clearTimeout(this.mouseMoveTimer);
 		this.mouseMoveTimer = setTimeout(() => {
+			this.changed = true;
 			this.state.axes[2] = restPos;
 			this.state.axes[3] = restPos;
-		}, 200);
+		}, 50);
 
 		let x = restPos + (event.movementX * this.settings.axes[0].sensitivity);
 		let y = restPos - (event.movementY * this.settings.axes[1].sensitivity);
 
-		let min = 50;
-		let accel = 1;
-		if (Math.abs(x - restPos) < min) {
-			x = tools.mathZoom(x, restPos, accel);
-		}
-		if (Math.abs(y - restPos) < min) {
-			y = tools.mathZoom(y, restPos, accel);
-		}
+		// let min = 50;
+		// let accel = 1;
+		// if (Math.abs(x - restPos) < min) {
+		// 	x = tools.mathZoom(x, restPos, accel);
+		// }
+		// if (Math.abs(y - restPos) < min) {
+		// 	y = tools.mathZoom(y, restPos, accel);
+		// }
+
+		this.changed = true;
 
 		this.state.axes[2] = tools.clamp(x, 0, 255);
 		this.state.axes[3] = tools.clamp(y, 0, 255);
@@ -73,6 +77,10 @@ export default class VirtualMouse {
 
 	getMouseInput2(event) {
 		let pressed = event.type == "mousedown" ? 1 : 0;
+		// if (this.state.buttons[this.settings.map.buttons[event.which - 1]] != pressed) {
+		// 	this.changed = true;
+		// }
+		this.changed = true;
 		this.state.buttons[this.settings.map.buttons[event.which - 1]] = pressed;
 	}
 
@@ -103,11 +111,12 @@ export default class VirtualMouse {
 			document.removeEventListener("mousedown", this.getMouseInput2);
 			document.removeEventListener("mouseup", this.getMouseInput2);
 			document.removeEventListener("pointerlockchange", this.onPointerLockChange);
+			clearTimeout(this.mouseMoveTimer);
 			this.state.axes[2] = restPos;
 			this.state.axes[3] = restPos;
 			setTimeout(() => {
 				this.settings.enabled = false;
-			}, 200);
+			}, 1000);
 		}
 	}
 

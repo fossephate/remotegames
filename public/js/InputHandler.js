@@ -14,6 +14,28 @@ const VirtualProController = require("./VirtualProController.js");
 import GamepadWrapper from "js/GamepadWrapper.js";
 window.gamepadWrapper = new GamepadWrapper();
 
+
+const BIT_MAP = {
+	"up": 0,
+	"down": 1,
+	"left": 2,
+	"right": 3,
+	"l": 4,
+	"zl": 5,
+	"lstick": 6,
+	"minus": 7,
+	"capture": 8,
+	"a": 9,
+	"b": 10,
+	"x": 11,
+	"y": 12,
+	"r": 13,
+	"zr": 14,
+	"rstick": 15,
+	"plus": 16,
+	"home": 17,
+};
+
 export class InputState {
 
 	constructor() {
@@ -106,6 +128,7 @@ export default class InputHandler {
 		// output to be read:
 		this.inputState = new InputState();
 		this.oldInputState = this.inputState;
+		this.oldInputStateString = JSON.stringify(this.inputState);
 
 		// init:
 		if (!this.isMobile) {
@@ -117,43 +140,56 @@ export default class InputHandler {
 	pollDevices() {
 
 		let newInputState;
-		let updatedState = this.oldInputState;
-		let oldStateString = JSON.stringify(this.oldInputState);
+		let updatedState = {
+			btns: 0,
+			axes: [128, 128, 128, 128, 0, 0],
+		};
 
 		if (!this.isMobile) {
 
 			// controller:
 			this.controller.poll();
-			newInputState = this.controller.state.getState();
-			if (JSON.stringify(newInputState) != oldStateString) {
+			if (this.controller.changed) {
+				this.controller.changed = false;
 				this.currentInputMode = "controller";
-				updatedState = newInputState;
-				// console.log(newInputState);
-			}
+				updatedState = this.controller.state.getState();
 
-			// keyboard:
-			this.keyboard.poll();
-			newInputState = this.keyboard.state.getState();
-			if (JSON.stringify(newInputState) != oldStateString) {
-				this.currentInputMode = "keyboard";
-				updatedState = newInputState;
-			}
+			} else {
 
-			if (this.mouse.settings.enabled && Math.random() > 0.4) {
-				updatedState.axes[2] = this.mouse.state.axes[2];
-				updatedState.axes[3] = this.mouse.state.axes[3];
+				// keyboard:
+				this.keyboard.poll();
+				if (this.keyboard.changed) {
+					this.keyboard.changed = false;
+					this.currentInputMode = "keyboard";
+					updatedState = this.keyboard.state.getState();
+
+				} else if (this.mouse.settings.enabled && this.mouse.changed) {
+
+					this.mouse.changed = false;
+					updatedState.btns = this.keyboard.state.getState().btns | this.mouse.state.getState().btns;
+					updatedState.axes[2] = this.mouse.state.axes[2];
+					updatedState.axes[3] = this.mouse.state.axes[3];
+					// triggers:
+					updatedState.axes[4] = ((updatedState.btns & (1 << 5)) != 0) ? 1 : 0;
+					updatedState.axes[5] = ((updatedState.btns & (1 << 14)) != 0) ? 1 : 0;
+				} else {
+					updatedState = this.oldInputState;
+				}
 			}
 
 		}
 
-		if (JSON.stringify(updatedState) != oldStateString) {
+		let updatedStateString = JSON.stringify(updatedState);
 
-			this.controller.state.setState(updatedState);
-			this.keyboard.state.setState(updatedState);
+		if (updatedStateString != this.oldStateString) {
+
+			// this.controller.state.setState(updatedState);
+			// this.keyboard.state.setState(updatedState);
 
 			this.inputState.setState(updatedState);
 
 			this.oldInputState = updatedState;
+			this.oldInputStateString = updatedStateString;
 		}
 	}
 
