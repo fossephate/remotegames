@@ -76,6 +76,16 @@ class AccountModal extends PureComponent {
 		this.props.history.push("/");
 	}
 
+	getTime(t) {
+		if (t < 60) {
+			return t.toFixed(1) + " seconds.";
+		} else if (t < (60 * 60)) {
+			return (t / 60).toFixed(1) + " minutes";
+		} else {
+			return (t / 60 / 60).toFixed(1) + " hours";
+		}
+	}
+
 	render() {
 
 		const { classes } = this.props;
@@ -89,7 +99,7 @@ class AccountModal extends PureComponent {
 
 					<Paper className="" elevation={4}>
 
-						<ListItemText>Time Played: {(this.props.timePlayed / 60).toFixed(1)} minutes</ListItemText>
+						<ListItemText>Time Played: {this.getTime(this.props.timePlayed)}</ListItemText>
 
 					</Paper>
 

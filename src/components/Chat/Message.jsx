@@ -29,6 +29,9 @@ import { connect } from "react-redux";
 // recompose:
 import { compose } from "recompose";
 
+// libs:
+import Noty from "noty";
+
 const styles = (theme) => ({
 	root: {
 		wordBreak: "break-word",
@@ -62,10 +65,25 @@ function getTimeStamp(t) {
 	return s;
 }
 
+
+function ping(text, time) {
+	new Noty({
+		theme: "mint",
+		type: "warning",
+		text: text,
+		timeout: time,
+		sounds: {
+			volume: 0.5,
+			sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+			conditions: ["docVisible"],
+		},
+	}).show();
+}
+
 // class Message extends PureComponent {
 const Message = (props) => {
 
-	let { classes, message, username, userid, time, accountMap } = props;
+	let { classes, message, username, userid, time, isReplay, isLastMessage, accountMap } = props;
 
 	let source = "";
 
@@ -82,6 +100,13 @@ const Message = (props) => {
 		// username = source.substr(0, 2) + ":" + user;
 		username = user;
 		message = msg;
+	}
+
+	if (!isReplay && isLastMessage) {
+		let mention = ("@" + props.myUsername);
+		if (message.indexOf(mention) > -1) {
+			ping("You've been pinged!", 500);
+		}
 	}
 
 	let is_dev = false;
@@ -109,6 +134,12 @@ const Message = (props) => {
 		if (account.is_sub) {
 			icons.push(<Badge type="sub1"/>);
 		}
+
+		if (account.is_mod && !isReplay && isLastMessage) {
+			if (message.indexOf("@everyone") > -1) {
+				ping("You've been pinged!", 500);
+			}
+		}
 	}
 
 	icons = React.Children.toArray(icons);
@@ -116,9 +147,7 @@ const Message = (props) => {
 	return (
 		<div className={classes.root} userid={userid} onClick={props.onClick}>
 			<Linkify properties={{className: classes.links}}>
-				{/* <ListItemText> */}
-					{getTimeStamp(time)}{icons}{(icons.length == 0) ? " " : null}<b>{username}</b> {message}
-				{/* </ListItemText> */}
+				{getTimeStamp(time)}{icons}{(icons.length == 0) ? " " : null}<b>{username}</b> {message}
 			</Linkify>
 		</div>
 	);
@@ -133,6 +162,7 @@ Message.propTypes = {
 const mapStateToProps = (state) => {
 	return {
 		accountMap: state.accountMap,
+		myUsername: state.userInfo.username,
 	};
 };
 

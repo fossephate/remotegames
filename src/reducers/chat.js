@@ -21,19 +21,6 @@ const chat = (state = {}, action) => {
 			if (userids.indexOf(action.payload.userid) == -1) {
 				userids.push(action.payload.userid);
 			}
-			if (action.payload.pinged) {
-				new Noty({
-					theme: "mint",
-					type: "warning",
-					text: "You've been pinged!",
-					timeout: 5000,
-					sounds: {
-						volume: 0.5,
-						sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
-						conditions: ["docVisible"],
-					},
-				}).show();
-			}
 			return { ...state, userids: userids, messages: messages };
 		case "UPDATE_MESSAGES":
 			return { ...state, messages: action.payload.messages };

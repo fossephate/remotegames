@@ -65,6 +65,9 @@ class NavTabs extends PureComponent {
 							this.props.updateSettings({streamNumber: 0});
 							this.props.history.push("/FAQ");
 						}
+						if (value == 4) {
+							window.location.href = "https://discord.io/tpns/";
+						}
 						if (value == 0) {
 							this.props.updateSettings({currentPlayer: 0});
 						}
@@ -80,6 +83,7 @@ class NavTabs extends PureComponent {
 					<Tab label="Xbox"/>
 					<Tab label="About"/>
 					<Tab label="FAQ"/>
+					<Tab label="Discord"/>
 					{/* <Link to="/about">About</Link> */}
 					{/* <Tab label="Wii U2"/> */}
 					{/* <Tab label="Lagless3"/> */}

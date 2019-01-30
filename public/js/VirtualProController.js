@@ -109,11 +109,14 @@ export default class VirtualProController {
 		state.btns |= (this.buttons.home << 17);
 
 		// state.sticks = this.sticks;
-		state.axes = this.axes;
+		// state.axes = this.axes;
+		for (let i = 0; i < this.axes.length; i++) {
+			state.axes[i] = this.axes[i];
+		}
 
 		// triggers:
-		state.axes[4] = (this.buttons.zl) ? 1 : state.axes[4];
-		state.axes[5] = (this.buttons.zr) ? 1 : state.axes[5];
+		// state.axes[4] = (this.buttons.zl) ? 1 : state.axes[4];
+		// state.axes[5] = (this.buttons.zr) ? 1 : state.axes[5];
 
 		return state;
 	}
@@ -131,10 +134,10 @@ export default class VirtualProController {
 		}
 		this.btns = state.btns;
 		this.axes = state.axes;
-		if (state.axes.length == 4) {
-			this.axes.push(0);
-			this.axes.push(0);
-		}
+		// if (state.axes.length == 4) {
+		// 	this.axes.push(0);
+		// 	this.axes.push(0);
+		// }
 
 		this.buttons.up = this.isPressed(0);
 		this.buttons.down = this.isPressed(1);

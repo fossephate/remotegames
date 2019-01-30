@@ -235,27 +235,6 @@ class App extends Component {
 			return null;
 		};
 
-		// reconnect:
-		socket.on("disconnect", (data) => {
-			// console.log("lost connection, attempting reconnect2.");
-			// socket.connect();
-		});
-		window.reconnectTimer = setInterval(() => {
-			if (!socket.connected) {
-				console.log("lost connection, attempting reconnect3.");
-				socket.connect();
-				// re-authenticate if the connection was successful
-				// setTimeout(() => {
-				// 	if (socket.connected) {
-				// 		socket.emit("authenticate", {
-				// 			auth: authCookie,
-				// 			usernameIndex: this.props.userInfo.usernameIndex,
-				// 		});
-				// 	}
-				// }, 1000);
-			}
-		}, 5000);
-
 		socket.on("waitlist", (data) => {
 			let waitlist = data.waitlist;
 			// check if you're in the waitlist
@@ -617,8 +596,7 @@ class App extends Component {
 			return;
 		}
 
-		authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-		if (authCookie == null) {
+		if (!this.props.userInfo.loggedIn) {
 			new Noty({
 				theme: "mint",
 				type: "warning",
@@ -631,8 +609,6 @@ class App extends Component {
 				},
 			}).show();
 			return;
-		} else {
-			authCookie = authCookie.split(" ")[0].replace(/;/g, "");
 		}
 
 		let obj = {
@@ -706,7 +682,7 @@ class App extends Component {
 
 	render() {
 
-		console.log("re-rendering");
+		console.log("re-rendering app.");
 
 		const { classes } = this.props;
 

@@ -33,6 +33,52 @@ const userInfoEvents = (socket, dispatch) => {
 		dispatch(updateUserInfo({ ...data, loggedIn: true }));
 	});
 
+	// reconnect:
+	socket.on("disconnect", (data) => {
+		console.log("lost connection, attempting reconnect1.");
+		socket.connect();
+		// re-authenticate if the connection was successful
+		setTimeout(() => {
+			if (socket.connected) {
+				socket.emit("authenticate", {
+					auth: authCookie,
+					usernameIndex: 0,
+				});
+			}
+		}, 1000);
+	});
+
+	// todo: make this not necessary
+	setInterval(() => {
+		if (socket.connected) {
+			socket.emit("authenticate", {
+				auth: authCookie,
+				usernameIndex: 0,
+			});
+		}
+	}, 120000);
+
+
+	// socket.on("disconnect", (data) => {
+	// 	// console.log("lost connection, attempting reconnect2.");
+	// 	// socket.connect();
+	// });
+	// window.reconnectTimer = setInterval(() => {
+	// 	if (!socket.connected) {
+	// 		console.log("lost connection, attempting reconnect3.");
+	// 		socket.connect();
+	// 		// re-authenticate if the connection was successful
+	// 		setTimeout(() => {
+	// 			if (socket.connected) {
+	// 				socket.emit("authenticate", {
+	// 					auth: this.props.userInfo.authToken,
+	// 					usernameIndex: this.props.userInfo.usernameIndex,
+	// 				});
+	// 			}
+	// 		}, 1000);
+	// 	}
+	// }, 5000);
+
 	return socket;
 };
 

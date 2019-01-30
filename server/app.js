@@ -101,20 +101,11 @@ let laglessClientUserids = [
 ];
 
 let normalTime = 1000 * 60 * 2;// 2 minutes
-let subTime = normalTime * 2;
+let subTime = normalTime * 2.5;
 let forfeitTime = 1000 * 15;// 15 seconds
 let tempBanTime = 5 * 1000 * 60; // 5 minutes
 
 const NUM_PLAYERS = 5;
-
-// let turnLengths = [30000, 30000, 30000, 30000];
-// let forfeitLengths = [15000, 15000, 15000, 15000];
-// let turnStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
-// let forfeitStartTimes = [Date.now(), Date.now(), Date.now(), Date.now()];
-// let moveLineTimers = [null, null, null, null];
-// let forfeitTimers = [null, null, null, null];
-// let turnExpirations = [0, 0, 0, 0];
-// let forfeitExpirations = [0, 0, 0, 0];
 
 let turnLengths = [];
 let forfeitLengths = [];
@@ -691,7 +682,7 @@ io.on("connection", (socket) => {
 					socket.emit("unauthorized", "ALREADY_LOGGED_IN");
 					return;
 				}
-				// 				console.log("registering account.");
+				// console.log("registering account.");
 				client.validUsernames = [];
 
 				if (account.connectedAccounts.indexOf("discord") > -1) {
@@ -834,19 +825,15 @@ io.on("connection", (socket) => {
 		if (data.message.length > 400) {
 			return;
 		}
-		let pinged = false;
-		if (data.message.indexOf("@everyone") > -1) {
-			pinged = true;
-		}
 		let msgObj = {
 			userid: client.userid,
 			username: client.username,
 			time: Date.now(),
 			message: data.message,
-			pinged: pinged,
+			isReplay: false,
 		};
 		// store for when people refresh:
-		lastFewMessages.push({...msgObj, pinged: false});
+		lastFewMessages.push(msgObj);
 		// keep only #numberOfLastFewMessages
 		if (lastFewMessages.length > numberOfLastFewMessages) {
 			lastFewMessages.shift();
@@ -1084,6 +1071,7 @@ io.on("connection", (socket) => {
 			username: "TPNSbot",
 			userid: "TPNSbot",
 			time: Date.now(),
+			isReplay: false,
 		});
 		// maybe unnecessary:
 		setTimeout(() => {
@@ -1455,6 +1443,7 @@ io.on("connection", (socket) => {
 				username: "TPNSbot",
 				time: Date.now(),
 				message: data,
+				isReplay: false,
 			};
 			// store for when people refresh:
 			lastFewMessages.push(msgObj);

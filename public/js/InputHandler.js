@@ -145,6 +145,8 @@ export default class InputHandler {
 			axes: [128, 128, 128, 128, 0, 0],
 		};
 
+		updatedState = this.oldInputState;
+
 		if (!this.isMobile) {
 
 			// controller:
@@ -162,8 +164,8 @@ export default class InputHandler {
 					this.keyboard.changed = false;
 					this.currentInputMode = "keyboard";
 					updatedState = this.keyboard.state.getState();
-
-				} else if (this.mouse.settings.enabled && this.mouse.changed) {
+				}
+				if (this.mouse.settings.enabled && this.mouse.changed) {
 
 					this.mouse.changed = false;
 					updatedState.btns = this.keyboard.state.getState().btns | this.mouse.state.getState().btns;
@@ -172,8 +174,6 @@ export default class InputHandler {
 					// triggers:
 					updatedState.axes[4] = ((updatedState.btns & (1 << 5)) != 0) ? 1 : 0;
 					updatedState.axes[5] = ((updatedState.btns & (1 << 14)) != 0) ? 1 : 0;
-				} else {
-					updatedState = this.oldInputState;
 				}
 			}
 

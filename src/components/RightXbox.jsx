@@ -45,33 +45,52 @@ const styles = (theme) => ({
 		top: "12%",
 		fontSize: "large",
     	fontWeight: "bold",
+
+		'& :after': {
+			content: '""',
+			position: "absolute",
+			top: "0px",
+			left: "0px",
+			// width: "100%",
+			// height: "50%",
+			// backgroundImage: "linear-gradient(rgba(255,255,255,0.8),rgba(255,255,255,0.2))",
+			// borderTopLeftRadius: "50%",
+			// borderTopRightRadius: "50%",
+			// clipPath: "circle(61% at 50% 100%)",
+			width: "100%",
+			height: "100%",
+			clipPath: "circle(60% at 80% 0%)",
+			backgroundImage: "linear-gradient(45deg, rgba(255,255,255,0.1),rgba(255,255,255,0.3))",
+			borderRadius: "50%",
+		},
+
 		"& .a": {
 			position: "absolute",
 			left: "63.2%",
 			top: "34.5%",
-			color: "red",
-			backgroundImage: "radial-gradient(circle, #000, #333)",
+			color: "#E53136",
+			backgroundImage: "linear-gradient(45deg, #000, #333)",
 		},
 		"& .b": {
 			position: "absolute",
 			left: "35.2%",
 			top: "61%",
-			color: "green",
-			backgroundImage: "radial-gradient(circle, #000, #333)",
+			color: "#91C85C",
+			backgroundImage: "linear-gradient(45deg, #000, #333)",
 		},
 		"& .x": {
 			position: "absolute",
 			left: "35.2%",
 			top: "8%",
-			color: "yellow",
-			backgroundImage: "radial-gradient(circle, #000, #333)",
+			color: "#FCE504",
+			backgroundImage: "linear-gradient(45deg, #000, #333)",
 		},
 		"& .y": {
 			position: "absolute",
 			left: "7.2%",
 			top: "34.5%",
-			color: "blue",
-			backgroundImage: "radial-gradient(circle, #000, #333)",
+			color: "#0399DC",
+			backgroundImage: "linear-gradient(45deg, #000, #333)",
 		},
 	},
 	button: {
@@ -121,11 +140,8 @@ const styles = (theme) => ({
 	highlighted: {
 		background: "rgba(68, 68, 68, 0.7)",
 		"&.a,&.b,&.x,&.y": {
-			background: "#444 !important",
+			background: "rgba(68, 68, 68, 1) !important",
 		},
-	},
-	highlighted2: {
-		background: "#444 !important",
 	},
 	trigger1: {
 		height: "50%",
@@ -187,10 +203,6 @@ class RightXbox extends PureComponent {
 				</div>
 
 				<div className={classes.abxy}>
-					{/* <div className={classNames(classes.button, classes.highlighted2, "a")}><div className={classNames({[classes.highlighted]: (this.controller.buttons.a)})}>B</div></div>
-					<div className={classNames(classes.button, classes.highlighted2, "b")}><div className={classNames({[classes.highlighted]: (this.controller.buttons.b)})}>A</div></div>
-					<div className={classNames(classes.button, classes.highlighted2, "x")}><div className={classNames({[classes.highlighted]: (this.controller.buttons.x)})}>Y</div></div>
-					<div className={classNames(classes.button, classes.highlighted2, "y")}><div className={classNames({[classes.highlighted]: (this.controller.buttons.y)})}>X</div></div> */}
 					<div className={classNames(classes.button, "a", {[classes.highlighted]: (this.controller.buttons.a)})}>B</div>
 					<div className={classNames(classes.button, "b", {[classes.highlighted]: (this.controller.buttons.b)})}>A</div>
 					<div className={classNames(classes.button, "x", {[classes.highlighted]: (this.controller.buttons.x)})}>Y</div>

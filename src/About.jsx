@@ -101,7 +101,7 @@ class About extends PureComponent {
 					</p>
 
 					<p>
-						The whole idea behind this project is that you can use a keyboard or controller to play these consoles on your computer with minimal lag.
+						The whole idea behind the project is that you can use a keyboard or controller to try out games on these consoles from anywhere with just a web browser.
 					</p>
 
 					<div className={classes.imagesContainer}>

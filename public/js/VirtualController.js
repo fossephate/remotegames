@@ -89,7 +89,7 @@ export default class VirtualController {
 		this.lastChangedButton = null;
 		this.lastChangedAxis = null;
 
-		this.gamepadList = [];
+		// this.gamepadList = [];
 
 		this.triggerIndexes = [];
 
@@ -161,31 +161,38 @@ export default class VirtualController {
 
 	}
 
+	autoSelectGamepad() {
+
+		// only auto select if one hasn't already been selected:
+		if (this.settings.controllerIndex != null) {
+			return;
+		}
+
+		// auto select an xbox / playstation controller:
+		let keys = [];
+		for (let key in window.gamepadWrapper.controllers) {
+			let controller = window.gamepadWrapper.controllers[key];
+			if (controller.id.indexOf("Xbox") > -1) {
+				this.settings.controllerIndex = key;
+				console.log("Xbox controller found!");
+			}
+			if (controller.id.indexOf("Twin") > -1) {
+				this.settings.controllerIndex = key;
+				console.log("Playstation controller found!");
+			}
+			keys.push(key);
+		}
+		// didn't find a known controller, just pick the first one if there is one:
+		if (this.settings.controllerIndex == null && keys.length > 0) {
+			this.settings.controllerIndex = keys[0];
+		}
+	}
+
 	init() {
 
 		window.gamepadWrapper.callbacksAfterPoll.push(this.poll);
-
-		// auto select an xbox / playstation controller:
-		setTimeout(() => {
-			let keys = [];
-			for (let key in window.gamepadWrapper.controllers) {
-				let controller = window.gamepadWrapper.controllers[key];
-				if (controller.id.indexOf("Xbox") > -1) {
-					this.settings.controllerIndex = key;
-					console.log("Xbox controller found!");
-				}
-				if (controller.id.indexOf("Twin") > -1) {
-					this.settings.controllerIndex = key;
-					console.log("Playstation controller found!");
-				}
-				keys.push(key);
-			}
-			// didn't find a known controller, just pick the first one if there is one:
-			if (this.settings.controllerIndex == null && keys.length > 0) {
-				this.settings.controllerIndex = keys[0];
-			}
-		}, 2000);
-
+		setTimeout(this.autoSelectGamepad, 2000);
+		setInterval(this.autoSelectGamepad, 10000);
 	}
 
 	poll() {

@@ -21,7 +21,7 @@ export const receiveMessage = (data) => {
 			username: data.username,
 			userid: data.userid,
 			time: data.time,
-			pinged: data.pinged,
+			isReplay: data.isReplay,
 		},
 	};
 };

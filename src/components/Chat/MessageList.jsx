@@ -89,10 +89,12 @@ class MessageList extends PureComponent {
 	mapMessages() {
 		let messages = [];
 		for (let i = 0; i < this.props.messages.length; i++) {
+			let isLastMessage = (i == this.props.messages.length - 1);
 			messages.push(
 				<Message
 					key={this.props.messages[i].id}
 					{...this.props.messages[i]}
+					isLastMessage={isLastMessage}
 					onClick={() => {swal(this.props.messages[i].userid)}}
 					onContextMenu={this.handleClick}/>
 			);
