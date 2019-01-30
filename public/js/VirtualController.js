@@ -94,6 +94,7 @@ export default class VirtualController {
 		this.triggerIndexes = [];
 
 		this.poll = this.poll.bind(this);
+		this.autoSelectGamepad = this.autoSelectGamepad.bind(this);
 
 		this.settings = {
 

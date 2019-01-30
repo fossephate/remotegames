@@ -15,9 +15,12 @@ import { compose } from "recompose";
 // jss:
 const styles = (theme) => ({
 	root: {
-		width: "18px",
+		width: "22px",
 		marginLeft: "2px",
 		marginRight: "2px",
+		backgroundColor: "#b7b7b7",
+	    border: "1px solid #333",
+	    borderRadius: "6px",
 	},
 });
 
@@ -37,23 +40,23 @@ class Badge extends PureComponent {
 		switch (this.props.type) {
 			case "dev":
 				src += "DevBadge.png";
-				text = "The Developer.";
+				text = "The Developer";
 				break;
 			case "admin":
 				src += "AdminBadge.png";
-				text = "Administrator.";
+				text = "Administrator";
 				break;
 			case "mod":
 				src += "ModBadge.png";
-				text = "Moderator.";
+				text = "Moderator";
 				break;
 			case "plus":
 				src += "PlusBadge.png";
-				text = "This user can use Plus.";
+				text = "This user can use Plus";
 				break;
 			case "sub1":
 				src += "SubBadge1.png";
-				text = "Subscriber for 1 month(+).";
+				text = "Subscriber for 1 month(+)";
 				break;
 		}
 

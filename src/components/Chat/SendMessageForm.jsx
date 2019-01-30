@@ -96,6 +96,7 @@ class SendMessageForm extends PureComponent {
 		this.handleTextChange = this.handleTextChange.bind(this);
 		this.sendMessage = this.sendMessage.bind(this);
 
+		this.renderEmojiSuggestions = this.renderEmojiSuggestions.bind(this);
 		this.renderUsernameSuggestions = this.renderUsernameSuggestions.bind(this);
 		this.renderCommandSuggestions = this.renderCommandSuggestions.bind(this);
 
@@ -168,6 +169,16 @@ class SendMessageForm extends PureComponent {
 		}
 	}
 
+	renderEmojiSuggestions(token) {
+		if (token.length < 1) {
+			return [];
+		} else {
+			return emoji(token)
+				.slice(0, 10)
+				.map(({ name, char }) => ({ name, char }));
+		}
+	}
+
 	renderUsernameSuggestions(token) {
 		let suggestions = [];
 		for (let i = 0; i < this.props.userids.length; i++) {
@@ -228,11 +239,7 @@ class SendMessageForm extends PureComponent {
 		            minChar={0}
 					trigger={{
 						":": {
-							dataProvider: (token) => {
-								return emoji(token)
-									.slice(0, 10)
-									.map(({ name, char }) => ({ name, char }));
-							},
+							dataProvider: this.renderEmojiSuggestions,
 							component: Item,
 							output: (item, trigger) => ({text: item.char, caretPosition: "next"}),
 						},

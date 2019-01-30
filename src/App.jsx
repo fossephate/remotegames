@@ -483,6 +483,20 @@ class App extends Component {
 		if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
 			// this.toggleFullscreen(false);
 
+			// from checkbox settings:
+			// todo: not this:
+			console.log("exiting fullscreen");
+			$("body").css("padding", "");
+			$("#picture").css("grid-row", "");
+			$("#picture").css("grid-column", "");
+			$("body").removeClass("hideScrollbar");
+			this.props.updateSettings({
+				largescreen: false,
+				controllerView: true,
+				hideChat: false,
+				hideNav: false,
+			});
+
 			// turn off mouse controls:
 			window.inputHandler.mouse.toggle(false);
 		}
