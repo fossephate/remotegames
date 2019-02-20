@@ -34,7 +34,7 @@ class Badge extends PureComponent {
 
 		const { classes } = this.props;
 
-		let src = "https://twitchplaysnintendoswitch.com/images/badges/";
+		let src = window.location.origin + "/images/badges/";
 		let text;
 
 		switch (this.props.type) {

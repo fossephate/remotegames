@@ -1,9 +1,9 @@
 const server = require("http").createServer();
 const io = require("socket.io")(server);
-const port = 8140;
+const port = 8003;
 const ws = require("ws");
 
-server.listen(port, function () {
+server.listen(port, () => {
 	console.log("Server listening at port %d", port);
 });
 
@@ -20,7 +20,7 @@ let socketServer = new ws.Server({
 	perMessageDeflate: false
 });
 socketServer.connectionCount = 0;
-socketServer.on("connection", function (socket, upgradeReq) {
+socketServer.on("connection", (socket, upgradeReq) => {
 	socketServer.connectionCount++;
 	console.log(
 		"New WebSocket Connection: ",
@@ -28,21 +28,22 @@ socketServer.on("connection", function (socket, upgradeReq) {
 		(upgradeReq || socket.upgradeReq).headers["user-agent"],
 		"(" + socketServer.connectionCount + " total)"
 	);
-	socket.on("close", function (code, message) {
+	socket.on("close", (code, message) => {
 		socketServer.connectionCount--;
 		console.log("Disconnected WebSocket (" + socketServer.connectionCount + " total)");
 	});
 });
-socketServer.broadcast = function (data) {
-	socketServer.clients.forEach(function each(client) {
+socketServer.broadcast = (data) => {
+	socketServer.clients.forEach((client) => {
 		if (client.readyState === ws.OPEN) {
 			client.send(data);
 		}
 	});
 };
 
-io.on("connection", function (socket) {
-	socket.on("videoData", function (data) {
+io.on("connection", (socket) => {
+	console.log("host connected.");
+	socket.on("videoData", (data) => {
 		socketServer.broadcast((data));
 	});
 });

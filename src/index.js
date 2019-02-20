@@ -68,66 +68,10 @@ let preloadedState = {
 		[],
 	],
 	players: {
-		controlQueues: [
-			[],
-			[],
-			[],
-			[],
-			[],
-		],
-		turnTimers: [{
-				turnStartTime: 0,
-				forfeitStartTime: 0,
-				turnLength: 0,
-				forfeitLength: 0,
-			},
-			{
-				turnStartTime: 0,
-				forfeitStartTime: 0,
-				turnLength: 0,
-				forfeitLength: 0,
-			},
-			{
-				turnStartTime: 0,
-				forfeitStartTime: 0,
-				turnLength: 0,
-				forfeitLength: 0,
-			},
-			{
-				turnStartTime: 0,
-				forfeitStartTime: 0,
-				turnLength: 0,
-				forfeitLength: 0,
-			},
-			{
-				turnStartTime: 0,
-				forfeitStartTime: 0,
-				turnLength: 0,
-				forfeitLength: 0,
-			},
-		],
-		controllerStates: [
-			{
-				btns: 0,
-				axes: [128, 128, 128, 128, 0, 0],
-			},
-			{
-				btns: 0,
-				axes: [128, 128, 128, 128, 0, 0],
-			},
-			{
-				btns: 0,
-				axes: [128, 128, 128, 128, 0, 0],
-			},
-			{
-				btns: 0,
-				axes: [128, 128, 128, 128, 0, 0],
-			},
-			{
-				btns: 0,
-				axes: [128, 128, 128, 128, 0, 0],
-			},
-		],
+		controlQueues: [],
+		turnTimers: [],
+		controllerStates: [],
+		count: 10,
 	},
 	// players2: [{
 	// 	controlQueue: [],
@@ -155,6 +99,7 @@ let preloadedState = {
 		banned: false,
 		waitlisted: false,
 		timePlayed: 0,
+		is_mod: false,
 	},
 
 	usernameMap: {},
@@ -187,6 +132,25 @@ let preloadedState = {
 	}
 };
 
+for (let i = 0; i < preloadedState.players.count; i++) {
+	preloadedState.players.turnTimers.push(
+		{
+			turnStartTime: 0,
+			forfeitStartTime: 0,
+			turnLength: 0,
+			forfeitLength: 0,
+		}
+	);
+	preloadedState.players.controlQueues.push([]);
+	preloadedState.players.controllerStates.push(
+		{
+			btns: 0,
+			axes: [128, 128, 128, 128, 0, 0],
+		}
+	);
+
+}
+
 function loadState() {
 	// Get stored preferences
 	localforage.getItem("settings").then((value) => {
@@ -211,6 +175,27 @@ function loadState() {
 			}
 		});
 
+		setTimeout(() => {
+			// check if incognito && chrome:
+			let isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+			if (isChrome) {
+				let fs = window.RequestFileSystem || window.webkitRequestFileSystem;
+				if (!fs) {
+					console.log("check failed?");
+				} else {
+					fs(window.TEMPORARY,
+					100,
+					() => {
+						console.log("ok.")
+					},
+					() => {
+						store.dispatch(updateUserInfo({banned: true}));
+						window.banned = true;
+					});
+				}
+			}
+		}, 100);
+
 	});
 }
 
@@ -223,7 +208,7 @@ const store = createStore(
 	)
 );
 
-let socket = io("https://twitchplaysnintendoswitch.com", {
+let socket = io("https://remotegames.io", {
 	path: "/8100/socket.io",
 	transports: ["websocket"],
 });

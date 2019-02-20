@@ -6,7 +6,7 @@ import { withRouter } from "react-router";
 
 // components:
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
-import MyCheckbox from "src/components/MyCheckbox.jsx"
+import MyCheckbox from "src/components/General/MyCheckbox.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";

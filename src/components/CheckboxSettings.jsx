@@ -9,7 +9,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
 
 // components:
-import MyCheckbox from "src/components/MyCheckbox.jsx";
+import MyCheckbox from "src/components/General/MyCheckbox.jsx";
 import ThemeSelector from "src/components/ThemeSelector.jsx";
 
 // redux:
@@ -19,7 +19,7 @@ import { connect } from "react-redux";
 import { updateSettings } from "src/actions/settings.js";
 
 // libs:
-const tools = require("js/tools.js");
+import { toggleFullscreen } from "libs/tools.js";
 
 
 class CheckboxSettings extends PureComponent {
@@ -75,26 +75,21 @@ class CheckboxSettings extends PureComponent {
 						<MyCheckbox
 							text={"Enable Fullscreen Mode"}
 							handleChange={(state) => {
-								this.props.updateSettings({ fullscreen: state });
 								if (state) {
-									$("body").css("padding", "0");
-									$("body").addClass("hideScrollbar");
-									$("#picture").css("grid-row", "1");
-									$("#picture").css("grid-column", "1/3");
 									$(document).scrollTop(0);
+									$("body").addClass("hideScrollbar");
 									this.props.updateSettings({
+										fullscreen: state,
 										controllerView: false,
 										hideChat: true,
 										hideNav: true,
 									});
-									tools.toggleFullscreen($("html")[0]);
+									toggleFullscreen($("html")[0]);
 								} else {
 									console.log("exiting fullscreen");
-									$("body").css("padding", "");
-									$("#picture").css("grid-row", "");
-									$("#picture").css("grid-column", "");
 									$("body").removeClass("hideScrollbar");
 									this.props.updateSettings({
+										fullscreen: state,
 										largescreen: false,
 										controllerView: true,
 										hideChat: false,

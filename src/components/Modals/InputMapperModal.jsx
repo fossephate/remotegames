@@ -20,7 +20,6 @@ import Modal from "@material-ui/core/Modal";
 
 // components:
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
-import MyCheckbox from "src/components/MyCheckbox.jsx"
 
 // recompose:
 import { compose } from "recompose";

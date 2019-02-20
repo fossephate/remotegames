@@ -13,12 +13,9 @@ import {
 // redux:
 import { connect } from "react-redux";
 
-import combineSocketEventHandlers from "src/sockets";
-
-import { changeUsername } from "src/actions/userInfo.js";
-import { updateUserInfo } from "src/actions/userInfo.js";
+import { changeUsername, updateUserInfo } from "src/actions/userInfo.js";
 import { updateSettings } from "src/actions/settings.js";
-import { leavePlayerControlQueue } from "src/actions/players.js";
+import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
 
 // main components:
 // const LoginArea = lazy(() => import("src/components/LoginArea.jsx"));
@@ -41,8 +38,6 @@ import Waitlist from "src/components/Waitlist.jsx";
 // import ThemeSelector from "src/components/ThemeSelector.jsx";
 
 // secondary components:
-import MySlider from "src/components/MySlider.jsx";
-import MyCheckbox from "src/components/MyCheckbox.jsx";
 
 // modals:
 // const LoginModal = lazy(() => import("src/components/Modals/LoginModal.jsx"));
@@ -59,15 +54,6 @@ import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
-import indigo from "@material-ui/core/colors/indigo";
-import pink from "@material-ui/core/colors/pink";
-import red from "@material-ui/core/colors/red";
-// icons:
-// todo: configure tree shaking:
-// import { Keyboard } from "@material-ui/icons";
-// import Keyboard from "@material-ui/icons/Keyboard";
-// import VideogameAsset from "@material-ui/icons/VideogameAsset";
-// import Refresh from "@material-ui/icons/Refresh";
 
 // components:
 import List from "@material-ui/core/List";
@@ -93,59 +79,68 @@ import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
 // jquery:
-let $ = require("jquery");
-window.$ = $;
+let $ = require("jquery");window.$ = $;
+
 // bootstrap:
 import "bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
 
-// keyboard:
-import keycode from "keycode";
-// touch controls:
-// import nipplejs from "nipplejs";
-// input master:
-import InputHandler from "js/InputHandler.js";
+// input handler:
+import InputHandler from "libs/InputHandler/InputHandler.js";
 
-const textFitPercent = require("js/textfitpercent.js");
-const tools = require("js/tools.js");
+// const textFitPercent = require("js/textfitpercent.js");
+import { deleteAllCookies, fixedLengthString } from "libs/tools.js";
 import Noty from "noty";
 // import "noty/lib/noty.css";
 // import "noty/lib/themes/light.css";
-import localforage from "localforage";
-import swal from "sweetalert2";
-window.swal = swal;
+import localforage from "localforage";window.localforage = localforage;
+import swal from "sweetalert2";window.swal = swal;
 import io from "socket.io-client";
 import _ from "lodash";
 
 // rr:
-import JSMpeg from "js/jsmpeg.min.js";
+import JSMpeg from "libs/jsmpeg.min.js";
+import Lagless2 from "libs/lagless/lagless2.js";
+import LaglessAudio from "libs/lagless/laglessAudio.js";
 
-// import JSMpeg from "js/jsmpeg.min.js";
-// require("js/WSAvcPlayer.js");
 
-// import Lagless1 from "js/lagless/lagless1.js";
-import Lagless2 from "js/lagless/lagless2.js";
-// import Lagless3 from "js/lagless/lagless3.js";
-// import Lagless4 from "js/lagless/lagless4.js";
-import LaglessAudio from "js/lagless/laglessAudio.js";
 
-window.localforage = localforage;
-
-let globalEventTimer = false;
 let sendInputTimer;
 let locked = false;
-let authCookie;
-let banlist = [];
-let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190", "103.217.104.246"];
-let resizers = [];
-let resizeDebounceTimer;
-let resizeAvailable = true;
 let isMobile = false;
 window.ping = 0;
 
 window.laglessAudio = null;
 window.streams = [];
-let settings = {};
+// let settings = {};
+window.afkTimer = null;
+window.afkTime = 1000 * 60 * 60;// 1 hour
+
+function afk() {
+	for (let i = 0; i < streams.length; i++) {
+		streams[i].pause();
+	}
+	swal({
+		title: "Are you still there?",
+		text: "You've been AFK for an hour.",
+		type: "warning",
+		// showCancelButton: true,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+		confirmButtonText: "No, I'm still here."
+	}).then((result) => {
+		if (result.value) {
+			// swal(
+			// 	"Deleted!",
+			// 	"Your file has been deleted.",
+			// 	"success"
+			// );
+			window.location.reload();
+		}
+	});
+}
+window.afkTimer = setTimeout(afk, window.afkTime);
+// swal("stream is down right now.");
 
 /* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // check if on mobile
@@ -163,6 +158,7 @@ if (isMobile) {
 // jss:
 const styles = (theme) => ({
 	root: {
+		padding: "1%",
 		display: "grid",
 		"grid-template-columns": "minmax(50%, 75%) minmax(100px, 25%)",
 		"gridTemplateAreas": `
@@ -249,7 +245,7 @@ class App extends Component {
 						timeout: 5000,
 						sounds: {
 							volume: 0.5,
-							sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+							sources: ["https://remotegames.io/sounds/ding.wav"],
 							conditions: ["docVisible"],
 						},
 					}).show();
@@ -264,7 +260,7 @@ class App extends Component {
 					timeout: 5000,
 					sounds: {
 						volume: 0.5,
-						sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+						sources: ["https://remotegames.io/sounds/ding.wav"],
 						conditions: ["docVisible"],
 					},
 				}).show();
@@ -272,17 +268,11 @@ class App extends Component {
 		});
 
 		/* AUTHENTICATION */
-		let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
-		setTimeout(() => {
-			$.ajax({
-				url: "https://twitchplaysnintendoswitch.com/accountData/" + this.props.userInfo.username + "/" + this.props.userInfo.userid + "/" + authCookie,
-			});
-		}, 5000);
 
 		socket.on("needToLogIn", () => {
 			swal("You need to log in!");
 			setTimeout(() => {
-				tools.deleteAllCookies();
+				deleteAllCookies();
 				location.reload(true);
 			}, 1000);
 		});
@@ -296,22 +286,6 @@ class App extends Component {
 
 
 		/* BAN / IP */
-		// setInterval(() => {
-		// 	// $.getJSON("https://jsonip.com?callback=?", (data) => {
-		// 	// 	socket.emit("registerIP", {
-		// 	// 		ip: data.ip,
-		// 	// 		id: this.props.userInfo.userid,
-		// 	// 		username: this.props.userInfo.username,
-		// 	// 	});
-		// 	// 	if (bannedIPs.indexOf(data.ip) > -1) {
-		// 	// 		window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-		// 	// 	}
-		// 	// });
-		// 	// if (banlist.indexOf(this.props.userInfo.username) > -1) {
-		// 	// 	window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
-		// 	// 	socket.close();
-		// 	// }
-		// }, 5000);
 
 		socket.on("forceRefresh", (data) => {
 			swal({
@@ -337,7 +311,7 @@ class App extends Component {
 		// lagless setup:
 
 		/* switch 2.0 */
-		streams.push(new Lagless2("wss://twitchplaysnintendoswitch.com/8002/"));
+		streams.push(new Lagless2("wss://remotegames.io/8002/"));
 		socket.on("lagless2SettingsChange", (data) => {
 			if (this.props.settings.streamNumber == 0) {
 				streams[0].resume();
@@ -345,8 +319,13 @@ class App extends Component {
 		});
 
 		// xbox 2.0
-		// streams.push(new Lagless1("https://twitchplaysnintendoswitch.com", "/8001/socket.io"));
-		streams.push(new Lagless2("wss://twitchplaysnintendoswitch.com/8004/", true));
+		// streams.push(new Lagless1("https://remotegames.io", "/8001/socket.io"));
+		streams.push(new Lagless2("wss://remotegames.io/8004/", true));
+
+		// host1:
+		streams.push(new Lagless2("wss://remotegames.io/8006/", true));
+		// host2:
+		streams.push(new Lagless2("wss://remotegames.io/8008/", true));
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 		laglessAudio = new LaglessAudio(socket);
@@ -365,7 +344,7 @@ class App extends Component {
 			// todo: not this:
 			if (!this.props.settings.audioThree) {
 				laglessAudio.audio.volume = 0;
-				// for (let i = 0; i < 0)
+				// for (let i = 0; i < streams.length; i++) {}
 				streams[0].player.volume = this.props.settings.volume / 100;
 				if (streams[1].player != null) {
 					streams[1].player.volume = this.props.settings.volume / 100;
@@ -383,11 +362,11 @@ class App extends Component {
 			if (!this.props.userInfo.loggedIn) {return;}
 			inputHandler.pollDevices();
 			this.sendControllerState();
-		}, 1000 / 60);
+		}, 1000 / 80);
 
 		/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-		socket.on("voteStarted", function (data) {
+		socket.on("voteStarted", (data) => {
 			new Noty({
 				theme: "mint",
 				type: "warning",
@@ -395,7 +374,7 @@ class App extends Component {
 				timeout: 5000,
 				sounds: {
 					volume: 0.5,
-					sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+					sources: ["https://remotegames.io/sounds/ding.wav"],
 					conditions: ["docVisible"],
 				},
 			}).show();
@@ -404,46 +383,10 @@ class App extends Component {
 
 		/* BAN EVASION @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
-		socket.on("rickroll", (data) => {
-			if (this.props.userInfo.username == data || data == "everyone") {
-				let myPlayer;
-				swal({
-					html: '<canvas id="rickroll"></canvas>',
-					onOpen: () => {
-						let rickrollCanvas = $("#rickroll")[0];
-						myPlayer = new JSMpeg.Player("videos/rickroll-480.ts", {
-							canvas: rickrollCanvas,
-							loop: false,
-							autoplay: true
-						});
-					},
-					onClose: () => {
-						myPlayer.destroy();
-					},
-					customClass: "swal-wide"
-				});
-
-			}
-		});
-
-		socket.on("rainbow", function (data) {
-			if (this.props.userInfo.username == data || data == "everyone") {
-				$("body").addClass("rainbow-text");
-			}
-		});
-
-		socket.on("banlist", (data) => {
-			banlist = data;
-		});
-
-		socket.on("bannedIPs", (data) => {
-			bannedIPs = data;
-		});
-
 		socket.on("banned", (data) => {
 			let alertMessage = $(".swal2-container")[0];
 			if (typeof alertMessage == "undefined") {
-				swal("You're banned, you can appeal the ban on the discord server, though it may be only temporary.");
+				swal("You're banned, you can appeal the ban on the discord server, though it may be a temporary ban.");
 			}
 			localforage.setItem("banned", "banned");
 		});
@@ -486,11 +429,9 @@ class App extends Component {
 			// from checkbox settings:
 			// todo: not this:
 			console.log("exiting fullscreen");
-			$("body").css("padding", "");
-			$("#picture").css("grid-row", "");
-			$("#picture").css("grid-column", "");
 			$("body").removeClass("hideScrollbar");
 			this.props.updateSettings({
+				fullscreen: false,
 				largescreen: false,
 				controllerView: true,
 				hideChat: false,
@@ -504,10 +445,10 @@ class App extends Component {
 	}
 
 	resetSettings() {
-		tools.deleteAllCookies();
-		localforage.clear().then(() => {
-			window.location.href = "https://twitchplaysnintendoswitch.com";
-		});
+		deleteAllCookies();
+		// localforage.clear().then(() => {
+		// 	window.location.href = "https://remotegames.io";
+		// });
 	}
 
 	switchTabs(sNum) {
@@ -529,15 +470,18 @@ class App extends Component {
 
 		// actually switch:
 		if (sNum != this.props.settings.streamNumber) {
+			for (let i = 0; i < this.props.playerCount; i++) {
+				this.props.leavePlayerControlQueue(i);
+			}
 			if (sNum == 0) {
 				this.props.updateSettings({currentPlayer: 0});
 			} else if (sNum == 1) {
 				this.props.updateSettings({currentPlayer: 4});
+			} else if (sNum == 2) {
+				this.props.updateSettings({currentPlayer: 5});
+			} else if (sNum == 3) {
+				this.props.updateSettings({currentPlayer: 6});
 			}
-			let players = [0, 1, 2, 3, 4, 5, 6, 7];
-			players.forEach((cNum) => {
-				this.props.leavePlayerControlQueue(cNum);
-			});
 		}
 
 		this.props.updateSettings({streamNumber: sNum});
@@ -563,13 +507,18 @@ class App extends Component {
 			this.oldInputState = JSON.stringify(inputHandler.getState());
 		}
 
-		let newInputState = JSON.stringify(inputHandler.getState());
-
-		if (newInputState == this.oldInputState) {
+		if (!inputHandler.changed) {
 			return;
 		} else {
-			this.oldInputState = newInputState;
+			inputHandler.changed = false;
 		}
+
+		if (window.banned) {
+			return;
+		}
+
+		clearTimeout(window.afkTimer);
+		window.afkTimer = setTimeout(afk, window.afkTime);
 
 		if (inputHandler.currentInputMode == "keyboard" && !this.props.settings.keyboardControls) {
 			return;
@@ -592,12 +541,7 @@ class App extends Component {
 
 		// if not in the queue, attempt to join it:
 		if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.userInfo.userid) == -1) {
-			// let players = [0, 1, 2, 3, 4, 5, 6, 7];
-			// players.splice(players.indexOf(this.props.settings.currentPlayer), 1);
-			// players.forEach((cNum) => {
-			// 	socket.emit("leaveQueue", cNum);
-			// });
-			socket.emit("joinQueue", this.props.settings.currentPlayer);
+			this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
 		}
 
 		if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.userInfo.userid) > 0 && this.props.controlQueues[this.props.settings.currentPlayer].length > 0) {
@@ -618,7 +562,7 @@ class App extends Component {
 				timeout: 500,
 				sounds: {
 					volume: 0.5,
-					sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+					sources: ["https://remotegames.io/sounds/ding.wav"],
 					conditions: ["docVisible"],
 				},
 			}).show();
@@ -630,11 +574,11 @@ class App extends Component {
 			cNum: -1,
 		};
 
-		for (let i = 0; i < this.props.controlQueues.length; i++) {
-			if (this.props.controlQueues[i][0] == this.props.userInfo.userid) {
-				obj.cNum = i;
-			}
-		}
+		// for (let i = 0; i < this.props.controlQueues.length; i++) {
+		// 	if (this.props.controlQueues[i][0] == this.props.userInfo.userid) {
+		// 		obj.cNum = i;
+		// 	}
+		// }
 		if (obj.cNum == -1) {
 			obj.cNum = this.props.settings.currentPlayer;
 		}
@@ -643,9 +587,9 @@ class App extends Component {
 		buttons = ("0".repeat(18)).substr(buttons.length) + buttons;
 
 		console.log(obj.cNum, buttons,
-		tools.fixedLengthString(obj.axes[0], "0", 3), tools.fixedLengthString(obj.axes[1], "0", 3),
-		tools.fixedLengthString(obj.axes[2], "0", 3), tools.fixedLengthString(obj.axes[3], "0", 3),
-		tools.fixedLengthString(obj.axes[4], "0", 3), tools.fixedLengthString(obj.axes[5], "0", 3));
+		fixedLengthString(obj.axes[0], "0", 3), fixedLengthString(obj.axes[1], "0", 3),
+		fixedLengthString(obj.axes[2], "0", 3), fixedLengthString(obj.axes[3], "0", 3),
+		fixedLengthString(obj.axes[4], "0", 3), fixedLengthString(obj.axes[5], "0", 3));
 
 		socket.emit("sendControllerState", obj);
 	}
@@ -774,6 +718,7 @@ const mapStateToProps = (state) => {
 		controlQueues: state.players.controlQueues,
 		userInfo: state.userInfo,
 		settings: state.settings,
+		playerCount: state.players.count,
 		// todo: modal
 	};
 };
@@ -785,6 +730,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		leavePlayerControlQueue: (controllerNumber) => {
 			dispatch(leavePlayerControlQueue(controllerNumber))
+		},
+		joinPlayerControlQueue: (controllerNumber) => {
+			dispatch(joinPlayerControlQueue(controllerNumber))
 		},
 		updateUserInfo: (userInfo) => {
 			dispatch(updateUserInfo(userInfo))
@@ -822,15 +770,16 @@ $(window).resize(_.throttle((event) => {
 	// console.log("resizing.");
 	// hack:
 	// todo: not this:
+	$("#videoCanvas0").outerHeight($("#videoCanvas0").outerWidth() * (9 / 16));
+	$("#videoCanvas1").outerHeight($("#videoCanvas1").outerWidth() * (9 / 16));
 	$("#videoCanvas2").outerHeight($("#videoCanvas2").outerWidth() * (9 / 16));
+	$("#videoCanvas3").outerHeight($("#videoCanvas3").outerWidth() * (9 / 16));
 	$("#twitchVideo").outerHeight($("#twitchVideo").outerWidth() * (9 / 16));
 
 	$("#chat").outerHeight(0);
 	$("#chat").outerHeight($("#picture").outerHeight());
-
-	// for (let i = 0; i < resizers.length; i++) {
-	// 	resizers[i].resize();
-	// }
+	// todo: figure out why I need this:
+	$("body").css("padding", "0");
 }, 1000));
 
 /* FORCE HTTPS */

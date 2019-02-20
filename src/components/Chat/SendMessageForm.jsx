@@ -1,15 +1,17 @@
+// react:
 import React, { PureComponent } from "react";
 import PropTypes from "prop-types";
-
-// redux:
-import { connect } from "react-redux";
-import { sendMessage } from "src/actions/chat.js";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
+// for voting:
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+
 // icons:
 import SendIcon from "@material-ui/icons/Send";
 
@@ -18,7 +20,14 @@ import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
 import "@webscopeio/react-textarea-autocomplete/style.css";
 import emoji from "@jukben/emoji-search";
 
-import "./SendMessageForm.css";
+
+// redux:
+import { connect } from "react-redux";
+import { sendMessage } from "src/actions/chat.js";
+
+// recompose:
+import { compose } from "recompose";
+
 
 
 const Item = ({ entity: { name, char } }) => <div>{`${name}: ${char}`}</div>;
@@ -34,58 +43,42 @@ const CommandSuggestion = ({ entity: { name } }) => {
 const Loading = ({ data }) => <div>Loading</div>;
 
 
-
-
 // jss:
 
-// const styles = (theme) => ({
-// 	root: {
-// 		"overflow-y": "auto",
-// 		"border-radius": "8px",
-// 		"flex-grow": "1",
-// 		"margin-bottom": "15px",
-// 		"& > div": {
-// 			"background-color": "#FF3C28A4",
-// 		},
-// 		"& > div:nth-child(odd)": {
-// 			"background-color": "#0AB9E6A4",
-// 		},
-// 	},
-// });
+const styles = (theme) => ({
+	root: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "space-evenly",
+		alignItems: "center",
+		width: "100%",
+		minHeight: "60px",
+		height: "12%",
+		paddingLeft: "5px",
+	    paddingRight: "5px",
+	},
 
-// #SendMessageForm {
-// 	display: flex;
-// 	flex-direction: row;
-// 	justify-content: space-evenly;
-// 	align-items: center;
-// 	width: 100%;
-// 	min-height: 45px;
-// 	height: 10%;
-// }
-//
-// #messageBox {
-// 	display: flex;
-// 	resize: none;
-// 	width: 100%;
-// 	border-radius: 6px;
-// }
-//
-// #messageBox:focus {
-// 	/* border-color: #0AB9E655; */
-// 	outline-offset: 0px !important;
-// 	outline: none !important;
-//
-// 	box-shadow: 0 0 3px blue !important;
-// 	-moz-box-shadow: 0 0 3px blue !important;
-// 	-webkit-box-shadow: 0 0 3px blue !important;
-// }
-//
-// .messageBoxContainer {
-// 	width: 70%;
-// 	/* font-size: 18px; */
-// 	line-height: 20px;
-// 	font-size: inherit !important;
-// }
+	messageBox: {
+		display: "flex",
+		resize: "none",
+		width: "98%",
+		borderRadius: "6px",
+
+		"&:focus": {
+			outlineOffset: "0px !important",
+			outline: "none !important",
+			boxShadow: "0 0 3px blue !important",
+		}
+	},
+
+	messageBoxContainer: {
+		width: "70%",
+		height: "70%",
+		fontSize: "14px",
+		lineHeight: "20px",
+		// fontSize: "inherit !important",
+	},
+});
 
 class SendMessageForm extends PureComponent {
 
@@ -102,6 +95,7 @@ class SendMessageForm extends PureComponent {
 
 
 		this.state = {
+			voting: false,
 			text: "",
 			commands: [
 				"help",
@@ -164,8 +158,8 @@ class SendMessageForm extends PureComponent {
 	sendMessage() {
 		if (this.state.text !== "") {
 			this.props.sendMessage(this.state.text);
-			this.setState({ text: "" });
-			this.rta.setState({ value: "" });
+			this.setState({text: ""});
+			this.rta.setState({value: ""});
 		}
 	}
 
@@ -198,6 +192,9 @@ class SendMessageForm extends PureComponent {
 
 	renderCommandSuggestions(token) {
 		let suggestions = [];
+		if (token.length < 1) {
+			return [];
+		}
 		for (let i = 0; i < this.state.commands.length; i++) {
 			let command = this.state.commands[i];
 			if (command.indexOf(token) == -1) {
@@ -214,8 +211,47 @@ class SendMessageForm extends PureComponent {
 
 	render() {
 
+		const { classes } = this.props;
+
+		if (!this.state.voting) {
+			let message = this.props.lastMessage;
+			if (message && message.username == "TPNSbot" && /A vote has been started to/.test(message.message)) {
+				this.setState({voting: true});
+				setTimeout(() => {
+					this.setState({voting: false});
+				}, 18000);
+			}
+		}
+
 		return (
-			<Paper id="SendMessageForm" elevation={4}>
+			<Paper id="SendMessageForm" className={classes.root} elevation={4}>
+				<Snackbar
+					anchorOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+					open={this.state.voting}
+					autoHideDuration={0}
+					onClose={() => {}}
+					message={<span id="message-id">A vote has started to switch games!</span>}
+					action={[
+						<Button key="leave" color="secondary" size="small" variant="contained" onClick={() => {this.props.sendMessage("yea");this.setState({voting: false});}}>
+							LEAVE
+						</Button>,
+						<div key="spacer" style={{width: "15px"}}></div>,
+						<Button key="stay" color="primary" size="small" variant="contained" onClick={() => {this.props.sendMessage("nay");this.setState({voting: false});}}>
+							STAY
+						</Button>,
+						<IconButton
+							key="close"
+							color="inherit"
+							className={classes.close}
+							onClick={() => {this.setState({voting: false});}}
+							>
+							<CloseIcon/>
+						</IconButton>,
+					]}
+				/>
 				{/* <TextField
 					fullWidth
 					id="messageBox"
@@ -228,11 +264,12 @@ class SendMessageForm extends PureComponent {
 					onKeyPress={this.handleKeyPress}/> */}
 				<ReactTextareaAutocomplete
 					id="messageBox"
-					containerClassName="messageBoxContainer"
+					className={classes.messageBox}
+					containerClassName={classes.messageBoxContainer}
 		            loadingComponent={Loading}
 		            style={{
 		            }}
-		            ref={(rta) => { this.rta = rta; } }
+		            ref={(rta) => {this.rta = rta;}}
 		            innerRef={(textarea) => { this.textarea = textarea; } }
 		            containerStyle={{
 		            }}
@@ -273,6 +310,7 @@ const mapStateToProps = (state) => {
 	return {
 		userids: state.chat.userids,
 		usernameMap: state.usernameMap,
+		lastMessage: state.chat.messages[state.chat.messages.length - 1],
 	};
 };
 
@@ -284,4 +322,7 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SendMessageForm);
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps),
+)(SendMessageForm);

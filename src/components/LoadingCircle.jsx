@@ -1,9 +1,6 @@
 // react:
 import React, { PureComponent } from "react";
 
-import LaglessView from "src/components/LaglessView.jsx";
-import LaglessBar from "src/components/LaglessBar.jsx";
-
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";

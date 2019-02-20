@@ -20,7 +20,7 @@ import { connect } from "react-redux";
 import { compose } from "recompose";
 
 // libs:
-const tools = require("js/tools.js");
+import { deleteAllCookies } from "libs/tools.js";
 
 // jss:
 const styles = (theme) => ({
@@ -71,7 +71,7 @@ class LoginArea extends PureComponent {
 	}
 
 	handleLogout() {
-		tools.deleteAllCookies();
+		deleteAllCookies();
 		location.reload(true);
 	}
 

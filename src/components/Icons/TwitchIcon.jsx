@@ -44,7 +44,7 @@ class TwitchIcon extends PureComponent {
 		const { classes } = this.props;
 
 		return (
-			<img className={classes.root} src="https://twitchplaysnintendoswitch.com/images/Glitch_Purple_RGB.png"/>
+			<img className={classes.root} src={window.location.origin + "/images/Glitch_Purple_RGB.png"}/>
 		);
 	}
 

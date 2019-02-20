@@ -20,7 +20,7 @@ class ConnectAccounts extends PureComponent {
 		if (window.banned) {
 			return;
 		}
-		let url = "https://twitchplaysnintendoswitch.com/8100/auth/" + type + "/";
+		let url = window.location.origin + "/8100/auth/" + type + "/";
 		if (this.props.authToken != null) {
 			url += "?uniqueToken=" + this.props.authToken;
 		}
@@ -39,7 +39,7 @@ class ConnectAccounts extends PureComponent {
 					</div>
 					: null
 				}
-				{
+				{/* {
 					this.props.connectedAccounts.indexOf("youtubeV3Strategy") == -1 ?
 						<div className="connectWithButton" onClick={() => {this.connectAccountOrLogIn("youtube")}}>
 							<span id="connectWithYouTubeText">Connect with</span>
@@ -57,7 +57,7 @@ class ConnectAccounts extends PureComponent {
 							</div>
 						</div>
 					: null
-				}
+				} */}
 				{
 					this.props.connectedAccounts.indexOf("discord") == -1 ?
 						<div className="connectWithButton" onClick={() => {this.connectAccountOrLogIn("discord")}}>

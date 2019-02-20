@@ -34,7 +34,13 @@ module.exports = {
 	// 	modules: [path.resolve(__dirname, "app"), "node_modules"],
 	resolve: {
 		alias: {
-			js: path.resolve(__dirname, "public/js/"),
+			libs: path.resolve(__dirname, "src/libs/"),
+			components: path.resolve(__dirname, "src/components/"),
+			actions: path.resolve(__dirname, "src/actions/"),
+			scokets: path.resolve(__dirname, "src/scokets/"),
+			sagas: path.resolve(__dirname, "src/sagas/"),
+			reducers: path.resolve(__dirname, "src/reducers/"),
+			constants: path.resolve(__dirname, "src/constants/"),
 			src: path.resolve(__dirname, "src/"),
 		},
 	},

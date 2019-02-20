@@ -46,6 +46,8 @@ class NavTabs extends PureComponent {
 			return null;
 		}
 
+		let end = 4;
+
 		return (
 			<Paper className={classes.root} elevation={4}>
 				<Tabs
@@ -57,22 +59,30 @@ class NavTabs extends PureComponent {
 		            // scrollButtons="auto"
 					onChange={(event, value) => {
 						this.props.handleChange(value);
-						if (value == 2) {
+						if (value == (end + 0)) {
 							this.props.updateSettings({streamNumber: 0});
 							this.props.history.push("/about");
 						}
-						if (value == 3) {
+						if (value == (end + 1)) {
 							this.props.updateSettings({streamNumber: 0});
 							this.props.history.push("/FAQ");
 						}
-						if (value == 4) {
-							window.location.href = "https://discord.io/tpns/";
+						if (value == (end + 2)) {
+							window.location.href = "https://discord.io/remotegames/";
 						}
+
+
 						if (value == 0) {
 							this.props.updateSettings({currentPlayer: 0});
 						}
 						if (value == 1) {
 							this.props.updateSettings({currentPlayer: 4});
+						}
+						if (value == 2) {
+							this.props.updateSettings({currentPlayer: 5});
+						}
+						if (value == 3) {
+							this.props.updateSettings({currentPlayer: 6});
 						}
 					}}>
 
@@ -81,6 +91,9 @@ class NavTabs extends PureComponent {
 					{/* <Tab label="Switch1"/> */}
 					<Tab label="Switch"/>
 					<Tab label="Xbox"/>
+					<Tab label="Host1"/>
+					<Tab label="Host2"/>
+					{/* <Tab label="Host3"/> */}
 					<Tab label="About"/>
 					<Tab label="FAQ"/>
 					<Tab label="Discord"/>

@@ -67,11 +67,29 @@ class PlayerInfo extends PureComponent {
 			);
 		}
 
-		return (
-			<Paper className={classes.root} elevation={0}>
-				<Player num={4} text="Player 1"/>
-			</Paper>
-		);
+		if (this.props.streamNumber == 1) {
+			return (
+				<Paper className={classes.root} elevation={0}>
+					<Player num={4} text="Player 1"/>
+				</Paper>
+			);
+		}
+
+		if (this.props.streamNumber == 2) {
+			return (
+				<Paper className={classes.root} elevation={0}>
+					<Player num={5} text="Player 1"/>
+				</Paper>
+			);
+		}
+
+		if (this.props.streamNumber == 3) {
+			return (
+				<Paper className={classes.root} elevation={0}>
+					<Player num={6} text="Player 1"/>
+				</Paper>
+			);
+		}
 	}
 }
 

@@ -2,14 +2,16 @@ import * as types from "../actions/ActionTypes.js";
 
 import { updateUserInfo } from "../actions/userInfo.js";
 
-const tools = require("js/tools.js");
+import { getCookie } from "libs/tools.js";
+
+// let $ = require("jquery");
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const userInfoEvents = (socket, dispatch) => {
 
 
 	/* AUTHENTICATION */
-	let authCookie = tools.getCookie("TwitchPlaysNintendoSwitch");
+	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
 	if (authCookie !== null) {
 		authCookie = authCookie.split(" ")[0].replace(/;/g, "");
 		dispatch(updateUserInfo({ authToken: authCookie }));
@@ -18,6 +20,12 @@ const userInfoEvents = (socket, dispatch) => {
 			usernameIndex: 0,
 		});
 	}
+
+	// setTimeout(() => {
+	// 	$.ajax({
+	// 		url: "https://remotegames.io/accountData/" + this.props.userInfo.username + "/" + this.props.userInfo.userid + "/" + authCookie,
+	// 	});
+	// }, 5000);
 
 	// socket.on("chatMessage", (data) => {
 	// 	dispatch(receiveMessage(data.message, data.username, data.userid));

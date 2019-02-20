@@ -40,11 +40,12 @@ class PlayerQueueButton extends PureComponent {
 		if (this.props.controlQueue.indexOf(this.props.userid) > -1) {
 			this.props.leavePlayerControlQueue(this.props.num);
 		} else {
-			let players = [0, 1, 2, 3, 4, 5, 6, 7];
-			players.splice(players.indexOf(this.props.num), 1);
-			players.forEach((cNum) => {
-				this.props.leavePlayerControlQueue(cNum);
-			});
+			for (let i = 0; i < this.props.playerCount; i++) {
+				if (i == this.props.num) {
+					continue;
+				}
+				this.props.leavePlayerControlQueue(i);
+			}
 			this.props.joinPlayerControlQueue(this.props.num);
 		}
 	}
@@ -71,7 +72,9 @@ class PlayerQueueButton extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		playerCount: state.players.count,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {

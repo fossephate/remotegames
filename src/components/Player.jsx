@@ -3,7 +3,7 @@ import React, { Component, PureComponent } from "react";
 import PropTypes from "prop-types";
 
 // components:
-import MyCheckbox from "./MyCheckbox.jsx";
+import MyCheckbox from "src/components/General/MyCheckbox.jsx";
 import TurnTimers from "./TurnTimers.jsx";
 import PlayerQueueButton from "./PlayerQueueButton.jsx";
 import ControlQueue from "./ControlQueue.jsx";
@@ -70,7 +70,7 @@ class Player extends PureComponent {
 		const { classes } = this.props;
 
 		let n = this.props.num;
-		
+
 		return (
 			<Paper elevation={4} className={classes.root}>
 				<MyCheckbox

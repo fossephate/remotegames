@@ -6,15 +6,6 @@ import Linkify from "react-linkify";
 
 // twitch icon:
 import TwitchIcon from "src/components/Icons/TwitchIcon.jsx";
-
-// // mod badge:
-// import ModBadge from "src/components/Icons/ModBadge.jsx";
-// // plus badge:
-// import PlusBadge from "src/components/Icons/PlusBadge.jsx";
-// // sub badge:
-// import SubBadge1 from "src/components/Icons/SubBadge1.jsx";
-// // dev badge:
-// import SubBadge1 from "src/components/Icons/DevBadge.jsx";
 import Badge from "src/components/Icons/Badge.jsx";
 
 

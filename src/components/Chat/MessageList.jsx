@@ -90,12 +90,29 @@ class MessageList extends PureComponent {
 		let messages = [];
 		for (let i = 0; i < this.props.messages.length; i++) {
 			let isLastMessage = (i == this.props.messages.length - 1);
+			let userid = this.props.messages[i].userid;
+			let onClick = () => {};
+			if (this.props.is_mod) {
+				onClick = () => {
+					if (!this.props.accountMap[userid]) {
+						swal("user info not loaded (yet).");
+						return;
+					}
+					let timePlayed = this.props.accountMap[userid].timePlayed;
+					if (timePlayed < 60 * 60) {
+						timePlayed = (timePlayed / 60).toFixed(2) + " minutes";
+					} else {
+						timePlayed = (timePlayed / (60 * 60)).toFixed(2) + " hours";
+					}
+					swal(`${userid}\n${timePlayed}`);
+				}
+			}
 			messages.push(
 				<Message
 					key={this.props.messages[i].id}
 					{...this.props.messages[i]}
 					isLastMessage={isLastMessage}
-					onClick={() => {swal(this.props.messages[i].userid)}}
+					onClick={onClick}
 					onContextMenu={this.handleClick}/>
 			);
 		}
@@ -138,6 +155,8 @@ MessageList.propTypes = {
 const mapStateToProps = (state) => {
 	return {
 		messages: state.chat.messages,
+		accountMap: state.accountMap,
+		is_mod: state.userInfo.is_mod,
 	};
 };
 

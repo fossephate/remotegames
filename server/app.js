@@ -3,6 +3,7 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const port = 8100;
+io.listen(8110);
 
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
@@ -70,7 +71,6 @@ let restartAvailable = true;
 let lagless2ChangeAvailable = true;
 let locked = false;
 let queuesLocked = false;
-let maxPlayers = 5;
 let restPos = 128;
 let waitlist = [];
 let siteCapacity = 10;
@@ -105,7 +105,7 @@ let subTime = normalTime * 2.5;
 let forfeitTime = 1000 * 15;// 15 seconds
 let tempBanTime = 5 * 1000 * 60; // 5 minutes
 
-const NUM_PLAYERS = 5;
+const NUM_PLAYERS = 10;
 
 let turnLengths = [];
 let forfeitLengths = [];
@@ -534,9 +534,9 @@ app.get("/redirect", (req, res) => {
 			// acount doesn't exist:
 			if (!account) {
 				console.log("account doesn't exist, something went wrong.");
-				res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com/reset";</script>`);
+				res.send(`<script>window.location.href = "https://remotegames.io/reset";</script>`);
 			} else {
-				res.send(`<script>window.location.href = "https://twitchplaysnintendoswitch.com";</script>`);
+				res.send(`<script>window.location.href = "https://remotegames.io";</script>`);
 			}
 
 		});
@@ -750,6 +750,7 @@ io.on("connection", (socket) => {
 				userInfo.connectedAccounts = account.connectedAccounts;
 				userInfo.validUsernames = client.validUsernames;
 				userInfo.timePlayed = client.timePlayed;
+				userInfo.is_mod = client.is_mod;
 
 				socket.emit("userInfo", userInfo);
 
@@ -944,11 +945,6 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		// return if max players is < cNum
-		if (cNum >= maxPlayers && maxPlayers != 4) {
-			return;
-		}
-
 		// check to make sure user isn't already in another queue
 		for (let i = 0; i < controllerList.length; i++) {
 			let listNum = controllerList[i];
@@ -1122,12 +1118,6 @@ io.on("connection", (socket) => {
 		// check if it's coming from the controller:
 		if (clients[socket.id].rooms.indexOf("controller") > -1) {
 			io.emit("rainbow", data);
-		}
-	});
-	socket.on("setMaxPlayers", (data) => {
-		// check if it's coming from the controller:
-		if (clients[socket.id].rooms.indexOf("controller") > -1) {
-			maxPlayers = data;
 		}
 	});
 
