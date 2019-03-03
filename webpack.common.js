@@ -37,7 +37,7 @@ module.exports = {
 			libs: path.resolve(__dirname, "src/libs/"),
 			components: path.resolve(__dirname, "src/components/"),
 			actions: path.resolve(__dirname, "src/actions/"),
-			scokets: path.resolve(__dirname, "src/scokets/"),
+			sockets: path.resolve(__dirname, "src/sockets/"),
 			sagas: path.resolve(__dirname, "src/sagas/"),
 			reducers: path.resolve(__dirname, "src/reducers/"),
 			constants: path.resolve(__dirname, "src/constants/"),

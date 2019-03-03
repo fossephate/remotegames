@@ -278,7 +278,7 @@ class RightControllerView extends PureComponent {
 						</div>
 						<div className={classNames(classes.button, classes.otherButtons, "zr")}>
 							<div className={classNames(classes.trigger1, {[classes.xboxHighlighted]: (this.controller.buttons.zr)})}>RT</div>
-							<div className={classes.trigger2} style={{width: (this.controller.axes[5] * 100) + "%"}}></div>
+							<div className={classNames(classes.trigger2, classes.xboxHighlighted)} style={{width: (this.controller.axes[5] * 100) + "%"}}></div>
 						</div>
 					</div>
 				</div>

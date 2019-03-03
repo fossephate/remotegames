@@ -30,6 +30,7 @@ const styles = (theme) => ({
 		border: "1px solid #333",
 		borderRadius: "4px",
 		padding: "2px",
+		verticalAlign: "middle",
 	},
 });
 

@@ -228,7 +228,7 @@ class LeftControllerView extends PureComponent {
 						</div>
 						<div className={classNames(classes.button, classes.otherButtons, "zl")}>
 							<div className={classNames(classes.trigger1, {[classes.xboxHighlighted]: (this.controller.buttons.zl)})}>LT</div>
-							<div className={classes.trigger2} style={{width: (this.controller.axes[4] * 100) + "%"}}></div>
+							<div className={classNames(classes.trigger2, classes.xboxHighlighted)} style={{width: (this.controller.axes[4] * 100) + "%"}}></div>
 						</div>
 					</div>
 				</div>

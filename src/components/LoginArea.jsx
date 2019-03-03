@@ -19,9 +19,6 @@ import { connect } from "react-redux";
 // recompose:
 import { compose } from "recompose";
 
-// libs:
-import { deleteAllCookies } from "libs/tools.js";
-
 // jss:
 const styles = (theme) => ({
 	root: {
@@ -35,13 +32,6 @@ const styles = (theme) => ({
 		padding: "3px",
 		gridColumn: 2,
 	},
-	logout: {
-		width: "30%",
-	},
-	usernameDropdown: {
-		alignSelf: "center",
-		background: "transparent",
-	},
 });
 
 
@@ -51,7 +41,6 @@ class LoginArea extends PureComponent {
 		super(props);
 
 		this.handleAccount = this.handleAccount.bind(this);
-		this.handleLogout = this.handleLogout.bind(this);
 		this.handleLogin = this.handleLogin.bind(this);
 		this.handleRegister = this.handleRegister.bind(this);
 	}
@@ -67,12 +56,6 @@ class LoginArea extends PureComponent {
 
 	handleRegister() {
 		this.props.history.push("/register");
-		// this.props.updateSettings({ modal: "REGISTER" });
-	}
-
-	handleLogout() {
-		deleteAllCookies();
-		location.reload(true);
 	}
 
 	render() {
@@ -88,13 +71,8 @@ class LoginArea extends PureComponent {
 				{
 					this.props.userInfo.loggedIn ?
 						<>
-							<UsernameDropdown
-								className={classes.usernameDropdown}
-								validUsernames={this.props.userInfo.validUsernames}
-								myUsername={this.props.userInfo.username}
-								handleChange={this.props.handleUsernameChange}/>
+							<UsernameDropdown/>
 							<Button variant="contained" color="primary" onClick={this.handleAccount}>Account</Button>
-							<Button className={classes.logout} variant="contained" color="secondary" onClick={this.handleLogout}>Logout</Button>
 						</>
 					:
 						<>

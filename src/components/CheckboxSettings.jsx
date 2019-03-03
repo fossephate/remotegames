@@ -78,6 +78,7 @@ class CheckboxSettings extends PureComponent {
 								if (state) {
 									$(document).scrollTop(0);
 									$("body").addClass("hideScrollbar");
+									// $("#root").children()[0].style.padding = "0";
 									this.props.updateSettings({
 										fullscreen: state,
 										controllerView: false,
@@ -88,6 +89,7 @@ class CheckboxSettings extends PureComponent {
 								} else {
 									console.log("exiting fullscreen");
 									$("body").removeClass("hideScrollbar");
+									// $("#root").children()[0].style.padding = "";
 									this.props.updateSettings({
 										fullscreen: state,
 										largescreen: false,

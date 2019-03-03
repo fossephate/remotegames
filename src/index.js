@@ -9,7 +9,7 @@ import {
 	Route,
 	Switch
 } from "react-router";
-import { HashRouter, BrowserRouter } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -20,6 +20,7 @@ import App from "src/App.jsx";
 import About from "src/About.jsx";
 import FAQ from "src/FAQ.jsx";
 import CurrentPlayers from "src/CurrentPlayers.jsx";
+import Streams from "src/Streams.jsx";
 
 // redux:
 import {
@@ -382,6 +383,10 @@ class Index extends Component {
 
 							<Route path="/CurrentPlayers" render={(props) => {
 								return <CurrentPlayers {...props}/>;
+							}}/>
+
+							<Route path="/streams" render={(props) => {
+								return <Streams {...props} socket={socket}/>;
 							}}/>
 
 							// order matters here, can't do exact path or /login and /register break:

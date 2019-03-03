@@ -63,7 +63,4 @@ class Chat extends PureComponent {
 
 }
 
-
-
-// export default Chat;
 export default withStyles(styles)(Chat);

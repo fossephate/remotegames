@@ -5,7 +5,6 @@ import React, { PureComponent } from "react";
 import { withRouter } from "react-router";
 
 // components:
-// import Modal from "./Modal.jsx";
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
 
 // material ui:
@@ -24,27 +23,13 @@ import { compose } from "recompose";
 // jss:
 const styles = (theme) => ({
 	root: {
-		display: "flex",
-		flexDirection: "row",
-		justifyContent: "center",
-		position: "relative",
-		marginLeft: "5px",
-		marginRight: "5px",
-		textAlign: "center",
-	},
-	canvas: {
-		width: "73.2%",
-		alignSelf: "center",
-	},
-	twitch: {
-		width: "73.2%",
-		height: "100%",
-	},
-	fullscreen: {
-		width: "100% !important",
-		margin: "0",
-		padding: "0",
-		border: "none",
+		// display: "flex",
+		// flexDirection: "row",
+		// justifyContent: "center",
+		// position: "relative",
+		// marginLeft: "5px",
+		// marginRight: "5px",
+		// textAlign: "center",
 	},
 });
 
@@ -62,21 +47,21 @@ class LoginModal extends PureComponent {
 
 	render() {
 
-		// const { classes } = this.props;
+		const { classes } = this.props;
 
 		return (
 			<Modal
 				open={true}
 				onClose={this.handleClose}>
 
-				<div className="loginContainer">
-					<div className="login">
+				<div className={classes.root}>
+					{/* <div className="login">
 						<h2><ListItemText>Login</ListItemText></h2>
 						<TextField id="loginUser" className="" label="Username" type="name" margin="normal" variant="outlined"/>
 						<TextField id="loginEmail" className="" label="Email" type="email" autoComplete="email" margin="normal" variant="outlined"/>
 						<TextField id="loginPassword" className="" label="Password" type="password" autoComplete="current-password" margin="normal" variant="outlined"/>
 						<Button id="loginSubmit" className="" variant="contained" color="primary" onClick={() => {alert("Coming soon™")}}>Login</Button>
-					</div>
+					</div> */}
 
 					<div className="connectAnAccount">
 						<h2><ListItemText>Connect an Account</ListItemText></h2>

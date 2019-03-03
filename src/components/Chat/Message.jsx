@@ -101,7 +101,7 @@ const Message = (props) => {
 	}
 
 	let is_dev = false;
-	if (username == "twitchplaysconsoles" || username == "fossephate") {
+	if (username == "twitchplaysconsoles" || username == "fossephate" || username == "fosse#0430") {
 		username = "fosse";
 		is_dev = true;
 	}

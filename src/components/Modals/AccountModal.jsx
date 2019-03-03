@@ -6,6 +6,7 @@ import { withRouter } from "react-router";
 
 // components:
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
+import UsernameDropdown from "src/components//UsernameDropdown.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
@@ -22,7 +23,8 @@ import { connect } from "react-redux";
 import { compose } from "recompose";
 
 // libs:
-let classNames = require("classnames");
+import classNames from "classnames";
+import { deleteAllCookies } from "libs/tools.js";
 
 
 // jss:
@@ -47,19 +49,21 @@ const styles = (theme) => ({
 	    left: "50%",
 	    transform: "translate(-50%, -50%)",
 	},
-	controllerRemapper: {
-		display: "flex",
-		flexDirection: "column",
-		padding: "15px",
-	},
-	keyboardRemapper: {
-		display: "flex",
-		flexDirection: "column",
-		padding: "15px",
-	},
 	list: {
 		maxHeight: "400px",
 		overflowY: "auto",
+	},
+	logout: {
+		width: "30%",
+	},
+	main: {
+		width: "80%",
+		display: "flex",
+		flexDirection: "column",
+	},
+	topBar: {
+		display: "flex",
+		justifyContent: "space-evenly",
 	},
 });
 
@@ -73,6 +77,11 @@ class AccountModal extends PureComponent {
 
 	handleClose() {
 		this.props.history.push("/");
+	}
+
+	handleLogout() {
+		deleteAllCookies();
+		location.reload(true);
 	}
 
 	getTime(t) {
@@ -96,9 +105,15 @@ class AccountModal extends PureComponent {
 
 				<div className={classNames(classes.root, classes.center)}>
 
-					<Paper className="" elevation={4}>
+					<Paper className={classes.main} elevation={4}>
 
-						<ListItemText>Time Played: {this.getTime(this.props.timePlayed)}</ListItemText>
+						<Paper className={classes.topBar} elevation={2}>
+							Logged in as <UsernameDropdown/>
+							<Button className={classes.logout} variant="contained" color="secondary" onClick={this.handleLogout}>Logout</Button>
+						</Paper>
+						<ConnectAccounts/>
+						<ListItemText>You've played for {this.getTime(this.props.timePlayed)}</ListItemText>
+
 
 					</Paper>
 

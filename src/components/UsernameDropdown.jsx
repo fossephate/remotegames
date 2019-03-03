@@ -2,15 +2,28 @@
 import React, { PureComponent } from "react";
 
 // material ui:
+import { withStyles } from "@material-ui/core/styles";
 import MenuItem from "@material-ui/core/MenuItem";
-// import FormHelperText from "@material-ui/core/FormHelperText";
-// import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 // import InputLabel from "@material-ui/core/InputLabel";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
 import FilledInput from "@material-ui/core/FilledInput";
 
-export default class UsernameDropdown extends PureComponent {
+// redux:
+import { connect } from "react-redux";
+
+// recompose:
+import { compose } from "recompose";
+
+// jss:
+const styles = (theme) => ({
+	root: {
+		alignSelf: "center",
+		background: "transparent",
+	},
+});
+
+class UsernameDropdown extends PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -27,13 +40,10 @@ export default class UsernameDropdown extends PureComponent {
 		let usernames = [];
 
 		for (let i = 0; i < this.props.validUsernames.length; i++) {
-			// let html = <button key={i} index={i} className="username-dropdown-item dropdown-item" onClick={this.props.handleClick}>{this.props.validUsernames[i]}</button>;
-			let html = <MenuItem key={i} value={i}>{this.props.validUsernames[i]}</MenuItem>;
-			usernames.push(html);
+			usernames.push(<MenuItem key={i} value={i}>{this.props.validUsernames[i]}</MenuItem>);
 		}
 
 		if (this.props.validUsernames.length == 0) {
-			// return <button key={0} className="username-dropdown-item dropdown-item">???</button>;
 			return <MenuItem key={0} value={0}>Not signed in.</MenuItem>;
 		}
 
@@ -43,28 +53,39 @@ export default class UsernameDropdown extends PureComponent {
 	render() {
 
 
-		let usernameIndex = this.props.validUsernames.indexOf(this.props.myUsername);
+		let usernameIndex = this.props.validUsernames.indexOf(this.props.username);
 		if (usernameIndex == -1) {
 			usernameIndex = 0;
 		}
 		return (
-			<React.Fragment>
-				{/* <InputLabel htmlFor="usernameDropdown">
-					Logged in as
-				</InputLabel> */}
-				<Select
-					value={usernameIndex}
-					onChange={this.props.handleChange}
-					input={<OutlinedInput labelWidth={0}/>}
-					// inputProps={{
-					// 	name: "username",
-					// 	id: "usernameDropdown",
-		            // }}
-					>
-					{this.getUsernameList()}
-				</Select>
-			</React.Fragment>
+			<Select
+				value={usernameIndex}
+				onChange={this.props.handleChange}
+				input={<OutlinedInput labelWidth={0}/>}>
+
+				{this.getUsernameList()}
+			</Select>
 		);
 	}
 
 }
+
+const mapStateToProps = (state) => {
+	return {
+		username: state.userInfo.username,
+		validUsernames: state.userInfo.validUsernames,
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		// updateSettings: (settings) => {
+		// 	dispatch(updateSettings(settings))
+		// },
+	};
+};
+
+export default compose(
+	withStyles(styles),
+	connect(mapStateToProps, mapDispatchToProps),
+)(UsernameDropdown);

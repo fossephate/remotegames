@@ -51,23 +51,12 @@ import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 
 // material ui:
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { withStyles } from "@material-ui/core/styles";
 
 // components:
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import Paper from "@material-ui/core/Paper";
-// import MenuItem from "@material-ui/core/MenuItem";
-// import FormHelperText from "@material-ui/core/FormHelperText";
-// import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Checkbox from "@material-ui/core/Checkbox";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -80,10 +69,6 @@ import { device } from "src/constants/DeviceSizes.js";
 // libs:
 // jquery:
 let $ = require("jquery");window.$ = $;
-
-// bootstrap:
-import "bootstrap";
-import "bootstrap/dist/css/bootstrap.css";
 
 // input handler:
 import InputHandler from "libs/InputHandler/InputHandler.js";
@@ -102,8 +87,6 @@ import _ from "lodash";
 import JSMpeg from "libs/jsmpeg.min.js";
 import Lagless2 from "libs/lagless/lagless2.js";
 import LaglessAudio from "libs/lagless/laglessAudio.js";
-
-
 
 let sendInputTimer;
 let locked = false;
@@ -306,7 +289,6 @@ class App extends Component {
 		document.addEventListener("mozfullscreenchange", this.exitFullscreen, false);
 		document.addEventListener("fullscreenchange", this.exitFullscreen, false);
 		document.addEventListener("MSFullscreenChange", this.exitFullscreen, false);
-
 
 		// lagless setup:
 
@@ -629,15 +611,6 @@ class App extends Component {
 		return false;
 	}
 
-	// componentWillReceiveProps(nextProps) {
-	// 	const changedProps = _.reduce(this.props, function (result, value, key) {
-	// 		return _.isEqual(value, nextProps[key]) ?
-	// 			result :
-	// 			result.concat(key)
-	// 	}, [])
-	// 	console.log('changedProps: ', changedProps)
-	// }
-
 	render() {
 
 		console.log("re-rendering app.");
@@ -646,6 +619,7 @@ class App extends Component {
 
 		if (window.location.pathname == "/reset") {
 			this.resetSettings();
+			swal("Try logging in again, if it doesn't work, try clicking the reset all settings button and try again.");
 		}
 
 		return (

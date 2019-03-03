@@ -120,7 +120,7 @@ class SendMessageForm extends PureComponent {
 				"sublist",
 				"modlist",
 				"pluslist",
-				"ban",
+				"banlist",
 				"tempban",
 				"unban",
 				"permaban",

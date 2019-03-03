@@ -21,6 +21,7 @@ const styles = (theme) => ({
 		backgroundColor: "#b7b7b7",
 	    border: "1px solid #333",
 	    borderRadius: "6px",
+		verticalAlign: "middle",
 	},
 });
 
