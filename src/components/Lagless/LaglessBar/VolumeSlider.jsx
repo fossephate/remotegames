@@ -62,6 +62,11 @@ const styles = (theme) => ({
 	thumbIconWrapper: {
 		backgroundColor: "#FFF !important",
 	},
+	activated: {
+		"button&": {
+			boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16) !important",
+		},
+	},
 });
 
 class VolumeSlider extends PureComponent {
@@ -81,6 +86,7 @@ class VolumeSlider extends PureComponent {
 					sliderClass={classes.slider}
 					containerClass={classes.container}
 					thumbIconWrapperClass={classes.thumbIconWrapper}
+					activatedClass={classes.activated}
 					min={0}
 					max={100}
 					step={1}

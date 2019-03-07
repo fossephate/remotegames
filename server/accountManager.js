@@ -3,6 +3,10 @@ const app = express();
 const server = require("http").createServer(app);
 const io = require("socket.io")(server);
 const port = 8099;
+const config = require("./config.js");
+
+const bcrypt = require("bcrypt");
+const SALT_ROUNDS = 10;
 
 const mongodb = require("mongodb");
 const MongoClient = mongodb.MongoClient;
@@ -109,6 +113,8 @@ let accountSchema = Schema({
 	password: String,
 
 	token: String,
+	streamKey: String,
+	isStreaming: Boolean,
 
 	connectedAccounts: [],
 
@@ -153,13 +159,13 @@ let accountSchema = Schema({
 	},
 
 	// settings:
-	is_mod: Boolean,
-	is_plus: Boolean,
-	is_sub: Boolean,
+	isMod: Boolean,
+	isPlus: Boolean,
+	isSub: Boolean,
 
-	is_ban: Boolean,
-	is_perma_ban: Boolean,
-	is_temp_ban: Boolean,
+	isBan: Boolean,
+	isPermaBan: Boolean,
+	isTempBan: Boolean,
 
 	// stats:
 	timePlayed: Number,
@@ -213,9 +219,70 @@ function connectAccount(account, profile, type) {
 }
 
 server.listen(port, () => {
-	console.log("Server listening at port %d", port);
+	console.log("Account server listening at port %d", port);
 });
 
 io.on("connection", (socket) => {
-	
+
+	socket.on("register", (data) => {
+
+		// todo: input validation:
+		if (!data.email || !data.password || !data.username) {
+			return;
+		}
+		let email = data.email;
+		let username = data.username;
+		let password = data.password;
+
+		console.log("Attempting to create a new account.");
+
+
+		// check if the acccount already exists:
+		Account.findOne({email: email}).exec().then((error, account) => {
+			if (error) {console.log(error);throw error;}
+			// account already exists:
+			if (account) {
+				console.log("Account already exists, aborting.");
+				socket.emit("ACCOUNT_ERROR", "EMAIL_ALREADY_TAKEN");
+				return;
+			}
+		});
+		Account.findOne({username: username}).exec().then((error, account) => {
+			if (error) {console.log(error);throw error;}
+			// account already exists:
+			if (account) {
+				console.log("Account already exists, aborting.");
+				socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
+				return;
+			}
+		});
+
+		console.log("Account doesn't already exist, creating account.");
+		// create the account:
+		let newAccount = new Account();
+		// set account details:
+		// hash password:
+		bcrypt.hash(password, SALT_ROUNDS).then((hash) => {
+			// store the password hash in the account:
+			newAccount.password = hash;
+			// other acount details:
+			newAccount.email = email;
+			newAccount.username = username;
+			// save the new Account:
+			newAccount.save((error) => {
+				if (error) {console.log(error);throw error;}
+				console.log("Account created.");
+			});
+		});
+
+	});
+
+	socket.on("getAllAccountsStreaming", (data) => {
+
+		Account.find({isStreaming: true}).exec().then((error, account) => {
+			if (error) {console.log(error);throw error;}
+
+		})
+	});
+
 });

@@ -18,10 +18,6 @@ import { updateSettings } from "src/actions/settings.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
 
 // main components:
-// const LoginArea = lazy(() => import("src/components/LoginArea.jsx"));
-// const NavTabs = lazy(() => import("src/components/NavTabs.jsx"));
-// const Picture = lazy(() => import("src/components/Picture.jsx"));
-// const Chat = lazy(() => import("src/components/Chat/Chat.jsx"));
 import LoginArea from "src/components/LoginArea.jsx";
 import NavTabs from "src/components/NavTabs.jsx";
 import Picture from "src/components/Picture.jsx";
@@ -40,10 +36,6 @@ import Waitlist from "src/components/Waitlist.jsx";
 // secondary components:
 
 // modals:
-// const LoginModal = lazy(() => import("src/components/Modals/LoginModal.jsx"));
-// const RegisterModal = lazy(() => import("src/components/Modals/RegisterModal.jsx"));
-// const AccountModal = lazy(() => import("src/components/Modals/AccountModal.jsx"));
-// const InputMapperModal = lazy(() => import("src/components/Modals/InputMapperModal.jsx"));
 import LoginModal from "src/components/Modals/LoginModal.jsx";
 import RegisterModal from "src/components/Modals/RegisterModal.jsx";
 import AccountModal from "src/components/Modals/AccountModal.jsx";
@@ -80,7 +72,6 @@ import Noty from "noty";
 // import "noty/lib/themes/light.css";
 import localforage from "localforage";window.localforage = localforage;
 import swal from "sweetalert2";window.swal = swal;
-import io from "socket.io-client";
 import _ from "lodash";
 
 // rr:

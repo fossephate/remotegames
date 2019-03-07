@@ -61,6 +61,7 @@
     "mongodb": "^3.1.13",
     "mongoose": "^5.4.9",
     "nipplejs": "^0.7.1",
+    "normalize.css": "^8.0.1",
     "noty": "^3.2.0-beta",
     "passport": "^0.4.0",
     "passport-discord": "^0.1.3",

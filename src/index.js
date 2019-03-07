@@ -49,6 +49,7 @@ import handleEvents from "src/sockets";
 import io from "socket.io-client";
 import localforage from "localforage";
 import merge from "deepmerge";
+// import "normalize.css";
 
 const sagaMiddleware = createSagaMiddleware();
 
