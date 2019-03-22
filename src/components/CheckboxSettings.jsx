@@ -62,12 +62,12 @@ class CheckboxSettings extends PureComponent {
 							}}
 							checked={this.props.settings.largescreen}/>
 					</ListItem>
-					{/* <ListItem>
+					<ListItem>
 						<MyCheckbox
 							text={"Audio 3.0"}
-							handleChange={this.toggleAudioThree}
+							handleChange={this.props.toggleAudioThree}
 							checked={this.props.settings.audioThree}/>
-					</ListItem> */}
+					</ListItem>
 					<ListItem>
 						<ThemeSelector/>
 					</ListItem>

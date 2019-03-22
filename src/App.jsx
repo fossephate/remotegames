@@ -163,7 +163,7 @@ class App extends Component {
 	constructor(props) {
 		super(props);
 
-		// this.toggleAudioThree = this.toggleAudioThree.bind(this);
+		this.toggleAudioThree = this.toggleAudioThree.bind(this);
 
 		this.exitFullscreen = this.exitFullscreen.bind(this);
 
@@ -329,7 +329,7 @@ class App extends Component {
 					streams[1].player.volume = 0;
 				}
 			}
-		}, 1000);
+		}, 2000);
 
 		sendInputTimer = setInterval(() => {
 			if (!this.props.userInfo.loggedIn) {return;}
@@ -642,7 +642,7 @@ class App extends Component {
 
 						<Paper id="settings" elevation={0}>
 
-							<CheckboxSettings/>
+							<CheckboxSettings toggleAudioThree={this.toggleAudioThree}/>
 
 							<Paper id="generalSettings" className="settingsPanel" elevation={5}>
 								<ListItemText>General Settings</ListItemText>

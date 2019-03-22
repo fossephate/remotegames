@@ -65,7 +65,7 @@ function ping(text, time) {
 		timeout: time,
 		sounds: {
 			volume: 0.5,
-			sources: ["https://twitchplaysnintendoswitch.com/sounds/ding.wav"],
+			sources: ["https://remotegames.io/sounds/ding.wav"],
 			conditions: ["docVisible"],
 		},
 	}).show();
@@ -101,7 +101,7 @@ const Message = (props) => {
 	}
 
 	let is_dev = false;
-	if (username == "twitchplaysconsoles" || username == "fossephate" || username == "fosse#0430") {
+	if (username == "remotegames" || username == "fossephate" || username == "fosse#0430") {
 		username = "fosse";
 		is_dev = true;
 	}

@@ -614,36 +614,6 @@ function findClientByUserid(userid) {
 	return index;
 }
 
-function SplitTimer(startTime, splitNames, name) {
-	//this.startTime = startTime;
-	this.startTime = new Date();
-	this.splitNames = splitNames;
-	this.name = name;
-	this.currentSplit = 0;
-	this.currentTime = 0;
-	this.times = [];
-
-	this.addSplit = (splitName) => {
-		this.splitNames.push(splitName);
-	}
-	this.moveToNextSplit = () => {
-		this.currentSplit += 1;
-		let time = (new Date()) - this.startTime;
-		this.times.push(time);
-		this.currentTime = time;
-	}
-	this.removeLastSplit = () => {
-		this.currentSplit -= 1;
-		this.times.pop();
-	}
-	this.getCurrentTime = () => {
-		let time = (new Date() - this.startTime);
-		this.currentTime = time;
-		return time;
-	}
-	return this;
-}
-
 io.set("transports", [
 	"polling",
 	"websocket",

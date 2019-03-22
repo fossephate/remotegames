@@ -132,7 +132,7 @@ class MessageList extends PureComponent {
 
 					{this.mapMessages()}
 					<div
-						style={{ float:"left", clear: "both" }}
+						style={{ float: "left", clear: "both" }}
 						ref={(el) => { this.messagesEnd = el; }}>
 					</div>
 			</Paper>
