@@ -1,10 +1,7 @@
 import { clamp } from "libs/tools.js";
-let restPos = 128;
 
 export default class VirtualProController {
-
 	constructor() {
-
 		this.buttons = {
 			up: 0,
 			down: 0,
@@ -29,7 +26,7 @@ export default class VirtualProController {
 
 		this.btns = 0;
 
-		this.axes = [restPos, restPos, restPos, restPos, 0, 0];
+		this.axes = [0, 0, 0, 0, 0, 0];
 
 		this.gyro = {
 			x: 0,
@@ -47,31 +44,22 @@ export default class VirtualProController {
 	}
 
 	reset() {
-
 		this.btns = 0;
 		for (let prop in this.buttons) {
 			this.buttons[prop] = 0;
 		}
-
 		this.axes = [0, 0, 0, 0, 0, 0];
-		this.axes[0] = restPos;
-		this.axes[1] = restPos;
-		this.axes[2] = restPos;
-		this.axes[3] = restPos;
-		this.axes[4] = 0;
-		this.axes[5] = 0;
 	}
 
 	isPressed(n) {
-		return ((this.btns & (1 << n)) != 0);
+		return (this.btns & (1 << n)) != 0;
 	}
 
 	getState() {
-
-		this.axes[0] = clamp(this.axes[0], 0, 255);
-		this.axes[1] = clamp(this.axes[1], 0, 255);
-		this.axes[2] = clamp(this.axes[2], 0, 255);
-		this.axes[3] = clamp(this.axes[3], 0, 255);
+		this.axes[0] = clamp(this.axes[0], -1, 1);
+		this.axes[1] = clamp(this.axes[1], -1, 1);
+		this.axes[2] = clamp(this.axes[2], -1, 1);
+		this.axes[3] = clamp(this.axes[3], -1, 1);
 		// this.axes[4] = this.axes[4];
 		// this.axes[5] = this.axes[5];
 
@@ -86,27 +74,27 @@ export default class VirtualProController {
 			accel: { ...this.accel },
 		};
 
-		state.btns |= (this.buttons.up << 0);
-		state.btns |= (this.buttons.down << 1);
-		state.btns |= (this.buttons.left << 2);
-		state.btns |= (this.buttons.right << 3);
+		state.btns |= this.buttons.up << 0;
+		state.btns |= this.buttons.down << 1;
+		state.btns |= this.buttons.left << 2;
+		state.btns |= this.buttons.right << 3;
 
-		state.btns |= (this.buttons.l << 4);
-		state.btns |= (this.buttons.zl << 5);
-		state.btns |= (this.buttons.lstick << 6);
-		state.btns |= (this.buttons.minus << 7);
-		state.btns |= (this.buttons.capture << 8);
+		state.btns |= this.buttons.l << 4;
+		state.btns |= this.buttons.zl << 5;
+		state.btns |= this.buttons.lstick << 6;
+		state.btns |= this.buttons.minus << 7;
+		state.btns |= this.buttons.capture << 8;
 
-		state.btns |= (this.buttons.a << 9);
-		state.btns |= (this.buttons.b << 10);
-		state.btns |= (this.buttons.x << 11);
-		state.btns |= (this.buttons.y << 12);
+		state.btns |= this.buttons.a << 9;
+		state.btns |= this.buttons.b << 10;
+		state.btns |= this.buttons.x << 11;
+		state.btns |= this.buttons.y << 12;
 
-		state.btns |= (this.buttons.r << 13);
-		state.btns |= (this.buttons.zr << 14);
-		state.btns |= (this.buttons.rstick << 15);
-		state.btns |= (this.buttons.plus << 16);
-		state.btns |= (this.buttons.home << 17);
+		state.btns |= this.buttons.r << 13;
+		state.btns |= this.buttons.zr << 14;
+		state.btns |= this.buttons.rstick << 15;
+		state.btns |= this.buttons.plus << 16;
+		state.btns |= this.buttons.home << 17;
 
 		// state.sticks = this.sticks;
 		// state.axes = this.axes;
@@ -122,7 +110,6 @@ export default class VirtualProController {
 	}
 
 	setState(state) {
-
 		// if (state.btns) {
 		// 	this.btns = state.btns;
 		// if (state.axes) {
@@ -158,6 +145,5 @@ export default class VirtualProController {
 		// triggers:
 		// this.axes[4] = (this.buttons.zl) ? 1 : this.axes[4];
 		// this.axes[5] = (this.buttons.zr) ? 1 : this.axes[5];
-
 	}
 }

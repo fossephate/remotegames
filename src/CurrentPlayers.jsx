@@ -39,7 +39,7 @@ const styles = (theme) => ({
 	main: {
 		display: "flex",
 		flexDirection: "column",
-	    justifyContent: "center",
+		justifyContent: "center",
 		width: "85%",
 		height: "100%",
 		padding: "3%",
@@ -56,11 +56,11 @@ const styles = (theme) => ({
 		// marginRight: "auto",
 	},
 	card: {
-      width: 345,
-    },
-    media: {
-      height: 300,
-    },
+		width: 345,
+	},
+	media: {
+		height: 300,
+	},
 	imagesContainer: {
 		display: "flex",
 		justifyContent: "space-evenly",
@@ -79,7 +79,6 @@ const styles = (theme) => ({
 });
 
 class FAQ extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
@@ -89,42 +88,40 @@ class FAQ extends PureComponent {
 
 		return (
 			<Paper elevation={0} className={classes.root}>
-
 				<Paper elevation={3} className={classes.main}>
-
 					<Button
 						variant="contained"
 						className={classes.back}
 						onClick={() => {
-							// window.location = "https://twitchplaysnintendoswitch.com";
 							this.props.history.push("/");
-						}}>Back</Button>
+						}}
+					>
+						Back
+					</Button>
 
-					<PlayerInfo/>
+					<PlayerInfo />
 				</Paper>
-
-
-
 			</Paper>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {
-	return {
-	};
+	return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		updateSettings: (settings) => {
-			dispatch(updateSettings(settings))
+			dispatch(updateSettings(settings));
 		},
 	};
 };
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(FAQ);

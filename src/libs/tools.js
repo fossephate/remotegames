@@ -1,4 +1,4 @@
-exports.getCookie = function (name) {
+exports.getCookie = (name) => {
 	let dc = document.cookie;
 	let prefix = name + "=";
 	let begin = dc.indexOf("; " + prefix);
@@ -18,40 +18,40 @@ exports.getCookie = function (name) {
 	return decodeURI(dc.substring(begin + prefix.length, end));
 };
 
-exports.setCookie = function (name, value, seconds) {
+exports.setCookie = (name, value, seconds) => {
 	let expires = "";
 	if (seconds) {
 		let date = new Date();
-		date.setTime(date.getTime() + (seconds * 1000));
+		date.setTime(date.getTime() + seconds * 1000);
 		expires = "; expires=" + date.toUTCString();
 	}
 	document.cookie = name + "=" + (value || "") + expires + "; path=/";
 };
 
-exports.clamp = function (n, min, max) {
+exports.clamp = (n, min, max) => {
 	return Math.min(Math.max(n, min), max);
 };
 
-exports.round = function (value, precision) {
+exports.round = (value, precision) => {
 	let multiplier = Math.pow(10, precision || 0);
 	return Math.round(value * multiplier) / multiplier;
 };
 
-exports.msToTime = function (duration) {
+exports.msToTime = (duration) => {
 	// 	var milliseconds = parseInt((duration % 1000) / 100);
 	let milliseconds = parseInt((((duration / 1000) % 60) % 1) * 1000);
 	let seconds = parseInt((duration / 1000) % 60);
 	let minutes = parseInt((duration / (1000 * 60)) % 60);
 	let hours = parseInt((duration / (1000 * 60 * 60)) % 24);
-	hours = (hours < 10) ? "0" + hours : hours;
-	if (hours.length == 2 || hours.length == 3 && hours[0] == "0") {
+	hours = hours < 10 ? "0" + hours : hours;
+	if (hours.length == 2 || (hours.length == 3 && hours[0] == "0")) {
 		hours = hours.substr(1);
 	}
-	minutes = (minutes < 10) ? "0" + minutes : minutes;
+	minutes = minutes < 10 ? "0" + minutes : minutes;
 	if (minutes.length == 3 || minutes.length == 4) {
 		minutes = minutes.substr(1);
 	}
-	seconds = (seconds < 10) ? "0" + seconds : seconds;
+	seconds = seconds < 10 ? "0" + seconds : seconds;
 	if (seconds.length == 3 || seconds.length == 4) {
 		seconds = seconds.substr(1);
 	}
@@ -62,11 +62,17 @@ exports.msToTime = function (duration) {
 	let time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 	time = time.replaceAll("-", ""); // remove negative signs
 	return time;
-}
+};
 
-exports.toggleFullscreen = function (elem) {
+exports.toggleFullscreen = (elem) => {
 	// ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
-	if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+	if (
+		(document.fullScreenElement !== undefined && document.fullScreenElement === null) ||
+		(document.msFullscreenElement !== undefined &&
+			document.msFullscreenElement === null) ||
+		(document.mozFullScreen !== undefined && !document.mozFullScreen) ||
+		(document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)
+	) {
 		if (elem.requestFullScreen) {
 			elem.requestFullScreen();
 		} else if (elem.mozRequestFullScreen) {
@@ -87,26 +93,28 @@ exports.toggleFullscreen = function (elem) {
 			document.msExitFullscreen();
 		}
 	}
-}
+};
 
-exports.setToPercentParent = function (elem, percent) {
+exports.setToPercentParent = (elem, percent) => {
 	$(elem).height(0);
-	let parentHeight = $(elem).parent().height();
+	let parentHeight = $(elem)
+		.parent()
+		.height();
 	let newHeight = (percent / 100) * parentHeight;
 	$(elem).height(newHeight);
-}
+};
 
 // like sleep, but worse:
-exports.wait = function (ms) {
+exports.wait = (ms) => {
 	var start = new Date().getTime();
 	var end = start;
 	while (end < start + ms) {
 		end = new Date().getTime();
 	}
-}
+};
 
 // brings number closer to target by accel
-exports.mathZoom = function (current, target, accel) {
+exports.mathZoom = (current, target, accel) => {
 	if (current == target) {
 		return current;
 	}
@@ -118,25 +126,23 @@ exports.mathZoom = function (current, target, accel) {
 	} else {
 		return current - accel;
 	}
-}
+};
 
-
-exports.normalizeVector = function (vector, scale) {
+exports.normalizeVector = (vector, scale) => {
 	let norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 	if (norm !== 0) {
-		vector.x = scale * vector.x / norm;
-		vector.y = scale * vector.y / norm;
+		vector.x = (scale * vector.x) / norm;
+		vector.y = (scale * vector.y) / norm;
 	}
 	return vector;
-}
+};
 
-exports.abs = function (n) {
+exports.abs = (n) => {
 	return Math.abs(n);
-}
+};
 
 // delete all cookies:
-exports.deleteAllCookies = function () {
-
+exports.deleteAllCookies = () => {
 	let cookies = document.cookie.split(";");
 
 	for (let i = 0; i < cookies.length; i++) {
@@ -145,16 +151,36 @@ exports.deleteAllCookies = function () {
 		let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 	}
-}
+};
 
-exports.fixedLengthString = function (string, pad, length) {
+exports.fixedLengthString = (string, pad, length) => {
 	string = string + "";
 	while (string.length < length) {
 		string = pad + string;
 	}
 	return string;
-}
+};
 
+exports.getStickString = (num) => {
+	// round to nearest tenth:
+	num = (Math.round((num + 1) * 10) / 10).toFixed(2);
+	let n = num * 10;
+	if (n == 0) {
+		return "900";
+	}
+	if (n == 10) {
+		return "090";
+	}
+	if (n == 20) {
+		return "009";
+	}
+	if (n < 10) {
+		n = 90 + 90 * n;
+	} else {
+		n = (20 - n) * 9;
+	}
+	return String(n).padStart(3, "0");
+};
 
 // String.prototype.replaceAll = function(search, replacement) {
 // 	let target = this;

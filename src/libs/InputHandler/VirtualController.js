@@ -1,6 +1,5 @@
-
 import VirtualProController from "./VirtualProController.js";
-let restPos = 128;
+const restPos = 0;
 
 export const AxisSettings = class AxisSettings {
 	constructor(sensitivity, offset, deadzone) {
@@ -8,16 +7,14 @@ export const AxisSettings = class AxisSettings {
 		this.offset = offset;
 		this.deadzone = deadzone;
 	}
-}
+};
 
 class AxisMapping {
-
 	constructor(which, activationThreshold, aboveOrBelow) {
-
-		if (typeof(which) == "number") {
+		if (typeof which == "number") {
 			this.type = "axis";
 		} else {
-			this.type ="button";
+			this.type = "button";
 		}
 
 		this.which = which;
@@ -28,23 +25,17 @@ class AxisMapping {
 		}
 
 		if (this.type == "axis") {
-
 		}
-
 	}
-
 }
 
-
 class ButtonMapping {
-
 	constructor(which, value, isAnalog) {
-
 		this.which = which;
 
-		if (typeof(which) == "string") {
+		if (typeof which == "string") {
 			this.type = "button";
-		} else if (typeof(which) == "number") {
+		} else if (typeof which == "number") {
 			this.type = "axis";
 			this.value = value;
 			this.isAnalog = isAnalog;
@@ -60,9 +51,7 @@ class ButtonState {
 }
 
 export default class VirtualController {
-
 	constructor(gamepadWrapper) {
-
 		this.gamepadWrapper = gamepadWrapper;
 
 		// this.activeControllers = [1];
@@ -90,26 +79,24 @@ export default class VirtualController {
 		this.autoSelectGamepad = this.autoSelectGamepad.bind(this);
 
 		this.settings = {
-
 			controllerIndex: null,
 
 			axes: [
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(-1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(-1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(1, 0, 50),
-				new AxisSettings(1, 0, 50),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(-1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(-1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.25),
 			],
 
 			map: {
-
 				buttons: [
 					new ButtonMapping("b"),
 					new ButtonMapping("a"),
@@ -130,13 +117,20 @@ export default class VirtualController {
 					new ButtonMapping("home"),
 
 					// extra:
-					new ButtonMapping("a"), new ButtonMapping("a"),
-					new ButtonMapping("a"), new ButtonMapping("a"),
-					new ButtonMapping("a"), new ButtonMapping("a"),
-					new ButtonMapping("a"), new ButtonMapping("a"),
-					new ButtonMapping("a"), new ButtonMapping("a"),
-					new ButtonMapping("a"), new ButtonMapping("a"),
-					new ButtonMapping("a"), new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
+					new ButtonMapping("a"),
 				],
 
 				axes: [
@@ -150,13 +144,10 @@ export default class VirtualController {
 					new AxisMapping(7),
 				],
 			},
-
-		}
-
+		};
 	}
 
 	autoSelectGamepad() {
-
 		// only auto select if one hasn't already been selected:
 		if (this.settings.controllerIndex != null) {
 			return;
@@ -183,14 +174,12 @@ export default class VirtualController {
 	}
 
 	init() {
-
 		this.gamepadWrapper.callbacksAfterPoll.push(this.poll);
 		setTimeout(this.autoSelectGamepad, 2000);
 		setInterval(this.autoSelectGamepad, 10000);
 	}
 
 	poll() {
-
 		let controller = this.gamepadWrapper.controllers[this.settings.controllerIndex];
 
 		// console.log(controller);
@@ -207,17 +196,15 @@ export default class VirtualController {
 
 		// buttons:
 		for (let j = 0; j < controller.buttons.length; j++) {
-
 			let button = controller.buttons[j];
 			let mapping = this.settings.map.buttons[j];
-
 
 			let oldPressed = this.oldState.buttons[j].pressed;
 			let oldValue = this.oldState.buttons[j].value;
 			let newPressed = button.pressed;
 			let newValue = button.value;
 			// if it's changed:
-			if ((oldPressed != newPressed) || (oldValue != newValue)) {
+			if (oldPressed != newPressed || oldValue != newValue) {
 				// console.log(j);
 				this.lastChangedButton = j;
 			}
@@ -242,19 +229,17 @@ export default class VirtualController {
 				}
 			}
 
-			if (mapping.type = "button") {
+			if ((mapping.type = "button")) {
 				this.state.buttons[mapping.which] = button.pressed ? 1 : 0;
-			} else if (mapping.type = "axis") {
+			} else if ((mapping.type = "axis")) {
 				console.log("something is wrong");
 				// TODO:
 				// this.state.axes[mapping.which] = button.pressed ? button.value : 0;
 			}
-
 		}
 
 		// axes:
 		for (let j = 0; j < controller.axes.length; j++) {
-
 			let axis = controller.axes[j];
 			let mapping = this.settings.map.axes[j];
 
@@ -266,34 +251,30 @@ export default class VirtualController {
 			}
 			this.oldState.axes[j] = axis;
 
-			if (mapping.type = "axis") {
-
-				let x = (axis * this.settings.axes[mapping.which].sensitivity);
-				x = (x / 2) + 0.5;
-				x *= 255;
-				this.state.axes[mapping.which] = parseInt(x) + this.settings.axes[mapping.which].offset;
-				if (Math.abs(restPos - this.state.axes[mapping.which]) < this.settings.axes[mapping.which].deadzone) {
+			if ((mapping.type = "axis")) {
+				let x = axis * this.settings.axes[mapping.which].sensitivity;
+				// x = x / 2 + 0.5;
+				// x *= 255;
+				this.state.axes[mapping.which] = x + this.settings.axes[mapping.which].offset;
+				if (
+					Math.abs(restPos - this.state.axes[mapping.which]) <
+					this.settings.axes[mapping.which].deadzone
+				) {
 					this.state.axes[mapping.which] = restPos;
 				}
 				// this.state.axes[mapping.which] = axis;
-
-			} else if (mapping.type = "button") {
-
+			} else if ((mapping.type = "button")) {
 				if (mapping.aboveOrBelow) {
-					this.state.buttons[mapping.which] = (axis > mapping.activationThreshold) ? 1 : 0;
+					this.state.buttons[mapping.which] = axis > mapping.activationThreshold ? 1 : 0;
 				} else {
-					this.state.buttons[mapping.which] = (axis < mapping.activationThreshold) ? 1 : 0;
+					this.state.buttons[mapping.which] = axis < mapping.activationThreshold ? 1 : 0;
 				}
 			}
-
 		}
-
 
 		let newState = JSON.stringify(this.state.getState());
 		if (newState != oldState) {
 			this.changed = true;
 		}
-
 	}
-
 }

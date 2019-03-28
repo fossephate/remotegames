@@ -5,7 +5,7 @@ import React, { PureComponent } from "react";
 import { withStyles } from "@material-ui/core/styles";
 
 import VirtualProController from "libs/InputHandler/VirtualProController.js";
-import { clamp, normalizeVector} from "libs/tools.js";
+import { clamp, normalizeVector } from "libs/tools.js";
 let classNames = require("classnames");
 
 // jss:
@@ -134,9 +134,9 @@ const styles = (theme) => ({
 		left: "3%",
 		top: "12%",
 		fontSize: "large",
-    	fontWeight: "bold",
+		fontWeight: "bold",
 
-		'& :after': {
+		"& :after": {
 			content: '""',
 			position: "absolute",
 			top: "0px",
@@ -150,7 +150,8 @@ const styles = (theme) => ({
 			width: "100%",
 			height: "100%",
 			clipPath: "circle(60% at 80% 0%)",
-			backgroundImage: "linear-gradient(45deg, rgba(255,255,255,0.1),rgba(255,255,255,0.3))",
+			backgroundImage:
+				"linear-gradient(45deg, rgba(255,255,255,0.1),rgba(255,255,255,0.3))",
 			borderRadius: "50%",
 		},
 
@@ -193,65 +194,113 @@ const styles = (theme) => ({
 });
 
 class RightControllerView extends PureComponent {
-
 	constructor(props) {
 		super(props);
+
+		this.getStickTransform = this.getStickTransform.bind(this);
 
 		this.controller = new VirtualProController();
 
 		this.state = {};
 	}
 
+	getStickTransform() {
+		let x = this.controller.axes[2];
+		let y = this.controller.axes[3];
+
+		y *= -1;
+
+		let x2 = x * Math.sqrt(1 - (y * y) / 2) * 32;
+		let y2 = y * Math.sqrt(1 - (x * x) / 2) * 32;
+
+		let scale;
+		scale = window.outerWidth / 1400 - 0.4;
+		if (window.outerWidth < 700) {
+			scale += 0.3;
+		}
+		x2 *= scale;
+		y2 *= scale;
+
+		return `${x2}px, ${y2}px`;
+	}
+
 	render() {
-
 		const { classes } = this.props;
-
-		let restPos = 128;
 
 		this.controller.setState(this.props.controllerState);
 
-		let RX = (this.controller.axes[2] - restPos);
-		let RY = (this.controller.axes[3] - restPos);
-
-		RY *= -1;
-
-		// normalize:
-		let scale = 0.25;
-		let RMagnitude = Math.sqrt((RX * RX) + (RY * RY));
-		let max = 120;
-		RMagnitude = clamp(RMagnitude, -max, max);
-		let RStick = normalizeVector({
-			x: RX,
-			y: RY,
-		}, RMagnitude);
-		RX = parseInt(RStick.x * scale);
-		RY = parseInt(RStick.y * scale);
-		let rightTransform = RX + "px" + "," + RY + "px";
-
+		let stickTransform = this.getStickTransform();
 
 		if (this.props.type === "joycon") {
 			return (
 				<div className={classes.root}>
-					<img className={classes.image} src={window.location.origin + "/images/rightJoyCon2.png"}/>
-					<div className={classNames(classes.stick1, {[classes.highlighted]: (this.controller.buttons.rstick)})}>
-						<div className={classes.stick2} style={{transform: "translate(" + rightTransform + ")"}}></div>
+					<img
+						className={classes.image}
+						src={window.location.origin + "/images/rightJoyCon2.png"}
+					/>
+					<div
+						className={classNames(classes.stick1, {
+							[classes.highlighted]: this.controller.buttons.rstick,
+						})}
+					>
+						<div
+							className={classes.stick2}
+							style={{ transform: "translate(" + stickTransform + ")" }}
+						/>
 					</div>
 
 					<div className={classes.abxy}>
-						<div className={classNames(classes.button, "a", {[classes.highlighted]: (this.controller.buttons.a)})}></div>
-						<div className={classNames(classes.button, "b", {[classes.highlighted]: (this.controller.buttons.b)})}></div>
-						<div className={classNames(classes.button, "x", {[classes.highlighted]: (this.controller.buttons.x)})}></div>
-						<div className={classNames(classes.button, "y", {[classes.highlighted]: (this.controller.buttons.y)})}></div>
+						<div
+							className={classNames(classes.button, "a", {
+								[classes.highlighted]: this.controller.buttons.a,
+							})}
+						/>
+						<div
+							className={classNames(classes.button, "b", {
+								[classes.highlighted]: this.controller.buttons.b,
+							})}
+						/>
+						<div
+							className={classNames(classes.button, "x", {
+								[classes.highlighted]: this.controller.buttons.x,
+							})}
+						/>
+						<div
+							className={classNames(classes.button, "y", {
+								[classes.highlighted]: this.controller.buttons.y,
+							})}
+						/>
 					</div>
 					<div className={classes.otherButtons}>
-						<div className={classNames(classes.button, classes.otherButtons, "plus", {[classes.highlighted]: (this.controller.buttons.plus)})}></div>
-						<div className={classNames(classes.button, classes.otherButtons, "home", {[classes.highlighted]: (this.controller.buttons.home)})}></div>
-						<div className={classNames(classes.button, classes.otherButtons, "r", {[classes.highlighted]: (this.controller.buttons.r)})}>
+						<div
+							className={classNames(classes.button, classes.otherButtons, "plus", {
+								[classes.highlighted]: this.controller.buttons.plus,
+							})}
+						/>
+						<div
+							className={classNames(classes.button, classes.otherButtons, "home", {
+								[classes.highlighted]: this.controller.buttons.home,
+							})}
+						/>
+						<div
+							className={classNames(classes.button, classes.otherButtons, "r", {
+								[classes.highlighted]: this.controller.buttons.r,
+							})}
+						>
 							<div className="click-passthrough">R</div>
 						</div>
 						<div className={classNames(classes.button, classes.otherButtons, "zr")}>
-							<div className={classNames(classes.trigger1, {[classes.highlighted]: (this.controller.buttons.zr)})}>ZR</div>
-							<div className={classes.trigger2} style={{width: (this.controller.axes[5] * 100) + "%"}}></div>
+							<div
+								className={classNames(classes.trigger1, {
+									[classes.highlighted]: this.controller.buttons.zr,
+								})}
+							>
+								ZR
+							</div>
+							<div
+								className={classes.trigger2}
+								style={{ width: this.controller.axes[5] * 100 + "%" }}
+							/>
 						</div>
 					</div>
 				</div>
@@ -259,35 +308,87 @@ class RightControllerView extends PureComponent {
 		} else if (this.props.type === "xbox") {
 			return (
 				<div className={classes.root}>
-					<img className={classes.image} src={window.location.origin + "/images/rightJoyCon2.png"}/>
-					<div className={classNames(classes.stick1, {[classes.xboxHighlighted]: (this.controller.buttons.rstick)})}>
-						<div className={classes.stick2} style={{transform: "translate(" + rightTransform + ")"}}></div>
+					<img
+						className={classes.image}
+						src={window.location.origin + "/images/rightJoyCon2.png"}
+					/>
+					<div
+						className={classNames(classes.stick1, {
+							[classes.xboxHighlighted]: this.controller.buttons.rstick,
+						})}
+					>
+						<div
+							className={classes.stick2}
+							style={{ transform: "translate(" + stickTransform + ")" }}
+						/>
 					</div>
 
 					<div className={classes.xboxabxy}>
-						<div className={classNames(classes.button, "a", {[classes.xboxHighlighted]: (this.controller.buttons.a)})}>B</div>
-						<div className={classNames(classes.button, "b", {[classes.xboxHighlighted]: (this.controller.buttons.b)})}>A</div>
-						<div className={classNames(classes.button, "x", {[classes.xboxHighlighted]: (this.controller.buttons.x)})}>Y</div>
-						<div className={classNames(classes.button, "y", {[classes.xboxHighlighted]: (this.controller.buttons.y)})}>X</div>
+						<div
+							className={classNames(classes.button, "a", {
+								[classes.xboxHighlighted]: this.controller.buttons.a,
+							})}
+						>
+							B
+						</div>
+						<div
+							className={classNames(classes.button, "b", {
+								[classes.xboxHighlighted]: this.controller.buttons.b,
+							})}
+						>
+							A
+						</div>
+						<div
+							className={classNames(classes.button, "x", {
+								[classes.xboxHighlighted]: this.controller.buttons.x,
+							})}
+						>
+							Y
+						</div>
+						<div
+							className={classNames(classes.button, "y", {
+								[classes.xboxHighlighted]: this.controller.buttons.y,
+							})}
+						>
+							X
+						</div>
 					</div>
 					<div className={classes.otherButtons}>
-						<div className={classNames(classes.button, classes.otherButtons, "plus", {[classes.xboxHighlighted]: (this.controller.buttons.plus)})}></div>
-						<div className={classNames(classes.button, classes.otherButtons, "home", {[classes.xboxHighlighted]: (this.controller.buttons.home)})}></div>
-						<div className={classNames(classes.button, classes.otherButtons, "r", {[classes.xboxHighlighted]: (this.controller.buttons.r)})}>
+						<div
+							className={classNames(classes.button, classes.otherButtons, "plus", {
+								[classes.xboxHighlighted]: this.controller.buttons.plus,
+							})}
+						/>
+						<div
+							className={classNames(classes.button, classes.otherButtons, "home", {
+								[classes.xboxHighlighted]: this.controller.buttons.home,
+							})}
+						/>
+						<div
+							className={classNames(classes.button, classes.otherButtons, "r", {
+								[classes.xboxHighlighted]: this.controller.buttons.r,
+							})}
+						>
 							<div className="click-passthrough">RB</div>
 						</div>
 						<div className={classNames(classes.button, classes.otherButtons, "zr")}>
-							<div className={classNames(classes.trigger1, {[classes.xboxHighlighted]: (this.controller.buttons.zr)})}>RT</div>
-							<div className={classNames(classes.trigger2, classes.xboxHighlighted)} style={{width: (this.controller.axes[5] * 100) + "%"}}></div>
+							<div
+								className={classNames(classes.trigger1, {
+									[classes.xboxHighlighted]: this.controller.buttons.zr,
+								})}
+							>
+								RT
+							</div>
+							<div
+								className={classNames(classes.trigger2, classes.xboxHighlighted)}
+								style={{ width: this.controller.axes[5] * 100 + "%" }}
+							/>
 						</div>
 					</div>
 				</div>
 			);
 		}
-
-
 	}
-
 }
 
 export default withStyles(styles)(RightControllerView);

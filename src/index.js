@@ -1,14 +1,8 @@
 // react:
-import React, {
-	Component
-} from "react";
+import React, { Component } from "react";
 import ReactDOM from "react-dom";
 // react-router:
-import {
-	Router,
-	Route,
-	Switch
-} from "react-router";
+import { Router, Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 
 // material ui:
@@ -23,16 +17,8 @@ import CurrentPlayers from "src/CurrentPlayers.jsx";
 import Streams from "src/Streams.jsx";
 
 // redux:
-import {
-	Provider,
-	connect,
-} from "react-redux";
-import {
-	combineReducers,
-	createStore,
-	applyMiddleware,
-	compose,
-} from "redux";
+import { Provider, connect } from "react-redux";
+import { combineReducers, createStore, applyMiddleware, compose } from "redux";
 
 import rootReducer from "./reducers";
 
@@ -56,19 +42,12 @@ const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let preloadedState = {
-
 	chat: {
 		messages: [],
 		userids: [],
 	},
 	waitlist: [],
-	viewers: [
-		[],
-		[],
-		[],
-		[],
-		[],
-	],
+	viewers: [[], [], [], [], []],
 	players: {
 		controlQueues: [],
 		turnTimers: [],
@@ -108,7 +87,6 @@ let preloadedState = {
 	accountMap: {},
 
 	settings: {
-
 		keyboardControls: true,
 		controllerControls: true,
 		mouseControls: false,
@@ -131,26 +109,21 @@ let preloadedState = {
 		server: 0, // server time (in ms)
 		lastServerUpdate: 0, // when it was last updated (in ms)
 		ping: 0,
-	}
+	},
 };
 
 for (let i = 0; i < preloadedState.players.count; i++) {
-	preloadedState.players.turnTimers.push(
-		{
-			turnStartTime: 0,
-			forfeitStartTime: 0,
-			turnLength: 0,
-			forfeitLength: 0,
-		}
-	);
+	preloadedState.players.turnTimers.push({
+		turnStartTime: 0,
+		forfeitStartTime: 0,
+		turnLength: 0,
+		forfeitLength: 0,
+	});
 	preloadedState.players.controlQueues.push([]);
-	preloadedState.players.controllerStates.push(
-		{
-			btns: 0,
-			axes: [128, 128, 128, 128, 0, 0],
-		}
-	);
-
+	preloadedState.players.controllerStates.push({
+		btns: 0,
+		axes: [128, 128, 128, 128, 0, 0],
+	});
 }
 
 function loadState() {
@@ -158,19 +131,19 @@ function loadState() {
 	localforage.getItem("settings").then((value) => {
 		let settings = {};
 		// If they exist, write them
-		if (typeof(value) != "undefined") {
+		if (typeof value != "undefined") {
 			settings = Object.assign({}, JSON.parse(value));
-			settings.streamNumber = 0;// force streamNumber to be 0 bc things rely on it loading first
-			settings.currentPlayer = 0;// same as above
+			settings.streamNumber = 0; // force streamNumber to be 0 bc things rely on it loading first
+			settings.currentPlayer = 0; // same as above
 		}
 
 		console.log(settings);
-		store.dispatch(updateSettings({...settings}));
+		store.dispatch(updateSettings({ ...settings }));
 
 		// check if banned:
 		localforage.getItem("banned").then((value) => {
 			if (value != null) {
-				store.dispatch(updateUserInfo({banned: true}));
+				store.dispatch(updateUserInfo({ banned: true }));
 				window.banned = true;
 			} else {
 				window.banned = false;
@@ -179,35 +152,36 @@ function loadState() {
 
 		setTimeout(() => {
 			// check if incognito && chrome:
-			let isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+			let isChrome =
+				/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 			if (isChrome) {
 				let fs = window.RequestFileSystem || window.webkitRequestFileSystem;
 				if (!fs) {
 					console.log("check failed?");
 				} else {
-					fs(window.TEMPORARY,
-					100,
-					() => {
-						console.log("ok.")
-					},
-					() => {
-						store.dispatch(updateUserInfo({banned: true}));
-						window.banned = true;
-					});
+					fs(
+						window.TEMPORARY,
+						100,
+						() => {
+							console.log("ok.");
+						},
+						() => {
+							store.dispatch(updateUserInfo({ banned: true }));
+							window.banned = true;
+						},
+					);
 				}
 			}
 		}, 100);
-
 	});
 }
 
 loadState();
 
 const store = createStore(
-	rootReducer, preloadedState,
-	composeEnhancers(
-		applyMiddleware(sagaMiddleware),
-	)
+	rootReducer,
+	preloadedState,
+	composeEnhancers(applyMiddleware(sagaMiddleware)),
 );
 
 let socket = io("https://remotegames.io", {
@@ -224,9 +198,7 @@ sagaMiddleware.run(handleActions, {
 	socket,
 });
 
-
 class Index extends Component {
-
 	constructor(props) {
 		super(props);
 
@@ -241,8 +213,8 @@ class Index extends Component {
 				},
 				secondary: {
 					main: "#ff3b3b",
-				}
-			}
+				},
+			},
 		});
 
 		this.getTheme = this.getTheme.bind(this);
@@ -266,14 +238,14 @@ class Index extends Component {
 				this.theme = merge(this.theme, {
 					palette: {
 						type: "light",
-					}
+					},
 				});
 				break;
 			case "dark":
 				this.theme = merge(this.theme, {
 					palette: {
 						type: "dark",
-					}
+					},
 				});
 				break;
 			case "mint":
@@ -289,7 +261,7 @@ class Index extends Component {
 						background: {
 							paper: "#5ae097",
 						},
-					}
+					},
 				});
 				break;
 		}
@@ -297,9 +269,7 @@ class Index extends Component {
 	}
 
 	getTheme() {
-
 		// let themeName = store.getState().settings.theme;
-
 		// default:
 		// let theme = {
 		// 	typography: {
@@ -364,37 +334,46 @@ class Index extends Component {
 	}
 
 	render() {
-
 		console.log("re-rendering index");
 
 		return (
 			<Provider store={store}>
 				<MuiThemeProvider theme={this.theme}>
-					<CssBaseline/>
+					<CssBaseline />
 					<BrowserRouter>
+						{/* selects the first matching path: */}
 						<Switch>
-
-							<Route path="/about" render={(props) => {
-								return <About {...props}/>;
-							}}/>
-
-							<Route path="/FAQ" render={(props) => {
-								return <FAQ {...props}/>;
-							}}/>
-
-							<Route path="/CurrentPlayers" render={(props) => {
-								return <CurrentPlayers {...props}/>;
-							}}/>
-
-							<Route path="/streams" render={(props) => {
-								return <Streams {...props} socket={socket}/>;
-							}}/>
-
+							<Route
+								path="/about"
+								render={(props) => {
+									return <About {...props} />;
+								}}
+							/>
+							<Route
+								path="/FAQ"
+								render={(props) => {
+									return <FAQ {...props} />;
+								}}
+							/>
+							<Route
+								path="/CurrentPlayers"
+								render={(props) => {
+									return <CurrentPlayers {...props} />;
+								}}
+							/>
+							<Route
+								path="/streams"
+								render={(props) => {
+									return <Streams {...props} socket={socket} />;
+								}}
+							/>
 							// order matters here, can't do exact path or /login and /register break:
-							<Route path="/" render={(props) => {
-								return <App {...props} socket={socket}/>;
-							}}/>
-
+							<Route
+								path="/"
+								render={(props) => {
+									return <App {...props} socket={socket} />;
+								}}
+							/>
 						</Switch>
 					</BrowserRouter>
 				</MuiThemeProvider>
@@ -418,4 +397,4 @@ class Index extends Component {
 //
 // const Index2 = connectWithStore(store, Index, mapStateToProps);
 
-ReactDOM.render(<Index/>, document.getElementById("root"));
+ReactDOM.render(<Index />, document.getElementById("root"));

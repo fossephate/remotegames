@@ -71,13 +71,18 @@ let restartAvailable = true;
 let lagless2ChangeAvailable = true;
 let locked = false;
 let queuesLocked = false;
-let restPos = 128;
 let waitlist = [];
 let siteCapacity = 10;
 let waitlistMax = 5;
 let minQueuePosition = 4;
 
-let bannedIPs = ["84.197.3.92", "94.214.218.184", "185.46.212.146", "103.217.104.190", "103.217.104.246"];
+let bannedIPs = [
+	"84.197.3.92",
+	"94.214.218.184",
+	"185.46.212.146",
+	"103.217.104.190",
+	"103.217.104.246",
+];
 
 let banlist = [];
 let modlist = [];
@@ -85,24 +90,12 @@ let pluslist = [];
 let sublist = [];
 
 // todo: combine:
-let laglessClientIds = [
-	[],
-	[],
-	[],
-	[],
-	[],
-];
-let laglessClientUserids = [
-	[],
-	[],
-	[],
-	[],
-	[],
-];
+let laglessClientIds = [[], [], [], [], []];
+let laglessClientUserids = [[], [], [], [], []];
 
-let normalTime = 1000 * 60 * 2;// 2 minutes
+let normalTime = 1000 * 60 * 2; // 2 minutes
 let subTime = normalTime * 2.5;
-let forfeitTime = 1000 * 15;// 15 seconds
+let forfeitTime = 1000 * 15; // 15 seconds
 let tempBanTime = 5 * 1000 * 60; // 5 minutes
 
 const NUM_PLAYERS = 10;
@@ -138,15 +131,16 @@ let splitTimer = null;
 let afkTimer = Date.now();
 let afkTime = 1000 * 60 * 30; // 30 minutes
 
-app.use(session({
-	secret: SESSION_SECRET,
-	resave: false,
-	saveUninitialized: false
-}));
+app.use(
+	session({
+		secret: SESSION_SECRET,
+		resave: false,
+		saveUninitialized: false,
+	}),
+);
 app.use(express.static("public"));
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 let redisClient = redis.createClient({ host: "localhost", port: 6379 });
 
@@ -162,7 +156,6 @@ let mongoURL = "mongodb://localhost:27017/db";
 mongoose.connect(mongoURL);
 // Get Mongoose to use the global promise library
 mongoose.Promise = global.Promise;
-
 
 // get banned IPs:
 redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
@@ -184,7 +177,6 @@ redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
 });
 
 let accountSchema = Schema({
-
 	// 	_id: Schema.Types.ObjectId,// created & initialized automatically
 
 	email: String,
@@ -248,13 +240,11 @@ let accountSchema = Schema({
 	timePlayed: Number,
 
 	IPs: [],
-
 });
 
 let Account = mongoose.model("Account", accountSchema);
 
 function connectAccount(account, profile, type) {
-
 	// set the id, access, and refresh token for the type of account we've connected:
 	// universal:
 	account[type].id = profile.id;
@@ -267,12 +257,10 @@ function connectAccount(account, profile, type) {
 
 	// unique to each platform:
 	if (type == "twitch") {
-
 		account[type].email = profile.email;
 		account[type].login = profile.login;
 		account[type].username = profile.username;
 		account[type].profile_image_url = profile.profile_image_url;
-
 
 		if (modlist.indexOf(account.twitch.username) > -1) {
 			account.is_mod = true;
@@ -283,12 +271,10 @@ function connectAccount(account, profile, type) {
 		if (sublist.indexOf(account.twitch.displayName) > -1) {
 			account.is_sub = true;
 		}
-
 	} else if (type == "google") {
 		account[type].familyName = profile.name.familyName;
 		account[type].givenName = profile.name.givenName;
 	} else if (type == "youtube") {
-
 	} else if (type == "discord") {
 		account[type].email = profile.email;
 		account[type].username = profile.username;
@@ -299,17 +285,13 @@ function connectAccount(account, profile, type) {
 	if (account.connectedAccounts.indexOf(type) == -1) {
 		account.connectedAccounts.push(type);
 	}
-
 }
 
 function updateOrCreateUser(profile, type, req) {
-
 	// link to existing account:
 	if (req.session.uniqueToken != null) {
-
 		// get account by token:
-		Account.findOne({ "token": req.session.uniqueToken }).exec((error, account) => {
-
+		Account.findOne({ token: req.session.uniqueToken }).exec((error, account) => {
 			if (error) {
 				console.log(error);
 				throw error;
@@ -331,7 +313,9 @@ function updateOrCreateUser(profile, type, req) {
 			}
 
 			if (!account) {
-				console.log("couldn't find account from token. continuing to find / create one from oauth.");
+				console.log(
+					"couldn't find account from token. continuing to find / create one from oauth.",
+				);
 			}
 		});
 		// create an account if one wasn't found:
@@ -342,7 +326,6 @@ function updateOrCreateUser(profile, type, req) {
 	let queryObj = {};
 	queryObj[type + "." + "id"] = profile.id;
 	Account.findOne(queryObj).exec((error, account) => {
-
 		if (error) {
 			console.log(error);
 			throw error;
@@ -360,7 +343,6 @@ function updateOrCreateUser(profile, type, req) {
 				}
 				console.log("account saved.");
 			});
-
 		}
 		// acount doesn't exist:
 		if (!account) {
@@ -382,70 +364,81 @@ function updateOrCreateUser(profile, type, req) {
 			});
 		}
 	});
-
 }
 
 // twitch:
-passport.use(new twitchStrategy({
-		clientID: TWITCH_CLIENT_ID,
-		clientSecret: TWITCH_CLIENT_SECRET,
-		callbackURL: TWITCH_CALLBACK_URL,
-		scope: "user:read:email analytics:read:games",
-		passReqToCallback: true,
-	},
-	(req, accessToken, refreshToken, profile, done) => {
-		profile.accessToken = accessToken;
-		profile.refreshToken = refreshToken;
-		updateOrCreateUser(profile, "twitch", req);
-		done(null, profile);
-	}
-));
+passport.use(
+	new twitchStrategy(
+		{
+			clientID: TWITCH_CLIENT_ID,
+			clientSecret: TWITCH_CLIENT_SECRET,
+			callbackURL: TWITCH_CALLBACK_URL,
+			scope: "user:read:email analytics:read:games",
+			passReqToCallback: true,
+		},
+		(req, accessToken, refreshToken, profile, done) => {
+			profile.accessToken = accessToken;
+			profile.refreshToken = refreshToken;
+			updateOrCreateUser(profile, "twitch", req);
+			done(null, profile);
+		},
+	),
+);
 // google:
-passport.use(new googleStrategy({
-		clientID: GOOGLE_CLIENT_ID,
-		clientSecret: GOOGLE_CLIENT_SECRET,
-		callbackURL: GOOGLE_CALLBACK_URL,
-		scope: ["profile"],
-		passReqToCallback: true,
-	},
-	(req, accessToken, refreshToken, profile, done) => {
-		profile.accessToken = accessToken;
-		profile.refreshToken = refreshToken;
-		updateOrCreateUser(profile, "google", req);
-		done(null, profile);
-	}
-));
+passport.use(
+	new googleStrategy(
+		{
+			clientID: GOOGLE_CLIENT_ID,
+			clientSecret: GOOGLE_CLIENT_SECRET,
+			callbackURL: GOOGLE_CALLBACK_URL,
+			scope: ["profile"],
+			passReqToCallback: true,
+		},
+		(req, accessToken, refreshToken, profile, done) => {
+			profile.accessToken = accessToken;
+			profile.refreshToken = refreshToken;
+			updateOrCreateUser(profile, "google", req);
+			done(null, profile);
+		},
+	),
+);
 // youtube:
-passport.use(new youtubeV3Strategy({
-		clientID: YOUTUBE_CLIENT_ID,
-		clientSecret: YOUTUBE_CLIENT_SECRET,
-		callbackURL: YOUTUBE_CALLBACK_URL,
-		scope: ["https://www.googleapis.com/auth/youtube.readonly"],
-		// "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube"
-		passReqToCallback: true,
-	},
-	(req, accessToken, refreshToken, profile, done) => {
-		profile.accessToken = accessToken;
-		profile.refreshToken = refreshToken;
-		updateOrCreateUser(profile, "youtube", req);
-		done(null, profile);
-	}
-));
+passport.use(
+	new youtubeV3Strategy(
+		{
+			clientID: YOUTUBE_CLIENT_ID,
+			clientSecret: YOUTUBE_CLIENT_SECRET,
+			callbackURL: YOUTUBE_CALLBACK_URL,
+			scope: ["https://www.googleapis.com/auth/youtube.readonly"],
+			// "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube"
+			passReqToCallback: true,
+		},
+		(req, accessToken, refreshToken, profile, done) => {
+			profile.accessToken = accessToken;
+			profile.refreshToken = refreshToken;
+			updateOrCreateUser(profile, "youtube", req);
+			done(null, profile);
+		},
+	),
+);
 // discord:
-passport.use(new discordStrategy({
-		clientID: DISCORD_CLIENT_ID,
-		clientSecret: DISCORD_CLIENT_SECRET,
-		callbackURL: DISCORD_CALLBACK_URL,
-		scope: ["identify", "email"],
-		passReqToCallback: true,
-	},
-	(req, accessToken, refreshToken, profile, done) => {
-		profile.accessToken = accessToken;
-		profile.refreshToken = refreshToken;
-		updateOrCreateUser(profile, "discord", req);
-		done(null, profile);
-	}
-));
+passport.use(
+	new discordStrategy(
+		{
+			clientID: DISCORD_CLIENT_ID,
+			clientSecret: DISCORD_CLIENT_SECRET,
+			callbackURL: DISCORD_CALLBACK_URL,
+			scope: ["identify", "email"],
+			passReqToCallback: true,
+		},
+		(req, accessToken, refreshToken, profile, done) => {
+			profile.accessToken = accessToken;
+			profile.refreshToken = refreshToken;
+			updateOrCreateUser(profile, "discord", req);
+			done(null, profile);
+		},
+	),
+);
 
 passport.serializeUser((user, done) => {
 	done(null, user);
@@ -455,54 +448,79 @@ passport.deserializeUser((user, done) => {
 });
 
 // app.get("/auth/twitch/", passport.authenticate("twitch", {forceVerify: true}));
-app.get("/auth/twitch/", (req, res, next) => {
-	req.session.uniqueToken = req.query.uniqueToken;
-	passport.authenticate("twitch", { forceVerify: true })(req, res, next);
-}, (req, res) => {});
-app.get("/auth/twitch/callback", passport.authenticate("twitch", {
-	successRedirect: "/8100/redirect",
-	failureRedirect: "/",
-}));
+app.get(
+	"/auth/twitch/",
+	(req, res, next) => {
+		req.session.uniqueToken = req.query.uniqueToken;
+		passport.authenticate("twitch", { forceVerify: true })(req, res, next);
+	},
+	(req, res) => {},
+);
+app.get(
+	"/auth/twitch/callback",
+	passport.authenticate("twitch", {
+		successRedirect: "/8100/redirect",
+		failureRedirect: "/",
+	}),
+);
 
 // app.get("/auth/google/", passport.authenticate("google"));
-app.get("/auth/google/", (req, res, next) => {
-	req.session.uniqueToken = req.query.uniqueToken;
-	passport.authenticate("google")(req, res, next);
-}, (req, res) => {});
-app.get("/auth/google/callback", passport.authenticate("google", {
-	successRedirect: "/8100/redirect",
-	failureRedirect: "/",
-}));
+app.get(
+	"/auth/google/",
+	(req, res, next) => {
+		req.session.uniqueToken = req.query.uniqueToken;
+		passport.authenticate("google")(req, res, next);
+	},
+	(req, res) => {},
+);
+app.get(
+	"/auth/google/callback",
+	passport.authenticate("google", {
+		successRedirect: "/8100/redirect",
+		failureRedirect: "/",
+	}),
+);
 
 // app.get("/auth/youtube/", passport.authenticate("youtube"));
-app.get("/auth/youtube/", (req, res, next) => {
-	req.session.uniqueToken = req.query.uniqueToken;
-	passport.authenticate("youtube")(req, res, next);
-}, (req, res) => {});
-app.get("/auth/youtube/callback", passport.authenticate("youtube", {
-	successRedirect: "/8100/redirect",
-	failureRedirect: "/",
-}));
+app.get(
+	"/auth/youtube/",
+	(req, res, next) => {
+		req.session.uniqueToken = req.query.uniqueToken;
+		passport.authenticate("youtube")(req, res, next);
+	},
+	(req, res) => {},
+);
+app.get(
+	"/auth/youtube/callback",
+	passport.authenticate("youtube", {
+		successRedirect: "/8100/redirect",
+		failureRedirect: "/",
+	}),
+);
 
 // app.get("/auth/discord/", passport.authenticate("discord"));
-app.get("/auth/discord/", (req, res, next) => {
-	req.session.uniqueToken = req.query.uniqueToken;
-	passport.authenticate("discord")(req, res, next);
-}, (req, res) => {});
-app.get("/auth/discord/callback", passport.authenticate("discord", {
-	successRedirect: "/8100/redirect",
-	failureRedirect: "/",
-}));
-
+app.get(
+	"/auth/discord/",
+	(req, res, next) => {
+		req.session.uniqueToken = req.query.uniqueToken;
+		passport.authenticate("discord")(req, res, next);
+	},
+	(req, res) => {},
+);
+app.get(
+	"/auth/discord/callback",
+	passport.authenticate("discord", {
+		successRedirect: "/8100/redirect",
+		failureRedirect: "/",
+	}),
+);
 
 // If user has an authenticated session, display it, otherwise display link to authenticate
 app.get("/redirect", (req, res) => {
 	if (req.session && req.session.passport && req.session.passport.user) {
-
 		console.log("setting cookie.");
 
 		console.log(req.user);
-
 
 		// create a token that lets us access the account:
 		let token = crypto.randomBytes(64).toString("hex");
@@ -515,7 +533,6 @@ app.get("/redirect", (req, res) => {
 		queryObj[type + "." + "id"] = id;
 
 		Account.findOne(queryObj).exec((error, account) => {
-
 			if (error) {
 				console.log(error);
 				throw error;
@@ -535,15 +552,16 @@ app.get("/redirect", (req, res) => {
 			// acount doesn't exist:
 			if (!account) {
 				console.log("account doesn't exist, something went wrong.");
-				res.send(`<script>window.location.href = "https://remotegames.io/reset";</script>`);
+				res.send(
+					`<script>window.location.href = "https://remotegames.io/reset";</script>`,
+				);
 			} else {
 				res.send(`<script>window.location.href = "https://remotegames.io";</script>`);
 			}
-
 		});
 
 		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
-		res.cookie("TwitchPlaysNintendoSwitch", token, {
+		res.cookie("RemoteGames", token, {
 			maxAge: time,
 		});
 
@@ -552,7 +570,6 @@ app.get("/redirect", (req, res) => {
 		// 		redis.hexpireAsync("clientMap", password, (time / 1000)).then(function(success) {
 		// 			console.log("set password to expire in 7 days: " + success);
 		// 		});
-
 	}
 	// else {
 	// 	console.log("couldn't find account / no session.");
@@ -574,7 +591,6 @@ server.listen(port, () => {
 //console.log(util.inspect(clientDB, false, null));
 
 function Client(socket) {
-
 	this.socket = socket;
 	this.id = socket.id;
 	this.userid = null;
@@ -597,14 +613,13 @@ function Client(socket) {
 }
 
 function findClientByUserid(userid) {
-
 	let socketid = useridToSocketidMap[userid];
 	if (socketid != null && clients[socketid] != null) {
 		return socketid;
 	}
 
 	let index = -1;
-	for (key in clients) {
+	for (let key in clients) {
 		if (clients[key].userid == userid) {
 			index = clients[key].id;
 			useridToSocketidMap[userid] = index;
@@ -614,25 +629,18 @@ function findClientByUserid(userid) {
 	return index;
 }
 
-io.set("transports", [
-	"polling",
-	"websocket",
-	"xhr-polling",
-	"jsonp-polling"
-]);
+io.set("transports", ["polling", "websocket", "xhr-polling", "jsonp-polling"]);
 
 io.on("connection", (socket) => {
-
 	clients[socket.id] = new Client(socket);
 	console.log("#clients: " + Object.keys(clients).length);
 
 	// authenticate:
 	socket.on("authenticate", (data) => {
-
 		let client = clients[socket.id];
 
 		// get account by token:
-		Account.findOne({ "token": data.auth }).exec((error, account) => {
+		Account.findOne({ token: data.auth }).exec((error, account) => {
 			if (error) {
 				console.log(error);
 				throw error;
@@ -650,86 +658,90 @@ io.on("connection", (socket) => {
 			// check if already logged in:
 			let userid = "" + account._id;
 			userid = userid.trim();
-			redisClient.setAsync(`users:${userid}`, socket.id, "NX", "EX", 30).then((success) => {
-
-				if (!success) {
-					console.log("already logged in.");
-					socket.emit("unauthorized", "ALREADY_LOGGED_IN");
-					return;
-				}
-				// console.log("registering account.");
-				client.validUsernames = [];
-
-				if (account.connectedAccounts.indexOf("discord") > -1) {
-					client.validUsernames.push(account.discord.username + "#" + account.discord.discriminator);
-				}
-				if (account.connectedAccounts.indexOf("twitch") > -1) {
-					client.validUsernames.push(account.twitch.displayName);
-					// todo: fix
-					if (sublist.indexOf(account.twitch.displayName) > -1) {
-						account.is_sub = true;
+			redisClient
+				.setAsync(`users:${userid}`, socket.id, "NX", "EX", 30)
+				.then((success) => {
+					if (!success) {
+						console.log("already logged in.");
+						socket.emit("unauthorized", "ALREADY_LOGGED_IN");
+						return;
 					}
-					if (pluslist.indexOf(account.twitch.displayName) > -1) {
-						account.is_plus = true;
+					// console.log("registering account.");
+					client.validUsernames = [];
+
+					if (account.connectedAccounts.indexOf("discord") > -1) {
+						client.validUsernames.push(
+							account.discord.username + "#" + account.discord.discriminator,
+						);
 					}
-				}
-				if (account.connectedAccounts.indexOf("youtube") > -1) {
-					client.validUsernames.push(account.youtube.displayName);
-				}
-				if (account.connectedAccounts.indexOf("google") > -1) {
-					client.validUsernames.push(account.google.displayName);
-				}
-
-				if (data.usernameIndex >= 0 && data.usernameIndex < client.validUsernames.length) {
-					client.username = client.validUsernames[data.usernameIndex];
-				} else {
-					client.username = client.validUsernames[0];
-				}
-
-				client.userid = "" + account._id;
-				client.userid = client.userid.trim();
-
-				client.is_mod = account.is_mod;
-				client.is_plus = account.is_plus;
-				client.is_sub = account.is_sub;
-				client.is_ban = client.is_ban || account.is_ban;
-				client.timePlayed = (account.timePlayed || 0);
-
-				// save IP if not known:
-				if (account.IPs.indexOf(client.ip) == -1) {
-					account.IPs.push(client.ip);
-				}
-
-				// todo: maybe ban the account if using a banned IP: (or keep as is)
-				for (let i = 0; i < account.IPs.length; i++) {
-					if (bannedIPs.indexOf(account.IPs[i]) > -1) {
-						client.is_ban = true;
+					if (account.connectedAccounts.indexOf("twitch") > -1) {
+						client.validUsernames.push(account.twitch.displayName);
+						// todo: fix
+						if (sublist.indexOf(account.twitch.displayName) > -1) {
+							account.is_sub = true;
+						}
+						if (pluslist.indexOf(account.twitch.displayName) > -1) {
+							account.is_plus = true;
+						}
 					}
-				}
+					if (account.connectedAccounts.indexOf("youtube") > -1) {
+						client.validUsernames.push(account.youtube.displayName);
+					}
+					if (account.connectedAccounts.indexOf("google") > -1) {
+						client.validUsernames.push(account.google.displayName);
+					}
 
-				uniqueIDToPreferredUsernameMap[client.userid] = client.username;
-				accountMap[client.userid] = {
-					username: client.username,
-					is_sub: client.is_sub,
-					is_plus: client.is_plus,
-					is_mod: client.is_mod,
-					is_ban: client.is_ban,
-					timePlayed: client.timePlayed,
-					validUsernames: client.validUsernames,
-				};
+					if (
+						data.usernameIndex >= 0 &&
+						data.usernameIndex < client.validUsernames.length
+					) {
+						client.username = client.validUsernames[data.usernameIndex];
+					} else {
+						client.username = client.validUsernames[0];
+					}
 
+					client.userid = "" + account._id;
+					client.userid = client.userid.trim();
 
-				let userInfo = {};
-				userInfo.userid = client.userid;
-				userInfo.username = client.username;
-				userInfo.connectedAccounts = account.connectedAccounts;
-				userInfo.validUsernames = client.validUsernames;
-				userInfo.timePlayed = client.timePlayed;
-				userInfo.is_mod = client.is_mod;
+					client.is_mod = account.is_mod;
+					client.is_plus = account.is_plus;
+					client.is_sub = account.is_sub;
+					client.is_ban = client.is_ban || account.is_ban;
+					client.timePlayed = account.timePlayed || 0;
 
-				socket.emit("userInfo", userInfo);
+					// save IP if not known:
+					if (account.IPs.indexOf(client.ip) == -1) {
+						account.IPs.push(client.ip);
+					}
 
-			});
+					// todo: maybe ban the account if using a banned IP: (or keep as is)
+					for (let i = 0; i < account.IPs.length; i++) {
+						if (bannedIPs.indexOf(account.IPs[i]) > -1) {
+							client.is_ban = true;
+						}
+					}
+
+					uniqueIDToPreferredUsernameMap[client.userid] = client.username;
+					accountMap[client.userid] = {
+						username: client.username,
+						is_sub: client.is_sub,
+						is_plus: client.is_plus,
+						is_mod: client.is_mod,
+						is_ban: client.is_ban,
+						timePlayed: client.timePlayed,
+						validUsernames: client.validUsernames,
+					};
+
+					let userInfo = {};
+					userInfo.userid = client.userid;
+					userInfo.username = client.username;
+					userInfo.connectedAccounts = account.connectedAccounts;
+					userInfo.validUsernames = client.validUsernames;
+					userInfo.timePlayed = client.timePlayed;
+					userInfo.is_mod = client.is_mod;
+
+					socket.emit("userInfo", userInfo);
+				});
 		});
 	});
 
@@ -748,7 +760,6 @@ io.on("connection", (socket) => {
 
 		let client = clients[socket.id];
 		if (client) {
-
 			// update timePlayed:
 			// get account:
 			Account.findOne({ _id: client.userid }, (error, account) => {
@@ -793,7 +804,7 @@ io.on("connection", (socket) => {
 			socket.emit("banned");
 			return;
 		}
-		if (data && typeof (data.message) != "string") {
+		if (data && typeof data.message != "string") {
 			return;
 		} else {
 			data.message = data.message.replace(/(\r\n\t|\n|\r\t)/gm, "");
@@ -820,7 +831,6 @@ io.on("connection", (socket) => {
 
 	// send inputs:
 	socket.on("sendControllerState", (data) => {
-
 		let client = clients[socket.id];
 
 		if (client == null || client.userid == null) {
@@ -876,13 +886,13 @@ io.on("connection", (socket) => {
 
 		let valid = true;
 		// ((btns & (1 << n)) != 0);
-		if (((btns & (1 << 8)) != 0) && !client.is_mod) {
+		if ((btns & (1 << 8)) != 0 && !client.is_mod) {
 			valid = false;
 		}
-		if (((btns & (1 << 16)) != 0) && !client.is_plus) {
+		if ((btns & (1 << 16)) != 0 && !client.is_plus) {
 			valid = false;
 		}
-		if (((btns & (1 << 17)) != 0) && !client.is_mod) {
+		if ((btns & (1 << 17)) != 0 && !client.is_mod) {
 			valid = false;
 		}
 
@@ -900,7 +910,6 @@ io.on("connection", (socket) => {
 	/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 	socket.on("joinQueue", (cNum) => {
-
 		let client = clients[socket.id];
 		if (client == null || client.userid == null) {
 			return;
@@ -946,7 +955,6 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("leaveQueue", (cNum) => {
-
 		let client = clients[socket.id];
 		if (client == null || client.userid == null) {
 			return;
@@ -976,16 +984,13 @@ io.on("connection", (socket) => {
 			io.emit("controllerState", {
 				cNum: cNum,
 				btns: 0,
-				axes: [restPos, restPos, restPos, restPos, 0, 0],
+				axes: [0, 0, 0, 0, 0, 0],
 			});
 		}
 
 		// emit turn times left:
 		calculateTurnExpirations();
-
 	});
-
-
 
 	/* STREAM COMMANDS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 	socket.on("restart1", () => {
@@ -1050,7 +1055,6 @@ io.on("connection", (socket) => {
 		}, 500);
 	});
 
-
 	/* LISTS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 
 	// 	socket.on("banlist", function(data) {
@@ -1081,7 +1085,6 @@ io.on("connection", (socket) => {
 		}
 	});
 
-
 	/* OTHER COMMANDS @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("rickroll", (data) => {
 		// check if it's coming from the controller:
@@ -1105,7 +1108,6 @@ io.on("connection", (socket) => {
 		}
 	});
 	socket.on("lock", (data) => {
-
 		let client = clients[socket.id];
 		let legit = false;
 		// check if it's coming from the controller:
@@ -1214,13 +1216,15 @@ io.on("connection", (socket) => {
 		for (let i = 0; i < controlQueues.length; i++) {
 			forfeitTurn(client.userid, i);
 		}
-		setTimeout((client) => {
-			client.is_ban = false;
-		}, tempBanTime, client);
-
+		setTimeout(
+			(client) => {
+				client.is_ban = false;
+			},
+			tempBanTime,
+			client,
+		);
 	});
 	socket.on("permaBan", (data) => {
-
 		let client = clients[socket.id];
 
 		// check if it's coming from the controller:
@@ -1295,7 +1299,6 @@ io.on("connection", (socket) => {
 				});
 			}
 		});
-
 	});
 	socket.on("unban", (data) => {
 		let client = clients[socket.id];
@@ -1368,7 +1371,6 @@ io.on("connection", (socket) => {
 					}
 				});
 			}
-
 		});
 	});
 	socket.on("setTurnLength", (data) => {
@@ -1400,7 +1402,7 @@ io.on("connection", (socket) => {
 		}
 	});
 	socket.on("botMessage", (data) => {
-		if (typeof (data) != "string") {
+		if (typeof data != "string") {
 			return;
 		} else {
 			data = data.replace(/(\r\n\t|\n|\r\t)/gm, "");
@@ -1432,7 +1434,11 @@ io.on("connection", (socket) => {
 		if (client == null || client.userid == null) {
 			return;
 		}
-		if (client.userid != controlQueues[0][0] && controlQueues[0].length > 0 && !client.is_mod) {
+		if (
+			client.userid != controlQueues[0][0] &&
+			controlQueues[0].length > 0 &&
+			!client.is_mod
+		) {
 			io.emit("lagless1Settings", lagless1Settings);
 			return;
 		}
@@ -1461,7 +1467,11 @@ io.on("connection", (socket) => {
 		if (client == null || client.userid == null) {
 			return;
 		}
-		if (client.userid != controlQueues[0][0] && controlQueues[0].length > 0 && !client.is_mod) {
+		if (
+			client.userid != controlQueues[0][0] &&
+			controlQueues[0].length > 0 &&
+			!client.is_mod
+		) {
 			io.emit("lagless2Settings", lagless2Settings);
 			return;
 		}
@@ -1497,7 +1507,11 @@ io.on("connection", (socket) => {
 		if (client == null || client.userid == null) {
 			return;
 		}
-		if (client.userid != controlQueues[0][0] && controlQueues[0].length > 0 && !client.is_mod) {
+		if (
+			client.userid != controlQueues[0][0] &&
+			controlQueues[0].length > 0 &&
+			!client.is_mod
+		) {
 			io.emit("lagless3Settings", lagless3Settings);
 			return;
 		}
@@ -1525,7 +1539,6 @@ io.on("connection", (socket) => {
 			io.emit("lagless3Settings", lagless3Settings);
 		}
 	});
-
 
 	/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
 	/* SIMPLEPEER */
@@ -1555,6 +1568,10 @@ io.on("connection", (socket) => {
 		io.to(data.id).emit("hostPeerSignalV", data.data);
 	});
 
+	// lagless1 - 2.0:
+	socket.on("video", (data) => {
+		io.emit("video", data);
+	});
 
 	/* AUDIO 4.0 @@@@@@@@@@@@@@@@@@@@@@@@ */
 	socket.on("d", (data) => {
@@ -1574,10 +1591,17 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("join", (room) => {
-
 		let client = clients[socket.id];
 
-		let secureList = ["lagless1Host", "lagless2Host", "lagless3Host", "lagless4Host", "lagless5Host", "controller", "controller2"];
+		let secureList = [
+			"lagless1Host",
+			"lagless2Host",
+			"lagless3Host",
+			"lagless4Host",
+			"lagless5Host",
+			"controller",
+			"controller2",
+		];
 		let streamList = ["stream0", "stream1", "stream2", "stream3", "stream4"];
 		if (secureList.indexOf(room) > -1) {
 			return;
@@ -1593,7 +1617,6 @@ io.on("connection", (socket) => {
 		socket.join(room);
 	});
 	socket.on("joinSecure", (data, password) => {
-
 		let myData = { room: "", password: "" };
 
 		if (typeof password == "undefined") {
@@ -1614,7 +1637,7 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("leaveStreams", () => {
-		for(let i = 0; i < 5; i++) {
+		for (let i = 0; i < 5; i++) {
 			socket.leave("stream" + i);
 		}
 	});
@@ -1699,9 +1722,7 @@ setInterval(() => {
 	lagless2ChangeAvailable = true;
 }, 300);
 
-
 function forfeitTurn(userid, cNum) {
-
 	// forfeit turn:
 	let index = controlQueues[cNum].indexOf(userid);
 	if (index == -1) {
@@ -1716,7 +1737,7 @@ function forfeitTurn(userid, cNum) {
 	io.emit("controllerState", {
 		cNum: cNum,
 		btns: 0,
-		axes: [restPos, restPos, restPos, restPos, 0, 0],
+		axes: [0, 0, 0, 0, 0, 0],
 	});
 
 	// reset the timers if the person forfeiting is first in line:
@@ -1738,7 +1759,6 @@ function forfeitTurn(userid, cNum) {
 	// emit turn times left:
 	calculateTurnExpirations();
 }
-
 
 function calculateTurnExpirations() {
 	// calculate time left for each player
@@ -1773,7 +1793,6 @@ function calculateTurnExpirations() {
 	// 	turnExpirations: turnExpirations,
 	// 	forfeitExpirations: forfeitExpirations,
 	// });
-
 }
 
 // todo: only send the diff of what changed / make it only reset the cNum
@@ -1791,7 +1810,6 @@ function emitForfeitStartTimes() {
 }
 
 function resetTimers(userid, cNum) {
-
 	// sub perk:
 	let index = findClientByUserid(controlQueues[cNum][0]);
 	let client = clients[index];
@@ -1814,7 +1832,6 @@ function resetTimers(userid, cNum) {
 }
 
 function moveLine(cNum) {
-
 	// if the queue length is more than one person
 	// move the line:
 	if (controlQueues[cNum].length > 1) {
@@ -1823,7 +1840,7 @@ function moveLine(cNum) {
 		io.emit("controllerState", {
 			cNum: cNum,
 			btns: 0,
-			axes: [restPos, restPos, restPos, restPos, 0, 0],
+			axes: [0, 0, 0, 0, 0, 0],
 		});
 		io.emit("controlQueues", controlQueues);
 	}
@@ -1852,7 +1869,6 @@ function moveLine(cNum) {
 }
 
 setInterval(() => {
-
 	for (let i = 0; i < 5; i++) {
 		io.in("stream" + i).clients((error, clientIDs) => {
 			if (error) throw error;
@@ -1881,7 +1897,12 @@ setInterval(() => {
 	// get list of logged in clients:
 	for (let key in clients) {
 		let client = clients[key];
-		if (client != null && client.userid != null && clients[client.id] != null && client.id != null) {
+		if (
+			client != null &&
+			client.userid != null &&
+			clients[client.id] != null &&
+			client.id != null
+		) {
 			loggedInClientIDs.push(client.id);
 		}
 		// todo: remove invalid users if they exist:
@@ -1900,7 +1921,6 @@ setInterval(() => {
 		let loggedInClientIDsCopy = loggedInClientIDs.slice(0);
 
 		for (let i = 0; i < controlQueues.length; i++) {
-
 			// check if any of the users are in the queue:
 
 			// modifies copy:
@@ -1991,7 +2011,6 @@ setInterval(() => {
 	// 	afkTimer = Date.now();
 	// 	io.to("controller").emit("afk");
 	// }
-
 }, 1000);
 
 // do every once in a while:
@@ -2011,7 +2030,13 @@ setInterval(() => {
 		forfeitLengths: forfeitLengths,
 	});
 	io.emit("viewers", {
-		viewers: [laglessClientUserids[0], laglessClientUserids[1], laglessClientUserids[2], laglessClientUserids[3], laglessClientUserids[4]],
+		viewers: [
+			laglessClientUserids[0],
+			laglessClientUserids[1],
+			laglessClientUserids[2],
+			laglessClientUserids[3],
+			laglessClientUserids[4],
+		],
 	});
 	emitForfeitStartTimes();
 }, 5000);
@@ -2035,21 +2060,21 @@ function addTimePlayed() {
 		clients[index].timePlayed += 1;
 	}
 }
-function customSetInterval(func, time){
-    var lastTime = Date.now(),
-        lastDelay = time,
-        outp = {};
-    function tick(){
-        func();
-        var now = Date.now(),
-            dTime = now - lastTime;
+function customSetInterval(func, time) {
+	var lastTime = Date.now(),
+		lastDelay = time,
+		outp = {};
+	function tick() {
+		func();
+		var now = Date.now(),
+			dTime = now - lastTime;
 
-        lastTime = now;
-        lastDelay = time + lastDelay - dTime;
-        outp.id = setTimeout(tick, lastDelay);
-    }
-    outp.id = setTimeout(tick, time);
-    return outp;
+		lastTime = now;
+		lastDelay = time + lastDelay - dTime;
+		outp.id = setTimeout(tick, lastDelay);
+	}
+	outp.id = setTimeout(tick, time);
+	return outp;
 }
 let timer = customSetInterval(addTimePlayed, 1000);
 

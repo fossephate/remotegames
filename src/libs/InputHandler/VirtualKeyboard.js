@@ -3,12 +3,9 @@ import keycode from "keycode";
 import { mathZoom } from "libs/tools.js";
 
 import VirtualProController from "./VirtualProController.js";
-let restPos = 128;
 
 export default class VirtualKeyboard {
-
 	constructor() {
-
 		this.state = new VirtualProController();
 		// this.getState = this.state.getState;
 		// this.setState = this.state.setState;
@@ -20,35 +17,6 @@ export default class VirtualKeyboard {
 
 		// function to call when state updates:
 		// this.updateParentState = () => {};
-
-		// this.map = {
-		// 	LU: "W",
-		// 	LD: "S",
-		// 	LL: "A",
-		// 	LR: "D",
-		// 	RU: "I",
-		// 	RD: "K",
-		// 	RL: "J",
-		// 	RR: "L",
-		// 	a: "right",
-		// 	b: "down",
-		// 	x: "up",
-		// 	y: "left",
-		// 	up: "T",
-		// 	down: "G",
-		// 	left: "F",
-		// 	right: "H",
-		// 	lstick: "R",
-		// 	rstick: "Y",
-		// 	l: "U",
-		// 	zl: "Q",
-		// 	r: "O",
-		// 	zr: "E",
-		// 	minus: "-",
-		// 	plus: "=",
-		// 	capture: "1",
-		// 	home: "2",
-		// };
 
 		this.map1 = {
 			LU: 0,
@@ -123,6 +91,8 @@ export default class VirtualKeyboard {
 
 		this.settings = {
 			analogStickMode: false,
+			stickAttack: 0.4,
+			stickReturn: 0.3,
 		};
 
 		this.lastPressedKey = null;
@@ -131,12 +101,10 @@ export default class VirtualKeyboard {
 			// console.log(event.key);
 			this.lastPressedKey = event.key;
 		});
-
 	}
 
 	// get controller state:
 	poll() {
-
 		// if (!this.state.keyboardControls) {
 		// 	return;
 		// }
@@ -145,57 +113,57 @@ export default class VirtualKeyboard {
 
 		if (!this.settings.analogStickMode) {
 			if (key.isPressed(this.map2[this.map1["LU"]])) {
-				this.state.axes[1] = 255;
+				this.state.axes[1] = 1;
 			} else if (key.wasPressed(this.map2[this.map1["LU"]], this.wasPressedKeyCodes)) {
-				this.state.axes[1] = restPos;
+				this.state.axes[1] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["LD"]])) {
-				this.state.axes[1] = 0;
+				this.state.axes[1] = -1;
 			} else if (key.wasPressed(this.map2[this.map1["LD"]], this.wasPressedKeyCodes)) {
-				this.state.axes[1] = restPos;
+				this.state.axes[1] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["LL"]])) {
-				this.state.axes[0] = 0;
+				this.state.axes[0] = -1;
 			} else if (key.wasPressed(this.map2[this.map1["LL"]], this.wasPressedKeyCodes)) {
-				this.state.axes[0] = restPos;
+				this.state.axes[0] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["LR"]])) {
-				this.state.axes[0] = 255;
+				this.state.axes[0] = 1;
 			} else if (key.wasPressed(this.map2[this.map1["LR"]], this.wasPressedKeyCodes)) {
-				this.state.axes[0] = restPos;
+				this.state.axes[0] = 0;
 			}
-
 		} else {
-
 			let leftRight = false;
 			let upDown = false;
 
 			if (key.isPressed(this.map2[this.map1["LU"]])) {
-				this.state.axes[1] = Math.round(parseInt(this.state.axes[1]) + settings.stickAttack);
+				this.state.axes[1] = this.state.axes[1] + this.settings.stickAttack;
 			}
 			if (key.isPressed(this.map2[this.map1["LD"]])) {
-				this.state.axes[1] = Math.round(parseInt(this.state.axes[1]) - settings.stickAttack);
+				this.state.axes[1] = this.state.axes[1] - this.settings.stickAttack;
 			}
 			if (key.isPressed(this.map2[this.map1["LL"]])) {
-				this.state.axes[0] = Math.round(parseInt(this.state.axes[0]) - settings.stickAttack);
+				this.state.axes[0] = this.state.axes[0] - this.settings.stickAttack;
 			}
 			if (key.isPressed(this.map2[this.map1["LR"]])) {
-				this.state.axes[0] = Math.round(parseInt(this.state.axes[0]) + settings.stickAttack);
+				this.state.axes[0] = this.state.axes[0] + this.settings.stickAttack;
 			}
 
-			upDown = key.isPressed(this.map2[this.map1["LU"]]) || key.isPressed(this.map2[this.map1["LD"]]);
-			leftRight = key.isPressed(this.map2[this.map1["LL"]]) || key.isPressed(this.map2[this.map1["LR"]]);
+			upDown =
+				key.isPressed(this.map2[this.map1["LU"]]) ||
+				key.isPressed(this.map2[this.map1["LD"]]);
+			leftRight =
+				key.isPressed(this.map2[this.map1["LL"]]) ||
+				key.isPressed(this.map2[this.map1["LR"]]);
 
 			if (!upDown) {
-				this.state.axes[1] = Math.round(mathZoom(parseInt(this.state.axes[1]), restPos, settings.stickReturn));
+				this.state.axes[1] = mathZoom(this.state.axes[1], 0, this.settings.stickReturn);
 			}
 
 			if (!leftRight) {
-				this.state.axes[0] = Math.round(mathZoom(parseInt(this.state.axes[0]), restPos, settings.stickReturn));
+				this.state.axes[0] = mathZoom(this.state.axes[0], 0, this.settings.stickReturn);
 			}
 		}
-
-		// console.log(this.state.lstick);
 
 		if (key.isPressed(this.map2[this.map1["a"]])) {
 			this.state.buttons.a = 1;
@@ -241,51 +209,55 @@ export default class VirtualKeyboard {
 
 		if (!this.settings.analogStickMode) {
 			if (key.isPressed(this.map2[this.map1["RU"]])) {
-				this.state.axes[3] = 255;
+				this.state.axes[3] = 1;
 			} else if (key.wasPressed(this.map2[this.map1["RU"]], this.wasPressedKeyCodes)) {
-				this.state.axes[3] = restPos;
+				this.state.axes[3] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["RD"]])) {
-				this.state.axes[3] = 0;
+				this.state.axes[3] = -1;
 			} else if (key.wasPressed(this.map2[this.map1["RD"]], this.wasPressedKeyCodes)) {
-				this.state.axes[3] = restPos;
+				this.state.axes[3] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["RL"]])) {
-				this.state.axes[2] = 0;
+				this.state.axes[2] = -1;
 			} else if (key.wasPressed(this.map2[this.map1["RL"]], this.wasPressedKeyCodes)) {
-				this.state.axes[2] = restPos;
+				this.state.axes[2] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["RR"]])) {
-				this.state.axes[2] = 255;
+				this.state.axes[2] = 1;
 			} else if (key.wasPressed(this.map2[this.map1["RR"]], this.wasPressedKeyCodes)) {
-				this.state.axes[2] = restPos;
+				this.state.axes[2] = 0;
 			}
 		} else {
 			let leftRight = false;
 			let upDown = false;
 
 			if (key.isPressed(this.map2[this.map1["RU"]])) {
-				this.state.axes[3] = Math.round(parseInt(this.state.axes[3]) + settings.stickAttack);
+				this.state.axes[3] = this.state.axes[3] + this.settings.stickAttack;
 			}
 			if (key.isPressed(this.map2[this.map1["RD"]])) {
-				this.state.axes[3] = Math.round(parseInt(this.state.axes[3]) - settings.stickAttack);
+				this.state.axes[3] = this.state.axes[3] - this.settings.stickAttack;
 			}
 			if (key.isPressed(this.map2[this.map1["RL"]])) {
-				this.state.axes[2] = Math.round(parseInt(this.state.axes[2]) - settings.stickAttack);
+				this.state.axes[2] = this.state.axes[2] - this.settings.stickAttack;
 			}
 			if (key.isPressed(this.map2[this.map1["RR"]])) {
-				this.state.axes[2] = Math.round(parseInt(this.state.axes[2]) + settings.stickAttack);
+				this.state.axes[2] = this.state.axes[2] + this.settings.stickAttack;
 			}
 
-			upDown = key.isPressed(this.map.RU) || key.isPressed(this.map.RD);
-			leftRight = key.isPressed(this.map.RL) || key.isPressed(this.map.RR);
+			upDown =
+				key.isPressed(this.map2[this.map1["RU"]]) ||
+				key.isPressed(this.map2[this.map1["RD"]]);
+			leftRight =
+				key.isPressed(this.map2[this.map1["RL"]]) ||
+				key.isPressed(this.map2[this.map1["RR"]]);
 
 			if (!upDown) {
-				this.state.axes[3] = Math.round(mathZoom(parseInt(this.state.axes[3]), restPos, settings.stickReturn));
+				this.state.axes[3] = mathZoom(this.state.axes[3], 0, this.settings.stickReturn);
 			}
 
 			if (!leftRight) {
-				this.state.axes[2] = Math.round(mathZoom(parseInt(this.state.axes[2]), restPos, settings.stickReturn));
+				this.state.axes[2] = mathZoom(this.state.axes[2], 0, this.settings.stickReturn);
 			}
 		}
 

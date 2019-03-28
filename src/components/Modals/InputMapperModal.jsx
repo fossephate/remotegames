@@ -46,12 +46,7 @@ const BUTTON_NAMES = [
 	"home",
 ];
 
-const AXIS_NAMES = [
-	"LX",
-	"LY",
-	"RX",
-	"RY",
-];
+const AXIS_NAMES = ["LX", "LY", "RX", "RY"];
 
 const KEYBOARD_MAP = [
 	"LU",
@@ -83,7 +78,6 @@ const KEYBOARD_MAP = [
 ];
 
 class ControllerMapper extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -96,68 +90,66 @@ class ControllerMapper extends PureComponent {
 		this.state = {
 			waiting: false,
 		};
-
 	}
 
 	mapButton() {
+		let inputHandler = this.props.inputHandler;
 
-		window.inputHandler.controller.lastChangedButton = null;
+		inputHandler.controller.lastChangedButton = null;
 
-		this.setState({waiting: true});
+		this.setState({ waiting: true });
 
 		this.mapButtonTimer = setInterval(() => {
-
-			if (window.inputHandler.controller.lastChangedButton != null) {
-
+			if (inputHandler.controller.lastChangedButton != null) {
 				clearInterval(this.mapButtonTimer);
 
 				if (this.props.type == "button") {
-					let lastChangedIndex = window.inputHandler.controller.lastChangedButton;
+					let lastChangedIndex = inputHandler.controller.lastChangedButton;
 					let which = parseInt(this.props.which);
-					// console.log(window.inputHandler.controller.settings.map.buttons[lastChangedIndex].which);
+					// console.log(inputHandler.controller.settings.map.buttons[lastChangedIndex].which);
 					console.log(lastChangedIndex);
-					window.inputHandler.controller.settings.map.buttons[lastChangedIndex].type = "button";
-					window.inputHandler.controller.settings.map.buttons[lastChangedIndex].which = BUTTON_NAMES[parseInt(this.props.which)];
+					inputHandler.controller.settings.map.buttons[lastChangedIndex].type = "button";
+					inputHandler.controller.settings.map.buttons[lastChangedIndex].which =
+						BUTTON_NAMES[parseInt(this.props.which)];
 				}
 				if (this.props.type == "axis") {
 					// todo: finish
-					// window.inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].type = "axis";
-					// window.inputHandler.controller.settings.map.axes[parseInt(this.props.which)] = BUTTON_NAMES[window.inputHandler.controller.lastChangedButton];
+					// inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].type = "axis";
+					// inputHandler.controller.settings.map.axes[parseInt(this.props.which)] = BUTTON_NAMES[inputHandler.controller.lastChangedButton];
 				}
-				window.inputHandler.controller.lastChangedButton = null;
-				this.setState({waiting: false});
+				inputHandler.controller.lastChangedButton = null;
+				this.setState({ waiting: false });
 				this.props.update();
 			}
-
 		}, 200);
-
 	}
 
 	mapAxis() {
-
 		// this.setState({waiting: true});
-
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		let NAMES = this.props.type == "button" ? BUTTON_NAMES : AXIS_NAMES;
 
+		let inputHandler = this.props.inputHandler;
+
 		if (this.state.waiting) {
 			return (
 				<ListItem>
-					<ListItemText>{`${NAMES[this.props.which]}`} waiting for axis / button input...</ListItemText>
+					<ListItemText>
+						{`${NAMES[this.props.which]}`} waiting for axis / button input...
+					</ListItemText>
 				</ListItem>
 			);
 		}
 		// let currentMapping = this.props.type + " ";
 		let currentMapping = "";
 		if (this.props.type == "button") {
-			// currentMapping += window.inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].which;
-			for (let i = 0; i < window.inputHandler.controller.settings.map.buttons.length; i++) {
-				let btn = window.inputHandler.controller.settings.map.buttons[i];
+			// currentMapping += inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].which;
+			for (let i = 0; i < inputHandler.controller.settings.map.buttons.length; i++) {
+				let btn = inputHandler.controller.settings.map.buttons[i];
 				if (btn.which == NAMES[this.props.which]) {
 					// currentMapping.push(i);
 					currentMapping = i;
@@ -166,9 +158,9 @@ class ControllerMapper extends PureComponent {
 			}
 		}
 		if (this.props.type == "axis") {
-			// currentMapping += window.inputHandler.controller.settings.map.axes[parseInt(this.props.which)].which;
-			for (let i = 0; i < window.inputHandler.controller.settings.map.axes.length; i++) {
-				let axis = window.inputHandler.controller.settings.map.axes[i];
+			// currentMapping += inputHandler.controller.settings.map.axes[parseInt(this.props.which)].which;
+			for (let i = 0; i < inputHandler.controller.settings.map.axes.length; i++) {
+				let axis = inputHandler.controller.settings.map.axes[i];
 				if (axis.which == NAMES[this.props.which]) {
 					// currentMapping.push(i);
 					currentMapping = i;
@@ -181,16 +173,18 @@ class ControllerMapper extends PureComponent {
 			<ListItem>
 				<ListItemText>{`${NAMES[this.props.which]}`}</ListItemText>
 				<ListItemText>{currentMapping}</ListItemText>
-				<Button variant="contained" onClick={this.mapButton}>Map To Button</Button>
-				<Button variant="contained" onClick={this.mapAxis}>Map To Axis</Button>
+				<Button variant="contained" onClick={this.mapButton}>
+					Map To Button
+				</Button>
+				<Button variant="contained" onClick={this.mapAxis}>
+					Map To Axis
+				</Button>
 			</ListItem>
 		);
 	}
 }
 
-
 class KeyboardMapper extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -202,53 +196,55 @@ class KeyboardMapper extends PureComponent {
 		this.state = {
 			waiting: false,
 		};
-
 	}
 
 	mapKey() {
+		let inputHandler = this.props.inputHandler;
 
-		console.log(window.inputHandler);
+		console.log(inputHandler);
 
-		window.inputHandler.keyboard.lastPressedKey = null;
+		inputHandler.keyboard.lastPressedKey = null;
 
-		this.setState({waiting: true});
+		this.setState({ waiting: true });
 
 		this.mapKeyTimer = setInterval(() => {
-
-			if (window.inputHandler.keyboard.lastPressedKey != null) {
-
+			if (inputHandler.keyboard.lastPressedKey != null) {
 				clearInterval(this.mapKeyTimer);
 
-				window.inputHandler.keyboard.map2[parseInt(this.props.which)] = window.inputHandler.keyboard.lastPressedKey;
+				inputHandler.keyboard.map2[parseInt(this.props.which)] =
+					inputHandler.keyboard.lastPressedKey;
 
-				window.inputHandler.keyboard.lastPressedKey = null;
-				this.setState({waiting: false});
+				inputHandler.keyboard.lastPressedKey = null;
+				this.setState({ waiting: false });
 				this.props.update();
 			}
-
 		}, 200);
-
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		if (this.state.waiting) {
 			return (
 				<ListItem>
-					<ListItemText>{`${KEYBOARD_MAP[this.props.which]}`} waiting for keypress...</ListItemText>
+					<ListItemText>
+						{`${KEYBOARD_MAP[this.props.which]}`} waiting for keypress...
+					</ListItemText>
 				</ListItem>
 			);
 		}
 
-		let currentMapping = window.inputHandler.keyboard.map2[parseInt(this.props.which)];
+		let currentMapping = this.props.inputHandler.keyboard.map2[
+			parseInt(this.props.which)
+		];
 
 		return (
 			<ListItem>
 				<ListItemText>{`${KEYBOARD_MAP[this.props.which]}`}</ListItemText>
 				<ListItemText>{currentMapping}</ListItemText>
-				<Button variant="contained" onClick={this.mapKey}>Map To Key</Button>
+				<Button variant="contained" onClick={this.mapKey}>
+					Map To Key
+				</Button>
 			</ListItem>
 		);
 	}
@@ -272,9 +268,9 @@ const styles = (theme) => ({
 	},
 	center: {
 		position: "fixed",
-	    top: "50%",
-	    left: "50%",
-	    transform: "translate(-50%, -50%)",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
 	},
 	controllerRemapper: {
 		display: "flex",
@@ -292,9 +288,7 @@ const styles = (theme) => ({
 	},
 });
 
-
 class InputMapperModal extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -309,7 +303,7 @@ class InputMapperModal extends PureComponent {
 
 	handleChange(event) {
 		console.log(event.target.value);
-		inputHandler.controller.settings.controllerIndex = "" + event.target.value;
+		this.props.inputHandler.controller.settings.controllerIndex = "" + event.target.value;
 		this.setState({});
 	}
 
@@ -319,15 +313,21 @@ class InputMapperModal extends PureComponent {
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
+		let inputHandler = this.props.inputHandler;
+		let gamepadWrapper = inputHandler.gamepadWrapper;
+
 		let activeGamepadIndex = inputHandler.controller.settings.controllerIndex;
-		let activeGamepad = window.gamepadWrapper.controllers[activeGamepadIndex];
+		let activeGamepad = gamepadWrapper.controllers[activeGamepadIndex];
 
 		let gamepads = [];
-		for (let gamepadIndex in window.gamepadWrapper.controllers) {
-			gamepads.push(<MenuItem key={gamepadIndex} value={gamepadIndex}>{window.gamepadWrapper.controllers[gamepadIndex].id}</MenuItem>);
+		for (let gamepadIndex in gamepadWrapper.controllers) {
+			gamepads.push(
+				<MenuItem key={gamepadIndex} value={gamepadIndex}>
+					{gamepadWrapper.controllers[gamepadIndex].id}
+				</MenuItem>,
+			);
 		}
 
 		// show that no gamepad is selected if one isn't:
@@ -335,96 +335,76 @@ class InputMapperModal extends PureComponent {
 			// set to 0 so we render this:
 			activeGamepadIndex = 0;
 			// prepend so it's first:
-			gamepads.unshift(<MenuItem key={0} value={0}>No gamepad selected</MenuItem>);
+			gamepads.unshift(
+				<MenuItem key={0} value={0}>
+					No gamepad selected
+				</MenuItem>,
+			);
 		}
 
 		if (gamepads.length == 0 || activeGamepadIndex == null) {
 			activeGamepadIndex = 0;
-			gamepads.push(<MenuItem key={0} value={0}>No gamepads detected</MenuItem>);
+			gamepads.push(
+				<MenuItem key={0} value={0}>
+					No gamepads detected
+				</MenuItem>,
+			);
 		}
 
 		return (
-			<Modal
-				open={true}
-				onClose={this.handleClose}>
-
+			<Modal open={true} onClose={this.handleClose}>
 				<div className={classNames(classes.root, classes.center)}>
-
 					<Paper className={classes.controllerRemapper} elevation={4}>
-
 						<ListItemText>Active Gamepad:</ListItemText>
 
 						<Select
 							value={activeGamepadIndex}
 							onChange={this.handleChange}
-							input={<OutlinedInput labelWidth={0}/>}>
-
+							input={<OutlinedInput labelWidth={0} />}
+						>
 							{gamepads}
 						</Select>
 
 						<List className={classes.list}>
-							<ControllerMapper update={this.update} type="button" which="0"/>
-							<ControllerMapper update={this.update} type="button" which="1"/>
-							<ControllerMapper update={this.update} type="button" which="2"/>
-							<ControllerMapper update={this.update} type="button" which="3"/>
-							<ControllerMapper update={this.update} type="button" which="4"/>
-							<ControllerMapper update={this.update} type="button" which="5"/>
-							<ControllerMapper update={this.update} type="button" which="6"/>
-							<ControllerMapper update={this.update} type="button" which="7"/>
-							<ControllerMapper update={this.update} type="button" which="8"/>
-							<ControllerMapper update={this.update} type="button" which="9"/>
-							<ControllerMapper update={this.update} type="button" which="10"/>
-							<ControllerMapper update={this.update} type="button" which="11"/>
-							<ControllerMapper update={this.update} type="button" which="12"/>
-							<ControllerMapper update={this.update} type="button" which="13"/>
-							<ControllerMapper update={this.update} type="button" which="14"/>
-							<ControllerMapper update={this.update} type="button" which="15"/>
-							<ControllerMapper update={this.update} type="button" which="16"/>
-							<ControllerMapper update={this.update} type="axis" which="0"/>
-							<ControllerMapper update={this.update} type="axis" which="1"/>
-							<ControllerMapper update={this.update} type="axis" which="2"/>
-							<ControllerMapper update={this.update} type="axis" which="3"/>
+							{[...Array(17)].map((e, i) => (
+								<ControllerMapper
+									key={i}
+									update={this.update}
+									inputHandler={inputHandler}
+									type="button"
+									which={i}
+								/>
+							))}
+							{[...Array(4)].map((e, i) => (
+								<ControllerMapper
+									key={i}
+									update={this.update}
+									inputHandler={inputHandler}
+									type="axis"
+									which={i}
+								/>
+							))}
 						</List>
 					</Paper>
 
 					<Paper className={classes.keyboardRemapper} elevation={4}>
 						<ListItemText>Keyboard Remapper:</ListItemText>
 						<List className={classes.list}>
-							<KeyboardMapper update={this.update} type="button" which="0"/>
-							<KeyboardMapper update={this.update} type="button" which="1"/>
-							<KeyboardMapper update={this.update} type="button" which="2"/>
-							<KeyboardMapper update={this.update} type="button" which="3"/>
-							<KeyboardMapper update={this.update} type="button" which="4"/>
-							<KeyboardMapper update={this.update} type="button" which="5"/>
-							<KeyboardMapper update={this.update} type="button" which="6"/>
-							<KeyboardMapper update={this.update} type="button" which="7"/>
-							<KeyboardMapper update={this.update} type="button" which="8"/>
-							<KeyboardMapper update={this.update} type="button" which="9"/>
-							<KeyboardMapper update={this.update} type="button" which="10"/>
-							<KeyboardMapper update={this.update} type="button" which="11"/>
-							<KeyboardMapper update={this.update} type="button" which="12"/>
-							<KeyboardMapper update={this.update} type="button" which="13"/>
-							<KeyboardMapper update={this.update} type="button" which="14"/>
-							<KeyboardMapper update={this.update} type="button" which="15"/>
-							<KeyboardMapper update={this.update} type="button" which="16"/>
-							<KeyboardMapper update={this.update} type="button" which="17"/>
-							<KeyboardMapper update={this.update} type="button" which="18"/>
-							<KeyboardMapper update={this.update} type="button" which="19"/>
-							<KeyboardMapper update={this.update} type="button" which="20"/>
-							<KeyboardMapper update={this.update} type="button" which="21"/>
-							<KeyboardMapper update={this.update} type="button" which="22"/>
-							<KeyboardMapper update={this.update} type="button" which="23"/>
-							<KeyboardMapper update={this.update} type="button" which="24"/>
-							<KeyboardMapper update={this.update} type="button" which="25"/>
+							{[...Array(26)].map((e, i) => (
+								<KeyboardMapper
+									key={i}
+									update={this.update}
+									inputHandler={inputHandler}
+									type="button"
+									which={i}
+								/>
+							))}
 						</List>
 					</Paper>
-
 				</div>
-
 			</Modal>
 		);
 	}
-
 }
 
 export default compose(

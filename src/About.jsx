@@ -90,7 +90,6 @@ class About extends PureComponent {
 						variant="contained"
 						className={classes.back}
 						onClick={() => {
-							// window.location = "https://twitchplaysnintendoswitch.com";
 							this.props.history.push("/");
 						}}>Back</Button>
 
@@ -136,7 +135,7 @@ class About extends PureComponent {
 					</div>
 
 					<p>
-						The games, consoles, and server costs to run this project are primarily funded through <a href="https://twitch.tv/twitchplaysconsoles/subscribe/">Twitch subscriptions</a> and donations.
+						The games, consoles, and server costs to run this project are primarily funded through <a href="https://twitch.tv/remotegames/subscribe/">Twitch subscriptions</a> and donations.
 						If you like the project consider supporting it with the links below.
 					</p>
 
@@ -146,16 +145,16 @@ class About extends PureComponent {
 							border="0"
 							// width="130"
 							alt="Donate with Twitch"
-							src="https://twitchplaysnintendoswitch.com/images/about/twdonatebutton.png"
+							src="/images/about/twdonatebutton.png"
 							className={classes.image}
 							onClick={() => {
-								window.location = "https://streamlabs.com/twitchplaysconsoles/";
+								window.location = "https://streamlabs.com/remotegames/";
 							}}/>
 						<img
 							border="0"
 							// width="130"
 							alt="Join the Discord Server"
-							src="https://twitchplaysnintendoswitch.com/images/about/discordbutton.png"
+							src="/images/about/discordbutton.png"
 							className={classes.image}
 							onClick={() => {
 								window.location = "https://discord.io/tpns/";
@@ -164,18 +163,16 @@ class About extends PureComponent {
 							border="0"
 							// width="130"
 							alt="Donate with Paypal"
-							src="https://twitchplaysnintendoswitch.com/images/about/ppdonatebutton.png"
+							src="/images/about/ppdonatebutton.png"
 							className={classes.image}
 							onClick={() => {
 								window.location = "https://paypal.me/fossephate/";
 							}}/>
 
-						{/* https://streamlabs.com/twitchplaysconsoles */}
-
 
 					</div>
 
-					<iframe className={classes.twitch} src="https://player.twitch.tv/?channel=twitchplaysconsoles&muted=false&autoplay=true" height="360" width="640" frameBorder="0" scrolling="no" allowFullScreen={true}></iframe>
+					<iframe className={classes.twitch} src="https://player.twitch.tv/?channel=remotegames&muted=false&autoplay=true" height="360" width="640" frameBorder="0" scrolling="no" allowFullScreen={true}></iframe>
 
 				</Paper>
 

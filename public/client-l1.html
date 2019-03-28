@@ -1,0 +1,34 @@
+<html>
+
+<head>
+	<title>Lagless video client</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.3.0/simplepeer.min.js"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+	<audio></audio>
+	<video></video>
+	<canvas></canvas>
+	<script>
+		let socket = io("https://remotegames.io", {
+			path: "/8100/socket.io/",
+		});
+
+		window.canvas = document.querySelector("canvas");
+		window.ctx = canvas.getContext("2d");
+		window.canvas.width = 1280;
+		window.canvas.height = 720;
+
+		socket.on("video", (data) => {
+			let image = new Image();
+			image.onload = () => {
+				ctx.drawImage(image, 0, 0);
+			};
+			image.src = data;
+		});
+	</script>
+</body>
+
+</html>

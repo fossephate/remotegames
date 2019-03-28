@@ -31,72 +31,69 @@ const styles = (theme) => ({
 	},
 });
 
-
 class NavTabs extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		if (this.props.hideNav) {
 			return null;
 		}
 
-		let end = 4;
+		let end = 2;
 
 		return (
 			<Paper className={classes.root} elevation={4}>
 				<Tabs
 					centered
 					value={this.props.tabNumber}
-					indicatorColor="primary"
+					variant="fullWidth"
+					indicatorColor="secondary"
 					textColor="primary"
 					// scrollable
-		            // scrollButtons="auto"
+					// scrollButtons="auto"
 					onChange={(event, value) => {
 						this.props.handleChange(value);
-						if (value == (end + 0)) {
-							this.props.updateSettings({streamNumber: 0});
+						if (value == end + 0) {
+							this.props.updateSettings({ streamNumber: 0 });
 							this.props.history.push("/about");
 						}
-						if (value == (end + 1)) {
-							this.props.updateSettings({streamNumber: 0});
+						if (value == end + 1) {
+							this.props.updateSettings({ streamNumber: 0 });
 							this.props.history.push("/FAQ");
 						}
-						if (value == (end + 2)) {
+						if (value == end + 2) {
 							window.location.href = "https://discord.io/remotegames/";
 						}
 
-
 						if (value == 0) {
-							this.props.updateSettings({currentPlayer: 0});
+							this.props.updateSettings({ currentPlayer: 0 });
 						}
 						if (value == 1) {
-							this.props.updateSettings({currentPlayer: 4});
+							this.props.updateSettings({ currentPlayer: 4 });
 						}
-						if (value == 2) {
-							this.props.updateSettings({currentPlayer: 5});
-						}
-						if (value == 3) {
-							this.props.updateSettings({currentPlayer: 6});
-						}
-					}}>
-
-					{!this.props.loggedIn ? <Tab label="Twitch"/> : null}
+						// if (value == 2) {
+						// 	this.props.updateSettings({ currentPlayer: 5 });
+						// }
+						// if (value == 3) {
+						// 	this.props.updateSettings({ currentPlayer: 6 });
+						// }
+					}}
+				>
+					{!this.props.loggedIn ? <Tab label="Twitch" /> : null}
 
 					{/* <Tab label="Switch1"/> */}
-					<Tab label="Switch"/>
-					<Tab label="Xbox"/>
-					<Tab label="Host1"/>
-					<Tab label="Host2"/>
+					<Tab label="Switch" />
+					<Tab label="Xbox" />
+					{/* <Tab label="Host1" /> */}
+					{/* <Tab label="Host2" /> */}
 					{/* <Tab label="Host3"/> */}
-					<Tab label="About"/>
-					<Tab label="FAQ"/>
-					<Tab label="Discord"/>
+					<Tab label="About" />
+					<Tab label="FAQ" />
+					<Tab label="Discord" />
 					{/* <Link to="/about">About</Link> */}
 					{/* <Tab label="Wii U2"/> */}
 					{/* <Tab label="Lagless3"/> */}
@@ -120,12 +117,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		updateSettings: (settings) => {
-			dispatch(updateSettings(settings))
+			dispatch(updateSettings(settings));
 		},
 	};
 };
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(NavTabs);

@@ -1,9 +1,7 @@
 import SimplePeer from "simple-peer";
 
 export default class LaglessAudio {
-
 	constructor(socket) {
-
 		this.audio = document.createElement("audio");
 		this.socket = socket;
 		this.connected = false;
@@ -13,28 +11,38 @@ export default class LaglessAudio {
 			initiator: false,
 			trickle: true,
 		});
+
 		peer.on("error", (err) => {
-			console.log("error", err)
+			console.log("error", err);
 		});
+
 		peer.on("signal", (data) => {
 			console.log("SIGNAL", JSON.stringify(data));
 			this.socket.emit("clientPeerSignal", JSON.stringify(data));
 		});
+
 		peer.on("connect", () => {
 			console.log("CONNECT");
 			peer.send(Math.random());
 		});
+
 		peer.on("data", (data) => {
-			console.log("data: " + data)
+			console.log("data: " + data);
 		});
+
 		this.socket.on("hostPeerSignal", (data) => {
 			peer.signal(JSON.parse(data));
 		});
+
 		peer.on("stream", (stream) => {
 			// got remote audio stream, then show it in an audio tag
-			this.audio.src = window.URL.createObjectURL(stream); // deprecated
-			// this.audio.srcObj = stream;
-			this.audio.play();
+			try {
+				this.audio.src = window.URL.createObjectURL(stream); // deprecated
+				this.audio.play();
+			} catch (error) {
+				this.audio.srcObject = stream;
+				this.audio.play();
+			}
 			this.audio.volume = 0;
 		});
 
@@ -58,5 +66,4 @@ export default class LaglessAudio {
 			} catch (error) {}
 		}
 	}
-
 }

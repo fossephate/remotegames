@@ -24,35 +24,37 @@ const styles = (theme) => ({
 });
 
 class UsernameDropdown extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	handleChange(event) {
-
-	}
+	handleChange(event) {}
 
 	getUsernameList() {
-
 		let usernames = [];
 
 		for (let i = 0; i < this.props.validUsernames.length; i++) {
-			usernames.push(<MenuItem key={i} value={i}>{this.props.validUsernames[i]}</MenuItem>);
+			usernames.push(
+				<MenuItem key={i} value={i}>
+					{this.props.validUsernames[i]}&nbsp;&nbsp;
+				</MenuItem>,
+			);
 		}
 
 		if (this.props.validUsernames.length == 0) {
-			return <MenuItem key={0} value={0}>Not signed in.</MenuItem>;
+			return (
+				<MenuItem key={0} value={0}>
+					Not signed in.
+				</MenuItem>
+			);
 		}
 
 		return usernames;
 	}
 
 	render() {
-
-
 		let usernameIndex = this.props.validUsernames.indexOf(this.props.username);
 		if (usernameIndex == -1) {
 			usernameIndex = 0;
@@ -61,13 +63,12 @@ class UsernameDropdown extends PureComponent {
 			<Select
 				value={usernameIndex}
 				onChange={this.props.handleChange}
-				input={<OutlinedInput labelWidth={0}/>}>
-
+				input={<OutlinedInput labelWidth={0} />}
+			>
 				{this.getUsernameList()}
 			</Select>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {
@@ -87,5 +88,8 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(UsernameDropdown);

@@ -8,10 +8,8 @@ import { getCookie } from "libs/tools.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const userInfoEvents = (socket, dispatch) => {
-
-
 	/* AUTHENTICATION */
-	let authCookie = getCookie("TwitchPlaysNintendoSwitch");
+	let authCookie = getCookie("RemoteGames");
 	if (authCookie !== null) {
 		authCookie = authCookie.split(" ")[0].replace(/;/g, "");
 		dispatch(updateUserInfo({ authToken: authCookie }));
@@ -66,7 +64,6 @@ const userInfoEvents = (socket, dispatch) => {
 		}
 	}, 120000);
 
-
 	// socket.on("disconnect", (data) => {
 	// 	// console.log("lost connection, attempting reconnect2.");
 	// 	// socket.connect();
@@ -89,7 +86,5 @@ const userInfoEvents = (socket, dispatch) => {
 
 	return socket;
 };
-
-
 
 export default userInfoEvents;

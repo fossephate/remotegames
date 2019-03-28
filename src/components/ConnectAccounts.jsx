@@ -16,33 +16,33 @@ import { compose } from "recompose";
 const styles = (theme) => ({
 	root: {
 		width: "100%",
-	    textAlign: "center",
-	    display: "flex",
-	    justifyContent: "space-evenly",
-	    flexWrap: "wrap",
-	    flexDirection: "column",
-	    flex: "1",
+		textAlign: "center",
+		display: "flex",
+		justifyContent: "space-evenly",
+		flexWrap: "wrap",
+		flexDirection: "column",
+		flex: "1",
 	},
 	connectWithButton: {
 		display: "flex",
-	    alignSelf: "center",
-	    justifyContent: "space-evenly",
-	    border: "1px solid #888",
-	    borderRadius: "5px",
-	    boxShadow: "1px 1px 1px grey",
-	    textDecoration: "none !important",
-	    color: "#282828",
-	    whiteSpace: "nowrap",
-	    minHeight: "40px",
-	    width: "100%",
-	    cursor: "pointer",
-	    backgroundColor: "#fff",
+		alignSelf: "center",
+		justifyContent: "space-evenly",
+		border: "1px solid #888",
+		borderRadius: "5px",
+		boxShadow: "1px 1px 1px grey",
+		textDecoration: "none !important",
+		color: "#282828",
+		whiteSpace: "nowrap",
+		minHeight: "40px",
+		width: "100%",
+		cursor: "pointer",
+		backgroundColor: "#fff",
 
 		"& > *": {
 			display: "flex",
 			alignSelf: "center",
 			color: "#282828",
-		}
+		},
 	},
 	twitchLogo: {
 		width: "60px",
@@ -61,7 +61,6 @@ const styles = (theme) => ({
 });
 
 class ConnectAccounts extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
@@ -70,7 +69,7 @@ class ConnectAccounts extends PureComponent {
 		if (window.banned) {
 			return;
 		}
-		let url = window.location.origin + "/8100/auth/" + type + "/";
+		let url = window.location.origin + "/8099/auth/" + type + "/";
 		if (this.props.authToken != null) {
 			url += "?uniqueToken=" + this.props.authToken;
 		}
@@ -78,50 +77,60 @@ class ConnectAccounts extends PureComponent {
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		return (
 			<Paper className={classes.root} elevation={2}>
-				{
-					this.props.connectedAccounts.indexOf("twitch") == -1 ?
-					<div className={classes.connectWithButton} onClick={() => {this.connectAccountOrLogIn("twitch")}}>
+				{this.props.connectedAccounts.indexOf("twitch") == -1 ? (
+					<div
+						className={classes.connectWithButton}
+						onClick={() => {
+							this.connectAccountOrLogIn("twitch");
+						}}
+					>
 						<span>Connect with</span>
-						<img className={classes.twitchLogo} src="/images/Twitch_Purple_RGB.png"/>
+						<img className={classes.twitchLogo} src="/images/Twitch_Purple_RGB.png" />
 					</div>
-					: null
-				}
-				{
-					this.props.connectedAccounts.indexOf("youtubeV3Strategy") == -1 ?
-						<div className={classes.connectWithButton} onClick={() => {this.connectAccountOrLogIn("youtube")}}>
-							<span>Connect with</span>
-							<img className={classes.youtubeLogo} src="/images/yt_logo_rgb_light.png"/>
+				) : null}
+				{this.props.connectedAccounts.indexOf("youtubeV3Strategy") == -1 ? (
+					<div
+						className={classes.connectWithButton}
+						onClick={() => {
+							this.connectAccountOrLogIn("youtube");
+						}}
+					>
+						<span>Connect with</span>
+						<img className={classes.youtubeLogo} src="/images/yt_logo_rgb_light.png" />
+					</div>
+				) : null}
+				{this.props.connectedAccounts.indexOf("google") == -1 ? (
+					<div
+						className={classes.connectWithButton}
+						onClick={() => {
+							this.connectAccountOrLogIn("google");
+						}}
+					>
+						<span id="connectWithGoogleText">Connect with</span>
+						<div id="googleConnectButton" className="customGPlusSignIn">
+							<span className="googleIcon" />
+							<span className="googleButtonText">Google</span>
 						</div>
-					: null
-				}
-				{
-					this.props.connectedAccounts.indexOf("google") == -1 ?
-						<div className={classes.connectWithButton} onClick={() => {this.connectAccountOrLogIn("google")}}>
-							<span id="connectWithGoogleText">Connect with</span>
-							<div id="googleConnectButton" className="customGPlusSignIn">
-								<span className="googleIcon"></span>
-								<span className="googleButtonText">Google</span>
-							</div>
-						</div>
-					: null
-				}
-				{
-					this.props.connectedAccounts.indexOf("discord") == -1 ?
-						<div className={classes.connectWithButton} onClick={() => {this.connectAccountOrLogIn("discord")}}>
-							<span>Connect with</span>
-							<img className={classes.discordLogo} src="/images/discord_logo.png"/>
-						</div>
-					: null
-				}
+					</div>
+				) : null}
+				{this.props.connectedAccounts.indexOf("discord") == -1 ? (
+					<div
+						className={classes.connectWithButton}
+						onClick={() => {
+							this.connectAccountOrLogIn("discord");
+						}}
+					>
+						<span>Connect with</span>
+						<img className={classes.discordLogo} src="/images/discord_logo.png" />
+					</div>
+				) : null}
 			</Paper>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {

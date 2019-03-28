@@ -13,8 +13,8 @@ export default class Lagless4 {
 			initiator: false,
 			trickle: true,
 		});
-		videoPeer.on("error", (err) => {
-			console.log("error", err)
+		videoPeer.on("error", (error) => {
+			console.log("error", error)
 		});
 		videoPeer.on("signal", (data) => {
 			console.log("SIGNAL", JSON.stringify(data));
@@ -35,15 +35,14 @@ export default class Lagless4 {
 			// 	return;
 			// }
 			// got remote video stream, then show it in a video tag
-			this.canvas.src = window.URL.createObjectURL(stream); // deprecated
-			this.canvas.srcObj = stream;
-			this.canvas.play();
+			try {
+				this.canvas.src = window.URL.createObjectURL(stream); // deprecated
+				this.canvas.play();
+			} catch(error) {
+				this.canvas.srcObject = stream;
+				this.canvas.play();
+			}
 
-			// let canvas4 = $("#videoCanvas4")[0];
-			// // got remote video stream, then show it in a video tag
-			// // canvas4.src = window.URL.createObjectURL(stream); // deprecated
-			// canvas4.srcObj = stream;
-			// canvas4.play();
 		});
 
 		this.pause = this.pause.bind(this);

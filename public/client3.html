@@ -1,9 +1,9 @@
 <html>
 
 <head>
-	<title>Lagless audio client</title>
+	<title>Lagless 4 video client</title>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.1.2/simplepeer.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.3.0/simplepeer.min.js"></script>
 </head>
 
 <body>
@@ -17,38 +17,43 @@
 
 		let peer = new SimplePeer({
 			initiator: false,
-			trickle: true
+			trickle: true,
+			// config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:global.stun.twilio.com:3478?transport=udp' }] },
 		});
-		peer.on("error", function(err) {
-			console.log("error", err)
+		peer.on("error", (error) => {
+			console.log("error", error)
 		});
-		peer.on("signal", function(data) {
+		peer.on("signal", (data) => {
 			console.log("SIGNAL", JSON.stringify(data));
 			socket.emit("clientPeerSignalV", JSON.stringify(data));
 		});
-		peer.on("connect", function() {
+		peer.on("connect", () => {
 			console.log("CONNECT");
 			peer.send(Math.random());
 		});
-		peer.on("data", function(data) {
+		peer.on("data", (data) => {
 			console.log("data: " + data)
 		});
-		socket.on("hostPeerSignalV", function(data) {
+		socket.on("hostPeerSignalV", (data) => {
 			peer.signal(JSON.parse(data));
 		});
 
-		let video = document.querySelector("video");
+		window.video = document.querySelector("video");
 
-		peer.on("stream", function (stream) {
+		peer.on("stream", (stream) => {
+			console.log(stream);
 			// got remote video stream, then show it in a video tag
-			video.src = window.URL.createObjectURL(stream);// deprecated
-// 			video.srcObj = stream;
-			video.play();
+			try {
+				video.src = window.URL.createObjectURL(stream);
+				video.play();
+			} catch(error) {
+				video.srcObject = stream;
+				video.play();
+			}
+
 		});
 
 		socket.emit("requestVideo");
-
-
 
 	</script>
 </body>
