@@ -1,6 +1,8 @@
 // import Client from "./client.js";
 const Client = require("./client.js").Client;
 
+const config = require("./config.js");
+
 function everySecond(self) {
 	// for (let i = 0; i < 5; i++) {
 	// 	this.io.in("stream" + i).clients((error, clientIDs) => {
@@ -157,6 +159,10 @@ function every5Seconds(self) {
 	self.emitForfeitStartTimes();
 }
 
+function every4Seconds(self) {
+	self.io.to("controller").emit("stayConnected");
+}
+
 // setInterval(() => {
 // 	io.to("controller").emit("stayConnected");
 // }, 4000);
@@ -211,7 +217,7 @@ class Host {
 		this.subTime = this.normalTime * 2.5;
 		this.forfeitTime = 1000 * 15; // 15 seconds
 		this.tempBanTime = 5 * 1000 * 60; // 5 minutes
-		this.numPlayers = 4;
+		this.numPlayers = 8;
 		this.numberOfLastFewMessages = 5;
 		this.lastFewMessages = [];
 
@@ -245,6 +251,7 @@ class Host {
 	init() {
 		// setup interval functions:
 		setInterval(everySecond, 1000, this);
+		setInterval(every4Seconds, 4000, this);
 		setInterval(every5Seconds, 5000, this);
 		setInterval(every30Seconds, 30000, this);
 
@@ -263,7 +270,7 @@ class Host {
 				// send socket.id and auth token:
 				this.accountServerConn.emit("authenticate", {
 					socketid: socket.id,
-					token: data.token,
+					authToken: data.authToken,
 					ip: client.ip,
 				});
 			});
@@ -327,10 +334,10 @@ class Host {
 					isReplay: false,
 				};
 				// store for when people refresh:
-				lastFewMessages.push(msgObj);
+				this.lastFewMessages.push(msgObj);
 				// keep only #numberOfLastFewMessages
-				if (lastFewMessages.length > numberOfLastFewMessages) {
-					lastFewMessages.shift();
+				if (this.lastFewMessages.length > this.numberOfLastFewMessages) {
+					this.lastFewMessages.shift();
 				}
 				// send to everyone:
 				this.io.emit("chatMessage", msgObj);
@@ -362,7 +369,7 @@ class Host {
 					return;
 				}
 
-				if (client.userid != controlQueues[cNum][0]) {
+				if (client.userid != this.controlQueues[cNum][0]) {
 					console.log("not the current player");
 					return;
 				}
@@ -384,7 +391,7 @@ class Host {
 				}
 
 				// reset forfeit timer:
-				forfeitStartTimes[cNum] = Date.now();
+				this.forfeitStartTimes[cNum] = Date.now();
 				// emitForfeitStartTimes();
 
 				let valid = true;
@@ -468,7 +475,7 @@ class Host {
 				}
 
 				// return if not in the queue:
-				index = this.controlQueues[cNum].indexOf(client.userid);
+				let index = this.controlQueues[cNum].indexOf(client.userid);
 				if (index == -1) {
 					return;
 				}
@@ -477,7 +484,7 @@ class Host {
 
 				if (this.controlQueues[cNum].length >= 1) {
 					if (index === 0) {
-						resetTimers(client.userid, cNum);
+						this.resetTimers(client.userid, cNum);
 					}
 				}
 
@@ -546,7 +553,6 @@ class Host {
 
 			socket.on("join", (room) => {
 				let client = this.clients[socket.id];
-
 				let secureList = [
 					"lagless1Host",
 					"lagless2Host",
@@ -556,17 +562,8 @@ class Host {
 					"controller",
 					"controller2",
 				];
-				let streamList = ["stream0", "stream1", "stream2", "stream3", "stream4"];
 				if (secureList.indexOf(room) > -1) {
 					return;
-				}
-
-				if (streamList.indexOf(room) > -1) {
-					for (let i = 0; i < streamList.length; i++) {
-						if (streamList[i] != room) {
-							socket.leave(streamList[i]);
-						}
-					}
 				}
 				socket.join(room);
 			});
@@ -582,7 +579,7 @@ class Host {
 				}
 
 				if (myData.password === config.ROOM_SECRET) {
-					let client = clients[socket.id];
+					let client = this.clients[socket.id];
 					if (client.rooms.indexOf(myData.room) == -1) {
 						client.rooms.push(myData.room);
 					}
@@ -590,9 +587,28 @@ class Host {
 				}
 			});
 
-			socket.on("leaveStreams", () => {
-				for (let i = 0; i < 5; i++) {
-					socket.leave("stream" + i);
+			socket.on("botMessage", (data) => {
+				if (typeof data != "string") {
+					return;
+				} else {
+					data = data.replace(/(\r\n\t|\n|\r\t)/gm, "");
+				}
+				// check if it's coming from the controller:
+				if (this.clients[socket.id].rooms.indexOf("controller") > -1) {
+					let msgObj = {
+						userid: "TPNSbot",
+						username: "TPNSbot",
+						time: Date.now(),
+						message: data,
+						isReplay: false,
+					};
+					// store for when people refresh:
+					this.lastFewMessages.push(msgObj);
+					// keep only #numberOfLastFewMessages
+					if (this.lastFewMessages.length > this.numberOfLastFewMessages) {
+						this.lastFewMessages.shift();
+					}
+					this.io.emit("chatMessage", msgObj);
 				}
 			});
 
@@ -643,9 +659,14 @@ class Host {
 				// todo: rename to "clientInfo" from "userInfo":
 				this.io.to(data.socketid).emit("userInfo", userInfo);
 			} else {
+				console.log(data);
 				// let the client know it didn't get authenticated:
-				this.io.to(data.socketid).emit("authenticationFailure", data.reason);
+				this.io.to(data.socketid).emit("authenticationFailure", { reason: data.reason });
 			}
+		});
+
+		this.accountServerConn.on("accountMap", (data) => {
+			this.accountMap = data;
 		});
 	}
 
@@ -677,7 +698,7 @@ class Host {
 		}
 
 		this.controlQueues[cNum].splice(index, 1);
-		this.io.emit("controlQueues", controlQueues);
+		this.io.emit("controlQueues", this.controlQueues);
 		// reset the controller
 		this.io.emit("controllerState", {
 			cNum: cNum,
@@ -692,7 +713,7 @@ class Host {
 
 		// sub perk:
 		index = this.findClientByUserid(this.controlQueues[cNum][0]);
-		let client = clients[index];
+		let client = this.clients[index];
 		if (client != null && client.userid != null) {
 			if (client.isSub) {
 				this.turnLengths[cNum] = this.normalTime * 2;

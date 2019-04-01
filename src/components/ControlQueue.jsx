@@ -36,33 +36,36 @@ const styles = (theme) => ({
 	},
 });
 
-
-
 class ControlQueue extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
 
 	getQueue() {
-
 		const { classes } = this.props;
 
 		let queue = [];
-		let usernameMap = this.props.usernameMap;
+		let accountMap = this.props.accountMap;
 		let userids = this.props.controlQueues[this.props.num];
 
 		if (userids.length == 0) {
-			return <ListItem key="0"><ListItemText primary="The queue is empty."/></ListItem>;
+			return (
+				<ListItem key="0">
+					<ListItemText primary="The queue is empty." />
+				</ListItem>
+			);
 		}
 
 		for (let i = 0; i < userids.length; i++) {
-			let username = usernameMap[userids[i]];
+			let username = this.props.accountMap[userids[i]];
+			username = username ? username.username : "loading";
 			let listItemClasses = classNames(classes.listItem, {
-				[classes.highlighted]: (this.props.userid == userids[i]),
+				[classes.highlighted]: this.props.userid == userids[i],
 			});
 			queue.push(
-				<ListItem button key={i} className={listItemClasses} userid={userids[i]}><ListItemText primary={username}/></ListItem>
+				<ListItem button key={i} className={listItemClasses} userid={userids[i]}>
+					<ListItemText primary={username} />
+				</ListItem>,
 			);
 		}
 
@@ -71,13 +74,8 @@ class ControlQueue extends PureComponent {
 
 	render() {
 		const { classes } = this.props;
-		return (
-			<List className={classes.root}>
-				{this.getQueue()}
-			</List>
-		);
+		return <List className={classes.root}>{this.getQueue()}</List>;
 	}
-
 }
 
 // ControlQueue.propTypes = {
@@ -92,6 +90,7 @@ const mapStateToProps = (state) => {
 	return {
 		userid: state.userInfo.userid,
 		controlQueues: state.players.controlQueues,
+		accountMap: state.accountMap,
 	};
 };
 

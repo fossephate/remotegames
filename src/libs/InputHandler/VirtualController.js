@@ -82,18 +82,18 @@ export default class VirtualController {
 			controllerIndex: null,
 
 			axes: [
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(-1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(-1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
-				new AxisSettings(1, 0, 0.25),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(-1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(-1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
 			],
 
 			map: {
@@ -142,6 +142,15 @@ export default class VirtualController {
 					new AxisMapping(5),
 					new AxisMapping(6),
 					new AxisMapping(7),
+					new AxisMapping(8),
+					new AxisMapping(9),
+					new AxisMapping(10),
+					new AxisMapping(11),
+					new AxisMapping(12),
+					new AxisMapping(13),
+					new AxisMapping(14),
+					new AxisMapping(15),
+					new AxisMapping(16),
 				],
 			},
 		};
@@ -229,9 +238,9 @@ export default class VirtualController {
 				}
 			}
 
-			if ((mapping.type = "button")) {
+			if (mapping.type == "button") {
 				this.state.buttons[mapping.which] = button.pressed ? 1 : 0;
-			} else if ((mapping.type = "axis")) {
+			} else if (mapping.type == "axis") {
 				console.log("something is wrong");
 				// TODO:
 				// this.state.axes[mapping.which] = button.pressed ? button.value : 0;
@@ -251,7 +260,7 @@ export default class VirtualController {
 			}
 			this.oldState.axes[j] = axis;
 
-			if ((mapping.type = "axis")) {
+			if (mapping.type == "axis") {
 				let x = axis * this.settings.axes[mapping.which].sensitivity;
 				// x = x / 2 + 0.5;
 				// x *= 255;
@@ -263,7 +272,7 @@ export default class VirtualController {
 					this.state.axes[mapping.which] = restPos;
 				}
 				// this.state.axes[mapping.which] = axis;
-			} else if ((mapping.type = "button")) {
+			} else if (mapping.type == "button") {
 				if (mapping.aboveOrBelow) {
 					this.state.buttons[mapping.which] = axis > mapping.activationThreshold ? 1 : 0;
 				} else {

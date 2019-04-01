@@ -3,21 +3,13 @@ import React, { Component, Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 
 // react-router:
-import {
-	Router,
-	Route,
-	Switch,
-	withRouter,
-} from "react-router";
+import { Router, Route, Switch, withRouter } from "react-router";
 
 // redux:
 import { connect } from "react-redux";
 
 // main components:
-import LoginArea from "src/components/LoginArea.jsx";
-import NavTabs from "src/components/NavTabs.jsx";
-import Picture from "src/components/Picture.jsx";
-import Chat from "src/components/Chat/Chat.jsx";
+import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
 
 // loading circle:
 // import LoadingCircle from "src/components/LoadingCircle.jsx";
@@ -37,16 +29,28 @@ import Chat from "src/components/Chat/Chat.jsx";
 // import AccountModal from "src/components/Modals/AccountModal.jsx";
 // import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
-
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
 // components:
+import AppBar from "@material-ui/core/AppBar";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
-
-// import { Client } from "./parsec/src/client.js";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import { fade } from "@material-ui/core/styles/colorManipulator";
+import MenuIcon from "@material-ui/icons/Menu";
+import SearchIcon from "@material-ui/icons/Search";
+import AccountCircle from "@material-ui/icons/AccountCircle";
+import MailIcon from "@material-ui/icons/Mail";
+import NotificationsIcon from "@material-ui/icons/Notifications";
+import MoreIcon from "@material-ui/icons/MoreVert";
+import Toolbar from "@material-ui/core/Toolbar";
+import IconButton from "@material-ui/core/IconButton";
+import Badge from "@material-ui/core/Badge";
+import InputBase from "@material-ui/core/InputBase";
+import Typography from "@material-ui/core/Typography";
 
 // recompose:
 import { compose } from "recompose";
@@ -56,14 +60,13 @@ import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
 
-
 // jss:
 const styles = (theme) => ({
 	root: {
 		padding: "1%",
 		display: "grid",
 		"grid-template-columns": "minmax(50%, 75%) minmax(100px, 25%)",
-		"gridTemplateAreas": `
+		gridTemplateAreas: `
 			"nav login"
 			"picture picture"
 			"chat chat"
@@ -74,7 +77,7 @@ const styles = (theme) => ({
 	[device.tablet]: {
 		root: {
 			"grid-template-columns": "minmax(50%, 75%) minmax(300px, 25%)",
-			"gridTemplateAreas": `
+			gridTemplateAreas: `
 				"nav login"
 				"picture chat"
 				"bar bar"`,
@@ -85,21 +88,16 @@ const styles = (theme) => ({
 	},
 });
 
-
-class App extends Component {
-
+class Streams extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {};
 	}
 
-	componentDidMount() {
-
-	}
+	componentDidMount() {}
 
 	shouldComponentUpdate(nextProps, nextState) {
-
 		if (this.state != nextState) {
 			return true;
 		}
@@ -107,38 +105,38 @@ class App extends Component {
 		// console.log(nextProps);
 		return false;
 	}
-
 	render() {
-
 		console.log("re-rendering streams.");
 
 		const { classes } = this.props;
 
 		return (
 			<div className={classes.root}>
-				test
+				<StreamsAppBar />
 			</div>
 		);
 	}
 }
 
 const mapStateToProps = (state) => {
-	return {
-	};
+	return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
-	return {
-	};
+	return {};
 };
 
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
-)(App);
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
+)(Streams);
 
-/* FORCE HTTPS */
-if (window.location.protocol != "https:") {
-	window.location.href = "https:" + window.location.href.substring(window.location.protocol.length);
-}
+// /* FORCE HTTPS */
+// if (window.location.protocol != "https:") {
+// 	window.location.href =
+// 		"https:" + window.location.href.substring(window.location.protocol.length);
+// }

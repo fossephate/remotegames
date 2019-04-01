@@ -15,6 +15,7 @@ import classNames from "classnames";
 const styles = {
 	root: {
 		position: "relative",
+		marginBottom: "5px",
 	},
 	turnText: {
 		width: "100%",
@@ -39,7 +40,6 @@ const styles = {
 };
 
 class TurnTimer extends PureComponent {
-
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -70,14 +70,16 @@ class TurnTimer extends PureComponent {
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		let isTurn = this.props.type == "turn";
-		let color = (isTurn) ? "primary" : "secondary";
-		let override = classNames({[classes.turn]: isTurn, [classes.forfeit]: !isTurn});
-		let value = (this.props.name == null) ? 100 : this.props.percent;
-		let textClass = classNames({[classes.turnText]: isTurn, [classes.forfeitText]: !isTurn});
+		let color = isTurn ? "primary" : "secondary";
+		let override = classNames({ [classes.turn]: isTurn, [classes.forfeit]: !isTurn });
+		let value = this.props.name == null ? 100 : this.props.percent;
+		let textClass = classNames({
+			[classes.turnText]: isTurn,
+			[classes.forfeitText]: !isTurn,
+		});
 
 		return (
 			// <React.Fragment>
@@ -98,18 +100,16 @@ class TurnTimer extends PureComponent {
 			// </React.Fragment>
 			<div className={classes.root}>
 				<LinearProgress
-					classes={{root: override}}
+					classes={{ root: override }}
 					variant="determinate"
 					value={value}
-					color={color}/>
+					color={color}
+				/>
 				<div className={textClass}>{this.getBarText()}</div>
 			</div>
 		);
-
 	}
-
 }
-
 
 // const mapStateToProps = (state) => {
 // 	return {

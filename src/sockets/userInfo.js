@@ -2,23 +2,24 @@ import * as types from "../actions/ActionTypes.js";
 
 import { updateUserInfo } from "../actions/userInfo.js";
 
-import { getCookie } from "libs/tools.js";
+// import { getCookie } from "libs/tools.js";
+import Cookie from "js-cookie";
 
-// let $ = require("jquery");
+function authenticate(socket, dispatch) {
+	let authToken = Cookie.get("RemoteGames");
+	if (authToken) {
+		dispatch(updateUserInfo({ authToken: authToken }));
+		socket.emit("authenticate", {
+			authToken: authToken,
+			usernameIndex: 0,
+		});
+	}
+}
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const userInfoEvents = (socket, dispatch) => {
 	/* AUTHENTICATION */
-	let authCookie = getCookie("RemoteGames");
-	if (authCookie !== null) {
-		authCookie = authCookie.split(" ")[0].replace(/;/g, "");
-		dispatch(updateUserInfo({ authToken: authCookie }));
-		socket.emit("authenticate", {
-			auth: authCookie,
-			usernameIndex: 0,
-		});
-	}
-
+	authenticate(socket, dispatch);
 	// setTimeout(() => {
 	// 	$.ajax({
 	// 		url: "https://remotegames.io/accountData/" + this.props.userInfo.username + "/" + this.props.userInfo.userid + "/" + authCookie,
@@ -29,13 +30,24 @@ const userInfoEvents = (socket, dispatch) => {
 	// 	dispatch(receiveMessage(data.message, data.username, data.userid));
 	// });
 
-	socket.on("unauthorized", (data) => {
-		console.log("Unauthorized: " + data);
+	socket.on("authenticationFailure", (data) => {
+		console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
+		// remove the authToken if it doesn't work:
+		if (data.reason == "ACCOUNT_NOT_FOUND") {
+			Cookie.remove("RemoteGames");
+			dispatch(updateUserInfo({ authToken: null }));
+		}
 		// swal("Already Logged In / multiple tabs open!");
 	});
 
+	// socket.on("authenticationFailure", (data) => {
+	// 	console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
+	// 	// swal("Already Logged In / multiple tabs open!");
+	// });
+
 	// response:
 	socket.on("userInfo", (data) => {
+		console.log("userInfo received");
 		dispatch(updateUserInfo({ ...data, loggedIn: true }));
 	});
 
@@ -46,10 +58,7 @@ const userInfoEvents = (socket, dispatch) => {
 		// re-authenticate if the connection was successful
 		setTimeout(() => {
 			if (socket.connected) {
-				socket.emit("authenticate", {
-					auth: authCookie,
-					usernameIndex: 0,
-				});
+				authenticate(socket, dispatch);
 			}
 		}, 1000);
 	});
@@ -57,32 +66,9 @@ const userInfoEvents = (socket, dispatch) => {
 	// todo: make this not necessary
 	setInterval(() => {
 		if (socket.connected) {
-			socket.emit("authenticate", {
-				auth: authCookie,
-				usernameIndex: 0,
-			});
+			authenticate(socket, dispatch);
 		}
-	}, 120000);
-
-	// socket.on("disconnect", (data) => {
-	// 	// console.log("lost connection, attempting reconnect2.");
-	// 	// socket.connect();
-	// });
-	// window.reconnectTimer = setInterval(() => {
-	// 	if (!socket.connected) {
-	// 		console.log("lost connection, attempting reconnect3.");
-	// 		socket.connect();
-	// 		// re-authenticate if the connection was successful
-	// 		setTimeout(() => {
-	// 			if (socket.connected) {
-	// 				socket.emit("authenticate", {
-	// 					auth: this.props.userInfo.authToken,
-	// 					usernameIndex: this.props.userInfo.usernameIndex,
-	// 				});
-	// 			}
-	// 		}, 1000);
-	// 	}
-	// }, 5000);
+	}, 120000); // 2 minutes
 
 	return socket;
 };

@@ -8,7 +8,6 @@ import Linkify from "react-linkify";
 import TwitchIcon from "src/components/Icons/TwitchIcon.jsx";
 import Badge from "src/components/Icons/Badge.jsx";
 
-
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -52,10 +51,11 @@ function pad(t) {
 
 function getTimeStamp(t) {
 	let time = new Date(t);
-	let s = time.getHours() + ":" + pad(time.getMinutes());
+	let hours = time.getHours();
+	hours = hours > 12 ? hours - 12 : hours;
+	let s = hours + ":" + pad(time.getMinutes());
 	return s;
 }
-
 
 function ping(text, time) {
 	new Noty({
@@ -73,15 +73,22 @@ function ping(text, time) {
 
 // class Message extends PureComponent {
 const Message = (props) => {
-
-	let { classes, message, username, userid, time, isReplay, isLastMessage, accountMap } = props;
+	let {
+		classes,
+		message,
+		username,
+		userid,
+		time,
+		isReplay,
+		isLastMessage,
+		accountMap,
+	} = props;
 
 	let source = "";
 
 	let is_relay = false;
 	// if it's a relayed message:
 	if (userid === "TPNSbot" && message[0] == "[") {
-
 		is_relay = true;
 		let r = /\[(.+):(.+)\](.+)/;
 		let split = message.match(r);
@@ -94,7 +101,7 @@ const Message = (props) => {
 	}
 
 	if (!isReplay && isLastMessage) {
-		let mention = ("@" + props.myUsername);
+		let mention = "@" + props.myUsername;
 		if (message.indexOf(mention) > -1) {
 			ping("You've been pinged!", 500);
 		}
@@ -108,22 +115,22 @@ const Message = (props) => {
 
 	let icons = [];
 	if (source == "twitch") {
-		icons.push(<TwitchIcon/>);
+		icons.push(<TwitchIcon />);
 	}
 
 	let account = accountMap[userid];
 	if (account) {
 		if (is_dev) {
-			icons.push(<Badge type="dev"/>);
+			icons.push(<Badge type="dev" />);
 		}
 		if (account.is_mod && !is_dev && !is_relay) {
-			icons.push(<Badge type="mod"/>);
+			icons.push(<Badge type="mod" />);
 		}
 		if (account.is_plus && !account.is_mod) {
-			icons.push(<Badge type="plus"/>);
+			icons.push(<Badge type="plus" />);
 		}
 		if (account.is_sub) {
-			icons.push(<Badge type="sub1"/>);
+			icons.push(<Badge type="sub1" />);
 		}
 
 		if (account.is_mod && !isReplay && isLastMessage) {
@@ -137,8 +144,11 @@ const Message = (props) => {
 
 	return (
 		<div className={classes.root} userid={userid} onClick={props.onClick}>
-			<Linkify properties={{className: classes.links}}>
-				{getTimeStamp(time)}{icons}{(icons.length == 0) ? " " : null}<b>{username}</b> {message}
+			<Linkify properties={{ className: classes.links }}>
+				{getTimeStamp(time)}
+				{icons}
+				{icons.length == 0 ? " " : null}
+				<b>{username}</b> {message}
 			</Linkify>
 		</div>
 	);

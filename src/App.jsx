@@ -25,7 +25,7 @@ import CheckboxSettings from "src/components/CheckboxSettings.jsx";
 
 // components:
 import PlayerInfo from "src/components/PlayerInfo.jsx";
-import Waitlist from "src/components/Waitlist.jsx";
+// import Waitlist from "src/components/Waitlist.jsx";
 // import ThemeSelector from "src/components/ThemeSelector.jsx";
 
 // secondary components:
@@ -63,8 +63,6 @@ import InputHandler from "libs/InputHandler/InputHandler.js";
 // const textFitPercent = require("js/textfitpercent.js");
 import { deleteAllCookies, fixedLengthString, getStickString } from "libs/tools.js";
 import Noty from "noty";
-// import "noty/lib/noty.css";
-// import "noty/lib/themes/light.css";
 import localforage from "localforage";
 window.localforage = localforage;
 import swal from "sweetalert2";
@@ -139,7 +137,7 @@ const styles = (theme) => ({
 	root: {
 		padding: "1%",
 		display: "grid",
-		"grid-template-columns": "minmax(50%, 75%) minmax(100px, 25%)",
+		gridTemplateColumns: "minmax(50%, 75%) minmax(100px, 25%)",
 		gridTemplateAreas: `
 			"nav login"
 			"picture picture"
@@ -150,7 +148,7 @@ const styles = (theme) => ({
 	},
 	[device.tablet]: {
 		root: {
-			"grid-template-columns": "minmax(50%, 75%) minmax(300px, 25%)",
+			gridTemplateColumns: "minmax(50%, 75%) minmax(300px, 25%)",
 			gridTemplateAreas: `
 				"nav login"
 				"picture chat"
@@ -204,51 +202,15 @@ class App extends Component {
 			return null;
 		};
 
-		socket.on("waitlist", (data) => {
-			let waitlist = data.waitlist;
-			// check if you're in the waitlist
-			if (waitlist.indexOf(this.props.userInfo.userid) > -1) {
-				if (!this.props.userInfo.waitlisted) {
-					this.props.updateUserInfo({ waitlisted: true });
-					new Noty({
-						theme: "mint",
-						type: "warning",
-						text:
-							"The server is a bit overloaded right now, the lagless stream will be swapped out for twitch temporarily, check the discord server for the rules on how this works.",
-						timeout: 5000,
-						sounds: {
-							volume: 0.5,
-							sources: ["https://remotegames.io/sounds/ding.wav"],
-							conditions: ["docVisible"],
-						},
-					}).show();
-				}
-				// no longer waitlisted:
-			} else if (this.props.userInfo.waitlisted) {
-				this.props.updateUserInfo({ waitlisted: false });
-				new Noty({
-					theme: "mint",
-					type: "success",
-					text: "You're at the top of the waitlist! Switching back to lagless!",
-					timeout: 5000,
-					sounds: {
-						volume: 0.5,
-						sources: ["https://remotegames.io/sounds/ding.wav"],
-						conditions: ["docVisible"],
-					},
-				}).show();
-			}
-		});
-
 		/* AUTHENTICATION */
 
-		socket.on("needToLogIn", () => {
-			swal("You need to log in!");
-			setTimeout(() => {
-				deleteAllCookies();
-				location.reload(true);
-			}, 1000);
-		});
+		// socket.on("needToLogIn", () => {
+		// 	swal("You need to log in!");
+		// 	setTimeout(() => {
+		// 		deleteAllCookies();
+		// 		location.reload(true);
+		// 	}, 1000);
+		// });
 		socket.emit("join", "stream" + this.props.settings.streamNumber);
 		setInterval(() => {
 			socket.emit("join", "stream" + this.props.settings.streamNumber);
@@ -336,7 +298,7 @@ class App extends Component {
 			}
 			inputHandler.pollDevices();
 			this.sendControllerState();
-		}, 1000 / 80);
+		}, 1000 / 120);
 
 		/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 
@@ -681,9 +643,9 @@ class App extends Component {
 								</Button>
 							</Paper>
 
-							<Paper id="waitlistContainer" className="settingsPanel" elevation={5}>
+							{/* <Paper id="waitlistContainer" className="settingsPanel" elevation={5}>
 								<Waitlist />
-							</Paper>
+							</Paper> */}
 						</Paper>
 					</Paper>
 
@@ -797,9 +759,3 @@ $(window).resize(
 		$("body").css("padding", "0");
 	}, 1000),
 );
-
-/* FORCE HTTPS */
-if (window.location.protocol != "https:") {
-	window.location.href =
-		"https:" + window.location.href.substring(window.location.protocol.length);
-}

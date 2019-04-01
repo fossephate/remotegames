@@ -35,20 +35,17 @@ const styles = (theme) => ({
 		root: {
 			width: "100%",
 			// padding: "5px",
-		}
+		},
 	},
 	[device.laptop]: {
 		root: {
 			width: "24%",
 			// padding: "5px",
-		}
+		},
 	},
 });
 
-
-
 class Player extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -66,7 +63,6 @@ class Player extends PureComponent {
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		let n = this.props.num;
@@ -78,22 +74,17 @@ class Player extends PureComponent {
 					handleChange={this.choosePlayer}
 					checked={this.props.currentPlayer == this.props.num}
 				/>
-				<TurnTimers	num={this.props.num}/>
+				<TurnTimers num={this.props.num} />
 				<PlayerQueueButton
 					num={this.props.num}
 					controlQueue={this.props.controlQueues[n]}
 					userid={this.props.userid}
 				/>
-				<ControlQueue
-					num={this.props.num}
-					usernameMap={this.props.usernameMap}
-				/>
+				<ControlQueue num={this.props.num} />
 			</Paper>
 		);
-
 	}
 }
-
 
 const mapStateToProps = (state) => {
 	return {
@@ -109,15 +100,18 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		choosePlayer: (index) => {
-			dispatch(updateSettings({ currentPlayer: index }))
+			dispatch(updateSettings({ currentPlayer: index }));
 		},
 		leavePlayerControlQueue: (controllerNumber) => {
-			dispatch(leavePlayerControlQueue(controllerNumber))
+			dispatch(leavePlayerControlQueue(controllerNumber));
 		},
 	};
 };
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(Player);

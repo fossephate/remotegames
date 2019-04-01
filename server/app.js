@@ -966,7 +966,7 @@ io.on("connection", (socket) => {
 		}
 
 		// return if not in the queue:
-		index = controlQueues[cNum].indexOf(client.userid);
+		let index = controlQueues[cNum].indexOf(client.userid);
 		if (index == -1) {
 			return;
 		}

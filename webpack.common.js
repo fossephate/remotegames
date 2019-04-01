@@ -2,7 +2,7 @@
 const path = require("path");
 module.exports = {
 	entry: {
-		index: "./src/index.js",
+		index: "./src/Index.js",
 	},
 	output: {
 		// `filename` provides a template for naming your bundles (remember to use `[name]`)
@@ -16,11 +16,12 @@ module.exports = {
 	},
 	optimization: {
 		splitChunks: {
-			chunks: "async"// all, async, and initial
-		}
+			chunks: "async", // all, async, and initial
+		},
 	},
 	module: {
-		rules: [{
+		rules: [
+			{
 				test: /\.(js|jsx)$/,
 				exclude: /node_modules/,
 				loader: "babel-loader",
@@ -28,7 +29,7 @@ module.exports = {
 			{
 				test: /\.css$/,
 				use: ["style-loader", "css-loader"],
-			}
+			},
 		],
 	},
 	// 	modules: [path.resolve(__dirname, "app"), "node_modules"],
@@ -46,5 +47,5 @@ module.exports = {
 	},
 	node: {
 		fs: "empty",
-	}
+	},
 };

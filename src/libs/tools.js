@@ -144,7 +144,6 @@ exports.abs = (n) => {
 // delete all cookies:
 exports.deleteAllCookies = () => {
 	let cookies = document.cookie.split(";");
-
 	for (let i = 0; i < cookies.length; i++) {
 		let cookie = cookies[i];
 		let eqPos = cookie.indexOf("=");
