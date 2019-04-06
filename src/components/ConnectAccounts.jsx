@@ -22,6 +22,8 @@ const styles = (theme) => ({
 		flexWrap: "wrap",
 		flexDirection: "column",
 		flex: "1",
+		paddingLeft: "25px",
+		paddingRight: "25px",
 	},
 	connectWithButton: {
 		display: "flex",
@@ -71,7 +73,7 @@ class ConnectAccounts extends PureComponent {
 		}
 		let url = window.location.origin + "/8099/auth/" + type + "/";
 		if (this.props.authToken != null) {
-			url += "?uniqueToken=" + this.props.authToken;
+			url += "?authToken=" + this.props.authToken;
 		}
 		window.location.href = url;
 	}

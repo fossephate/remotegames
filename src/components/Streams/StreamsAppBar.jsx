@@ -1,5 +1,5 @@
 // react:
-import React, { Component, Suspense, lazy } from "react";
+import React, { PureComponent } from "react";
 import ReactDOM from "react-dom";
 
 // react-router:
@@ -9,10 +9,6 @@ import { Router, Route, Switch, withRouter } from "react-router";
 import { connect } from "react-redux";
 
 // main components:
-import LoginArea from "src/components/LoginArea.jsx";
-import NavTabs from "src/components/NavTabs.jsx";
-import Picture from "src/components/Picture.jsx";
-import Chat from "src/components/Chat/Chat.jsx";
 
 // loading circle:
 // import LoadingCircle from "src/components/LoadingCircle.jsx";
@@ -154,7 +150,7 @@ const styles = (theme) => ({
 	},
 });
 
-class StreamsAppBar extends Component {
+class StreamsAppBar extends PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -165,15 +161,6 @@ class StreamsAppBar extends Component {
 	}
 
 	componentDidMount() {}
-
-	shouldComponentUpdate(nextProps, nextState) {
-		if (this.state != nextState) {
-			return true;
-		}
-
-		// console.log(nextProps);
-		return false;
-	}
 
 	handleProfileMenuOpen = (event) => {
 		this.setState({ anchorEl: event.currentTarget });

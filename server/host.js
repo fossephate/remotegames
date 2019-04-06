@@ -183,12 +183,12 @@ function addTimePlayed() {
 	}
 }
 function customSetInterval(func, time) {
-	var lastTime = Date.now(),
+	let lastTime = Date.now(),
 		lastDelay = time,
 		outp = {};
 	function tick() {
 		func();
-		var now = Date.now(),
+		let now = Date.now(),
 			dTime = now - lastTime;
 
 		lastTime = now;

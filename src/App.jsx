@@ -62,7 +62,6 @@ import InputHandler from "libs/InputHandler/InputHandler.js";
 
 // const textFitPercent = require("js/textfitpercent.js");
 import { deleteAllCookies, fixedLengthString, getStickString } from "libs/tools.js";
-import Noty from "noty";
 import localforage from "localforage";
 window.localforage = localforage;
 import swal from "sweetalert2";
@@ -254,12 +253,6 @@ class App extends Component {
 		// xbox 2.0
 		// streams.push(new Lagless1("https://remotegames.io", "/8001/socket.io"));
 		streams.push(new Lagless2("wss://remotegames.io/8004/", true));
-
-		// host1:
-		streams.push(new Lagless2("wss://remotegames.io/8006/", true));
-		// host2:
-		streams.push(new Lagless2("wss://remotegames.io/8008/", true));
-		// streams.push(new Lagless4(socket));
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
 		laglessAudio = new LaglessAudio(socket);
@@ -502,27 +495,27 @@ class App extends Component {
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
-			new Noty({
-				theme: "mint",
-				type: "warning",
-				text: "It's not your turn yet!",
-				timeout: 250,
-			}).show();
+			// new Noty({
+			// 	theme: "mint",
+			// 	type: "warning",
+			// 	text: "It's not your turn yet!",
+			// 	timeout: 250,
+			// }).show();
 			return;
 		}
 
 		if (!this.props.userInfo.loggedIn) {
-			new Noty({
-				theme: "mint",
-				type: "warning",
-				text: "You aren't logged in!",
-				timeout: 500,
-				sounds: {
-					volume: 0.5,
-					sources: ["https://remotegames.io/sounds/ding.wav"],
-					conditions: ["docVisible"],
-				},
-			}).show();
+			// new Noty({
+			// 	theme: "mint",
+			// 	type: "warning",
+			// 	text: "You aren't logged in!",
+			// 	timeout: 500,
+			// 	sounds: {
+			// 		volume: 0.5,
+			// 		sources: ["https://remotegames.io/sounds/ding.wav"],
+			// 		conditions: ["docVisible"],
+			// 	},
+			// }).show();
 			return;
 		}
 

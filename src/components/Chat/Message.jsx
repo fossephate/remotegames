@@ -20,7 +20,6 @@ import { connect } from "react-redux";
 import { compose } from "recompose";
 
 // libs:
-import Noty from "noty";
 
 const styles = (theme) => ({
 	root: {
@@ -58,17 +57,17 @@ function getTimeStamp(t) {
 }
 
 function ping(text, time) {
-	new Noty({
-		theme: "mint",
-		type: "warning",
-		text: text,
-		timeout: time,
-		sounds: {
-			volume: 0.5,
-			sources: ["https://remotegames.io/sounds/ding.wav"],
-			conditions: ["docVisible"],
-		},
-	}).show();
+	// new Noty({
+	// 	theme: "mint",
+	// 	type: "warning",
+	// 	text: text,
+	// 	timeout: time,
+	// 	sounds: {
+	// 		volume: 0.5,
+	// 		sources: ["https://remotegames.io/sounds/ding.wav"],
+	// 		conditions: ["docVisible"],
+	// 	},
+	// }).show();
 }
 
 // class Message extends PureComponent {

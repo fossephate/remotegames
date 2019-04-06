@@ -1,5 +1,5 @@
 // react:
-import React, { Component, Suspense, lazy } from "react";
+import React, { PureComponent } from "react";
 import ReactDOM from "react-dom";
 
 // react-router:
@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 
 // main components:
 import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
+import StreamList from "src/components/Streams/StreamList.jsx";
 
 // loading circle:
 // import LoadingCircle from "src/components/LoadingCircle.jsx";
@@ -33,24 +34,9 @@ import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
 import { withStyles } from "@material-ui/core/styles";
 
 // components:
-import AppBar from "@material-ui/core/AppBar";
 import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
 import Paper from "@material-ui/core/Paper";
-import MenuItem from "@material-ui/core/MenuItem";
-import Menu from "@material-ui/core/Menu";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
-import MoreIcon from "@material-ui/icons/MoreVert";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
-import InputBase from "@material-ui/core/InputBase";
-import Typography from "@material-ui/core/Typography";
 
 // recompose:
 import { compose } from "recompose";
@@ -65,22 +51,17 @@ const styles = (theme) => ({
 	root: {
 		padding: "1%",
 		display: "grid",
-		"grid-template-columns": "minmax(50%, 75%) minmax(100px, 25%)",
 		gridTemplateAreas: `
-			"nav login"
-			"picture picture"
-			"chat chat"
-			"bar bar"`,
+			"nav"
+			"streams"`,
 		width: "100%",
 		gridGap: "5px",
 	},
 	[device.tablet]: {
 		root: {
-			"grid-template-columns": "minmax(50%, 75%) minmax(300px, 25%)",
 			gridTemplateAreas: `
-				"nav login"
-				"picture chat"
-				"bar bar"`,
+				"nav"
+				"streams"`,
 		},
 	},
 	[device.laptop]: {
@@ -88,7 +69,7 @@ const styles = (theme) => ({
 	},
 });
 
-class Streams extends Component {
+class Streams extends PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -97,14 +78,6 @@ class Streams extends Component {
 
 	componentDidMount() {}
 
-	shouldComponentUpdate(nextProps, nextState) {
-		if (this.state != nextState) {
-			return true;
-		}
-
-		// console.log(nextProps);
-		return false;
-	}
 	render() {
 		console.log("re-rendering streams.");
 
@@ -113,6 +86,7 @@ class Streams extends Component {
 		return (
 			<div className={classes.root}>
 				<StreamsAppBar />
+				<StreamList />
 			</div>
 		);
 	}

@@ -28,26 +28,24 @@ const styles = (theme) => ({
 		justifyContent: "space-evenly",
 		overflowX: "hidden",
 		padding: "10px",
+		flexWrap: "wrap",
 	},
 	[device.tablet]: {
 		root: {
 			flexDirection: "row",
 			// width: "100%",
 			// padding: "5px",
-		}
+		},
 	},
 	[device.laptop]: {
 		root: {
 			// width: "24%",
 			// padding: "5px",
-		}
+		},
 	},
 });
 
-
-
 class PlayerInfo extends PureComponent {
-
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -56,48 +54,23 @@ class PlayerInfo extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
-		if (this.props.streamNumber == 0) {
-			return (
-				<Paper className={classes.root} elevation={0}>
-					<Player num={0} text="Player 1"/>
-					<Player num={1} text="Player 2"/>
-					<Player num={2} text="Player 3"/>
-					<Player num={3} text="Player 4"/>
-				</Paper>
-			);
-		}
-
-		if (this.props.streamNumber == 1) {
-			return (
-				<Paper className={classes.root} elevation={0}>
-					<Player num={4} text="Player 1"/>
-				</Paper>
-			);
-		}
-
-		if (this.props.streamNumber == 2) {
-			return (
-				<Paper className={classes.root} elevation={0}>
-					<Player num={5} text="Player 1"/>
-				</Paper>
-			);
-		}
-
-		if (this.props.streamNumber == 3) {
-			return (
-				<Paper className={classes.root} elevation={0}>
-					<Player num={6} text="Player 1"/>
-				</Paper>
-			);
-		}
+		return (
+			<Paper className={classes.root} elevation={0}>
+				<Player num={0} text="Player 1" />
+				<Player num={1} text="Player 2" />
+				<Player num={2} text="Player 3" />
+				<Player num={3} text="Player 4" />
+				<Player num={4} text="Player 5" />
+				<Player num={5} text="Player 6" />
+				<Player num={6} text="Player 7" />
+				<Player num={7} text="Player 8" />
+			</Paper>
+		);
 	}
 }
 
-
 const mapStateToProps = (state) => {
-	return {
-		streamNumber: state.settings.streamNumber,
-	};
+	return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -106,5 +79,8 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(PlayerInfo);

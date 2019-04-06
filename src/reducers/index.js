@@ -1,14 +1,14 @@
 import { combineReducers } from "redux";
+import { reducer as form } from "redux-form";
+
 import chat from "./chat.js";
 
-import viewers from "./viewers.js";
 import waitlist from "./waitlist.js";
 
-import players from "./players.js";
-
 import userInfo from "./userInfo.js";
-// import usernameMap from "./usernameMap.js";
 import accountMap from "./accountMap.js";
+
+import players from "./players.js";
 
 import settings from "./settings.js";
 
@@ -16,14 +16,13 @@ import time from "./time.js";
 
 const rootReducer = combineReducers({
 	chat,
-	viewers,
 	waitlist,
 	userInfo,
-	// usernameMap,
 	accountMap,
-	settings,
 	players,
+	settings,
 	time,
+	form,
 });
 
 export default rootReducer;

@@ -10,6 +10,7 @@ import Button from "@material-ui/core/Button";
 // import Select from "@material-ui/core/Select";
 // import Divider from "@material-ui/core/Divider";
 // import Fade from "@material-ui/core/Fade";
+import Typography from "@material-ui/core/Typography";
 
 // icons:
 import DropDownIcon from "@material-ui/icons/ArrowDropDown";
@@ -18,12 +19,12 @@ import DropDownIcon from "@material-ui/icons/ArrowDropDown";
 // import { connect } from "react-redux";
 
 export default class ViewerDropdown extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
 		this.handleClick = this.handleClick.bind(this);
 		this.handleClose = this.handleClose.bind(this);
+		this.getViewerList = this.getViewerList.bind(this);
 
 		this.state = {
 			anchorEl: null,
@@ -39,47 +40,34 @@ export default class ViewerDropdown extends PureComponent {
 	}
 
 	getViewerList() {
-
-		let viewerNames = [];
-
-		for (let i = 0; i < this.props.userids.length; i++) {
-			viewerNames.push([]);
-			for (let j = 0; j < this.props.userids[i].length; j++) {
-				let name = this.props.usernameMap[this.props.userids[i][j]];
-				if (name == null) {
-					name = "guest";
-				}
-				viewerNames[i].push(name);
-			}
-		}
-
 		let viewers = [];
-
-		for (let i = 0; i < viewerNames.length; i++) {
-			if (viewerNames[i].length > 0) {
-				viewers.push(
-					<div key={i} className="dropdown-divider"><MenuItem>Lagless {i + 1}</MenuItem></div>
-				);
-				// viewers.push(
-				// 	<Divider key={i}>Lagless {i + 1}</Divider>
-				// );
+		let count = 0;
+		for (let key in this.props.accountMap) {
+			if (!this.props.accountMap.hasOwnProperty(key)) {
+				continue;
 			}
-			for (let j = 0; j < viewerNames[i].length; j++) {
-				viewers.push(
-					<MenuItem key={i + ":" + j} uniqueid={this.props.userids[i][j]}>{viewerNames[i][j]}</MenuItem>
-				);
-			}
+			let account = this.props.accountMap[key];
+			count++;
+			viewers.push(
+				<MenuItem key={count} uniqueid={account.userid}>
+					<Typography variant="inherit" noWrap>
+						{account.username}
+					</Typography>
+				</MenuItem>,
+			);
 		}
 		return viewers;
 	}
 
 	render() {
-
 		const open = Boolean(this.state.anchorEl);
 
 		return (
 			<React.Fragment>
-				<Button variant="contained" color="primary" onClick={this.handleClick}>Viewers<DropDownIcon/></Button>
+				<Button variant="contained" color="primary" onClick={this.handleClick}>
+					Viewers
+					<DropDownIcon />
+				</Button>
 				<Menu
 					id="viewerDropdown"
 					anchorEl={this.state.anchorEl}
@@ -89,16 +77,15 @@ export default class ViewerDropdown extends PureComponent {
 					PaperProps={{
 						style: {
 							maxHeight: 48 * 4.5,
-							width: 200,
-						}
-					}}>
-
+							width: 250,
+						},
+					}}
+				>
 					{this.getViewerList()}
 				</Menu>
 			</React.Fragment>
 		);
 	}
-
 }
 
 // const mapStateToProps = (state) => {

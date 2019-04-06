@@ -62,7 +62,6 @@ import InputHandler from "libs/InputHandler/InputHandler.js";
 
 // const textFitPercent = require("js/textfitpercent.js");
 import { deleteAllCookies, fixedLengthString, getStickString } from "libs/tools.js";
-import Noty from "noty";
 import localforage from "localforage";
 window.localforage = localforage;
 import swal from "sweetalert2";
@@ -125,19 +124,12 @@ if (
 	isMobile = true;
 }
 
-window.inputHandler = new InputHandler(isMobile);
-
-// mobile warning messages:
-if (isMobile) {
-	// swal("This site isn't really designed for mobile, I'll improve it in the future but for now consider using a desktop / laptop.");
-}
-
 // jss:
 const styles = (theme) => ({
 	root: {
 		padding: "1%",
 		display: "grid",
-		"grid-template-columns": "minmax(50%, 75%) minmax(100px, 25%)",
+		gridTemplateColumns: "minmax(50%, 75%) minmax(100px, 25%)",
 		gridTemplateAreas: `
 			"nav login"
 			"picture picture"
@@ -148,7 +140,7 @@ const styles = (theme) => ({
 	},
 	[device.tablet]: {
 		root: {
-			"grid-template-columns": "minmax(50%, 75%) minmax(300px, 25%)",
+			gridTemplateColumns: "minmax(50%, 75%) minmax(300px, 25%)",
 			gridTemplateAreas: `
 				"nav login"
 				"picture chat"
@@ -160,19 +152,19 @@ const styles = (theme) => ({
 	},
 });
 
-class App extends Component {
+class Stream extends Component {
 	constructor(props) {
 		super(props);
 
-		this.toggleAudioThree = this.toggleAudioThree.bind(this);
+		// this.exitFullscreen = this.exitFullscreen.bind(this);
 
-		this.exitFullscreen = this.exitFullscreen.bind(this);
-
-		this.switchTabs = this.switchTabs.bind(this);
+		// this.switchTabs = this.switchTabs.bind(this);
 
 		this.sendControllerState = this.sendControllerState.bind(this);
 
 		this.state = {};
+
+		this.inputHandler = new InputHandler(isMobile);
 	}
 
 	// static getDerivedStateFromProps(props, state) {
@@ -180,23 +172,12 @@ class App extends Component {
 	// }
 
 	componentDidMount() {
-		// check if new:
-		// localforage.getItem("new").then(function (value) {
-		// 	if (value != "new") {
-		//	// first time message:
-		// 	}
-		// 	localforage.setItem("new", "new");
-		// });
-
-		// window.dispatchEvent(new Event("resize"));
-
 		window.socket = this.props.socket;
 
 		// save settings on close:
 		/* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 		// window.addEventListener("beforeunload", () => {
 		window.onbeforeunload = () => {
-			socket.emit("leaveStreams");
 			console.log("saving settings");
 			localforage.setItem("settings", JSON.stringify(this.props.settings));
 			return null;
@@ -211,29 +192,6 @@ class App extends Component {
 		// 		location.reload(true);
 		// 	}, 1000);
 		// });
-		socket.emit("join", "stream" + this.props.settings.streamNumber);
-		setInterval(() => {
-			socket.emit("join", "stream" + this.props.settings.streamNumber);
-		}, 10000);
-
-		window.state = this.state;
-		window.props = this.props;
-
-		/* BAN / IP */
-
-		socket.on("forceRefresh", (data) => {
-			swal({
-				title: "There has been a force refresh!",
-			}).then((result) => {
-				if (result.value) {
-					window.location.reload(true);
-				}
-			});
-			// actually force after 5 seconds:
-			setTimeout(() => {
-				window.location.reload(true);
-			}, 5000);
-		});
 
 		// fullscreen:
 		document.addEventListener("webkitfullscreenchange", this.exitFullscreen, false);
@@ -244,21 +202,27 @@ class App extends Component {
 		// lagless setup:
 
 		/* switch 2.0 */
-		streams.push(new Lagless2("wss://remotegames.io/8002/"));
-		socket.on("lagless2SettingsChange", (data) => {
-			if (this.props.settings.streamNumber == 0) {
-				streams[0].resume();
+		streams.push(
+			new Lagless2("https://remotegames.io", { path: "/8001/socket.io", audio: true }),
+		);
+		setTimeout(() => {
+			if (!this.props.userInfo.loggedIn) {
+				swal("You have to login / register first!");
+				return;
 			}
-		});
+			streams[0].resume(document.getElementById("videoCanvas"));
+		}, 3000);
+		// let videoSocket = io("https://remotegames.io", {
+		// 	path: "/8002/socket.io",
+		// 	transports: ["websocket"],
+		// });
+		// videoSocket.on("videoData", (data) => {
+		// 	if (!streams[0].player.source) {
+		// 		return;
+		// 	}
+		// 	streams[0].player.source.onMessage(data);
+		// });
 
-		// xbox 2.0
-		// streams.push(new Lagless1("https://remotegames.io", "/8001/socket.io"));
-		streams.push(new Lagless2("wss://remotegames.io/8004/", true));
-
-		// host1:
-		streams.push(new Lagless2("wss://remotegames.io/8006/", true));
-		// host2:
-		streams.push(new Lagless2("wss://remotegames.io/8008/", true));
 		// streams.push(new Lagless4(socket));
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
@@ -280,15 +244,9 @@ class App extends Component {
 				laglessAudio.audio.volume = 0;
 				// for (let i = 0; i < streams.length; i++) {}
 				streams[0].player.volume = this.props.settings.volume / 100;
-				if (streams[1].player != null) {
-					streams[1].player.volume = this.props.settings.volume / 100;
-				}
 			} else {
 				laglessAudio.audio.volume = this.props.settings.volume / 100;
 				streams[0].player.volume = 0;
-				if (streams[1].player != null) {
-					streams[1].player.volume = 0;
-				}
 			}
 		}, 2000);
 
@@ -299,34 +257,6 @@ class App extends Component {
 			inputHandler.pollDevices();
 			this.sendControllerState();
 		}, 1000 / 120);
-
-		/* NOTIFICATIONS @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-		socket.on("voteStarted", (data) => {
-			new Noty({
-				theme: "mint",
-				type: "warning",
-				text: "A vote to change games has started!",
-				timeout: 5000,
-				sounds: {
-					volume: 0.5,
-					sources: ["https://remotegames.io/sounds/ding.wav"],
-					conditions: ["docVisible"],
-				},
-			}).show();
-		});
-
-		/* BAN EVASION @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-
-		socket.on("banned", (data) => {
-			let alertMessage = $(".swal2-container")[0];
-			if (typeof alertMessage == "undefined") {
-				swal(
-					"You're banned, you can appeal the ban on the discord server, though it may be a temporary ban.",
-				);
-			}
-			localforage.setItem("banned", "banned");
-		});
 
 		window.addEventListener(
 			"keydown",
@@ -346,19 +276,6 @@ class App extends Component {
 			},
 			false,
 		);
-
-		setTimeout(() => {
-			this.switchTabs(this.props.settings.streamNumber);
-		}, 2000);
-	}
-
-	// checkbox settings:
-
-	toggleAudioThree(state) {
-		this.props.updateSettings({ audioThree: state });
-		if (state) {
-			laglessAudio.resume();
-		}
 	}
 
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
@@ -393,54 +310,6 @@ class App extends Component {
 		// localforage.clear().then(() => {
 		// 	window.location.href = "https://remotegames.io";
 		// });
-	}
-
-	switchTabs(sNum) {
-		// if (this.state.tab == tab) {
-		// 	return;
-		// }
-
-		if (!this.props.userInfo.loggedIn) {
-			swal("You have to login / register first!");
-			return;
-		}
-
-		// first clean up / destroy instances before we switch:
-		socket.emit("leave", `stream${sNum}`);
-		if (streams[this.props.settings.streamNumber]) {
-			streams[this.props.settings.streamNumber].pause();
-		}
-
-		// actually switch:
-		if (sNum != this.props.settings.streamNumber) {
-			for (let i = 0; i < this.props.playerCount; i++) {
-				this.props.leavePlayerControlQueue(i);
-			}
-			if (sNum == 0) {
-				this.props.updateSettings({ currentPlayer: 0 });
-			} else if (sNum == 1) {
-				this.props.updateSettings({ currentPlayer: 4 });
-			} else if (sNum == 2) {
-				this.props.updateSettings({ currentPlayer: 5 });
-			} else if (sNum == 3) {
-				this.props.updateSettings({ currentPlayer: 6 });
-			}
-		}
-
-		this.props.updateSettings({ streamNumber: sNum });
-
-		socket.emit("join", `stream${sNum}`);
-		// streams[sNum].resume(document.getElementById(`videoCanvas${sNum}`));
-		if (!!streams[sNum]) {
-			streams[sNum].resume(document.getElementById(`videoCanvas${sNum}`));
-		}
-
-		// https://github.com/yoannmoinet/nipplejs/issues/39
-		// force joysticks to recalculate the center:
-		window.dispatchEvent(new Event("resize"));
-		setTimeout(() => {
-			window.dispatchEvent(new Event("resize"));
-		}, 5000);
 	}
 
 	sendControllerState() {
@@ -560,6 +429,11 @@ class App extends Component {
 			// fixedLengthString(obj.axes[4], "0", 3),
 			// fixedLengthString(obj.axes[5], "0", 3),
 		);
+		// console.log("0 0 0\n 0 9 0\n 0 0 0");
+
+		// let s1x = getStickString(obj.axes[0]);
+		// let s1y = getStickString(obj.axes[1]);
+		// console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
 
 		socket.emit("sendControllerState", obj);
 	}
@@ -599,7 +473,7 @@ class App extends Component {
 	}
 
 	render() {
-		console.log("re-rendering app.");
+		console.log("re-rendering stream.");
 
 		const { classes } = this.props;
 
@@ -612,7 +486,7 @@ class App extends Component {
 
 		return (
 			<div className={classes.root}>
-				<NavTabs handleChange={this.switchTabs} history={this.props.history} />
+				<NavTabs history={this.props.history} />
 				<LoginArea />
 				<Picture tab={this.props.settings.streamNumber} />
 				<Chat hide={this.props.settings.hideChat} />
@@ -630,10 +504,6 @@ class App extends Component {
 								Reset All Settings
 							</Button>
 						</Paper>
-
-						{/* <Paper id="waitlistContainer" className="settingsPanel" elevation={5}>
-								<Waitlist />
-							</Paper> */}
 					</Paper>
 				</Paper>
 

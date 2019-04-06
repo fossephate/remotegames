@@ -34,9 +34,7 @@ const styles = (theme) => ({
 	},
 });
 
-
 class LoginArea extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -50,7 +48,6 @@ class LoginArea extends PureComponent {
 	}
 
 	handleLogin() {
-		window.swal("This doesn't do anything yet, just use the register button for now.");
 		this.props.history.push("/login");
 	}
 
@@ -59,7 +56,6 @@ class LoginArea extends PureComponent {
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		// if (this.props.hideNav) {
@@ -68,22 +64,26 @@ class LoginArea extends PureComponent {
 
 		return (
 			<Paper elevation={4} className={classes.root}>
-				{
-					this.props.userInfo.loggedIn ?
-						<>
-							<UsernameDropdown/>
-							<Button variant="contained" color="primary" onClick={this.handleAccount}>Account</Button>
-						</>
-					:
-						<>
-							<Button variant="contained" color="primary" onClick={this.handleLogin}>Login</Button>
-							<Button variant="contained" color="secondary" onClick={this.handleRegister}>Register</Button>
-						</>
-				}
+				{this.props.userInfo.loggedIn ? (
+					<>
+						<UsernameDropdown />
+						<Button variant="contained" color="primary" onClick={this.handleAccount}>
+							Account
+						</Button>
+					</>
+				) : (
+					<>
+						<Button variant="contained" color="primary" onClick={this.handleLogin}>
+							Login
+						</Button>
+						<Button variant="contained" color="secondary" onClick={this.handleRegister}>
+							Register
+						</Button>
+					</>
+				)}
 			</Paper>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {
@@ -96,7 +96,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		updateSettings: (settings) => {
-			dispatch(updateSettings(settings))
+			dispatch(updateSettings(settings));
 		},
 	};
 };
@@ -104,5 +104,8 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(LoginArea);

@@ -33,7 +33,7 @@ const styles = (theme) => ({
 	main: {
 		display: "flex",
 		flexDirection: "column",
-	    justifyContent: "center",
+		justifyContent: "center",
 		width: "85%",
 		height: "100%",
 		padding: "3%",
@@ -50,11 +50,11 @@ const styles = (theme) => ({
 		// marginRight: "auto",
 	},
 	card: {
-      width: 345,
-    },
-    media: {
-      height: 300,
-    },
+		width: 345,
+	},
+	media: {
+		height: 300,
+	},
 	imagesContainer: {
 		display: "flex",
 		justifyContent: "space-evenly",
@@ -73,7 +73,6 @@ const styles = (theme) => ({
 });
 
 class About extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
@@ -83,24 +82,27 @@ class About extends PureComponent {
 
 		return (
 			<Paper elevation={0} className={classes.root}>
-
 				<Paper elevation={3} className={classes.main}>
-
 					<Button
 						variant="contained"
 						className={classes.back}
 						onClick={() => {
 							this.props.history.push("/");
-						}}>Back</Button>
+						}}
+					>
+						Back
+					</Button>
 
 					<h2>About the project</h2>
 
 					<p>
-						This website is developed and maintained by <a href="https://github.com/mfosse">Matthew Fosse</a>.
+						This website is developed and maintained by{" "}
+						<a href="https://github.com/mfosse">Matthew Fosse</a>.
 					</p>
 
 					<p>
-						The whole idea behind the project is that you can use a keyboard or controller to try out games on these consoles from anywhere with just a web browser.
+						The whole idea behind the project is that you can use a keyboard or controller
+						to try out games on these consoles from anywhere with just a web browser.
 					</p>
 
 					<div className={classes.imagesContainer}>
@@ -110,10 +112,11 @@ class About extends PureComponent {
 									className={classes.media}
 									image="/images/about/about5.jpg"
 									title="Photo 1"
-									/>
+								/>
 								<CardContent>
 									<Typography component="p">
-										The consoles are hosted in Central Florida, and the server is currently located in New York.
+										The consoles are hosted in Central Florida, and the server is
+										currently located in Virginia.
 									</Typography>
 								</CardContent>
 							</CardActionArea>
@@ -124,23 +127,23 @@ class About extends PureComponent {
 									className={classes.media}
 									image="/images/about/about2.jpg"
 									title="Photo 2"
-									/>
+								/>
 								<CardContent>
-									<Typography component="p">
-										The whole setup
-									</Typography>
+									<Typography component="p">The whole setup</Typography>
 								</CardContent>
 							</CardActionArea>
 						</Card>
 					</div>
 
 					<p>
-						The games, consoles, and server costs to run this project are primarily funded through <a href="https://twitch.tv/remotegames/subscribe/">Twitch subscriptions</a> and donations.
-						If you like the project consider supporting it with the links below.
+						The games, consoles, and server costs to run this project are primarily funded
+						through{" "}
+						<a href="https://twitch.tv/remotegames/subscribe/">Twitch subscriptions</a>{" "}
+						and donations. If you like the project consider supporting it with the links
+						below.
 					</p>
 
 					<div className={classes.donationButtons}>
-
 						<img
 							border="0"
 							// width="130"
@@ -149,7 +152,8 @@ class About extends PureComponent {
 							className={classes.image}
 							onClick={() => {
 								window.location = "https://streamlabs.com/remotegames/";
-							}}/>
+							}}
+						/>
 						<img
 							border="0"
 							// width="130"
@@ -158,7 +162,8 @@ class About extends PureComponent {
 							className={classes.image}
 							onClick={() => {
 								window.location = "https://discord.io/tpns/";
-							}}/>
+							}}
+						/>
 						<img
 							border="0"
 							// width="130"
@@ -167,37 +172,41 @@ class About extends PureComponent {
 							className={classes.image}
 							onClick={() => {
 								window.location = "https://paypal.me/fossephate/";
-							}}/>
-
-
+							}}
+						/>
 					</div>
 
-					<iframe className={classes.twitch} src="https://player.twitch.tv/?channel=remotegames&muted=false&autoplay=true" height="360" width="640" frameBorder="0" scrolling="no" allowFullScreen={true}></iframe>
-
+					<iframe
+						className={classes.twitch}
+						src="https://player.twitch.tv/?channel=remotegames&muted=false&autoplay=true"
+						height="360"
+						width="640"
+						frameBorder="0"
+						scrolling="no"
+						allowFullScreen={true}
+					/>
 				</Paper>
-
-
-
 			</Paper>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {
-	return {
-	};
+	return {};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
 		updateSettings: (settings) => {
-			dispatch(updateSettings(settings))
+			dispatch(updateSettings(settings));
 		},
 	};
 };
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(About);

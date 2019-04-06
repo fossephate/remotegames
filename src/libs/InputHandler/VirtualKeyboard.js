@@ -97,9 +97,17 @@ export default class VirtualKeyboard {
 
 		this.lastPressedKey = null;
 
-		document.addEventListener("keypress", (event) => {
+		// document.addEventListener("keypress", (event) => {
+		// 	console.log(event.key);
+		// 	this.lastPressedKey = event.key;
+		// });
+		document.addEventListener("keydown", (event) => {
 			// console.log(event.key);
-			this.lastPressedKey = event.key;
+			let key = event.key;
+			if (key.indexOf("Arrow") > -1) {
+				key = key.substring(5).toLowerCase();
+			}
+			this.lastPressedKey = key;
 		});
 	}
 

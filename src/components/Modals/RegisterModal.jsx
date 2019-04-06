@@ -8,13 +8,16 @@ import { withRouter } from "react-router";
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
 import MyCheckbox from "src/components/General/MyCheckbox.jsx";
 
+import RegisterForm from "src/components/Forms/RegisterForm.jsx";
+
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import ListItemText from "@material-ui/core/ListItemText";
-import Modal from "@material-ui/core/Modal";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 
 // recompose:
 import { compose } from "recompose";
@@ -22,41 +25,36 @@ import { compose } from "recompose";
 // libs:
 const classNames = require("classnames");
 
+// device sizes:
+import { device } from "src/constants/DeviceSizes.js";
+
 // jss:
 const styles = (theme) => ({
 	root: {
 		display: "flex",
-		flexDirection: "row",
-		// padding: "30px",
-
-		// position: "absolute",
-		// width: theme.spacing.unit * 50,
-		backgroundColor: theme.palette.background.paper,
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing.unit * 4,
-		borderRadius: "5px",
+		flexDirection: "column",
+		justifyContent: "space-evenly",
 	},
-	center: {
-		position: "fixed",
-	    top: "50%",
-	    left: "50%",
-	    transform: "translate(-50%, -50%)",
+	[device.tablet]: {
+		root: {
+			flexDirection: "row",
+		},
 	},
 	createAnAccount: {
 		display: "flex",
 		flexDirection: "column",
+		textAlign: "center",
 	},
 	connectAnAccount: {
 		display: "flex",
-	    flexDirection: "column",
+		flexDirection: "column",
 		justifyContent: "start",
-		marginLeft: "50px",
-		minWidth: "230px",
+		minWidth: "25%",
+		textAlign: "center",
 	},
 });
 
 class RegisterModal extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -67,37 +65,39 @@ class RegisterModal extends PureComponent {
 		this.props.history.push("/");
 	}
 
-	render() {
+	handleRegisterForm(values) {
+		console.log(values);
+	}
 
+	render() {
 		const { classes } = this.props;
 
 		return (
-			<Modal
+			<Dialog
 				open={true}
-				onClose={this.handleClose}>
-
-				<div className={classNames(classes.root, classes.center)}>
-
+				scroll="body"
+				maxWidth="lg"
+				// fullWidth={true}
+				onClose={this.handleClose}
+			>
+				<DialogContent className={classes.root}>
 					<div className={classes.createAnAccount}>
-						<h2><ListItemText>Create an Account</ListItemText></h2>
-						<TextField id="registerUsername" className="" label="Username" type="name" margin="normal" variant="outlined"/>
-						<TextField id="registerEmail" className="" label="Email" type="email" autoComplete="email" margin="normal" variant="outlined"/>
-						<TextField id="registerPassword" className="" label="Password" type="password" autoComplete="current-password" margin="normal" variant="outlined"/>
-						<TextField id="registerPassword2" className="" label="Password" type="password" autoComplete="current-password" margin="normal" variant="outlined"/>
-						<MyCheckbox text={"I am over 13 years old"} handleChange={() => {}} checked={false}/>
-						<Button id="registerSubmit" className="" variant="contained" color="primary" onClick={() => {alert("Coming soon™")}}>Create Account</Button>
+						<div>
+							<ListItemText>Create an Account</ListItemText>
+						</div>
+						<RegisterForm onSubmit={this.handleRegisterForm} />
 					</div>
 
 					<div className={classes.connectAnAccount}>
-						<h2><ListItemText>Connect an Account</ListItemText></h2>
-						<ConnectAccounts/>
+						<div>
+							<ListItemText>Connect an Account</ListItemText>
+						</div>
+						<ConnectAccounts />
 					</div>
-
-				</div>
-			</Modal>
+				</DialogContent>
+			</Dialog>
 		);
 	}
-
 }
 
 export default compose(

@@ -45,7 +45,6 @@ const styles = (theme) => ({
 });
 
 class LaglessView extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
@@ -54,16 +53,16 @@ class LaglessView extends PureComponent {
 		const { classes } = this.props;
 
 		let laglessClasses = classNames(classes.root, {
-			[classes.fullscreen]: (this.props.largescreen || this.props.fullscreen),
+			[classes.fullscreen]: this.props.largescreen || this.props.fullscreen,
 		});
 
-		let displayLagless = (this.props.loggedIn && !this.props.waitlisted);
+		let displayLagless = this.props.loggedIn && !this.props.waitlisted;
 		let twitchStyle = {
 			display: displayLagless ? "none" : null,
 		};
 
 		let videoClasses = classNames(classes.canvas, {
-			[classes.fullscreen]: (this.props.largescreen || this.props.fullscreen),
+			[classes.fullscreen]: this.props.largescreen || this.props.fullscreen,
 		});
 
 		let controllerNumber = 0;
@@ -81,13 +80,20 @@ class LaglessView extends PureComponent {
 		}
 
 		let isXbox = this.props.streamNumber == 1;
-		let controllerType = (isXbox) ? "xbox" : "joycon";
+		let controllerType = isXbox ? "xbox" : "joycon";
 
 		return (
 			<div className={laglessClasses}>
-				{this.props.controllerView ? <LeftControllerView controllerState={this.props.controllerStates[controllerNumber]} type={controllerType}/> : null}
+				{this.props.controllerView ? (
+					<LeftControllerView
+						controllerState={this.props.controllerStates[controllerNumber]}
+						type={controllerType}
+					/>
+				) : null}
 
-				{displayLagless ? <LaglessCanvas num={this.props.num} classes={videoClasses}/> : null}
+				{displayLagless ? (
+					<LaglessCanvas num={this.props.num} classes={videoClasses} />
+				) : null}
 				<iframe
 					id="twitchVideo"
 					className={classes.twitch}
@@ -95,14 +101,18 @@ class LaglessView extends PureComponent {
 					frameBorder="0"
 					scrolling="no"
 					allowFullScreen={true}
-					style={twitchStyle}>
-				</iframe>
+					style={twitchStyle}
+				/>
 
-				{this.props.controllerView ? <RightControllerView controllerState={this.props.controllerStates[controllerNumber]} type={controllerType}/> : null}
+				{this.props.controllerView ? (
+					<RightControllerView
+						controllerState={this.props.controllerStates[controllerNumber]}
+						type={controllerType}
+					/>
+				) : null}
 			</div>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {
@@ -113,7 +123,7 @@ const mapStateToProps = (state) => {
 		controllerView: state.settings.controllerView, // whether to render the joycons
 		fullscreen: state.settings.fullscreen,
 		largescreen: state.settings.largescreen,
-		streamNumber: state.settings.streamNumber,
+		streamNumber: 0,
 	};
 };
 

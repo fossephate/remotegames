@@ -174,6 +174,7 @@ exports.getStickString = (num) => {
 		return "009";
 	}
 	if (n < 10) {
+		n = 10 - n;
 		n = 90 + 90 * n;
 	} else {
 		n = (20 - n) * 9;

@@ -41,12 +41,14 @@ const styles = (theme) => ({
 		paddingTop: "4px",
 		paddingBottom: "4px",
 		marginTop: "4px",
-		backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
+		backgroundColor:
+			theme.palette.type === "dark"
+				? theme.palette.primary.dark
+				: theme.palette.primary.light,
 	},
 });
 
 class LaglessBar extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -67,34 +69,41 @@ class LaglessBar extends PureComponent {
 		const { classes } = this.props;
 		return (
 			<Paper className={classes.root} elevation={3}>
-				<ViewerDropdown userids={this.props.viewers} usernameMap={this.props.usernameMap}/>
+				<ViewerDropdown accountMap={this.props.accountMap} />
 				<VolumeSlider
 					value={this.props.volume}
 					handleChange={this.handleChange}
-					onMute={() => {this.props.setVolume(0)}}
-					onMax={() => {this.props.setVolume(100)}}/>
+					onMute={() => {
+						this.props.setVolume(0);
+					}}
+					onMax={() => {
+						this.props.setVolume(100);
+					}}
+				/>
 				{/* <MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/> */}
 				{/* <Button id="laglessRefresh" className="laglessRefresh" variant="contained" color="primary">
 					<RefreshIcon/>
 				</Button> */}
-				<Button variant="contained" color="primary" onClick={() => {this.props.history.push("/remap")}}>
-					<KeyboardIcon/>|<VideogameAssetIcon/>
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={() => {
+						this.props.history.push("/remap");
+					}}
+				>
+					<KeyboardIcon />|<VideogameAssetIcon />
 				</Button>
 
-				<Ping/>
-
+				<Ping />
 			</Paper>
 		);
-
 	}
 }
-
 
 const mapStateToProps = (state) => {
 	return {
 		volume: state.settings.volume,
-		viewers: state.viewers,
-		usernameMap: state.usernameMap,
+		accountMap: state.accountMap,
 	};
 };
 
@@ -110,5 +119,8 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(LaglessBar);

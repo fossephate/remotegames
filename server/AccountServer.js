@@ -5,6 +5,8 @@ const io = require("socket.io")(server);
 const port = 8099;
 const config = require("./config.js");
 
+const VideoServer = require("./VideoServer.js").VideoServer;
+
 const session = require("express-session");
 const passport = require("passport");
 const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
@@ -79,7 +81,6 @@ let modlist = [
 	"harmjan387",
 	"beanjr_yt",
 	"alua2020",
-	"ogcristofer",
 	"stravos96",
 	"splatax",
 	"silvermagpi",
@@ -110,9 +111,9 @@ redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
 
 function updateOrCreateUser(profile, type, req) {
 	// link to existing account:
-	if (req.session.uniqueToken != null) {
+	if (req.session.authToken != null) {
 		// get account by token:
-		Account.findOne({ authToken: req.session.uniqueToken }).exec((error, account) => {
+		Account.findOne({ authToken: req.session.authToken }).exec((error, account) => {
 			if (error) {
 				throw error;
 			}
@@ -192,6 +193,11 @@ let accountSchema = Schema({
 	authToken: String,
 	streamKey: String,
 	isStreaming: Boolean,
+	emailVerified: Boolean,
+	videoServerIP: String,
+	videoServerPort: Number,
+	hostServerIP: String,
+	hostServerPort: Number,
 
 	connectedAccounts: [],
 
@@ -378,7 +384,7 @@ passport.deserializeUser((user, done) => {
 app.get(
 	"/auth/twitch/",
 	(req, res, next) => {
-		req.session.uniqueToken = req.query.uniqueToken;
+		req.session.authToken = req.query.authToken;
 		passport.authenticate("twitch", { forceVerify: true })(req, res, next);
 	},
 	(req, res) => {},
@@ -395,7 +401,7 @@ app.get(
 app.get(
 	"/auth/google/",
 	(req, res, next) => {
-		req.session.uniqueToken = req.query.uniqueToken;
+		req.session.authToken = req.query.authToken;
 		passport.authenticate("google")(req, res, next);
 	},
 	(req, res) => {},
@@ -412,7 +418,7 @@ app.get(
 app.get(
 	"/auth/youtube/",
 	(req, res, next) => {
-		req.session.uniqueToken = req.query.uniqueToken;
+		req.session.authToken = req.query.authToken;
 		passport.authenticate("youtube")(req, res, next);
 	},
 	(req, res) => {},
@@ -429,7 +435,7 @@ app.get(
 app.get(
 	"/auth/discord/",
 	(req, res, next) => {
-		req.session.uniqueToken = req.query.uniqueToken;
+		req.session.authToken = req.query.authToken;
 		passport.authenticate("discord")(req, res, next);
 	},
 	(req, res) => {},
@@ -508,10 +514,13 @@ server.listen(port, () => {
 	console.log("Account server listening at port %d", port);
 });
 
+let videoServers = {};
+
 io.on("connection", (socket) => {
 	socket.on("register", (data) => {
 		// todo: input validation:
 		if (!data.email || !data.password || !data.username) {
+			socket.emit("ACCOUNT_ERROR", "INVALID_ARGUMENTS");
 			return;
 		}
 		let email = data.email;
@@ -548,6 +557,8 @@ io.on("connection", (socket) => {
 				}
 			});
 
+		// todo: make sure this doesn't happen accidentally
+
 		console.log("Account doesn't already exist, creating account.");
 		// create the account:
 		let newAccount = new Account();
@@ -571,6 +582,15 @@ io.on("connection", (socket) => {
 
 	socket.on("authenticate", (data) => {
 		let reply = { socketid: data.socketid };
+
+		if (!data.socketid) {
+			console.log("socketid was not defined!")
+			socket.emit("authenticated", {
+				success: false,
+				reason: "INVALID_ARGUMENTS",
+			});
+			return;
+		}
 
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
@@ -670,6 +690,7 @@ io.on("connection", (socket) => {
 
 					socket.emit("authenticated", {
 						success: true,
+						authToken: account.authToken,
 						clientInfo: clientInfo,
 						...reply,
 					});
@@ -701,6 +722,10 @@ io.on("connection", (socket) => {
 		if (data.userid != null) {
 			redisClient.delAsync(`users:${data.userid}`);
 		}
+		if (localizedAccountMaps[socket.id]) {
+			delete localizedAccountMaps[socket.id][data.userid];
+		}
+		delete masterAccountMap[data.userid];
 	});
 
 	// todo:
@@ -717,11 +742,121 @@ io.on("connection", (socket) => {
 	socket.on("getAllAccountsStreaming", (data) => {
 		Account.find({ isStreaming: true })
 			.exec()
-			.then((error, account) => {
+			.then((error, accounts) => {
+				if (error) {
+					throw error;
+				}
+				socket.emit("accounts", accounts);
+			});
+	});
+
+	socket.on("startStreaming", (data) => {
+		// let reply = { socketid: data.socketid };
+
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				socket.emit("streaming", {
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			if (account.isStreaming) {
+				console.log("already streaming!");
+				socket.emit("streaming", {
+					success: false,
+					reason: "ALREADY_STREAMING",
+				});
+				return;
+			}
+
+			// update account info:
+			account.isStreaming = true;
+			// update the account details:
+			account.save((error) => {
+				// error check:
 				if (error) {
 					throw error;
 				}
 			});
+
+			for (let key in videoServers) {
+				let server = videoServers[key];
+				if (server.availablePorts.length > 0) {
+					let ip = videoServers[key].ip;
+					let port = videoServers[key].availablePorts.shift();
+					// create a stream key:
+					let streamKey = crypto.randomBytes(64).toString("hex");
+					// send to client:
+					socket.emit("startStreaming", {ip: ip, port: port, streamKey: streamKey});
+					// send to videoServer:
+					io.to(key).emit("startRelay", {port: port, streamKey: streamKey});
+				}
+			}
+
+
+		});
+	});
+
+	socket.on("stopStreaming", (data) => {
+		// let reply = { socketid: data.socketid };
+
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				socket.emit("streaming", {
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			if (!account.isStreaming) {
+				console.log("wasn't streaming!");
+				socket.emit("streaming", {
+					success: false,
+					reason: "WAS_NOT_STREAMING",
+				});
+				return;
+			}
+
+			// update account info:
+			account.isStreaming = false;
+			// update the account details:
+			account.save((error) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+			});
+
+
+		});
+	});
+
+	socket.on("registerVideoServer", (data) => {
+		if (data.secret !== config.ROOM_SECRET) {
+			return;
+		}
+		videoServers[socket.id] = new VideoServer(socket, data.ip, data.availablePorts);
+	});
+	// check if it's one of the videoServers:
+	socket.on("disconnect", () => {
+		if (videoServers.hasOwnProperty(socket.id)) {
+			delete videoServers[socket.id];
+		}
 	});
 });
 

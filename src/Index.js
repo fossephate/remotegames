@@ -15,6 +15,7 @@ import About from "src/About.jsx";
 import FAQ from "src/FAQ.jsx";
 import CurrentPlayers from "src/CurrentPlayers.jsx";
 import Streams from "src/Streams.jsx";
+import Stream from "src/Stream.jsx";
 
 // redux:
 import { Provider, connect } from "react-redux";
@@ -47,7 +48,6 @@ let preloadedState = {
 		userids: [],
 	},
 	waitlist: [],
-	viewers: [[], [], [], [], []],
 	players: {
 		controlQueues: [],
 		turnTimers: [],
@@ -87,6 +87,21 @@ let preloadedState = {
 	accountMap: {},
 
 	settings: {
+		general: {
+			keyboardControls: true,
+			controllerControls: true,
+			mouseControls: false,
+			touchControls: false,
+			controllerView: true,
+			fullscreen: false,
+			largescreen: false,
+			audioThree: false,
+			analogStickMode: false,
+			currentPlayer: 0,
+			volume: 50,
+			theme: "dark",
+		},
+
 		keyboardControls: true,
 		controllerControls: true,
 		mouseControls: false,
@@ -110,6 +125,8 @@ let preloadedState = {
 		lastServerUpdate: 0, // when it was last updated (in ms)
 		ping: 0,
 	},
+
+	form: {},
 };
 
 for (let i = 0; i < preloadedState.players.count; i++) {
@@ -177,6 +194,12 @@ function loadState() {
 }
 
 loadState();
+
+// window.onbeforeunload = () => {
+// 	console.log("saving settings");
+// 	localforage.setItem("settings", JSON.stringify(this.props.settings));
+// 	return null;
+// };
 
 const store = createStore(
 	rootReducer,
@@ -304,11 +327,17 @@ class Index extends Component {
 									return <Streams {...props} socket={socket} />;
 								}}
 							/>
+							<Route
+								path="/stream"
+								render={(props) => {
+									return <Stream {...props} socket={socket} />;
+								}}
+							/>
 							// order matters here, can't do exact path or /login and /register break:
 							<Route
 								path="/"
 								render={(props) => {
-									return <App {...props} socket={socket} />;
+									return <Stream {...props} socket={socket} />;
 								}}
 							/>
 						</Switch>
