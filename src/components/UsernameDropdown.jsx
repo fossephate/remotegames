@@ -73,8 +73,8 @@ class UsernameDropdown extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		username: state.userInfo.username,
-		validUsernames: state.userInfo.validUsernames,
+		username: state.clientInfo.username,
+		validUsernames: state.clientInfo.validUsernames,
 	};
 };
 

@@ -89,7 +89,7 @@ class NavTabs extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		loggedIn: state.userInfo.loggedIn,
+		loggedIn: state.clientInfo.loggedIn,
 		hideNav: state.settings.hideNav,
 	};
 };

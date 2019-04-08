@@ -5,7 +5,7 @@ import chat from "./chat.js";
 
 import waitlist from "./waitlist.js";
 
-import userInfo from "./userInfo.js";
+import clientInfo from "./clientInfo.js";
 import accountMap from "./accountMap.js";
 
 import players from "./players.js";
@@ -17,7 +17,7 @@ import time from "./time.js";
 const rootReducer = combineReducers({
 	chat,
 	waitlist,
-	userInfo,
+	clientInfo,
 	accountMap,
 	players,
 	settings,

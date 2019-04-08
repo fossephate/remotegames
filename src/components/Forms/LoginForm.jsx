@@ -122,7 +122,7 @@ const LoginForm = (props) => {
 		<form onSubmit={handleSubmit}>
 			<div>
 				<Field
-					name="username"
+					name="user"
 					component={renderTextField}
 					label="Username or Email"
 					variant="outlined"

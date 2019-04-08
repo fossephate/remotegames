@@ -8,7 +8,7 @@ import { Router, Route, Switch, withRouter } from "react-router";
 // redux:
 import { connect } from "react-redux";
 
-import { changeUsername, updateUserInfo } from "src/actions/userInfo.js";
+import { changeUsername, updateClientInfo } from "src/actions/clientInfo.js";
 import { updateSettings } from "src/actions/settings.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
 
@@ -286,7 +286,7 @@ class App extends Component {
 		}, 2000);
 
 		sendInputTimer = setInterval(() => {
-			if (!this.props.userInfo.loggedIn) {
+			if (!this.props.clientInfo.loggedIn) {
 				return;
 			}
 			inputHandler.pollDevices();
@@ -393,7 +393,7 @@ class App extends Component {
 		// 	return;
 		// }
 
-		if (!this.props.userInfo.loggedIn) {
+		if (!this.props.clientInfo.loggedIn) {
 			swal("You have to login / register first!");
 			return;
 		}
@@ -483,7 +483,7 @@ class App extends Component {
 		// if not in the queue, attempt to join it:
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
-				this.props.userInfo.userid,
+				this.props.clientInfo.userid,
 			) == -1
 		) {
 			this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
@@ -491,7 +491,7 @@ class App extends Component {
 
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
-				this.props.userInfo.userid,
+				this.props.clientInfo.userid,
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
@@ -504,7 +504,7 @@ class App extends Component {
 			return;
 		}
 
-		if (!this.props.userInfo.loggedIn) {
+		if (!this.props.clientInfo.loggedIn) {
 			// new Noty({
 			// 	theme: "mint",
 			// 	type: "warning",
@@ -525,7 +525,7 @@ class App extends Component {
 		};
 
 		// for (let i = 0; i < this.props.controlQueues.length; i++) {
-		// 	if (this.props.controlQueues[i][0] == this.props.userInfo.userid) {
+		// 	if (this.props.controlQueues[i][0] == this.props.clientInfo.userid) {
 		// 		obj.cNum = i;
 		// 	}
 		// }
@@ -558,7 +558,7 @@ class App extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (JSON.stringify(this.props.userInfo) != JSON.stringify(nextProps.userInfo)) {
+		if (JSON.stringify(this.props.clientInfo) != JSON.stringify(nextProps.clientInfo)) {
 			return true;
 		}
 
@@ -678,7 +678,7 @@ class App extends Component {
 const mapStateToProps = (state) => {
 	return {
 		controlQueues: state.players.controlQueues,
-		userInfo: state.userInfo,
+		clientInfo: state.clientInfo,
 		settings: state.settings,
 		playerCount: state.players.count,
 		// todo: modal
@@ -696,8 +696,8 @@ const mapDispatchToProps = (dispatch) => {
 		joinPlayerControlQueue: (controllerNumber) => {
 			dispatch(joinPlayerControlQueue(controllerNumber));
 		},
-		updateUserInfo: (userInfo) => {
-			dispatch(updateUserInfo(userInfo));
+		updateClientInfo: (clientInfo) => {
+			dispatch(updateClientInfo(clientInfo));
 		},
 	};
 };

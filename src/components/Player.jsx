@@ -91,7 +91,7 @@ const mapStateToProps = (state) => {
 		// turnTimers: state.turnTimers,
 		controlQueues: state.players.controlQueues,
 		usernameMap: state.usernameMap,
-		userid: state.userInfo.userid,
+		userid: state.clientInfo.userid,
 		// time: state.time,
 		currentPlayer: state.settings.currentPlayer,
 	};

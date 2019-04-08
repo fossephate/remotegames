@@ -57,3 +57,31 @@ class Client {
 }
 
 module.exports.Client = Client;
+
+class VideoServerClient {
+	constructor(socket, ip, ports) {
+		this.socket = socket;
+		this.id = socket.id;
+
+		this.ip = ip;
+		this.ports = ports;
+
+		this.authenticated = false;
+	}
+}
+
+module.exports.VideoServerClient = VideoServerClient;
+
+class HostServerClient {
+	constructor(socket, ip, ports) {
+		this.socket = socket;
+		this.id = socket.id;
+
+		this.ip = ip;
+		this.ports = ports;
+
+		this.authenticated = false;
+	}
+}
+
+module.exports.HostServerClient = HostServerClient;

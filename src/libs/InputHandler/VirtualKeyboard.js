@@ -76,17 +76,6 @@ export default class VirtualKeyboard {
 			"2",
 		];
 
-		// this.settings = {
-		// 	map: {
-		// 		buttons: [
-		//
-		// 		],
-		// 		axes: [
-		//
-		// 		],
-		// 	},
-		// };
-
 		this.wasPressedKeyCodes = [];
 
 		this.settings = {
@@ -104,6 +93,9 @@ export default class VirtualKeyboard {
 		document.addEventListener("keydown", (event) => {
 			// console.log(event.key);
 			let key = event.key;
+			if (!key) {
+				return;
+			}
 			if (key.indexOf("Arrow") > -1) {
 				key = key.substring(5).toLowerCase();
 			}

@@ -5,7 +5,7 @@ const io = require("socket.io")(server);
 const port = 8099;
 const config = require("./config.js");
 
-const VideoServer = require("./VideoServer.js").VideoServer;
+const VideoServerClient = require("./client.js").VideoServerClient;
 
 const session = require("express-session");
 const passport = require("passport");
@@ -498,7 +498,7 @@ app.get("/redirect", (req, res) => {
 
 		// set authToken to expire after 7 days:
 		// todo: make expire:
-		// 		redis.hexpireAsync("clientMap", password, (time / 1000)).then(function(success) {
+		// 		redis.hexpireAsync("clientMap", password, (time / 1000)).then((success) => {
 		// 			console.log("set password to expire in 7 days: " + success);
 		// 		});
 	}
@@ -515,6 +515,7 @@ server.listen(port, () => {
 });
 
 let videoServers = {};
+let hostServers = {};
 
 io.on("connection", (socket) => {
 	socket.on("register", (data) => {
@@ -531,60 +532,96 @@ io.on("connection", (socket) => {
 
 		// check if the acccount already exists:
 		Account.findOne({ email: email })
-			.exec()
-			.then((error, account) => {
-				if (error) {
-					throw error;
-				}
+			.then((account) => {
 				// account already exists:
 				if (account) {
-					console.log("Account already exists, aborting.");
+					console.log("Account already exists, EMAIL_ALREADY_TAKEN.");
 					socket.emit("ACCOUNT_ERROR", "EMAIL_ALREADY_TAKEN");
-					return;
+					return { then: function() {} }; // break promise chain
 				}
+			})
+			.then(() => {
+				return Account.findOne({ username: username }).then((account) => {
+					// account already exists:
+					if (account) {
+						console.log("Account already exists, USERNAME_ALREADY_TAKEN.");
+						socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
+						return { then: function() {} }; // break promise chain
+					}
+				});
+			})
+			.then(() => {
+				console.log("Account doesn't already exist, creating account.");
+				// create the account:
+				let newAccount = new Account();
+				// set account details:
+				// hash password:
+				bcrypt.hash(password, SALT_ROUNDS).then((hash) => {
+					// store the password hash in the account:
+					newAccount.password = hash;
+					// other acount details:
+					newAccount.email = email;
+					newAccount.username = username;
+					// create an authToken that lets us access the account:
+					newAccount.authToken = crypto.randomBytes(64).toString("hex");
+					// save the new Account:
+					newAccount.save((error) => {
+						if (error) {
+							throw error;
+						}
+						console.log("Account created.");
+					});
+				});
 			});
-		Account.findOne({ username: username })
+	});
+
+	// https://stackoverflow.com/questions/29098830/mongoose-findone-with-either-or-query
+	// https://stackoverflow.com/questions/35780524/how-to-do-simple-mongoose-findone-with-multiple-conditions?rq=1
+
+	socket.on("login", (data) => {
+		let reply = { socketid: data.socketid };
+
+		if (typeof data.password !== "string") {
+			return;
+		}
+
+		let queryObj = { $or: [{ email: data.user }, { username: data.user }] };
+		Account.findOne(queryObj)
 			.exec()
-			.then((error, account) => {
-				if (error) {
-					throw error;
-				}
-				// account already exists:
-				if (account) {
-					console.log("Account already exists, aborting.");
-					socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
+			.then((account) => {
+				// acount doesn't exist:
+				if (!account) {
+					console.log("Account not found (while logging in)");
+					socket.emit("authenticated", {
+						success: false,
+						reason: "ACCOUNT_NOT_FOUND",
+						...reply,
+					});
 					return;
+				} else {
+					bcrypt.compare(data.password, account.password).then((result) => {
+						if (result) {
+							socket.emit("authenticated", {
+								success: true,
+								authToken: account.authToken,
+							});
+						} else {
+							socket.emit("authenticated", {
+								success: false,
+								reason: "INVALID_CREDENTIALS",
+								...reply,
+							});
+						}
+					});
 				}
 			});
-
-		// todo: make sure this doesn't happen accidentally
-
-		console.log("Account doesn't already exist, creating account.");
-		// create the account:
-		let newAccount = new Account();
-		// set account details:
-		// hash password:
-		bcrypt.hash(password, SALT_ROUNDS).then((hash) => {
-			// store the password hash in the account:
-			newAccount.password = hash;
-			// other acount details:
-			newAccount.email = email;
-			newAccount.username = username;
-			// save the new Account:
-			newAccount.save((error) => {
-				if (error) {
-					throw error;
-				}
-				console.log("Account created.");
-			});
-		});
 	});
 
 	socket.on("authenticate", (data) => {
 		let reply = { socketid: data.socketid };
 
 		if (!data.socketid) {
-			console.log("socketid was not defined!")
+			console.log("socketid was not defined!");
 			socket.emit("authenticated", {
 				success: false,
 				reason: "INVALID_ARGUMENTS",
@@ -624,6 +661,10 @@ io.on("connection", (socket) => {
 
 					// console.log("registering account.");
 					clientInfo.validUsernames = [];
+
+					if (account.username) {
+						clientInfo.validUsernames.push(account.username);
+					}
 
 					if (account.connectedAccounts.indexOf("discord") > -1) {
 						clientInfo.validUsernames.push(
@@ -777,8 +818,85 @@ io.on("connection", (socket) => {
 				return;
 			}
 
+			let streamKey = null;
+
+			let videoIP = null;
+			let videoPort = null;
+			// look for available video server port:
+			for (let id in videoServers) {
+				let server = videoServers[id];
+
+				for (let port in server.ports) {
+					// check if the port is available:
+					if (server.ports[port]) {
+						let ip = videoServers[id].ip;
+						// set port as unavailable:
+						videoServers[id].ports[port] = false;
+						videoIP = ip;
+						videoPort = port;
+						// create a stream key:
+						let videoStreamKey = crypto.randomBytes(64).toString("hex");
+						streamKey = videoStreamKey;
+						// send to client:
+						socket.emit("startStreaming", {
+							ip: ip,
+							port: port,
+							streamKey: videoStreamKey,
+						});
+						// send to videoServer:
+						io.to(id).emit("startVideo", { port: port, streamKey: videoStreamKey });
+
+						break;
+					}
+				}
+
+				if (videoPort != null) {
+					break;
+				}
+			}
+			// look for available host server port:
+			let hostIP = null;
+			let hostPort = null;
+
+			// look for available host server port:
+			for (let id in hostServers) {
+				let server = hostServers[id];
+
+				for (let port in server.ports) {
+					// check if the port is available:
+					if (server.ports[port]) {
+						let ip = hostServers[id].ip;
+						// set port as unavailable:
+						hostServers[id].ports[port] = false;
+						hostIP = ip;
+						hostPort = port;
+						// // create a stream key:
+						// let streamKey = crypto.randomBytes(64).toString("hex");
+						// // send to client:
+						// socket.emit("startStreaming", { ip: ip, port: port, streamKey: streamKey });
+						// send to hostServer:
+						io.to(id).emit("startHost", {
+							port: port,
+							streamKey: streamKey,
+							videoIP: videoIP,
+							videoPort: videoPort,
+						});
+
+						break;
+					}
+				}
+
+				if (hostPort != null) {
+					break;
+				}
+			}
+
 			// update account info:
 			account.isStreaming = true;
+			account.videoServerIP = videoIP;
+			account.videoServerPort = videoPort;
+			account.hostServerIP = hostIP;
+			account.hostServerPort = hostPort;
 			// update the account details:
 			account.save((error) => {
 				// error check:
@@ -786,22 +904,6 @@ io.on("connection", (socket) => {
 					throw error;
 				}
 			});
-
-			for (let key in videoServers) {
-				let server = videoServers[key];
-				if (server.availablePorts.length > 0) {
-					let ip = videoServers[key].ip;
-					let port = videoServers[key].availablePorts.shift();
-					// create a stream key:
-					let streamKey = crypto.randomBytes(64).toString("hex");
-					// send to client:
-					socket.emit("startStreaming", {ip: ip, port: port, streamKey: streamKey});
-					// send to videoServer:
-					io.to(key).emit("startRelay", {port: port, streamKey: streamKey});
-				}
-			}
-
-
 		});
 	});
 
@@ -841,8 +943,6 @@ io.on("connection", (socket) => {
 					throw error;
 				}
 			});
-
-
 		});
 	});
 
@@ -850,12 +950,23 @@ io.on("connection", (socket) => {
 		if (data.secret !== config.ROOM_SECRET) {
 			return;
 		}
-		videoServers[socket.id] = new VideoServer(socket, data.ip, data.availablePorts);
+		videoServers[socket.id] = new VideoServerClient(socket, data.ip, data.ports);
 	});
-	// check if it's one of the videoServers:
+
+	socket.on("registerHostServer", (data) => {
+		if (data.secret !== config.ROOM_SECRET) {
+			return;
+		}
+		videoServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
+	});
+
+	// check if it's one of the videoServers / hostServers:
 	socket.on("disconnect", () => {
 		if (videoServers.hasOwnProperty(socket.id)) {
 			delete videoServers[socket.id];
+		}
+		if (hostServers.hasOwnProperty(socket.id)) {
+			delete hostServers[socket.id];
 		}
 	});
 });

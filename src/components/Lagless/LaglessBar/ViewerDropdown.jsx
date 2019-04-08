@@ -56,6 +56,15 @@ export default class ViewerDropdown extends PureComponent {
 				</MenuItem>,
 			);
 		}
+		if (count === 0) {
+			viewers.push(
+				<MenuItem key={0} uniqueid={null}>
+					<Typography variant="inherit" noWrap>
+						Loading...
+					</Typography>
+				</MenuItem>,
+			);
+		}
 		return viewers;
 	}
 

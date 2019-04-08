@@ -8,7 +8,7 @@ import { Router, Route, Switch, withRouter } from "react-router";
 // redux:
 import { connect } from "react-redux";
 
-import { changeUsername, updateUserInfo } from "src/actions/userInfo.js";
+import { changeUsername, updateClientInfo } from "src/actions/clientInfo.js";
 import { updateSettings } from "src/actions/settings.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
 
@@ -203,10 +203,10 @@ class Stream extends Component {
 
 		/* switch 2.0 */
 		streams.push(
-			new Lagless2("https://remotegames.io", { path: "/8001/socket.io", audio: true }),
+			new Lagless2("https://remotegames.io", { path: "/8005/socket.io", audio: true }),
 		);
 		setTimeout(() => {
-			if (!this.props.userInfo.loggedIn) {
+			if (!this.props.clientInfo.loggedIn) {
 				swal("You have to login / register first!");
 				return;
 			}
@@ -251,7 +251,7 @@ class Stream extends Component {
 		}, 2000);
 
 		sendInputTimer = setInterval(() => {
-			if (!this.props.userInfo.loggedIn) {
+			if (!this.props.clientInfo.loggedIn) {
 				return;
 			}
 			inputHandler.pollDevices();
@@ -359,7 +359,7 @@ class Stream extends Component {
 		// if not in the queue, attempt to join it:
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
-				this.props.userInfo.userid,
+				this.props.clientInfo.userid,
 			) == -1
 		) {
 			this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
@@ -367,31 +367,31 @@ class Stream extends Component {
 
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
-				this.props.userInfo.userid,
+				this.props.clientInfo.userid,
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
-			new Noty({
-				theme: "mint",
-				type: "warning",
-				text: "It's not your turn yet!",
-				timeout: 250,
-			}).show();
+			// new Noty({
+			// 	theme: "mint",
+			// 	type: "warning",
+			// 	text: "It's not your turn yet!",
+			// 	timeout: 250,
+			// }).show();
 			return;
 		}
 
-		if (!this.props.userInfo.loggedIn) {
-			new Noty({
-				theme: "mint",
-				type: "warning",
-				text: "You aren't logged in!",
-				timeout: 500,
-				sounds: {
-					volume: 0.5,
-					sources: ["https://remotegames.io/sounds/ding.wav"],
-					conditions: ["docVisible"],
-				},
-			}).show();
+		if (!this.props.clientInfo.loggedIn) {
+			// new Noty({
+			// 	theme: "mint",
+			// 	type: "warning",
+			// 	text: "You aren't logged in!",
+			// 	timeout: 500,
+			// 	sounds: {
+			// 		volume: 0.5,
+			// 		sources: ["https://remotegames.io/sounds/ding.wav"],
+			// 		conditions: ["docVisible"],
+			// 	},
+			// }).show();
 			return;
 		}
 
@@ -401,7 +401,7 @@ class Stream extends Component {
 		};
 
 		// for (let i = 0; i < this.props.controlQueues.length; i++) {
-		// 	if (this.props.controlQueues[i][0] == this.props.userInfo.userid) {
+		// 	if (this.props.controlQueues[i][0] == this.props.clientInfo.userid) {
 		// 		obj.cNum = i;
 		// 	}
 		// }
@@ -439,7 +439,7 @@ class Stream extends Component {
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
-		if (JSON.stringify(this.props.userInfo) != JSON.stringify(nextProps.userInfo)) {
+		if (JSON.stringify(this.props.clientInfo) != JSON.stringify(nextProps.clientInfo)) {
 			return true;
 		}
 
@@ -542,7 +542,7 @@ class Stream extends Component {
 const mapStateToProps = (state) => {
 	return {
 		controlQueues: state.players.controlQueues,
-		userInfo: state.userInfo,
+		clientInfo: state.clientInfo,
 		settings: state.settings,
 		playerCount: state.players.count,
 		// todo: modal
@@ -560,8 +560,8 @@ const mapDispatchToProps = (dispatch) => {
 		joinPlayerControlQueue: (controllerNumber) => {
 			dispatch(joinPlayerControlQueue(controllerNumber));
 		},
-		updateUserInfo: (userInfo) => {
-			dispatch(updateUserInfo(userInfo));
+		updateClientInfo: (clientInfo) => {
+			dispatch(updateClientInfo(clientInfo));
 		},
 	};
 };

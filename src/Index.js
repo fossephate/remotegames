@@ -25,7 +25,7 @@ import rootReducer from "./reducers";
 
 // actions:
 import { updateSettings } from "src/actions/settings.js";
-import { updateUserInfo } from "src/actions/userInfo.js";
+import { updateClientInfo } from "src/actions/clientInfo.js";
 
 // redux-saga:
 import createSagaMiddleware from "redux-saga";
@@ -33,7 +33,7 @@ import handleActions from "src/sagas";
 import handleEvents from "src/sockets";
 
 // libs:
-import io from "socket.io-client";
+import socketio from "socket.io-client";
 import localforage from "localforage";
 import merge from "deepmerge";
 // import "normalize.css";
@@ -67,7 +67,7 @@ let preloadedState = {
 	// 		forfeitLength: 0,
 	// 	},
 	// }, ],
-	userInfo: {
+	clientInfo: {
 		authToken: null,
 		loggedIn: false,
 		userid: "",
@@ -160,7 +160,7 @@ function loadState() {
 		// check if banned:
 		localforage.getItem("banned").then((value) => {
 			if (value != null) {
-				store.dispatch(updateUserInfo({ banned: true }));
+				store.dispatch(updateClientInfo({ banned: true }));
 				window.banned = true;
 			} else {
 				window.banned = false;
@@ -183,7 +183,7 @@ function loadState() {
 							console.log("ok.");
 						},
 						() => {
-							store.dispatch(updateUserInfo({ banned: true }));
+							store.dispatch(updateClientInfo({ banned: true }));
 							window.banned = true;
 						},
 					);
@@ -207,9 +207,9 @@ const store = createStore(
 	composeEnhancers(applyMiddleware(sagaMiddleware)),
 );
 
-let socket = io("https://remotegames.io", {
+let socket = socketio("https://remotegames.io", {
 	path: "/8100/socket.io",
-	transports: ["websocket"],
+	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 });
 
 // listen to events and dispatch actions:

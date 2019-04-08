@@ -26,7 +26,6 @@ import { compose } from "recompose";
 import classNames from "classnames";
 import { deleteAllCookies } from "libs/tools.js";
 
-
 // jss:
 const styles = (theme) => ({
 	root: {
@@ -45,9 +44,9 @@ const styles = (theme) => ({
 	},
 	center: {
 		position: "fixed",
-	    top: "50%",
-	    left: "50%",
-	    transform: "translate(-50%, -50%)",
+		top: "50%",
+		left: "50%",
+		transform: "translate(-50%, -50%)",
 	},
 	list: {
 		maxHeight: "400px",
@@ -68,7 +67,6 @@ const styles = (theme) => ({
 });
 
 class AccountModal extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -87,7 +85,7 @@ class AccountModal extends PureComponent {
 	getTime(t) {
 		if (t < 60) {
 			return t.toFixed(1) + " seconds.";
-		} else if (t < (60 * 60)) {
+		} else if (t < 60 * 60) {
 			return (t / 60).toFixed(1) + " minutes";
 		} else {
 			return (t / 60 / 60).toFixed(1) + " hours";
@@ -95,38 +93,37 @@ class AccountModal extends PureComponent {
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		return (
-			<Modal
-				open={true}
-				onClose={this.handleClose}>
-
+			<Modal open={true} onClose={this.handleClose}>
 				<div className={classNames(classes.root, classes.center)}>
-
 					<Paper className={classes.main} elevation={4}>
-
 						<Paper className={classes.topBar} elevation={2}>
-							Logged in as <UsernameDropdown/>
-							<Button className={classes.logout} variant="contained" color="secondary" onClick={this.handleLogout}>Logout</Button>
+							Logged in as <UsernameDropdown />
+							<Button
+								className={classes.logout}
+								variant="contained"
+								color="secondary"
+								onClick={this.handleLogout}
+							>
+								Logout
+							</Button>
 						</Paper>
-						<ConnectAccounts/>
-						<ListItemText>You've played for {this.getTime(this.props.timePlayed)}</ListItemText>
-
-
+						<ConnectAccounts />
+						<ListItemText>
+							You've played for {this.getTime(this.props.timePlayed)}
+						</ListItemText>
 					</Paper>
-
 				</div>
 			</Modal>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {
 	return {
-		timePlayed: state.userInfo.timePlayed,
+		timePlayed: state.clientInfo.timePlayed,
 	};
 };
 

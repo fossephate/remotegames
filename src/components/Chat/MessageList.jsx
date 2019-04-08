@@ -23,7 +23,6 @@ import { compose } from "recompose";
 import swal from "sweetalert2";
 // import ScrollableFeed from "react-scrollable-feed";
 
-
 // jss:
 
 const styles = (theme) => ({
@@ -46,9 +45,7 @@ const styles = (theme) => ({
 	},
 });
 
-
 class MessageList extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -68,15 +65,19 @@ class MessageList extends PureComponent {
 	}
 
 	getSnapshotBeforeUpdate(prevProps, prevState) {
-
 		if (prevProps.messages.length < this.props.messages.length) {
 			let messageList = document.getElementById("messageList");
-			if (messageList && Math.abs((messageList.scrollHeight - messageList.scrollTop) - (messageList.offsetHeight)) < 2) {
+			if (
+				messageList &&
+				Math.abs(
+					messageList.scrollHeight - messageList.scrollTop - messageList.offsetHeight,
+				) < 2
+			) {
 				this.shouldScroll = true;
 			}
 		}
 		return null;
-    }
+	}
 
 	componentDidUpdate(prevProps, prevState, snapshot) {
 		if (this.shouldScroll) {
@@ -89,10 +90,10 @@ class MessageList extends PureComponent {
 	mapMessages() {
 		let messages = [];
 		for (let i = 0; i < this.props.messages.length; i++) {
-			let isLastMessage = (i == this.props.messages.length - 1);
+			let isLastMessage = i == this.props.messages.length - 1;
 			let userid = this.props.messages[i].userid;
 			let onClick = () => {};
-			if (this.props.is_mod) {
+			if (this.props.isMod) {
 				onClick = () => {
 					if (!this.props.accountMap[userid]) {
 						swal("user info not loaded (yet).");
@@ -105,7 +106,7 @@ class MessageList extends PureComponent {
 						timePlayed = (timePlayed / (60 * 60)).toFixed(2) + " hours";
 					}
 					swal(`${userid}\n${timePlayed}`);
-				}
+				};
 			}
 			messages.push(
 				<Message
@@ -113,14 +114,14 @@ class MessageList extends PureComponent {
 					{...this.props.messages[i]}
 					isLastMessage={isLastMessage}
 					onClick={onClick}
-					onContextMenu={this.handleClick}/>
+					onContextMenu={this.handleClick}
+				/>,
 			);
 		}
 		return messages;
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		return (
@@ -128,17 +129,20 @@ class MessageList extends PureComponent {
 				id="messageList"
 				className={classes.root}
 				elevation={4}
-				ref={(el) => { this.rootRef = el; }}>
-
-					{this.mapMessages()}
-					<div
-						style={{ float: "left", clear: "both" }}
-						ref={(el) => { this.messagesEnd = el; }}>
-					</div>
+				ref={(el) => {
+					this.rootRef = el;
+				}}
+			>
+				{this.mapMessages()}
+				<div
+					style={{ float: "left", clear: "both" }}
+					ref={(el) => {
+						this.messagesEnd = el;
+					}}
+				/>
 			</Paper>
 		);
 	}
-
 }
 
 MessageList.propTypes = {
@@ -148,15 +152,15 @@ MessageList.propTypes = {
 			message: PropTypes.string.isRequired,
 			username: PropTypes.string.isRequired,
 			userid: PropTypes.string.isRequired,
-		}).isRequired
-	).isRequired
+		}).isRequired,
+	).isRequired,
 };
 
 const mapStateToProps = (state) => {
 	return {
 		messages: state.chat.messages,
 		accountMap: state.accountMap,
-		is_mod: state.userInfo.is_mod,
+		isMod: state.clientInfo.isMod,
 	};
 };
 

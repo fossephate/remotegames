@@ -182,6 +182,8 @@ exports.getStickString = (num) => {
 	return String(n).padStart(3, "0");
 };
 
+exports.getAverage = (array) => array.reduce((a, b) => a + b) / array.length;
+
 // String.prototype.replaceAll = function(search, replacement) {
 // 	let target = this;
 // 	return target.replace(new RegExp(search, "g"), replacement);

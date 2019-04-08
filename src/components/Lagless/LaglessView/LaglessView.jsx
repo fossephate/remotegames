@@ -117,8 +117,8 @@ class LaglessView extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		loggedIn: state.userInfo.loggedIn,
-		waitlisted: state.userInfo.waitlisted,
+		loggedIn: state.clientInfo.loggedIn,
+		waitlisted: state.clientInfo.waitlisted,
 		controllerStates: state.players.controllerStates,
 		controllerView: state.settings.controllerView, // whether to render the joycons
 		fullscreen: state.settings.fullscreen,

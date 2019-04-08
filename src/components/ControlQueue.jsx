@@ -88,7 +88,7 @@ class ControlQueue extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		userid: state.userInfo.userid,
+		userid: state.clientInfo.userid,
 		controlQueues: state.players.controlQueues,
 		accountMap: state.accountMap,
 	};

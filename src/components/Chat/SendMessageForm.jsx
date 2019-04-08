@@ -215,7 +215,7 @@ class SendMessageForm extends PureComponent {
 
 		if (!this.state.voting) {
 			let message = this.props.lastMessage;
-			if (message && message.username == "TPNSbot" && /A vote has been started to/.test(message.message)) {
+			if (message && message.username == "TPNSbot" && /A vote has been started to/.test(message.message) && !message.isReplay) {
 				this.setState({voting: true});
 				setTimeout(() => {
 					this.setState({voting: false});

@@ -24,6 +24,7 @@ import { compose } from "recompose";
 
 // libs:
 const classNames = require("classnames");
+import socketio from "socket.io-client";
 
 // device sizes:
 import { device } from "src/constants/DeviceSizes.js";
@@ -58,7 +59,13 @@ class RegisterModal extends PureComponent {
 	constructor(props) {
 		super(props);
 
+		this.socket = socketio("https://remotegames.io", {
+			path: "/8099/socket.io",
+			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+		});
+
 		this.handleClose = this.handleClose.bind(this);
+		this.handleRegisterForm = this.handleRegisterForm.bind(this);
 	}
 
 	handleClose() {
@@ -66,7 +73,8 @@ class RegisterModal extends PureComponent {
 	}
 
 	handleRegisterForm(values) {
-		console.log(values);
+		let vals = { ...values, password: values["password1"] };
+		this.socket.emit("register", vals);
 	}
 
 	render() {

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
 while true ; do
-	node ./server/videoRelayServer.js
+	node ./server/VideoServer.js
 	sleep 1
 done

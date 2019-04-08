@@ -162,7 +162,7 @@ Message.propTypes = {
 const mapStateToProps = (state) => {
 	return {
 		accountMap: state.accountMap,
-		myUsername: state.userInfo.username,
+		myUsername: state.clientInfo.username,
 	};
 };
 

@@ -64,7 +64,7 @@ class LoginArea extends PureComponent {
 
 		return (
 			<Paper elevation={4} className={classes.root}>
-				{this.props.userInfo.loggedIn ? (
+				{this.props.clientInfo.loggedIn ? (
 					<>
 						<UsernameDropdown />
 						<Button variant="contained" color="primary" onClick={this.handleAccount}>
@@ -89,7 +89,7 @@ class LoginArea extends PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		hideNav: state.settings.hideNav,
-		userInfo: state.userInfo,
+		clientInfo: state.clientInfo,
 	};
 };
 

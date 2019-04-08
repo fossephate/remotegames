@@ -41,10 +41,17 @@ const styles = (theme) => ({
 		paddingTop: "4px",
 		paddingBottom: "4px",
 		marginTop: "4px",
+		// marginTop: "-40px",
 		backgroundColor:
 			theme.palette.type === "dark"
 				? theme.palette.primary.dark
 				: theme.palette.primary.light,
+		// opacity: 0,
+		// zIndex: 1,
+		// transition: "all 400ms ease-in-out",
+		// "&:hover": {
+		// opacity: 1,
+		// },
 	},
 });
 
