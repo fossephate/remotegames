@@ -26,7 +26,7 @@ class VideoServer {
 
 			socket.on("authenticate", (data) => {
 				// console.log(data);
-				// console.log(streamKey);
+				// console.log(this.streamKey);
 				// join the host room if they have the streamKey
 				if (data.streamKey === this.streamKey) {
 					console.log("host authenticated.");
@@ -43,7 +43,9 @@ class VideoServer {
 	}
 
 	stop() {
+		console.log("closing connection");
 		this.io.emit("stop");
+		this.io.close();
 	}
 }
 
@@ -103,6 +105,8 @@ accountServerConn.on("stopVideo", (data) => {
 		return;
 	}
 	videoServers[data.port].stop();
+	// set port as available:
+	ports[data.port] = true;
 });
 
 // for testing:

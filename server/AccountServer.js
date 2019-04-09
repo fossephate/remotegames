@@ -186,18 +186,25 @@ function updateOrCreateUser(profile, type, req) {
 let accountSchema = Schema({
 	// 	_id: Schema.Types.ObjectId,// created & initialized automatically
 
+	// account:
 	email: String,
 	username: String,
 	password: String,
 
 	authToken: String,
 	streamKey: String,
-	isStreaming: Boolean,
+
 	emailVerified: Boolean,
+
+	// streaming:
+	isStreaming: Boolean,
+
 	videoServerIP: String,
 	videoServerPort: Number,
 	hostServerIP: String,
 	hostServerPort: Number,
+	thumbnailURL: String,
+	streamTitle: String,
 
 	connectedAccounts: [],
 
@@ -297,6 +304,62 @@ function connectAccount(account, profile, type) {
 	if (account.connectedAccounts.indexOf(type) == -1) {
 		account.connectedAccounts.push(type);
 	}
+}
+
+function clientInfoFromAccount(account, usernameIndex) {
+	let clientInfo = {};
+
+	clientInfo.validUsernames = [];
+
+	if (account.username) {
+		clientInfo.validUsernames.push(account.username);
+	}
+
+	if (account.connectedAccounts.indexOf("discord") > -1) {
+		clientInfo.validUsernames.push(
+			account.discord.username + "#" + account.discord.discriminator,
+		);
+	}
+	if (account.connectedAccounts.indexOf("twitch") > -1) {
+		clientInfo.validUsernames.push(account.twitch.displayName);
+		// // todo: fix
+		// if (sublist.indexOf(account.twitch.displayName) > -1) {
+		// 	account.isSub = true;
+		// }
+		// if (pluslist.indexOf(account.twitch.displayName) > -1) {
+		// 	account.isPlus = true;
+		// }
+	}
+	if (account.connectedAccounts.indexOf("youtube") > -1) {
+		clientInfo.validUsernames.push(account.youtube.displayName);
+	}
+	if (account.connectedAccounts.indexOf("google") > -1) {
+		clientInfo.validUsernames.push(account.google.displayName);
+	}
+
+	if (usernameIndex >= 0 && usernameIndex < clientInfo.validUsernames.length) {
+		clientInfo.username = clientInfo.validUsernames[data.usernameIndex];
+	} else {
+		clientInfo.username = clientInfo.validUsernames[0];
+	}
+
+	clientInfo.userid = ("" + account._id).trim();
+	clientInfo.isMod = account.isMod;
+	clientInfo.isPlus = account.isPlus;
+	clientInfo.isSub = account.isSub;
+	clientInfo.isBan = account.isBan;
+	clientInfo.timePlayed = account.timePlayed;
+	clientInfo.connectedAccounts = account.connectedAccounts;
+	clientInfo.isStreaming = account.isStreaming;
+
+	// todo: maybe ban the account if using a banned IP: (or keep as is)
+	for (let i = 0; i < account.IPs.length; i++) {
+		if (bannedIPs.indexOf(account.IPs[i]) > -1) {
+			clientInfo.isBan = true;
+		}
+	}
+
+	return clientInfo;
 }
 
 // twitch:
@@ -599,11 +662,13 @@ io.on("connection", (socket) => {
 					});
 					return;
 				} else {
+					let clientInfo = clientInfoFromAccount(account);
 					bcrypt.compare(data.password, account.password).then((result) => {
 						if (result) {
 							socket.emit("authenticated", {
 								success: true,
 								authToken: account.authToken,
+								clientInfo: clientInfo,
 							});
 						} else {
 							socket.emit("authenticated", {
@@ -645,8 +710,6 @@ io.on("connection", (socket) => {
 				return;
 			}
 
-			// acount exists:
-			let clientInfo = {};
 			// account exists:
 			// check if already logged in:
 			let userid = ("" + account._id).trim();
@@ -660,55 +723,13 @@ io.on("connection", (socket) => {
 					// }
 
 					// console.log("registering account.");
-					clientInfo.validUsernames = [];
-
-					if (account.username) {
-						clientInfo.validUsernames.push(account.username);
-					}
-
-					if (account.connectedAccounts.indexOf("discord") > -1) {
-						clientInfo.validUsernames.push(
-							account.discord.username + "#" + account.discord.discriminator,
-						);
-					}
-					if (account.connectedAccounts.indexOf("twitch") > -1) {
-						clientInfo.validUsernames.push(account.twitch.displayName);
-						// // todo: fix
-						// if (sublist.indexOf(account.twitch.displayName) > -1) {
-						// 	account.isSub = true;
-						// }
-						// if (pluslist.indexOf(account.twitch.displayName) > -1) {
-						// 	account.isPlus = true;
-						// }
-					}
-					if (account.connectedAccounts.indexOf("youtube") > -1) {
-						clientInfo.validUsernames.push(account.youtube.displayName);
-					}
-					if (account.connectedAccounts.indexOf("google") > -1) {
-						clientInfo.validUsernames.push(account.google.displayName);
-					}
-
-					if (
-						data.usernameIndex >= 0 &&
-						data.usernameIndex < clientInfo.validUsernames.length
-					) {
-						clientInfo.username = clientInfo.validUsernames[data.usernameIndex];
-					} else {
-						clientInfo.username = clientInfo.validUsernames[0];
-					}
-
-					clientInfo.userid = ("" + account._id).trim();
-					clientInfo.isMod = account.isMod;
-					clientInfo.isPlus = account.isPlus;
-					clientInfo.isSub = account.isSub;
-					clientInfo.isBan = account.isBan;
-					clientInfo.timePlayed = account.timePlayed || 0;
-					clientInfo.connectedAccounts = account.connectedAccounts;
 
 					// save IP if not known:
 					if (account.IPs.indexOf(data.ip) == -1) {
 						account.IPs.push(data.ip);
 					}
+
+					let clientInfo = clientInfoFromAccount(account, data.usernameIndex);
 
 					// todo: maybe ban the account if using a banned IP: (or keep as is)
 					for (let i = 0; i < account.IPs.length; i++) {
@@ -780,14 +801,13 @@ io.on("connection", (socket) => {
 	// 	}
 	// });
 
-	socket.on("getAllAccountsStreaming", (data) => {
+	socket.on("getStreams", (data) => {
 		Account.find({ isStreaming: true })
 			.exec()
-			.then((error, accounts) => {
-				if (error) {
-					throw error;
-				}
-				socket.emit("accounts", accounts);
+			.then((accounts) => {
+				let streams = [];
+				console.log(accounts);
+				socket.emit("streams", accounts);
 			});
 	});
 
@@ -838,7 +858,7 @@ io.on("connection", (socket) => {
 						let videoStreamKey = crypto.randomBytes(64).toString("hex");
 						streamKey = videoStreamKey;
 						// send to client:
-						socket.emit("startStreaming", {
+						socket.emit("startStream", {
 							ip: ip,
 							port: port,
 							streamKey: videoStreamKey,
@@ -854,6 +874,11 @@ io.on("connection", (socket) => {
 					break;
 				}
 			}
+
+			if (videoPort == null) {
+				console.log("open video server wasn't found!");
+			}
+
 			// look for available host server port:
 			let hostIP = null;
 			let hostPort = null;
@@ -942,7 +967,47 @@ io.on("connection", (socket) => {
 				if (error) {
 					throw error;
 				}
+				// socket.emit("streaming", {
+				// 	success: true,
+				// });
 			});
+
+			// stop the host and video servers:
+
+			// look for the video server:
+			for (let id in videoServers) {
+
+				if (videoServers[id].ip != account.videoServerIP) {
+					continue;
+				}
+
+				// set port to available:
+				// todo check if it already was:
+				videoServers[id].ports[account.videoServerPort] = true;
+
+				// send to videoServer:
+				io.to(id).emit("stopVideo", { port: account.videoServerPort });
+
+				break;
+			}
+
+			// look for the host server:
+			for (let id in hostServers) {
+
+				if (hostServers[id].ip != account.hostServerIP) {
+					continue;
+				}
+
+				// set port to available:
+				// todo check if it already was:
+				hostServers[id].ports[account.hostServerPort] = true;
+
+				// send to hostServer:
+				io.to(id).emit("stopHost", { port: account.hostServerPort });
+
+				break;
+			}
+
 		});
 	});
 

@@ -84,7 +84,7 @@ class LoginModal extends PureComponent {
 	}
 
 	handleLoginForm(values) {
-		this.socket.emit("login", values);
+		this.socket.emit("login", { ...values, socketid: this.socket.id });
 	}
 
 	render() {

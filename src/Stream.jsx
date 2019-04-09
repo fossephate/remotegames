@@ -17,14 +17,13 @@ import LoginArea from "src/components/LoginArea.jsx";
 import NavTabs from "src/components/NavTabs.jsx";
 import Picture from "src/components/Picture.jsx";
 import Chat from "src/components/Chat/Chat.jsx";
+import StreamInfo from "src/components/StreamInfo.jsx";
 
 // loading circle:
 import LoadingCircle from "src/components/LoadingCircle.jsx";
 
-import CheckboxSettings from "src/components/CheckboxSettings.jsx";
-
 // components:
-import PlayerInfo from "src/components/PlayerInfo.jsx";
+
 // import Waitlist from "src/components/Waitlist.jsx";
 // import ThemeSelector from "src/components/ThemeSelector.jsx";
 
@@ -38,11 +37,6 @@ import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-
-// components:
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -134,7 +128,7 @@ const styles = (theme) => ({
 			"nav login"
 			"picture picture"
 			"chat chat"
-			"bar bar"`,
+			"info info"`,
 		width: "100%",
 		gridGap: "5px",
 	},
@@ -144,7 +138,7 @@ const styles = (theme) => ({
 			gridTemplateAreas: `
 				"nav login"
 				"picture chat"
-				"bar bar"`,
+				"info info"`,
 		},
 	},
 	[device.laptop]: {
@@ -203,7 +197,7 @@ class Stream extends Component {
 
 		/* switch 2.0 */
 		streams.push(
-			new Lagless2("https://remotegames.io", { path: "/8005/socket.io", audio: true }),
+			new Lagless2("https://remotegames.io", { path: "/8006/socket.io", audio: true }),
 		);
 		setTimeout(() => {
 			if (!this.props.clientInfo.loggedIn) {
@@ -490,22 +484,7 @@ class Stream extends Component {
 				<LoginArea />
 				<Picture tab={this.props.settings.streamNumber} />
 				<Chat hide={this.props.settings.hideChat} />
-
-				<Paper id="barUnderTheStream">
-					<PlayerInfo />
-
-					<Paper id="settings" elevation={0}>
-						<CheckboxSettings toggleAudioThree={this.toggleAudioThree} />
-
-						<Paper id="generalSettings" className="settingsPanel" elevation={5}>
-							<ListItemText>General Settings</ListItemText>
-							<hr />
-							<Button variant="contained" onClick={this.resetSettings}>
-								Reset All Settings
-							</Button>
-						</Paper>
-					</Paper>
-				</Paper>
+				<StreamInfo />
 
 				{/* selects the first matching path: */}
 				<Switch>

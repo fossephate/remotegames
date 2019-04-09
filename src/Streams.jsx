@@ -45,6 +45,7 @@ import { compose } from "recompose";
 import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
+import socketio from "socket.io-client";
 
 // jss:
 const styles = (theme) => ({
@@ -73,6 +74,17 @@ class Streams extends PureComponent {
 	constructor(props) {
 		super(props);
 
+		this.socket = socketio("https://remotegames.io", {
+			path: "/8099/socket.io",
+			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+		});
+
+		this.socket.on("streams", (data) => {
+			console.log(data);
+		});
+
+		this.socket.emit("getStreams");
+
 		this.state = {};
 	}
 
@@ -86,7 +98,7 @@ class Streams extends PureComponent {
 		return (
 			<div className={classes.root}>
 				<StreamsAppBar />
-				<StreamList />
+				<StreamList streams={[]}/>
 			</div>
 		);
 	}

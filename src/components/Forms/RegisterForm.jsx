@@ -164,9 +164,6 @@ const RegisterForm = (props) => {
 				/>
 			</div>
 			<div>
-				<Field name="age" component={renderCheckbox} label="I am over 13" />
-			</div>
-			<div>
 				<Field
 					name="agree"
 					component={renderCheckbox}

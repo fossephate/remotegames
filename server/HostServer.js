@@ -690,7 +690,14 @@ class HostServer {
 
 		this.accountServerConn.on("accountMap", (data) => {
 			this.accountMap = data;
+			this.io.emit("accountMap", this.accountMap);
 		});
+	}
+
+	stop() {
+		console.log("closing connection");
+		this.io.emit("stop");
+		this.io.disconnect();
 	}
 
 	// finds a client in this.clients with a specific userid

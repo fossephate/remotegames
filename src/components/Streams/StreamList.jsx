@@ -83,7 +83,44 @@ class StreamList extends PureComponent {
 	constructor(props) {
 		super(props);
 
+		this.changeURL = this.changeURL.bind(this);
+		this.renderStreams = this.renderStreams.bind(this);
+
 		this.state = {};
+	}
+
+	changeURL() {
+		this.props.history.push("")
+	}
+
+	renderStreams() {
+
+		const { classes, streams } = this.props;
+
+		let cards = [];
+
+		for (let i = 0; i < streams.length; i++) {
+			let stream = streams[i];
+			let card = (
+				<Card key={i} className={classes.card} elevation={5}>
+					<CardActionArea onClick={() => {
+						this.props.history.push(`/streams/${stream.username}`)
+					}}>
+						<CardMedia
+							className={classes.media}
+							image={stream.thumbnail}
+							title="Photo"
+						/>
+						<CardContent>
+							<Typography component="p">{stream.title}</Typography>
+						</CardContent>
+					</CardActionArea>
+				</Card>
+			);
+			cards.push(card);
+		}
+
+		return cards;
 	}
 
 	componentDidMount() {}
@@ -95,102 +132,7 @@ class StreamList extends PureComponent {
 
 		return (
 			<Paper className={classes.root} elevation={5}>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Nintendo Switch</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Xbox One</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Xbox One</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Xbox One</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Xbox One</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Xbox One</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Xbox One</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
-				<Card className={classes.card} elevation={5}>
-					<CardActionArea>
-						<CardMedia
-							className={classes.media}
-							image="/images/smo.png"
-							title="Photo 1"
-						/>
-						<CardContent>
-							<Typography component="p">Xbox One</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
+				{this.renderStreams()}
 			</Paper>
 		);
 	}

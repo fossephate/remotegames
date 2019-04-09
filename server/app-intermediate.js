@@ -34,7 +34,7 @@ accountServerConn.on("startHost", (data) => {
 
 	// set port as unavailable:
 	ports[data.port] = false;
-
+	// start:
 	hostServers[data.port] = new HostServer(data.port, accountServerConn);
 	hostServers[data.port].init(data.videoIP, data.videoPort);
 });
@@ -45,6 +45,8 @@ accountServerConn.on("stopHost", (data) => {
 		return;
 	}
 	hostServers[data.port].stop();
+	// set port as available:
+	ports[data.port] = true;
 });
 
 // for testing:
