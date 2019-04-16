@@ -85,10 +85,10 @@ const Message = (props) => {
 
 	let source = "";
 
-	let is_relay = false;
+	let isRelay = false;
 	// if it's a relayed message:
 	if (userid === "TPNSbot" && message[0] == "[") {
-		is_relay = true;
+		isRelay = true;
 		let r = /\[(.+):(.+)\](.+)/;
 		let split = message.match(r);
 		source = split[1];
@@ -106,10 +106,10 @@ const Message = (props) => {
 		}
 	}
 
-	let is_dev = false;
-	if (username == "remotegames" || username == "fossephate" || username == "fosse#0430") {
+	let isDev = false;
+	if (username == "fosse" || username == "remotegames" || username == "fossephate" || username == "fosse#0430") {
 		username = "fosse";
-		is_dev = true;
+		isDev = true;
 	}
 
 	let icons = [];
@@ -119,20 +119,20 @@ const Message = (props) => {
 
 	let account = accountMap[userid];
 	if (account) {
-		if (is_dev) {
+		if (isDev) {
 			icons.push(<Badge type="dev" />);
 		}
-		if (account.is_mod && !is_dev && !is_relay) {
+		if (account.isMod && !isDev && !isRelay) {
 			icons.push(<Badge type="mod" />);
 		}
-		if (account.is_plus && !account.is_mod) {
+		if (account.isPlus && !account.isMod) {
 			icons.push(<Badge type="plus" />);
 		}
-		if (account.is_sub) {
+		if (account.isSub) {
 			icons.push(<Badge type="sub1" />);
 		}
 
-		if (account.is_mod && !isReplay && isLastMessage) {
+		if (account.isMod && !isReplay && isLastMessage) {
 			if (message.indexOf("@everyone") > -1) {
 				ping("You've been pinged!", 500);
 			}

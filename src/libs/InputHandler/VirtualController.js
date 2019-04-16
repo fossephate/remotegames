@@ -166,6 +166,7 @@ export default class VirtualController {
 		let keys = [];
 		for (let key in this.gamepadWrapper.controllers) {
 			let controller = this.gamepadWrapper.controllers[key];
+			key = parseInt(key);
 			if (controller.id.indexOf("Xbox") > -1) {
 				this.settings.controllerIndex = key;
 				console.log("Xbox controller found!");

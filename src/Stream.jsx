@@ -103,7 +103,7 @@ function afk() {
 	});
 }
 window.afkTimer = setTimeout(afk, window.afkTime);
-// swal("stream is down right now.");
+// swal("stream is down right now, don't put anything in #bug-reports.");
 
 /* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
 // check if on mobile
@@ -197,7 +197,7 @@ class Stream extends Component {
 
 		/* switch 2.0 */
 		streams.push(
-			new Lagless2("https://remotegames.io", { path: "/8006/socket.io", audio: true }),
+			new Lagless2("https://remotegames.io", { path: "/8005/socket.io", audio: true }),
 		);
 		setTimeout(() => {
 			if (!this.props.clientInfo.loggedIn) {

@@ -89,6 +89,7 @@ let modlist = [
 	"tpnsbot",
 ];
 let pluslist = modlist.slice(0);
+let streams = [];
 
 // get banned IPs:
 redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
@@ -190,6 +191,9 @@ let accountSchema = Schema({
 	email: String,
 	username: String,
 	password: String,
+
+	usernameLower: String,
+	emailLower: String,
 
 	authToken: String,
 	streamKey: String,
@@ -581,34 +585,61 @@ let videoServers = {};
 let hostServers = {};
 
 io.on("connection", (socket) => {
-	socket.on("register", (data) => {
-		// todo: input validation:
-		if (!data.email || !data.password || !data.username) {
-			socket.emit("ACCOUNT_ERROR", "INVALID_ARGUMENTS");
+	socket.on("register", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (register)");
 			return;
 		}
+		// todo: input validation:
+		if (!data.email || !data.password || !data.username) {
+			// socket.emit("ACCOUNT_ERROR", "INVALID_ARGUMENTS");
+			cb({ success: false, reason: "INVALID_ARGUMENTS" });
+			return;
+		}
+
 		let email = data.email;
+		let emailLower = data.email.toLowerCase();
 		let username = data.username;
-		let password = data.password;
+		let usernameLower = data.username.toLowerCase();
+		let password1 = data.password1;
+		let password2 = data.password2;
+
+		// some input validation:
+		if (password1 !== password2) {
+			cb({ success: false, reason: "PASSWORDS_NOT_EQUAL" });
+			return;
+		}
+
+		let emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+		if (!emailRegex.test(email)) {
+			cb({ success: false, reason: "INVALID_EMAIL" });
+		}
+
+		var passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
+		if (!emailRegex.test(password1)) {
+			cb({ success: false, reason: "PASSWORD_NOT_STRONG_ENOUGH" });
+		}
 
 		console.log("Attempting to create a new account.");
 
 		// check if the acccount already exists:
-		Account.findOne({ email: email })
+		Account.findOne({ emailLower: emailLower })
 			.then((account) => {
 				// account already exists:
 				if (account) {
-					console.log("Account already exists, EMAIL_ALREADY_TAKEN.");
-					socket.emit("ACCOUNT_ERROR", "EMAIL_ALREADY_TAKEN");
+					// console.log("Account already exists, EMAIL_ALREADY_TAKEN.");
+					// socket.emit("ACCOUNT_ERROR", "EMAIL_ALREADY_TAKEN");
+					cb({ success: false, reason: "EMAIL_ALREADY_TAKEN" });
 					return { then: function() {} }; // break promise chain
 				}
 			})
 			.then(() => {
-				return Account.findOne({ username: username }).then((account) => {
+				return Account.findOne({ usernameLower: usernameLower }).then((account) => {
 					// account already exists:
 					if (account) {
-						console.log("Account already exists, USERNAME_ALREADY_TAKEN.");
-						socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
+						// console.log("Account already exists, USERNAME_ALREADY_TAKEN.");
+						// socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
+						cb({ success: false, reason: "USERNAME_ALREADY_TAKEN" });
 						return { then: function() {} }; // break promise chain
 					}
 				});
@@ -619,12 +650,14 @@ io.on("connection", (socket) => {
 				let newAccount = new Account();
 				// set account details:
 				// hash password:
-				bcrypt.hash(password, SALT_ROUNDS).then((hash) => {
+				bcrypt.hash(password1, SALT_ROUNDS).then((hash) => {
 					// store the password hash in the account:
 					newAccount.password = hash;
 					// other acount details:
 					newAccount.email = email;
+					newAccount.emailLower = emailLower;
 					newAccount.username = username;
+					newAccount.usernameLower = usernameLower;
 					// create an authToken that lets us access the account:
 					newAccount.authToken = crypto.randomBytes(64).toString("hex");
 					// save the new Account:
@@ -633,6 +666,7 @@ io.on("connection", (socket) => {
 							throw error;
 						}
 						console.log("Account created.");
+						cb({ sucess: true });
 					});
 				});
 			});
@@ -641,23 +675,31 @@ io.on("connection", (socket) => {
 	// https://stackoverflow.com/questions/29098830/mongoose-findone-with-either-or-query
 	// https://stackoverflow.com/questions/35780524/how-to-do-simple-mongoose-findone-with-multiple-conditions?rq=1
 
-	socket.on("login", (data) => {
+	socket.on("login", (data, cb) => {
+
+		if (!cb) {
+			console.log("no callback (login)");
+			return;
+		}
+
 		let reply = { socketid: data.socketid };
 
 		if (typeof data.password !== "string") {
 			return;
 		}
 
-		let queryObj = { $or: [{ email: data.user }, { username: data.user }] };
+		let user = data.user.toLowerCase();
+
+		let queryObj = { $or: [{ emailLower: user }, { usernameLower: user }] };
 		Account.findOne(queryObj)
 			.exec()
 			.then((account) => {
 				// acount doesn't exist:
 				if (!account) {
 					console.log("Account not found (while logging in)");
-					socket.emit("authenticated", {
+					cb({
 						success: false,
-						reason: "ACCOUNT_NOT_FOUND",
+						reason: "ACCOUNT_NOT_FOUND,
 						...reply,
 					});
 					return;
@@ -665,13 +707,14 @@ io.on("connection", (socket) => {
 					let clientInfo = clientInfoFromAccount(account);
 					bcrypt.compare(data.password, account.password).then((result) => {
 						if (result) {
-							socket.emit("authenticated", {
+							cb({
 								success: true,
 								authToken: account.authToken,
 								clientInfo: clientInfo,
+								...reply,
 							});
 						} else {
-							socket.emit("authenticated", {
+							cb({
 								success: false,
 								reason: "INVALID_CREDENTIALS",
 								...reply,
@@ -682,7 +725,12 @@ io.on("connection", (socket) => {
 			});
 	});
 
-	socket.on("authenticate", (data) => {
+	socket.on("authenticate", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (authenticate)");
+			return;
+		}
+
 		let reply = { socketid: data.socketid };
 
 		if (!data.socketid) {
@@ -801,15 +849,15 @@ io.on("connection", (socket) => {
 	// 	}
 	// });
 
-	socket.on("getStreams", (data) => {
-		Account.find({ isStreaming: true })
-			.exec()
-			.then((accounts) => {
-				let streams = [];
-				console.log(accounts);
-				socket.emit("streams", accounts);
-			});
-	});
+	// socket.on("getStreams", (data) => {
+	// 	Account.find({ isStreaming: true })
+	// 		.exec()
+	// 		.then((accounts) => {
+	// 			let streams = [];
+	// 			console.log(accounts);
+	// 			socket.emit("streams", accounts);
+	// 		});
+	// });
 
 	socket.on("startStreaming", (data) => {
 		// let reply = { socketid: data.socketid };
@@ -922,6 +970,9 @@ io.on("connection", (socket) => {
 			account.videoServerPort = videoPort;
 			account.hostServerIP = hostIP;
 			account.hostServerPort = hostPort;
+			// stream details:
+			account.streamTitle = data.streamTitle;
+			account.thumbnailURL = data.thumbnailURL;
 			// update the account details:
 			account.save((error) => {
 				// error check:
@@ -976,7 +1027,6 @@ io.on("connection", (socket) => {
 
 			// look for the video server:
 			for (let id in videoServers) {
-
 				if (videoServers[id].ip != account.videoServerIP) {
 					continue;
 				}
@@ -993,7 +1043,6 @@ io.on("connection", (socket) => {
 
 			// look for the host server:
 			for (let id in hostServers) {
-
 				if (hostServers[id].ip != account.hostServerIP) {
 					continue;
 				}
@@ -1007,7 +1056,6 @@ io.on("connection", (socket) => {
 
 				break;
 			}
-
 		});
 	});
 
@@ -1034,6 +1082,9 @@ io.on("connection", (socket) => {
 			delete hostServers[socket.id];
 		}
 	});
+
+	// on connect:
+	socket.emit("streams", streams);
 });
 
 // do every once in a while:
@@ -1066,3 +1117,22 @@ setInterval(() => {
 
 	io.emit("serverTime", Date.now());
 }, 30000);
+
+setInterval(() => {
+	Account.find({ isStreaming: true })
+		.exec()
+		.then((accounts) => {
+			streams = [];
+
+			for (let i = 0; i < accounts.length; i++) {
+				let stream = {
+					title: accounts[i].streamTitle,
+					username: accounts[i].username,
+					thumbnailURL: accounts[i].thumbnailURL,
+				};
+				streams.push(stream);
+			}
+
+			io.emit("streams", streams);
+		});
+}, 120000);

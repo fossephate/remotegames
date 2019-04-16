@@ -80,12 +80,15 @@ class Streams extends PureComponent {
 		});
 
 		this.socket.on("streams", (data) => {
+			this.setState({ streams: data });
 			console.log(data);
 		});
 
 		this.socket.emit("getStreams");
 
-		this.state = {};
+		this.state = {
+			streams: [],
+		};
 	}
 
 	componentDidMount() {}
@@ -98,7 +101,7 @@ class Streams extends PureComponent {
 		return (
 			<div className={classes.root}>
 				<StreamsAppBar />
-				<StreamList streams={[]}/>
+				<StreamList streams={this.state.streams} />
 			</div>
 		);
 	}

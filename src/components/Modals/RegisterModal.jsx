@@ -73,8 +73,15 @@ class RegisterModal extends PureComponent {
 	}
 
 	handleRegisterForm(values) {
-		let vals = { ...values, password: values["password1"] };
-		this.socket.emit("register", vals);
+		let vals = { ...values };
+
+		this.socket.emit("register", {...vals }, (data) => {
+			if (!data.success) {
+				alert(data.reason);
+			} else {
+				alert("success!");
+			}
+		});
 	}
 
 	render() {

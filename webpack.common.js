@@ -2,7 +2,7 @@
 const path = require("path");
 module.exports = {
 	entry: {
-		index: "./src/Index.js",
+		index: "./src/Index2.jsx",
 	},
 	output: {
 		// `filename` provides a template for naming your bundles (remember to use `[name]`)

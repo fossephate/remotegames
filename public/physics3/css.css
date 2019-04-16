@@ -1,0 +1,52 @@
+canvas {
+  border: 1px solid #000000;
+  float: left;
+  margin: 0 auto 0 auto;
+  padding: 0 0 0 0;
+}
+#sl {
+  border:1px solid #151212;
+  float: right;
+  height: 200px;
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  width: 13.30%;
+  position: relative;
+}
+
+#save {
+}
+
+.saves {
+  background-color: #FFFFFF;
+  cursor: pointer;
+  user-select: none;
+}
+
+.saves:hover {
+  background-color: #FFFF00;
+  cursor: pointer;
+  user-select: none;
+}
+
+.savesel {
+  background-color: #A0A0A0;
+  cursor: pointer;
+  user-select: none;
+}
+
+#open {
+  float: right;
+  /*margin: 0 0 0 9%;*/
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}

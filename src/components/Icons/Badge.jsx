@@ -19,8 +19,8 @@ const styles = (theme) => ({
 		marginLeft: "2px",
 		marginRight: "2px",
 		backgroundColor: "#b7b7b7",
-	    border: "1px solid #333",
-	    borderRadius: "6px",
+    border: "1px solid #333",
+    borderRadius: "6px",
 		verticalAlign: "middle",
 	},
 });

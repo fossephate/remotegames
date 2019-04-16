@@ -66,15 +66,6 @@ class LoginModal extends PureComponent {
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 		});
 
-		this.socket.on("authenticated", (data) => {
-			if (data.success) {
-				Cookie.set("RemoteGames", data.authToken, { expires: 7 });
-				this.props.updateClientInfo({ authToken: data.authToken });
-				this.props.authenticate(data.authToken);
-				this.props.history.push("/");
-			}
-		});
-
 		this.handleClose = this.handleClose.bind(this);
 		this.handleLoginForm = this.handleLoginForm.bind(this);
 	}
@@ -84,7 +75,17 @@ class LoginModal extends PureComponent {
 	}
 
 	handleLoginForm(values) {
-		this.socket.emit("login", { ...values, socketid: this.socket.id });
+		this.socket.emit("login", { ...values, socketid: this.socket.id }, (data) => {
+			if (data.success) {
+				alert("success");
+				Cookie.set("RemoteGames", data.authToken, { expires: 7 });
+				this.props.updateClientInfo({ authToken: data.authToken });
+				this.props.authenticate(data.authToken);
+				this.props.history.push("/");
+			} else {
+				alert(data.reason);
+			}
+		});
 	}
 
 	render() {

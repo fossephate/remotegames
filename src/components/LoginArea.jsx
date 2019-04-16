@@ -29,7 +29,8 @@ const styles = (theme) => ({
 		justifyContent: "space-evenly",
 		overflowY: "visible",
 		maxHeight: "50px",
-		padding: "3px",
+		// padding: "3px",
+		padding: "5px 0px",
 		gridColumn: 2,
 	},
 });

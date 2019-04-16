@@ -99,16 +99,25 @@ class StreamList extends PureComponent {
 
 		let cards = [];
 
+		for (let i = 0; i < 30; i++) {
+			let stream = {
+				username: "fosse",
+				thumbnailURL: "https://remotegames.io/images/smo.png",
+				title: "Nintendo Switch",
+			};
+			streams.push(stream);
+		}
+
 		for (let i = 0; i < streams.length; i++) {
 			let stream = streams[i];
 			let card = (
 				<Card key={i} className={classes.card} elevation={5}>
 					<CardActionArea onClick={() => {
-						this.props.history.push(`/streams/${stream.username}`)
+						this.props.history.push(`/s/${stream.username}`)
 					}}>
 						<CardMedia
 							className={classes.media}
-							image={stream.thumbnail}
+							image={stream.thumbnailURL}
 							title="Photo"
 						/>
 						<CardContent>

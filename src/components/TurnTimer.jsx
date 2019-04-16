@@ -21,7 +21,7 @@ const styles = {
 		width: "100%",
 		position: "absolute",
 		top: "0px",
-		lineHeight: "25px",
+		lineHeight: "24px",
 	},
 	forfeitText: {
 		width: "100%",
@@ -30,7 +30,7 @@ const styles = {
 		lineHeight: "15px",
 	},
 	turn: {
-		height: "25px",
+		height: "24px",
 		borderRadius: "6px",
 	},
 	forfeit: {

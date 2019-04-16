@@ -20,15 +20,12 @@ import ReactTextareaAutocomplete from "@webscopeio/react-textarea-autocomplete";
 import "@webscopeio/react-textarea-autocomplete/style.css";
 import emoji from "@jukben/emoji-search";
 
-
 // redux:
 import { connect } from "react-redux";
 import { sendMessage } from "src/actions/chat.js";
 
 // recompose:
 import { compose } from "recompose";
-
-
 
 const Item = ({ entity: { name, char } }) => <div>{`${name}: ${char}`}</div>;
 // const UsernameSuggestion = (username) => {
@@ -39,9 +36,8 @@ const UsernameSuggestion = ({ entity: { name } }) => {
 };
 const CommandSuggestion = ({ entity: { name } }) => {
 	return <div>{`${name}`}</div>;
-}
+};
 const Loading = ({ data }) => <div>Loading</div>;
-
 
 // jss:
 
@@ -55,7 +51,7 @@ const styles = (theme) => ({
 		minHeight: "60px",
 		height: "12%",
 		paddingLeft: "5px",
-	    paddingRight: "5px",
+		paddingRight: "5px",
 	},
 
 	messageBox: {
@@ -68,7 +64,7 @@ const styles = (theme) => ({
 			outlineOffset: "0px !important",
 			outline: "none !important",
 			boxShadow: "0 0 3px blue !important",
-		}
+		},
 	},
 
 	messageBoxContainer: {
@@ -81,7 +77,6 @@ const styles = (theme) => ({
 });
 
 class SendMessageForm extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -92,7 +87,6 @@ class SendMessageForm extends PureComponent {
 		this.renderEmojiSuggestions = this.renderEmojiSuggestions.bind(this);
 		this.renderUsernameSuggestions = this.renderUsernameSuggestions.bind(this);
 		this.renderCommandSuggestions = this.renderCommandSuggestions.bind(this);
-
 
 		this.state = {
 			voting: false,
@@ -158,8 +152,8 @@ class SendMessageForm extends PureComponent {
 	sendMessage() {
 		if (this.state.text !== "") {
 			this.props.sendMessage(this.state.text);
-			this.setState({text: ""});
-			this.rta.setState({value: ""});
+			this.setState({ text: "" });
+			this.rta.setState({ value: "" });
 		}
 	}
 
@@ -175,9 +169,8 @@ class SendMessageForm extends PureComponent {
 
 	renderUsernameSuggestions(token) {
 		let suggestions = [];
-		for (let i = 0; i < this.props.userids.length; i++) {
-			let userid = this.props.userids[i];
-			let username = this.props.usernameMap[userid];
+		for (let userid in this.props.accountMap) {
+			let username = this.props.accountMap[userid].username;
 			if (username == null || username.toLowerCase().indexOf(token) == -1) {
 				continue;
 			}
@@ -185,7 +178,7 @@ class SendMessageForm extends PureComponent {
 				suggestions = [];
 				break;
 			}
-			suggestions.push({ name: username, char: ("@" + username) });
+			suggestions.push({ name: username, char: "@" + username });
 		}
 		return suggestions.slice(0, 5);
 	}
@@ -204,21 +197,25 @@ class SendMessageForm extends PureComponent {
 				suggestions = [];
 				break;
 			}
-			suggestions.push({ name: command, char: ("!" + command) });
+			suggestions.push({ name: command, char: "!" + command });
 		}
 		return suggestions.slice(0, 5);
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		if (!this.state.voting) {
 			let message = this.props.lastMessage;
-			if (message && message.username == "TPNSbot" && /A vote has been started to/.test(message.message) && !message.isReplay) {
-				this.setState({voting: true});
+			if (
+				message &&
+				message.username == "TPNSbot" &&
+				/A vote has been started to/.test(message.message) &&
+				!message.isReplay
+			) {
+				this.setState({ voting: true });
 				setTimeout(() => {
-					this.setState({voting: false});
+					this.setState({ voting: false });
 				}, 18000);
 			}
 		}
@@ -235,20 +232,40 @@ class SendMessageForm extends PureComponent {
 					onClose={() => {}}
 					message={<span id="message-id">A vote has started to switch games!</span>}
 					action={[
-						<Button key="leave" color="secondary" size="small" variant="contained" onClick={() => {this.props.sendMessage("yea");this.setState({voting: false});}}>
+						<Button
+							key="leave"
+							color="secondary"
+							size="small"
+							variant="contained"
+							onClick={() => {
+								this.props.sendMessage("yea");
+								this.setState({ voting: false });
+							}}
+						>
 							LEAVE
 						</Button>,
-						<div key="spacer" style={{width: "15px"}}></div>,
-						<Button key="stay" color="primary" size="small" variant="contained" onClick={() => {this.props.sendMessage("nay");this.setState({voting: false});}}>
+						<div key="spacer" style={{ width: "15px" }} />,
+						<Button
+							key="stay"
+							color="primary"
+							size="small"
+							variant="contained"
+							onClick={() => {
+								this.props.sendMessage("nay");
+								this.setState({ voting: false });
+							}}
+						>
 							STAY
 						</Button>,
 						<IconButton
 							key="close"
 							color="inherit"
 							className={classes.close}
-							onClick={() => {this.setState({voting: false});}}
-							>
-							<CloseIcon/>
+							onClick={() => {
+								this.setState({ voting: false });
+							}}
+						>
+							<CloseIcon />
 						</IconButton>,
 					]}
 				/>
@@ -266,50 +283,50 @@ class SendMessageForm extends PureComponent {
 					id="messageBox"
 					className={classes.messageBox}
 					containerClassName={classes.messageBoxContainer}
-		            loadingComponent={Loading}
-		            style={{
-		            }}
-		            ref={(rta) => {this.rta = rta;}}
-		            innerRef={(textarea) => { this.textarea = textarea; } }
-		            containerStyle={{
-		            }}
-		            minChar={0}
+					loadingComponent={Loading}
+					style={{}}
+					ref={(rta) => {
+						this.rta = rta;
+					}}
+					innerRef={(textarea) => {
+						this.textarea = textarea;
+					}}
+					containerStyle={{}}
+					minChar={0}
 					trigger={{
 						":": {
 							dataProvider: this.renderEmojiSuggestions,
 							component: Item,
-							output: (item, trigger) => ({text: item.char, caretPosition: "next"}),
+							output: (item, trigger) => ({ text: item.char, caretPosition: "next" }),
 						},
 						"@": {
 							dataProvider: this.renderUsernameSuggestions,
 							component: UsernameSuggestion,
-							output: (item, trigger) => ({text: item.char, caretPosition: "next"}),
+							output: (item, trigger) => ({ text: item.char, caretPosition: "next" }),
 						},
 						"!": {
 							dataProvider: this.renderCommandSuggestions,
 							component: CommandSuggestion,
-							output: (item, trigger) => ({text: item.char, caretPosition: "end"}),
+							output: (item, trigger) => ({ text: item.char, caretPosition: "end" }),
 						},
 					}}
 					onChange={this.handleTextChange}
 					onKeyPress={this.handleKeyPress}
 					value={this.state.text}
-					placeholder="Send a message"/>
-				<Button variant="contained" color="primary" onClick={this.sendMessage}>Send<SendIcon style={{marginLeft: "8px"}} fontSize="small"/></Button>
+					placeholder="Send a message"
+				/>
+				<Button variant="contained" color="primary" onClick={this.sendMessage}>
+					Send
+					<SendIcon style={{ marginLeft: "8px" }} fontSize="small" />
+				</Button>
 			</Paper>
 		);
 	}
-
 }
-
-SendMessageForm.propTypes = {
-	sendMessage: PropTypes.func.isRequired,
-};
 
 const mapStateToProps = (state) => {
 	return {
-		userids: state.chat.userids,
-		usernameMap: state.usernameMap,
+		accountMap: state.accountMap,
 		lastMessage: state.chat.messages[state.chat.messages.length - 1],
 	};
 };
@@ -317,12 +334,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		sendMessage: (message) => {
-			dispatch(sendMessage(message))
+			dispatch(sendMessage(message));
 		},
 	};
 };
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(SendMessageForm);

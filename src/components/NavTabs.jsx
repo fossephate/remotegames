@@ -73,10 +73,7 @@ class NavTabs extends PureComponent {
 						}
 					}}
 				>
-					{!this.props.loggedIn ? <Tab label="Twitch" /> : null}
-
-					{/* <Tab label="Switch1"/> */}
-					<Tab label="Stream" />
+					{!this.props.loggedIn ? <Tab label="Twitch" /> : <Tab label="Stream" />}
 					<Tab label="About" />
 					<Tab label="FAQ" />
 					<Tab label="Discord" />
