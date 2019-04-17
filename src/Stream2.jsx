@@ -132,6 +132,7 @@ class Stream extends Component {
 		this.afkTimer = null;
 		this.laglessAudio = null;
 		this.streams = [];
+		window.streams = this.streams;
 		this.socket = null;
 		this.accountServerConnection = this.props.accountServerConnection;
 
@@ -139,6 +140,7 @@ class Stream extends Component {
 
 		this.sendControllerState = this.sendControllerState.bind(this);
 		this.afk = this.afk.bind(this);
+		this.start = this.start.bind(this);
 
 		this.state = {};
 
@@ -149,80 +151,82 @@ class Stream extends Component {
 	// // ...
 	// }
 
-	componentDidMount() {
-
-		this.accountServerConnection.on("streamInfo", (data) => {
-
-			this.socket = socketio("https://remotegames.io", {
-				path: `/${data.hostServerPort}/socket.io`,
-				transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
-			});
-
-			// listen to events and dispatch actions:
-			handleEvents(this.socket, this.props.dispatch);
-
-			let socket2 = this.socket;
-
-			// handle outgoing events & listen to actions:
-			// and maybe dispatch more actions:
-			this.props.sagaMiddleware.run(handleActions, {
-				socket: socket2,
-			});
-
-
-			// lagless setup:
-			/* switch 2.0 */
-			this.streams.push(
-				new Lagless2("https://remotegames.io", { path: "/8005/socket.io", audio: true }),
-			);
-			setTimeout(() => {
-				if (!this.props.clientInfo.loggedIn) {
-					swal("You have to login / register first!");
-					return;
-				}
-				this.streams[0].resume(document.getElementById("videoCanvas"));
-			}, 3000);
-			// let videoSocket = io("https://remotegames.io", {
-			// 	path: "/8002/socket.io",
-			// 	transports: ["websocket"],
-			// });
-			// videoSocket.on("videoData", (data) => {
-			// 	if (!streams[0].player.source) {
-			// 		return;
-			// 	}
-			// 	streams[0].player.source.onMessage(data);
-			// });
-
-			// streams.push(new Lagless4(socket));
-
-			/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-			laglessAudio = new LaglessAudio(socket);
-
-			if (this.props.settings.audioThree) {
-				laglessAudio.resume();
-			}
-
-			// for (let i = 0; i < streams.length; i++) {
-			// 	streams[i].pause();
-			// }
-
-			/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-			setInterval(() => {
-				// hack:
-				// todo: not this:
-				if (!this.props.settings.audioThree) {
-					laglessAudio.audio.volume = 0;
-					// for (let i = 0; i < streams.length; i++) {}
-					streams[0].player.volume = this.props.settings.volume / 100;
-				} else {
-					laglessAudio.audio.volume = this.props.settings.volume / 100;
-					streams[0].player.volume = 0;
-				}
-			}, 2000);
-
+	start(data) {
+		this.socket = socketio(`https://${data.hostServerIP}`, {
+			path: `/${data.hostServerPort}/socket.io`,
+			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 		});
 
-		this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username});
+		// listen to events and dispatch actions:
+		handleEvents(this.socket, this.props.store.dispatch);
+
+		let socket2 = this.socket;
+
+		// handle outgoing events & listen to actions:
+		// and maybe dispatch more actions:
+		this.props.sagaMiddleware.run(handleActions, {
+			socket: socket2,
+		});
+
+
+		// lagless setup:
+		/* switch 2.0 */
+		this.streams.push(
+			new Lagless2(`https://${data.videoServerIP}`, { path: `/${data.videoServerPort}/socket.io`, audio: true }),
+		);
+		setTimeout(() => {
+			if (!this.props.clientInfo.loggedIn) {
+				swal("You have to login / register first!");
+				return;
+			}
+			this.streams[0].resume(document.getElementById("videoCanvas"));
+		}, 3000);
+
+		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
+		this.laglessAudio = new LaglessAudio(this.socket);
+
+		if (this.props.settings.audioThree) {
+			this.laglessAudio.resume();
+		}
+
+		// for (let i = 0; i < streams.length; i++) {
+		// 	streams[i].pause();
+		// }
+
+		/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+		setInterval(() => {
+			// hack:
+			// todo: not this:
+			if (!this.props.settings.audioThree) {
+				this.laglessAudio.audio.volume = 0;
+				this.streams[0].player.volume = this.props.settings.volume / 100;
+			} else {
+				this.laglessAudio.audio.volume = this.props.settings.volume / 100;
+				this.streams[0].player.volume = 0;
+			}
+		}, 2000);
+	}
+
+	componentDidMount() {
+
+		if (window.location.pathname === "/") {
+			this.start({
+				videoServerIP: "remotegames.io",
+				videoServerPort: 8005,
+				hostServerIP: "remotegames.io",
+				hostServerPort: 8100,
+			});
+		} else {
+			this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username}, (data) => {
+
+				if (!data.success) {
+					alert(data.reason);
+					return;
+				}
+
+				this.start(data);
+			});
+		}
 
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
@@ -255,7 +259,7 @@ class Stream extends Component {
 
 
 
-		sendInputTimer = setInterval(() => {
+		this.sendInputTimer = setInterval(() => {
 			if (!this.props.clientInfo.loggedIn) {
 				return;
 			}
@@ -350,13 +354,13 @@ class Stream extends Component {
 	sendControllerState() {
 		if (!this.init) {
 			this.init = true;
-			this.oldInputState = JSON.stringify(inputHandler.getState());
+			this.oldInputState = JSON.stringify(this.inputHandler.getState());
 		}
 
-		if (!inputHandler.changed) {
+		if (!this.inputHandler.changed) {
 			return;
 		} else {
-			inputHandler.changed = false;
+			this.inputHandler.changed = false;
 		}
 
 		if (window.banned) {
@@ -367,18 +371,18 @@ class Stream extends Component {
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
 		if (
-			inputHandler.currentInputMode == "keyboard" &&
+			this.inputHandler.currentInputMode == "keyboard" &&
 			!this.props.settings.keyboardControls
 		) {
 			return;
 		}
 		if (
-			inputHandler.currentInputMode == "controller" &&
+			this.inputHandler.currentInputMode == "controller" &&
 			!this.props.settings.controllerControls
 		) {
 			return;
 		}
-		if (inputHandler.currentInputMode == "touch" && !this.props.settings.touchControls) {
+		if (this.inputHandler.currentInputMode == "touch" && !this.props.settings.touchControls) {
 			return;
 		}
 
@@ -431,7 +435,7 @@ class Stream extends Component {
 		}
 
 		let obj = {
-			...inputHandler.getState(),
+			...this.inputHandler.getState(),
 			cNum: -1,
 		};
 
@@ -470,7 +474,7 @@ class Stream extends Component {
 		// let s1y = getStickString(obj.axes[1]);
 		// console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
 
-		socket.emit("sendControllerState", obj);
+		this.socket.emit("sendControllerState", obj);
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {

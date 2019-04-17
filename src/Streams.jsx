@@ -74,17 +74,12 @@ class Streams extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.socket = socketio("https://remotegames.io", {
-			path: "/8099/socket.io",
-			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
-		});
+		this.socket = this.props.accountServerConnection;
 
-		this.socket.on("streams", (data) => {
-			this.setState({ streams: data });
+		this.socket.emit("getStreams", null, (data) => {
 			console.log(data);
+			this.setState({ streams: data.streams });
 		});
-
-		this.socket.emit("getStreams");
 
 		this.state = {
 			streams: [],

@@ -1,7 +1,7 @@
 import * as types from "../actions/ActionTypes.js";
 import { takeEvery } from "redux-saga/effects";
 
-const handleClientInfoActions = function(params) {
+const handleClientInfoActions = (params) => {
 	let list = [];
 	list.push(
 		takeEvery(types.AUTHENTICATE, (action) => {

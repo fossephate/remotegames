@@ -203,14 +203,14 @@ function customSetInterval(func, time) {
 
 // export class Host {
 class HostServer {
-	constructor(port, accountServerConn) {
+	constructor(port, accountServerConnection) {
 		// this.hostid = hostid;
 		this.port = port;
 		this.io = new socketio({
 			// perMessageDeflate: false,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 		});
-		this.accountServerConn = accountServerConn;
+		this.accountServerConnection = accountServerConnection;
 
 		// where to find the video feed (sent to clients on connect):
 		this.videoIP = null;
@@ -235,7 +235,6 @@ class HostServer {
 		this.forfeitLengths = [];
 		this.turnStartTimes = [];
 		this.forfeitStartTimes = [];
-		this.moveLineTimers = [];
 		this.forfeitTimers = [];
 		this.turnExpirations = [];
 		this.forfeitExpirations = [];
@@ -247,7 +246,6 @@ class HostServer {
 			this.forfeitLengths.push(this.forfeitTime);
 			this.turnStartTimes.push(Date.now());
 			this.forfeitStartTimes.push(Date.now());
-			this.moveLineTimers.push(null);
 			this.forfeitTimers.push(null);
 			this.turnExpirations.push(0);
 			this.forfeitExpirations.push(0);
@@ -275,7 +273,10 @@ class HostServer {
 			this.clients[socket.id] = new Client(socket);
 			console.log(`#clients: ${Object.keys(this.clients).length}`);
 
-			socket.on("authenticate", (data) => {
+			socket.on("authenticate", (data, cb) => {
+				if (!cb) {
+					console.log("no callback (authenticate)");
+				}
 				let client = this.clients[socket.id];
 				// return if already authenticated:
 				if (client.authenticated) {
@@ -283,11 +284,41 @@ class HostServer {
 				}
 
 				// send socket.id and auth token:
-				this.accountServerConn.emit("authenticate", {
-					socketid: socket.id,
-					authToken: data.authToken,
-					ip: client.ip,
-				});
+				this.accountServerConnection.emit(
+					"authenticate",
+					{
+						socketid: socket.id,
+						authToken: data.authToken,
+						ip: client.ip,
+					},
+					(data) => {
+						// make sure they didn't disconnect:
+						if (!this.clients[data.socketid]) {
+							console.log("User disconnected before they could be authenticated.");
+							return;
+						}
+
+						// check if it was successful:
+						if (data.success) {
+							// update local client to contain account server's info:
+							this.clients[data.socketid].update(data.clientInfo);
+
+							// emit to the client their info:
+							let clientInfo = {
+								userid: data.clientInfo.userid,
+								username: data.clientInfo.username,
+								validUsernames: data.clientInfo.validUsernames,
+								connectedAccounts: data.clientInfo.connectedAccounts,
+								timePlayed: data.clientInfo.timePlayed,
+								isMod: data.clientInfo.isMod,
+							};
+							cb({ ...data, clientInfo: clientInfo });
+						} else {
+							// forward data to client:
+							cb(data);
+						}
+					},
+				);
 			});
 
 			// todo: forward this to the account server:
@@ -307,7 +338,7 @@ class HostServer {
 				let client = this.clients[socket.id];
 
 				if (client) {
-					this.accountServerConn.emit("clientDisconnected", {
+					this.accountServerConnection.emit("clientDisconnected", {
 						socketid: socket.id,
 						userid: client.userid,
 						timePlayed: client.timePlayed,
@@ -654,41 +685,8 @@ class HostServer {
 		});
 
 		// do stuff based on the account server's responses:
-		this.accountServerConn.on("authenticated", (data) => {
-			// make sure they didn't disconnect:
-			if (!this.clients[data.socketid]) {
-				console.log("User disconnected before they could be authenticated.");
-				return;
-			}
 
-			// check if it was successful:
-			if (data.success) {
-				// update local client to contain account server's info:
-				this.clients[data.socketid].update(data.clientInfo);
-
-				// emit to the client their info:
-				let clientInfo = {
-					userid: data.clientInfo.userid,
-					username: data.clientInfo.username,
-					validUsernames: data.clientInfo.validUsernames,
-					connectedAccounts: data.clientInfo.connectedAccounts,
-					timePlayed: data.clientInfo.timePlayed,
-					isMod: data.clientInfo.isMod,
-				};
-
-				this.io
-					.to(data.socketid)
-					.emit("authenticated", { success: true, clientInfo: clientInfo });
-			} else {
-				console.log(data);
-				// let the client know it didn't get authenticated:
-				this.io
-					.to(data.socketid)
-					.emit("authenticated", { success: false, reason: data.reason });
-			}
-		});
-
-		this.accountServerConn.on("accountMap", (data) => {
+		this.accountServerConnection.on("accountMap", (data) => {
 			this.accountMap = data;
 			this.io.emit("accountMap", this.accountMap);
 		});
@@ -697,7 +695,7 @@ class HostServer {
 	stop() {
 		console.log("closing connection");
 		this.io.emit("stop");
-		this.io.disconnect();
+		this.io.close();
 	}
 
 	// finds a client in this.clients with a specific userid

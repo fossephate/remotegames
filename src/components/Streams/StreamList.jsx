@@ -99,14 +99,14 @@ class StreamList extends PureComponent {
 
 		let cards = [];
 
-		for (let i = 0; i < 30; i++) {
-			let stream = {
-				username: "fosse",
-				thumbnailURL: "https://remotegames.io/images/smo.png",
-				title: "Nintendo Switch",
-			};
-			streams.push(stream);
-		}
+		// for (let i = 0; i < 30; i++) {
+		// 	let stream = {
+		// 		username: "fosse",
+		// 		thumbnailURL: "https://remotegames.io/images/smo.png",
+		// 		title: "Nintendo Switch",
+		// 	};
+		// 	streams.push(stream);
+		// }
 
 		for (let i = 0; i < streams.length; i++) {
 			let stream = streams[i];
@@ -122,6 +122,7 @@ class StreamList extends PureComponent {
 						/>
 						<CardContent>
 							<Typography component="p">{stream.title}</Typography>
+							<Typography component="p">{stream.username}</Typography>
 						</CardContent>
 					</CardActionArea>
 				</Card>

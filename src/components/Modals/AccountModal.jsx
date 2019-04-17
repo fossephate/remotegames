@@ -74,7 +74,8 @@ class AccountModal extends PureComponent {
 	}
 
 	handleClose() {
-		this.props.history.push("/");
+		// this.props.history.push("/");
+		this.props.history.goBack();
 	}
 
 	handleLogout() {

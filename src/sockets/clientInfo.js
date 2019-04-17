@@ -12,6 +12,18 @@ function authenticate(socket, dispatch) {
 		socket.emit("authenticate", {
 			authToken: authToken,
 			usernameIndex: 0,
+		}, (data) => {
+			console.log(data);
+			if (data.success) {
+				dispatch(updateClientInfo({ ...data.clientInfo, loggedIn: true }));
+			} else {
+				console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
+				// remove the authToken if it doesn't work:
+				if (data.reason == "ACCOUNT_NOT_FOUND") {
+					Cookie.remove("RemoteGames");
+					dispatch(updateClientInfo({ authToken: null }));
+				}
+			}
 		});
 	}
 }
@@ -29,19 +41,6 @@ const clientInfoEvents = (socket, dispatch) => {
 	// socket.on("chatMessage", (data) => {
 	// 	dispatch(receiveMessage(data.message, data.username, data.userid));
 	// });
-
-	socket.on("authenticated", (data) => {
-		if (data.success) {
-			dispatch(updateClientInfo({ ...data.clientInfo, loggedIn: true }));
-		} else {
-			console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
-			// remove the authToken if it doesn't work:
-			if (data.reason == "ACCOUNT_NOT_FOUND") {
-				Cookie.remove("RemoteGames");
-				dispatch(updateClientInfo({ authToken: null }));
-			}
-		}
-	});
 
 	// socket.on("authenticationFailure", (data) => {
 	// 	console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);

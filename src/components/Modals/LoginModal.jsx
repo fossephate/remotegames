@@ -71,7 +71,9 @@ class LoginModal extends PureComponent {
 	}
 
 	handleClose() {
-		this.props.history.push("/");
+		// this.props.history.push("/");
+		// todo:
+		this.props.history.goBack();
 	}
 
 	handleLoginForm(values) {
@@ -79,9 +81,10 @@ class LoginModal extends PureComponent {
 			if (data.success) {
 				alert("success");
 				Cookie.set("RemoteGames", data.authToken, { expires: 7 });
-				this.props.updateClientInfo({ authToken: data.authToken });
+				this.props.updateClientInfo({ authToken: data.authToken, loggedIn: true, clientInfo: data.clientInfo });
 				this.props.authenticate(data.authToken);
-				this.props.history.push("/");
+				// this.props.history.push("/");
+				this.props.history.goBack();
 			} else {
 				alert(data.reason);
 			}

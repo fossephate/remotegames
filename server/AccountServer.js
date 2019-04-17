@@ -6,6 +6,7 @@ const port = 8099;
 const config = require("./config.js");
 
 const VideoServerClient = require("./client.js").VideoServerClient;
+const HostServerClient = require("./client.js").HostServerClient;
 
 const session = require("express-session");
 const passport = require("passport");
@@ -193,7 +194,6 @@ let accountSchema = Schema({
 	password: String,
 
 	usernameLower: String,
-	emailLower: String,
 
 	authToken: String,
 	streamKey: String,
@@ -591,14 +591,15 @@ io.on("connection", (socket) => {
 			return;
 		}
 		// todo: input validation:
-		if (!data.email || !data.password || !data.username) {
+		if (!data.email || !data.username || !data.password1 || !data.password2) {
 			// socket.emit("ACCOUNT_ERROR", "INVALID_ARGUMENTS");
 			cb({ success: false, reason: "INVALID_ARGUMENTS" });
 			return;
 		}
 
 		let email = data.email;
-		let emailLower = data.email.toLowerCase();
+		email = email.split("@");
+		email = `${email[0]}@${email[1].toLowerCase()}`;
 		let username = data.username;
 		let usernameLower = data.username.toLowerCase();
 		let password1 = data.password1;
@@ -615,15 +616,15 @@ io.on("connection", (socket) => {
 			cb({ success: false, reason: "INVALID_EMAIL" });
 		}
 
-		var passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
-		if (!emailRegex.test(password1)) {
-			cb({ success: false, reason: "PASSWORD_NOT_STRONG_ENOUGH" });
-		}
+		// var passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})");
+		// if (!emailRegex.test(password1)) {
+		// 	cb({ success: false, reason: "PASSWORD_NOT_STRONG_ENOUGH" });
+		// }
 
 		console.log("Attempting to create a new account.");
 
 		// check if the acccount already exists:
-		Account.findOne({ emailLower: emailLower })
+		Account.findOne({ email: email })
 			.then((account) => {
 				// account already exists:
 				if (account) {
@@ -655,7 +656,6 @@ io.on("connection", (socket) => {
 					newAccount.password = hash;
 					// other acount details:
 					newAccount.email = email;
-					newAccount.emailLower = emailLower;
 					newAccount.username = username;
 					newAccount.usernameLower = usernameLower;
 					// create an authToken that lets us access the account:
@@ -666,7 +666,7 @@ io.on("connection", (socket) => {
 							throw error;
 						}
 						console.log("Account created.");
-						cb({ sucess: true });
+						cb({ success: true });
 					});
 				});
 			});
@@ -676,7 +676,6 @@ io.on("connection", (socket) => {
 	// https://stackoverflow.com/questions/35780524/how-to-do-simple-mongoose-findone-with-multiple-conditions?rq=1
 
 	socket.on("login", (data, cb) => {
-
 		if (!cb) {
 			console.log("no callback (login)");
 			return;
@@ -690,7 +689,7 @@ io.on("connection", (socket) => {
 
 		let user = data.user.toLowerCase();
 
-		let queryObj = { $or: [{ emailLower: user }, { usernameLower: user }] };
+		let queryObj = { $or: [{ email: user }, { usernameLower: user }] };
 		Account.findOne(queryObj)
 			.exec()
 			.then((account) => {
@@ -699,7 +698,7 @@ io.on("connection", (socket) => {
 					console.log("Account not found (while logging in)");
 					cb({
 						success: false,
-						reason: "ACCOUNT_NOT_FOUND,
+						reason: "ACCOUNT_NOT_FOUND",
 						...reply,
 					});
 					return;
@@ -735,7 +734,7 @@ io.on("connection", (socket) => {
 
 		if (!data.socketid) {
 			console.log("socketid was not defined!");
-			socket.emit("authenticated", {
+			cb({
 				success: false,
 				reason: "INVALID_ARGUMENTS",
 			});
@@ -750,7 +749,7 @@ io.on("connection", (socket) => {
 			}
 			// acount doesn't exist:
 			if (!account) {
-				socket.emit("authenticated", {
+				cb({
 					success: false,
 					reason: "ACCOUNT_NOT_FOUND",
 					...reply,
@@ -798,7 +797,7 @@ io.on("connection", (socket) => {
 					// fill it with this account:
 					localizedAccountMaps[socket.id][clientInfo.userid] = { ...clientInfo };
 
-					socket.emit("authenticated", {
+					cb({
 						success: true,
 						authToken: account.authToken,
 						clientInfo: clientInfo,
@@ -849,15 +848,51 @@ io.on("connection", (socket) => {
 	// 	}
 	// });
 
-	// socket.on("getStreams", (data) => {
-	// 	Account.find({ isStreaming: true })
-	// 		.exec()
-	// 		.then((accounts) => {
-	// 			let streams = [];
-	// 			console.log(accounts);
-	// 			socket.emit("streams", accounts);
-	// 		});
-	// });
+	socket.on("getStreams", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (getStreams)");
+			return;
+		}
+		cb({ streams: streams });
+	});
+
+	socket.on("getStreamInfo", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (getStreamInfo)");
+			return;
+		}
+		if (typeof data.username !== "string") {
+			return;
+		}
+
+		let username = data.username.toLowerCase();
+
+		let queryObj = { usernameLower: username };
+		Account.findOne(queryObj)
+			.exec()
+			.then((account) => {
+				// acount doesn't exist:
+				if (!account) {
+					cb({
+						success: false,
+						reason: "ACCOUNT_NOT_FOUND",
+					});
+					return;
+				} else {
+					if (account.isStreaming) {
+						cb({
+							success: true,
+							hostServerIP: account.hostServerIP,
+							hostServerPort: account.hostServerPort,
+							videoServerIP: account.videoServerIP,
+							videoServerPort: account.videoServerPort,
+						});
+					} else {
+						cb({ success: false, reason: "ACCOUNT_NOT_STREAMING" });
+					}
+				}
+			});
+	});
 
 	socket.on("startStreaming", (data) => {
 		// let reply = { socketid: data.socketid };
@@ -886,10 +921,10 @@ io.on("connection", (socket) => {
 				return;
 			}
 
-			let streamKey = null;
-
+			let videoStreamKey = null;
 			let videoIP = null;
 			let videoPort = null;
+			let videoID = null;
 			// look for available video server port:
 			for (let id in videoServers) {
 				let server = videoServers[id];
@@ -902,17 +937,9 @@ io.on("connection", (socket) => {
 						videoServers[id].ports[port] = false;
 						videoIP = ip;
 						videoPort = port;
+						videoID = id;
 						// create a stream key:
-						let videoStreamKey = crypto.randomBytes(64).toString("hex");
-						streamKey = videoStreamKey;
-						// send to client:
-						socket.emit("startStream", {
-							ip: ip,
-							port: port,
-							streamKey: videoStreamKey,
-						});
-						// send to videoServer:
-						io.to(id).emit("startVideo", { port: port, streamKey: videoStreamKey });
+						videoStreamKey = crypto.randomBytes(64).toString("hex");
 
 						break;
 					}
@@ -923,13 +950,10 @@ io.on("connection", (socket) => {
 				}
 			}
 
-			if (videoPort == null) {
-				console.log("open video server wasn't found!");
-			}
-
 			// look for available host server port:
 			let hostIP = null;
 			let hostPort = null;
+			let hostID = null;
 
 			// look for available host server port:
 			for (let id in hostServers) {
@@ -943,17 +967,12 @@ io.on("connection", (socket) => {
 						hostServers[id].ports[port] = false;
 						hostIP = ip;
 						hostPort = port;
+						hostID = id;
 						// // create a stream key:
 						// let streamKey = crypto.randomBytes(64).toString("hex");
 						// // send to client:
 						// socket.emit("startStreaming", { ip: ip, port: port, streamKey: streamKey });
 						// send to hostServer:
-						io.to(id).emit("startHost", {
-							port: port,
-							streamKey: streamKey,
-							videoIP: videoIP,
-							videoPort: videoPort,
-						});
 
 						break;
 					}
@@ -963,6 +982,44 @@ io.on("connection", (socket) => {
 					break;
 				}
 			}
+
+			if (!videoPort) {
+				console.log("open video server wasn't found!");
+			}
+			if (!hostPort) {
+				console.log("open host server wasn't found!");
+			}
+
+			if (!videoPort || !hostPort) {
+				// set ports as available:
+				if (videoPort) {
+					videoServers[videoID].ports[videoPort] = true;
+				}
+				if (hostPort) {
+					hostServers[hostID].ports[hostPort] = true;
+				}
+				return;
+			}
+
+
+
+			// start streaming:
+
+			// send to client:
+			socket.emit("startStream", {
+				ip: videoIP,
+				port: videoPort,
+				streamKey: videoStreamKey,
+			});
+			// send to videoServer:
+			io.to(videoID).emit("startVideo", { port: videoPort, streamKey: videoStreamKey });
+
+			io.to(hostID).emit("startHost", {
+				port: hostPort,
+				streamKey: videoStreamKey,
+				videoIP: videoIP,
+				videoPort: videoPort,
+			});
 
 			// update account info:
 			account.isStreaming = true;
@@ -1070,7 +1127,7 @@ io.on("connection", (socket) => {
 		if (data.secret !== config.ROOM_SECRET) {
 			return;
 		}
-		videoServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
+		hostServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
 	});
 
 	// check if it's one of the videoServers / hostServers:
@@ -1133,6 +1190,6 @@ setInterval(() => {
 				streams.push(stream);
 			}
 
-			io.emit("streams", streams);
+			// io.emit("streams", streams);
 		});
 }, 120000);

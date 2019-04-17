@@ -324,20 +324,20 @@ class Index extends Component {
 							<Route
 								path="/streams"
 								render={(props) => {
-									return <Streams {...props} socket={socket} />;
+									return <Streams {...props} accountServerConnection={accountServerConnection} />;
 								}}
 							/>
 							<Route
 								path="/s/:username"
 								render={(props) => {
-									return <Stream2 {...props} accountServerConnection={accountServerConnection} sagaMiddleware={sagaMiddleware} />;
+									return <Stream2 {...props} store={store} accountServerConnection={accountServerConnection} sagaMiddleware={sagaMiddleware} />;
 								}}
 							/>
 							// order matters here, can't do exact path or /login and /register break:
 							<Route
 								path="/"
 								render={(props) => {
-									return <Stream2 {...props} accountServerConnection={accountServerConnection} sagaMiddleware={sagaMiddleware} />;
+									return <Stream2 {...props} store={store} accountServerConnection={accountServerConnection} sagaMiddleware={sagaMiddleware} />;
 								}}
 							/>
 						</Switch>

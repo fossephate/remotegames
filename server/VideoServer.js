@@ -36,7 +36,8 @@ class VideoServer {
 
 			socket.on("videoData", (data) => {
 				if (socket.rooms.hasOwnProperty("host")) {
-					socket.broadcast.emit("videoData", data);
+					// socket.broadcast.emit("videoData", data);
+					socket.compress(false).broadcast.emit("videoData", data);
 				}
 			});
 		});
@@ -59,14 +60,15 @@ class VideoServer {
 // keyed by port:
 let videoServers = {};
 // this server's IP address:
-let ip = "34.203.73.220";
+// let ip = "34.203.73.220";
+let ip = "remotegames.io";
 // available ports on this server, true means it's available
 let ports = {
 	// 8001: true,
 	// 8002: true,
 	// 8003: true,
 	// 8004: true,
-	8005: true,
+	8005: false,
 	8006: true,
 	8007: true,
 	8009: true,

@@ -69,17 +69,22 @@ class RegisterModal extends PureComponent {
 	}
 
 	handleClose() {
-		this.props.history.push("/");
+		// this.props.history.push("/");
+		this.props.history.goBack();
 	}
 
 	handleRegisterForm(values) {
 		let vals = { ...values };
 
 		this.socket.emit("register", {...vals }, (data) => {
-			if (!data.success) {
-				alert(data.reason);
+			if (data.success) {
+				alert("success");
+				// Cookie.set("RemoteGames", data.authToken, { expires: 7 });
+				// this.props.updateClientInfo({ authToken: data.authToken });
+				// this.props.authenticate(data.authToken);
+				// this.props.history.push("/");
 			} else {
-				alert("success!");
+				alert(data.reason);
 			}
 		});
 	}
