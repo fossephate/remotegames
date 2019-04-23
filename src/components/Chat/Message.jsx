@@ -21,8 +21,9 @@ import { compose } from "recompose";
 
 // libs:
 
-const styles = (theme) => ({
+const styles = (props) => ({
 	root: {
+		backgroundColor: (props.isBanned) ? "#d34c4ca4" : null,
 		wordBreak: "break-word",
 		// padding: "4px",
 		paddingLeft: "10px",
@@ -74,7 +75,7 @@ function ping(text, time) {
 const Message = (props) => {
 	let {
 		classes,
-		message,
+		text,
 		username,
 		userid,
 		time,
@@ -87,21 +88,21 @@ const Message = (props) => {
 
 	let isRelay = false;
 	// if it's a relayed message:
-	if (userid === "TPNSbot" && message[0] == "[") {
+	if (userid === "TPNSbot" && text[0] == "[") {
 		isRelay = true;
 		let r = /\[(.+):(.+)\](.+)/;
-		let split = message.match(r);
+		let split = text.match(r);
 		source = split[1];
 		let user = split[2];
 		let msg = split[3];
 		// username = source.substr(0, 2) + ":" + user;
 		username = user;
-		message = msg;
+		text = msg;
 	}
 
 	if (!isReplay && isLastMessage) {
 		let mention = "@" + props.myUsername;
-		if (message.indexOf(mention) > -1) {
+		if (text.indexOf(mention) > -1) {
 			ping("You've been pinged!", 500);
 		}
 	}
@@ -133,7 +134,7 @@ const Message = (props) => {
 		}
 
 		if (account.isMod && !isReplay && isLastMessage) {
-			if (message.indexOf("@everyone") > -1) {
+			if (text.indexOf("@everyone") > -1) {
 				ping("You've been pinged!", 500);
 			}
 		}
@@ -147,14 +148,14 @@ const Message = (props) => {
 				{getTimeStamp(time)}
 				{icons}
 				{icons.length == 0 ? " " : null}
-				<b>{username}</b> {message}
+				<b>{username}</b> {text}
 			</Linkify>
 		</div>
 	);
 };
 
 Message.propTypes = {
-	message: PropTypes.string.isRequired,
+	text: PropTypes.string.isRequired,
 	username: PropTypes.string.isRequired,
 	userid: PropTypes.string.isRequired,
 };

@@ -12,6 +12,11 @@ import { changeUsername, updateClientInfo } from "src/actions/clientInfo.js";
 import { updateSettings } from "src/actions/settings.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
 
+// redux-saga:
+import createSagaMiddleware from "redux-saga";
+import handleActions from "src/sagas";
+import handleEvents from "src/sockets";
+
 // main components:
 import LoginArea from "src/components/LoginArea.jsx";
 import NavTabs from "src/components/NavTabs.jsx";
@@ -20,7 +25,7 @@ import Chat from "src/components/Chat/Chat.jsx";
 import StreamInfo from "src/components/StreamInfo.jsx";
 
 // loading circle:
-import LoadingCircle from "src/components/LoadingCircle.jsx";
+// import LoadingCircle from "src/components/LoadingCircle.jsx";
 
 // components:
 
@@ -50,6 +55,7 @@ import { device } from "src/constants/DeviceSizes.js";
 // jquery:
 let $ = require("jquery");
 window.$ = $;
+import Cookie from "js-cookie";
 
 // input handler:
 import InputHandler from "libs/InputHandler/InputHandler.js";
@@ -61,48 +67,20 @@ window.localforage = localforage;
 import swal from "sweetalert2";
 window.swal = swal;
 import { throttle } from "lodash";
+import socketio from "socket.io-client";
 
 // rr:
 import JSMpeg from "libs/jsmpeg.min.js";
 import Lagless2 from "libs/lagless/lagless2.js";
-import Lagless4 from "libs/lagless/lagless4.js";
+// import Lagless4 from "libs/lagless/lagless4.js";
 import LaglessAudio from "libs/lagless/laglessAudio.js";
 
+
 let sendInputTimer;
-let locked = false;
 let isMobile = false;
-window.ping = 0;
 
-window.laglessAudio = null;
-window.streams = [];
 // let settings = {};
-window.afkTimer = null;
-window.afkTime = 1000 * 60 * 60; // 1 hour
 
-function afk() {
-	for (let i = 0; i < streams.length; i++) {
-		streams[i].pause();
-	}
-	swal({
-		title: "Are you still there?",
-		text: "You've been AFK for an hour.",
-		type: "warning",
-		// showCancelButton: true,
-		confirmButtonColor: "#3085d6",
-		cancelButtonColor: "#d33",
-		confirmButtonText: "No, I'm still here.",
-	}).then((result) => {
-		if (result.value) {
-			// swal(
-			// 	"Deleted!",
-			// 	"Your file has been deleted.",
-			// 	"success"
-			// );
-			window.location.reload();
-		}
-	});
-}
-window.afkTimer = setTimeout(afk, window.afkTime);
 // swal("stream is down right now, don't put anything in #bug-reports.");
 
 /* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -150,11 +128,20 @@ class Stream extends Component {
 	constructor(props) {
 		super(props);
 
+
+		this.afkTime = 1000 * 60 * 60; // 1 hour
+		this.afkTimer = null;
+		this.laglessAudio = null;
+		this.streams = [];
+		window.streams = this.streams;
+		this.socket = null;
+		this.accountServerConnection = this.props.accountServerConnection;
+
 		// this.exitFullscreen = this.exitFullscreen.bind(this);
 
-		// this.switchTabs = this.switchTabs.bind(this);
-
 		this.sendControllerState = this.sendControllerState.bind(this);
+		this.afk = this.afk.bind(this);
+		this.start = this.start.bind(this);
 
 		this.state = {};
 
@@ -165,8 +152,108 @@ class Stream extends Component {
 	// // ...
 	// }
 
+	start(data) {
+		this.socket = socketio(`https://${data.hostServerIP}`, {
+			path: `/${data.hostServerPort}/socket.io`,
+			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+		});
+
+		// listen to events and dispatch actions:
+		handleEvents(this.socket, this.props.store.dispatch);
+
+		let socket2 = this.socket;
+
+		// handle outgoing events & listen to actions:
+		// and maybe dispatch more actions:
+		this.props.sagaMiddleware.run(handleActions, {
+			socket: socket2,
+		});
+
+
+		// lagless setup:
+		/* switch 2.0 */
+		this.streams.push(
+			new Lagless2(`https://${data.videoServerIP}`, { path: `/${data.videoServerPort}/socket.io`, audio: true }),
+		);
+		setTimeout(() => {
+			if (!this.props.clientInfo.loggedIn) {
+				swal("You have to login / register first!");
+				return;
+			}
+			this.streams[0].resume(document.getElementById("videoCanvas"));
+		}, 3000);
+
+		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
+		this.laglessAudio = new LaglessAudio(this.socket);
+
+		if (this.props.settings.audioThree) {
+			this.laglessAudio.resume();
+		}
+
+		// for (let i = 0; i < streams.length; i++) {
+		// 	streams[i].pause();
+		// }
+
+		/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
+		setInterval(() => {
+			// hack:
+			// todo: not this:
+			if (!this.props.settings.audioThree) {
+				this.laglessAudio.audio.volume = 0;
+				this.streams[0].player.volume = this.props.settings.volume / 100;
+			} else {
+				this.laglessAudio.audio.volume = this.props.settings.volume / 100;
+				this.streams[0].player.volume = 0;
+			}
+		}, 2000);
+	}
+
 	componentDidMount() {
-		window.socket = this.props.socket;
+
+		if (window.location.pathname === "/") {
+			this.start({
+				videoServerIP: "remotegames.io",
+				videoServerPort: 8005,
+				hostServerIP: "remotegames.io",
+				hostServerPort: 8100,
+			});
+		} else {
+
+
+			let authToken = Cookie.get("RemoteGames");
+			if (authToken) {
+				console.log("test");
+				this.accountServerConnection.emit("authenticate", {
+					authToken: authToken,
+					usernameIndex: 0,
+					socketid: 1,
+				}, (data) => {
+					if (data.success) {
+						console.log(data);
+						this.props.updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true });
+					} else {
+						alert(`AUTHENTICATION_FAILURE: ${data.reason}`);
+						// remove the authToken if it doesn't work:
+						if (data.reason === "ACCOUNT_NOT_FOUND") {
+							Cookie.remove("RemoteGames");
+							this.props.updateClientInfo({ authToken: null });
+						}
+					}
+				});
+			}
+
+			this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username}, (data) => {
+
+				if (!data.success) {
+					alert(data.reason);
+					return;
+				}
+
+				this.start(data);
+			});
+		}
+
+		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
 		// save settings on close:
 		/* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
@@ -195,60 +282,13 @@ class Stream extends Component {
 
 		// lagless setup:
 
-		/* switch 2.0 */
-		streams.push(
-			new Lagless2("https://remotegames.io", { path: "/8005/socket.io", audio: true }),
-		);
-		setTimeout(() => {
-			if (!this.props.clientInfo.loggedIn) {
-				swal("You have to login / register first!");
-				return;
-			}
-			streams[0].resume(document.getElementById("videoCanvas"));
-		}, 3000);
-		// let videoSocket = io("https://remotegames.io", {
-		// 	path: "/8002/socket.io",
-		// 	transports: ["websocket"],
-		// });
-		// videoSocket.on("videoData", (data) => {
-		// 	if (!streams[0].player.source) {
-		// 		return;
-		// 	}
-		// 	streams[0].player.source.onMessage(data);
-		// });
 
-		// streams.push(new Lagless4(socket));
 
-		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-		laglessAudio = new LaglessAudio(socket);
-
-		if (this.props.settings.audioThree) {
-			laglessAudio.resume();
-		}
-
-		// for (let i = 0; i < streams.length; i++) {
-		// 	streams[i].pause();
-		// }
-
-		/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		setInterval(() => {
-			// hack:
-			// todo: not this:
-			if (!this.props.settings.audioThree) {
-				laglessAudio.audio.volume = 0;
-				// for (let i = 0; i < streams.length; i++) {}
-				streams[0].player.volume = this.props.settings.volume / 100;
-			} else {
-				laglessAudio.audio.volume = this.props.settings.volume / 100;
-				streams[0].player.volume = 0;
-			}
-		}, 2000);
-
-		sendInputTimer = setInterval(() => {
+		this.sendInputTimer = setInterval(() => {
 			if (!this.props.clientInfo.loggedIn) {
 				return;
 			}
-			inputHandler.pollDevices();
+			this.inputHandler.pollDevices();
 			this.sendControllerState();
 		}, 1000 / 120);
 
@@ -261,7 +301,7 @@ class Stream extends Component {
 					$("body").removeClass("hideScrollbar");
 
 					// turn off mouse controls:
-					window.inputHandler.mouse.toggle(false);
+					this.inputHandler.mouse.toggle(false);
 				}
 				// prevent space bar scrolling:
 				// if ([32].indexOf(event.keyCode) > -1) {
@@ -270,6 +310,36 @@ class Stream extends Component {
 			},
 			false,
 		);
+	}
+
+
+	componentWillUnmount() {
+
+	}
+
+
+	afk() {
+		for (let i = 0; i < this.streams.length; i++) {
+			this.streams[i].pause();
+		}
+		swal({
+			title: "Are you still there?",
+			text: "You've been AFK for an hour.",
+			type: "warning",
+			// showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "No, I'm still here.",
+		}).then((result) => {
+			if (result.value) {
+				// swal(
+				// 	"Deleted!",
+				// 	"Your file has been deleted.",
+				// 	"success"
+				// );
+				window.location.reload();
+			}
+		});
 	}
 
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
@@ -294,7 +364,7 @@ class Stream extends Component {
 			});
 
 			// turn off mouse controls:
-			window.inputHandler.mouse.toggle(false);
+			this.inputHandler.mouse.toggle(false);
 		}
 		window.dispatchEvent(new Event("resize"));
 	}
@@ -309,35 +379,35 @@ class Stream extends Component {
 	sendControllerState() {
 		if (!this.init) {
 			this.init = true;
-			this.oldInputState = JSON.stringify(inputHandler.getState());
+			this.oldInputState = JSON.stringify(this.inputHandler.getState());
 		}
 
-		if (!inputHandler.changed) {
+		if (!this.inputHandler.changed) {
 			return;
 		} else {
-			inputHandler.changed = false;
+			this.inputHandler.changed = false;
 		}
 
 		if (window.banned) {
 			return;
 		}
 
-		clearTimeout(window.afkTimer);
-		window.afkTimer = setTimeout(afk, window.afkTime);
+		clearTimeout(this.afkTimer);
+		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
 		if (
-			inputHandler.currentInputMode == "keyboard" &&
+			this.inputHandler.currentInputMode == "keyboard" &&
 			!this.props.settings.keyboardControls
 		) {
 			return;
 		}
 		if (
-			inputHandler.currentInputMode == "controller" &&
+			this.inputHandler.currentInputMode == "controller" &&
 			!this.props.settings.controllerControls
 		) {
 			return;
 		}
-		if (inputHandler.currentInputMode == "touch" && !this.props.settings.touchControls) {
+		if (this.inputHandler.currentInputMode == "touch" && !this.props.settings.touchControls) {
 			return;
 		}
 
@@ -390,7 +460,7 @@ class Stream extends Component {
 		}
 
 		let obj = {
-			...inputHandler.getState(),
+			...this.inputHandler.getState(),
 			cNum: -1,
 		};
 
@@ -429,7 +499,7 @@ class Stream extends Component {
 		// let s1y = getStickString(obj.axes[1]);
 		// console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
 
-		socket.emit("sendControllerState", obj);
+		this.socket.emit("sendControllerState", obj);
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {

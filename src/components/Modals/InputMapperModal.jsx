@@ -298,7 +298,8 @@ class InputMapperModal extends PureComponent {
 	}
 
 	handleClose() {
-		this.props.history.push("/");
+		// this.props.history.push("/");
+		this.props.history.goBack();
 	}
 
 	handleChange(event) {

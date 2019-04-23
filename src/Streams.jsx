@@ -25,10 +25,10 @@ import StreamList from "src/components/Streams/StreamList.jsx";
 // secondary components:
 
 // modals:
-// import LoginModal from "src/components/Modals/LoginModal.jsx";
-// import RegisterModal from "src/components/Modals/RegisterModal.jsx";
-// import AccountModal from "src/components/Modals/AccountModal.jsx";
-// import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
+import LoginModal from "src/components/Modals/LoginModal.jsx";
+import RegisterModal from "src/components/Modals/RegisterModal.jsx";
+import AccountModal from "src/components/Modals/AccountModal.jsx";
+import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";

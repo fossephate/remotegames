@@ -1,188 +1,9 @@
-// import Client from "./client.js";
 const socketio = require("socket.io");
+const socketioClient = require("socket.io-client");
 const Client = require("./client.js").Client;
 
 const config = require("./config.js");
 
-function everySecond(self) {
-	// for (let i = 0; i < 5; i++) {
-	// 	this.io.in("stream" + i).clients((error, clientIDs) => {
-	// 		if (error) {
-	// 			throw error;
-	// 		}
-	// 		laglessClientIds[i] = clientIDs;
-	// 	});
-	// }
-
-	// create viewer list:
-	// for each stream:
-	// for (let i = 0; i < laglessClientIds.length; i++) {
-	// 	// reset:
-	// 	laglessClientUserids[i] = [];
-	// 	// for each user:
-	// 	for (let j = 0; j < laglessClientIds[i].length; j++) {
-	// 		let client = clients[laglessClientIds[i][j]];
-	// 		if (client && client.userid) {
-	// 			laglessClientUserids[i].push(client.userid);
-	// 		}
-	// 	}
-	// }
-
-	// waitlist = [];
-	//
-	// let loggedInClientIDs = [];
-	//
-	// // get list of logged in clients:
-	// for (let key in clients) {
-	// 	let client = clients[key];
-	// 	if (
-	// 		client != null &&
-	// 		client.userid != null &&
-	// 		clients[client.id] != null &&
-	// 		client.id != null
-	// 	) {
-	// 		loggedInClientIDs.push(client.id);
-	// 	}
-	// 	// todo: remove invalid users if they exist:
-	// }
-	//
-	// // console.log(clients);
-	//
-	// // check if site is over capacity:
-	// if (loggedInClientIDs.length >= siteCapacity) {
-	// 	// the number of people we need to put into the waitlist:
-	// 	let numberOfPeopleToWaitlist = loggedInClientIDs.length - siteCapacity;
-	// 	// remove anyone exempt by being in a queue, with a position less than minQueuePositions:
-	// 	// loop through control queues:
-	//
-	// 	// make a copy to modify:
-	// 	let loggedInClientIDsCopy = loggedInClientIDs.slice(0);
-	//
-	// 	for (let i = 0; i < controlQueues.length; i++) {
-	// 		// check if any of the users are in the queue:
-	//
-	// 		// modifies copy:
-	// 		for (let j = 0; j < loggedInClientIDs.length; j++) {
-	// 			console.log(loggedInClientIDs[j]);
-	// 			let userid = clients[loggedInClientIDs[j]].userid;
-	// 			// if they're in pos < minQueuePosition, exempt:
-	// 			if (controlQueues[i].indexOf(userid) < minQueuePosition) {
-	// 				// remove from loggedInClientIDs
-	// 				loggedInClientIDsCopy.splice(j, 1);
-	// 			}
-	// 		}
-	// 		// modifies original:
-	// 		// let j = loggedInClientIDs.length;
-	// 		// while (j--) {
-	// 		// 	let userid = clients[loggedInClientIDs[j]].userid;
-	// 		// 	// if they're in pos < minQueuePosition, exempt:
-	// 		// 	if (controlQueues[i].indexOf(userid) < minQueuePosition) {
-	// 		// 		// remove from loggedInClientIDs
-	// 		// 		loggedInClientIDs.splice(j, 1);
-	// 		// 	}
-	// 		// }
-	// 	}
-	//
-	// 	// now we have a list of non-auto-exempt people:
-	// 	// sort them by the time that they joined, and exempt more people until the queue limit is met
-	//
-	// 	// get the actual client objects:
-	// 	let nonExemptClients = [];
-	// 	for (let i = 0; i < loggedInClientIDsCopy.length; i++) {
-	// 		let socketid = loggedInClientIDsCopy[i];
-	// 		if (clients[socketid].userid != null) {
-	// 			laglessXClients.push(clients[socketid]);
-	// 		} else {
-	// 			console.log("this shouldn't have happened.");
-	// 		}
-	// 	}
-	//
-	// 	// sort by time joined:
-	// 	nonExemptClients = _.sortBy(nonExemptClients, "joinTime");
-	//
-	// 	// pick the first X to be exempted:
-	// 	while (nonExemptClients.length > numberOfPeopleToWaitlist) {
-	// 		nonExemptClients.shift();
-	// 	}
-	//
-	// 	// our final waitlist is everyone in nonExemptClients
-	// 	for (let i = 0; i < nonExemptClients.length; i++) {
-	// 		let client = nonExemptClients[j];
-	// 		if (client != null && client.userid != null) {
-	// 			waitlist.push(client.userid);
-	// 		} else {
-	// 			console.log("this shouldn't have happened2.");
-	// 		}
-	// 	}
-	// }
-
-	// emit turn times left:
-	self.calculateTurnExpirations();
-
-	// if (!this.queuesLocked) {
-	for (let i = 0; i < self.forfeitExpirations.length; i++) {
-		if (self.forfeitExpirations[i] < -450 && self.controlQueues[i][0] != null) {
-			self.forfeitTurn(self.controlQueues[i][0], i);
-		}
-	}
-
-	for (let i = 0; i < self.turnExpirations.length; i++) {
-		if (self.turnExpirations[i] < -450) {
-			self.moveLine(i);
-		}
-	}
-	// }
-}
-
-function every30Seconds(self) {
-	self.io.emit("accountMap", self.accountMap);
-	self.io.emit("bannedIPs", self.bannedIPs);
-	self.io.emit("waitlist", {
-		waitlist: self.waitlist,
-	});
-	self.io.emit("serverTime", Date.now());
-}
-
-function every5Seconds(self) {
-	self.io.emit("turnLengths", {
-		turnLengths: self.turnLengths,
-		forfeitLengths: self.forfeitLengths,
-	});
-	// self.io.emit("viewers", {
-	// 	viewers: [
-	// 		laglessClientUserids[0],
-	// 		laglessClientUserids[1],
-	// 		laglessClientUserids[2],
-	// 		laglessClientUserids[3],
-	// 		laglessClientUserids[4],
-	// 	],
-	// });
-	self.emitForfeitStartTimes();
-}
-
-function every4Seconds(self) {
-	self.io.to("controller").emit("stayConnected");
-}
-
-// setInterval(() => {
-// 	io.to("controller").emit("stayConnected");
-// }, 4000);
-
-// add to timePlayed:
-function addTimePlayed() {
-	for (let i = 0; i < controlQueues.length; i++) {
-		let controlQueue = controlQueues[i];
-		let userid = controlQueues[i][0];
-		if (userid == null) {
-			continue;
-		}
-		let index = findClientByUserid(userid);
-		if (index == -1) {
-			continue;
-		}
-		clients[index].timePlayed += 1;
-	}
-}
 function customSetInterval(func, time) {
 	let lastTime = Date.now(),
 		lastDelay = time,
@@ -203,7 +24,7 @@ function customSetInterval(func, time) {
 
 // export class Host {
 class HostServer {
-	constructor(port, accountServerConnection) {
+	constructor(port, accountServerConnection, videoIP, videoPort, streamKey, hostUserid) {
 		// this.hostid = hostid;
 		this.port = port;
 		this.io = new socketio({
@@ -212,9 +33,14 @@ class HostServer {
 		});
 		this.accountServerConnection = accountServerConnection;
 
+		// userid of the host:
+		this.hostUserid = hostUserid;
+		this.hostUser = {};
+
 		// where to find the video feed (sent to clients on connect):
-		this.videoIP = null;
-		this.videoPort = null;
+		this.videoIP = videoIP;
+		this.videoPort = videoPort;
+		this.streamKey = streamKey;
 
 		this.clients = [];
 		this.useridToSocketidMap = {}; // so we can find the Client object when we only have the userid (quickly)
@@ -252,23 +78,31 @@ class HostServer {
 			this.controllerList.push(i);
 			this.controlQueues.push([]);
 		}
+
+		// bind intervaled functions:
+		this.everySecond = this.everySecond.bind(this);
+		this.every4Seconds = this.every4Seconds.bind(this);
+		this.every5Seconds = this.every5Seconds.bind(this);
+		this.every30Seconds = this.every30Seconds.bind(this);
+		this.addTimePlayed = this.addTimePlayed.bind(this);
 	}
 
-	init(videoIP, videoPort) {
-		this.videoIP = videoIP;
-		this.videoPort = videoPort;
-
+	init() {
 		// setup interval functions:
-		setInterval(everySecond, 1000, this);
-		setInterval(every4Seconds, 4000, this);
-		setInterval(every5Seconds, 5000, this);
-		setInterval(every30Seconds, 30000, this);
+		setInterval(this.everySecond, 1000);
+		setInterval(this.every4Seconds, 4000);
+		setInterval(this.every5Seconds, 5000);
+		setInterval(this.every30Seconds, 30000);
+		let timer = customSetInterval(this.addTimePlayed, 5000);
 
+		// get host userid:
+		this.getUserInfo();
+
+		// listen to clients:
 		this.io.listen(this.port, () => {
 			console.log("Server listening at port %d", port);
 		});
 
-		// listen to clients:
 		this.io.on("connection", (socket) => {
 			this.clients[socket.id] = new Client(socket);
 			console.log(`#clients: ${Object.keys(this.clients).length}`);
@@ -276,6 +110,11 @@ class HostServer {
 			socket.on("authenticate", (data, cb) => {
 				if (!cb) {
 					console.log("no callback (authenticate)");
+				}
+				if (typeof(cb) != "function") {
+					console.log("something went very wrong:");
+					console.log(cb);
+					return
 				}
 				let client = this.clients[socket.id];
 				// return if already authenticated:
@@ -300,6 +139,24 @@ class HostServer {
 
 						// check if it was successful:
 						if (data.success) {
+							// check if they're the host:
+							if (data.clientInfo.userid === this.hostUserid) {
+								data.clientInfo.isHost = true;
+								data.clientInfo.isMod = true;
+								data.clientInfo.isPlus = true;
+							}
+							// only if loaded:
+							if (this.hostUser.modlist) {
+								if (this.hostUser.modlist.includes(data.clientInfo.userid)) {
+									data.clientInfo.isMod = true;
+								}
+								if (this.hostUser.pluslist.includes(data.clientInfo.userid)) {
+									data.clientInfo.isPlus = true;
+								}
+								if (this.hostUser.banlist.includes(data.clientInfo.userid)) {
+									data.clientInfo.isBanned = true;
+								}
+							}
 							// update local client to contain account server's info:
 							this.clients[data.socketid].update(data.clientInfo);
 
@@ -310,7 +167,10 @@ class HostServer {
 								validUsernames: data.clientInfo.validUsernames,
 								connectedAccounts: data.clientInfo.connectedAccounts,
 								timePlayed: data.clientInfo.timePlayed,
-								isMod: data.clientInfo.isMod,
+								isHost: !!data.clientInfo.isHost,
+								isMod: !!data.clientInfo.isMod,
+								isPlus: !!data.clientInfo.isPlus,
+								isBanned: !!data.clientInfo.isBanned,
 							};
 							cb({ ...data, clientInfo: clientInfo });
 						} else {
@@ -360,33 +220,29 @@ class HostServer {
 				if (client == null || client.userid == null) {
 					return;
 				}
-				if (client.isBan) {
-					socket.emit("banned");
-					return;
-				}
-				if (data && typeof data.message != "string") {
+				if (data && typeof data.text != "string") {
 					return;
 				} else {
-					data.message = data.message.replace(/(\r\n\t|\n|\r\t)/gm, "");
+					data.text = data.text.replace(/(\r\n\t|\n|\r\t)/gm, "");
 				}
-				if (data.message.length > 400) {
+				if (data.text.length > 400) {
 					return;
 				}
 				let msgObj = {
 					userid: client.userid,
 					username: client.username,
 					time: Date.now(),
-					message: data.message,
+					text: data.text,
 					isReplay: false,
+					isBanned: false,
 				};
-				// store for when people refresh:
-				this.lastFewMessages.push(msgObj);
-				// keep only #numberOfLastFewMessages
-				if (this.lastFewMessages.length > this.numberOfLastFewMessages) {
-					this.lastFewMessages.shift();
+				if (client.isBanned) {
+					// socket.emit("banned");
+					// return;
+					msgObj.isBanned = true;
 				}
-				// send to everyone:
-				this.io.emit("chatMessage", msgObj);
+				this.sendMessage(msgObj);
+				this.parseMessage(client, msgObj);
 			});
 
 			/* INPUT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -424,7 +280,7 @@ class HostServer {
 					return;
 				}
 				// return if banned:
-				if (client.isBan) {
+				if (client.isBanned) {
 					socket.emit("banned");
 					return;
 				}
@@ -470,7 +326,7 @@ class HostServer {
 					return;
 				}
 				// return if banned
-				if (client.isBan) {
+				if (client.isBanned) {
 					socket.emit("banned");
 					return;
 				}
@@ -601,37 +457,20 @@ class HostServer {
 
 			socket.on("join", (room) => {
 				let client = this.clients[socket.id];
-				let secureList = [
-					"lagless1Host",
-					"lagless2Host",
-					"lagless3Host",
-					"lagless4Host",
-					"lagless5Host",
-					"controller",
-					"controller2",
-				];
+				let secureList = ["controller"];
 				if (secureList.indexOf(room) > -1) {
 					return;
 				}
 				socket.join(room);
 			});
-			socket.on("joinSecure", (data, password) => {
-				let myData = { room: "", password: "" };
 
-				if (typeof password == "undefined") {
-					myData.room = data.room;
-					myData.password = data.password;
-				} else if (typeof password != "undefined") {
-					myData.room = data;
-					myData.password = password;
-				}
-
-				if (myData.password === config.ROOM_SECRET) {
+			socket.on("joinSecure", (data) => {
+				if ((data.password = this.streamKey || data.password === config.ROOM_SECRET)) {
 					let client = this.clients[socket.id];
-					if (client.rooms.indexOf(myData.room) == -1) {
-						client.rooms.push(myData.room);
+					if (client.rooms.indexOf(data.room) == -1) {
+						client.rooms.push(data.room);
 					}
-					socket.join(myData.room);
+					socket.join(data.room);
 				}
 			});
 
@@ -642,21 +481,16 @@ class HostServer {
 					data = data.replace(/(\r\n\t|\n|\r\t)/gm, "");
 				}
 				// check if it's coming from the controller:
-				if (this.clients[socket.id].rooms.indexOf("controller") > -1) {
+				if (this.clients[socket.id].rooms.includes("controller")) {
 					let msgObj = {
 						userid: "TPNSbot",
 						username: "TPNSbot",
 						time: Date.now(),
-						message: data,
+						text: data,
 						isReplay: false,
+						isBanned: false,
 					};
-					// store for when people refresh:
-					this.lastFewMessages.push(msgObj);
-					// keep only #numberOfLastFewMessages
-					if (this.lastFewMessages.length > this.numberOfLastFewMessages) {
-						this.lastFewMessages.shift();
-					}
-					this.io.emit("chatMessage", msgObj);
+					this.sendMessage(msgObj);
 				}
 			});
 
@@ -666,9 +500,6 @@ class HostServer {
 			socket.emit("videoInfo", { ip: this.videoIP, port: this.videoPort });
 
 			// settings:
-			// socket.emit("lagless2Settings", lagless2Settings);
-
-			// socket.emit("bannedIPs", this.bannedIPs);
 			socket.emit("accountMap", this.accountMap);
 			socket.emit("controlQueues", this.controlQueues);
 			socket.emit("turnLengths", {
@@ -690,6 +521,57 @@ class HostServer {
 			this.accountMap = data;
 			this.io.emit("accountMap", this.accountMap);
 		});
+	}
+
+	sendMessage(msgObj) {
+		// store for when people refresh:
+		this.lastFewMessages.push(msgObj);
+		// keep only #numberOfLastFewMessages
+		if (this.lastFewMessages.length > this.numberOfLastFewMessages) {
+			this.lastFewMessages.shift();
+		}
+		// send to everyone:
+		this.io.emit("chatMessage", msgObj);
+	}
+
+	parseMessage(client, message) {
+		// for replies:
+		let msgObj = {
+			userid: "TPNSbot",
+			username: "TPNSbot",
+			time: Date.now(),
+			isReplay: false,
+			isBanned: false,
+		};
+		// ban / unban:
+		if (/^!(?:un)?ban ([a-zA-Z0-9]+)$/.test(message.text)) {
+			if (!client.isMod) {
+				msgObj.text = "You need to be a mod to use this command!";
+				this.sendMessage(msgObj);
+				console.log("not a mod");
+				return;
+			}
+			let n = /^!un/.test(message.text) ? 7 : 5;
+			let userid = message.text.substring(n);
+			this.accountServerConnection.emit(
+				"ban",
+				{
+					isBanned: n === 5,
+					issuerUserid: client.userid,
+					hostUserid: this.hostUserid,
+					clientUserid: userid,
+				},
+				(data) => {
+					if (data.success) {
+						msgObj.text = "Successfully (un)banned user.";
+						this.sendMessage(msgObj);
+					} else {
+						msgObj.text = "Something went wrong while trying to (un)ban the user.";
+						this.sendMessage(msgObj);
+					}
+				},
+			);
+		}
 	}
 
 	stop() {
@@ -854,6 +736,189 @@ class HostServer {
 			this.emitForfeitStartTimes();
 		}
 	}
+
+	// every x:
+	everySecond() {
+		// emit turn times left:
+		this.calculateTurnExpirations();
+		for (let i = 0; i < this.forfeitExpirations.length; i++) {
+			if (this.forfeitExpirations[i] < -150 && this.controlQueues[i][0] != null) {
+				this.forfeitTurn(this.controlQueues[i][0], i);
+			}
+		}
+		for (let i = 0; i < this.turnExpirations.length; i++) {
+			if (this.turnExpirations[i] < -150) {
+				this.moveLine(i);
+			}
+		}
+	}
+
+	every4Seconds() {
+		this.io.to("controller").emit("stayConnected");
+	}
+
+	every5Seconds() {
+		this.io.emit("turnLengths", {
+			turnLengths: this.turnLengths,
+			forfeitLengths: this.forfeitLengths,
+		});
+		// this.io.emit("viewers", {
+		// 	viewers: [
+		// 		laglessClientUserids[0],
+		// 		laglessClientUserids[1],
+		// 		laglessClientUserids[2],
+		// 		laglessClientUserids[3],
+		// 		laglessClientUserids[4],
+		// 	],
+		// });
+		this.emitForfeitStartTimes();
+	}
+
+	getUserInfo() {
+		this.accountServerConnection.emit(
+			"getUserInfo",
+			{ userid: this.hostUserid },
+			(data) => {
+				if (!data.success) {
+					console.log("something went wrong, getUserInfo");
+					console.log(data.reason);
+					return;
+				}
+
+				this.hostUser = data.account;
+				this.hostUserid = ("" + this.hostUser._id).trim();
+
+				for (let socketid in this.clients) {
+					if (this.hostUser.modlist.includes(this.clients[socketid].userid)) {
+						this.clients[socketid].isMod = true;
+					} else {
+						this.clients[socketid].isMod = false;
+					}
+					if (this.hostUser.pluslist.includes(this.clients[socketid].userid)) {
+						this.clients[socketid].isPlus = true;
+					} else {
+						this.clients[socketid].isPlus = false;
+					}
+					if (this.hostUser.banlist.includes(this.clients[socketid].userid)) {
+						this.clients[socketid].isBanned = true;
+					} else {
+						this.clients[socketid].isBanned = false;
+					}
+					// has to be last so it isn't overwritten:
+					if (this.clients[socketid].userid === this.hostUserid) {
+						this.clients[socketid].isMod = true;
+						this.clients[socketid].isPlus = true;
+					}
+				}
+			},
+		);
+	}
+
+	every30Seconds() {
+		this.io.emit("accountMap", this.accountMap);
+		this.io.emit("bannedIPs", this.bannedIPs);
+		this.io.emit("waitlist", {
+			waitlist: this.waitlist,
+		});
+		this.io.emit("serverTime", Date.now());
+		this.getUserInfo();
+	}
+
+	// setInterval(() => {
+	// 	io.to("controller").emit("stayConnected");
+	// }, 4000);
+
+	// add to timePlayed:
+	addTimePlayed() {
+		for (let i = 0; i < this.controlQueues.length; i++) {
+			let controlQueue = this.controlQueues[i];
+			let userid = this.controlQueues[i][0];
+			if (userid == null) {
+				continue;
+			}
+			let index = this.findClientByUserid(userid);
+			if (index == -1) {
+				continue;
+			}
+			this.clients[index].timePlayed += 5;
+		}
+	}
 }
 
-module.exports.HostServer = HostServer;
+// module.exports.HostServer = HostServer;
+
+// some global variables:
+// all host servers:
+// keyed by port:
+let hostServers = {};
+// this server's IP address:
+// let ip = "34.203.73.220";
+let ip = "remotegames.io";
+// available ports on this server, true means it's available
+let ports = {
+	8100: false,
+	8110: true,
+	8001: true,
+	8002: true,
+	8003: true,
+	8004: true,
+};
+
+// start connection with the account server (same server in this case):
+let accountServerConnection = socketioClient("https://remotegames.io", {
+	path: "/8099/socket.io",
+	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+});
+
+function register() {
+	accountServerConnection.emit("registerHostServer", {
+		secret: config.ROOM_SECRET,
+		ip: ip,
+		ports: ports,
+	});
+}
+register();
+setInterval(register, 1000 * 60);
+
+accountServerConnection.on("startHost", (data) => {
+	if (!ports[data.port]) {
+		console.log("something went wrong, this port is not available!");
+		return;
+	}
+
+	// set port as unavailable:
+	ports[data.port] = false;
+	// start:
+	hostServers[data.port] = new HostServer(
+		data.port,
+		accountServerConnection,
+		data.videoIP,
+		data.videoPort,
+		data.streamKey,
+		data.hostUserid,
+	);
+	hostServers[data.port].init();
+});
+
+accountServerConnection.on("stopHost", (data) => {
+	if (ports[data.port]) {
+		console.log("something went wrong, this port wasn't set as unavailable!");
+		return;
+	}
+	hostServers[data.port].stop();
+	// set port as available:
+	ports[data.port] = true;
+});
+
+// for testing:
+let port = 8100;
+ports[port] = true;
+hostServers[port] = new HostServer(
+	port,
+	accountServerConnection,
+	ip,
+	8005,
+	"a",
+	"fosse",
+);
+hostServers[port].init(ip, 8005);

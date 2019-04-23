@@ -56,6 +56,18 @@ class LoginArea extends PureComponent {
 		this.props.history.push("/register");
 	}
 
+	// handleAccount() {
+	// 	this.props.history.push(`${window.location.pathname}/account`);
+	// }
+	//
+	// handleLogin() {
+	// 	this.props.history.push(`${window.location.pathname}/login`);
+	// }
+	//
+	// handleRegister() {
+	// 	this.props.history.push(`${window.location.pathname}/register`);
+	// }
+
 	render() {
 		const { classes } = this.props;
 

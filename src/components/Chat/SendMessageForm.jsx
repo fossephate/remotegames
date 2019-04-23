@@ -115,9 +115,8 @@ class SendMessageForm extends PureComponent {
 				"modlist",
 				"pluslist",
 				"banlist",
-				"tempban",
+				"ban",
 				"unban",
-				"permaban",
 				"forcerefresh",
 				"lockqueues",
 				"unlockqueues",
@@ -210,7 +209,7 @@ class SendMessageForm extends PureComponent {
 			if (
 				message &&
 				message.username == "TPNSbot" &&
-				/A vote has been started to/.test(message.message) &&
+				/A vote has been started to/.test(message.text) &&
 				!message.isReplay
 			) {
 				this.setState({ voting: true });

@@ -108,6 +108,12 @@ class MessageList extends PureComponent {
 					swal(`${userid}\n${timePlayed}`);
 				};
 			}
+
+			if (this.props.messages[i].isBanned) {
+				if (!this.props.isBanned && !this.props.isMod) {
+					continue;
+				}
+			}
 			messages.push(
 				<Message
 					key={this.props.messages[i].id}
@@ -149,7 +155,7 @@ MessageList.propTypes = {
 	messages: PropTypes.arrayOf(
 		PropTypes.shape({
 			id: PropTypes.number.isRequired,
-			message: PropTypes.string.isRequired,
+			text: PropTypes.string.isRequired,
 			username: PropTypes.string.isRequired,
 			userid: PropTypes.string.isRequired,
 		}).isRequired,
@@ -161,6 +167,7 @@ const mapStateToProps = (state) => {
 		messages: state.chat.messages,
 		accountMap: state.accountMap,
 		isMod: state.clientInfo.isMod,
+		isBanned: state.clientInfo.isBanned,
 	};
 };
 

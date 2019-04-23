@@ -12,9 +12,10 @@ const chat = (state = {}, action) => {
 					id: action.payload.id,
 					userid: action.payload.userid,
 					username: action.payload.username,
-					message: action.payload.message,
+					text: action.payload.text,
 					time: action.payload.time,
 					isReplay: action.payload.isReplay,
+					isBanned: action.payload.isBanned,
 				},
 			]);
 			let userids = state.userids.splice(0);

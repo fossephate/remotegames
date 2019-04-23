@@ -2,24 +2,24 @@ import * as types from "../actions/ActionTypes.js";
 
 import { updateClientInfo } from "../actions/clientInfo.js";
 
-// import { getCookie } from "libs/tools.js";
+// libs:
+import localforage from "localforage";
 import Cookie from "js-cookie";
 
 function authenticate(socket, dispatch) {
 	let authToken = Cookie.get("RemoteGames");
 	if (authToken) {
-		dispatch(updateClientInfo({ authToken: authToken }));
 		socket.emit("authenticate", {
 			authToken: authToken,
 			usernameIndex: 0,
 		}, (data) => {
 			console.log(data);
 			if (data.success) {
-				dispatch(updateClientInfo({ ...data.clientInfo, loggedIn: true }));
+				dispatch(updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true }));
 			} else {
 				console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
 				// remove the authToken if it doesn't work:
-				if (data.reason == "ACCOUNT_NOT_FOUND") {
+				if (data.reason === "ACCOUNT_NOT_FOUND") {
 					Cookie.remove("RemoteGames");
 					dispatch(updateClientInfo({ authToken: null }));
 				}
@@ -52,6 +52,10 @@ const clientInfoEvents = (socket, dispatch) => {
 	// 	console.log("clientInfo received");
 	// 	dispatch(updateClientInfo({ ...data, loggedIn: true }));
 	// });
+
+	socket.on("banned", (data) => {
+		localforage.setItem("banned", "banned");
+	});
 
 	// reconnect:
 	socket.on("disconnect", (data) => {

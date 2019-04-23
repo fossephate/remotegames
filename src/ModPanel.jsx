@@ -55,6 +55,7 @@ import { device } from "src/constants/DeviceSizes.js";
 // jquery:
 let $ = require("jquery");
 window.$ = $;
+import Cookie from "js-cookie";
 
 // input handler:
 import InputHandler from "libs/InputHandler/InputHandler.js";
@@ -123,7 +124,7 @@ const styles = (theme) => ({
 	},
 });
 
-class Stream extends Component {
+class ModPanel extends Component {
 	constructor(props) {
 		super(props);
 
@@ -217,6 +218,30 @@ class Stream extends Component {
 				hostServerPort: 8100,
 			});
 		} else {
+
+
+			let authToken = Cookie.get("RemoteGames");
+			if (authToken) {
+				console.log("test");
+				this.accountServerConnection.emit("authenticate", {
+					authToken: authToken,
+					usernameIndex: 0,
+					socketid: 1,
+				}, (data) => {
+					if (data.success) {
+						console.log(data);
+						this.props.updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true });
+					} else {
+						alert(`AUTHENTICATION_FAILURE: ${data.reason}`);
+						// remove the authToken if it doesn't work:
+						if (data.reason === "ACCOUNT_NOT_FOUND") {
+							Cookie.remove("RemoteGames");
+							this.props.updateClientInfo({ authToken: null });
+						}
+					}
+				});
+			}
+
 			this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username}, (data) => {
 
 				if (!data.success) {
@@ -597,4 +622,4 @@ export default compose(
 		mapStateToProps,
 		mapDispatchToProps,
 	),
-)(Stream);
+)(ModPanel);

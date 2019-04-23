@@ -3,11 +3,11 @@ import * as types from "./ActionTypes.js";
 let nextMessageId = 0;
 const nextUserId = 0;
 
-export const sendMessage = (message) => {
+export const sendMessage = (text) => {
 	return {
 		type: types.SEND_MESSAGE,
 		payload: {
-			message: message,
+			text: text,
 		},
 	};
 };
@@ -17,11 +17,12 @@ export const receiveMessage = (data) => {
 		type: types.RECEIVE_MESSAGE,
 		payload: {
 			id: nextMessageId++,
-			message: data.message,
+			text: data.text,
 			username: data.username,
 			userid: data.userid,
 			time: data.time,
 			isReplay: data.isReplay,
+			isBanned: data.isBanned,
 		},
 	};
 };

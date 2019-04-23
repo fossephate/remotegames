@@ -61,7 +61,7 @@ class LaglessCanvas extends PureComponent {
 
 	enableMouseControls() {
 		this.setState({ alertOpen: false });
-		window.inputHandler.mouse.init($("#videoCanvas0")[0]);
+		window.inputHandler.mouse.init($("#videoCanvas")[0]);
 		window.inputHandler.mouse.toggle(true);
 	}
 

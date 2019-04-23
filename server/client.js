@@ -17,10 +17,11 @@ class Client {
 		this.ip = this.socket.handshake.headers["x-real-ip"];
 		this.port = this.socket.handshake.headers["x-real-port"];
 
+		this.isHost = false;
 		this.isMod = false;
 		this.isPlus = false;
 		this.isSub = false;
-		this.isBan = false;
+		this.isBanned = false;
 	}
 
 	update(client) {
@@ -50,8 +51,8 @@ class Client {
 		if (client.isSub) {
 			this.isSub = client.isSub;
 		}
-		if (client.isBan) {
-			this.isBan = client.isBan;
+		if (client.isBanned) {
+			this.isBanned = client.isBanned;
 		}
 	}
 }

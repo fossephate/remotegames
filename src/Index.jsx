@@ -16,7 +16,6 @@ import FAQ from "src/FAQ.jsx";
 import CurrentPlayers from "src/CurrentPlayers.jsx";
 import Streams from "src/Streams.jsx";
 import Stream from "src/Stream.jsx";
-import Stream2 from "src/Stream2.jsx";
 
 // redux:
 import { Provider, connect } from "react-redux";
@@ -28,10 +27,10 @@ import rootReducer from "./reducers";
 import { updateSettings } from "src/actions/settings.js";
 import { updateClientInfo } from "src/actions/clientInfo.js";
 
-// redux-saga:
+// // redux-saga:
 import createSagaMiddleware from "redux-saga";
-import handleActions from "src/sagas";
-import handleEvents from "src/sockets";
+// import handleActions from "src/sagas";
+// import handleEvents from "src/sockets";
 
 // libs:
 import socketio from "socket.io-client";
@@ -78,10 +77,10 @@ let preloadedState = {
 		usernameIndex: 0,
 		// banTime: 0,
 		// currentPlayer: 0,
-		banned: false,
+		isMod: false,
+		isBanned: false,
 		waitlisted: false,
 		timePlayed: 0,
-		isMod: false,
 	},
 
 	// usernameMap: {},
@@ -161,7 +160,7 @@ function loadState() {
 		// check if banned:
 		localforage.getItem("banned").then((value) => {
 			if (value != null) {
-				store.dispatch(updateClientInfo({ banned: true }));
+				store.dispatch(updateClientInfo({ isBanned: true }));
 				window.banned = true;
 			} else {
 				window.banned = false;
@@ -208,19 +207,19 @@ const store = createStore(
 	composeEnhancers(applyMiddleware(sagaMiddleware)),
 );
 
-let socket = socketio("https://remotegames.io", {
-	path: "/8100/socket.io",
+let accountServerConnection = socketio("https://remotegames.io", {
+	path: "/8099/socket.io",
 	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 });
-
-// listen to events and dispatch actions:
-handleEvents(socket, store.dispatch);
+//
+// // listen to events and dispatch actions:
+// handleEvents(socket, store.dispatch);
 
 // handle outgoing events & listen to actions:
 // and maybe dispatch more actions:
-sagaMiddleware.run(handleActions, {
-	socket,
-});
+// sagaMiddleware.run(handleActions, {
+// 	socket,
+// });
 
 class Index extends Component {
 	constructor(props) {
@@ -240,7 +239,6 @@ class Index extends Component {
 				},
 			},
 		});
-
 		this.getTheme = this.getTheme.bind(this);
 		this.switchTheme = this.switchTheme.bind(this);
 
@@ -325,26 +323,40 @@ class Index extends Component {
 							<Route
 								path="/streams"
 								render={(props) => {
-									return <Streams {...props} socket={socket} />;
+									return (
+										<Streams
+											{...props}
+											accountServerConnection={accountServerConnection}
+										/>
+									);
 								}}
 							/>
 							<Route
-								path="/stream"
+								// path="/s/:username"
+								path="/(s|login|register|account|remap)/:username?"
 								render={(props) => {
-									return <Stream {...props} socket={socket} />;
-								}}
-							/>
-							<Route
-								path="/s/:username"
-								render={(props) => {
-									return <Stream2 {...props} socket={socket} />;
+									return (
+										<Stream
+											{...props}
+											store={store}
+											accountServerConnection={accountServerConnection}
+											sagaMiddleware={sagaMiddleware}
+										/>
+									);
 								}}
 							/>
 							// order matters here, can't do exact path or /login and /register break:
 							<Route
 								path="/"
 								render={(props) => {
-									return <Stream {...props} socket={socket} />;
+									return (
+										<Streams
+											{...props}
+											store={store}
+											accountServerConnection={accountServerConnection}
+											sagaMiddleware={sagaMiddleware}
+										/>
+									);
 								}}
 							/>
 						</Switch>

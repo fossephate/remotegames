@@ -5,7 +5,7 @@ const handleChatActions = function (params) {
 	let list = [];
 	list.push(
 		takeEvery(types.SEND_MESSAGE, (action) => {
-			params.socket.emit("chatMessage", { message: action.payload.message });
+			params.socket.emit("chatMessage", { text: action.payload.text });
 		})
 	);
 	return list;

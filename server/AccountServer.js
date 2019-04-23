@@ -196,19 +196,29 @@ let accountSchema = Schema({
 	usernameLower: String,
 
 	authToken: String,
-	streamKey: String,
 
 	emailVerified: Boolean,
 
 	// streaming:
 	isStreaming: Boolean,
+	streamKey: String,
 
 	videoServerIP: String,
 	videoServerPort: Number,
 	hostServerIP: String,
 	hostServerPort: Number,
-	thumbnailURL: String,
+
 	streamTitle: String,
+	streamDescription: String,
+	thumbnailURL: String,
+
+	adminlist: [],
+	modlist: [],
+	pluslist: [],
+	sublist: [],
+	banlist: [],
+	bannedIPs: [],
+	followers: [],
 
 	connectedAccounts: [],
 
@@ -253,13 +263,13 @@ let accountSchema = Schema({
 	},
 
 	// settings:
-	isMod: Boolean,
-	isPlus: Boolean,
-	isSub: Boolean,
+	// isMod: Boolean,
+	// isPlus: Boolean,
+	// isSub: Boolean,
 
-	isBan: Boolean,
-	isPermaBan: Boolean,
-	isTempBan: Boolean,
+	isBanned: Boolean,
+	isPermaBanned: Boolean,
+	isTempBanned: Boolean,
 
 	// stats:
 	timePlayed: Number,
@@ -286,15 +296,6 @@ function connectAccount(account, profile, type) {
 		account[type].login = profile.login;
 		account[type].username = profile.username;
 		account[type].profile_image_url = profile.profile_image_url;
-		if (modlist.indexOf(account.twitch.username) > -1) {
-			account.isMod = true;
-		}
-		if (pluslist.indexOf(account.twitch.username) > -1) {
-			account.isPlus = true;
-		}
-		// if (sublist.indexOf(account.twitch.displayName) > -1) {
-		// 	account.isSub = true;
-		// }
 	} else if (type == "google") {
 		account[type].familyName = profile.name.familyName;
 		account[type].givenName = profile.name.givenName;
@@ -342,16 +343,13 @@ function clientInfoFromAccount(account, usernameIndex) {
 	}
 
 	if (usernameIndex >= 0 && usernameIndex < clientInfo.validUsernames.length) {
-		clientInfo.username = clientInfo.validUsernames[data.usernameIndex];
+		clientInfo.username = clientInfo.validUsernames[usernameIndex];
 	} else {
 		clientInfo.username = clientInfo.validUsernames[0];
 	}
 
 	clientInfo.userid = ("" + account._id).trim();
-	clientInfo.isMod = account.isMod;
-	clientInfo.isPlus = account.isPlus;
-	clientInfo.isSub = account.isSub;
-	clientInfo.isBan = account.isBan;
+	clientInfo.isBanned = account.isBanned;
 	clientInfo.timePlayed = account.timePlayed;
 	clientInfo.connectedAccounts = account.connectedAccounts;
 	clientInfo.isStreaming = account.isStreaming;
@@ -359,7 +357,7 @@ function clientInfoFromAccount(account, usernameIndex) {
 	// todo: maybe ban the account if using a banned IP: (or keep as is)
 	for (let i = 0; i < account.IPs.length; i++) {
 		if (bannedIPs.indexOf(account.IPs[i]) > -1) {
-			clientInfo.isBan = true;
+			clientInfo.isBanned = true;
 		}
 	}
 
@@ -599,6 +597,10 @@ io.on("connection", (socket) => {
 
 		let email = data.email;
 		email = email.split("@");
+		if (email.length < 2) {
+			cb({ success: false, reason: "INVALID_EMAIL" });
+			return;
+		}
 		email = `${email[0]}@${email[1].toLowerCase()}`;
 		let username = data.username;
 		let usernameLower = data.username.toLowerCase();
@@ -781,7 +783,7 @@ io.on("connection", (socket) => {
 					// todo: maybe ban the account if using a banned IP: (or keep as is)
 					for (let i = 0; i < account.IPs.length; i++) {
 						if (bannedIPs.indexOf(account.IPs[i]) > -1) {
-							clientInfo.isBan = true;
+							clientInfo.isBanned = true;
 						}
 					}
 					// fill masterAccountMap:
@@ -1001,20 +1003,21 @@ io.on("connection", (socket) => {
 				return;
 			}
 
-
-
 			// start streaming:
 
 			// send to client:
 			socket.emit("startStream", {
-				ip: videoIP,
-				port: videoPort,
+				videoIP: videoIP,
+				videoPort: videoPort,
+				hostIP: hostIP,
+				hostPort: hostPort,
 				streamKey: videoStreamKey,
 			});
 			// send to videoServer:
 			io.to(videoID).emit("startVideo", { port: videoPort, streamKey: videoStreamKey });
 
 			io.to(hostID).emit("startHost", {
+				hostUserid: ("" + account._id).trim(),
 				port: hostPort,
 				streamKey: videoStreamKey,
 				videoIP: videoIP,
@@ -1116,6 +1119,7 @@ io.on("connection", (socket) => {
 		});
 	});
 
+	// register servers:
 	socket.on("registerVideoServer", (data) => {
 		if (data.secret !== config.ROOM_SECRET) {
 			return;
@@ -1128,6 +1132,88 @@ io.on("connection", (socket) => {
 			return;
 		}
 		hostServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
+	});
+
+	// host server commands:
+	socket.on("ban", (data, cb) => {
+		if (!hostServers.hasOwnProperty(socket.id)) {
+			return;
+		}
+		// try and get account:
+		Account.findOne({ _id: data.hostUserid }, (error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// if the account exists:
+			if (account) {
+				// update account info:
+				// banning:
+				if (data.isBanned) {
+					if (!account.banlist.includes(data.clientUserid)) {
+						account.banlist.push(data.clientUserid);
+					}
+					// unbanning:
+				} else {
+					account.banlist = account.banlist.filter((i) => i !== data.clientUserid);
+				}
+				// update the account details:
+				account.save((error) => {
+					// error check:
+					if (error) {
+						throw error;
+					}
+					cb({ success: true });
+				});
+			} else {
+				cb({ success: false, reason: "HOST_ACCOUNT_NOT_FOUND" });
+			}
+		});
+	});
+
+	socket.on("getUserInfo", (data, cb) => {
+		if (!hostServers.hasOwnProperty(socket.id)) {
+			return;
+		}
+
+		// hack:
+		// todo: not this:
+		if (data.userid.length === 24) {
+
+			// try and get account:
+			Account.findOne({ _id: data.userid }, (error, account) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+				// if the account exists:
+				if (account) {
+					cb({ success: true, account: account });
+				} else {
+					cb({ success: false, reason: "ACCOUNT_NOT_FOUND" });
+				}
+			});
+
+		} else {
+
+			// try and get account:
+			Account.findOne({ usernameLower: data.userid.toLowerCase() }, (error, account) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+				// if the account exists:
+				if (account) {
+					cb({ success: true, account: account });
+				} else {
+					cb({ success: false, reason: "ACCOUNT_NOT_FOUND" });
+				}
+			});
+
+		}
+
+
+
 	});
 
 	// check if it's one of the videoServers / hostServers:
