@@ -10,24 +10,6 @@ import { connect } from "react-redux";
 
 // main components:
 
-// loading circle:
-// import LoadingCircle from "src/components/LoadingCircle.jsx";
-
-// import CheckboxSettings from "src/components/CheckboxSettings.jsx";
-
-// components:
-// import PlayerInfo from "src/components/PlayerInfo.jsx";
-// import Waitlist from "src/components/Waitlist.jsx";
-// import ThemeSelector from "src/components/ThemeSelector.jsx";
-
-// secondary components:
-
-// modals:
-// import LoginModal from "src/components/Modals/LoginModal.jsx";
-// import RegisterModal from "src/components/Modals/RegisterModal.jsx";
-// import AccountModal from "src/components/Modals/AccountModal.jsx";
-// import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
-
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
@@ -58,31 +40,25 @@ import { compose } from "recompose";
 import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
+import classNames from "classnames";
 
 // jss:
 const styles = (theme) => ({
 	root: {
-		padding: "1%",
-		display: "grid",
-		gridTemplateAreas: `
-			"nav"
-			"streams"`,
 		width: "100%",
+		height: "48px",
+		zIndex: 10000,
+	},
+	[device.mobile]: {
+		root: {
+			height: "64px",
+		},
 	},
 	[device.tablet]: {
-		root: {
-			gridTemplateAreas: `
-				"nav login"
-				"picture chat"
-				"bar bar"`,
-		},
+		root: {},
 	},
 	[device.laptop]: {
 		root: {},
-	},
-
-	root: {
-		width: "100%",
 	},
 	grow: {
 		flexGrow: 1,
@@ -235,12 +211,13 @@ class StreamsAppBar extends PureComponent {
 
 		return (
 			<div className={classes.root}>
-				<AppBar position="static">
+				<AppBar position="fixed">
 					<Toolbar>
 						<IconButton
 							className={classes.menuButton}
 							color="inherit"
 							aria-label="Open drawer"
+							onClick={this.props.handleToggleDrawer}
 						>
 							<MenuIcon />
 						</IconButton>

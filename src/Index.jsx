@@ -10,10 +10,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 
 // components:
-import App from "src/App.jsx";
 import About from "src/About.jsx";
 import FAQ from "src/FAQ.jsx";
-import CurrentPlayers from "src/CurrentPlayers.jsx";
+// import CurrentPlayers from "src/CurrentPlayers.jsx";
 import Streams from "src/Streams.jsx";
 import Stream from "src/Stream.jsx";
 
@@ -43,30 +42,35 @@ const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let preloadedState = {
-	chat: {
-		messages: [],
-		userids: [],
+
+	// account: {
+	//
+	// },
+
+	stream: {
+		chat: {
+			messages: [],
+			userids: [],
+		},
+		players: {
+			controlQueues: [],
+			turnTimers: [],
+			controllerStates: [],
+			count: 8,
+		},
+		time: {
+			server: 0, // server time (in ms)
+			lastServerUpdate: 0, // when it was last updated (in ms)
+			ping: 0,
+		},
+		accountMap: {},
+		waitlist: [],
 	},
-	waitlist: [],
-	players: {
-		controlQueues: [],
-		turnTimers: [],
-		controllerStates: [],
-		count: 8,
+
+	streams: {
+		streamList: [],
 	},
-	// players2: [{
-	// 	controlQueue: [],
-	// 	controllerState: {
-	// 		btns: 0,
-	// 		axes: [128, 128, 128, 128, 0, 0],
-	// 	},
-	// 	turnTimers: {
-	// 		turnStartTime: 0,
-	// 		forfeitStartTime: 0,
-	// 		turnLength: 0,
-	// 		forfeitLength: 0,
-	// 	},
-	// }, ],
+
 	clientInfo: {
 		authToken: null,
 		loggedIn: false,
@@ -82,9 +86,6 @@ let preloadedState = {
 		waitlisted: false,
 		timePlayed: 0,
 	},
-
-	// usernameMap: {},
-	accountMap: {},
 
 	settings: {
 		general: {
@@ -120,24 +121,18 @@ let preloadedState = {
 		theme: "dark",
 	},
 
-	time: {
-		server: 0, // server time (in ms)
-		lastServerUpdate: 0, // when it was last updated (in ms)
-		ping: 0,
-	},
-
 	form: {},
 };
 
-for (let i = 0; i < preloadedState.players.count; i++) {
-	preloadedState.players.turnTimers.push({
+for (let i = 0; i < preloadedState.stream.players.count; i++) {
+	preloadedState.stream.players.turnTimers.push({
 		turnStartTime: 0,
 		forfeitStartTime: 0,
 		turnLength: 0,
 		forfeitLength: 0,
 	});
-	preloadedState.players.controlQueues.push([]);
-	preloadedState.players.controllerStates.push({
+	preloadedState.stream.players.controlQueues.push([]);
+	preloadedState.stream.players.controllerStates.push({
 		btns: 0,
 		axes: [0, 0, 0, 0, 0, 0],
 	});
@@ -211,9 +206,12 @@ let accountServerConnection = socketio("https://remotegames.io", {
 	path: "/8099/socket.io",
 	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 });
-//
+
+
+// import handleActions from "src/sagas";
+import handleAccountEvents from "src/sockets/account";
 // // listen to events and dispatch actions:
-// handleEvents(socket, store.dispatch);
+handleAccountEvents(accountServerConnection, store.dispatch);
 
 // handle outgoing events & listen to actions:
 // and maybe dispatch more actions:
@@ -314,12 +312,12 @@ class Index extends Component {
 									return <FAQ {...props} />;
 								}}
 							/>
-							<Route
+							{/* <Route
 								path="/CurrentPlayers"
 								render={(props) => {
 									return <CurrentPlayers {...props} />;
 								}}
-							/>
+							/> */}
 							<Route
 								path="/streams"
 								render={(props) => {

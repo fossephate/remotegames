@@ -95,8 +95,8 @@ class HostServer {
 		setInterval(this.every30Seconds, 30000);
 		let timer = customSetInterval(this.addTimePlayed, 5000);
 
-		// get host userid:
-		this.getUserInfo();
+		// get host info:
+		this.getHostInfo();
 
 		// listen to clients:
 		this.io.listen(this.port, () => {
@@ -111,10 +111,10 @@ class HostServer {
 				if (!cb) {
 					console.log("no callback (authenticate)");
 				}
-				if (typeof(cb) != "function") {
+				if (typeof cb != "function") {
 					console.log("something went very wrong:");
 					console.log(cb);
-					return
+					return;
 				}
 				let client = this.clients[socket.id];
 				// return if already authenticated:
@@ -774,44 +774,47 @@ class HostServer {
 		this.emitForfeitStartTimes();
 	}
 
-	getUserInfo() {
+	getHostInfo() {
 		this.accountServerConnection.emit(
-			"getUserInfo",
+			"getHostInfo",
 			{ userid: this.hostUserid },
 			(data) => {
 				if (!data.success) {
-					console.log("something went wrong, getUserInfo");
+					console.log("something went wrong, getHostInfo");
 					console.log(data.reason);
 					return;
 				}
 
 				this.hostUser = data.account;
 				this.hostUserid = ("" + this.hostUser._id).trim();
-
-				for (let socketid in this.clients) {
-					if (this.hostUser.modlist.includes(this.clients[socketid].userid)) {
-						this.clients[socketid].isMod = true;
-					} else {
-						this.clients[socketid].isMod = false;
-					}
-					if (this.hostUser.pluslist.includes(this.clients[socketid].userid)) {
-						this.clients[socketid].isPlus = true;
-					} else {
-						this.clients[socketid].isPlus = false;
-					}
-					if (this.hostUser.banlist.includes(this.clients[socketid].userid)) {
-						this.clients[socketid].isBanned = true;
-					} else {
-						this.clients[socketid].isBanned = false;
-					}
-					// has to be last so it isn't overwritten:
-					if (this.clients[socketid].userid === this.hostUserid) {
-						this.clients[socketid].isMod = true;
-						this.clients[socketid].isPlus = true;
-					}
-				}
+				this.setClientPermissions();
 			},
 		);
+	}
+
+	setClientPermissions() {
+		for (let socketid in this.clients) {
+			if (this.hostUser.modlist.includes(this.clients[socketid].userid)) {
+				this.clients[socketid].isMod = true;
+			} else {
+				this.clients[socketid].isMod = false;
+			}
+			if (this.hostUser.pluslist.includes(this.clients[socketid].userid)) {
+				this.clients[socketid].isPlus = true;
+			} else {
+				this.clients[socketid].isPlus = false;
+			}
+			if (this.hostUser.banlist.includes(this.clients[socketid].userid)) {
+				this.clients[socketid].isBanned = true;
+			} else {
+				this.clients[socketid].isBanned = false;
+			}
+			// has to be last so it isn't overwritten:
+			if (this.clients[socketid].userid === this.hostUserid) {
+				this.clients[socketid].isMod = true;
+				this.clients[socketid].isPlus = true;
+			}
+		}
 	}
 
 	every30Seconds() {
@@ -821,7 +824,7 @@ class HostServer {
 			waitlist: this.waitlist,
 		});
 		this.io.emit("serverTime", Date.now());
-		this.getUserInfo();
+		this.getHostInfo();
 	}
 
 	// setInterval(() => {
@@ -856,12 +859,21 @@ let hostServers = {};
 let ip = "remotegames.io";
 // available ports on this server, true means it's available
 let ports = {
-	8100: false,
-	8110: true,
-	8001: true,
-	8002: true,
-	8003: true,
-	8004: true,
+	8050: true,
+	8051: true,
+	8052: true,
+	8053: true,
+	8054: true,
+	8055: true,
+	8056: true,
+	8057: true,
+	8058: true,
+	8059: true,
+	8060: true,
+	8061: true,
+	8062: true,
+	8063: true,
+	8064: true,
 };
 
 // start connection with the account server (same server in this case):
@@ -911,14 +923,7 @@ accountServerConnection.on("stopHost", (data) => {
 });
 
 // for testing:
-let port = 8100;
-ports[port] = true;
-hostServers[port] = new HostServer(
-	port,
-	accountServerConnection,
-	ip,
-	8005,
-	"a",
-	"fosse",
-);
-hostServers[port].init(ip, 8005);
+// let port = 8100;
+// ports[port] = true;
+// hostServers[port] = new HostServer(port, accountServerConnection, ip, 8005, "a", "fosse");
+// hostServers[port].init(ip, 8005);

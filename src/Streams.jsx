@@ -11,16 +11,7 @@ import { connect } from "react-redux";
 // main components:
 import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
 import StreamList from "src/components/Streams/StreamList.jsx";
-
-// loading circle:
-// import LoadingCircle from "src/components/LoadingCircle.jsx";
-
-// import CheckboxSettings from "src/components/CheckboxSettings.jsx";
-
-// components:
-// import PlayerInfo from "src/components/PlayerInfo.jsx";
-// import Waitlist from "src/components/Waitlist.jsx";
-// import ThemeSelector from "src/components/ThemeSelector.jsx";
+import StreamsDrawer from "src/components/Streams/StreamsDrawer.jsx";
 
 // secondary components:
 
@@ -50,20 +41,18 @@ import socketio from "socket.io-client";
 // jss:
 const styles = (theme) => ({
 	root: {
-		padding: "1%",
-		display: "grid",
-		gridTemplateAreas: `
-			"nav"
-			"streams"`,
+		// padding: "1%",
+		display: "flex",
+		flexDirection: "column",
+		// display: "grid",
+		// gridTemplateAreas: `
+		// 	"nav"
+		// 	"streams"`,
 		width: "100%",
-		gridGap: "5px",
+		// gridGap: "5px",
 	},
 	[device.tablet]: {
-		root: {
-			gridTemplateAreas: `
-				"nav"
-				"streams"`,
-		},
+		root: {},
 	},
 	[device.laptop]: {
 		root: {},
@@ -82,11 +71,43 @@ class Streams extends PureComponent {
 		});
 
 		this.state = {
-			streams: [],
+			drawerOpen: true,
 		};
+
+		this.triggered = false;
+
+		this.toggleDrawer = this.toggleDrawer.bind(this);
 	}
 
-	componentDidMount() {}
+	updateDimensions() {
+		if (window.innerWidth < 900 && this.state.drawerOpen) {
+      this.setState({ drawerOpen: false });
+    }
+		if (window.innerWidth > 1000) {
+      this.setState({ drawerOpen: true });
+    }
+	}
+
+	componentWillMount() {
+		this.updateDimensions();
+	}
+
+	componentDidMount() {
+		window.addEventListener("resize", this.updateDimensions.bind(this));
+	}
+
+	componentWillUnmount() {
+		window.removeEventListener("resize", this.updateDimensions.bind(this));
+	}
+
+	toggleDrawer(bool) {
+		if (typeof(bool) === "boolean") {
+			this.setState({ drawerOpen: !this.state.drawerOpen });
+		} else {
+			this.setState({ drawerOpen: bool });
+		}
+		this.setState({ drawerOpen: !this.state.drawerOpen });
+	}
 
 	render() {
 		console.log("re-rendering streams.");
@@ -95,15 +116,18 @@ class Streams extends PureComponent {
 
 		return (
 			<div className={classes.root}>
-				<StreamsAppBar />
-				<StreamList streams={this.state.streams} />
+				<StreamsAppBar drawerOpen={this.state.drawerOpen} handleToggleDrawer={this.toggleDrawer} />
+				<StreamsDrawer drawerOpen={this.state.drawerOpen} handleToggleDrawer={this.toggleDrawer} />
+				<StreamList drawerOpen={this.state.drawerOpen} streams={this.props.streamList} />
 			</div>
 		);
 	}
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		streamList: state.streams.streamList,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -118,9 +142,3 @@ export default compose(
 		mapDispatchToProps,
 	),
 )(Streams);
-
-// /* FORCE HTTPS */
-// if (window.location.protocol != "https:") {
-// 	window.location.href =
-// 		"https:" + window.location.href.substring(window.location.protocol.length);
-// }

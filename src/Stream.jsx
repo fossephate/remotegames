@@ -14,15 +14,16 @@ import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/pla
 
 // redux-saga:
 import createSagaMiddleware from "redux-saga";
-import handleActions from "src/sagas";
-import handleEvents from "src/sockets";
+// import handleStreamActions from "src/sagas";
+import handleStreamActions from "src/sagas/stream";
+import handleStreamEvents from "src/sockets/stream";
 
 // main components:
 import LoginArea from "src/components/LoginArea.jsx";
-import NavTabs from "src/components/NavTabs.jsx";
-import Picture from "src/components/Picture.jsx";
-import Chat from "src/components/Chat/Chat.jsx";
-import StreamInfo from "src/components/StreamInfo.jsx";
+import NavTabs from "src/components/Stream/NavTabs.jsx";
+import Picture from "src/components/Stream/Picture.jsx";
+import Chat from "src/components/Stream/Chat/Chat.jsx";
+import StreamInfo from "src/components/Stream/StreamInfo.jsx";
 
 // loading circle:
 // import LoadingCircle from "src/components/LoadingCircle.jsx";
@@ -35,8 +36,9 @@ import StreamInfo from "src/components/StreamInfo.jsx";
 // secondary components:
 
 // modals:
-import LoginModal from "src/components/Modals/LoginModal.jsx";
-import RegisterModal from "src/components/Modals/RegisterModal.jsx";
+// import LoginModal from "src/components/Modals/LoginModal.jsx";
+// import RegisterModal from "src/components/Modals/RegisterModal.jsx";
+import LoginRegisterModal from "src/components/Modals/LoginRegisterModal.jsx";
 import AccountModal from "src/components/Modals/AccountModal.jsx";
 import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
@@ -75,26 +77,7 @@ import Lagless2 from "libs/lagless/lagless2.js";
 // import Lagless4 from "libs/lagless/lagless4.js";
 import LaglessAudio from "libs/lagless/laglessAudio.js";
 
-
-let sendInputTimer;
-let isMobile = false;
-
-// let settings = {};
-
 // swal("stream is down right now, don't put anything in #bug-reports.");
-
-/* MOBILE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-// check if on mobile
-if (
-	/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(
-		navigator.userAgent,
-	) ||
-	/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(
-		navigator.userAgent.substr(0, 4),
-	)
-) {
-	isMobile = true;
-}
 
 // jss:
 const styles = (theme) => ({
@@ -137,7 +120,7 @@ class Stream extends Component {
 		this.socket = null;
 		this.accountServerConnection = this.props.accountServerConnection;
 
-		// this.exitFullscreen = this.exitFullscreen.bind(this);
+		this.exitFullscreen = this.exitFullscreen.bind(this);
 
 		this.sendControllerState = this.sendControllerState.bind(this);
 		this.afk = this.afk.bind(this);
@@ -145,12 +128,8 @@ class Stream extends Component {
 
 		this.state = {};
 
-		this.inputHandler = new InputHandler(isMobile);
+		this.inputHandler = new InputHandler(false);
 	}
-
-	// static getDerivedStateFromProps(props, state) {
-	// // ...
-	// }
 
 	start(data) {
 		this.socket = socketio(`https://${data.hostServerIP}`, {
@@ -159,14 +138,12 @@ class Stream extends Component {
 		});
 
 		// listen to events and dispatch actions:
-		handleEvents(this.socket, this.props.store.dispatch);
-
-		let socket2 = this.socket;
-
+		handleStreamEvents(this.socket, this.props.store.dispatch);
 		// handle outgoing events & listen to actions:
 		// and maybe dispatch more actions:
-		this.props.sagaMiddleware.run(handleActions, {
-			socket: socket2,
+		this.props.sagaMiddleware.run(handleStreamActions, {
+			socket: this.socket,
+			dispatch: this.props.store.dispatch,
 		});
 
 
@@ -210,48 +187,36 @@ class Stream extends Component {
 
 	componentDidMount() {
 
-		if (window.location.pathname === "/") {
-			this.start({
-				videoServerIP: "remotegames.io",
-				videoServerPort: 8005,
-				hostServerIP: "remotegames.io",
-				hostServerPort: 8100,
-			});
-		} else {
+		// let authToken = Cookie.get("RemoteGames");
+		// if (authToken) {
+		// 	this.accountServerConnection.emit("authenticate", {
+		// 		authToken: authToken,
+		// 		usernameIndex: 0,
+		// 		socketid: 1,
+		// 	}, (data) => {
+		// 		if (data.success) {
+		// 			console.log(data);
+		// 			this.props.updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true });
+		// 		} else {
+		// 			alert(`AUTHENTICATION_FAILURE: ${data.reason}`);
+		// 			// remove the authToken if it doesn't work:
+		// 			if (data.reason === "ACCOUNT_NOT_FOUND") {
+		// 				Cookie.remove("RemoteGames");
+		// 				this.props.updateClientInfo({ authToken: null });
+		// 			}
+		// 		}
+		// 	});
+		// }
 
+		this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username}, (data) => {
 
-			let authToken = Cookie.get("RemoteGames");
-			if (authToken) {
-				console.log("test");
-				this.accountServerConnection.emit("authenticate", {
-					authToken: authToken,
-					usernameIndex: 0,
-					socketid: 1,
-				}, (data) => {
-					if (data.success) {
-						console.log(data);
-						this.props.updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true });
-					} else {
-						alert(`AUTHENTICATION_FAILURE: ${data.reason}`);
-						// remove the authToken if it doesn't work:
-						if (data.reason === "ACCOUNT_NOT_FOUND") {
-							Cookie.remove("RemoteGames");
-							this.props.updateClientInfo({ authToken: null });
-						}
-					}
-				});
+			if (!data.success) {
+				alert(data.reason);
+				return;
 			}
 
-			this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username}, (data) => {
-
-				if (!data.success) {
-					alert(data.reason);
-					return;
-				}
-
-				this.start(data);
-			});
-		}
+			this.start(data);
+		});
 
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
@@ -558,7 +523,7 @@ class Stream extends Component {
 
 				{/* selects the first matching path: */}
 				<Switch>
-					<Route
+					{/* <Route
 						path="/login"
 						render={(props) => {
 							return <LoginModal {...props} />;
@@ -568,6 +533,12 @@ class Stream extends Component {
 						path="/register"
 						render={(props) => {
 							return <RegisterModal {...props} />;
+						}}
+					/> */}
+					<Route
+						path="/(login|register)"
+						render={(props) => {
+							return <LoginRegisterModal {...props} />;
 						}}
 					/>
 					<Route
@@ -579,7 +550,7 @@ class Stream extends Component {
 					<Route
 						path="/remap"
 						render={(props) => {
-							return <InputMapperModal {...props} inputHandler={inputHandler} />;
+							return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
 						}}
 					/>
 				</Switch>
@@ -590,10 +561,10 @@ class Stream extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		controlQueues: state.players.controlQueues,
+		controlQueues: state.stream.players.controlQueues,
 		clientInfo: state.clientInfo,
 		settings: state.settings,
-		playerCount: state.players.count,
+		playerCount: state.stream.players.count,
 		// todo: modal
 	};
 };
@@ -623,3 +594,11 @@ export default compose(
 		mapDispatchToProps,
 	),
 )(Stream);
+
+// todo: https://stackoverflow.com/questions/19014250/rerender-view-on-browser-resize-with-react
+// $(window).resize(
+// 	_.throttle((event) => {
+// 		$("#chat").outerHeight(0);
+// 		$("#chat").outerHeight($("#picture").outerHeight());
+// 	}, 1000),
+// );

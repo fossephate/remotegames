@@ -1,4 +1,4 @@
-import * as types from "../actions/ActionTypes.js";
+import * as types from "src/actions/ActionTypes.js";
 import { takeEvery } from "redux-saga/effects";
 
 const handleClientInfoActions = (params) => {

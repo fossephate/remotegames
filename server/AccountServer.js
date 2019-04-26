@@ -208,9 +208,27 @@ let accountSchema = Schema({
 	hostServerIP: String,
 	hostServerPort: Number,
 
-	streamTitle: String,
-	streamDescription: String,
-	thumbnailURL: String,
+	streamSettings: {
+		title: String,
+		description: String,
+		thumbnailURL: String,
+
+		videoBitrate: Number,
+		captureRate: Number,
+		resolution: Number,
+
+		audioDevice: String,
+		windowTitle: String,
+		capture: String, // "window" or "desktop"
+		offsetX: Number,
+		offsetY: Number,
+		width: Number,
+		height: Number,
+
+		controllerCount: Number,
+		keyboardEnabled: Boolean,
+		mouseEnabled: Boolean,
+	},
 
 	adminlist: [],
 	modlist: [],
@@ -734,14 +752,14 @@ io.on("connection", (socket) => {
 
 		let reply = { socketid: data.socketid };
 
-		if (!data.socketid) {
-			console.log("socketid was not defined!");
-			cb({
-				success: false,
-				reason: "INVALID_ARGUMENTS",
-			});
-			return;
-		}
+		// if (!data.socketid) {
+		// 	console.log("socketid was not defined!");
+		// 	cb({
+		// 		success: false,
+		// 		reason: "INVALID_ARGUMENTS",
+		// 	});
+		// 	return;
+		// }
 
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
@@ -896,8 +914,12 @@ io.on("connection", (socket) => {
 			});
 	});
 
-	socket.on("startStreaming", (data) => {
+	socket.on("startStreaming", (data, cb) => {
 		// let reply = { socketid: data.socketid };
+		if (!cb) {
+			console.log("no callback (startStreaming)");
+			return;
+		}
 
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
@@ -1000,13 +1022,18 @@ io.on("connection", (socket) => {
 				if (hostPort) {
 					hostServers[hostID].ports[hostPort] = true;
 				}
+				cb({
+					success: false,
+					reason: "NO_AVAILABLE_PORTS",
+				});
 				return;
 			}
 
 			// start streaming:
 
 			// send to client:
-			socket.emit("startStream", {
+			cb({
+				success: true,
 				videoIP: videoIP,
 				videoPort: videoPort,
 				hostIP: hostIP,
@@ -1031,8 +1058,24 @@ io.on("connection", (socket) => {
 			account.hostServerIP = hostIP;
 			account.hostServerPort = hostPort;
 			// stream details:
-			account.streamTitle = data.streamTitle;
-			account.thumbnailURL = data.thumbnailURL;
+			account.streamSettings.title = data.streamSettings.streamTitle;
+			account.streamSettings.thumbnailURL = data.streamSettings.thumbnailURL;
+			// account.streamSettings.description = data.streamSettings.description;
+			account.streamSettings.captureRate = data.streamSettings.captureRate;
+			account.streamSettings.resolution = data.streamSettings.resolution;
+			account.streamSettings.videoBitrate = data.streamSettings.videoBitrate;
+
+			account.streamSettings.controllerCount = data.streamSettings.controllerCount;
+			// account.streamSettings.keyboardEnabled = data.streamSettings.keyboardEnabled;
+			// account.streamSettings.mouseEnabled = data.streamSettings.mouseEnabled;
+			account.streamSettings.windowTitle = data.streamSettings.windowTitle;
+			account.streamSettings.capture = data.streamSettings.capture
+			account.streamSettings.audioDevice = data.streamSettings.audioDevice;
+			account.streamSettings.width = data.streamSettings.width;
+			account.streamSettings.height = data.streamSettings.height;
+			account.streamSettings.offsetX = data.streamSettings.offsetX;
+			account.streamSettings.offsetY = data.streamSettings.offsetY;
+
 			// update the account details:
 			account.save((error) => {
 				// error check:
@@ -1119,6 +1162,39 @@ io.on("connection", (socket) => {
 		});
 	});
 
+	// get previously used stream settings:
+	socket.on("getStreamSettings", (data, cb) => {
+
+		if (!cb) {
+			console.log("no callback (getStreamSettings)");
+			return;
+		}
+
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				socket.emit("streaming", {
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			// send to client:
+			cb({
+				success: true,
+				streamSettings: {
+					...account.streamSettings,
+				},
+			});
+		});
+	});
+
 	// register servers:
 	socket.on("registerVideoServer", (data) => {
 		if (data.secret !== config.ROOM_SECRET) {
@@ -1171,7 +1247,7 @@ io.on("connection", (socket) => {
 		});
 	});
 
-	socket.on("getUserInfo", (data, cb) => {
+	socket.on("getHostInfo", (data, cb) => {
 		if (!hostServers.hasOwnProperty(socket.id)) {
 			return;
 		}
@@ -1179,7 +1255,6 @@ io.on("connection", (socket) => {
 		// hack:
 		// todo: not this:
 		if (data.userid.length === 24) {
-
 			// try and get account:
 			Account.findOne({ _id: data.userid }, (error, account) => {
 				// error check:
@@ -1193,9 +1268,7 @@ io.on("connection", (socket) => {
 					cb({ success: false, reason: "ACCOUNT_NOT_FOUND" });
 				}
 			});
-
 		} else {
-
 			// try and get account:
 			Account.findOne({ usernameLower: data.userid.toLowerCase() }, (error, account) => {
 				// error check:
@@ -1209,11 +1282,7 @@ io.on("connection", (socket) => {
 					cb({ success: false, reason: "ACCOUNT_NOT_FOUND" });
 				}
 			});
-
 		}
-
-
-
 	});
 
 	// check if it's one of the videoServers / hostServers:
@@ -1267,11 +1336,15 @@ setInterval(() => {
 		.then((accounts) => {
 			streams = [];
 
+			if (!accounts) {
+				return;
+			}
+
 			for (let i = 0; i < accounts.length; i++) {
 				let stream = {
-					title: accounts[i].streamTitle,
+					title: accounts[i].streamSettings.title,
 					username: accounts[i].username,
-					thumbnailURL: accounts[i].thumbnailURL,
+					thumbnailURL: accounts[i].streamSettings.thumbnailURL,
 				};
 				streams.push(stream);
 			}

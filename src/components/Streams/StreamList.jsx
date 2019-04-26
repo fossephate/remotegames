@@ -33,22 +33,34 @@ import { compose } from "recompose";
 import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
+import classNames from "classnames";
 
 // jss:
 const styles = (theme) => ({
 	root: {
 		// width: "100%",
 		padding: "1%",
-		// display: "flex",
-		// justifyContent: "space-evenly",
-		// flexWrap: "wrap",
+		// margin: "0 1%",
 		display: "grid",
+		justifyContent: "center",
 		// gridTemplateRows: "repeat(4, 1fr)",
 		// gridTemplateRows: "repeat(4, 400px)",
 		// gridTemplateColumns: "repeat(2, 1fr)",
 		// gridTemplateColumns: "repeat(3, 1fr)",
 		gridTemplateColumns: "repeat(auto-fit, 300px)",
-		gridGap: "10px",
+		// gridGap: "10px",
+		gridGap: "60px 40px",
+		transition: theme.transitions.create(["width", "margin"], {
+			easing: theme.transitions.easing.sharp,
+			duration: theme.transitions.duration.enteringScreen,
+		}),
+	},
+	drawerOpen: {
+		marginLeft: "240px",
+		width: "calc(100% - 240px)",
+	},
+	drawerClose: {
+		width: "100%",
 	},
 	card: {
 		width: 300,
@@ -90,11 +102,10 @@ class StreamList extends PureComponent {
 	}
 
 	changeURL() {
-		this.props.history.push("")
+		this.props.history.push("");
 	}
 
 	renderStreams() {
-
 		const { classes, streams } = this.props;
 
 		let cards = [];
@@ -112,9 +123,11 @@ class StreamList extends PureComponent {
 			let stream = streams[i];
 			let card = (
 				<Card key={i} className={classes.card} elevation={5}>
-					<CardActionArea onClick={() => {
-						this.props.history.push(`/s/${stream.username}`)
-					}}>
+					<CardActionArea
+						onClick={() => {
+							this.props.history.push(`/s/${stream.username}`);
+						}}
+					>
 						<CardMedia
 							className={classes.media}
 							image={stream.thumbnailURL}
@@ -130,6 +143,14 @@ class StreamList extends PureComponent {
 			cards.push(card);
 		}
 
+		if (cards.length === 0) {
+			return (
+				<Paper elevation={4} style={{ width: 300 }}>
+					<Typography component="p">No streams online right now.</Typography>
+				</Paper>
+			);
+		}
+
 		return cards;
 	}
 
@@ -141,7 +162,13 @@ class StreamList extends PureComponent {
 		const { classes } = this.props;
 
 		return (
-			<Paper className={classes.root} elevation={5}>
+			<Paper
+				className={classNames(classes.root, {
+					[classes.drawerOpen]: this.props.drawerOpen,
+					[classes.drawerClose]: !this.props.drawerOpen,
+				})}
+				elevation={5}
+			>
 				{this.renderStreams()}
 			</Paper>
 		);
@@ -158,7 +185,7 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withRouter,
-	withStyles(styles),
+	withStyles(styles, { withTheme: true }),
 	connect(
 		mapStateToProps,
 		mapDispatchToProps,
