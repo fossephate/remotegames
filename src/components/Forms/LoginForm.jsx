@@ -114,27 +114,32 @@ const styles = (theme) => ({
 		// marginRight: "5px",
 		// textAlign: "center",
 	},
+	field: {
+		margin: "20px 0px",
+	},
 });
 
 const LoginForm = (props) => {
 	const { handleSubmit, pristine, reset, submitting, classes } = props;
 	return (
 		<form onSubmit={handleSubmit}>
-			<div>
+			<div className={classes.field}>
 				<Field
 					name="user"
 					component={renderTextField}
 					label="Username or Email"
-					variant="outlined"
+					variant="standard"
+					fullWidth
 				/>
 			</div>
-			<div>
+			<div className={classes.field}>
 				<Field
 					name="password"
 					component={renderTextField}
 					label="Password"
 					type="password"
-					variant="outlined"
+					variant="standard"
+					fullWidth
 				/>
 			</div>
 			<div className={classes.buttons}>
@@ -143,6 +148,7 @@ const LoginForm = (props) => {
 					color="primary"
 					type="submit"
 					disabled={pristine || submitting}
+					fullWidth
 				>
 					Login
 				</Button>

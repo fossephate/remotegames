@@ -8,6 +8,7 @@ function customSetInterval(func, time) {
 	let lastTime = Date.now(),
 		lastDelay = time,
 		outp = {};
+
 	function tick() {
 		func();
 		let now = Date.now(),
@@ -20,7 +21,6 @@ function customSetInterval(func, time) {
 	outp.id = setTimeout(tick, time);
 	return outp;
 }
-// let timer = customSetInterval(addTimePlayed, 1000);
 
 // export class Host {
 class HostServer {
@@ -124,8 +124,7 @@ class HostServer {
 
 				// send socket.id and auth token:
 				this.accountServerConnection.emit(
-					"authenticate",
-					{
+					"authenticate", {
 						socketid: socket.id,
 						authToken: data.authToken,
 						ip: client.ip,
@@ -187,9 +186,12 @@ class HostServer {
 					return;
 				}
 				let client = this.clients[socket.id];
-				// if (client && client.userid) {
-				// 	await redisClient.setAsync(`users:${client.userid}`, socket.id, "XX", "EX", 30);
-				// }
+				if (client && client.userid) {
+					this.accountServerConnection.emit("keepAlive", {
+						userid: client.userid,
+						socketid: socket.id,
+					});
+				}
 			});
 
 			socket.on("disconnect", () => {
@@ -243,6 +245,7 @@ class HostServer {
 				}
 				this.sendMessage(msgObj);
 				this.parseMessage(client, msgObj);
+				console.log(msgObj);
 			});
 
 			/* INPUT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -554,8 +557,7 @@ class HostServer {
 			let n = /^!un/.test(message.text) ? 7 : 5;
 			let userid = message.text.substring(n);
 			this.accountServerConnection.emit(
-				"ban",
-				{
+				"ban", {
 					isBanned: n === 5,
 					issuerUserid: client.userid,
 					hostUserid: this.hostUserid,
@@ -776,8 +778,7 @@ class HostServer {
 
 	getHostInfo() {
 		this.accountServerConnection.emit(
-			"getHostInfo",
-			{ userid: this.hostUserid },
+			"getHostInfo", { userid: this.hostUserid },
 			(data) => {
 				if (!data.success) {
 					console.log("something went wrong, getHostInfo");
@@ -889,7 +890,6 @@ function register() {
 		ports: ports,
 	});
 }
-register();
 setInterval(register, 1000 * 60);
 
 accountServerConnection.on("startHost", (data) => {
@@ -923,7 +923,9 @@ accountServerConnection.on("stopHost", (data) => {
 });
 
 // for testing:
-// let port = 8100;
-// ports[port] = true;
-// hostServers[port] = new HostServer(port, accountServerConnection, ip, 8005, "a", "fosse");
-// hostServers[port].init(ip, 8005);
+let port = 8050;
+ports[port] = false;
+hostServers[port] = new HostServer(port, accountServerConnection, ip, 8000, "a", "fosse");
+hostServers[port].init();
+
+register();

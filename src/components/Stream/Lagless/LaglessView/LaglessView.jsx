@@ -66,20 +66,8 @@ class LaglessView extends PureComponent {
 		});
 
 		let controllerNumber = 0;
-		if (this.props.streamNumber == 1) {
-			controllerNumber = 4;
-		}
-		if (this.props.streamNumber == 2) {
-			controllerNumber = 5;
-		}
-		if (this.props.streamNumber == 3) {
-			controllerNumber = 6;
-		}
-		if (this.props.streamNumber == 4) {
-			controllerNumber = 7;
-		}
 
-		let isXbox = this.props.streamNumber == 1;
+		let isXbox = this.props.streamNumber === 1;
 		let controllerType = isXbox ? "xbox" : "joycon";
 
 		return (
@@ -91,9 +79,7 @@ class LaglessView extends PureComponent {
 					/>
 				) : null}
 
-				{displayLagless ? (
-					<LaglessCanvas num={this.props.num} classes={videoClasses} />
-				) : null}
+				{displayLagless ? <LaglessCanvas classes={videoClasses} /> : null}
 				<iframe
 					id="twitchVideo"
 					className={classes.twitch}

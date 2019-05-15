@@ -26,15 +26,17 @@ const styles = (theme) => ({
 		gridArea: "picture",
 		display: "flex",
 		flexDirection: "column",
+		// justifyContent: "space-between",
 		width: "100%",
 		padding: "5px",
 		margin: 0,
-		overflowX: "hidden",
-		height: "calc(47vw)",
+		overflow: "hidden",
+		// height: "calc(47vw)",
+
 	},
 	[device.tablet]: {
 		root: {
-			height: "calc(34vw)",
+			// height: "calc(34vw)",
 		},
 	},
 	hideChat: {
@@ -44,11 +46,10 @@ const styles = (theme) => ({
 		gridRow: "1",
 		gridColumn: "1/3",
 		padding: "0px",
-	}
+	},
 });
 
 class Picture extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
@@ -63,8 +64,8 @@ class Picture extends PureComponent {
 
 		return (
 			<Paper id="picture" elevation={3} className={pictureClasses}>
-				<LaglessView num={this.props.tab}/>
-				<LaglessBar/>
+				<LaglessView />
+				<LaglessBar />
 			</Paper>
 		);
 	}

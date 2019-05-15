@@ -38,8 +38,7 @@ const styles = (theme) => ({
 		justifyContent: "space-evenly",
 		alignSelf: "center",
 		width: "100%",
-		paddingTop: "4px",
-		paddingBottom: "4px",
+		padding: "4px 0px",
 		marginTop: "4px",
 		// marginTop: "-40px",
 		backgroundColor:

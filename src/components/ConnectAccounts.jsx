@@ -82,7 +82,7 @@ class ConnectAccounts extends PureComponent {
 		const { classes } = this.props;
 
 		return (
-			<Paper className={classes.root} elevation={2}>
+			<Paper className={classes.root} elevation={0}>
 				{this.props.connectedAccounts.indexOf("twitch") == -1 ? (
 					<div
 						className={classes.connectWithButton}

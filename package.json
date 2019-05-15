@@ -6,12 +6,14 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:dev": "webpack --progress --config webpack.dev.js",
-    "watch:dev": "webpack --env dev --progress --watch --config webpack.dev.js",
     "build:prod": "webpack --progress --config webpack.prod.js",
+    "watch:dev": "webpack --env dev --progress --watch --config webpack.dev.js",
     "watch:prod": "webpack --env prod --progress --watch --config webpack.prod.js",
     "prestart": "./prestart.sh",
     "start": "./start.sh 2>&1 | tee -a ./server/log.txt",
-    "start-account": "./start-account-server.sh",
+    "start-account": "./start-account.sh",
+    "start-host": "./start-host.sh",
+    "start-video": "./start-video.sh",
     "poststop": "./poststop.sh"
   },
   "sideEffects": [
@@ -56,6 +58,7 @@
     "immer": "^1.12.1",
     "jquery": "^3.3.1",
     "js-cookie": "^2.2.0",
+    "js-yaml": "^3.13.1",
     "keycode": "^2.2.0",
     "keymaster": "^1.6.2",
     "localforage": "^1.7.2",
@@ -92,6 +95,7 @@
     "redux-form": "^8.1.0",
     "redux-saga": "^0.16.2",
     "redux-thunk": "^2.3.0",
+    "request": "^2.88.0",
     "simple-peer": "^9.2.1",
     "snex": "^0.5.0",
     "socket.io": "^2.1.1",

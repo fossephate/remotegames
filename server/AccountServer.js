@@ -30,6 +30,8 @@ const DISCORD_CLIENT_SECRET = config.DISCORD_CLIENT_SECRET;
 const DISCORD_CALLBACK_URL = config.DISCORD_CALLBACK_URL;
 const SESSION_SECRET = config.SESSION_SECRET;
 
+const yaml = require("js-yaml");
+const request = require("request");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 10;
@@ -207,6 +209,10 @@ let accountSchema = Schema({
 	videoServerPort: Number,
 	hostServerIP: String,
 	hostServerPort: Number,
+
+	directMessages: {
+		// sorted by userid, with lists of messages:
+	},
 
 	streamSettings: {
 		title: String,
@@ -593,6 +599,17 @@ app.get("/deleteDB", (req, res) => {
 	// 	res.send(`<script>window.location.href = "https://remotegames.io";</script>`);
 });
 
+app.get("/download", (req, res) => {
+	request(
+		"https://s3.amazonaws.com/remote-games-host/latest.yml",
+		{ json: true },
+		(err, res2, body) => {
+			let path = yaml.load(body).path;
+			res.redirect(302, `https://s3.amazonaws.com/remote-games-host/${path}`);
+		},
+	);
+});
+
 server.listen(port, () => {
 	console.log("Account server listening at port %d", port);
 });
@@ -686,7 +703,11 @@ io.on("connection", (socket) => {
 							throw error;
 						}
 						console.log("Account created.");
-						cb({ success: true });
+						cb({
+							success: true,
+							authToken: newAccount.authToken,
+							clientInfo: clientInfoFromAccount(newAccount),
+						});
 					});
 				});
 			});
@@ -723,13 +744,12 @@ io.on("connection", (socket) => {
 					});
 					return;
 				} else {
-					let clientInfo = clientInfoFromAccount(account);
 					bcrypt.compare(data.password, account.password).then((result) => {
 						if (result) {
 							cb({
 								success: true,
 								authToken: account.authToken,
-								clientInfo: clientInfo,
+								clientInfo: clientInfoFromAccount(account),
 								...reply,
 							});
 						} else {
@@ -750,16 +770,17 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		let reply = { socketid: data.socketid };
+		if (!data.socketid) {
+			// console.log("socketid was not defined!");
+			// cb({
+			// 	success: false,
+			// 	reason: "INVALID_ARGUMENTS",
+			// });
+			// return;
+			data.socketid = "NOT_PROVIDED";
+		}
 
-		// if (!data.socketid) {
-		// 	console.log("socketid was not defined!");
-		// 	cb({
-		// 		success: false,
-		// 		reason: "INVALID_ARGUMENTS",
-		// 	});
-		// 	return;
-		// }
+		let reply = { socketid: data.socketid };
 
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
@@ -784,10 +805,15 @@ io.on("connection", (socket) => {
 				.setAsync(`users:${userid}`, data.socketid, "NX", "EX", 30)
 				.then((success) => {
 					// todo: enable / fix:
-					// if (!success) {
-					// 	socket.emit("authenticated", {success: false, reason: "ALREADY_LOGGED_IN", ...reply});
-					// 	return;
-					// }
+					if (!success && data.socketid !== "NOT_PROVIDED") {
+						// socket.emit("authenticated", {success: false, reason: "ALREADY_LOGGED_IN", ...reply});
+						cb({
+							success: false,
+							reason: "ALREADY_LOGGED_IN",
+							...reply,
+						});
+						return;
+					}
 
 					// console.log("registering account.");
 
@@ -868,6 +894,14 @@ io.on("connection", (socket) => {
 	// 	}
 	// });
 
+	socket.on("keepAlive", async (data) => {
+		// must come from a host server:
+		if (!hostServers.hasOwnProperty(socket.id)) {
+			return;
+		}
+		await redisClient.setAsync(`users:${data.userid}`, data.socketid, "XX", "EX", 30);
+	});
+
 	socket.on("getStreams", (data, cb) => {
 		if (!cb) {
 			console.log("no callback (getStreams)");
@@ -921,6 +955,14 @@ io.on("connection", (socket) => {
 			return;
 		}
 
+		if (!data.authToken) {
+			cb({
+				success: false,
+				reason: "NOT_LOGGED_IN",
+			});
+			return;
+		}
+
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
 			// error check:
@@ -929,7 +971,7 @@ io.on("connection", (socket) => {
 			}
 			// acount doesn't exist:
 			if (!account) {
-				socket.emit("streaming", {
+				cb({
 					success: false,
 					reason: "ACCOUNT_NOT_FOUND",
 				});
@@ -938,7 +980,7 @@ io.on("connection", (socket) => {
 
 			if (account.isStreaming) {
 				console.log("already streaming!");
-				socket.emit("streaming", {
+				cb({
 					success: false,
 					reason: "ALREADY_STREAMING",
 				});
@@ -1069,7 +1111,7 @@ io.on("connection", (socket) => {
 			// account.streamSettings.keyboardEnabled = data.streamSettings.keyboardEnabled;
 			// account.streamSettings.mouseEnabled = data.streamSettings.mouseEnabled;
 			account.streamSettings.windowTitle = data.streamSettings.windowTitle;
-			account.streamSettings.capture = data.streamSettings.capture
+			account.streamSettings.capture = data.streamSettings.capture;
 			account.streamSettings.audioDevice = data.streamSettings.audioDevice;
 			account.streamSettings.width = data.streamSettings.width;
 			account.streamSettings.height = data.streamSettings.height;
@@ -1082,12 +1124,18 @@ io.on("connection", (socket) => {
 				if (error) {
 					throw error;
 				}
+				// re-generate stream list:
+				generateStreamList();
 			});
 		});
 	});
 
-	socket.on("stopStreaming", (data) => {
+	socket.on("stopStreaming", (data, cb) => {
 		// let reply = { socketid: data.socketid };
+		if (!cb) {
+			console.log("no callback (stopStreaming)");
+			return;
+		}
 
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
@@ -1097,7 +1145,7 @@ io.on("connection", (socket) => {
 			}
 			// acount doesn't exist:
 			if (!account) {
-				socket.emit("streaming", {
+				cb({
 					success: false,
 					reason: "ACCOUNT_NOT_FOUND",
 				});
@@ -1105,8 +1153,7 @@ io.on("connection", (socket) => {
 			}
 
 			if (!account.isStreaming) {
-				console.log("wasn't streaming!");
-				socket.emit("streaming", {
+				cb({
 					success: false,
 					reason: "WAS_NOT_STREAMING",
 				});
@@ -1121,9 +1168,11 @@ io.on("connection", (socket) => {
 				if (error) {
 					throw error;
 				}
-				// socket.emit("streaming", {
-				// 	success: true,
-				// });
+				cb({
+					success: true,
+				});
+				// re-generate stream list:
+				generateStreamList();
 			});
 
 			// stop the host and video servers:
@@ -1164,7 +1213,6 @@ io.on("connection", (socket) => {
 
 	// get previously used stream settings:
 	socket.on("getStreamSettings", (data, cb) => {
-
 		if (!cb) {
 			console.log("no callback (getStreamSettings)");
 			return;
@@ -1296,13 +1344,10 @@ io.on("connection", (socket) => {
 	});
 
 	// on connect:
-	socket.emit("streams", streams);
+	// socket.emit("streams", streams);
 });
 
-// do every once in a while:
-setInterval(() => {
-	// io.emit("accountMap", accountMap);
-
+function sendLocalizedAccountMaps() {
 	// create and send an accountMap (from the master map) to each connected host server:
 	// let accountMaps = {};
 	// for (let key in masterAccountMap) {
@@ -1326,11 +1371,13 @@ setInterval(() => {
 	for (let hostSocketid in localizedAccountMaps) {
 		io.to(hostSocketid).emit("accountMap", localizedAccountMaps[hostSocketid]);
 	}
+}
 
+function sendServerTime() {
 	io.emit("serverTime", Date.now());
-}, 30000);
+}
 
-setInterval(() => {
+function generateStreamList() {
 	Account.find({ isStreaming: true })
 		.exec()
 		.then((accounts) => {
@@ -1351,4 +1398,41 @@ setInterval(() => {
 
 			// io.emit("streams", streams);
 		});
-}, 120000);
+}
+
+// do every once in a while:
+setInterval(sendLocalizedAccountMaps, 30000);
+setInterval(sendServerTime, 30000);
+setInterval(generateStreamList, 120000);
+
+// for testing:
+// try and get account by authToken:
+Account.findOne({ username: "fosse" }).exec((error, account) => {
+	// error check:
+	if (error) {
+		throw error;
+	}
+	// acount doesn't exist:
+	if (!account) {
+		return;
+	}
+
+	// update account info:
+	account.isStreaming = true;
+	account.videoServerIP = "remotegames.io";
+	account.videoServerPort = 8000;
+	account.hostServerIP = "remotegames.io";
+	account.hostServerPort = 8050;
+	account.streamSettings.title = "Nintendo Switch";
+	account.streamSettings.description = "";
+	account.streamSettings.thumbnailURL = "https://i.imgur.com/Negv09l.jpg";
+
+	// update the account details:
+	account.save((error) => {
+		// error check:
+		if (error) {
+			throw error;
+		}
+		generateStreamList();
+	});
+});

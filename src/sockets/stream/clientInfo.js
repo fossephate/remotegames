@@ -57,24 +57,24 @@ const clientInfoEvents = (socket, dispatch) => {
 		localforage.setItem("banned", "banned");
 	});
 
-	// reconnect:
-	socket.on("disconnect", (data) => {
-		console.log("lost connection, attempting reconnect1.");
-		socket.connect();
-		// re-authenticate if the connection was successful
-		setTimeout(() => {
-			if (socket.connected) {
-				authenticate(socket, dispatch);
-			}
-		}, 1000);
-	});
-
-	// todo: make this not necessary
-	setInterval(() => {
-		if (socket.connected) {
-			authenticate(socket, dispatch);
-		}
-	}, 120000); // 2 minutes
+	// // reconnect:
+	// socket.on("disconnect", (data) => {
+	// 	console.log("lost connection, attempting reconnect1.");
+	// 	socket.connect();
+	// 	// re-authenticate if the connection was successful
+	// 	setTimeout(() => {
+	// 		if (socket.connected) {
+	// 			authenticate(socket, dispatch);
+	// 		}
+	// 	}, 1000);
+	// });
+	//
+	// // todo: make this not necessary
+	// setInterval(() => {
+	// 	if (socket.connected) {
+	// 		authenticate(socket, dispatch);
+	// 	}
+	// }, 120000); // 2 minutes
 
 	return socket;
 };

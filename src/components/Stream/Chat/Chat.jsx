@@ -18,13 +18,15 @@ const styles = (theme) => ({
 		display: "flex",
 		flexDirection: "column",
 		justifyContent: "space-between",
-		flex: "1",
+		// flex: "1",
 		padding: "5px",
-		height: "calc(34vw)",
+		// height: "calc(34vw)",
+		// new:
+		position: "relative",
 	},
 	[device.tablet]: {
 		root: {
-			height: "calc(34vw)",
+			// height: "calc(34vw)",
 		},
 	},
 	[device.laptop]: {
@@ -38,13 +40,11 @@ const styles = (theme) => ({
 
 // @withStyles(styles)
 class Chat extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		if (this.props.hide) {
@@ -53,12 +53,12 @@ class Chat extends PureComponent {
 
 		return (
 			<Paper id="chat" className={classes.root}>
-				<MessageList/>
-				<SendMessageForm/>
+				<MessageList />
+				<div style={{ flex: 1 }} />
+				<SendMessageForm />
 			</Paper>
 		);
 	}
-
 }
 
 export default withStyles(styles)(Chat);

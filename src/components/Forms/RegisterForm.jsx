@@ -123,44 +123,51 @@ const styles = (theme) => ({
 		// marginRight: "5px",
 		// textAlign: "center",
 	},
+	field: {
+		margin: "20px 0px",
+	},
 });
 
 const RegisterForm = (props) => {
 	const { handleSubmit, pristine, reset, submitting, classes } = props;
 	return (
 		<form onSubmit={handleSubmit}>
-			<div>
+			<div className={classes.field}>
 				<Field
 					name="email"
 					component={renderTextField}
 					label="Email"
-					variant="outlined"
+					variant="standard"
+					fullWidth
 				/>
 			</div>
-			<div>
+			<div className={classes.field}>
 				<Field
 					name="username"
 					component={renderTextField}
 					label="Username"
-					variant="outlined"
+					variant="standard"
+					fullWidth
 				/>
 			</div>
-			<div>
+			<div className={classes.field}>
 				<Field
 					name="password1"
 					component={renderTextField}
 					label="Password"
 					type="password"
-					variant="outlined"
+					variant="standard"
+					fullWidth
 				/>
 			</div>
-			<div>
+			<div className={classes.field}>
 				<Field
 					name="password2"
 					component={renderTextField}
 					label="Confirm Password"
 					type="password"
-					variant="outlined"
+					variant="standard"
+					fullWidth
 				/>
 			</div>
 			<div>
@@ -176,6 +183,7 @@ const RegisterForm = (props) => {
 					color="primary"
 					type="submit"
 					disabled={pristine || submitting}
+					fullWidth
 				>
 					Create Account
 				</Button>

@@ -16,8 +16,6 @@ import StreamsDrawer from "src/components/Streams/StreamsDrawer.jsx";
 // secondary components:
 
 // modals:
-import LoginModal from "src/components/Modals/LoginModal.jsx";
-import RegisterModal from "src/components/Modals/RegisterModal.jsx";
 import AccountModal from "src/components/Modals/AccountModal.jsx";
 import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
@@ -71,6 +69,7 @@ class Streams extends PureComponent {
 		});
 
 		this.state = {
+			streams: [],
 			drawerOpen: true,
 		};
 
@@ -118,7 +117,8 @@ class Streams extends PureComponent {
 			<div className={classes.root}>
 				<StreamsAppBar drawerOpen={this.state.drawerOpen} handleToggleDrawer={this.toggleDrawer} />
 				<StreamsDrawer drawerOpen={this.state.drawerOpen} handleToggleDrawer={this.toggleDrawer} />
-				<StreamList drawerOpen={this.state.drawerOpen} streams={this.props.streamList} />
+				{/* <StreamList drawerOpen={this.state.drawerOpen} streams={this.props.streamList} /> */}
+				<StreamList drawerOpen={this.state.drawerOpen} streams={this.state.streams} />
 			</div>
 		);
 	}

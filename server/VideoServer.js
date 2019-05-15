@@ -64,16 +64,16 @@ let videoServers = {};
 let ip = "remotegames.io";
 // available ports on this server, true means it's available
 let ports = {
-	// 8000: true,
-	// 8001: true,
-	// 8002: true,
-	// 8003: true,
-	// 8004: true,
-	// 8005: true,
-	// 8006: true,
-	// 8007: true,
-	// 8008: true,
-	// 8009: true,
+	8000: true,
+	8001: true,
+	8002: true,
+	8003: true,
+	8004: true,
+	8005: true,
+	8006: true,
+	8007: true,
+	8008: true,
+	8009: true,
 	8010: true,
 	8011: true,
 	8012: true,
@@ -92,7 +92,6 @@ function register() {
 		ports: ports,
 	});
 }
-register();
 setInterval(register, 1000 * 60);
 
 accountServerConnection.on("startVideo", (data) => {
@@ -121,8 +120,10 @@ accountServerConnection.on("stopVideo", (data) => {
 });
 
 // for testing:
-// let port = 8005;
-// // set port as unavailable:
-// ports[port] = false;
-// videoServers[port] = new VideoServer(port, "a");
-// videoServers[port].init();
+let port = 8000;
+// set port as unavailable:
+ports[port] = false;
+videoServers[port] = new VideoServer(port, "a");
+videoServers[port].init();
+
+register();

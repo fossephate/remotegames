@@ -293,6 +293,11 @@ class Index extends Component {
 	render() {
 		console.log("re-rendering index");
 
+		if (/^\/download/.test(window.location.pathname)) {
+			window.location.href = "https://remotegames.io/8099/download/";
+			window.history.replaceState("", "", "/");
+		}
+
 		return (
 			<Provider store={store}>
 				<MuiThemeProvider theme={this.theme}>

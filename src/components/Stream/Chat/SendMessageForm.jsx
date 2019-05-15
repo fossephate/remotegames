@@ -220,7 +220,7 @@ class SendMessageForm extends PureComponent {
 		}
 
 		return (
-			<Paper id="SendMessageForm" className={classes.root} elevation={4}>
+			<Paper id="SendMessageForm" className={classes.root} elevation={0}>
 				<Snackbar
 					anchorOrigin={{
 						vertical: "top",

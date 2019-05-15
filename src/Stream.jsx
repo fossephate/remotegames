@@ -19,8 +19,9 @@ import handleStreamActions from "src/sagas/stream";
 import handleStreamEvents from "src/sockets/stream";
 
 // main components:
-import LoginArea from "src/components/LoginArea.jsx";
-import NavTabs from "src/components/Stream/NavTabs.jsx";
+// import LoginArea from "src/components/LoginArea.jsx";
+// import NavTabs from "src/components/Stream/NavTabs.jsx";
+import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
 import Picture from "src/components/Stream/Picture.jsx";
 import Chat from "src/components/Stream/Chat/Chat.jsx";
 import StreamInfo from "src/components/Stream/StreamInfo.jsx";
@@ -36,8 +37,6 @@ import StreamInfo from "src/components/Stream/StreamInfo.jsx";
 // secondary components:
 
 // modals:
-// import LoginModal from "src/components/Modals/LoginModal.jsx";
-// import RegisterModal from "src/components/Modals/RegisterModal.jsx";
 import LoginRegisterModal from "src/components/Modals/LoginRegisterModal.jsx";
 import AccountModal from "src/components/Modals/AccountModal.jsx";
 import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
@@ -111,7 +110,6 @@ class Stream extends Component {
 	constructor(props) {
 		super(props);
 
-
 		this.afkTime = 1000 * 60 * 60; // 1 hour
 		this.afkTimer = null;
 		this.laglessAudio = null;
@@ -136,6 +134,7 @@ class Stream extends Component {
 			path: `/${data.hostServerPort}/socket.io`,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 		});
+		window.socket = this.socket;
 
 		// listen to events and dispatch actions:
 		handleStreamEvents(this.socket, this.props.store.dispatch);
@@ -146,11 +145,22 @@ class Stream extends Component {
 			dispatch: this.props.store.dispatch,
 		});
 
+		if (!data.videoServerIP) {
+			console.log("something went wrong, (video server IP missing)");
+			return;
+		}
+
+		console.log(data);
+
+		// data.videoServerIP =
 
 		// lagless setup:
 		/* switch 2.0 */
 		this.streams.push(
-			new Lagless2(`https://${data.videoServerIP}`, { path: `/${data.videoServerPort}/socket.io`, audio: true }),
+			new Lagless2(`https://${data.videoServerIP}`, {
+				path: `/${data.videoServerPort}/socket.io`,
+				audio: true,
+			}),
 		);
 		setTimeout(() => {
 			if (!this.props.clientInfo.loggedIn) {
@@ -186,7 +196,6 @@ class Stream extends Component {
 	}
 
 	componentDidMount() {
-
 		// let authToken = Cookie.get("RemoteGames");
 		// if (authToken) {
 		// 	this.accountServerConnection.emit("authenticate", {
@@ -208,15 +217,18 @@ class Stream extends Component {
 		// 	});
 		// }
 
-		this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username}, (data) => {
+		this.accountServerConnection.emit(
+			"getStreamInfo",
+			{ username: this.props.match.params.username },
+			(data) => {
+				if (!data.success) {
+					alert(data.reason);
+					return;
+				}
 
-			if (!data.success) {
-				alert(data.reason);
-				return;
-			}
-
-			this.start(data);
-		});
+				this.start(data);
+			},
+		);
 
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
@@ -247,8 +259,6 @@ class Stream extends Component {
 
 		// lagless setup:
 
-
-
 		this.sendInputTimer = setInterval(() => {
 			if (!this.props.clientInfo.loggedIn) {
 				return;
@@ -272,16 +282,28 @@ class Stream extends Component {
 				// if ([32].indexOf(event.keyCode) > -1) {
 				// 	event.preventDefault();
 				// }
+				// prevent arrow key & spacebar scrolling:
+				if ([38, 40, 32].indexOf(event.keyCode) > -1) {
+					// check if chat isn't focused:
+					if (!(document.activeElement === document.getElementById("messageBox"))) {
+						event.preventDefault();
+					}
+				}
+				// escape:
+				if ([27].indexOf(event.keyCode) > -1) {
+					document.exitPointerLock();
+				}
 			},
 			false,
 		);
 	}
 
-
 	componentWillUnmount() {
-
+		if (this.socket) {
+			this.socket.close();
+		}
+		this.streams[0].pause();
 	}
-
 
 	afk() {
 		for (let i = 0; i < this.streams.length; i++) {
@@ -372,7 +394,10 @@ class Stream extends Component {
 		) {
 			return;
 		}
-		if (this.inputHandler.currentInputMode == "touch" && !this.props.settings.touchControls) {
+		if (
+			this.inputHandler.currentInputMode == "touch" &&
+			!this.props.settings.touchControls
+		) {
 			return;
 		}
 
@@ -515,9 +540,10 @@ class Stream extends Component {
 
 		return (
 			<div className={classes.root}>
-				<NavTabs history={this.props.history} />
-				<LoginArea />
-				<Picture tab={this.props.settings.streamNumber} />
+				{/* <NavTabs history={this.props.history} /> */}
+				<StreamsAppBar history={this.props.history} />
+				{/* <LoginArea /> */}
+				<Picture />
 				<Chat hide={this.props.settings.hideChat} />
 				<StreamInfo />
 
@@ -538,7 +564,7 @@ class Stream extends Component {
 					<Route
 						path="/(login|register)"
 						render={(props) => {
-							return <LoginRegisterModal {...props} />;
+							return <LoginRegisterModal {...props} history={this.props.history} />;
 						}}
 					/>
 					<Route

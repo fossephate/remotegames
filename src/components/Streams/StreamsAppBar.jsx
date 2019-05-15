@@ -47,7 +47,7 @@ const styles = (theme) => ({
 	root: {
 		width: "100%",
 		height: "48px",
-		zIndex: 10000,
+		zIndex: 1300,
 	},
 	[device.mobile]: {
 		root: {
@@ -72,6 +72,7 @@ const styles = (theme) => ({
 		[theme.breakpoints.up("sm")]: {
 			display: "block",
 		},
+		cursor: "pointer",
 	},
 	search: {
 		position: "relative",
@@ -138,6 +139,10 @@ class StreamsAppBar extends PureComponent {
 
 	componentDidMount() {}
 
+	handleLoginRegister = () => {
+		this.props.history.push("/login");
+	};
+
 	handleProfileMenuOpen = (event) => {
 		this.setState({ anchorEl: event.currentTarget });
 	};
@@ -171,8 +176,21 @@ class StreamsAppBar extends PureComponent {
 				open={isMenuOpen}
 				onClose={this.handleMenuClose}
 			>
-				<MenuItem onClick={this.handleMenuClose}>Profile</MenuItem>
-				<MenuItem onClick={this.handleMenuClose}>My account</MenuItem>
+				{/* <MenuItem
+					onClick={() => {
+						this.handleMenuClose();
+					}}
+				>
+					Profile
+				</MenuItem> */}
+				<MenuItem
+					onClick={() => {
+						this.handleMenuClose();
+						this.props.history.push("/account");
+					}}
+				>
+					My account
+				</MenuItem>
 			</Menu>
 		);
 
@@ -192,14 +210,14 @@ class StreamsAppBar extends PureComponent {
 					</IconButton>
 					<p>Messages</p>
 				</MenuItem>
-				<MenuItem onClick={this.handleMobileMenuClose}>
+				{/* <MenuItem onClick={this.handleMobileMenuClose}>
 					<IconButton color="inherit">
 						<Badge badgeContent={0} color="secondary">
 							<NotificationsIcon />
 						</Badge>
 					</IconButton>
 					<p>Notifications</p>
-				</MenuItem>
+				</MenuItem> */}
 				<MenuItem onClick={this.handleProfileMenuOpen}>
 					<IconButton color="inherit">
 						<AccountCircle />
@@ -221,8 +239,18 @@ class StreamsAppBar extends PureComponent {
 						>
 							<MenuIcon />
 						</IconButton>
-						<Typography className={classes.title} variant="h6" color="inherit" noWrap>
+						<Typography
+							className={classes.title}
+							variant="h6"
+							color="inherit"
+							noWrap
+							onClick={() => {
+								this.props.history.push("/");
+							}}
+						>
+							{/* <Button color="inherit" > */}
 							Streams
+							{/* </Button> */}
 						</Typography>
 						<div className={classes.search}>
 							<div className={classes.searchIcon}>
@@ -237,35 +265,69 @@ class StreamsAppBar extends PureComponent {
 							/>
 						</div>
 						<div className={classes.grow} />
-						<div className={classes.sectionDesktop}>
-							<IconButton color="inherit">
-								<Badge badgeContent={0} color="secondary">
-									<MailIcon />
-								</Badge>
-							</IconButton>
-							<IconButton color="inherit">
-								<Badge badgeContent={0} color="secondary">
-									<NotificationsIcon />
-								</Badge>
-							</IconButton>
-							<IconButton
-								aria-owns={isMenuOpen ? "material-appbar" : undefined}
-								aria-haspopup="true"
-								onClick={this.handleProfileMenuOpen}
-								color="inherit"
-							>
-								<AccountCircle />
-							</IconButton>
-						</div>
-						<div className={classes.sectionMobile}>
-							<IconButton
-								aria-haspopup="true"
-								onClick={this.handleMobileMenuOpen}
-								color="inherit"
-							>
-								<MoreIcon />
-							</IconButton>
-						</div>
+						<Button
+							color="default"
+							variant="contained"
+							onClick={() => {
+								window.location.href = "https://remotegames.io/8099/download/";
+							}}
+						>
+							Download Host Files
+						</Button>
+						<div style={{ width: "10px" }} />
+						<Button
+							color="default"
+							variant="contained"
+							onClick={() => {
+								window.location.href = "https://discord.io/remotegames/";
+							}}
+						>
+							Discord Server
+						</Button>
+						{this.props.loggedIn ? (
+							<>
+								<div className={classes.sectionDesktop}>
+									<IconButton color="inherit">
+										<Badge badgeContent={0} color="secondary">
+											<MailIcon />
+										</Badge>
+									</IconButton>
+									{/* <IconButton color="inherit">
+										<Badge badgeContent={0} color="secondary">
+											<NotificationsIcon />
+										</Badge>
+									</IconButton> */}
+									<IconButton
+										aria-owns={isMenuOpen ? "material-appbar" : undefined}
+										aria-haspopup="true"
+										onClick={this.handleProfileMenuOpen}
+										color="inherit"
+									>
+										<AccountCircle />
+									</IconButton>
+								</div>
+								<div className={classes.sectionMobile}>
+									<IconButton
+										aria-haspopup="true"
+										onClick={this.handleMobileMenuOpen}
+										color="inherit"
+									>
+										<MoreIcon />
+									</IconButton>
+								</div>
+							</>
+						) : (
+							<>
+								<div style={{ width: "10px" }} />
+								<Button
+									color="default"
+									variant="contained"
+									onClick={this.handleLoginRegister}
+								>
+									Login / Register
+								</Button>
+							</>
+						)}
 					</Toolbar>
 				</AppBar>
 				{renderMenu}
@@ -276,7 +338,9 @@ class StreamsAppBar extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		loggedIn: state.clientInfo.loggedIn,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {
@@ -291,9 +355,3 @@ export default compose(
 		mapDispatchToProps,
 	),
 )(StreamsAppBar);
-
-// /* FORCE HTTPS */
-// if (window.location.protocol != "https:") {
-// 	window.location.href =
-// 		"https:" + window.location.href.substring(window.location.protocol.length);
-// }
