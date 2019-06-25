@@ -6,7 +6,7 @@ import PropTypes from "prop-types";
 import Player from "./Player.jsx";
 
 // material ui:
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles } from "@material-ui/styles";
 import Paper from "@material-ui/core/Paper";
 
 // redux:
@@ -21,7 +21,7 @@ import { compose } from "recompose";
 import { device } from "src/constants/DeviceSizes.js";
 
 // jss:
-const styles = (theme) => ({
+const styles = {
 	root: {
 		display: "flex",
 		flexDirection: "column",
@@ -43,7 +43,7 @@ const styles = (theme) => ({
 			// padding: "5px",
 		},
 	},
-});
+};
 
 class PlayerInfo extends PureComponent {
 	constructor(props) {

@@ -80,7 +80,7 @@ import LaglessAudio from "libs/lagless/laglessAudio.js";
 // swal("stream is down right now, don't put anything in #bug-reports.");
 
 // jss:
-const styles = (theme) => ({
+const styles = {
 	root: {
 		padding: "1%",
 		display: "grid",
@@ -105,7 +105,7 @@ const styles = (theme) => ({
 	[device.laptop]: {
 		root: {},
 	},
-});
+};
 
 class Stream extends Component {
 	constructor(props) {

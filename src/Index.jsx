@@ -7,7 +7,8 @@ import { BrowserRouter } from "react-router-dom";
 
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { ThemeProvider } from "@material-ui/styles";
+import { createMuiTheme } from "@material-ui/core/styles";
 
 // components:
 import About from "src/About.jsx";
@@ -238,6 +239,20 @@ class Index extends Component {
 				},
 			},
 		});
+		// this.theme = {
+		// 	typography: {
+		// 		useNextVariants: true,
+		// 	},
+		// 	palette: {
+		// 		type: "dark",
+		// 		primary: {
+		// 			main: "#2181ff", // #2181ff
+		// 		},
+		// 		secondary: {
+		// 			main: "#ff3b3b",
+		// 		},
+		// 	},
+		// };
 		this.getTheme = this.getTheme.bind(this);
 		this.switchTheme = this.switchTheme.bind(this);
 
@@ -301,7 +316,7 @@ class Index extends Component {
 
 		return (
 			<Provider store={store}>
-				<MuiThemeProvider theme={this.theme}>
+				<ThemeProvider theme={this.theme}>
 					<CssBaseline />
 					<BrowserRouter>
 						{/* selects the first matching path: */}
@@ -365,7 +380,7 @@ class Index extends Component {
 							/>
 						</Switch>
 					</BrowserRouter>
-				</MuiThemeProvider>
+				</ThemeProvider>
 			</Provider>
 		);
 	}
@@ -385,5 +400,7 @@ class Index extends Component {
 // }
 //
 // const Index2 = connectWithStore(store, Index, mapStateToProps);
+
+export default Index;
 
 ReactDOM.render(<Index />, document.getElementById("root"));
