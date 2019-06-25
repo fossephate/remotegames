@@ -5,6 +5,7 @@ import PropTypes from "prop-types";
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
+import Fab from "@material-ui/core/Fab";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 // for voting:
@@ -74,6 +75,18 @@ const styles = (theme) => ({
 		lineHeight: "20px",
 		// fontSize: "inherit !important",
 	},
+	textField: {
+		flex: "1",
+		overflowY: "auto",
+		height: "32px",
+		// height: "56px",
+		"&::-webkit-scrollbar": {
+			width: "0 !important",
+		},
+		"& textarea": {
+			overflow: "hidden",
+		},
+	},
 });
 
 class SendMessageForm extends PureComponent {
@@ -87,6 +100,7 @@ class SendMessageForm extends PureComponent {
 		this.renderEmojiSuggestions = this.renderEmojiSuggestions.bind(this);
 		this.renderUsernameSuggestions = this.renderUsernameSuggestions.bind(this);
 		this.renderCommandSuggestions = this.renderCommandSuggestions.bind(this);
+		this.inputRef = React.createRef();
 
 		this.state = {
 			voting: false,
@@ -155,7 +169,6 @@ class SendMessageForm extends PureComponent {
 			this.rta.setState({ value: "" });
 		}
 	}
-
 	renderEmojiSuggestions(token) {
 		if (token.length < 1) {
 			return [];
@@ -268,29 +281,20 @@ class SendMessageForm extends PureComponent {
 						</IconButton>,
 					]}
 				/>
-				{/* <TextField
-					fullWidth
-					id="messageBox"
-					placeholder="Send a message"
-					type="text"
-					margin="normal"
-					variant="outlined"
-					value={this.state.text}
-					onChange={this.handleTextChange}
-					onKeyPress={this.handleKeyPress}/> */}
 				<ReactTextareaAutocomplete
-					id="messageBox"
+					id="messageBoxOld"
 					className={classes.messageBox}
 					containerClassName={classes.messageBoxContainer}
 					loadingComponent={Loading}
-					style={{}}
+					style={{ display: "none" }}
 					ref={(rta) => {
 						this.rta = rta;
 					}}
-					innerRef={(textarea) => {
-						this.textarea = textarea;
+					innerRef={(ref) => {
+						this.textarea = ref;
 					}}
-					containerStyle={{}}
+					// textAreaComponent={this.inputRef}
+					containerStyle={{ width: "0", top: "20px", left: "10px", zIndex: 1 }}
 					minChar={0}
 					trigger={{
 						":": {
@@ -314,10 +318,36 @@ class SendMessageForm extends PureComponent {
 					value={this.state.text}
 					placeholder="Send a message"
 				/>
-				<Button variant="contained" color="primary" onClick={this.sendMessage}>
+				<TextField
+					id="messageBox"
+					placeholder="Send a message"
+					type="text"
+					margin="normal"
+					variant="standard"
+					value={this.state.text}
+					innerRef={(ref) => {
+						this.inputRef = ref;
+					}}
+					multiline={true}
+					className={classes.textField}
+					onChange={this.handleTextChange}
+					onKeyPress={this.handleKeyPress}
+					value={this.state.text}
+				/>
+				{/* <Button variant="contained" color="primary" onClick={this.sendMessage}>
 					Send
 					<SendIcon style={{ marginLeft: "8px" }} fontSize="small" />
-				</Button>
+				</Button> */}
+				{/* <Button variant="contained" color="primary" onClick={this.sendMessage}>
+					<SendIcon fontSize="small" />
+				</Button> */}
+				<Fab color="primary" size="small" onClick={this.sendMessage}>
+					<SendIcon fontSize="small" />
+				</Fab>
+				{/* <Fab color="primary" size="medium" variant="extended" onClick={this.sendMessage}>
+					Send
+					<SendIcon style={{ marginLeft: "8px" }} fontSize="small" />
+				</Fab> */}
 			</Paper>
 		);
 	}

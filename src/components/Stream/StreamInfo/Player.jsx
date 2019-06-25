@@ -70,7 +70,7 @@ class Player extends PureComponent {
 		return (
 			<Paper elevation={4} className={classes.root}>
 				<MyCheckbox
-					text={this.props.text}
+					text={`Player ${this.props.num + 1}`}
 					handleChange={this.choosePlayer}
 					checked={this.props.currentPlayer == this.props.num}
 				/>

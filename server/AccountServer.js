@@ -35,6 +35,7 @@ const request = require("request");
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const SALT_ROUNDS = 10;
+const nodemailer = require("nodemailer");
 
 app.use(
 	session({
@@ -112,6 +113,22 @@ redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
 		console.log("stored banned IPs: " + success);
 	});
 });
+
+// mail:
+let transporter = nodemailer.createTransport({
+	service: "gmail",
+	auth: {
+		user: "remotegamesio@gmail.com",
+		pass: config.EMAIL_PASSWORD,
+	},
+});
+
+let mailOptions = {
+	from: "remotegamesio@gmail.com",
+	to: null,
+	subject: null,
+	text: null,
+};
 
 function updateOrCreateUser(profile, type, req) {
 	// link to existing account:
@@ -315,24 +332,30 @@ function connectAccount(account, profile, type) {
 	}
 
 	// unique to each platform:
-	if (type == "twitch") {
-		account[type].email = profile.email;
-		account[type].login = profile.login;
-		account[type].username = profile.username;
-		account[type].profile_image_url = profile.profile_image_url;
-	} else if (type == "google") {
-		account[type].familyName = profile.name.familyName;
-		account[type].givenName = profile.name.givenName;
-	} else if (type == "youtube") {
-	} else if (type == "discord") {
-		account[type].email = profile.email;
-		account[type].username = profile.username;
-		account[type].discriminator = profile.discriminator;
+	switch (type) {
+		case "twitch":
+			account[type].email = profile.email;
+			account[type].login = profile.login;
+			account[type].username = profile.username;
+			account[type].profile_image_url = profile.profile_image_url;
+			break;
+		case "google":
+			account[type].familyName = profile.name.familyName;
+			account[type].givenName = profile.name.givenName;
+			break;
+		case "youtube":
+			break;
+		case "discord":
+			account[type].email = profile.email;
+			account[type].username = profile.username;
+			account[type].discriminator = profile.discriminator;
+			break;
 	}
 	// update connected accounts list:
 	if (account.connectedAccounts.indexOf(type) == -1) {
 		account.connectedAccounts.push(type);
 	}
+	account.emailVerified = true;
 }
 
 function clientInfoFromAccount(account, usernameIndex) {
@@ -377,6 +400,7 @@ function clientInfoFromAccount(account, usernameIndex) {
 	clientInfo.timePlayed = account.timePlayed;
 	clientInfo.connectedAccounts = account.connectedAccounts;
 	clientInfo.isStreaming = account.isStreaming;
+	clientInfo.emailVerified = account.emailVerified;
 
 	// todo: maybe ban the account if using a banned IP: (or keep as is)
 	for (let i = 0; i < account.IPs.length; i++) {
@@ -593,6 +617,53 @@ app.get("/redirect", (req, res) => {
 	}
 });
 
+app.get("/getUser", (req, res) => {
+	let user = req.query.user;
+	if (!req.query.user) {
+		return;
+	}
+	let queryObj = {
+		$or: [
+			{ email: user.toLowerCase() },
+			{ usernameLower: user.toLowerCase() },
+			{ "twitch.username": user },
+		],
+	};
+	Account.findOne(queryObj)
+		// .exec()
+		.then((account) => {
+			// account exists:
+			if (account) {
+				console.log(account);
+			} else {
+				console.log("account not found.");
+			}
+		});
+});
+
+app.get("/verify", (req, res) => {
+	Account.findOne({ authToken: req.query.authToken })
+		.exec()
+		.then((account) => {
+			// Account.findOne({ authToken: req.query.authToken }).then(account => {
+			// account exists:
+			if (account) {
+				if (account.connectedAccounts.indexOf("rgio") === -1) {
+					account.connectedAccounts.push("rgio");
+				}
+				account.emailVerified = true;
+				account.save((error) => {
+					if (error) {
+						throw error;
+					}
+				});
+				res.redirect(302, "https://remotegames.io/login/?verified=true");
+			} else {
+				res.redirect(302, "https://remotegames.io");
+			}
+		});
+});
+
 app.get("/deleteDB", (req, res) => {
 	console.log("deleting DB");
 	Account.remove({}, () => {});
@@ -623,11 +694,24 @@ io.on("connection", (socket) => {
 			console.log("no callback (register)");
 			return;
 		}
+
+		// todo:
+		// https://developers.google.com/recaptcha/docs/verify
+
 		// todo: input validation:
 		if (!data.email || !data.username || !data.password1 || !data.password2) {
 			// socket.emit("ACCOUNT_ERROR", "INVALID_ARGUMENTS");
 			cb({ success: false, reason: "INVALID_ARGUMENTS" });
 			return;
+		}
+
+		if (data.username.length > 24) {
+			cb({ success: false, reason: "USERNAME_TOO_LONG" });
+			return;
+		}
+
+		if (!/^[a-zA-Z0-9_]+$/.test(data.username)) {
+			cb({ success: false, reason: "USERNAME_MUST_BE_ALPHANUMERIC" });
 		}
 
 		let email = data.email;
@@ -665,6 +749,10 @@ io.on("connection", (socket) => {
 			.then((account) => {
 				// account already exists:
 				if (account) {
+					if (!account.emailVerified) {
+						account.delete();
+						return;
+					}
 					// console.log("Account already exists, EMAIL_ALREADY_TAKEN.");
 					// socket.emit("ACCOUNT_ERROR", "EMAIL_ALREADY_TAKEN");
 					cb({ success: false, reason: "EMAIL_ALREADY_TAKEN" });
@@ -675,6 +763,10 @@ io.on("connection", (socket) => {
 				return Account.findOne({ usernameLower: usernameLower }).then((account) => {
 					// account already exists:
 					if (account) {
+						if (!account.emailVerified) {
+							account.delete();
+							return;
+						}
 						// console.log("Account already exists, USERNAME_ALREADY_TAKEN.");
 						// socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
 						cb({ success: false, reason: "USERNAME_ALREADY_TAKEN" });
@@ -697,6 +789,7 @@ io.on("connection", (socket) => {
 					newAccount.usernameLower = usernameLower;
 					// create an authToken that lets us access the account:
 					newAccount.authToken = crypto.randomBytes(64).toString("hex");
+					newAccount.emailVerified = false;
 					// save the new Account:
 					newAccount.save((error) => {
 						if (error) {
@@ -705,8 +798,20 @@ io.on("connection", (socket) => {
 						console.log("Account created.");
 						cb({
 							success: true,
-							authToken: newAccount.authToken,
+							// authToken: newAccount.authToken,
 							clientInfo: clientInfoFromAccount(newAccount),
+						});
+						mailOptions.to = email;
+						mailOptions.subject = "Verify your email with remotegames.io";
+						mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${
+							newAccount.authToken
+						}`;
+						transporter.sendMail(mailOptions, (error, info) => {
+							if (error) {
+								console.log(error);
+							} else {
+								console.log("Email sent: " + info.response);
+							}
 						});
 					});
 				});
@@ -744,8 +849,28 @@ io.on("connection", (socket) => {
 					});
 					return;
 				} else {
+					// if (!account.emailVerified) {
+					//   cb({
+					//     success: false,
+					//     reason: "EMAIL_NOT_VERIFIED",
+					//     ...reply
+					//   });
+					//   return;
+					// }
 					bcrypt.compare(data.password, account.password).then((result) => {
 						if (result) {
+							// save IP if not known:
+							let ip = socket.handshake.headers["x-real-ip"];
+							if (account.IPs.indexOf(ip) == -1) {
+								account.IPs.push(ip);
+								// update the account details:
+								account.save((error) => {
+									// error check:
+									if (error) {
+										throw error;
+									}
+								});
+							}
 							cb({
 								success: true,
 								authToken: account.authToken,
@@ -762,6 +887,35 @@ io.on("connection", (socket) => {
 					});
 				}
 			});
+	});
+
+	socket.on("getAccountInfo", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (getAccountInfo)");
+			return;
+		}
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				cb({
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			let clientInfo = clientInfoFromAccount(account, data.usernameIndex);
+			cb({
+				success: true,
+				authToken: account.authToken,
+				clientInfo: clientInfo,
+			});
+		});
 	});
 
 	socket.on("authenticate", (data, cb) => {
@@ -841,7 +995,9 @@ io.on("connection", (socket) => {
 						localizedAccountMaps[socket.id] = {};
 					}
 					// fill it with this account:
-					localizedAccountMaps[socket.id][clientInfo.userid] = { ...clientInfo };
+					localizedAccountMaps[socket.id][clientInfo.userid] = {
+						...clientInfo,
+					};
 
 					cb({
 						success: true,
@@ -881,6 +1037,195 @@ io.on("connection", (socket) => {
 			delete localizedAccountMaps[socket.id][data.userid];
 		}
 		delete masterAccountMap[data.userid];
+	});
+
+	socket.on("resendVerifyEmail", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (resendVerifyEmail)");
+			return;
+		}
+
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				cb({
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			// save the new Account:
+			account.save((error) => {
+				if (error) {
+					throw error;
+				}
+				cb({
+					success: true,
+					clientInfo: clientInfoFromAccount(account),
+					message: account.email,
+				});
+				mailOptions.to = account.email;
+				mailOptions.subject = "Verify your email with remotegames.io";
+				mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${
+					account.authToken
+				}`;
+				transporter.sendMail(mailOptions, (error, info) => {
+					if (error) {
+						console.log(error);
+					} else {
+						console.log("Email sent: " + info.response);
+					}
+				});
+			});
+		});
+	});
+
+	socket.on("changeAccountStatus", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (changeAccountStatus)");
+			return;
+		}
+
+		if (!hostServers.hasOwnProperty(socket.id)) {
+			return;
+		}
+
+		// try and get account by uid:
+		Account.findOne({ _id: data.hostUserid }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+
+			// acount doesn't exist:
+			if (!account) {
+				cb({ success: false, reason: "HOST_ACCOUNT_NOT_FOUND" });
+				return;
+			}
+
+			// format:
+			// let statusChange = {
+			// 	role: "mod",
+			// 	type: "add",
+			// 	userid: "aaa",
+			// };
+
+			if (["mod", "plus", "sub"].indexOf(data.change.role) === -1) {
+				cb({
+					success: false,
+					reason: "INVALID_ROLE",
+				});
+			}
+
+			if (["add", "remove"].indexOf(data.change.type) === -1) {
+				cb({
+					success: false,
+					reason: "INVALID_TYPE",
+				});
+			}
+
+			let index = account[`${data.change.role}list`].indexOf(data.change.userid);
+			let alreadyInList = index > -1;
+
+			if (data.change.type === "add") {
+				if (alreadyInList) {
+					cb({
+						success: false,
+						reason: "ALREADY_IN_LIST",
+					});
+					return;
+				} else {
+					account[`${data.change.role}list`].push(data.change.userid);
+				}
+			} else {
+				if (!alreadyInList) {
+					cb({
+						success: false,
+						reason: "NOT_IN_LIST",
+					});
+					return;
+				} else {
+					account[`${data.change.role}list`].splice(index, 1);
+				}
+			}
+
+			account.save((error) => {
+				if (error) {
+					throw error;
+				}
+
+				cb({
+					success: true,
+				});
+			});
+		});
+	});
+
+	socket.on("removeConnectedAccount", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (removeConnectedAccount)");
+			return;
+		}
+
+		if (["twitch", "google", "youtube", "discord"].indexOf(data.type) === -1) {
+			cb({
+				success: false,
+				reason: "INVALID_TYPE",
+			});
+			return;
+		}
+
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				cb({
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			} else {
+				let index = account.connectedAccounts.indexOf(data.type);
+
+				if (index > -1) {
+					if (!account.username && account.connectedAccounts.length < 2) {
+						cb({
+							success: false,
+							reason: "ONLY_CONNECTED_ACCOUNT",
+						});
+						return;
+					} else {
+						account.connectedAccounts.splice(index, 1);
+						// update the account details:
+						account.save((error) => {
+							// error check:
+							if (error) {
+								throw error;
+							}
+							cb({
+								success: true,
+							});
+						});
+					}
+				} else {
+					cb({
+						success: false,
+						reason: "ACCOUNT_NOT_LINKED",
+					});
+					return;
+				}
+			}
+		});
 	});
 
 	// todo:
@@ -1083,7 +1428,10 @@ io.on("connection", (socket) => {
 				streamKey: videoStreamKey,
 			});
 			// send to videoServer:
-			io.to(videoID).emit("startVideo", { port: videoPort, streamKey: videoStreamKey });
+			io.to(videoID).emit("startVideo", {
+				port: videoPort,
+				streamKey: videoStreamKey,
+			});
 
 			io.to(hostID).emit("startHost", {
 				hostUserid: ("" + account._id).trim(),
@@ -1426,6 +1774,40 @@ Account.findOne({ username: "fosse" }).exec((error, account) => {
 	account.streamSettings.title = "Nintendo Switch";
 	account.streamSettings.description = "";
 	account.streamSettings.thumbnailURL = "https://i.imgur.com/Negv09l.jpg";
+
+	// update the account details:
+	account.save((error) => {
+		// error check:
+		if (error) {
+			throw error;
+		}
+		generateStreamList();
+	});
+});
+
+// try and get account by authToken:
+Account.findOne({ username: "fosse2" }).exec((error, account) => {
+	// error check:
+	if (error) {
+		throw error;
+	}
+	// acount doesn't exist:
+	if (!account) {
+		return;
+	}
+
+	// update account info:
+	account.isStreaming = true;
+	account.videoServerIP = "remotegames.io";
+	account.videoServerPort = 8001;
+	account.hostServerIP = "remotegames.io";
+	account.hostServerPort = 8051;
+	// account.streamSettings.title = "PS4 - Persona 5 - testing";
+	account.streamSettings.title = "Xbox - RDR2";
+	account.streamSettings.description = "";
+	// account.streamSettings.thumbnailURL = "https://thumbs.gfycat.com/CloudyBlandBison-poster.jpg";
+	account.streamSettings.thumbnailURL =
+		"https://metro.co.uk/wp-content/uploads/2018/04/rdr2_trailer-3-announce_1920x1080_nomsg.jpg";
 
 	// update the account details:
 	account.save((error) => {

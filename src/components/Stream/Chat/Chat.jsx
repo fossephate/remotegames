@@ -20,13 +20,13 @@ const styles = (theme) => ({
 		justifyContent: "space-between",
 		// flex: "1",
 		padding: "5px",
-		// height: "calc(34vw)",
+		height: "300px",
 		// new:
 		position: "relative",
 	},
 	[device.tablet]: {
 		root: {
-			// height: "calc(34vw)",
+			height: "unset",
 		},
 	},
 	[device.laptop]: {

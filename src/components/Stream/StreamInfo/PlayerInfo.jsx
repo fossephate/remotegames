@@ -56,14 +56,14 @@ class PlayerInfo extends PureComponent {
 
 		return (
 			<Paper className={classes.root} elevation={0}>
-				<Player num={0} text="Player 1" />
-				<Player num={1} text="Player 2" />
-				<Player num={2} text="Player 3" />
-				<Player num={3} text="Player 4" />
-				<Player num={4} text="Player 5" />
-				<Player num={5} text="Player 6" />
-				<Player num={6} text="Player 7" />
-				<Player num={7} text="Player 8" />
+				<Player num={0} />
+				<Player num={1} />
+				<Player num={2} />
+				<Player num={3} />
+				{/* <Player num={4} />
+				<Player num={5} />
+				<Player num={6} />
+				<Player num={7} /> */}
 			</Paper>
 		);
 	}

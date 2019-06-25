@@ -28,9 +28,8 @@ import swal from "sweetalert2";
 const styles = (theme) => ({
 	root: {
 		overflowY: "auto",
-		// borderRadius: "8px",
-		// flexGrow: "1",
-		marginBottom: "15px",
+		// marginBottom: "15px",
+		boxShadow: "none",
 		"& > div:nth-child(even)": {
 			// backgroundColor: "#FF3C28A4",
 			// backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
@@ -42,13 +41,12 @@ const styles = (theme) => ({
 			// backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light,
 			color: theme.palette.type === "dark" ? "#FFF" : "#000",
 		},
-		// new:
 		position: "absolute",
 		top: 0,
 		left: 0,
 		bottom: 0,
 		right: 0,
-		height: "88%",
+		height: "82%",
 	},
 });
 
@@ -141,7 +139,7 @@ class MessageList extends PureComponent {
 			<Paper
 				id="messageList"
 				className={classes.root}
-				elevation={0}
+				elevation={4}
 				ref={(el) => {
 					this.rootRef = el;
 				}}

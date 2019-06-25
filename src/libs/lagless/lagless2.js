@@ -64,7 +64,7 @@ export default class Lagless2 {
 		} catch (error) {}
 
 		let videoBufferSize = 512 * 1024; // 256kb (256 * 1024)
-		let audioBufferSize = 64 * 1024; // 128kb (128 * 1024)
+		let audioBufferSize = 128 * 1024; // 128kb (128 * 1024)
 		this.player = new JSMpeg.Player(this.url, {
 			canvas: this.canvas,
 			video: true,

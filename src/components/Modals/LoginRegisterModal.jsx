@@ -34,6 +34,7 @@ import { updateClientInfo, authenticate } from "src/actions/clientInfo.js";
 const classNames = require("classnames");
 import socketio from "socket.io-client";
 import Cookie from "js-cookie";
+import queryString from "query-string";
 
 // device sizes:
 import { device } from "src/constants/DeviceSizes.js";
@@ -102,8 +103,16 @@ class LoginRegisterModal extends PureComponent {
 					...data.clientInfo,
 				});
 				this.props.authenticate(data.authToken);
-				// this.props.history.push("/");
-				this.props.history.goBack();
+
+				const values = queryString.parse(this.props.location.search);
+				if (values.verified) {
+					this.props.history.replace("/");
+				} else {
+					this.props.history.goBack();
+				}
+				setTimeout(() => {
+					window.location.reload();
+				}, 1000);
 			} else {
 				alert(data.reason);
 			}
@@ -115,14 +124,14 @@ class LoginRegisterModal extends PureComponent {
 
 		this.socket.emit("register", { ...vals }, (data) => {
 			if (data.success) {
-				alert("success");
-				Cookie.set("RemoteGames", data.authToken, { expires: 7 });
-				this.props.updateClientInfo({
-					authToken: data.authToken,
-					loggedIn: true,
-					...data.clientInfo,
-				});
-				this.props.authenticate(data.authToken);
+				alert("Verification email sent!");
+				// Cookie.set("RemoteGames", data.authToken, { expires: 7 });
+				// this.props.updateClientInfo({
+				//   authToken: data.authToken,
+				//   loggedIn: true,
+				//   ...data.clientInfo
+				// });
+				// this.props.authenticate(data.authToken);
 				// this.props.history.push("/");
 			} else {
 				alert(data.reason);
@@ -130,10 +139,19 @@ class LoginRegisterModal extends PureComponent {
 		});
 	}
 
+	componentDidMount() {
+		const values = queryString.parse(this.props.location.search);
+		if (values.verified) {
+			setTimeout(() => {
+				alert("Email verified.");
+			}, 2000);
+		}
+	}
+
 	render() {
 		const { classes } = this.props;
 
-		let which = this.props.history.location.pathname == "/login" ? 0 : 1;
+		let which = this.props.history.location.pathname.indexOf("/login") > -1 ? 0 : 1;
 
 		return (
 			<Dialog

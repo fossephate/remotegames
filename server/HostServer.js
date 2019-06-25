@@ -124,7 +124,8 @@ class HostServer {
 
 				// send socket.id and auth token:
 				this.accountServerConnection.emit(
-					"authenticate", {
+					"authenticate",
+					{
 						socketid: socket.id,
 						authToken: data.authToken,
 						ip: client.ip,
@@ -297,7 +298,6 @@ class HostServer {
 
 				// reset forfeit timer:
 				this.forfeitStartTimes[cNum] = Date.now();
-				// emitForfeitStartTimes();
 
 				let valid = true;
 				// ((btns & (1 << n)) != 0);
@@ -557,7 +557,8 @@ class HostServer {
 			let n = /^!un/.test(message.text) ? 7 : 5;
 			let userid = message.text.substring(n);
 			this.accountServerConnection.emit(
-				"ban", {
+				"ban",
+				{
 					isBanned: n === 5,
 					issuerUserid: client.userid,
 					hostUserid: this.hostUserid,
@@ -573,6 +574,74 @@ class HostServer {
 					}
 				},
 			);
+		}
+		// lock / unlock:
+		if (/^!(?:un)?lock$/.test(message.text)) {
+			if (!client.isMod) {
+				msgObj.text = "You need to be a mod to use this command!";
+				this.sendMessage(msgObj);
+				console.log("not a mod");
+				return;
+			}
+			let n = /^!un/.test(message.text) ? 8 : 6;
+			let userid = message.text.substring(n);
+			if (n === 6) {
+				this.locked = true;
+				// clear queues:
+				for (let i = 0; i < this.controlQueues.length; i++) {
+					this.controlQueues[i] = [];
+				}
+				this.io.emit("controlQueues", this.controlQueues);
+			} else {
+				this.locked = false;
+			}
+			msgObj.text = "Successfully (un)locked stream.";
+			this.sendMessage(msgObj);
+		}
+
+		// change status:
+		if (/^!(?:un)?(mod|plus|sub) ([a-zA-Z0-9]+)$/.test(message.text)) {
+			if (!client.isMod) {
+				msgObj.text = "You need to be a mod to use this command!";
+				this.sendMessage(msgObj);
+				console.log("not a mod");
+				return;
+			}
+			let un = /^!un/.test(message.text);
+			let userid = message.text.split(" ")[1];
+
+			let role = "";
+			if (message.text.indexOf("mod") > -1) {
+				role = "mod";
+			} else if (message.text.indexOf("plus") > -1) {
+				role = "plus";
+			}
+
+			this.accountServerConnection.emit(
+				"changeAccountStatus",
+				{
+					issuerUserid: client.userid,
+					hostUserid: this.hostUserid,
+					change: {
+						type: !un ? "add" : "remove",
+						role: role,
+						userid: userid,
+					},
+				},
+				(data) => {
+					if (data.success) {
+						msgObj.text = "Successfully changed account status.";
+						this.sendMessage(msgObj);
+					} else {
+						msgObj.text = `Something went wrong while trying to change the user's status: ${
+							data.reason
+						}.`;
+						this.sendMessage(msgObj);
+					}
+				},
+			);
+			// msgObj.text = "Successfully changed account status.";
+			// this.sendMessage(msgObj);
 		}
 	}
 
@@ -778,7 +847,8 @@ class HostServer {
 
 	getHostInfo() {
 		this.accountServerConnection.emit(
-			"getHostInfo", { userid: this.hostUserid },
+			"getHostInfo",
+			{ userid: this.hostUserid },
 			(data) => {
 				if (!data.success) {
 					console.log("something went wrong, getHostInfo");
@@ -795,20 +865,19 @@ class HostServer {
 
 	setClientPermissions() {
 		for (let socketid in this.clients) {
+			this.clients[socketid].isMod = false;
+			this.clients[socketid].isPlus = false;
+			this.clients[socketid].isBanned = false;
+
 			if (this.hostUser.modlist.includes(this.clients[socketid].userid)) {
 				this.clients[socketid].isMod = true;
-			} else {
-				this.clients[socketid].isMod = false;
+				this.clients[socketid].isPlus = true;
 			}
 			if (this.hostUser.pluslist.includes(this.clients[socketid].userid)) {
 				this.clients[socketid].isPlus = true;
-			} else {
-				this.clients[socketid].isPlus = false;
 			}
 			if (this.hostUser.banlist.includes(this.clients[socketid].userid)) {
 				this.clients[socketid].isBanned = true;
-			} else {
-				this.clients[socketid].isBanned = false;
 			}
 			// has to be last so it isn't overwritten:
 			if (this.clients[socketid].userid === this.hostUserid) {
@@ -927,5 +996,18 @@ let port = 8050;
 ports[port] = false;
 hostServers[port] = new HostServer(port, accountServerConnection, ip, 8000, "a", "fosse");
 hostServers[port].init();
+
+port = 8051;
+ports[port] = false;
+hostServers[port] = new HostServer(
+	port,
+	accountServerConnection,
+	ip,
+	8001,
+	"b",
+	"fosse2",
+);
+hostServers[port].init();
+// hostServers[port].locked = true;
 
 register();

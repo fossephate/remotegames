@@ -5,6 +5,7 @@ import React, { PureComponent } from "react";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import ListItemText from "@material-ui/core/ListItemText";
+import Button from "@material-ui/core/Button";
 
 // redux:
 import { connect } from "react-redux";
@@ -16,35 +17,18 @@ import { compose } from "recompose";
 const styles = (theme) => ({
 	root: {
 		width: "100%",
+		height: "200px",
 		textAlign: "center",
 		display: "flex",
+		flexDirection: "column",
 		justifyContent: "space-evenly",
 		flexWrap: "wrap",
-		flexDirection: "column",
-		flex: "1",
+		// flex: "1",
 		paddingLeft: "25px",
 		paddingRight: "25px",
 	},
 	connectWithButton: {
 		display: "flex",
-		alignSelf: "center",
-		justifyContent: "space-evenly",
-		border: "1px solid #888",
-		borderRadius: "5px",
-		boxShadow: "1px 1px 1px grey",
-		textDecoration: "none !important",
-		color: "#282828",
-		whiteSpace: "nowrap",
-		minHeight: "40px",
-		width: "100%",
-		cursor: "pointer",
-		backgroundColor: "#fff",
-
-		"& > *": {
-			display: "flex",
-			alignSelf: "center",
-			color: "#282828",
-		},
 	},
 	twitchLogo: {
 		width: "60px",
@@ -56,9 +40,11 @@ const styles = (theme) => ({
 	},
 	youtubeLogo: {
 		width: "80px",
+		marginLeft: "10px",
 	},
 	discordLogo: {
 		width: "80px",
+		marginLeft: "4px",
 	},
 });
 
@@ -67,7 +53,7 @@ class ConnectAccounts extends PureComponent {
 		super(props);
 	}
 
-	connectAccountOrLogIn(type) {
+	connectAccountOrLogin(type) {
 		if (window.banned) {
 			return;
 		}
@@ -81,55 +67,114 @@ class ConnectAccounts extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
+		let canDelete =
+			this.props.connectedAccounts.length > 1 || this.props.validUsernames.length > 1;
+
 		return (
 			<Paper className={classes.root} elevation={0}>
-				{this.props.connectedAccounts.indexOf("twitch") == -1 ? (
-					<div
-						className={classes.connectWithButton}
+				<div className={classes.connectWithButton}>
+					<Button
+						fullWidth
+						variant="contained"
+						color="default"
+						className={null}
 						onClick={() => {
-							this.connectAccountOrLogIn("twitch");
+							this.connectAccountOrLogin("twitch");
 						}}
 					>
 						<span>Connect with</span>
 						<img className={classes.twitchLogo} src="/images/Twitch_Purple_RGB.png" />
-					</div>
-				) : null}
-				{this.props.connectedAccounts.indexOf("youtubeV3Strategy") == -1 ? (
-					<div
-						className={classes.connectWithButton}
+					</Button>
+					{this.props.connectedAccounts.includes("twitch") && canDelete && (
+						<Button
+							variant="contained"
+							color="secondary"
+							onClick={() => {
+								this.props.onRemoveAccount("twitch");
+							}}
+						>
+							X
+						</Button>
+					)}
+				</div>
+				<div className={classes.connectWithButton}>
+					<Button
+						fullWidth
+						variant="contained"
+						color="default"
+						className={null}
 						onClick={() => {
-							this.connectAccountOrLogIn("youtube");
+							this.connectAccountOrLogin("youtube");
 						}}
 					>
 						<span>Connect with</span>
 						<img className={classes.youtubeLogo} src="/images/yt_logo_rgb_light.png" />
-					</div>
-				) : null}
-				{this.props.connectedAccounts.indexOf("google") == -1 ? (
-					<div
-						className={classes.connectWithButton}
+					</Button>
+					{this.props.connectedAccounts.includes("youtube") && canDelete && (
+						<Button
+							variant="contained"
+							color="secondary"
+							onClick={() => {
+								this.props.onRemoveAccount("youtube");
+							}}
+						>
+							X
+						</Button>
+					)}
+				</div>
+				<div className={classes.connectWithButton}>
+					<Button
+						fullWidth
+						variant="contained"
+						color="default"
+						className={null}
 						onClick={() => {
-							this.connectAccountOrLogIn("google");
+							this.connectAccountOrLogin("google");
 						}}
 					>
-						<span id="connectWithGoogleText">Connect with</span>
-						<div id="googleConnectButton" className="customGPlusSignIn">
-							<span className="googleIcon" />
-							<span className="googleButtonText">Google</span>
-						</div>
-					</div>
-				) : null}
-				{this.props.connectedAccounts.indexOf("discord") == -1 ? (
-					<div
-						className={classes.connectWithButton}
+						<span id="connectWithGoogleText">Connect with Google</span>
+						{/* <div id="googleConnectButton" className="customGPlusSignIn">
+								<span className="googleIcon" />
+								<span className="googleButtonText">Google</span>
+							</div> */}
+					</Button>
+					{this.props.connectedAccounts.includes("google") && canDelete && (
+						<Button
+							variant="contained"
+							color="secondary"
+							onClick={() => {
+								this.props.onRemoveAccount("google");
+							}}
+						>
+							X
+						</Button>
+					)}
+				</div>
+				<div className={classes.connectWithButton}>
+					<Button
+						fullWidth
+						variant="contained"
+						color="default"
+						className={null}
 						onClick={() => {
-							this.connectAccountOrLogIn("discord");
+							this.connectAccountOrLogin("discord");
 						}}
 					>
 						<span>Connect with</span>
 						<img className={classes.discordLogo} src="/images/discord_logo.png" />
-					</div>
-				) : null}
+					</Button>
+					{this.props.connectedAccounts.includes("discord") && canDelete && (
+						<Button
+							variant="contained"
+							color="secondary"
+							onClick={() => {
+								this.props.onRemoveAccount("discord");
+							}}
+						>
+							X
+						</Button>
+					)}
+				</div>
 			</Paper>
 		);
 	}
@@ -139,6 +184,7 @@ const mapStateToProps = (state) => {
 	return {
 		authToken: state.clientInfo.authToken,
 		connectedAccounts: state.clientInfo.connectedAccounts,
+		validUsernames: state.clientInfo.validUsernames,
 	};
 };
 

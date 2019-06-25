@@ -94,6 +94,15 @@ export default class VirtualController {
 				new AxisSettings(1, 0, 0.1),
 				new AxisSettings(1, 0, 0.1),
 				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
+				new AxisSettings(1, 0, 0.1),
 			],
 
 			map: {
@@ -262,7 +271,14 @@ export default class VirtualController {
 			this.oldState.axes[j] = axis;
 
 			if (mapping.type == "axis") {
-				let x = axis * this.settings.axes[mapping.which].sensitivity;
+				let ax = this.settings.axes[mapping.which];
+				if (!ax) {
+					console.log("mapping error?");
+					console.log(this.settings.axes);
+					console.log(mapping.which);
+					return;
+				}
+				let x = axis * ax.sensitivity;
 				// x = x / 2 + 0.5;
 				// x *= 255;
 				this.state.axes[mapping.which] = x + this.settings.axes[mapping.which].offset;

@@ -10,6 +10,7 @@ import { connect } from "react-redux";
 
 import { changeUsername, updateClientInfo } from "src/actions/clientInfo.js";
 import { updateSettings } from "src/actions/settings.js";
+import { updateMessages } from "src/actions/chat.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
 
 // redux-saga:
@@ -127,9 +128,17 @@ class Stream extends Component {
 		this.state = {};
 
 		this.inputHandler = new InputHandler(false);
+		window.inputHandler = this.inputHandler; // for lagless canvas
 	}
 
 	start(data) {
+		if (this.socket) {
+			this.socket.close();
+			this.socket = null;
+		}
+		if (this.streams.length > 0) {
+			this.streams[0].pause();
+		}
 		this.socket = socketio(`https://${data.hostServerIP}`, {
 			path: `/${data.hostServerPort}/socket.io`,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
@@ -149,8 +158,6 @@ class Stream extends Component {
 			console.log("something went wrong, (video server IP missing)");
 			return;
 		}
-
-		console.log(data);
 
 		// data.videoServerIP =
 
@@ -302,7 +309,10 @@ class Stream extends Component {
 		if (this.socket) {
 			this.socket.close();
 		}
-		this.streams[0].pause();
+		if (this.streams.length > 0) {
+			this.streams[0].pause();
+		}
+		this.props.updateMessages([]);
 	}
 
 	afk() {
@@ -570,7 +580,12 @@ class Stream extends Component {
 					<Route
 						path="/account"
 						render={(props) => {
-							return <AccountModal {...props} />;
+							return (
+								<AccountModal
+									{...props}
+									accountServerConnection={this.props.accountServerConnection}
+								/>
+							);
 						}}
 					/>
 					<Route
@@ -608,6 +623,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		updateClientInfo: (clientInfo) => {
 			dispatch(updateClientInfo(clientInfo));
+		},
+		updateMessages: (messages) => {
+			dispatch(updateMessages(messages));
 		},
 	};
 };

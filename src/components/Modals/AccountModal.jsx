@@ -10,11 +10,13 @@ import UsernameDropdown from "src/components//UsernameDropdown.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
-import Modal from "@material-ui/core/Modal";
 import ListItemText from "@material-ui/core/ListItemText";
 import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 
 // redux:
 import { connect } from "react-redux";
@@ -26,21 +28,21 @@ import { compose } from "recompose";
 import classNames from "classnames";
 import { deleteAllCookies } from "libs/tools.js";
 
+// device sizes:
+import { device } from "src/constants/DeviceSizes.js";
+
 // jss:
 const styles = (theme) => ({
 	root: {
 		display: "flex",
-		flexDirection: "row",
+		flexDirection: "column",
 		justifyContent: "space-evenly",
-		width: "95%",
-		maxWidth: "950px",
-		// padding: "30px",
-		// position: "absolute",
-		// width: theme.spacing.unit * 50,
-		backgroundColor: theme.palette.background.paper,
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing.unit * 4,
-		borderRadius: "5px",
+		padding: "0px 0px 25px 0px !important",
+	},
+	[device.tablet]: {
+		root: {
+			flexDirection: "column",
+		},
 	},
 	center: {
 		position: "fixed",
@@ -63,6 +65,9 @@ const styles = (theme) => ({
 	topBar: {
 		display: "flex",
 		justifyContent: "space-evenly",
+		margin: "20px 25px 10px",
+		padding: "5px",
+		lineHeight: "60px",
 	},
 });
 
@@ -70,7 +75,10 @@ class AccountModal extends PureComponent {
 	constructor(props) {
 		super(props);
 
+		this.accountServerConnection = this.props.accountServerConnection;
+
 		this.handleClose = this.handleClose.bind(this);
+		this.handleRemoveAccount = this.handleRemoveAccount.bind(this);
 	}
 
 	handleClose() {
@@ -81,6 +89,22 @@ class AccountModal extends PureComponent {
 	handleLogout() {
 		deleteAllCookies();
 		location.reload(true);
+	}
+
+	handleRemoveAccount(type) {
+		this.accountServerConnection.emit(
+			"removeConnectedAccount",
+			{ authToken: this.props.authToken, type: type },
+			(data) => {
+				if (!data.success) {
+					alert(data.reason);
+					return;
+				} else {
+					alert("success");
+				}
+				location.reload(true);
+			},
+		);
 	}
 
 	getTime(t) {
@@ -97,27 +121,38 @@ class AccountModal extends PureComponent {
 		const { classes } = this.props;
 
 		return (
-			<Modal open={true} onClose={this.handleClose}>
-				<div className={classNames(classes.root, classes.center)}>
-					<Paper className={classes.main} elevation={4}>
-						<Paper className={classes.topBar} elevation={2}>
-							Logged in as <UsernameDropdown />
-							<Button
-								className={classes.logout}
-								variant="contained"
-								color="secondary"
-								onClick={this.handleLogout}
-							>
-								Logout
-							</Button>
-						</Paper>
-						<ConnectAccounts />
-						<ListItemText>
-							You've played for {this.getTime(this.props.timePlayed)}
-						</ListItemText>
+			<Dialog
+				open={true}
+				scroll="body"
+				maxWidth="sm"
+				// fullWidth={true}
+				onClose={this.handleClose}
+			>
+				<DialogContent className={classes.root}>
+					<AppBar position="static">
+						<Toolbar>
+							<Typography variant="h6" color="inherit">
+								Account
+							</Typography>
+						</Toolbar>
+					</AppBar>
+					<Paper className={classes.topBar} elevation={2}>
+						<UsernameDropdown />
+						<Button
+							className={classes.logout}
+							variant="contained"
+							color="secondary"
+							onClick={this.handleLogout}
+						>
+							Logout
+						</Button>
 					</Paper>
-				</div>
-			</Modal>
+					<ConnectAccounts onRemoveAccount={this.handleRemoveAccount} />
+					<ListItemText>
+						You've played for {this.getTime(this.props.timePlayed)}
+					</ListItemText>
+				</DialogContent>
+			</Dialog>
 		);
 	}
 }
@@ -125,6 +160,9 @@ class AccountModal extends PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		timePlayed: state.clientInfo.timePlayed,
+		// email: state.clientInfo.email,
+		emailVerified: state.clientInfo.emailVerified,
+		authToken: state.clientInfo.authToken,
 	};
 };
 

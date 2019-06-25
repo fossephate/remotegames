@@ -26,3 +26,13 @@ export const receiveMessage = (data) => {
 		},
 	};
 };
+
+
+export const updateMessages = (messages) => {
+	return {
+		type: types.UPDATE_MESSAGES,
+		payload: {
+			messages: messages,
+		},
+	};
+};

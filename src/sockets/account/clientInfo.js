@@ -6,10 +6,10 @@ import { updateClientInfo } from "src/actions/clientInfo.js";
 import localforage from "localforage";
 import Cookie from "js-cookie";
 
-function authenticate(socket, dispatch) {
+function getAccountInfo(socket, dispatch) {
 	let authToken = Cookie.get("RemoteGames");
 	if (authToken) {
-		socket.emit("authenticate", {
+		socket.emit("getAccountInfo", {
 			authToken: authToken,
 			usernameIndex: 0,
 		}, (data) => {
@@ -30,28 +30,8 @@ function authenticate(socket, dispatch) {
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const clientInfoEvents = (socket, dispatch) => {
-	/* AUTHENTICATION */
-	// authenticate(socket, dispatch);
-	// setTimeout(() => {
-	// 	$.ajax({
-	// 		url: "https://remotegames.io/accountData/" + this.props.clientInfo.username + "/" + this.props.clientInfo.userid + "/" + authCookie,
-	// 	});
-	// }, 5000);
-
-	// socket.on("chatMessage", (data) => {
-	// 	dispatch(receiveMessage(data.message, data.username, data.userid));
-	// });
-
-	// socket.on("authenticationFailure", (data) => {
-	// 	console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
-	// 	// swal("Already Logged In / multiple tabs open!");
-	// });
-
-	// response:
-	// socket.on("clientInfo", (data) => {
-	// 	console.log("clientInfo received");
-	// 	dispatch(updateClientInfo({ ...data, loggedIn: true }));
-	// });
+	/* getAccountInfo */
+	getAccountInfo(socket, dispatch);
 
 	socket.on("banned", (data) => {
 		localforage.setItem("banned", "banned");

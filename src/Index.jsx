@@ -85,6 +85,7 @@ let preloadedState = {
 		isBanned: false,
 		waitlisted: false,
 		timePlayed: 0,
+		emailVerified: false,
 	},
 
 	settings: {
@@ -240,16 +241,16 @@ class Index extends Component {
 		this.getTheme = this.getTheme.bind(this);
 		this.switchTheme = this.switchTheme.bind(this);
 
-		let currentValue = null;
-		const unsubscribe = store.subscribe(() => {
-			let previousValue = currentValue;
-			currentValue = store.getState().settings.theme;
-			if (previousValue !== currentValue) {
-				console.log("theme changed");
-				// this.switchTheme(currentValue);
-				this.setState({});
-			}
-		});
+		// let currentValue = null;
+		// const unsubscribe = store.subscribe(() => {
+		// 	let previousValue = currentValue;
+		// 	currentValue = store.getState().settings.theme;
+		// 	if (previousValue !== currentValue) {
+		// 		console.log("theme changed");
+		// 		// this.switchTheme(currentValue);
+		// 		this.setState({});
+		// 	}
+		// });
 	}
 
 	switchTheme(themeName) {

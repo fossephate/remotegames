@@ -279,7 +279,7 @@ class StreamsAppBar extends PureComponent {
 							color="default"
 							variant="contained"
 							onClick={() => {
-								window.location.href = "https://discord.io/remotegames/";
+								window.location.href = "https://discord.io/rgio/";
 							}}
 						>
 							Discord Server

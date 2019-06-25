@@ -40,6 +40,22 @@ class VideoServer {
 					socket.compress(false).broadcast.emit("videoData", data);
 				}
 			});
+
+
+			/* SIMPLEPEER */
+			socket.on("requestAudio", (data) => {
+				this.io.to("host").emit("createNewPeer", { id: socket.id });
+			});
+			socket.on("hostPeerSignalReply", (data) => {
+				this.io.to(data.id).emit("hostPeerSignal", data.data);
+			});
+			socket.on("hostPeerSignal", (data) => {
+				this.io.emit("hostPeerSignal", data);
+			});
+			socket.on("clientPeerSignal", (data) => {
+				this.io.emit("clientPeerSignal", { id: socket.id, data: data });
+			});
+
 		});
 	}
 
@@ -121,9 +137,14 @@ accountServerConnection.on("stopVideo", (data) => {
 
 // for testing:
 let port = 8000;
-// set port as unavailable:
 ports[port] = false;
 videoServers[port] = new VideoServer(port, "a");
+videoServers[port].init();
+
+// fosse2:
+port = 8001;
+ports[port] = false;
+videoServers[port] = new VideoServer(port, "b");
 videoServers[port].init();
 
 register();
