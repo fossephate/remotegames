@@ -58,10 +58,11 @@ class MySlider extends PureComponent {
 		return (
 			<Slider
 				classes={{
-					root: this.props.sliderClass || classes.slider,
-					container: this.props.containerClass,
-					thumbIconWrapper: this.props.thumbIconWrapperClass,
-					activated: this.props.activatedClass,
+					root: this.props.rootClass || classes.slider,
+					thumb: this.props.thumbClass,
+					active: this.props.activeClass,
+					rail: this.props.railClass,
+					track: this.props.trackClass,
 				}}
 				min={this.props.min}
 				max={this.props.max}

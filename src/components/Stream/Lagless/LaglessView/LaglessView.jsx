@@ -80,7 +80,7 @@ class LaglessView extends PureComponent {
 				) : null}
 
 				{displayLagless ? <LaglessCanvas classes={videoClasses} /> : null}
-				<iframe
+				{/* <iframe
 					id="twitchVideo"
 					className={classes.twitch}
 					src="https://player.twitch.tv/?channel=remotegames&muted=true&autoplay=true"
@@ -88,7 +88,11 @@ class LaglessView extends PureComponent {
 					scrolling="no"
 					allowFullScreen={true}
 					style={twitchStyle}
-				/>
+				/> */}
+
+				<div id="twitchVideo" className={classes.twitch} style={twitchStyle}>
+					You need to login first or this stream is offline.
+				</div>
 
 				{this.props.controllerView ? (
 					<RightControllerView

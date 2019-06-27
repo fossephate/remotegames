@@ -34,38 +34,50 @@ const styles = (theme) => ({
 		// padding: "1px",
 		cursor: "pointer",
 	},
-	slider: {
+	rootClass: {
 		width: "70%",
-	},
-	container: {
-		// first part of track:
-		"& :first-child": {
-			backgroundColor: "#FFF",
-		},
+		// track:
+		// "& :nth-child(1)": {
+		// 	backgroundColor: "#FFF",
+		// },
+		// // first part of track:
+		// "& :nth-child(2)": {
+		// 	backgroundColor: "#FFF",
+		// },
 		// thumb icon:
-		"& :nth-child(2)": {
-			"& :first-child": {
-				backgroundColor: "#FFF",
-				"&:hover": {
-					boxShadow: "0px 0px 0px 9px rgba(255, 255, 255, 0.16)",
-				},
-				"&:active": {
-					boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)",
-				},
-			},
+		// "& :nth-child(4)": {
+		// 	"& :first-child": {
+		// 	},
+		// 	backgroundColor: "#FFF",
+		// 	"&:hover": {
+		// 		boxShadow: "0px 0px 0px 9px rgba(255, 255, 255, 0.16)",
+		// 	},
+		// 	"&:active": {
+		// 		boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)",
+		// 	},
+		// },
+
+	},
+	rail: {
+		backgroundColor: "#FFF",
+	},
+	track: {
+		backgroundColor: "#FFF",
+	},
+	thumb: {
+		backgroundColor: "#FFF",
+		"&:hover": {
+			boxShadow: "0px 0px 0px 9px rgba(255, 255, 255, 0.16)",
 		},
-		// last part of track:
-		"& :last-child": {
-			backgroundColor: "#FFF",
+		"&:active": {
+			boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)",
 		},
 	},
-	thumbIconWrapper: {
-		backgroundColor: "#FFF !important",
-	},
-	activated: {
-		"button&": {
+	active: {
+		"span&": {
 			boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16) !important",
 		},
+		// boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16) !important",
 	},
 });
 
@@ -83,10 +95,11 @@ class VolumeSlider extends PureComponent {
 			<Paper className={classes.root} elevation={3}>
 				<VolumeDown className={classes.svg} onClick={this.props.onMute}/>
 				<MySlider
-					sliderClass={classes.slider}
-					containerClass={classes.container}
-					thumbIconWrapperClass={classes.thumbIconWrapper}
-					activatedClass={classes.activated}
+					rootClass={classes.rootClass}
+					thumbClass={classes.thumb}
+					activeClass={classes.active}
+					railClass={classes.rail}
+					trackClass={classes.track}
 					min={0}
 					max={100}
 					step={1}

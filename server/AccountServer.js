@@ -627,6 +627,7 @@ app.get("/getUser", (req, res) => {
 			{ email: user.toLowerCase() },
 			{ usernameLower: user.toLowerCase() },
 			{ "twitch.username": user },
+			{ "discord.username": user },
 		],
 	};
 	Account.findOne(queryObj)

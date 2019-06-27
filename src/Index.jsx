@@ -226,9 +226,6 @@ class Index extends Component {
 		super(props);
 
 		this.theme = createMuiTheme({
-			typography: {
-				useNextVariants: true,
-			},
 			palette: {
 				type: "dark",
 				primary: {
@@ -239,20 +236,7 @@ class Index extends Component {
 				},
 			},
 		});
-		// this.theme = {
-		// 	typography: {
-		// 		useNextVariants: true,
-		// 	},
-		// 	palette: {
-		// 		type: "dark",
-		// 		primary: {
-		// 			main: "#2181ff", // #2181ff
-		// 		},
-		// 		secondary: {
-		// 			main: "#ff3b3b",
-		// 		},
-		// 	},
-		// };
+
 		this.getTheme = this.getTheme.bind(this);
 		this.switchTheme = this.switchTheme.bind(this);
 

@@ -125,7 +125,7 @@ class AccountModal extends PureComponent {
 				open={true}
 				scroll="body"
 				maxWidth="sm"
-				// fullWidth={true}
+				fullWidth={true}
 				onClose={this.handleClose}
 			>
 				<DialogContent className={classes.root}>
