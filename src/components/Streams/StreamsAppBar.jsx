@@ -161,7 +161,7 @@ class StreamsAppBar extends PureComponent {
 	};
 
 	render() {
-		console.log("re-rendering streams.");
+		console.log("re-rendering streamsappbar.");
 
 		const { anchorEl, mobileMoreAnchorEl } = this.state;
 		const { classes } = this.props;

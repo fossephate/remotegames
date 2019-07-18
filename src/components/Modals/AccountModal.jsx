@@ -148,7 +148,7 @@ class AccountModal extends PureComponent {
 						</Button>
 					</Paper>
 					<ConnectAccounts onRemoveAccount={this.handleRemoveAccount} />
-					<ListItemText>
+					<ListItemText style={{margin: "0 auto"}}>
 						You've played for {this.getTime(this.props.timePlayed)}
 					</ListItemText>
 				</DialogContent>

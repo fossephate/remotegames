@@ -757,7 +757,7 @@ io.on("connection", (socket) => {
 					// console.log("Account already exists, EMAIL_ALREADY_TAKEN.");
 					// socket.emit("ACCOUNT_ERROR", "EMAIL_ALREADY_TAKEN");
 					cb({ success: false, reason: "EMAIL_ALREADY_TAKEN" });
-					return { then: function() {} }; // break promise chain
+					return { then: () => {} }; // break promise chain
 				}
 			})
 			.then(() => {
@@ -771,7 +771,7 @@ io.on("connection", (socket) => {
 						// console.log("Account already exists, USERNAME_ALREADY_TAKEN.");
 						// socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
 						cb({ success: false, reason: "USERNAME_ALREADY_TAKEN" });
-						return { then: function() {} }; // break promise chain
+						return { then: () => {} }; // break promise chain
 					}
 				});
 			})
@@ -804,9 +804,7 @@ io.on("connection", (socket) => {
 						});
 						mailOptions.to = email;
 						mailOptions.subject = "Verify your email with remotegames.io";
-						mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${
-							newAccount.authToken
-						}`;
+						mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${newAccount.authToken}`;
 						transporter.sendMail(mailOptions, (error, info) => {
 							if (error) {
 								console.log(error);
@@ -1073,9 +1071,7 @@ io.on("connection", (socket) => {
 				});
 				mailOptions.to = account.email;
 				mailOptions.subject = "Verify your email with remotegames.io";
-				mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${
-					account.authToken
-				}`;
+				mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${account.authToken}`;
 				transporter.sendMail(mailOptions, (error, info) => {
 					if (error) {
 						console.log(error);
@@ -1265,9 +1261,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		let username = data.username.toLowerCase();
-
-		let queryObj = { usernameLower: username };
+		let queryObj = { usernameLower: data.username.toLowerCase() };
 		Account.findOne(queryObj)
 			.exec()
 			.then((account) => {

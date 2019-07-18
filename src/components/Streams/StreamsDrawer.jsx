@@ -121,7 +121,7 @@ class StreamsDrawer extends PureComponent {
 			<div>
 				<div className={classes.toolbar} />
 				<Divider />
-				<List>
+				{/* <List>
 					{["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
 						<ListItem button key={text}>
 							<ListItemIcon>
@@ -141,6 +141,17 @@ class StreamsDrawer extends PureComponent {
 							<ListItemText primary={text} />
 						</ListItem>
 					))}
+				</List> */}
+				<List>
+					<ListItem button>
+						<ListItemText primary={"Streams"} />
+					</ListItem>
+					<ListItem button>
+						<ListItemIcon>
+							<InboxIcon />
+						</ListItemIcon>
+						<ListItemText primary={"Subscriptions"} />
+					</ListItem>
 				</List>
 			</div>
 		);

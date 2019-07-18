@@ -884,6 +884,15 @@ class HostServer {
 				this.clients[socketid].isMod = true;
 				this.clients[socketid].isPlus = true;
 			}
+
+			// copy roles to accountMap:
+			// todo: fix this:
+			if (this.accountMap[this.clients[socketid].userid]) {
+				this.accountMap[this.clients[socketid].userid].isMod = this.clients[socketid].isMod;
+				this.accountMap[this.clients[socketid].userid].isPlus = this.clients[socketid].isPlus;
+				// this.accountMap[this.clients[socketid].userid].isStreamer = this.clients[socketid].isStreamer;
+			}
+
 		}
 	}
 

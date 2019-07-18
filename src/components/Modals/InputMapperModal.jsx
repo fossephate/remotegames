@@ -2,10 +2,13 @@
 import React, { PureComponent } from "react";
 
 // react-router:
-import { withRouter } from "react-router";
+import { Route, withRouter } from "react-router";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
+import { AppBar, Toolbar, Typography } from "@material-ui/core";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -16,7 +19,8 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Modal from "@material-ui/core/Modal";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
 
 // components:
 import ConnectAccounts from "src/components/ConnectAccounts.jsx";
@@ -254,23 +258,10 @@ class KeyboardMapper extends PureComponent {
 const styles = (theme) => ({
 	root: {
 		display: "flex",
-		flexDirection: "row",
+		flexDirection: "column",
 		justifyContent: "space-evenly",
-		width: "95%",
-		maxWidth: "950px",
-		// padding: "30px",
-		// position: "absolute",
-		// width: theme.spacing.unit * 50,
-		backgroundColor: theme.palette.background.paper,
-		boxShadow: theme.shadows[5],
-		padding: theme.spacing.unit * 4,
-		borderRadius: "5px",
-	},
-	center: {
-		position: "fixed",
-		top: "50%",
-		left: "50%",
-		transform: "translate(-50%, -50%)",
+		// padding: "0px 0px 25px 0px !important",
+		padding: "0 !important",
 	},
 	controllerRemapper: {
 		display: "flex",
@@ -316,6 +307,8 @@ class InputMapperModal extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
+		let which = this.props.history.location.pathname.indexOf("/controller") > -1 ? 0 : 1;
+
 		let inputHandler = this.props.inputHandler;
 		let gamepadWrapper = inputHandler.gamepadWrapper;
 
@@ -353,57 +346,110 @@ class InputMapperModal extends PureComponent {
 		}
 
 		return (
-			<Modal open={true} onClose={this.handleClose}>
-				<div className={classNames(classes.root, classes.center)}>
-					<Paper className={classes.controllerRemapper} elevation={4}>
-						<ListItemText>Active Gamepad:</ListItemText>
+			<Dialog
+				open={true}
+				scroll="body"
+				maxWidth="sm"
+				fullWidth={true}
+				onClose={this.handleClose}
+			>
+				<DialogContent className={classes.root}>
+					<AppBar position="static">
+						<Toolbar>
+							<Typography variant="h6" color="inherit">
+								Remapper
+							</Typography>
+						</Toolbar>
+					</AppBar>
+					<Tabs
+						centered
+						value={which}
+						classes={{ root: classes.tabs }}
+						variant="fullWidth"
+						indicatorColor="primary"
+						textColor="primary"
+						// scrollable
+						// scrollButtons="auto"
+						onChange={(event, value) => {
+							if (value === 0) {
+								this.props.history.replace("/remap/controller");
+							}
+							if (value === 1) {
+								this.props.history.replace("/remap/keyboard");
+							}
+						}}
+					>
+						<Tab label="Controller" />
+						<Tab label="Keyboard" />
+						{/* <Tab label="Mouse" /> */}
+					</Tabs>
 
-						<Select
-							value={activeGamepadIndex}
-							onChange={this.handleChange}
-							input={<OutlinedInput labelWidth={0} />}
-						>
-							{gamepads}
-						</Select>
+					<Route
+						path="/remap/controller"
+						render={(props) => {
+							return (
+								<Paper className={classes.controllerRemapper} elevation={4}>
+									<ListItemText>Active Gamepad:</ListItemText>
 
-						<List className={classes.list}>
-							{[...Array(17)].map((e, i) => (
-								<ControllerMapper
-									key={i}
-									update={this.update}
-									inputHandler={inputHandler}
-									type="button"
-									which={i}
-								/>
-							))}
-							{[...Array(4)].map((e, i) => (
-								<ControllerMapper
-									key={i}
-									update={this.update}
-									inputHandler={inputHandler}
-									type="axis"
-									which={i}
-								/>
-							))}
-						</List>
-					</Paper>
+									<Select
+										value={activeGamepadIndex}
+										onChange={this.handleChange}
+										input={<OutlinedInput labelWidth={0} />}
+									>
+										{gamepads}
+									</Select>
 
-					<Paper className={classes.keyboardRemapper} elevation={4}>
-						<ListItemText>Keyboard Remapper:</ListItemText>
-						<List className={classes.list}>
-							{[...Array(26)].map((e, i) => (
-								<KeyboardMapper
-									key={i}
-									update={this.update}
-									inputHandler={inputHandler}
-									type="button"
-									which={i}
-								/>
-							))}
-						</List>
-					</Paper>
-				</div>
-			</Modal>
+									<Paper elevation={2} style={{marginTop: 15}}>
+										<List className={classes.list}>
+											{[...Array(17)].map((e, i) => (
+												<ControllerMapper
+													key={i}
+													update={this.update}
+													inputHandler={inputHandler}
+													type="button"
+													which={i}
+												/>
+											))}
+											{[...Array(4)].map((e, i) => (
+												<ControllerMapper
+													key={i}
+													update={this.update}
+													inputHandler={inputHandler}
+													type="axis"
+													which={i}
+												/>
+											))}
+										</List>
+									</Paper>
+								</Paper>
+							);
+						}}
+					/>
+
+					<Route
+						path="/remap/keyboard"
+						render={(props) => {
+							return (
+								<Paper className={classes.keyboardRemapper} elevation={4}>
+									<Paper elevation={2}>
+										<List className={classes.list}>
+											{[...Array(26)].map((e, i) => (
+												<KeyboardMapper
+													key={i}
+													update={this.update}
+													inputHandler={inputHandler}
+													type="button"
+													which={i}
+												/>
+											))}
+										</List>
+									</Paper>
+								</Paper>
+							);
+						}}
+					/>
+				</DialogContent>
+			</Dialog>
 		);
 	}
 }
