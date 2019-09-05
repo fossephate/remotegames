@@ -43,7 +43,6 @@ const sagaMiddleware = createSagaMiddleware();
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let preloadedState = {
-
 	// account: {
 	//
 	// },
@@ -209,7 +208,6 @@ let accountServerConnection = socketio("https://remotegames.io", {
 	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 });
 
-
 // import handleActions from "src/sagas";
 import handleAccountEvents from "src/sockets/account";
 // // listen to events and dispatch actions:
@@ -237,7 +235,6 @@ class Index extends Component {
 			},
 		});
 
-		this.getTheme = this.getTheme.bind(this);
 		this.switchTheme = this.switchTheme.bind(this);
 
 		// let currentValue = null;
@@ -287,8 +284,6 @@ class Index extends Component {
 		}
 		this.theme = createMuiTheme(this.theme);
 	}
-
-	getTheme() {}
 
 	render() {
 		console.log("re-rendering index");

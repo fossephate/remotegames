@@ -21,14 +21,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/fossephate/remotegames.git"
+    "url": "git+https://github.com/mfosse/remotegames.git"
   },
   "author": "",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/fossephate/remotegames/issues"
+    "url": "https://github.com/mfosse/remotegames/issues"
   },
-  "homepage": "https://github.com/fossephate/remotegames#readme",
+  "homepage": "https://github.com/mfosse/remotegames#readme",
   "dependencies": {
     "@babel/core": "^7.1.2",
     "@babel/plugin-proposal-class-properties": "^7.3.0",
@@ -67,8 +67,8 @@
     "passport-discord": "^0.1.3",
     "passport-google-oauth20": "^1.0.0",
     "passport-oauth": "^1.0.0",
-    "passport-twitch": "git+https://git@github.com/fossephate/passport-twitch.git",
-    "passport-youtube-v3": "git+https://git@github.com/fossephate/passport-youtube-v3.git",
+    "passport-twitch": "github:mfosse/passport-twitch",
+    "passport-youtube-v3": "github:mfosse/passport-youtube-v3",
     "performance-now": "^2.1.0",
     "prop-types": "^15.6.2",
     "query-string": "^6.5.0",

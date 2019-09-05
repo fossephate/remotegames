@@ -238,11 +238,18 @@ class HostServer {
 					text: data.text,
 					isReplay: false,
 					isBanned: false,
+					roles: client.roles,
 				};
 				if (client.isBanned) {
 					// socket.emit("banned");
 					// return;
 					msgObj.isBanned = true;
+				}
+				if (client.isMod) {
+					msgObj.roles.push("mod");
+				}
+				if (client.isPlus) {
+					msgObj.roles.push("plus");
 				}
 				this.sendMessage(msgObj);
 				this.parseMessage(client, msgObj);
@@ -633,9 +640,7 @@ class HostServer {
 						msgObj.text = "Successfully changed account status.";
 						this.sendMessage(msgObj);
 					} else {
-						msgObj.text = `Something went wrong while trying to change the user's status: ${
-							data.reason
-						}.`;
+						msgObj.text = `Something went wrong while trying to change the user's status: ${data.reason}.`;
 						this.sendMessage(msgObj);
 					}
 				},
@@ -888,11 +893,14 @@ class HostServer {
 			// copy roles to accountMap:
 			// todo: fix this:
 			if (this.accountMap[this.clients[socketid].userid]) {
-				this.accountMap[this.clients[socketid].userid].isMod = this.clients[socketid].isMod;
-				this.accountMap[this.clients[socketid].userid].isPlus = this.clients[socketid].isPlus;
+				this.accountMap[this.clients[socketid].userid].isMod = this.clients[
+					socketid
+				].isMod;
+				this.accountMap[this.clients[socketid].userid].isPlus = this.clients[
+					socketid
+				].isPlus;
 				// this.accountMap[this.clients[socketid].userid].isStreamer = this.clients[socketid].isStreamer;
 			}
-
 		}
 	}
 

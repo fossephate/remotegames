@@ -14,7 +14,6 @@ import { AppBar, Toolbar, Typography } from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import ListItemText from "@material-ui/core/ListItemText";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 
@@ -148,7 +147,7 @@ class AccountModal extends PureComponent {
 						</Button>
 					</Paper>
 					<ConnectAccounts onRemoveAccount={this.handleRemoveAccount} />
-					<ListItemText style={{margin: "0 auto"}}>
+					<ListItemText style={{ margin: "0 auto" }}>
 						You've played for {this.getTime(this.props.timePlayed)}
 					</ListItemText>
 				</DialogContent>

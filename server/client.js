@@ -17,6 +17,8 @@ class Client {
 		this.ip = this.socket.handshake.headers["x-real-ip"];
 		this.port = this.socket.handshake.headers["x-real-port"];
 
+		this.roles = [];
+
 		this.isHost = false;
 		this.isMod = false;
 		this.isPlus = false;
@@ -26,6 +28,8 @@ class Client {
 
 	update(client) {
 		this.authenticated = true;
+
+		this.roles = client.roles;
 
 		if (client.connectedAccounts) {
 			this.connectedAccounts = client.connectedAccounts;
