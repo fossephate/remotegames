@@ -4,14 +4,9 @@ import PropTypes from "prop-types";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import Fab from "@material-ui/core/Fab";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
-// for voting:
-import Snackbar from "@material-ui/core/Snackbar";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
 
 // icons:
 import SendIcon from "@material-ui/icons/Send";
@@ -103,7 +98,7 @@ class SendMessageForm extends PureComponent {
 		this.inputRef = React.createRef();
 
 		this.state = {
-			voting: false,
+			// voting: false,
 			text: "",
 			commands: [
 				"help",
@@ -116,9 +111,6 @@ class SendMessageForm extends PureComponent {
 				"playing",
 				"restartscript",
 				"restartserver",
-				"restart1",
-				"restart2",
-				"restart3",
 				"fixcontrollers",
 				"lock",
 				"unlock",
@@ -138,14 +130,9 @@ class SendMessageForm extends PureComponent {
 				"enablegoto",
 				"disablechat",
 				"enablechat",
-				"xboxgoto",
-				"xboxgames",
-				"xboxgamelist",
-				"xboxforcegoto",
 				"giveplus",
 				"removeplus",
 				"setgame",
-				"setxboxgame",
 			],
 			emotes: [],
 		};
@@ -217,70 +204,8 @@ class SendMessageForm extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
-		if (!this.state.voting) {
-			let message = this.props.lastMessage;
-			if (
-				message &&
-				message.username == "TPNSbot" &&
-				/A vote has been started to/.test(message.text) &&
-				!message.isReplay
-			) {
-				this.setState({ voting: true });
-				setTimeout(() => {
-					this.setState({ voting: false });
-				}, 18000);
-			}
-		}
-
 		return (
 			<Paper id="SendMessageForm" className={classes.root} elevation={0}>
-				<Snackbar
-					anchorOrigin={{
-						vertical: "top",
-						horizontal: "right",
-					}}
-					open={this.state.voting}
-					autoHideDuration={0}
-					onClose={() => {}}
-					message={<span id="message-id">A vote has started to switch games!</span>}
-					action={[
-						<Button
-							key="leave"
-							color="secondary"
-							size="small"
-							variant="contained"
-							onClick={() => {
-								this.props.sendMessage("yea");
-								this.setState({ voting: false });
-							}}
-						>
-							LEAVE
-						</Button>,
-						<div key="spacer" style={{ width: "15px" }} />,
-						<Button
-							key="stay"
-							color="primary"
-							size="small"
-							variant="contained"
-							onClick={() => {
-								this.props.sendMessage("nay");
-								this.setState({ voting: false });
-							}}
-						>
-							STAY
-						</Button>,
-						<IconButton
-							key="close"
-							color="inherit"
-							className={classes.close}
-							onClick={() => {
-								this.setState({ voting: false });
-							}}
-						>
-							<CloseIcon />
-						</IconButton>,
-					]}
-				/>
 				<ReactTextareaAutocomplete
 					id="messageBoxOld"
 					className={classes.messageBox}
@@ -356,14 +281,13 @@ class SendMessageForm extends PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		accountMap: state.stream.accountMap,
-		lastMessage: state.stream.chat.messages[state.stream.chat.messages.length - 1],
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		sendMessage: (message) => {
-			dispatch(sendMessage(message));
+		sendMessage: (text) => {
+			dispatch(sendMessage(text));
 		},
 	};
 };

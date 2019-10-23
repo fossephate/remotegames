@@ -21,9 +21,7 @@ import { updateSettings } from "src/actions/settings.js";
 // libs:
 import { toggleFullscreen } from "libs/tools.js";
 
-
 class CheckboxSettings extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -37,14 +35,29 @@ class CheckboxSettings extends PureComponent {
 					<ListItem>
 						<MyCheckbox
 							text={"Enable Keyboard Controls"}
-							handleChange={(state) => {this.props.updateSettings({ keyboardControls: state })}}
-							checked={this.props.settings.keyboardControls}/>
+							handleChange={(state) => {
+								this.props.updateSettings({ keyboardControls: state });
+							}}
+							checked={this.props.settings.keyboardControls}
+						/>
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
 							text={"Enable Controller Controls"}
-							handleChange={(state) => {this.props.updateSettings({ controllerControls: state })}}
-							checked={this.props.settings.controllerControls}/>
+							handleChange={(state) => {
+								this.props.updateSettings({ controllerControls: state });
+							}}
+							checked={this.props.settings.controllerControls}
+						/>
+					</ListItem>
+					<ListItem>
+						<MyCheckbox
+							text={"Real keyboard / mouse"}
+							handleChange={(state) => {
+								this.props.updateSettings({ realKeyboardMouse: state });
+							}}
+							checked={this.props.settings.realKeyboardMouse}
+						/>
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
@@ -60,16 +73,18 @@ class CheckboxSettings extends PureComponent {
 									window.dispatchEvent(new Event("resize"));
 								}, 200);
 							}}
-							checked={this.props.settings.largescreen}/>
+							checked={this.props.settings.largescreen}
+						/>
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
 							text={"Audio 3.0"}
 							handleChange={this.props.toggleAudioThree}
-							checked={this.props.settings.audioThree}/>
+							checked={this.props.settings.audioThree}
+						/>
 					</ListItem>
 					<ListItem>
-						<ThemeSelector/>
+						<ThemeSelector />
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
@@ -99,7 +114,8 @@ class CheckboxSettings extends PureComponent {
 									});
 								}
 							}}
-							checked={this.props.settings.fullscreen}/>
+							checked={this.props.settings.fullscreen}
+						/>
 					</ListItem>
 					{/* <ListItem>
 						<MyCheckbox
@@ -116,8 +132,11 @@ class CheckboxSettings extends PureComponent {
 					<ListItem>
 						<MyCheckbox
 							text={"Analog Stick Mode"}
-							handleChange={(state) => {this.props.updateSettings({ analogStickMode: state })}}
-							checked={this.props.settings.analogStickMode}/>
+							handleChange={(state) => {
+								this.props.updateSettings({ analogStickMode: state });
+							}}
+							checked={this.props.settings.analogStickMode}
+						/>
 					</ListItem>
 					{/* <ListItem>
 						<MyCheckbox
@@ -134,14 +153,20 @@ class CheckboxSettings extends PureComponent {
 					<ListItem>
 						<MyCheckbox
 							text={"Hide Chat"}
-							handleChange={(state) => {this.props.updateSettings({ hideChat: state })}}
-							checked={this.props.settings.hideChat}/>
+							handleChange={(state) => {
+								this.props.updateSettings({ hideChat: state });
+							}}
+							checked={this.props.settings.hideChat}
+						/>
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
 							text={"Hide Nav Bar"}
-							handleChange={(state) => {this.props.updateSettings({ hideNav: state })}}
-							checked={this.props.settings.hideNav}/>
+							handleChange={(state) => {
+								this.props.updateSettings({ hideNav: state });
+							}}
+							checked={this.props.settings.hideNav}
+						/>
 					</ListItem>
 					{/* <ListItem>
 						<MyCheckbox
@@ -158,9 +183,7 @@ class CheckboxSettings extends PureComponent {
 			</Paper>
 		);
 	}
-
 }
-
 
 // export default JoinLeaveQueueButton;
 const mapStateToProps = (state) => {
@@ -172,9 +195,12 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		updateSettings: (settings) => {
-			dispatch(updateSettings(settings))
+			dispatch(updateSettings(settings));
 		},
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CheckboxSettings);
+export default connect(
+	mapStateToProps,
+	mapDispatchToProps,
+)(CheckboxSettings);

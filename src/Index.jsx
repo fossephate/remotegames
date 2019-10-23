@@ -18,8 +18,8 @@ import Streams from "src/Streams.jsx";
 import Stream from "src/Stream.jsx";
 
 // redux:
-import { Provider, connect } from "react-redux";
-import { combineReducers, createStore, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
+import { createStore, applyMiddleware, compose } from "redux";
 
 import rootReducer from "./reducers";
 
@@ -86,28 +86,30 @@ let preloadedState = {
 		waitlisted: false,
 		timePlayed: 0,
 		emailVerified: false,
+		roles: {},
 	},
 
 	settings: {
-		general: {
-			keyboardControls: true,
-			controllerControls: true,
-			mouseControls: false,
-			touchControls: false,
-			controllerView: true,
-			fullscreen: false,
-			largescreen: false,
-			audioThree: false,
-			analogStickMode: false,
-			currentPlayer: 0,
-			volume: 50,
-			theme: "dark",
-		},
+		// general: {
+		// 	keyboardControls: true,
+		// 	controllerControls: true,
+		// 	mouseControls: false,
+		// 	touchControls: false,
+		// 	controllerView: true,
+		// 	fullscreen: false,
+		// 	largescreen: false,
+		// 	audioThree: false,
+		// 	analogStickMode: false,
+		// 	currentPlayer: 0,
+		// 	volume: 50,
+		// 	theme: "dark",
+		// },
 
 		keyboardControls: true,
 		controllerControls: true,
 		mouseControls: false,
 		touchControls: false,
+		realKeyboardMouse: false,
 		controllerView: true,
 		fullscreen: false,
 		largescreen: false,
@@ -118,7 +120,7 @@ let preloadedState = {
 
 		currentPlayer: 0,
 		streamNumber: 0,
-		volume: 50,
+		volume: 0,
 		theme: "dark",
 	},
 
@@ -150,7 +152,6 @@ function loadState() {
 			settings.currentPlayer = 0; // same as above
 		}
 
-		console.log(settings);
 		store.dispatch(updateSettings({ ...settings }));
 
 		// check if banned:
@@ -162,30 +163,6 @@ function loadState() {
 				window.banned = false;
 			}
 		});
-
-		setTimeout(() => {
-			// check if incognito && chrome:
-			let isChrome =
-				/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
-			if (isChrome) {
-				let fs = window.RequestFileSystem || window.webkitRequestFileSystem;
-				if (!fs) {
-					console.log("check failed?");
-				} else {
-					fs(
-						window.TEMPORARY,
-						100,
-						() => {
-							console.log("ok.");
-						},
-						() => {
-							store.dispatch(updateClientInfo({ banned: true }));
-							window.banned = true;
-						},
-					);
-				}
-			}
-		}, 100);
 	});
 }
 
@@ -223,66 +200,87 @@ class Index extends Component {
 	constructor(props) {
 		super(props);
 
-		this.theme = createMuiTheme({
-			palette: {
-				type: "dark",
-				primary: {
-					main: "#2181ff", // #2181ff
-				},
-				secondary: {
-					main: "#ff3b3b",
-				},
-			},
-		});
+		this.state = {
+			theme: createMuiTheme({}),
+		};
 
 		this.switchTheme = this.switchTheme.bind(this);
 
-		// let currentValue = null;
-		// const unsubscribe = store.subscribe(() => {
-		// 	let previousValue = currentValue;
-		// 	currentValue = store.getState().settings.theme;
-		// 	if (previousValue !== currentValue) {
-		// 		console.log("theme changed");
-		// 		// this.switchTheme(currentValue);
-		// 		this.setState({});
-		// 	}
-		// });
+		let currentValue = null;
+		const unsubscribe = store.subscribe(() => {
+			let previousValue = currentValue;
+			currentValue = store.getState().settings.theme;
+			if (previousValue !== currentValue) {
+				console.log("theme changed");
+				this.switchTheme(currentValue);
+				this.setState({});
+			}
+		});
+	}
+
+	componentDidMount() {
+		store.dispatch(updateSettings({ theme: "spooky" }));
 	}
 
 	switchTheme(themeName) {
+		let theme = {};
 		switch (themeName) {
 			case "light":
-				this.theme = merge(this.theme, {
-					palette: {
-						type: "light",
-					},
-				});
-				break;
-			case "dark":
-				this.theme = merge(this.theme, {
-					palette: {
-						type: "dark",
-					},
-				});
-				break;
-			case "mint":
-				this.theme = merge(this.theme, {
+				theme = /*merge(this.state.theme, */ {
 					palette: {
 						type: "light",
 						primary: {
-							main: "#16d0f4",
+							main: "#2181ff", // #2181ff
 						},
 						secondary: {
-							main: "#24d2ac",
+							main: "#ff3b3b",
 						},
 						background: {
-							paper: "#5ae097",
+							paper: "#fafafa",
 						},
 					},
-				});
+				} /*)*/;
+				break;
+			case "dark":
+				theme = {
+					palette: {
+						type: "dark",
+						primary: {
+							main: "#2181ff", // #2181ff
+						},
+						secondary: {
+							main: "#ff3b3b",
+						},
+						background: {
+							paper: "#424242",
+						},
+					},
+				};
+				break;
+			case "spooky":
+				theme = {
+					palette: {
+						type: "dark",
+						primary: {
+							main: "#ff7930",
+						},
+						secondary: {
+							main: "#000",
+							// main: "#a73ae7",
+						},
+						background: {
+							paper: "#2f2f2f",
+						},
+					},
+				};
 				break;
 		}
-		this.theme = createMuiTheme(this.theme);
+		// this.theme = createMuiTheme(this.theme);
+		this.setState({ theme: createMuiTheme(theme) });
+	}
+
+	shouldComponentUpdate(nextProps, nextState) {
+		return true;
 	}
 
 	render() {
@@ -295,7 +293,7 @@ class Index extends Component {
 
 		return (
 			<Provider store={store}>
-				<ThemeProvider theme={this.theme}>
+				<ThemeProvider theme={this.state.theme}>
 					<CssBaseline />
 					<BrowserRouter>
 						{/* selects the first matching path: */}

@@ -3,19 +3,17 @@ import React, { Component, Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 
 // react-router:
-import { Router, Route, Switch, withRouter } from "react-router";
+import { Route, Switch, withRouter } from "react-router";
 
 // redux:
 import { connect } from "react-redux";
 
-import { changeUsername, updateClientInfo } from "src/actions/clientInfo.js";
+import { updateClientInfo } from "src/actions/clientInfo.js";
 import { updateSettings } from "src/actions/settings.js";
 import { updateMessages } from "src/actions/chat.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
 
 // redux-saga:
-import createSagaMiddleware from "redux-saga";
-// import handleStreamActions from "src/sagas";
 import handleStreamActions from "src/sagas/stream";
 import handleStreamEvents from "src/sockets/stream";
 
@@ -32,9 +30,6 @@ import StreamInfo from "src/components/Stream/StreamInfo.jsx";
 
 // components:
 
-// import Waitlist from "src/components/Waitlist.jsx";
-// import ThemeSelector from "src/components/ThemeSelector.jsx";
-
 // secondary components:
 
 // modals:
@@ -44,6 +39,7 @@ import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
+import { Snackbar } from "@material-ui/core";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -57,7 +53,6 @@ import { device } from "src/constants/DeviceSizes.js";
 // jquery:
 let $ = require("jquery");
 window.$ = $;
-import Cookie from "js-cookie";
 
 // input handler:
 import InputHandler from "libs/InputHandler/InputHandler.js";
@@ -68,21 +63,18 @@ import localforage from "localforage";
 window.localforage = localforage;
 import swal from "sweetalert2";
 window.swal = swal;
-import { throttle } from "lodash";
 import socketio from "socket.io-client";
 
 // rr:
-import JSMpeg from "libs/jsmpeg.min.js";
 import Lagless2 from "libs/lagless/lagless2.js";
 // import Lagless4 from "libs/lagless/lagless4.js";
 import LaglessAudio from "libs/lagless/laglessAudio.js";
 
-// swal("stream is down right now, don't put anything in #bug-reports.");
+// swal.fire("stream is down right now, don't put anything in #bug-reports.");
 
 // jss:
 const styles = {
 	root: {
-		padding: "1%",
 		display: "grid",
 		gridTemplateColumns: "minmax(50%, 75%) minmax(100px, 25%)",
 		gridTemplateAreas: `
@@ -92,6 +84,8 @@ const styles = {
 			"info info"`,
 		width: "100%",
 		gridGap: "5px",
+		// accomodate for grid gap:
+		padding: "0px 5px 5px 5px",
 	},
 	[device.tablet]: {
 		root: {
@@ -114,13 +108,13 @@ class Stream extends Component {
 		this.afkTime = 1000 * 60 * 60; // 1 hour
 		this.afkTimer = null;
 		this.laglessAudio = null;
-		this.streams = [];
-		window.streams = this.streams;
+		this.stream = null;
+		// window.stream = this.stream;
 		this.socket = null;
 		this.accountServerConnection = this.props.accountServerConnection;
 
+		this.setStreamVolume = this.setStreamVolume.bind(this);
 		this.exitFullscreen = this.exitFullscreen.bind(this);
-
 		this.sendControllerState = this.sendControllerState.bind(this);
 		this.afk = this.afk.bind(this);
 		this.start = this.start.bind(this);
@@ -132,12 +126,13 @@ class Stream extends Component {
 	}
 
 	start(data) {
+		console.log("STARTING");
 		if (this.socket) {
 			this.socket.close();
 			this.socket = null;
 		}
-		if (this.streams.length > 0) {
-			this.streams[0].pause();
+		if (this.stream) {
+			this.stream.pause();
 		}
 		this.socket = socketio(`https://${data.hostServerIP}`, {
 			path: `/${data.hostServerPort}/socket.io`,
@@ -159,22 +154,33 @@ class Stream extends Component {
 			return;
 		}
 
-		// data.videoServerIP =
-
 		// lagless setup:
 		/* switch 2.0 */
-		this.streams.push(
-			new Lagless2(`https://${data.videoServerIP}`, {
-				path: `/${data.videoServerPort}/socket.io`,
-				audio: true,
-			}),
-		);
+		this.stream = new Lagless2(`https://${data.videoServerIP}`, {
+			path: `/${data.videoServerPort}/socket.io`,
+			audio: true,
+		});
+		window.stream = this.stream;
+		this.setStreamVolume(this.props);
+		setTimeout(() => {
+			this.setStreamVolume(this.props);
+		}, 5000);
+
+		// let currentValue = null;
+		// let unsubscribe = this.props.store.subscribe(() => {
+		// 	let previousValue = currentValue;
+		// 	currentValue = this.props.store.getState().settings.volume;
+		// 	if (previousValue !== currentValue) {
+		// 		this.stream.player.volume = currentValue / 100;
+		// 	}
+		// });
+
 		setTimeout(() => {
 			if (!this.props.clientInfo.loggedIn) {
-				swal("You have to login / register first!");
+				swal.fire("You have to login / register first!");
 				return;
 			}
-			this.streams[0].resume(document.getElementById("videoCanvas"));
+			this.stream.resume(document.getElementById("videoCanvas"));
 		}, 3000);
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
@@ -183,23 +189,6 @@ class Stream extends Component {
 		if (this.props.settings.audioThree) {
 			this.laglessAudio.resume();
 		}
-
-		// for (let i = 0; i < streams.length; i++) {
-		// 	streams[i].pause();
-		// }
-
-		/* AUDIO SWITCHING @@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		setInterval(() => {
-			// hack:
-			// todo: not this:
-			if (!this.props.settings.audioThree) {
-				this.laglessAudio.audio.volume = 0;
-				this.streams[0].player.volume = this.props.settings.volume / 100;
-			} else {
-				this.laglessAudio.audio.volume = this.props.settings.volume / 100;
-				this.streams[0].player.volume = 0;
-			}
-		}, 2000);
 	}
 
 	componentDidMount() {
@@ -251,7 +240,7 @@ class Stream extends Component {
 		/* AUTHENTICATION */
 
 		// socket.on("needToLogIn", () => {
-		// 	swal("You need to log in!");
+		// 	swal.fire("You need to log in!");
 		// 	setTimeout(() => {
 		// 		deleteAllCookies();
 		// 		location.reload(true);
@@ -274,6 +263,7 @@ class Stream extends Component {
 			this.sendControllerState();
 		}, 1000 / 120);
 
+		// todo: remove this when component unmounts:
 		window.addEventListener(
 			"keydown",
 			(event) => {
@@ -306,37 +296,41 @@ class Stream extends Component {
 	}
 
 	componentWillUnmount() {
+		console.log("UNMOUNTING STREAM");
+		clearInterval(this.sendInputTimer);
 		if (this.socket) {
 			this.socket.close();
+			this.socket = null;
 		}
-		if (this.streams.length > 0) {
-			this.streams[0].pause();
+		if (this.stream) {
+			this.stream.pause();
 		}
 		this.props.updateMessages([]);
 	}
 
 	afk() {
-		for (let i = 0; i < this.streams.length; i++) {
-			this.streams[i].pause();
+		if (this.socket) {
+			this.socket.close();
+			this.socket = null;
 		}
-		swal({
-			title: "Are you still there?",
-			text: "You've been AFK for an hour.",
-			type: "warning",
-			// showCancelButton: true,
-			confirmButtonColor: "#3085d6",
-			cancelButtonColor: "#d33",
-			confirmButtonText: "No, I'm still here.",
-		}).then((result) => {
-			if (result.value) {
-				// swal(
-				// 	"Deleted!",
-				// 	"Your file has been deleted.",
-				// 	"success"
-				// );
-				window.location.reload();
-			}
-		});
+		if (this.stream) {
+			this.stream.pause();
+		}
+		swal
+			.fire({
+				title: "Are you still there?",
+				text: "You've been AFK for an hour.",
+				type: "warning",
+				// showCancelButton: true,
+				confirmButtonColor: "#3085d6",
+				cancelButtonColor: "#d33",
+				confirmButtonText: "No, I'm still here.",
+			})
+			.then((result) => {
+				if (result.value) {
+					window.location.reload();
+				}
+			});
 	}
 
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
@@ -435,27 +429,6 @@ class Stream extends Component {
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
-			// new Noty({
-			// 	theme: "mint",
-			// 	type: "warning",
-			// 	text: "It's not your turn yet!",
-			// 	timeout: 250,
-			// }).show();
-			return;
-		}
-
-		if (!this.props.clientInfo.loggedIn) {
-			// new Noty({
-			// 	theme: "mint",
-			// 	type: "warning",
-			// 	text: "You aren't logged in!",
-			// 	timeout: 500,
-			// 	sounds: {
-			// 		volume: 0.5,
-			// 		sources: ["https://remotegames.io/sounds/ding.wav"],
-			// 		conditions: ["docVisible"],
-			// 	},
-			// }).show();
 			return;
 		}
 
@@ -476,39 +449,74 @@ class Stream extends Component {
 		let buttons = obj.btns.toString(2);
 		buttons = "0".repeat(18).substr(buttons.length) + buttons;
 
-		console.log(
-			obj.cNum,
-			buttons,
-			getStickString(obj.axes[0]),
-			getStickString(obj.axes[1]),
-			getStickString(obj.axes[2]),
-			getStickString(obj.axes[3]),
-			getStickString(obj.axes[4]),
-			getStickString(obj.axes[5]),
-			Math.random().toFixed(3),
-			// fixedLengthString(obj.axes[0], "0", 3),
-			// fixedLengthString(obj.axes[1], "0", 3),
-			// fixedLengthString(obj.axes[2], "0", 3),
-			// fixedLengthString(obj.axes[3], "0", 3),
-			// fixedLengthString(obj.axes[4], "0", 3),
-			// fixedLengthString(obj.axes[5], "0", 3),
-		);
+		if (!this.props.settings.realKeyboardMouse) {
+			console.log(
+				obj.cNum,
+				buttons,
+				getStickString(obj.axes[0]),
+				getStickString(obj.axes[1]),
+				getStickString(obj.axes[2]),
+				getStickString(obj.axes[3]),
+				getStickString(obj.axes[4]),
+				getStickString(obj.axes[5]),
+				Math.random().toFixed(3),
+				// fixedLengthString(obj.axes[0], "0", 3),
+				// fixedLengthString(obj.axes[1], "0", 3),
+				// fixedLengthString(obj.axes[2], "0", 3),
+				// fixedLengthString(obj.axes[3], "0", 3),
+				// fixedLengthString(obj.axes[4], "0", 3),
+				// fixedLengthString(obj.axes[5], "0", 3),
+			);
+		} else {
+			// console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
+		}
 		// console.log("0 0 0\n 0 9 0\n 0 0 0");
 
 		// let s1x = getStickString(obj.axes[0]);
 		// let s1y = getStickString(obj.axes[1]);
 		// console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
 
-		this.socket.emit("sendControllerState", obj);
+		if (this.socket) {
+			this.socket.emit("sendControllerState", obj);
+		} else {
+			console.log("the socket is null!");
+		}
+	}
+
+	setStreamVolume(props) {
+		if (this.stream) {
+			this.stream.player.volume = props.settings.volume / 100;
+			// if (!props.settings.audioThree) {
+			// 	// this.laglessAudio.audio.volume = 0;
+			// 	this.stream.player.volume = props.settings.volume / 100;
+			// } else {
+			// 	// this.laglessAudio.audio.volume = props.settings.volume / 100;
+			// 	this.stream.player.volume = 0;
+			// }
+		}
 	}
 
 	shouldComponentUpdate(nextProps, nextState) {
+		// update stream volume:
+		this.setStreamVolume(nextProps);
+
+		this.inputHandler.realMode = nextProps.settings.realKeyboardMouse;
+
+		// if (this.props.settings.volume != nextProps.settings.volume) {
+		// 	this.setStreamVolume(nextProps);
+		// 	return false;
+		// }
+
 		if (JSON.stringify(this.props.clientInfo) != JSON.stringify(nextProps.clientInfo)) {
 			return true;
 		}
 
-		if (this.props.settings.volume != nextProps.settings.volume) {
-			return false;
+		if (this.props.settings.hideChat != nextProps.settings.hideChat) {
+			return true;
+		}
+
+		if (this.props.settings.fullscreen != nextProps.settings.fullscreen) {
+			return true;
 		}
 
 		if (this.props.settings.theme != nextProps.settings.theme) {
@@ -543,7 +551,7 @@ class Stream extends Component {
 
 		if (window.location.pathname == "/reset") {
 			this.resetSettings();
-			swal(
+			swal.fire(
 				"Try logging in again, if it doesn't work, try clicking the reset all settings button and try again.",
 			);
 		}
@@ -551,7 +559,10 @@ class Stream extends Component {
 		return (
 			<div className={classes.root}>
 				{/* <NavTabs history={this.props.history} /> */}
-				<StreamsAppBar history={this.props.history} />
+				<StreamsAppBar
+					history={this.props.history}
+					hide={this.props.settings.fullscreen}
+				/>
 				{/* <LoginArea /> */}
 				<Picture />
 				<Chat hide={this.props.settings.hideChat} />
@@ -638,11 +649,3 @@ export default compose(
 		mapDispatchToProps,
 	),
 )(Stream);
-
-// todo: https://stackoverflow.com/questions/19014250/rerender-view-on-browser-resize-with-react
-// $(window).resize(
-// 	_.throttle((event) => {
-// 		$("#chat").outerHeight(0);
-// 		$("#chat").outerHeight($("#picture").outerHeight());
-// 	}, 1000),
-// );

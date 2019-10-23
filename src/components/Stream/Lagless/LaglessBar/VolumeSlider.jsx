@@ -56,7 +56,6 @@ const styles = (theme) => ({
 		// 		boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)",
 		// 	},
 		// },
-
 	},
 	rail: {
 		backgroundColor: "#FFF",
@@ -82,7 +81,6 @@ const styles = (theme) => ({
 });
 
 class VolumeSlider extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -93,7 +91,7 @@ class VolumeSlider extends PureComponent {
 		const { classes } = this.props;
 		return (
 			<Paper className={classes.root} elevation={3}>
-				<VolumeDown className={classes.svg} onClick={this.props.onMute}/>
+				<VolumeDown className={classes.svg} onClick={this.props.onMute} />
 				<MySlider
 					rootClass={classes.rootClass}
 					thumbClass={classes.thumb}
@@ -104,12 +102,14 @@ class VolumeSlider extends PureComponent {
 					max={100}
 					step={1}
 					handleChange={this.props.handleChange}
-					value={this.props.value}/>
-				<VolumeUp className={classes.svg} onClick={this.props.onMax}/>
+					value={this.props.value}
+					bounceInterval={100}
+					delay={500}
+				/>
+				<VolumeUp className={classes.svg} onClick={this.props.onMax} />
 			</Paper>
 		);
 	}
-
 }
 
 export default withStyles(styles)(VolumeSlider);

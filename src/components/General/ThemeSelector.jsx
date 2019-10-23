@@ -17,7 +17,6 @@ import { updateSettings } from "src/actions/settings.js";
 // recompose:
 import { compose } from "recompose";
 
-
 let classNames = require("classnames");
 
 // jss:
@@ -25,19 +24,10 @@ const styles = (theme) => ({
 	root: {},
 });
 
-const options = [
-	"Light",
-	"Dark",
-	"Mint",
-];
-const options2 = [
-	"light",
-	"dark",
-	"mint",
-];
+const options = ["Light", "Dark", "Spooky"];
+const options2 = ["light", "dark", "spooky"];
 
 class ThemeSelector extends PureComponent {
-
 	constructor(props) {
 		super(props);
 
@@ -66,7 +56,6 @@ class ThemeSelector extends PureComponent {
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		const open = Boolean(this.state.anchorEl);
@@ -75,7 +64,9 @@ class ThemeSelector extends PureComponent {
 
 		return (
 			<React.Fragment>
-				<Button variant="contained" onClick={this.handleClick}>Select Theme</Button>
+				<Button variant="contained" onClick={this.handleClick}>
+					Select Theme
+				</Button>
 				<Menu
 					id="themeSelector"
 					anchorEl={this.state.anchorEl}
@@ -86,15 +77,16 @@ class ThemeSelector extends PureComponent {
 						style: {
 							maxHeight: 48 * 4.5,
 							width: 200,
-						}
-					}}>
+						},
+					}}
+				>
 					{options.map((option, index) => (
 						<MenuItem
 							key={option}
 							disabled={index === themeIndex}
 							selected={index === themeIndex}
-							onClick={(event) => (this.handleMenuItemClick(event, index))}>
-
+							onClick={(event) => this.handleMenuItemClick(event, index)}
+						>
 							{option}
 						</MenuItem>
 					))}
@@ -102,7 +94,6 @@ class ThemeSelector extends PureComponent {
 			</React.Fragment>
 		);
 	}
-
 }
 
 const mapStateToProps = (state) => {
@@ -114,12 +105,15 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
 	return {
 		switchTheme: (index) => {
-			dispatch(updateSettings({ theme: index }))
+			dispatch(updateSettings({ theme: index }));
 		},
 	};
 };
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps, mapDispatchToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(ThemeSelector);

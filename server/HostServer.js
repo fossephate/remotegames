@@ -1,46 +1,47 @@
 const socketio = require("socket.io");
-const socketioClient = require("socket.io-client");
 const Client = require("./client.js").Client;
 
-const config = require("./config.js");
-
 function customSetInterval(func, time) {
-	let lastTime = Date.now(),
-		lastDelay = time,
-		outp = {};
+	let lastTime = Date.now();
+	let lastDelay = time;
+	let out = {};
 
 	function tick() {
 		func();
-		let now = Date.now(),
-			dTime = now - lastTime;
+		let now = Date.now();
+		let dTime = now - lastTime;
 
 		lastTime = now;
 		lastDelay = time + lastDelay - dTime;
-		outp.id = setTimeout(tick, lastDelay);
+		out.id = setTimeout(tick, lastDelay);
 	}
-	outp.id = setTimeout(tick, time);
-	return outp;
+	out.id = setTimeout(tick, time);
+	return out;
 }
 
 // export class Host {
 class HostServer {
-	constructor(port, accountServerConnection, videoIP, videoPort, streamKey, hostUserid) {
-		// this.hostid = hostid;
-		this.port = port;
+	constructor(
+		options /*accountServerConnection, port, videoIP, videoPort, streamKey, hostUserid*/,
+	) {
+		this.accountServerConnection = options.socket;
+		this.port = options.port;
 		this.io = new socketio({
 			// perMessageDeflate: false,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 		});
-		this.accountServerConnection = accountServerConnection;
+
+		this.alive = true;
 
 		// userid of the host:
-		this.hostUserid = hostUserid;
+		this.hostUserid = options.hostUserid;
 		this.hostUser = {};
 
 		// where to find the video feed (sent to clients on connect):
-		this.videoIP = videoIP;
-		this.videoPort = videoPort;
-		this.streamKey = streamKey;
+		this.videoIP = options.videoIP;
+		this.videoPort = options.videoPort;
+		this.streamKey = options.streamKey;
+		this.secret = options.secret;
 
 		this.clients = [];
 		this.useridToSocketidMap = {}; // so we can find the Client object when we only have the userid (quickly)
@@ -54,8 +55,15 @@ class HostServer {
 		this.numPlayers = 8;
 		this.numberOfLastFewMessages = 5;
 		this.lastFewMessages = [];
-
 		this.locked = false;
+		this.plusLock = false;
+
+		// host set settings:
+		if (options.settings) {
+			this.keyboardEnabled = options.settings.keyboardEnabled;
+			this.mouseEnabled = options.settings.mouseEnabled;
+			this.controllerCount = options.settings.controllerCount;
+		}
 
 		this.turnLengths = [];
 		this.forfeitLengths = [];
@@ -141,22 +149,12 @@ class HostServer {
 						if (data.success) {
 							// check if they're the host:
 							if (data.clientInfo.userid === this.hostUserid) {
-								data.clientInfo.isHost = true;
-								data.clientInfo.isMod = true;
-								data.clientInfo.isPlus = true;
+								data.clientInfo.roles.host = true;
+								data.clientInfo.roles.mod = true;
+								data.clientInfo.roles.plus = true;
 							}
-							// only if loaded:
-							if (this.hostUser.modlist) {
-								if (this.hostUser.modlist.includes(data.clientInfo.userid)) {
-									data.clientInfo.isMod = true;
-								}
-								if (this.hostUser.pluslist.includes(data.clientInfo.userid)) {
-									data.clientInfo.isPlus = true;
-								}
-								if (this.hostUser.banlist.includes(data.clientInfo.userid)) {
-									data.clientInfo.isBanned = true;
-								}
-							}
+							// todo: this is probably way more often than necessary:
+							this.setClientPermissions();
 							// update local client to contain account server's info:
 							this.clients[data.socketid].update(data.clientInfo);
 
@@ -167,10 +165,12 @@ class HostServer {
 								validUsernames: data.clientInfo.validUsernames,
 								connectedAccounts: data.clientInfo.connectedAccounts,
 								timePlayed: data.clientInfo.timePlayed,
-								isHost: !!data.clientInfo.isHost,
-								isMod: !!data.clientInfo.isMod,
-								isPlus: !!data.clientInfo.isPlus,
-								isBanned: !!data.clientInfo.isBanned,
+								roles: data.clientInfo.roles,
+								// todo: remove:
+								isHost: !!data.clientInfo.roles.host,
+								isMod: !!data.clientInfo.roles.mod,
+								isPlus: !!data.clientInfo.roles.plus,
+								isBanned: !!data.clientInfo.roles.banned,
 							};
 							cb({ ...data, clientInfo: clientInfo });
 						} else {
@@ -231,29 +231,28 @@ class HostServer {
 				if (data.text.length > 400) {
 					return;
 				}
+				// return if banned:
+				if (client.roles.banned) {
+					socket.emit("banned");
+					return;
+				}
+
 				let msgObj = {
 					userid: client.userid,
 					username: client.username,
 					time: Date.now(),
 					text: data.text,
 					isReplay: false,
-					isBanned: false,
 					roles: client.roles,
 				};
-				if (client.isBanned) {
-					// socket.emit("banned");
-					// return;
-					msgObj.isBanned = true;
+
+				if (client.rooms.indexOf("hostController") > -1) {
+					msgObj.username = "HostBot";
+					msgObj.roles = ["mod"];
 				}
-				if (client.isMod) {
-					msgObj.roles.push("mod");
-				}
-				if (client.isPlus) {
-					msgObj.roles.push("plus");
-				}
+
 				this.sendMessage(msgObj);
 				this.parseMessage(client, msgObj);
-				console.log(msgObj);
 			});
 
 			/* INPUT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -266,6 +265,8 @@ class HostServer {
 				let cNum = data.cNum;
 				let btns = data.btns;
 				let axes = data.axes;
+				let keys = data.keys;
+				let mouse = data.mouse;
 
 				// make sure it's a valid cNum:
 				if (this.controllerList.indexOf(cNum) == -1) {
@@ -286,18 +287,25 @@ class HostServer {
 					console.log("not the current player");
 					return;
 				}
+
 				// return if locked && not a mod:
-				if (this.locked && !client.isMod) {
+				if (this.locked && !client.roles.mod) {
 					return;
 				}
+
+				// return if pluslocked && not a plus:
+				if (this.plusLocked && !client.roles.plus) {
+					return;
+				}
+
 				// return if banned:
-				if (client.isBanned) {
+				if (client.roles.banned) {
 					socket.emit("banned");
 					return;
 				}
 
 				// sub perk:
-				if (client.isSub) {
+				if (client.roles.sub) {
 					this.turnLengths[cNum] = this.normalTime * 2;
 				} else {
 					this.turnLengths[cNum] = this.normalTime;
@@ -308,13 +316,13 @@ class HostServer {
 
 				let valid = true;
 				// ((btns & (1 << n)) != 0);
-				if ((btns & (1 << 8)) != 0 && !client.isMod) {
+				if ((btns & (1 << 8)) != 0 && !client.roles.mod) {
 					valid = false;
 				}
-				if ((btns & (1 << 16)) != 0 && !client.isPlus) {
+				if ((btns & (1 << 16)) != 0 && !client.roles.plus) {
 					valid = false;
 				}
-				if ((btns & (1 << 17)) != 0 && !client.isMod) {
+				if ((btns & (1 << 17)) != 0 && !client.roles.mod) {
 					valid = false;
 				}
 
@@ -322,11 +330,26 @@ class HostServer {
 					return;
 				}
 
-				this.io.emit("controllerState", {
+				let obj = {
 					cNum: data.cNum,
 					btns: data.btns,
 					axes: data.axes,
-				});
+				};
+
+				// if player 1 & mouse || keyboard is enabled
+				// send keyboard &|| mouse state
+				if (cNum === 0 && (this.mouseEnabled || this.keyboardEnabled)) {
+					if (this.mouseEnabled) {
+						// obj = { ...obj, mouse: data.mouse };
+						this.io.emit("mouseState", data.mouse);
+					}
+					if (this.keyboardEnabled) {
+						// obj = { ...obj, keys: data.keys };
+						this.io.emit("keyboardState", { keys: data.keys });
+					}
+				}
+
+				this.io.emit("controllerState", obj);
 			});
 
 			/* QUEUE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
@@ -336,12 +359,16 @@ class HostServer {
 					return;
 				}
 				// return if banned
-				if (client.isBanned) {
+				if (client.roles.banned) {
 					socket.emit("banned");
 					return;
 				}
 				// return if locked && not a mod:
-				if (this.locked && !client.isMod) {
+				if (this.locked && !client.roles.mod) {
+					return;
+				}
+				// return if pluslocked && not a plus:
+				if (this.plusLocked && !client.roles.plus) {
 					return;
 				}
 
@@ -466,8 +493,7 @@ class HostServer {
 			});
 
 			socket.on("join", (room) => {
-				let client = this.clients[socket.id];
-				let secureList = ["controller"];
+				let secureList = ["hostController"];
 				if (secureList.indexOf(room) > -1) {
 					return;
 				}
@@ -475,11 +501,14 @@ class HostServer {
 			});
 
 			socket.on("joinSecure", (data) => {
-				if ((data.password = this.streamKey || data.password === config.ROOM_SECRET)) {
+				if ((data.password = this.streamKey || data.password === this.secret)) {
 					let client = this.clients[socket.id];
 					if (client.rooms.indexOf(data.room) == -1) {
 						client.rooms.push(data.room);
 					}
+					// if (data.room === "hostController") {
+					// 	client.userid = "hostController";
+					// }
 					socket.join(data.room);
 				}
 			});
@@ -490,15 +519,14 @@ class HostServer {
 				} else {
 					data = data.replace(/(\r\n\t|\n|\r\t)/gm, "");
 				}
-				// check if it's coming from the controller:
-				if (this.clients[socket.id].rooms.includes("controller")) {
+				// check if it's coming from the host controller:
+				if (this.clients[socket.id].rooms.includes("hostController")) {
 					let msgObj = {
-						userid: "TPNSbot",
-						username: "TPNSbot",
+						userid: "HostBot",
+						username: "HostBot",
 						time: Date.now(),
 						text: data,
 						isReplay: false,
-						isBanned: false,
 					};
 					this.sendMessage(msgObj);
 				}
@@ -529,6 +557,7 @@ class HostServer {
 
 		this.accountServerConnection.on("accountMap", (data) => {
 			this.accountMap = data;
+			this.setClientPermissions();
 			this.io.emit("accountMap", this.accountMap);
 		});
 	}
@@ -547,52 +576,61 @@ class HostServer {
 	parseMessage(client, message) {
 		// for replies:
 		let msgObj = {
-			userid: "TPNSbot",
-			username: "TPNSbot",
+			userid: "HostBot",
+			username: "HostBot",
 			time: Date.now(),
 			isReplay: false,
-			isBanned: false,
 		};
+		let reg = null;
+		let results = null;
 		// ban / unban:
-		if (/^!(?:un)?ban ([a-zA-Z0-9]+)$/.test(message.text)) {
-			if (!client.isMod) {
+		if (/^!(un)?ban ([a-zA-Z0-9]+)$/.test(message.text)) {
+			if (!client.roles.mod) {
 				msgObj.text = "You need to be a mod to use this command!";
 				this.sendMessage(msgObj);
 				console.log("not a mod");
 				return;
 			}
-			let n = /^!un/.test(message.text) ? 7 : 5;
+			let un = !!results[1];
 			let userid = message.text.substring(n);
 			this.accountServerConnection.emit(
 				"ban",
 				{
-					isBanned: n === 5,
+					isBanned: !un,
 					issuerUserid: client.userid,
 					hostUserid: this.hostUserid,
 					clientUserid: userid,
 				},
 				(data) => {
 					if (data.success) {
-						msgObj.text = "Successfully (un)banned user.";
+						msgObj.text = `Successfully ${un ? "un" : ""}banned user.`;
 						this.sendMessage(msgObj);
 					} else {
-						msgObj.text = "Something went wrong while trying to (un)ban the user.";
+						msgObj.text = `Something went wrong while trying to ${
+							un ? "un" : ""
+						}ban the user.`;
 						this.sendMessage(msgObj);
 					}
 				},
 			);
 		}
+
 		// lock / unlock:
-		if (/^!(?:un)?lock$/.test(message.text)) {
-			if (!client.isMod) {
-				msgObj.text = "You need to be a mod to use this command!";
+		reg = /^!(un)?lock$/;
+		results = reg.exec(message.text);
+		if (results) {
+			let un = !!results[1];
+			if (
+				(!un && !client.roles.mod) ||
+				(un && !(client.roles.mod || client.roles.plus))
+			) {
+				msgObj.text = "You need permission to use this command!";
 				this.sendMessage(msgObj);
-				console.log("not a mod");
+				console.log("not a mod / plus");
 				return;
 			}
-			let n = /^!un/.test(message.text) ? 8 : 6;
-			let userid = message.text.substring(n);
-			if (n === 6) {
+
+			if (!un) {
 				this.locked = true;
 				// clear queues:
 				for (let i = 0; i < this.controlQueues.length; i++) {
@@ -602,27 +640,48 @@ class HostServer {
 			} else {
 				this.locked = false;
 			}
-			msgObj.text = "Successfully (un)locked stream.";
+			msgObj.text = `Successfully ${this.locked ? "" : "un"}locked stream.`;
 			this.sendMessage(msgObj);
 		}
 
-		// change status:
-		if (/^!(?:un)?(mod|plus|sub) ([a-zA-Z0-9]+)$/.test(message.text)) {
-			if (!client.isMod) {
+		// pluslock:
+		reg = /^!(un)?pluslock$/;
+		results = reg.exec(message.text);
+		if (results) {
+			if (!client.roles.mod) {
 				msgObj.text = "You need to be a mod to use this command!";
 				this.sendMessage(msgObj);
 				console.log("not a mod");
 				return;
 			}
-			let un = /^!un/.test(message.text);
-			let userid = message.text.split(" ")[1];
-
-			let role = "";
-			if (message.text.indexOf("mod") > -1) {
-				role = "mod";
-			} else if (message.text.indexOf("plus") > -1) {
-				role = "plus";
+			let un = !!results[1];
+			if (!un) {
+				this.plusLocked = true;
+				// clear queues:
+				for (let i = 0; i < this.controlQueues.length; i++) {
+					this.controlQueues[i] = [];
+				}
+				this.io.emit("controlQueues", this.controlQueues);
+			} else {
+				this.plusLocked = false;
 			}
+			msgObj.text = `Successfully ${this.plusLocked ? "" : "un"}pluslocked stream.`;
+			this.sendMessage(msgObj);
+		}
+
+		// change status:
+		reg = /^!(un)?(mod|plus|sub) ([a-zA-Z0-9]+)$/;
+		results = reg.exec(message.text);
+		if (results) {
+			if (!client.roles.mod) {
+				msgObj.text = "You need to be a mod to use this command!";
+				this.sendMessage(msgObj);
+				console.log("not a mod");
+				return;
+			}
+			let un = !!results[1];
+			let role = results[2];
+			let userid = results[3];
 
 			this.accountServerConnection.emit(
 				"changeAccountStatus",
@@ -645,8 +704,44 @@ class HostServer {
 					}
 				},
 			);
-			// msgObj.text = "Successfully changed account status.";
-			// this.sendMessage(msgObj);
+		}
+
+		// change status 2:
+		reg = /^!changestatus (add|remove) (plus|mod|sub|banned) ([a-zA-Z0-9]+)$/;
+		results = reg.exec(message.text);
+		if (results) {
+			if (!client.roles.mod) {
+				msgObj.text = "You need to be a mod to use this command!";
+				this.sendMessage(msgObj);
+				console.log("not a mod");
+				return;
+			}
+
+			let addOrRemove = results[1] === "add";
+			let role = results[2];
+			let userid = results[3];
+
+			this.accountServerConnection.emit(
+				"changeAccountStatus",
+				{
+					issuerUserid: client.userid,
+					hostUserid: this.hostUserid,
+					change: {
+						type: addOrRemove ? "add" : "remove",
+						role: role,
+						userid: userid,
+					},
+				},
+				(data) => {
+					if (data.success) {
+						msgObj.text = "Successfully changed account status.";
+						this.sendMessage(msgObj);
+					} else {
+						msgObj.text = `Something went wrong while trying to change the user's status: ${data.reason}.`;
+						this.sendMessage(msgObj);
+					}
+				},
+			);
 		}
 	}
 
@@ -813,43 +908,6 @@ class HostServer {
 		}
 	}
 
-	// every x:
-	everySecond() {
-		// emit turn times left:
-		this.calculateTurnExpirations();
-		for (let i = 0; i < this.forfeitExpirations.length; i++) {
-			if (this.forfeitExpirations[i] < -150 && this.controlQueues[i][0] != null) {
-				this.forfeitTurn(this.controlQueues[i][0], i);
-			}
-		}
-		for (let i = 0; i < this.turnExpirations.length; i++) {
-			if (this.turnExpirations[i] < -150) {
-				this.moveLine(i);
-			}
-		}
-	}
-
-	every4Seconds() {
-		this.io.to("controller").emit("stayConnected");
-	}
-
-	every5Seconds() {
-		this.io.emit("turnLengths", {
-			turnLengths: this.turnLengths,
-			forfeitLengths: this.forfeitLengths,
-		});
-		// this.io.emit("viewers", {
-		// 	viewers: [
-		// 		laglessClientUserids[0],
-		// 		laglessClientUserids[1],
-		// 		laglessClientUserids[2],
-		// 		laglessClientUserids[3],
-		// 		laglessClientUserids[4],
-		// 	],
-		// });
-		this.emitForfeitStartTimes();
-	}
-
 	getHostInfo() {
 		this.accountServerConnection.emit(
 			"getHostInfo",
@@ -870,53 +928,73 @@ class HostServer {
 
 	setClientPermissions() {
 		for (let socketid in this.clients) {
-			this.clients[socketid].isMod = false;
-			this.clients[socketid].isPlus = false;
-			this.clients[socketid].isBanned = false;
+			for (let key in this.hostUser.roleData) {
+				let roleList = this.hostUser.roleData[key];
 
-			if (this.hostUser.modlist.includes(this.clients[socketid].userid)) {
-				this.clients[socketid].isMod = true;
-				this.clients[socketid].isPlus = true;
+				if (roleList.includes(this.clients[socketid].userid)) {
+					this.clients[socketid].roles[key] = true;
+					// copy to account map:
+					// make sure account exists in accountMap
+					if (this.accountMap[this.clients[socketid].userid]) {
+						this.accountMap[this.clients[socketid].userid].roles[key] = true;
+					}
+				}
 			}
-			if (this.hostUser.pluslist.includes(this.clients[socketid].userid)) {
-				this.clients[socketid].isPlus = true;
-			}
-			if (this.hostUser.banlist.includes(this.clients[socketid].userid)) {
-				this.clients[socketid].isBanned = true;
-			}
+
 			// has to be last so it isn't overwritten:
 			if (this.clients[socketid].userid === this.hostUserid) {
-				this.clients[socketid].isMod = true;
-				this.clients[socketid].isPlus = true;
+				this.clients[socketid].roles.host = true;
+				this.clients[socketid].roles.mod = true;
+				this.clients[socketid].roles.plus = true;
 			}
 
 			// copy roles to accountMap:
 			// todo: fix this:
 			if (this.accountMap[this.clients[socketid].userid]) {
-				this.accountMap[this.clients[socketid].userid].isMod = this.clients[
+				this.accountMap[this.clients[socketid].userid].roles = this.clients[
 					socketid
-				].isMod;
-				this.accountMap[this.clients[socketid].userid].isPlus = this.clients[
-					socketid
-				].isPlus;
-				// this.accountMap[this.clients[socketid].userid].isStreamer = this.clients[socketid].isStreamer;
+				].roles;
 			}
 		}
 	}
 
+	// every x:
+	everySecond() {
+		// emit turn times left:
+		this.calculateTurnExpirations();
+		for (let i = 0; i < this.forfeitExpirations.length; i++) {
+			if (this.forfeitExpirations[i] < -150 && this.controlQueues[i][0] != null) {
+				this.forfeitTurn(this.controlQueues[i][0], i);
+			}
+		}
+		for (let i = 0; i < this.turnExpirations.length; i++) {
+			if (this.turnExpirations[i] < -150) {
+				this.moveLine(i);
+			}
+		}
+	}
+
+	every4Seconds() {
+		this.io.to("hostController").emit("stayConnected");
+	}
+
+	every5Seconds() {
+		this.io.emit("turnLengths", {
+			turnLengths: this.turnLengths,
+			forfeitLengths: this.forfeitLengths,
+		});
+		this.emitForfeitStartTimes();
+	}
+
 	every30Seconds() {
 		this.io.emit("accountMap", this.accountMap);
-		this.io.emit("bannedIPs", this.bannedIPs);
+		// this.io.emit("bannedIPs", this.bannedIPs);
 		this.io.emit("waitlist", {
 			waitlist: this.waitlist,
 		});
 		this.io.emit("serverTime", Date.now());
 		this.getHostInfo();
 	}
-
-	// setInterval(() => {
-	// 	io.to("controller").emit("stayConnected");
-	// }, 4000);
 
 	// add to timePlayed:
 	addTimePlayed() {
@@ -935,96 +1013,4 @@ class HostServer {
 	}
 }
 
-// module.exports.HostServer = HostServer;
-
-// some global variables:
-// all host servers:
-// keyed by port:
-let hostServers = {};
-// this server's IP address:
-// let ip = "34.203.73.220";
-let ip = "remotegames.io";
-// available ports on this server, true means it's available
-let ports = {
-	8050: true,
-	8051: true,
-	8052: true,
-	8053: true,
-	8054: true,
-	8055: true,
-	8056: true,
-	8057: true,
-	8058: true,
-	8059: true,
-	8060: true,
-	8061: true,
-	8062: true,
-	8063: true,
-	8064: true,
-};
-
-// start connection with the account server (same server in this case):
-let accountServerConnection = socketioClient("https://remotegames.io", {
-	path: "/8099/socket.io",
-	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
-});
-
-function register() {
-	accountServerConnection.emit("registerHostServer", {
-		secret: config.ROOM_SECRET,
-		ip: ip,
-		ports: ports,
-	});
-}
-setInterval(register, 1000 * 60);
-
-accountServerConnection.on("startHost", (data) => {
-	if (!ports[data.port]) {
-		console.log("something went wrong, this port is not available!");
-		return;
-	}
-
-	// set port as unavailable:
-	ports[data.port] = false;
-	// start:
-	hostServers[data.port] = new HostServer(
-		data.port,
-		accountServerConnection,
-		data.videoIP,
-		data.videoPort,
-		data.streamKey,
-		data.hostUserid,
-	);
-	hostServers[data.port].init();
-});
-
-accountServerConnection.on("stopHost", (data) => {
-	if (ports[data.port]) {
-		console.log("something went wrong, this port wasn't set as unavailable!");
-		return;
-	}
-	hostServers[data.port].stop();
-	// set port as available:
-	ports[data.port] = true;
-});
-
-// for testing:
-let port = 8050;
-ports[port] = false;
-hostServers[port] = new HostServer(port, accountServerConnection, ip, 8000, "a", "fosse");
-hostServers[port].init();
-
-port = 8051;
-ports[port] = false;
-hostServers[port] = new HostServer(
-	port,
-	accountServerConnection,
-	ip,
-	8001,
-	"b",
-	"fosse2",
-);
-hostServers[port].init();
-// hostServers[port].locked = true;
-
-register();
+module.exports.HostServer = HostServer;

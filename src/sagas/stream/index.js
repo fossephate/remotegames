@@ -1,5 +1,5 @@
 import * as types from "src/actions/ActionTypes.js";
-import { takeEvery } from "redux-saga/effects";
+import { takeEvery, all } from "redux-saga/effects";
 
 import handleChatActions from "./chat.js";
 import handlePlayersActions from "./players.js";
@@ -14,7 +14,7 @@ const handleActions = function*(params) {
 	list = list.concat(handleClientInfoActions(params));
 
 	// yield to entire list:
-	yield list;
+	yield all(list);
 };
 
 export default handleActions;

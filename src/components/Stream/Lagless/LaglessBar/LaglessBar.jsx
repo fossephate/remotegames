@@ -1,6 +1,5 @@
 // react:
-import React, { Component, PureComponent } from "react";
-import PropTypes from "prop-types";
+import React, { PureComponent } from "react";
 
 // react-router:
 import { withRouter } from "react-router";
@@ -16,7 +15,6 @@ import { withStyles } from "@material-ui/core/styles";
 // icons:
 import KeyboardIcon from "@material-ui/icons/Keyboard";
 import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
-import RefreshIcon from "@material-ui/icons/Refresh";
 // components:
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
@@ -64,10 +62,6 @@ class LaglessBar extends PureComponent {
 	}
 
 	handleChange(value) {
-		// _.throttle(() => {
-		// 	console.log(value)
-		// 	this.props.setVolume(parseInt(value));
-		// }, 100);
 		this.props.setVolume(parseInt(value));
 	}
 
@@ -87,14 +81,11 @@ class LaglessBar extends PureComponent {
 					}}
 				/>
 				{/* <MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/> */}
-				{/* <Button id="laglessRefresh" className="laglessRefresh" variant="contained" color="primary">
-					<RefreshIcon/>
-				</Button> */}
 				<Button
 					variant="contained"
 					color="primary"
 					onClick={() => {
-						this.props.history.push("/remap");
+						this.props.history.push("/remap/keyboard");
 					}}
 				>
 					<KeyboardIcon />|<VideogameAssetIcon />

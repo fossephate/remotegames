@@ -110,11 +110,6 @@ export default class VirtualProController {
 	}
 
 	setState(state) {
-		// if (state.btns) {
-		// 	this.btns = state.btns;
-		// if (state.axes) {
-		// 	this.axes = state.axes;
-		// }
 		if (state.btns == null) {
 			console.log(state);
 			throw error;
@@ -141,9 +136,5 @@ export default class VirtualProController {
 		this.buttons.rstick = this.isPressed(15);
 		this.buttons.plus = this.isPressed(16);
 		this.buttons.home = this.isPressed(17);
-
-		// triggers:
-		// this.axes[4] = (this.buttons.zl) ? 1 : this.axes[4];
-		// this.axes[5] = (this.buttons.zr) ? 1 : this.axes[5];
 	}
 }

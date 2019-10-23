@@ -1,14 +1,11 @@
-
 import VirtualProController from "./VirtualProController.js";
 import { AxisSettings } from "./VirtualController.js";
-let restPos = 128;
+const restPos = 0;
 
 import { clamp } from "libs/tools.js";
 
 export default class VirtualMouse {
-
 	constructor() {
-
 		this.canvas = null;
 		this.toggle = this.toggle.bind(this);
 		this.getMouseInput1 = this.getMouseInput1.bind(this);
@@ -21,24 +18,19 @@ export default class VirtualMouse {
 		this.changed = false;
 
 		this.settings = {
-
 			enabled: false,
 
 			axes: [
-				new AxisSettings(15, 0, 0),// 15
-				new AxisSettings(15, 0, 0),
+				// new AxisSettings(0.08, 0, 0), // 15
+				// new AxisSettings(0.08, 0, 0),
+				new AxisSettings(0.06, 0, 0),
+				new AxisSettings(0.06, 0, 0),
 			],
 
 			map: {
-				buttons: [
-					"zr",
-					"x",
-					"zl",
-				],
+				buttons: ["zr", "x", "zl"],
 			},
-
-		}
-
+		};
 	}
 
 	onPointerLockChange() {
@@ -48,38 +40,25 @@ export default class VirtualMouse {
 	}
 
 	getMouseInput1(event) {
-
 		// on mouse stop:
 		clearTimeout(this.mouseMoveTimer);
 		this.mouseMoveTimer = setTimeout(() => {
 			this.changed = true;
 			this.state.axes[2] = restPos;
 			this.state.axes[3] = restPos;
-		}, 50);
+		}, 80);
 
-		let x = restPos + (event.movementX * this.settings.axes[0].sensitivity);
-		let y = restPos - (event.movementY * this.settings.axes[1].sensitivity);
-
-		// let min = 50;
-		// let accel = 1;
-		// if (Math.abs(x - restPos) < min) {
-		// 	x = tools.mathZoom(x, restPos, accel);
-		// }
-		// if (Math.abs(y - restPos) < min) {
-		// 	y = tools.mathZoom(y, restPos, accel);
-		// }
+		let x = restPos + event.movementX * this.settings.axes[0].sensitivity;
+		let y = restPos - event.movementY * this.settings.axes[1].sensitivity;
 
 		this.changed = true;
 
-		this.state.axes[2] = clamp(x, 0, 255);
-		this.state.axes[3] = clamp(y, 0, 255);
+		this.state.axes[2] = clamp(x, -1, 1);
+		this.state.axes[3] = clamp(y, -1, 1);
 	}
 
 	getMouseInput2(event) {
 		let pressed = event.type == "mousedown" ? 1 : 0;
-		// if (this.state.buttons[this.settings.map.buttons[event.which - 1]] != pressed) {
-		// 	this.changed = true;
-		// }
 		this.changed = true;
 		this.state.buttons[this.settings.map.buttons[event.which - 1]] = pressed;
 	}
@@ -91,7 +70,6 @@ export default class VirtualMouse {
 	}
 
 	toggle(state) {
-
 		if (!this.canvas) {
 			console.log("canvas not set!");
 			return;
@@ -119,5 +97,4 @@ export default class VirtualMouse {
 			}, 1000);
 		}
 	}
-
 }

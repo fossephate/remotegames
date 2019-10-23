@@ -8,7 +8,6 @@ import {
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const playersEvents = (socket, dispatch) => {
-
 	socket.on("controlQueues", (data) => {
 		dispatch(updatePlayerControlQueues(data));
 	});

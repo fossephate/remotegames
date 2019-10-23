@@ -25,7 +25,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
-import NotificationsIcon from "@material-ui/icons/Notifications";
+// import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -40,7 +40,7 @@ import { compose } from "recompose";
 import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
-import classNames from "classnames";
+// import classNames from "classnames";
 
 // jss:
 const styles = (theme) => ({
@@ -162,6 +162,10 @@ class StreamsAppBar extends PureComponent {
 
 	render() {
 		console.log("re-rendering streamsappbar.");
+
+		if (this.props.hide) {
+			return null;
+		}
 
 		const { anchorEl, mobileMoreAnchorEl } = this.state;
 		const { classes } = this.props;

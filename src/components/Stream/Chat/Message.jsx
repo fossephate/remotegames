@@ -4,14 +4,11 @@ import PropTypes from "prop-types";
 
 import Linkify from "react-linkify";
 
-// twitch icon:
-import TwitchIcon from "src/components/Icons/TwitchIcon.jsx";
+// badge:
 import Badge from "src/components/Icons/Badge.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
 
 // redux:
 import { connect } from "react-redux";
@@ -23,7 +20,7 @@ import { compose } from "recompose";
 
 const styles = (props) => ({
 	root: {
-		backgroundColor: (props.isBanned) ? "#d34c4ca4" : null,
+		backgroundColor: props.isBanned ? "#d34c4ca4" : null,
 		wordBreak: "break-word",
 		// padding: "4px",
 		paddingLeft: "10px",
@@ -32,6 +29,7 @@ const styles = (props) => ({
 		paddingBottom: "5px",
 		fontSize: "14px !important",
 		// color: theme.palette.primary.contrastText,
+		borderRadius: "5px",
 	},
 	links: {
 		// todo: use primary / secondary based on which it should be:
@@ -108,32 +106,34 @@ const Message = (props) => {
 	}
 
 	let isDev = false;
-	if (username == "fosse" || username == "remotegames" || username == "fossephate" || username == "fosse#0430") {
+	if (
+		username == "fosse" ||
+		username == "remotegames" ||
+		username == "fossephate" ||
+		username == "fosse#0430"
+	) {
 		username = "fosse";
 		isDev = true;
 	}
 
 	let icons = [];
-	if (source == "twitch") {
-		icons.push(<TwitchIcon />);
-	}
 
 	let account = accountMap[userid];
 	if (account) {
 		if (isDev) {
 			icons.push(<Badge type="dev" />);
-		}
-		if (account.isMod && !isDev && !isRelay) {
+		} else if (account.roles.host) {
+			icons.push(<Badge type="host" />);
+		} else if (account.roles.mod) {
 			icons.push(<Badge type="mod" />);
-		}
-		if (account.isPlus && !account.isMod) {
+		} else if (account.roles.plus) {
 			icons.push(<Badge type="plus" />);
 		}
-		if (account.isSub) {
+		if (account.roles.sub) {
 			icons.push(<Badge type="sub1" />);
 		}
 
-		if (account.isMod && !isReplay && isLastMessage) {
+		if (account.roles.mod && !isReplay && isLastMessage) {
 			if (text.indexOf("@everyone") > -1) {
 				ping("You've been pinged!", 500);
 			}

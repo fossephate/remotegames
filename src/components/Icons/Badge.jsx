@@ -11,7 +11,6 @@ import { connect } from "react-redux";
 // recompose:
 import { compose } from "recompose";
 
-
 // jss:
 const styles = (theme) => ({
 	root: {
@@ -19,20 +18,18 @@ const styles = (theme) => ({
 		marginLeft: "2px",
 		marginRight: "2px",
 		backgroundColor: "#b7b7b7",
-    border: "1px solid #333",
-    borderRadius: "6px",
+		border: "1px solid #333",
+		borderRadius: "6px",
 		verticalAlign: "middle",
 	},
 });
 
 class Badge extends PureComponent {
-
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
-
 		const { classes } = this.props;
 
 		let src = window.location.origin + "/images/badges/";
@@ -43,9 +40,9 @@ class Badge extends PureComponent {
 				src += "DevBadge.png";
 				text = "The Developer";
 				break;
-			case "admin":
+			case "host":
 				src += "AdminBadge.png";
-				text = "Administrator";
+				text = "This is the host of the stream.";
 				break;
 			case "mod":
 				src += "ModBadge.png";
@@ -63,13 +60,10 @@ class Badge extends PureComponent {
 
 		return (
 			<Tooltip title={text} placement="top">
-				<img className={classes.root} src={src}/>
+				<img className={classes.root} src={src} />
 			</Tooltip>
 		);
 	}
-
 }
 
-export default compose(
-	withStyles(styles),
-)(Badge);
+export default compose(withStyles(styles))(Badge);

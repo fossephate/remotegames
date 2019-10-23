@@ -10,7 +10,6 @@ const HostServerClient = require("./client.js").HostServerClient;
 
 const session = require("express-session");
 const passport = require("passport");
-const OAuth2Strategy = require("passport-oauth").OAuth2Strategy;
 const twitchStrategy = require("passport-twitch").Strategy;
 const googleStrategy = require("passport-google-oauth20").Strategy;
 const youtubeV3Strategy = require("passport-youtube-v3").Strategy;
@@ -50,7 +49,6 @@ app.use(passport.session());
 
 // mongoose:
 const mongodb = require("mongodb");
-const MongoClient = mongodb.MongoClient;
 const mongoose = require("mongoose");
 // Define a schema
 let Schema = mongoose.Schema;
@@ -80,19 +78,7 @@ let bannedIPs = [
 	"103.217.104.190",
 	"103.217.104.246",
 ];
-let modlist = [
-	"melodiousmarci",
-	"harmjan387",
-	"beanjr_yt",
-	"alua2020",
-	"stravos96",
-	"splatax",
-	"silvermagpi",
-	"remotegames",
-	"fossephate",
-	"tpnsbot",
-];
-let pluslist = modlist.slice(0);
+
 let streams = [];
 
 // get banned IPs:
@@ -118,13 +104,13 @@ redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
 let transporter = nodemailer.createTransport({
 	service: "gmail",
 	auth: {
-		user: "remotegamesio@gmail.com",
+		user: config.EMAIL_USERNAME,
 		pass: config.EMAIL_PASSWORD,
 	},
 });
 
 let mailOptions = {
-	from: "remotegamesio@gmail.com",
+	from: config.EMAIL_USERNAME,
 	to: null,
 	subject: null,
 	text: null,
@@ -163,7 +149,7 @@ function updateOrCreateUser(profile, type, req) {
 		// return;
 	}
 
-	// check if the acccount already exists:
+	// check if the account already exists:
 	let queryObj = { [type + ".id"]: profile.id };
 	Account.findOne(queryObj).exec((error, account) => {
 		// error check:
@@ -222,8 +208,11 @@ let accountSchema = Schema({
 	isStreaming: Boolean,
 	streamKey: String,
 
+	// host / video server info:
+	videoServerSocketid: String,
 	videoServerIP: String,
 	videoServerPort: Number,
+	hostServerSocketid: String,
 	hostServerIP: String,
 	hostServerPort: Number,
 
@@ -232,7 +221,7 @@ let accountSchema = Schema({
 	},
 
 	streamSettings: {
-		title: String,
+		streamTitle: String,
 		description: String,
 		thumbnailURL: String,
 
@@ -253,11 +242,16 @@ let accountSchema = Schema({
 		mouseEnabled: Boolean,
 	},
 
-	adminlist: [],
-	modlist: [],
-	pluslist: [],
 	sublist: [],
-	banlist: [],
+
+	roleData: {
+		host: [],
+		admin: [],
+		mod: [],
+		plus: [],
+		banned: [],
+	},
+
 	bannedIPs: [],
 	followers: [],
 
@@ -401,6 +395,7 @@ function clientInfoFromAccount(account, usernameIndex) {
 	clientInfo.connectedAccounts = account.connectedAccounts;
 	clientInfo.isStreaming = account.isStreaming;
 	clientInfo.emailVerified = account.emailVerified;
+	clientInfo.roles = {};
 
 	// todo: maybe ban the account if using a banned IP: (or keep as is)
 	for (let i = 0; i < account.IPs.length; i++) {
@@ -968,8 +963,6 @@ io.on("connection", (socket) => {
 						return;
 					}
 
-					// console.log("registering account.");
-
 					// save IP if not known:
 					if (account.IPs.indexOf(data.ip) == -1) {
 						account.IPs.push(data.ip);
@@ -978,11 +971,12 @@ io.on("connection", (socket) => {
 					let clientInfo = clientInfoFromAccount(account, data.usernameIndex);
 
 					// todo: maybe ban the account if using a banned IP: (or keep as is)
-					for (let i = 0; i < account.IPs.length; i++) {
-						if (bannedIPs.indexOf(account.IPs[i]) > -1) {
-							clientInfo.isBanned = true;
-						}
-					}
+					// for (let i = 0; i < account.IPs.length; i++) {
+					// 	if (bannedIPs.indexOf(account.IPs[i]) > -1) {
+					// 		clientInfo.isBanned = true;
+					// 	}
+					// }
+
 					// fill masterAccountMap:
 					masterAccountMap[clientInfo.userid] = {
 						...clientInfo,
@@ -1113,11 +1107,12 @@ io.on("connection", (socket) => {
 			// 	userid: "aaa",
 			// };
 
-			if (["mod", "plus", "sub"].indexOf(data.change.role) === -1) {
+			if (["mod", "plus", "sub", "banned"].indexOf(data.change.role) === -1) {
 				cb({
 					success: false,
 					reason: "INVALID_ROLE",
 				});
+				return;
 			}
 
 			if (["add", "remove"].indexOf(data.change.type) === -1) {
@@ -1125,9 +1120,10 @@ io.on("connection", (socket) => {
 					success: false,
 					reason: "INVALID_TYPE",
 				});
+				return;
 			}
 
-			let index = account[`${data.change.role}list`].indexOf(data.change.userid);
+			let index = account.roleData[data.change.role].indexOf(data.change.userid);
 			let alreadyInList = index > -1;
 
 			if (data.change.type === "add") {
@@ -1138,7 +1134,7 @@ io.on("connection", (socket) => {
 					});
 					return;
 				} else {
-					account[`${data.change.role}list`].push(data.change.userid);
+					account.roleData[data.change.role].push(data.change.userid);
 				}
 			} else {
 				if (!alreadyInList) {
@@ -1148,7 +1144,7 @@ io.on("connection", (socket) => {
 					});
 					return;
 				} else {
-					account[`${data.change.role}list`].splice(index, 1);
+					account.roleData[data.change.role].splice(index, 1);
 				}
 			}
 
@@ -1327,83 +1323,11 @@ io.on("connection", (socket) => {
 				return;
 			}
 
-			let videoStreamKey = null;
-			let videoIP = null;
-			let videoPort = null;
-			let videoID = null;
-			// look for available video server port:
-			for (let id in videoServers) {
-				let server = videoServers[id];
+			// find available host and video servers / ports:
+			let servers = findAvailableServers(hostServers, videoServers);
 
-				for (let port in server.ports) {
-					// check if the port is available:
-					if (server.ports[port]) {
-						let ip = videoServers[id].ip;
-						// set port as unavailable:
-						videoServers[id].ports[port] = false;
-						videoIP = ip;
-						videoPort = port;
-						videoID = id;
-						// create a stream key:
-						videoStreamKey = crypto.randomBytes(64).toString("hex");
-
-						break;
-					}
-				}
-
-				if (videoPort != null) {
-					break;
-				}
-			}
-
-			// look for available host server port:
-			let hostIP = null;
-			let hostPort = null;
-			let hostID = null;
-
-			// look for available host server port:
-			for (let id in hostServers) {
-				let server = hostServers[id];
-
-				for (let port in server.ports) {
-					// check if the port is available:
-					if (server.ports[port]) {
-						let ip = hostServers[id].ip;
-						// set port as unavailable:
-						hostServers[id].ports[port] = false;
-						hostIP = ip;
-						hostPort = port;
-						hostID = id;
-						// // create a stream key:
-						// let streamKey = crypto.randomBytes(64).toString("hex");
-						// // send to client:
-						// socket.emit("startStreaming", { ip: ip, port: port, streamKey: streamKey });
-						// send to hostServer:
-
-						break;
-					}
-				}
-
-				if (hostPort != null) {
-					break;
-				}
-			}
-
-			if (!videoPort) {
-				console.log("open video server wasn't found!");
-			}
-			if (!hostPort) {
-				console.log("open host server wasn't found!");
-			}
-
-			if (!videoPort || !hostPort) {
-				// set ports as available:
-				if (videoPort) {
-					videoServers[videoID].ports[videoPort] = true;
-				}
-				if (hostPort) {
-					hostServers[hostID].ports[hostPort] = true;
-				}
+			// if server candidates weren't found
+			if (!servers.host || !servers.video) {
 				cb({
 					success: false,
 					reason: "NO_AVAILABLE_PORTS",
@@ -1411,48 +1335,59 @@ io.on("connection", (socket) => {
 				return;
 			}
 
+			// set ports as in use:
+
+			videoServers[servers.video.sid].ports[servers.video.port] = true;
+			hostServers[servers.host.sid].ports[servers.host.port] = true;
+
 			// start streaming:
+
+			let videoStreamKey = account.streamKey || crypto.randomBytes(64).toString("hex");
 
 			// send to client:
 			cb({
 				success: true,
-				videoIP: videoIP,
-				videoPort: videoPort,
-				hostIP: hostIP,
-				hostPort: hostPort,
+				videoIP: servers.video.ip,
+				videoPort: servers.video.port,
+				hostIP: servers.host.ip,
+				hostPort: servers.host.port,
 				streamKey: videoStreamKey,
 			});
 			// send to videoServer:
-			io.to(videoID).emit("startVideo", {
-				port: videoPort,
+			io.to(servers.video.sid).emit("startVideo", {
+				port: servers.video.port,
 				streamKey: videoStreamKey,
 			});
-
-			io.to(hostID).emit("startHost", {
+			// send to hostServer:
+			io.to(servers.host.sid).emit("startHost", {
 				hostUserid: ("" + account._id).trim(),
-				port: hostPort,
+				port: servers.host.port,
 				streamKey: videoStreamKey,
-				videoIP: videoIP,
-				videoPort: videoPort,
+				videoIP: servers.video.ip,
+				videoPort: servers.video.port,
 			});
 
 			// update account info:
 			account.isStreaming = true;
-			account.videoServerIP = videoIP;
-			account.videoServerPort = videoPort;
-			account.hostServerIP = hostIP;
-			account.hostServerPort = hostPort;
+			account.streamKey = videoStreamKey;
+			account.videoServerSocketid = servers.video.sid;
+			account.videoServerIP = servers.video.ip;
+			account.videoServerPort = servers.video.port;
+			account.hostServerSocketid = servers.host.sid;
+			account.hostServerIP = servers.host.ip;
+			account.hostServerPort = servers.host.port;
 			// stream details:
-			account.streamSettings.title = data.streamSettings.streamTitle;
+			// todo: type check this:
+			account.streamSettings.streamTitle = data.streamSettings.streamTitle;
 			account.streamSettings.thumbnailURL = data.streamSettings.thumbnailURL;
-			// account.streamSettings.description = data.streamSettings.description;
+			account.streamSettings.description = data.streamSettings.description;
 			account.streamSettings.captureRate = data.streamSettings.captureRate;
 			account.streamSettings.resolution = data.streamSettings.resolution;
 			account.streamSettings.videoBitrate = data.streamSettings.videoBitrate;
 
 			account.streamSettings.controllerCount = data.streamSettings.controllerCount;
-			// account.streamSettings.keyboardEnabled = data.streamSettings.keyboardEnabled;
-			// account.streamSettings.mouseEnabled = data.streamSettings.mouseEnabled;
+			account.streamSettings.keyboardEnabled = data.streamSettings.keyboardEnabled;
+			account.streamSettings.mouseEnabled = data.streamSettings.mouseEnabled;
 			account.streamSettings.windowTitle = data.streamSettings.windowTitle;
 			account.streamSettings.capture = data.streamSettings.capture;
 			account.streamSettings.audioDevice = data.streamSettings.audioDevice;
@@ -1460,6 +1395,7 @@ io.on("connection", (socket) => {
 			account.streamSettings.height = data.streamSettings.height;
 			account.streamSettings.offsetX = data.streamSettings.offsetX;
 			account.streamSettings.offsetY = data.streamSettings.offsetY;
+			// account.streamSettings = { ...account.streamSettings, ...data.streamSettings };
 
 			// update the account details:
 			account.save((error) => {
@@ -1520,37 +1456,71 @@ io.on("connection", (socket) => {
 
 			// stop the host and video servers:
 
-			// look for the video server:
-			for (let id in videoServers) {
-				if (videoServers[id].ip != account.videoServerIP) {
-					continue;
-				}
-
-				// set port to available:
-				// todo check if it already was:
-				videoServers[id].ports[account.videoServerPort] = true;
-
-				// send to videoServer:
-				io.to(id).emit("stopVideo", { port: account.videoServerPort });
-
-				break;
+			// set ports as available:
+			if (videoServers[account.videoServerSocketid]) {
+				videoServers[account.videoServerSocketid].ports[account.videoServerPort] = true;
+			}
+			if (hostServers[account.hostServerSocketid]) {
+				hostServers[account.hostServerSocketid].ports[account.hostServerPort] = true;
 			}
 
-			// look for the host server:
-			for (let id in hostServers) {
-				if (hostServers[id].ip != account.hostServerIP) {
-					continue;
-				}
+			// send stop requests:
+			io.to(account.videoServerSocketid).emit("stopVideo", {
+				port: account.videoServerPort,
+			});
+			io.to(account.hostServerSocketid).emit("stopHost", {
+				port: account.hostServerPort,
+			});
+		});
+	});
 
-				// set port to available:
-				// todo check if it already was:
-				hostServers[id].ports[account.hostServerPort] = true;
+	socket.on("streamInactive", (data) => {
+		// must come from a video server:
+		if (!videoServers.hasOwnProperty(socket.id)) {
+			return;
+		}
 
-				// send to hostServer:
-				io.to(id).emit("stopHost", { port: account.hostServerPort });
-
-				break;
+		// try and get account by streamKey:
+		Account.findOne({ streamKey: data.streamKey }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
 			}
+			// acount doesn't exist:
+			if (!account) {
+				console.log("account wasn't found! (streamInactive)");
+				return;
+			}
+
+			// update account info:
+			account.isStreaming = false;
+			// update the account details:
+			account.save((error) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+				// re-generate stream list:
+				generateStreamList();
+			});
+
+			// stop the host and video servers:
+
+			// set ports as available:
+			if (videoServers[account.videoServerSocketid]) {
+				videoServers[account.videoServerSocketid].ports[account.videoServerPort] = true;
+			}
+			if (hostServers[account.hostServerSocketid]) {
+				hostServers[account.hostServerSocketid].ports[account.hostServerPort] = true;
+			}
+
+			// send stop requests:
+			io.to(account.videoServerSocketid).emit("stopVideo", {
+				port: account.videoServerPort,
+			});
+			io.to(account.hostServerSocketid).emit("stopHost", {
+				port: account.hostServerPort,
+			});
 		});
 	});
 
@@ -1617,12 +1587,14 @@ io.on("connection", (socket) => {
 				// update account info:
 				// banning:
 				if (data.isBanned) {
-					if (!account.banlist.includes(data.clientUserid)) {
-						account.banlist.push(data.clientUserid);
+					if (!account.roleData.banned.includes(data.clientUserid)) {
+						account.roleData.banned.push(data.clientUserid);
 					}
 					// unbanning:
 				} else {
-					account.banlist = account.banlist.filter((i) => i !== data.clientUserid);
+					account.roleData.banned = account.roleData.banned.filter(
+						(i) => i !== data.clientUserid,
+					);
 				}
 				// update the account details:
 				account.save((error) => {
@@ -1732,7 +1704,8 @@ function generateStreamList() {
 
 			for (let i = 0; i < accounts.length; i++) {
 				let stream = {
-					title: accounts[i].streamSettings.title,
+					// userid: ("" + accounts[i]._id).trim(),
+					title: accounts[i].streamSettings.streamTitle,
 					username: accounts[i].username,
 					thumbnailURL: accounts[i].streamSettings.thumbnailURL,
 				};
@@ -1740,6 +1713,170 @@ function generateStreamList() {
 			}
 
 			// io.emit("streams", streams);
+		});
+}
+
+// find available videoServer / port combo:
+function findAvailableServers(hostServers, videoServers) {
+	let videoIP = null;
+	let videoPort = null;
+	let videoSID = null;
+
+	if (videoServers) {
+		// look for available video server port:
+		for (let sid in videoServers) {
+			let server = videoServers[sid];
+
+			for (let port in server.ports) {
+				// check if the port is available:
+				if (server.ports[port]) {
+					videoIP = videoServers[sid].ip;
+					videoPort = port;
+					videoSID = sid;
+					break;
+				}
+			}
+
+			if (videoPort != null) {
+				break;
+			}
+		}
+	}
+
+	// look for available host server port:
+	let hostIP = null;
+	let hostPort = null;
+	let hostSID = null;
+
+	if (hostServers) {
+		// look for available host server port:
+		for (let sid in hostServers) {
+			let server = hostServers[sid];
+
+			for (let port in server.ports) {
+				// check if the port is available:
+				if (server.ports[port]) {
+					hostIP = hostServers[sid].ip;
+					hostPort = port;
+					hostSID = sid;
+					break;
+				}
+			}
+			if (hostPort != null) {
+				break;
+			}
+		}
+	}
+
+	// if (!videoPort) {
+	// 	console.log("open video server wasn't found!");
+	// }
+	// if (!hostPort) {
+	// 	console.log("open host server wasn't found!");
+	// }
+
+	let info = {};
+
+	if (hostPort) {
+		info.host = {
+			ip: hostIP,
+			port: hostPort,
+			sid: hostSID,
+		};
+	}
+	if (videoPort) {
+		info.video = {
+			ip: videoIP,
+			port: videoPort,
+			sid: videoSID,
+		};
+	}
+	return info;
+}
+
+// start and stop servers based on who is streaming
+function synchronizeServers() {
+	// go through the stream list:
+
+	// go through all of the accounts that should have a host/video server running:
+	Account.find({ isStreaming: true })
+		.exec()
+		.then((accounts) => {
+			streams = [];
+
+			if (!accounts) {
+				return;
+			}
+
+			// go through each account:
+
+			for (let i = 0; i < accounts.length; i++) {
+				// we only care if they are currently supposed to be streaming:
+				if (!accounts[i].isStreaming) {
+					continue;
+				}
+
+				// check to make sure both the host and video servers assigned are alive:
+				let hostServerAlive = false;
+				let videoServerAlive = false;
+				if (hostServers[account.hostServerSocketid]) {
+					let p = accounts[i].hostServerPort;
+					if (hostServers[account.hostServerSocketid].serversAlive[p]) {
+						hostServerAlive = true;
+					}
+				}
+				if (videoServers[account.videoServerSocketid]) {
+					let p = accounts[i].videoServerPort;
+					if (videoServers[account.videoServerSocketid].serversAlive[p]) {
+						videoServerAlive = true;
+					}
+				}
+
+				// start a new server up if either is down:
+				if (!hostServerAlive) {
+					let server = findAvailableServers(hostServers, null);
+					// update account:
+					account.hostServerSocketid = server.host.sid;
+					account.hostServerIP = server.host.ip;
+					account.hostServerPort = server.host.port;
+					// send to hostServer:
+					io.to(server.host.sid).emit("startHost", {
+						hostUserid: ("" + account._id).trim(),
+						port: server.host.port,
+						streamKey: account.streamKey,
+						videoIP: server.video.ip,
+						videoPort: server.video.port,
+					});
+				}
+
+				if (!videoServerAlive) {
+					let server = findAvailableServers(null, videoServers);
+					// update account:
+					account.videoServerSocketid = server.video.sid;
+					account.videoServerIP = server.video.ip;
+					account.videoServerPort = server.video.port;
+					// send to videoServer:
+					io.to(server.video.sid).emit("startVideo", {
+						port: server.video.port,
+						streamKey: account.streamKey,
+					});
+				}
+
+				// if either server was down, update the account:
+				if (!hostServerAlive || !videoServerAlive) {
+					// save:
+					account.save((error) => {
+						if (error) {
+							throw error;
+						}
+						console.log("account saved.");
+					});
+				}
+			}
+
+			// update the stream list in case there were any changes:
+			// todo: only do this if there were changes:
+			this.generateStreamList();
 		});
 }
 
@@ -1762,11 +1899,12 @@ Account.findOne({ username: "fosse" }).exec((error, account) => {
 
 	// update account info:
 	account.isStreaming = true;
+	account.streamKey = "a";
 	account.videoServerIP = "remotegames.io";
 	account.videoServerPort = 8000;
 	account.hostServerIP = "remotegames.io";
 	account.hostServerPort = 8050;
-	account.streamSettings.title = "Nintendo Switch";
+	account.streamSettings.streamTitle = "Nintendo Switch";
 	account.streamSettings.description = "";
 	account.streamSettings.thumbnailURL = "https://i.imgur.com/Negv09l.jpg";
 
@@ -1781,35 +1919,36 @@ Account.findOne({ username: "fosse" }).exec((error, account) => {
 });
 
 // try and get account by authToken:
-Account.findOne({ username: "fosse2" }).exec((error, account) => {
-	// error check:
-	if (error) {
-		throw error;
-	}
-	// acount doesn't exist:
-	if (!account) {
-		return;
-	}
+// Account.findOne({ username: "fosse2" }).exec((error, account) => {
+// 	// error check:
+// 	if (error) {
+// 		throw error;
+// 	}
+// 	// acount doesn't exist:
+// 	if (!account) {
+// 		return;
+// 	}
 
-	// update account info:
-	account.isStreaming = true;
-	account.videoServerIP = "remotegames.io";
-	account.videoServerPort = 8001;
-	account.hostServerIP = "remotegames.io";
-	account.hostServerPort = 8051;
-	// account.streamSettings.title = "PS4 - Persona 5 - testing";
-	account.streamSettings.title = "Xbox - RDR2";
-	account.streamSettings.description = "";
-	// account.streamSettings.thumbnailURL = "https://thumbs.gfycat.com/CloudyBlandBison-poster.jpg";
-	account.streamSettings.thumbnailURL =
-		"https://metro.co.uk/wp-content/uploads/2018/04/rdr2_trailer-3-announce_1920x1080_nomsg.jpg";
+// 	// update account info:
+// 	account.isStreaming = true;
+// 	account.streamKey = "b";
+// 	account.videoServerIP = "remotegames.io";
+// 	account.videoServerPort = 8001;
+// 	account.hostServerIP = "remotegames.io";
+// 	account.hostServerPort = 8051;
+// 	// account.streamSettings.title = "PS4 - Persona 5 - testing";
+// 	account.streamSettings.streamTitle = "Xbox - RDR2";
+// 	account.streamSettings.description = "";
+// 	// account.streamSettings.thumbnailURL = "https://thumbs.gfycat.com/CloudyBlandBison-poster.jpg";
+// 	account.streamSettings.thumbnailURL =
+// 		"https://metro.co.uk/wp-content/uploads/2018/04/rdr2_trailer-3-announce_1920x1080_nomsg.jpg";
 
-	// update the account details:
-	account.save((error) => {
-		// error check:
-		if (error) {
-			throw error;
-		}
-		generateStreamList();
-	});
-});
+// 	// update the account details:
+// 	account.save((error) => {
+// 		// error check:
+// 		if (error) {
+// 			throw error;
+// 		}
+// 		generateStreamList();
+// 	});
+// });

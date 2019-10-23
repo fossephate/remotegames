@@ -1,5 +1,4 @@
 require("libs/keymaster.js");
-import keycode from "keycode";
 import { mathZoom } from "libs/tools.js";
 
 import VirtualProController from "./VirtualProController.js";
@@ -76,6 +75,36 @@ export default class VirtualKeyboard {
 			"2",
 		];
 
+		// todo: combine map1 and map2:
+		this.map = {
+			LU: "W",
+			LD: "S",
+			LL: "A",
+			LR: "D",
+			RU: "I",
+			RD: "K",
+			RL: "J",
+			RR: "L",
+			a: "right",
+			b: "down",
+			x: "up",
+			y: "left",
+			up: "T",
+			down: "G",
+			left: "F",
+			right: "H",
+			lstick: "R",
+			rstick: "Y",
+			l: "U",
+			zl: "Q",
+			r: "O",
+			zr: "E",
+			minus: "-",
+			plus: "=",
+			capture: "1",
+			home: "2",
+		};
+
 		this.wasPressedKeyCodes = [];
 
 		this.settings = {
@@ -112,23 +141,25 @@ export default class VirtualKeyboard {
 		let oldControllerState = this.state.getState();
 
 		if (!this.settings.analogStickMode) {
+			this.state.axes[0] = 0;
+			this.state.axes[1] = 0;
 			if (key.isPressed(this.map2[this.map1["LU"]])) {
-				this.state.axes[1] = 1;
+				this.state.axes[1] += 1;
 			} else if (key.wasPressed(this.map2[this.map1["LU"]], this.wasPressedKeyCodes)) {
 				this.state.axes[1] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["LD"]])) {
-				this.state.axes[1] = -1;
+				this.state.axes[1] -= 1;
 			} else if (key.wasPressed(this.map2[this.map1["LD"]], this.wasPressedKeyCodes)) {
 				this.state.axes[1] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["LL"]])) {
-				this.state.axes[0] = -1;
+				this.state.axes[0] -= 1;
 			} else if (key.wasPressed(this.map2[this.map1["LL"]], this.wasPressedKeyCodes)) {
 				this.state.axes[0] = 0;
 			}
 			if (key.isPressed(this.map2[this.map1["LR"]])) {
-				this.state.axes[0] = 1;
+				this.state.axes[0] += 1;
 			} else if (key.wasPressed(this.map2[this.map1["LR"]], this.wasPressedKeyCodes)) {
 				this.state.axes[0] = 0;
 			}

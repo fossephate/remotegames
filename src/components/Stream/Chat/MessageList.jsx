@@ -1,5 +1,5 @@
 // react:
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 // components:
@@ -7,14 +7,16 @@ import Message from "./Message.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
 import Paper from "@material-ui/core/Paper";
+// for voting:
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Button from "@material-ui/core/Button";
 
 // redux:
 import { connect } from "react-redux";
+import { sendMessage } from "src/actions/chat.js";
 
 // recompose:
 import { compose } from "recompose";
@@ -34,12 +36,20 @@ const styles = (theme) => ({
 			// backgroundColor: "#FF3C28A4",
 			// backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
 			color: theme.palette.type === "dark" ? "#FFF" : "#000",
+			backgroundColor:
+				theme.palette.type === "dark"
+					? theme.palette.primary.dark
+					: theme.palette.primary.light,
 		},
 		"& > div:nth-child(odd)": {
 			// backgroundColor: "#0AB9E6A4",
-			backgroundColor: "#2d2d2dA4",
+			// backgroundColor: "#2d2d2dA4",
 			// backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light,
 			color: theme.palette.type === "dark" ? "#FFF" : "#000",
+			backgroundColor:
+				theme.palette.type === "dark"
+					? theme.palette.secondary.dark
+					: theme.palette.secondary.light,
 		},
 		position: "absolute",
 		top: 0,
@@ -50,24 +60,22 @@ const styles = (theme) => ({
 	},
 });
 
-class MessageList extends PureComponent {
+class MessageList extends Component {
 	constructor(props) {
 		super(props);
 
 		this.messagesEnd = null;
 		this.rootRef = null;
-		this.handleClick = this.handleClick.bind(this);
 		this.shouldScroll = false;
 		// this.scrollToBottom = this.scrollToBottom.bind(this);
+		this.handleClick = this.handleClick.bind(this);
+
+		this.state = {
+			voting: false,
+		};
 	}
 
-	handleClick(event) {
-		// if (event.nativeEvent.which === 1) {
-		// 	swal(this.props.messages[i].userid);
-		// } else if(event.nativeEvent.which === 3) {
-		// 	swal(this.props.messages[i].userid);
-		// }
-	}
+	handleClick(event) {}
 
 	getSnapshotBeforeUpdate(prevProps, prevState) {
 		if (prevProps.messages.length < this.props.messages.length) {
@@ -101,7 +109,7 @@ class MessageList extends PureComponent {
 			if (this.props.isMod) {
 				onClick = () => {
 					if (!this.props.accountMap[userid]) {
-						swal("user info not loaded (yet).");
+						swal.fire("user info not loaded (yet).");
 						return;
 					}
 					let timePlayed = this.props.accountMap[userid].timePlayed;
@@ -110,7 +118,7 @@ class MessageList extends PureComponent {
 					} else {
 						timePlayed = (timePlayed / (60 * 60)).toFixed(2) + " hours";
 					}
-					swal(`${userid}\n${timePlayed}`);
+					swal.fire(`${userid}\n${timePlayed}`);
 				};
 			}
 
@@ -132,6 +140,27 @@ class MessageList extends PureComponent {
 		return messages;
 	}
 
+	shouldComponentUpdate(nextProps, nextState) {
+		if (!this.state.voting) {
+			let message = nextProps.messages[nextProps.messages.length - 1];
+			if (
+				message &&
+				message.username == "HostBot" &&
+				/A vote has been started to/.test(message.text) &&
+				!message.isReplay
+			) {
+				this.setState({ voting: true });
+				setTimeout(() => {
+					this.setState({ voting: false });
+				}, 18000);
+			}
+		}
+		return true;
+		// }
+
+		// return false;
+	}
+
 	render() {
 		const { classes } = this.props;
 
@@ -150,6 +179,53 @@ class MessageList extends PureComponent {
 					ref={(el) => {
 						this.messagesEnd = el;
 					}}
+				/>
+				<Snackbar
+					anchorOrigin={{
+						vertical: "top",
+						horizontal: "right",
+					}}
+					open={this.state.voting}
+					autoHideDuration={0}
+					onClose={() => {}}
+					message={<span id="message-id">A vote has started to switch games!</span>}
+					action={[
+						<Button
+							key="leave"
+							color="secondary"
+							size="small"
+							variant="contained"
+							onClick={() => {
+								this.props.sendMessage("yea");
+								this.setState({ voting: false });
+							}}
+						>
+							LEAVE
+						</Button>,
+						<div key="spacer" style={{ width: "15px" }} />,
+						<Button
+							key="stay"
+							color="primary"
+							size="small"
+							variant="contained"
+							onClick={() => {
+								this.props.sendMessage("nay");
+								this.setState({ voting: false });
+							}}
+						>
+							STAY
+						</Button>,
+						<IconButton
+							key="close"
+							color="inherit"
+							className={classes.close}
+							onClick={() => {
+								this.setState({ voting: false });
+							}}
+						>
+							<CloseIcon />
+						</IconButton>,
+					]}
 				/>
 			</Paper>
 		);
@@ -173,10 +249,22 @@ const mapStateToProps = (state) => {
 		accountMap: state.stream.accountMap,
 		isMod: state.clientInfo.isMod,
 		isBanned: state.clientInfo.isBanned,
+		// lastMessage: state.stream.chat.messages[state.stream.chat.messages.length - 1],
+	};
+};
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		sendMessage: (text) => {
+			dispatch(sendMessage(text));
+		},
 	};
 };
 
 export default compose(
 	withStyles(styles),
-	connect(mapStateToProps),
+	connect(
+		mapStateToProps,
+		mapDispatchToProps,
+	),
 )(MessageList);

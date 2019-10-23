@@ -15,17 +15,10 @@ import StreamsDrawer from "src/components/Streams/StreamsDrawer.jsx";
 
 // secondary components:
 
-// modals:
-import AccountModal from "src/components/Modals/AccountModal.jsx";
-import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
-
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
 // components:
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 
 // recompose:
 import { compose } from "recompose";
@@ -34,7 +27,6 @@ import { compose } from "recompose";
 import { device } from "src/constants/DeviceSizes.js";
 
 // libs:
-import socketio from "socket.io-client";
 
 // jss:
 const styles = (theme) => ({
@@ -64,7 +56,6 @@ class Streams extends PureComponent {
 		this.socket = this.props.accountServerConnection;
 
 		this.socket.emit("getStreams", null, (data) => {
-			console.log(data);
 			this.setState({ streams: data.streams });
 		});
 
@@ -80,27 +71,28 @@ class Streams extends PureComponent {
 
 	updateDimensions() {
 		if (window.innerWidth < 900 && this.state.drawerOpen) {
-      this.setState({ drawerOpen: false });
-    }
+			this.setState({ drawerOpen: false });
+		}
 		if (window.innerWidth > 1000) {
-      this.setState({ drawerOpen: true });
-    }
-	}
-
-	componentWillMount() {
-		this.updateDimensions();
+			this.setState({ drawerOpen: true });
+		}
 	}
 
 	componentDidMount() {
 		window.addEventListener("resize", this.updateDimensions.bind(this));
+		this.updateDimensions();
 	}
 
 	componentWillUnmount() {
 		window.removeEventListener("resize", this.updateDimensions.bind(this));
+		if (this.socket) {
+			this.socket.close();
+			this.socket = null;
+		}
 	}
 
 	toggleDrawer(bool) {
-		if (typeof(bool) === "boolean") {
+		if (typeof bool === "boolean") {
 			this.setState({ drawerOpen: !this.state.drawerOpen });
 		} else {
 			this.setState({ drawerOpen: bool });
@@ -115,8 +107,14 @@ class Streams extends PureComponent {
 
 		return (
 			<div className={classes.root}>
-				<StreamsAppBar drawerOpen={this.state.drawerOpen} handleToggleDrawer={this.toggleDrawer} />
-				<StreamsDrawer drawerOpen={this.state.drawerOpen} handleToggleDrawer={this.toggleDrawer} />
+				<StreamsAppBar
+					drawerOpen={this.state.drawerOpen}
+					handleToggleDrawer={this.toggleDrawer}
+				/>
+				<StreamsDrawer
+					drawerOpen={this.state.drawerOpen}
+					handleToggleDrawer={this.toggleDrawer}
+				/>
 				{/* <StreamList drawerOpen={this.state.drawerOpen} streams={this.props.streamList} /> */}
 				<StreamList drawerOpen={this.state.drawerOpen} streams={this.state.streams} />
 			</div>

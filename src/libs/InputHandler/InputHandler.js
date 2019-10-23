@@ -9,6 +9,7 @@ import GamepadWrapper from "./GamepadWrapper.js";
 import VirtualController from "./VirtualController.js";
 import VirtualKeyboard from "./VirtualKeyboard.js";
 import VirtualMouse from "./VirtualMouse.js";
+require("libs/keymaster.js");
 
 const BIT_MAP = {
 	up: 0,
@@ -52,10 +53,13 @@ export class InputState {
 		};
 
 		this.mouse = {
-			x: 0,
-			y: 0,
 			dx: 0,
 			dy: 0,
+			btns: {
+				left: 0,
+				right: 0,
+				middle: 0,
+			},
 		};
 
 		this.keys = [];
@@ -92,8 +96,8 @@ export class InputState {
 			axes: this.axes,
 			// gyro: this.gyro,
 			// accel: this.accel,
-			// mouse: this.mouse,
-			// keys: this.keys,
+			mouse: this.mouse,
+			keys: this.keys,
 		};
 	}
 }
@@ -120,6 +124,9 @@ export default class InputHandler {
 		// the touch controls state:
 		// this.touch = new ???(); // todo
 
+		// real mode:
+		this.realMode = false;
+
 		// output to be read:
 		this.inputState = new InputState();
 		this.oldInputState = this.inputState;
@@ -136,34 +143,52 @@ export default class InputHandler {
 		let updatedState = {
 			btns: 0,
 			axes: [0, 0, 0, 0, 0, 0],
+			mouse: { dx: 0, dy: 0, btns: [] },
+			keys: [],
 		};
 
 		updatedState = this.oldInputState;
 
 		if (!this.isMobile) {
-			// controller:
-			this.controller.poll();
-			if (this.controller.changed) {
-				this.controller.changed = false;
-				this.currentInputMode = "controller";
-				updatedState = this.controller.state.getState();
-			} else {
-				// keyboard:
-				this.keyboard.poll();
-				if (this.keyboard.changed) {
-					this.keyboard.changed = false;
-					this.currentInputMode = "keyboard";
-					updatedState = this.keyboard.state.getState();
+			if (!this.realMode) {
+				// controller:
+				this.controller.poll();
+				if (this.controller.changed) {
+					this.controller.changed = false;
+					this.currentInputMode = "controller";
+					updatedState = this.controller.state.getState();
+				} else {
+					// keyboard:
+					this.keyboard.poll();
+					if (this.keyboard.changed) {
+						this.keyboard.changed = false;
+						this.currentInputMode = "keyboard";
+						updatedState = this.keyboard.state.getState();
+					}
+					if (this.mouse.settings.enabled && this.mouse.changed) {
+						this.mouse.changed = false;
+						updatedState.btns =
+							this.keyboard.state.getState().btns | this.mouse.state.getState().btns;
+						updatedState.axes[2] = this.mouse.state.axes[2];
+						updatedState.axes[3] = this.mouse.state.axes[3];
+						// triggers:
+						updatedState.axes[4] = (updatedState.btns & (1 << 5)) != 0 ? 1 : 0;
+						updatedState.axes[5] = (updatedState.btns & (1 << 14)) != 0 ? 1 : 0;
+					}
 				}
+			} else {
+				let keys = key.getPressedKeyCodes();
+				for (let i = 0; i < keys.length; i++) {
+					keys[i] = String.fromCharCode(keys[i]);
+				}
+				updatedState.keys = keys;
 				if (this.mouse.settings.enabled && this.mouse.changed) {
 					this.mouse.changed = false;
-					updatedState.btns =
-						this.keyboard.state.getState().btns | this.mouse.state.getState().btns;
-					updatedState.axes[2] = this.mouse.state.axes[2];
-					updatedState.axes[3] = this.mouse.state.axes[3];
-					// triggers:
-					updatedState.axes[4] = (updatedState.btns & (1 << 5)) != 0 ? 1 : 0;
-					updatedState.axes[5] = (updatedState.btns & (1 << 14)) != 0 ? 1 : 0;
+					updatedState.mouse.dx = this.mouse.state.axes[2];
+					updatedState.mouse.dy = this.mouse.state.axes[3];
+					let btns = this.mouse.state.getState().btns;
+					updatedState.mouse.btns.left = (btns & (1 << 14)) != 0 ? 1 : 0;
+					updatedState.mouse.btns.right = (btns & (1 << 5)) != 0 ? 1 : 0;
 				}
 			}
 		}
@@ -174,12 +199,18 @@ export default class InputHandler {
 			// this.controller.state.setState(updatedState);
 			// this.keyboard.state.setState(updatedState);
 
+			// kind of a hack: todo:
+			if (!updatedState.mouse) {
+				updatedState.mouse = { dx: 0, dy: 0, btns: [] };
+			}
+
 			this.inputState.setState(updatedState);
 
 			this.oldInputState = updatedState;
 			this.oldInputStateString = updatedStateString;
 
 			this.changed = true;
+			console.log("changed");
 		}
 	}
 
