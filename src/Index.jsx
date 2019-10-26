@@ -35,7 +35,6 @@ import createSagaMiddleware from "redux-saga";
 // libs:
 import socketio from "socket.io-client";
 import localforage from "localforage";
-import merge from "deepmerge";
 // import "normalize.css";
 
 const sagaMiddleware = createSagaMiddleware();
@@ -81,8 +80,8 @@ let preloadedState = {
 		usernameIndex: 0,
 		// banTime: 0,
 		// currentPlayer: 0,
-		isMod: false,
-		isBanned: false,
+		// isMod: false,
+		// isBanned: false,
 		waitlisted: false,
 		timePlayed: 0,
 		emailVerified: false,
@@ -185,9 +184,8 @@ let accountServerConnection = socketio("https://remotegames.io", {
 	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 });
 
-// import handleActions from "src/sagas";
 import handleAccountEvents from "src/sockets/account";
-// // listen to events and dispatch actions:
+// listen to events and dispatch actions:
 handleAccountEvents(accountServerConnection, store.dispatch);
 
 // handle outgoing events & listen to actions:
@@ -335,8 +333,8 @@ class Index extends Component {
 										<Stream
 											{...props}
 											store={store}
-											accountServerConnection={accountServerConnection}
 											sagaMiddleware={sagaMiddleware}
+											accountServerConnection={accountServerConnection}
 										/>
 									);
 								}}

@@ -126,9 +126,9 @@ class HostServer {
 				}
 				let client = this.clients[socket.id];
 				// return if already authenticated:
-				if (client.authenticated) {
-					return;
-				}
+				// if (client.authenticated) {
+				// 	return;
+				// }
 
 				// send socket.id and auth token:
 				this.accountServerConnection.emit(
@@ -137,6 +137,9 @@ class HostServer {
 						socketid: socket.id,
 						authToken: data.authToken,
 						ip: client.ip,
+						hostUserid: this.hostUserid,
+						// todo:
+						// usernameIndex: data.usernameIndex,
 					},
 					(data) => {
 						// make sure they didn't disconnect:
@@ -147,14 +150,6 @@ class HostServer {
 
 						// check if it was successful:
 						if (data.success) {
-							// check if they're the host:
-							if (data.clientInfo.userid === this.hostUserid) {
-								data.clientInfo.roles.host = true;
-								data.clientInfo.roles.mod = true;
-								data.clientInfo.roles.plus = true;
-							}
-							// todo: this is probably way more often than necessary:
-							this.setClientPermissions();
 							// update local client to contain account server's info:
 							this.clients[data.socketid].update(data.clientInfo);
 
@@ -166,11 +161,6 @@ class HostServer {
 								connectedAccounts: data.clientInfo.connectedAccounts,
 								timePlayed: data.clientInfo.timePlayed,
 								roles: data.clientInfo.roles,
-								// todo: remove:
-								isHost: !!data.clientInfo.roles.host,
-								isMod: !!data.clientInfo.roles.mod,
-								isPlus: !!data.clientInfo.roles.plus,
-								isBanned: !!data.clientInfo.roles.banned,
 							};
 							cb({ ...data, clientInfo: clientInfo });
 						} else {
@@ -264,9 +254,6 @@ class HostServer {
 
 				let cNum = data.cNum;
 				let btns = data.btns;
-				let axes = data.axes;
-				let keys = data.keys;
-				let mouse = data.mouse;
 
 				// make sure it's a valid cNum:
 				if (this.controllerList.indexOf(cNum) == -1) {
@@ -340,11 +327,11 @@ class HostServer {
 				// send keyboard &|| mouse state
 				if (cNum === 0 && (this.mouseEnabled || this.keyboardEnabled)) {
 					if (this.mouseEnabled) {
-						// obj = { ...obj, mouse: data.mouse };
+						obj = { ...obj, mouse: data.mouse };
 						this.io.emit("mouseState", data.mouse);
 					}
 					if (this.keyboardEnabled) {
-						// obj = { ...obj, keys: data.keys };
+						obj = { ...obj, keys: data.keys };
 						this.io.emit("keyboardState", { keys: data.keys });
 					}
 				}
@@ -557,7 +544,6 @@ class HostServer {
 
 		this.accountServerConnection.on("accountMap", (data) => {
 			this.accountMap = data;
-			this.setClientPermissions();
 			this.io.emit("accountMap", this.accountMap);
 		});
 	}
@@ -921,41 +907,8 @@ class HostServer {
 
 				this.hostUser = data.account;
 				this.hostUserid = ("" + this.hostUser._id).trim();
-				this.setClientPermissions();
 			},
 		);
-	}
-
-	setClientPermissions() {
-		for (let socketid in this.clients) {
-			for (let key in this.hostUser.roleData) {
-				let roleList = this.hostUser.roleData[key];
-
-				if (roleList.includes(this.clients[socketid].userid)) {
-					this.clients[socketid].roles[key] = true;
-					// copy to account map:
-					// make sure account exists in accountMap
-					if (this.accountMap[this.clients[socketid].userid]) {
-						this.accountMap[this.clients[socketid].userid].roles[key] = true;
-					}
-				}
-			}
-
-			// has to be last so it isn't overwritten:
-			if (this.clients[socketid].userid === this.hostUserid) {
-				this.clients[socketid].roles.host = true;
-				this.clients[socketid].roles.mod = true;
-				this.clients[socketid].roles.plus = true;
-			}
-
-			// copy roles to accountMap:
-			// todo: fix this:
-			if (this.accountMap[this.clients[socketid].userid]) {
-				this.accountMap[this.clients[socketid].userid].roles = this.clients[
-					socketid
-				].roles;
-			}
-		}
 	}
 
 	// every x:

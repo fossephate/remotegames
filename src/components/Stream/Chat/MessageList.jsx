@@ -247,7 +247,7 @@ const mapStateToProps = (state) => {
 	return {
 		messages: state.stream.chat.messages,
 		accountMap: state.stream.accountMap,
-		isMod: state.clientInfo.isMod,
+		isMod: state.clientInfo.roles.mod,
 		isBanned: state.clientInfo.isBanned,
 		// lastMessage: state.stream.chat.messages[state.stream.chat.messages.length - 1],
 	};

@@ -352,7 +352,7 @@ function connectAccount(account, profile, type) {
 	account.emailVerified = true;
 }
 
-function clientInfoFromAccount(account, usernameIndex) {
+function clientInfoFromAccount(account, usernameIndex, hostUserid, cb) {
 	let clientInfo = {};
 
 	clientInfo.validUsernames = [];
@@ -404,7 +404,48 @@ function clientInfoFromAccount(account, usernameIndex) {
 		}
 	}
 
-	return clientInfo;
+	// get role data from host user:
+	if (hostUserid) {
+		// try and get account:
+		let queryObj;
+		if (hostUserid === "fosse" || hostUserid === "fosse2") {
+			queryObj = { usernameLower: hostUserid };
+		} else {
+			queryObj = { _id: hostUserid };
+		}
+		Account.findOne(queryObj).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+
+			// acount doesn't exist:
+			if (!account) {
+				console.log("host userid didn't lead to an account!");
+			} else {
+				let keys = Object.keys(account.roleData);
+				for (let i = 0; i < keys.length; i++) {
+					if (keys[i] === "$init") {
+						continue;
+					}
+					let roleList = account.roleData[keys[i]];
+					if (roleList.includes(clientInfo.userid)) {
+						clientInfo.roles[keys[i]] = true;
+					}
+				}
+
+				// has to be last so it isn't overwritten:
+				if (clientInfo.userid === hostUserid) {
+					clientInfo.roles.host = true;
+					clientInfo.roles.mod = true;
+					clientInfo.roles.plus = true;
+				}
+			}
+			cb(clientInfo);
+		});
+	} else {
+		return clientInfo;
+	}
 }
 
 // twitch:
@@ -918,13 +959,14 @@ io.on("connection", (socket) => {
 			return;
 		}
 
+		// must come from a host server:
+		if (!hostServers.hasOwnProperty(socket.id)) {
+			console.log("authenticate request from a client / unauthed");
+			return;
+		}
+
 		if (!data.socketid) {
-			// console.log("socketid was not defined!");
-			// cb({
-			// 	success: false,
-			// 	reason: "INVALID_ARGUMENTS",
-			// });
-			// return;
+			console.log("socketid was not defined!");
 			data.socketid = "NOT_PROVIDED";
 		}
 
@@ -953,8 +995,7 @@ io.on("connection", (socket) => {
 				.setAsync(`users:${userid}`, data.socketid, "NX", "EX", 30)
 				.then((success) => {
 					// todo: enable / fix:
-					if (!success && data.socketid !== "NOT_PROVIDED") {
-						// socket.emit("authenticated", {success: false, reason: "ALREADY_LOGGED_IN", ...reply});
+					if (!success) {
 						cb({
 							success: false,
 							reason: "ALREADY_LOGGED_IN",
@@ -964,40 +1005,51 @@ io.on("connection", (socket) => {
 					}
 
 					// save IP if not known:
-					if (account.IPs.indexOf(data.ip) == -1) {
+					if (account.IPs.indexOf(data.ip) === -1) {
 						account.IPs.push(data.ip);
 					}
-
-					let clientInfo = clientInfoFromAccount(account, data.usernameIndex);
-
 					// todo: maybe ban the account if using a banned IP: (or keep as is)
 					// for (let i = 0; i < account.IPs.length; i++) {
 					// 	if (bannedIPs.indexOf(account.IPs[i]) > -1) {
 					// 		clientInfo.isBanned = true;
 					// 	}
 					// }
-
-					// fill masterAccountMap:
-					masterAccountMap[clientInfo.userid] = {
-						...clientInfo,
-						hostSocketid: socket.id,
-					};
-
-					// create the localized account map if it doesn't exist:
-					if (!localizedAccountMaps.hasOwnProperty(socket.id)) {
-						localizedAccountMaps[socket.id] = {};
-					}
-					// fill it with this account:
-					localizedAccountMaps[socket.id][clientInfo.userid] = {
-						...clientInfo,
-					};
-
-					cb({
-						success: true,
-						authToken: account.authToken,
-						clientInfo: clientInfo,
-						...reply,
+					// update the account details:
+					account.save((error) => {
+						// error check:
+						if (error) {
+							throw error;
+						}
 					});
+
+					let clientInfo = clientInfoFromAccount(
+						account,
+						data.usernameIndex,
+						data.hostUserid,
+						(clientInfo) => {
+							// fill masterAccountMap:
+							masterAccountMap[clientInfo.userid] = {
+								...clientInfo,
+								hostSocketid: socket.id,
+							};
+
+							// create the localized account map if it doesn't exist:
+							if (!localizedAccountMaps.hasOwnProperty(socket.id)) {
+								localizedAccountMaps[socket.id] = {};
+							}
+							// fill it with this account:
+							localizedAccountMaps[socket.id][clientInfo.userid] = {
+								...clientInfo,
+							};
+
+							cb({
+								success: true,
+								authToken: account.authToken,
+								clientInfo: clientInfo,
+								...reply,
+							});
+						},
+					);
 				});
 		});
 	});
@@ -1087,7 +1139,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		// try and get account by uid:
+		// try and get account by userid:
 		Account.findOne({ _id: data.hostUserid }).exec((error, account) => {
 			// error check:
 			if (error) {
@@ -1615,37 +1667,27 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		// hack:
-		// todo: not this:
-		if (data.userid.length === 24) {
-			// try and get account:
-			Account.findOne({ _id: data.userid }, (error, account) => {
-				// error check:
-				if (error) {
-					throw error;
-				}
-				// if the account exists:
-				if (account) {
-					cb({ success: true, account: account });
-				} else {
-					cb({ success: false, reason: "ACCOUNT_NOT_FOUND" });
-				}
-			});
+		let queryObj;
+
+		if (data.userid === "fosse" || data.userid === "fosse2") {
+			queryObj = { usernameLower: data.userid.toLowerCase() };
 		} else {
-			// try and get account:
-			Account.findOne({ usernameLower: data.userid.toLowerCase() }, (error, account) => {
-				// error check:
-				if (error) {
-					throw error;
-				}
-				// if the account exists:
-				if (account) {
-					cb({ success: true, account: account });
-				} else {
-					cb({ success: false, reason: "ACCOUNT_NOT_FOUND" });
-				}
-			});
+			queryObj = { _id: data.userid };
 		}
+
+		// try and get account:
+		Account.findOne(queryObj, (error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// if the account exists:
+			if (account) {
+				cb({ success: true, account: account });
+			} else {
+				cb({ success: false, reason: "ACCOUNT_NOT_FOUND" });
+			}
+		});
 	});
 
 	// check if it's one of the videoServers / hostServers:

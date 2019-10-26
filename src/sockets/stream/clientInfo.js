@@ -9,22 +9,32 @@ import Cookie from "js-cookie";
 function authenticate(socket, dispatch) {
 	let authToken = Cookie.get("RemoteGames");
 	if (authToken) {
-		socket.emit("authenticate", {
-			authToken: authToken,
-			usernameIndex: 0,
-		}, (data) => {
-			console.log(data);
-			if (data.success) {
-				dispatch(updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true }));
-			} else {
-				console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
-				// remove the authToken if it doesn't work:
-				if (data.reason === "ACCOUNT_NOT_FOUND") {
-					Cookie.remove("RemoteGames");
-					dispatch(updateClientInfo({ authToken: null }));
+		socket.emit(
+			"authenticate",
+			{
+				authToken: authToken,
+				usernameIndex: 0,
+			},
+			(data) => {
+				console.log(data);
+				if (data.success) {
+					dispatch(
+						updateClientInfo({
+							...data.clientInfo,
+							authToken: authToken,
+							loggedIn: true,
+						}),
+					);
+				} else {
+					console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
+					// remove the authToken if it doesn't work:
+					if (data.reason === "ACCOUNT_NOT_FOUND") {
+						Cookie.remove("RemoteGames");
+						dispatch(updateClientInfo({ authToken: null }));
+					}
 				}
-			}
-		});
+			},
+		);
 	}
 }
 
@@ -32,26 +42,6 @@ function authenticate(socket, dispatch) {
 const clientInfoEvents = (socket, dispatch) => {
 	/* AUTHENTICATION */
 	authenticate(socket, dispatch);
-	// setTimeout(() => {
-	// 	$.ajax({
-	// 		url: "https://remotegames.io/accountData/" + this.props.clientInfo.username + "/" + this.props.clientInfo.userid + "/" + authCookie,
-	// 	});
-	// }, 5000);
-
-	// socket.on("chatMessage", (data) => {
-	// 	dispatch(receiveMessage(data.message, data.username, data.userid));
-	// });
-
-	// socket.on("authenticationFailure", (data) => {
-	// 	console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
-	// 	// swal("Already Logged In / multiple tabs open!");
-	// });
-
-	// response:
-	// socket.on("clientInfo", (data) => {
-	// 	console.log("clientInfo received");
-	// 	dispatch(updateClientInfo({ ...data, loggedIn: true }));
-	// });
 
 	socket.on("banned", (data) => {
 		localforage.setItem("banned", "banned");

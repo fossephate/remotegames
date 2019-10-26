@@ -40,17 +40,17 @@ export class InputState {
 
 		this.axes = [0, 0, 0, 0, 0, 0];
 
-		this.gyro = {
-			x: 0,
-			y: 0,
-			z: 0,
-		};
+		// this.gyro = {
+		// 	x: 0,
+		// 	y: 0,
+		// 	z: 0,
+		// };
 
-		this.accel = {
-			x: 0,
-			y: 0,
-			z: 0,
-		};
+		// this.accel = {
+		// 	x: 0,
+		// 	y: 0,
+		// 	z: 0,
+		// };
 
 		this.mouse = {
 			dx: 0,
@@ -73,12 +73,12 @@ export class InputState {
 		if (state.axes != null) {
 			this.axes = state.axes;
 		}
-		if (state.gyro != null) {
-			this.gyro = state.gyro;
-		}
-		if (state.accel != null) {
-			this.accel = state.accel;
-		}
+		// if (state.gyro != null) {
+		// 	this.gyro = state.gyro;
+		// }
+		// if (state.accel != null) {
+		// 	this.accel = state.accel;
+		// }
 
 		// mouse
 		if (state.mouse != null) {
@@ -140,12 +140,23 @@ export default class InputHandler {
 
 	pollDevices() {
 		let newInputState;
-		let updatedState = {
-			btns: 0,
-			axes: [0, 0, 0, 0, 0, 0],
-			mouse: { dx: 0, dy: 0, btns: [] },
-			keys: [],
-		};
+		// let updatedState = {
+		// 	btns: 0,
+		// 	axes: [0, 0, 0, 0, 0, 0],
+		// 	mouse: { dx: 0, dy: 0, btns: { left: 0, right: 0, middle: 0 } },
+		// 	keys: [],
+		// 	// gryo: {
+		// 	// 	x: 0,
+		// 	// 	y: 0,
+		// 	// 	z: 0,
+		// 	// },
+		// 	// accel: {
+		// 	// 	x: 0,
+		// 	// 	y: 0,
+		// 	// 	z: 0,
+		// 	// },
+		// };
+		let updatedState = new InputState();
 
 		updatedState = this.oldInputState;
 
@@ -156,42 +167,58 @@ export default class InputHandler {
 				if (this.controller.changed) {
 					this.controller.changed = false;
 					this.currentInputMode = "controller";
-					updatedState = this.controller.state.getState();
+					updatedState.setState(this.controller.getControllerState());
 				} else {
 					// keyboard:
 					this.keyboard.poll();
 					if (this.keyboard.changed) {
 						this.keyboard.changed = false;
 						this.currentInputMode = "keyboard";
-						updatedState = this.keyboard.state.getState();
+						updatedState.setState(this.keyboard.getControllerState());
 					}
 					if (this.mouse.settings.enabled && this.mouse.changed) {
 						this.mouse.changed = false;
 						updatedState.btns =
-							this.keyboard.state.getState().btns | this.mouse.state.getState().btns;
-						updatedState.axes[2] = this.mouse.state.axes[2];
-						updatedState.axes[3] = this.mouse.state.axes[3];
+							this.keyboard.cstate.getState().btns | this.mouse.getControllerState().btns;
+						updatedState.axes[2] = this.mouse.cstate.axes[2];
+						updatedState.axes[3] = this.mouse.cstate.axes[3];
 						// triggers:
 						updatedState.axes[4] = (updatedState.btns & (1 << 5)) != 0 ? 1 : 0;
 						updatedState.axes[5] = (updatedState.btns & (1 << 14)) != 0 ? 1 : 0;
 					}
 				}
 			} else {
-				let keys = key.getPressedKeyCodes();
-				for (let i = 0; i < keys.length; i++) {
-					keys[i] = String.fromCharCode(keys[i]);
+				// keyboard & mouse:
+				this.keyboard.poll();
+				if (this.keyboard.changed) {
+					this.keyboard.changed = false;
+					this.currentInputMode = "keyboard";
+					updatedState.setState(this.keyboard.getKeyboardState());
 				}
-				updatedState.keys = keys;
 				if (this.mouse.settings.enabled && this.mouse.changed) {
 					this.mouse.changed = false;
-					updatedState.mouse.dx = this.mouse.state.axes[2];
-					updatedState.mouse.dy = this.mouse.state.axes[3];
-					let btns = this.mouse.state.getState().btns;
-					updatedState.mouse.btns.left = (btns & (1 << 14)) != 0 ? 1 : 0;
-					updatedState.mouse.btns.right = (btns & (1 << 5)) != 0 ? 1 : 0;
+					updatedState.setState(this.mouse.getMouseState());
 				}
 			}
 		}
+
+		// setInterval(() => {
+		// 	let keys = key.getPressedKeyCodes();
+		// 	let keys2 = [];
+		// 	for (let i = 0; i < keys.length; i++) {
+		// 		keys2.push(String.fromCharCode(keys[i]));
+		// 	}
+		// 	console.log(keys2);
+		// }, 100);
+
+		// setInterval(() => {
+		// 	let keys = key.getPressedKeyCodes();
+		// 	let keys2 = [];
+		// 	for (let i = 0; i < keys.length; i++) {
+		// 		keys2.push(keys[i]);
+		// 	}
+		// 	console.log(keys2);
+		// }, 100);
 
 		let updatedStateString = JSON.stringify(updatedState);
 
@@ -199,18 +226,12 @@ export default class InputHandler {
 			// this.controller.state.setState(updatedState);
 			// this.keyboard.state.setState(updatedState);
 
-			// kind of a hack: todo:
-			if (!updatedState.mouse) {
-				updatedState.mouse = { dx: 0, dy: 0, btns: [] };
-			}
-
 			this.inputState.setState(updatedState);
 
 			this.oldInputState = updatedState;
 			this.oldInputStateString = updatedStateString;
 
 			this.changed = true;
-			console.log("changed");
 		}
 	}
 

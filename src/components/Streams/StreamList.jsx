@@ -88,6 +88,9 @@ const styles = (theme) => ({
 	},
 });
 
+const DUMMY_URL =
+	"https://dummyimage.com/1280x720/000000/fff.png&text=No+thumbnail+specified";
+
 class StreamList extends PureComponent {
 	constructor(props) {
 		super(props);
@@ -125,9 +128,10 @@ class StreamList extends PureComponent {
 							this.props.history.push(`/s/${stream.username}`);
 						}}
 					>
+						{/* todo: put a default thumbnail here: */}
 						<CardMedia
 							className={classes.media}
-							image={stream.thumbnailURL}
+							image={stream.thumbnailURL || DUMMY_URL}
 							title="Photo"
 						/>
 						<CardContent>

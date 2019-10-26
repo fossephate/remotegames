@@ -14,16 +14,13 @@ import Button from "@material-ui/core/Button";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import OutlinedInput from "@material-ui/core/OutlinedInput";
-import TextField from "@material-ui/core/TextField";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
 
 // components:
-import ConnectAccounts from "src/components/ConnectAccounts.jsx";
 
 // recompose:
 import { compose } from "recompose";
@@ -399,7 +396,7 @@ class InputMapperModal extends PureComponent {
 										{gamepads}
 									</Select>
 
-									<Paper elevation={2} style={{marginTop: 15}}>
+									<Paper elevation={2} style={{ marginTop: 15 }}>
 										<List className={classes.list}>
 											{[...Array(17)].map((e, i) => (
 												<ControllerMapper

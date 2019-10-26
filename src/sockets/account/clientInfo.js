@@ -9,22 +9,32 @@ import Cookie from "js-cookie";
 function getAccountInfo(socket, dispatch) {
 	let authToken = Cookie.get("RemoteGames");
 	if (authToken) {
-		socket.emit("getAccountInfo", {
-			authToken: authToken,
-			usernameIndex: 0,
-		}, (data) => {
-			console.log(data);
-			if (data.success) {
-				dispatch(updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true }));
-			} else {
-				console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
-				// remove the authToken if it doesn't work:
-				if (data.reason === "ACCOUNT_NOT_FOUND") {
-					Cookie.remove("RemoteGames");
-					dispatch(updateClientInfo({ authToken: null }));
+		socket.emit(
+			"getAccountInfo",
+			{
+				authToken: authToken,
+				usernameIndex: 0,
+			},
+			(data) => {
+				console.log(data);
+				if (data.success) {
+					dispatch(
+						updateClientInfo({
+							...data.clientInfo,
+							authToken: authToken,
+							loggedIn: true,
+						}),
+					);
+				} else {
+					console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
+					// remove the authToken if it doesn't work:
+					if (data.reason === "ACCOUNT_NOT_FOUND") {
+						Cookie.remove("RemoteGames");
+						dispatch(updateClientInfo({ authToken: null }));
+					}
 				}
-			}
-		});
+			},
+		);
 	}
 }
 

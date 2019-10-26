@@ -3,9 +3,7 @@ import React, { PureComponent } from "react";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
+import { Paper, Button } from "@material-ui/core";
 
 // redux:
 import { connect } from "react-redux";

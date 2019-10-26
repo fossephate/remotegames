@@ -1,4 +1,4 @@
-import VirtualProController from "./VirtualProController.js";
+import ControllerState from "./ControllerState.js";
 const restPos = 0;
 
 export const AxisSettings = class AxisSettings {
@@ -55,7 +55,8 @@ export default class VirtualController {
 		this.gamepadWrapper = gamepadWrapper;
 
 		// this.activeControllers = [1];
-		this.state = new VirtualProController();
+		this.cstate = new ControllerState();
+		this.getControllerState = this.getControllerState.bind(this);
 		this.oldState = {
 			buttons: [],
 			axes: [],
@@ -184,6 +185,10 @@ export default class VirtualController {
 				this.settings.controllerIndex = key;
 				console.log("Playstation controller found!");
 			}
+			if (controller.id.indexOf("Pro Controller") > -1) {
+				this.settings.controllerIndex = key;
+				console.log("Pro controller found!");
+			}
 			keys.push(key);
 		}
 		// didn't find a known controller, just pick the first one if there is one:
@@ -209,7 +214,7 @@ export default class VirtualController {
 			return;
 		}
 
-		let oldState = JSON.stringify(this.state.getState());
+		let oldState = JSON.stringify(this.cstate.getState());
 
 		// map buttons and axes to VirtualProController:
 
@@ -236,7 +241,7 @@ export default class VirtualController {
 
 			let triggerIndex = this.triggerIndexes.indexOf(j);
 			if (triggerIndex > -1) {
-				this.state.axes[4 + triggerIndex] = button.value;
+				this.cstate.axes[4 + triggerIndex] = button.value;
 				// continue;
 			}
 
@@ -249,11 +254,11 @@ export default class VirtualController {
 			}
 
 			if (mapping.type == "button") {
-				this.state.buttons[mapping.which] = button.pressed ? 1 : 0;
+				this.cstate.buttons[mapping.which] = button.pressed ? 1 : 0;
 			} else if (mapping.type == "axis") {
 				console.log("something is wrong");
 				// TODO:
-				// this.state.axes[mapping.which] = button.pressed ? button.value : 0;
+				// this.cstate.axes[mapping.which] = button.pressed ? button.value : 0;
 			}
 		}
 
@@ -281,26 +286,30 @@ export default class VirtualController {
 				let x = axis * ax.sensitivity;
 				// x = x / 2 + 0.5;
 				// x *= 255;
-				this.state.axes[mapping.which] = x + this.settings.axes[mapping.which].offset;
+				this.cstate.axes[mapping.which] = x + this.settings.axes[mapping.which].offset;
 				if (
-					Math.abs(restPos - this.state.axes[mapping.which]) <
+					Math.abs(restPos - this.cstate.axes[mapping.which]) <
 					this.settings.axes[mapping.which].deadzone
 				) {
-					this.state.axes[mapping.which] = restPos;
+					this.cstate.axes[mapping.which] = restPos;
 				}
-				// this.state.axes[mapping.which] = axis;
+				// this.cstate.axes[mapping.which] = axis;
 			} else if (mapping.type == "button") {
 				if (mapping.aboveOrBelow) {
-					this.state.buttons[mapping.which] = axis > mapping.activationThreshold ? 1 : 0;
+					this.cstate.buttons[mapping.which] = axis > mapping.activationThreshold ? 1 : 0;
 				} else {
-					this.state.buttons[mapping.which] = axis < mapping.activationThreshold ? 1 : 0;
+					this.cstate.buttons[mapping.which] = axis < mapping.activationThreshold ? 1 : 0;
 				}
 			}
 		}
 
-		let newState = JSON.stringify(this.state.getState());
+		let newState = JSON.stringify(this.cstate.getState());
 		if (newState != oldState) {
 			this.changed = true;
 		}
+	}
+
+	getControllerState() {
+		return this.cstate.getState();
 	}
 }

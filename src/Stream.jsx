@@ -1,6 +1,5 @@
 // react:
-import React, { Component, Suspense, lazy } from "react";
-import ReactDOM from "react-dom";
+import React, { Component } from "react";
 
 // react-router:
 import { Route, Switch, withRouter } from "react-router";
@@ -18,8 +17,6 @@ import handleStreamActions from "src/sagas/stream";
 import handleStreamEvents from "src/sockets/stream";
 
 // main components:
-// import LoginArea from "src/components/LoginArea.jsx";
-// import NavTabs from "src/components/Stream/NavTabs.jsx";
 import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
 import Picture from "src/components/Stream/Picture.jsx";
 import Chat from "src/components/Stream/Chat/Chat.jsx";
@@ -39,7 +36,12 @@ import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import { Snackbar } from "@material-ui/core";
+
+import { Snackbar, SnackbarContent } from "@material-ui/core";
+import { amber } from "@material-ui/core/colors";
+import WarningIcon from "@material-ui/icons/Warning";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -68,7 +70,7 @@ import socketio from "socket.io-client";
 // rr:
 import Lagless2 from "libs/lagless/lagless2.js";
 // import Lagless4 from "libs/lagless/lagless4.js";
-import LaglessAudio from "libs/lagless/laglessAudio.js";
+// import LaglessAudio from "libs/lagless/laglessAudio.js";
 
 // swal.fire("stream is down right now, don't put anything in #bug-reports.");
 
@@ -99,6 +101,15 @@ const styles = {
 	[device.laptop]: {
 		root: {},
 	},
+	warning: {
+		backgroundColor: amber[700],
+	},
+	icon: {
+		fontSize: 20,
+		opacity: 0.9,
+		// marginRight: theme.spacing(1),
+		marginRight: "8px",
+	},
 };
 
 class Stream extends Component {
@@ -109,7 +120,6 @@ class Stream extends Component {
 		this.afkTimer = null;
 		this.laglessAudio = null;
 		this.stream = null;
-		// window.stream = this.stream;
 		this.socket = null;
 		this.accountServerConnection = this.props.accountServerConnection;
 
@@ -119,14 +129,15 @@ class Stream extends Component {
 		this.afk = this.afk.bind(this);
 		this.start = this.start.bind(this);
 
-		this.state = {};
+		this.state = {
+			warningOpen: false,
+		};
 
 		this.inputHandler = new InputHandler(false);
 		window.inputHandler = this.inputHandler; // for lagless canvas
 	}
 
 	start(data) {
-		console.log("STARTING");
 		if (this.socket) {
 			this.socket.close();
 			this.socket = null;
@@ -166,53 +177,24 @@ class Stream extends Component {
 			this.setStreamVolume(this.props);
 		}, 5000);
 
-		// let currentValue = null;
-		// let unsubscribe = this.props.store.subscribe(() => {
-		// 	let previousValue = currentValue;
-		// 	currentValue = this.props.store.getState().settings.volume;
-		// 	if (previousValue !== currentValue) {
-		// 		this.stream.player.volume = currentValue / 100;
-		// 	}
-		// });
-
 		setTimeout(() => {
 			if (!this.props.clientInfo.loggedIn) {
-				swal.fire("You have to login / register first!");
+				swal.fire("You need to login / register first!");
 				return;
 			}
 			this.stream.resume(document.getElementById("videoCanvas"));
 		}, 3000);
 
 		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-		this.laglessAudio = new LaglessAudio(this.socket);
+		// this.laglessAudio = new LaglessAudio(this.socket);
 
-		if (this.props.settings.audioThree) {
-			this.laglessAudio.resume();
-		}
+		// if (this.props.settings.audioThree) {
+		// 	this.laglessAudio.resume();
+		// }
 	}
 
 	componentDidMount() {
-		// let authToken = Cookie.get("RemoteGames");
-		// if (authToken) {
-		// 	this.accountServerConnection.emit("authenticate", {
-		// 		authToken: authToken,
-		// 		usernameIndex: 0,
-		// 		socketid: 1,
-		// 	}, (data) => {
-		// 		if (data.success) {
-		// 			console.log(data);
-		// 			this.props.updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true });
-		// 		} else {
-		// 			alert(`AUTHENTICATION_FAILURE: ${data.reason}`);
-		// 			// remove the authToken if it doesn't work:
-		// 			if (data.reason === "ACCOUNT_NOT_FOUND") {
-		// 				Cookie.remove("RemoteGames");
-		// 				this.props.updateClientInfo({ authToken: null });
-		// 			}
-		// 		}
-		// 	});
-		// }
-
+		// todo move to a saga:
 		this.accountServerConnection.emit(
 			"getStreamInfo",
 			{ username: this.props.match.params.username },
@@ -296,7 +278,6 @@ class Stream extends Component {
 	}
 
 	componentWillUnmount() {
-		console.log("UNMOUNTING STREAM");
 		clearInterval(this.sendInputTimer);
 		if (this.socket) {
 			this.socket.close();
@@ -409,6 +390,7 @@ class Stream extends Component {
 		if (document.activeElement === document.getElementById("messageBox")) {
 			return;
 		}
+
 		// return if trying to re-map inputs:
 		if (window.location.pathname == "/remap") {
 			return;
@@ -429,6 +411,7 @@ class Stream extends Component {
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
+			this.setState({ warningOpen: true });
 			return;
 		}
 
@@ -468,7 +451,7 @@ class Stream extends Component {
 				// fixedLengthString(obj.axes[5], "0", 3),
 			);
 		} else {
-			// console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
+			console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
 		}
 		// console.log("0 0 0\n 0 9 0\n 0 0 0");
 
@@ -563,25 +546,43 @@ class Stream extends Component {
 					history={this.props.history}
 					hide={this.props.settings.fullscreen}
 				/>
-				{/* <LoginArea /> */}
 				<Picture />
 				<Chat hide={this.props.settings.hideChat} />
 				<StreamInfo />
 
+				<Snackbar
+					anchorOrigin={{
+						vertical: "bottom",
+						horizontal: "left",
+					}}
+					open={this.state.warningOpen}
+					autoHideDuration={5000}
+				>
+					<SnackbarContent
+						className={classes.warning}
+						message={
+							<span id="message-id">
+								<WarningIcon className={classes.icon} />
+								It's not your turn yet!
+							</span>
+						}
+						action={[
+							<IconButton
+								key="close"
+								color="inherit"
+								className=""
+								onClick={() => {
+									this.setState({ warningOpen: false });
+								}}
+							>
+								<CloseIcon />
+							</IconButton>,
+						]}
+					></SnackbarContent>
+				</Snackbar>
+
 				{/* selects the first matching path: */}
 				<Switch>
-					{/* <Route
-						path="/login"
-						render={(props) => {
-							return <LoginModal {...props} />;
-						}}
-					/>
-					<Route
-						path="/register"
-						render={(props) => {
-							return <RegisterModal {...props} />;
-						}}
-					/> */}
 					<Route
 						path="/(login|register)"
 						render={(props) => {
@@ -617,7 +618,6 @@ const mapStateToProps = (state) => {
 		clientInfo: state.clientInfo,
 		settings: state.settings,
 		playerCount: state.stream.players.count,
-		// todo: modal
 	};
 };
 

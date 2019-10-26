@@ -4,8 +4,7 @@ import React, { PureComponent } from "react";
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
-import VirtualProController from "libs/InputHandler/VirtualProController.js";
-import { clamp, normalizeVector } from "libs/tools.js";
+import ControllerState from "libs/InputHandler/ControllerState.js";
 let classNames = require("classnames");
 
 // jss:
@@ -199,14 +198,14 @@ class RightControllerView extends PureComponent {
 
 		this.getStickTransform = this.getStickTransform.bind(this);
 
-		this.controller = new VirtualProController();
+		this.cstate = new ControllerState();
 
 		this.state = {};
 	}
 
 	getStickTransform() {
-		let x = this.controller.axes[2];
-		let y = this.controller.axes[3];
+		let x = this.cstate.axes[2];
+		let y = this.cstate.axes[3];
 
 		y *= -1;
 
@@ -227,7 +226,7 @@ class RightControllerView extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
-		this.controller.setState(this.props.controllerState);
+		this.cstate.setState(this.props.controllerState);
 
 		let stickTransform = this.getStickTransform();
 
@@ -240,7 +239,7 @@ class RightControllerView extends PureComponent {
 					/>
 					<div
 						className={classNames(classes.stick1, {
-							[classes.highlighted]: this.controller.buttons.rstick,
+							[classes.highlighted]: this.cstate.buttons.rstick,
 						})}
 					>
 						<div
@@ -252,39 +251,39 @@ class RightControllerView extends PureComponent {
 					<div className={classes.abxy}>
 						<div
 							className={classNames(classes.button, "a", {
-								[classes.highlighted]: this.controller.buttons.a,
+								[classes.highlighted]: this.cstate.buttons.a,
 							})}
 						/>
 						<div
 							className={classNames(classes.button, "b", {
-								[classes.highlighted]: this.controller.buttons.b,
+								[classes.highlighted]: this.cstate.buttons.b,
 							})}
 						/>
 						<div
 							className={classNames(classes.button, "x", {
-								[classes.highlighted]: this.controller.buttons.x,
+								[classes.highlighted]: this.cstate.buttons.x,
 							})}
 						/>
 						<div
 							className={classNames(classes.button, "y", {
-								[classes.highlighted]: this.controller.buttons.y,
+								[classes.highlighted]: this.cstate.buttons.y,
 							})}
 						/>
 					</div>
 					<div className={classes.otherButtons}>
 						<div
 							className={classNames(classes.button, classes.otherButtons, "plus", {
-								[classes.highlighted]: this.controller.buttons.plus,
+								[classes.highlighted]: this.cstate.buttons.plus,
 							})}
 						/>
 						<div
 							className={classNames(classes.button, classes.otherButtons, "home", {
-								[classes.highlighted]: this.controller.buttons.home,
+								[classes.highlighted]: this.cstate.buttons.home,
 							})}
 						/>
 						<div
 							className={classNames(classes.button, classes.otherButtons, "r", {
-								[classes.highlighted]: this.controller.buttons.r,
+								[classes.highlighted]: this.cstate.buttons.r,
 							})}
 						>
 							<div className="click-passthrough">R</div>
@@ -292,14 +291,14 @@ class RightControllerView extends PureComponent {
 						<div className={classNames(classes.button, classes.otherButtons, "zr")}>
 							<div
 								className={classNames(classes.trigger1, {
-									[classes.highlighted]: this.controller.buttons.zr,
+									[classes.highlighted]: this.cstate.buttons.zr,
 								})}
 							>
 								ZR
 							</div>
 							<div
 								className={classes.trigger2}
-								style={{ width: this.controller.axes[5] * 100 + "%" }}
+								style={{ width: this.cstate.axes[5] * 100 + "%" }}
 							/>
 						</div>
 					</div>
@@ -314,7 +313,7 @@ class RightControllerView extends PureComponent {
 					/>
 					<div
 						className={classNames(classes.stick1, {
-							[classes.xboxHighlighted]: this.controller.buttons.rstick,
+							[classes.xboxHighlighted]: this.cstate.buttons.rstick,
 						})}
 					>
 						<div
@@ -326,28 +325,28 @@ class RightControllerView extends PureComponent {
 					<div className={classes.xboxabxy}>
 						<div
 							className={classNames(classes.button, "a", {
-								[classes.xboxHighlighted]: this.controller.buttons.a,
+								[classes.xboxHighlighted]: this.cstate.buttons.a,
 							})}
 						>
 							B
 						</div>
 						<div
 							className={classNames(classes.button, "b", {
-								[classes.xboxHighlighted]: this.controller.buttons.b,
+								[classes.xboxHighlighted]: this.cstate.buttons.b,
 							})}
 						>
 							A
 						</div>
 						<div
 							className={classNames(classes.button, "x", {
-								[classes.xboxHighlighted]: this.controller.buttons.x,
+								[classes.xboxHighlighted]: this.cstate.buttons.x,
 							})}
 						>
 							Y
 						</div>
 						<div
 							className={classNames(classes.button, "y", {
-								[classes.xboxHighlighted]: this.controller.buttons.y,
+								[classes.xboxHighlighted]: this.cstate.buttons.y,
 							})}
 						>
 							X
@@ -356,17 +355,17 @@ class RightControllerView extends PureComponent {
 					<div className={classes.otherButtons}>
 						<div
 							className={classNames(classes.button, classes.otherButtons, "plus", {
-								[classes.xboxHighlighted]: this.controller.buttons.plus,
+								[classes.xboxHighlighted]: this.cstate.buttons.plus,
 							})}
 						/>
 						<div
 							className={classNames(classes.button, classes.otherButtons, "home", {
-								[classes.xboxHighlighted]: this.controller.buttons.home,
+								[classes.xboxHighlighted]: this.cstate.buttons.home,
 							})}
 						/>
 						<div
 							className={classNames(classes.button, classes.otherButtons, "r", {
-								[classes.xboxHighlighted]: this.controller.buttons.r,
+								[classes.xboxHighlighted]: this.cstate.buttons.r,
 							})}
 						>
 							<div className="click-passthrough">RB</div>
@@ -374,14 +373,14 @@ class RightControllerView extends PureComponent {
 						<div className={classNames(classes.button, classes.otherButtons, "zr")}>
 							<div
 								className={classNames(classes.trigger1, {
-									[classes.xboxHighlighted]: this.controller.buttons.zr,
+									[classes.xboxHighlighted]: this.cstate.buttons.zr,
 								})}
 							>
 								RT
 							</div>
 							<div
 								className={classNames(classes.trigger2, classes.xboxHighlighted)}
-								style={{ width: this.controller.axes[5] * 100 + "%" }}
+								style={{ width: this.cstate.axes[5] * 100 + "%" }}
 							/>
 						</div>
 					</div>
