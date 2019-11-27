@@ -26,13 +26,13 @@ let ports = {
 };
 
 // start connection with the account server (same server in this case):
-let accountServerConnection = socketioClient("https://remotegames.io", {
+let accountConnection = socketioClient("https://remotegames.io", {
 	path: "/8099/socket.io",
 	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 });
 
 function register() {
-	accountServerConnection.emit("registerVideoServer", {
+	accountConnection.emit("registerVideoServer", {
 		secret: config.ROOM_SECRET,
 		ip: ip,
 		ports: ports,
@@ -40,7 +40,7 @@ function register() {
 }
 setInterval(register, 1000 * 60);
 
-accountServerConnection.on("startVideo", (data) => {
+accountConnection.on("startVideo", (data) => {
 	// make sure the port is available:
 
 	if (!ports[data.port]) {
@@ -52,14 +52,14 @@ accountServerConnection.on("startVideo", (data) => {
 	ports[data.port] = false;
 
 	videoServers[data.port] = new VideoServer({
-		socket: accountServerConnection,
+		socket: accountConnection,
 		port: data.port,
 		streamKey: data.streamKey,
 	});
 	videoServers[data.port].init();
 });
 
-accountServerConnection.on("stopVideo", (data) => {
+accountConnection.on("stopVideo", (data) => {
 	if (ports[data.port]) {
 		console.log("something went wrong, this port wasn't set as unavailable!");
 		// return;
@@ -74,7 +74,7 @@ let port;
 port = 8000;
 ports[port] = false;
 videoServers[port] = new VideoServer({
-	socket: accountServerConnection,
+	socket: accountConnection,
 	port: port,
 	streamKey: "a",
 });
@@ -84,7 +84,7 @@ videoServers[port].init();
 port = 8001;
 ports[port] = false;
 videoServers[port] = new VideoServer({
-	socket: accountServerConnection,
+	socket: accountConnection,
 	port: port,
 	streamKey: "b",
 });

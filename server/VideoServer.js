@@ -1,8 +1,8 @@
 const socketio = require("socket.io");
 
 class VideoServer {
-	constructor(options /*accountServerConnection, port, streamKey*/) {
-		this.accountServerConnection = options.socket;
+	constructor(options /*accountConnection, port, streamKey*/) {
+		this.accountConnection = options.socket;
 		this.port = options.port;
 		this.streamKey = options.streamKey;
 		this.io = new socketio({
@@ -45,7 +45,21 @@ class VideoServer {
 			});
 
 			/* SIMPLEPEER */
-			socket.on("requestAudio", (data) => {
+
+			// socket.on("requestAudio", (data) => {
+			// 	this.io.to("host").emit("createNewPeer", { id: socket.id });
+			// });
+			// socket.on("hostPeerSignalReply", (data) => {
+			// 	this.io.to(data.id).emit("hostPeerSignal", data.data);
+			// });
+			// socket.on("hostPeerSignal", (data) => {
+			// 	this.io.emit("hostPeerSignal", data);
+			// });
+			// socket.on("clientPeerSignal", (data) => {
+			// 	this.io.emit("clientPeerSignal", { id: socket.id, data: data });
+			// });
+
+			socket.on("requestVideo", (data) => {
 				this.io.to("host").emit("createNewPeer", { id: socket.id });
 			});
 			socket.on("hostPeerSignalReply", (data) => {
@@ -66,7 +80,7 @@ class VideoServer {
 	}
 
 	afk() {
-		this.accountServerConnection.emit("streamInactive", {
+		this.accountConnection.emit("streamInactive", {
 			port: this.port,
 			streamKey: this.streamKey,
 		});

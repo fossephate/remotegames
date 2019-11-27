@@ -22,9 +22,9 @@ function customSetInterval(func, time) {
 // export class Host {
 class HostServer {
 	constructor(
-		options /*accountServerConnection, port, videoIP, videoPort, streamKey, hostUserid*/,
+		options /*accountConnection, port, videoIP, videoPort, streamKey, hostUserid, streamSettings*/,
 	) {
-		this.accountServerConnection = options.socket;
+		this.accountConnection = options.socket;
 		this.port = options.port;
 		this.io = new socketio({
 			// perMessageDeflate: false,
@@ -59,11 +59,10 @@ class HostServer {
 		this.plusLock = false;
 
 		// host set settings:
-		if (options.settings) {
-			this.keyboardEnabled = options.settings.keyboardEnabled;
-			this.mouseEnabled = options.settings.mouseEnabled;
-			this.controllerCount = options.settings.controllerCount;
-		}
+		this.streamSettings = options.settings;
+		this.keyboardEnabled = options.settings.keyboardEnabled;
+		this.mouseEnabled = options.settings.mouseEnabled;
+		this.controllerCount = options.settings.controllerCount;
 
 		this.turnLengths = [];
 		this.forfeitLengths = [];
@@ -131,7 +130,7 @@ class HostServer {
 				// }
 
 				// send socket.id and auth token:
-				this.accountServerConnection.emit(
+				this.accountConnection.emit(
 					"authenticate",
 					{
 						socketid: socket.id,
@@ -178,7 +177,7 @@ class HostServer {
 				}
 				let client = this.clients[socket.id];
 				if (client && client.userid) {
-					this.accountServerConnection.emit("keepAlive", {
+					this.accountConnection.emit("keepAlive", {
 						userid: client.userid,
 						socketid: socket.id,
 					});
@@ -191,7 +190,7 @@ class HostServer {
 				let client = this.clients[socket.id];
 
 				if (client) {
-					this.accountServerConnection.emit("clientDisconnected", {
+					this.accountConnection.emit("clientDisconnected", {
 						socketid: socket.id,
 						userid: client.userid,
 						timePlayed: client.timePlayed,
@@ -427,34 +426,6 @@ class HostServer {
 				this.calculateTurnExpirations();
 			});
 
-			/* WebRTC @@@@@@@@@@@@@@@@@@@@@@@@ */
-			/* SIMPLEPEER */
-			socket.on("hostPeerSignal", (data) => {
-				this.io.emit("hostPeerSignal", data);
-			});
-			socket.on("clientPeerSignal", (data) => {
-				this.io.emit("clientPeerSignal", { id: socket.id, data: data });
-			});
-			socket.on("requestAudio", (data) => {
-				this.io.to("audioHost").emit("createNewPeer", { id: socket.id });
-			});
-			socket.on("hostPeerSignalReply", (data) => {
-				this.io.to(data.id).emit("hostPeerSignal", data.data);
-			});
-			// video:
-			socket.on("hostPeerSignalV", (data) => {
-				this.io.emit("hostPeerSignalV", data);
-			});
-			socket.on("clientPeerSignalV", (data) => {
-				this.io.emit("clientPeerSignalV", { id: socket.id, data: data });
-			});
-			socket.on("requestVideo", (data) => {
-				this.io.to("videoHost").emit("createNewPeerV", { id: socket.id });
-			});
-			socket.on("hostPeerSignalReplyV", (data) => {
-				this.io.to(data.id).emit("hostPeerSignalV", data.data);
-			});
-
 			// lagless1 - 2.0:
 			socket.on("video", (data) => {
 				this.io.emit("video", data);
@@ -542,7 +513,7 @@ class HostServer {
 
 		// do stuff based on the account server's responses:
 
-		this.accountServerConnection.on("accountMap", (data) => {
+		this.accountConnection.on("accountMap", (data) => {
 			this.accountMap = data;
 			this.io.emit("accountMap", this.accountMap);
 		});
@@ -569,8 +540,11 @@ class HostServer {
 		};
 		let reg = null;
 		let results = null;
+
+		reg = /^!(un)?ban ([a-zA-Z0-9]+)$/;
+		results = reg.exec(message.text);
 		// ban / unban:
-		if (/^!(un)?ban ([a-zA-Z0-9]+)$/.test(message.text)) {
+		if (results) {
 			if (!client.roles.mod) {
 				msgObj.text = "You need to be a mod to use this command!";
 				this.sendMessage(msgObj);
@@ -578,8 +552,8 @@ class HostServer {
 				return;
 			}
 			let un = !!results[1];
-			let userid = message.text.substring(n);
-			this.accountServerConnection.emit(
+			let userid = results[2];
+			this.accountConnection.emit(
 				"ban",
 				{
 					isBanned: !un,
@@ -669,7 +643,7 @@ class HostServer {
 			let role = results[2];
 			let userid = results[3];
 
-			this.accountServerConnection.emit(
+			this.accountConnection.emit(
 				"changeAccountStatus",
 				{
 					issuerUserid: client.userid,
@@ -707,7 +681,7 @@ class HostServer {
 			let role = results[2];
 			let userid = results[3];
 
-			this.accountServerConnection.emit(
+			this.accountConnection.emit(
 				"changeAccountStatus",
 				{
 					issuerUserid: client.userid,
@@ -895,20 +869,16 @@ class HostServer {
 	}
 
 	getHostInfo() {
-		this.accountServerConnection.emit(
-			"getHostInfo",
-			{ userid: this.hostUserid },
-			(data) => {
-				if (!data.success) {
-					console.log("something went wrong, getHostInfo");
-					console.log(data.reason);
-					return;
-				}
+		this.accountConnection.emit("getHostInfo", { userid: this.hostUserid }, (data) => {
+			if (!data.success) {
+				console.log("something went wrong, getHostInfo");
+				console.log(data.reason);
+				return;
+			}
 
-				this.hostUser = data.account;
-				this.hostUserid = ("" + this.hostUser._id).trim();
-			},
-		);
+			this.hostUser = data.account;
+			this.hostUserid = ("" + this.hostUser._id).trim();
+		});
 	}
 
 	// every x:
@@ -952,7 +922,6 @@ class HostServer {
 	// add to timePlayed:
 	addTimePlayed() {
 		for (let i = 0; i < this.controlQueues.length; i++) {
-			let controlQueue = this.controlQueues[i];
 			let userid = this.controlQueues[i][0];
 			if (userid == null) {
 				continue;

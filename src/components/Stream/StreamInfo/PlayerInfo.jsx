@@ -1,12 +1,11 @@
 // react:
 import React, { Component, PureComponent } from "react";
-import PropTypes from "prop-types";
 
 // components:
 import Player from "./Player.jsx";
 
 // material ui:
-import { withStyles } from "@material-ui/styles";
+import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
 // redux:
@@ -79,8 +78,5 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(PlayerInfo);

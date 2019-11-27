@@ -27,6 +27,24 @@ export const authenticate = (data) => {
 	};
 };
 
+export const login = (data) => {
+	return {
+		type: types.LOGIN,
+		payload: {
+			...data,
+		},
+	};
+};
+
+export const register = (data) => {
+	return {
+		type: types.REGISTER,
+		payload: {
+			...data,
+		},
+	};
+};
+
 // export const createAccount = (data) => {
 // 	return {
 // 		type: types.CREATE_ACCOUNT,

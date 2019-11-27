@@ -16,25 +16,6 @@ import { connect } from "react-redux";
 // recompose:
 import { compose } from "recompose";
 
-// let classNames = require("classnames");
-
-// jss:
-// const styles = (theme) => ({
-// 	root: {
-// 		display: "flex",
-// 		flexDirection: "row",
-// 		justifyContent: "center",
-// 		position: "relative",
-// 		marginLeft: "20px",
-// 		marginRight: "20px",
-// 		textAlign: "center",
-// 	},
-// 	canvas: {
-// 		width: "73.2%",
-// 		alignSelf: "center",
-// 	},
-// });
-
 class LaglessCanvas extends PureComponent {
 	constructor(props) {
 		super(props);
@@ -42,6 +23,9 @@ class LaglessCanvas extends PureComponent {
 		this.handleClick = this.handleClick.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 		this.enableMouseControls = this.enableMouseControls.bind(this);
+
+		// this.videoRef = React.createRef();
+		this.mouseCanvasRef = React.createRef();
 
 		this.state = {
 			alertOpen: false,
@@ -61,30 +45,52 @@ class LaglessCanvas extends PureComponent {
 
 	enableMouseControls() {
 		this.setState({ alertOpen: false });
-		window.inputHandler.mouse.init($("#videoCanvas")[0]);
+
+		// let id = null;
+		// if (this.props.streamType === "mpeg2") {
+		// 	id = "canvas";
+		// } else if (this.props.streamType === "webRTC") {
+		// 	id = "video";
+		// }
+		// window.inputHandler.mouse.init(document.getElementById(id));
+
+		window.inputHandler.mouse.init(this.mouseCanvasRef.current);
 		window.inputHandler.mouse.toggle(true);
 	}
 
 	render() {
 		const { classes } = this.props;
-		//
-		// let videoClasses = "videoCanvas";
-		// if (this.props.largescreen || this.props.fullscreen) {
-		// 	laglessClasses += " fullscreen";
-		// 	videoClasses += " fullscreen";
-		// }
-		//
-		// // let videoClasses = classNames("videoCanvas", {
-		// // 	displayNone: false,
-		// // });
-		//
+
+		let videoCanvas = null;
+		if (this.props.streamType === "mpeg2") {
+			videoCanvas = (
+				<canvas
+					id="canvas"
+					// onClick={this.handleClick}
+					className={this.props.classes}
+					// ref={this.videoRef}
+				/>
+			);
+		} else if (this.props.streamType === "webRTC") {
+			videoCanvas = (
+				<video
+					id="video"
+					// onClick={this.handleClick}
+					className={this.props.classes}
+					// ref={this.videoRef}
+				/>
+			);
+		}
 
 		return (
-			<React.Fragment>
+			<>
+				{videoCanvas}
 				<canvas
-					id="videoCanvas"
+					ref={this.mouseCanvasRef}
 					onClick={this.handleClick}
-					className={this.props.classes}
+					style={{ position: "absolute", width: "73.2%", height: "100%" }}
+					width="1280"
+					height="720"
 				/>
 				<Dialog
 					open={this.state.alertOpen}
@@ -113,13 +119,15 @@ class LaglessCanvas extends PureComponent {
 						</Button>
 					</DialogActions>
 				</Dialog>
-			</React.Fragment>
+			</>
 		);
 	}
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		streamType: state.stream.info.streamType,
+	};
 };
 
 export default compose(

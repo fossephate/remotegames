@@ -25,11 +25,15 @@ import { compose } from "recompose";
 
 // redux:
 import { connect } from "react-redux";
-import { updateClientInfo, authenticate } from "src/actions/clientInfo.js";
+import {
+	login,
+	register,
+	updateClientInfo,
+	authenticate,
+} from "src/actions/clientInfo.js";
 
 // libs:
 const classNames = require("classnames");
-import socketio from "socket.io-client";
 import Cookie from "js-cookie";
 import queryString from "query-string";
 
@@ -74,11 +78,6 @@ class LoginRegisterModal extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.socket = socketio("https://remotegames.io", {
-			path: "/8099/socket.io",
-			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
-		});
-
 		this.handleClose = this.handleClose.bind(this);
 		this.handleLoginForm = this.handleLoginForm.bind(this);
 		this.handleRegisterForm = this.handleRegisterForm.bind(this);
@@ -90,49 +89,45 @@ class LoginRegisterModal extends PureComponent {
 	}
 
 	handleLoginForm(values) {
-		this.socket.emit("login", { ...values, socketid: this.socket.id }, (data) => {
-			if (data.success) {
-				alert("success");
-				Cookie.set("RemoteGames", data.authToken, { expires: 7 });
-				this.props.updateClientInfo({
-					authToken: data.authToken,
-					loggedIn: true,
-					...data.clientInfo,
-				});
-				this.props.authenticate(data.authToken);
-
-				const values = queryString.parse(this.props.location.search);
-				if (values.verified) {
-					this.props.history.replace("/");
+		this.props.login({
+			...values,
+			cb: (data) => {
+				if (data.success) {
+					alert("success");
+					Cookie.set("RemoteGames", data.authToken, { expires: 7 });
+					this.props.updateClientInfo({
+						authToken: data.authToken,
+						loggedIn: true,
+						...data.clientInfo,
+					});
+					// this.props.authenticate(data.authToken);
+					let values = queryString.parse(this.props.location.search);
+					if (values.verified) {
+						this.props.history.replace("/");
+					} else {
+						this.props.history.goBack();
+					}
+					setTimeout(() => {
+						window.location.reload();
+					}, 1000);
 				} else {
-					this.props.history.goBack();
+					alert(data.reason);
 				}
-				setTimeout(() => {
-					window.location.reload();
-				}, 1000);
-			} else {
-				alert(data.reason);
-			}
+			},
 		});
 	}
 
 	handleRegisterForm(values) {
-		let vals = { ...values };
-
-		this.socket.emit("register", { ...vals }, (data) => {
-			if (data.success) {
-				alert("Verification email sent!");
-				// Cookie.set("RemoteGames", data.authToken, { expires: 7 });
-				// this.props.updateClientInfo({
-				//   authToken: data.authToken,
-				//   loggedIn: true,
-				//   ...data.clientInfo
-				// });
-				// this.props.authenticate(data.authToken);
-				// this.props.history.push("/");
-			} else {
-				alert(data.reason);
-			}
+		this.props.register({
+			...values,
+			cb: (data) => {
+				if (data.success) {
+					alert("Account created! Please login!");
+					this.props.history.replace("/login");
+				} else {
+					alert(data.reason);
+				}
+			},
 		});
 	}
 
@@ -214,7 +209,7 @@ class LoginRegisterModal extends PureComponent {
 							<ListItemText>or</ListItemText>
 						</div>
 						<div style={{ marginTop: "15px" }}>
-							<ConnectAccounts />
+							<ConnectAccounts showTOS={true} />
 						</div>
 					</div>
 				</DialogContent>
@@ -235,14 +230,17 @@ const mapDispatchToProps = (dispatch) => {
 		authenticate: (data) => {
 			dispatch(authenticate(data));
 		},
+		login: (data) => {
+			dispatch(login(data));
+		},
+		register: (data) => {
+			dispatch(register(data));
+		},
 	};
 };
 
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(LoginRegisterModal);

@@ -39,3 +39,8 @@ export const UPDATE_PING = "UPDATE_PING";
 
 // streams:
 export const RECEIVE_STREAMS = "RECEIVE_STREAMS";
+
+export const LOGIN = "LOGIN";
+export const REGISTER = "REGISTER";
+
+export const UPDATE_STREAM_INFO = "UPDATE_STREAM_INFO";

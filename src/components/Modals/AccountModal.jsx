@@ -74,7 +74,7 @@ class AccountModal extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.accountServerConnection = this.props.accountServerConnection;
+		this.accountConnection = this.props.accountConnection;
 
 		this.handleClose = this.handleClose.bind(this);
 		this.handleRemoveAccount = this.handleRemoveAccount.bind(this);
@@ -91,7 +91,7 @@ class AccountModal extends PureComponent {
 	}
 
 	handleRemoveAccount(type) {
-		this.accountServerConnection.emit(
+		this.accountConnection.emit(
 			"removeConnectedAccount",
 			{ authToken: this.props.authToken, type: type },
 			(data) => {
@@ -146,7 +146,7 @@ class AccountModal extends PureComponent {
 							Logout
 						</Button>
 					</Paper>
-					<ConnectAccounts onRemoveAccount={this.handleRemoveAccount} />
+					<ConnectAccounts onRemoveAccount={this.handleRemoveAccount} showTOS={false} />
 					<ListItemText style={{ margin: "0 auto" }}>
 						You've played for {this.getTime(this.props.timePlayed)}
 					</ListItemText>

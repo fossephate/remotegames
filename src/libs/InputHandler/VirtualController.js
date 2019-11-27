@@ -1,4 +1,4 @@
-import ControllerState from "./ControllerState.js";
+import { ControllerState } from "./DeviceStates.js";
 const restPos = 0;
 
 export const AxisSettings = class AxisSettings {
@@ -56,7 +56,8 @@ export default class VirtualController {
 
 		// this.activeControllers = [1];
 		this.cstate = new ControllerState();
-		this.getControllerState = this.getControllerState.bind(this);
+		this.getState = this.getState.bind(this);
+
 		this.oldState = {
 			buttons: [],
 			axes: [],
@@ -309,7 +310,7 @@ export default class VirtualController {
 		}
 	}
 
-	getControllerState() {
+	getState() {
 		return this.cstate.getState();
 	}
 }

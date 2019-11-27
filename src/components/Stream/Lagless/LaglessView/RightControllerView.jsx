@@ -4,8 +4,9 @@ import React, { PureComponent } from "react";
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
-import ControllerState from "libs/InputHandler/ControllerState.js";
-let classNames = require("classnames");
+// libs:
+import { ControllerState } from "libs/InputHandler/DeviceStates.js";
+import classNames from "classnames";
 
 // jss:
 const styles = (theme) => ({

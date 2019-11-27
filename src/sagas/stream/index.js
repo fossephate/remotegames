@@ -1,5 +1,4 @@
-import * as types from "src/actions/ActionTypes.js";
-import { takeEvery, all } from "redux-saga/effects";
+import { all } from "redux-saga/effects";
 
 import handleChatActions from "./chat.js";
 import handlePlayersActions from "./players.js";

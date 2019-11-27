@@ -1,5 +1,5 @@
 // react:
-import React, { PureComponent } from "react";
+import React, { Component } from "react";
 
 // react-router:
 import { Route, withRouter } from "react-router";
@@ -78,12 +78,13 @@ const KEYBOARD_MAP = [
 	"home",
 ];
 
-class ControllerMapper extends PureComponent {
+class ControllerMapper extends Component {
 	constructor(props) {
 		super(props);
 
 		this.mapAxisTimer = null;
 		this.mapButtonTimer = null;
+		this.currentMapping = "unset";
 
 		this.mapButton = this.mapButton.bind(this);
 		this.mapAxis = this.mapAxis.bind(this);
@@ -93,8 +94,12 @@ class ControllerMapper extends PureComponent {
 		};
 	}
 
+	shouldComponentUpdate() {
+		return true;
+	}
+
 	mapButton() {
-		let inputHandler = this.props.inputHandler;
+		let inputHandler = window.inputHandler;
 
 		inputHandler.controller.lastChangedButton = null;
 
@@ -107,11 +112,16 @@ class ControllerMapper extends PureComponent {
 				if (this.props.type == "button") {
 					let lastChangedIndex = inputHandler.controller.lastChangedButton;
 					let which = parseInt(this.props.which);
-					// console.log(inputHandler.controller.settings.map.buttons[lastChangedIndex].which);
-					console.log(lastChangedIndex);
+
+					if (this.currentMapping !== "unset") {
+						inputHandler.controller.settings.map.buttons[
+							parseInt(this.currentMapping)
+						].which = "unset";
+					}
+
 					inputHandler.controller.settings.map.buttons[lastChangedIndex].type = "button";
 					inputHandler.controller.settings.map.buttons[lastChangedIndex].which =
-						BUTTON_NAMES[parseInt(this.props.which)];
+						BUTTON_NAMES[which];
 				}
 				if (this.props.type == "axis") {
 					// todo: finish
@@ -134,7 +144,7 @@ class ControllerMapper extends PureComponent {
 
 		let NAMES = this.props.type == "button" ? BUTTON_NAMES : AXIS_NAMES;
 
-		let inputHandler = this.props.inputHandler;
+		let inputHandler = window.inputHandler;
 
 		if (this.state.waiting) {
 			return (
@@ -145,26 +155,26 @@ class ControllerMapper extends PureComponent {
 				</ListItem>
 			);
 		}
-		// let currentMapping = this.props.type + " ";
-		let currentMapping = "";
+		// this.currentMapping = this.props.type + " ";
+		this.currentMapping = "unset";
 		if (this.props.type == "button") {
-			// currentMapping += inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].which;
+			// this.currentMapping += inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].which;
 			for (let i = 0; i < inputHandler.controller.settings.map.buttons.length; i++) {
 				let btn = inputHandler.controller.settings.map.buttons[i];
-				if (btn.which == NAMES[this.props.which]) {
-					// currentMapping.push(i);
-					currentMapping = i;
+				if (btn.which === NAMES[this.props.which]) {
+					// this.currentMapping.push(i);
+					this.currentMapping = i;
 					break;
 				}
 			}
 		}
 		if (this.props.type == "axis") {
-			// currentMapping += inputHandler.controller.settings.map.axes[parseInt(this.props.which)].which;
+			// this.currentMapping += inputHandler.controller.settings.map.axes[parseInt(this.props.which)].which;
 			for (let i = 0; i < inputHandler.controller.settings.map.axes.length; i++) {
 				let axis = inputHandler.controller.settings.map.axes[i];
-				if (axis.which == NAMES[this.props.which]) {
-					// currentMapping.push(i);
-					currentMapping = i;
+				if (axis.which === NAMES[this.props.which]) {
+					// this.currentMapping.push(i);
+					this.currentMapping = i;
 					break;
 				}
 			}
@@ -173,7 +183,7 @@ class ControllerMapper extends PureComponent {
 		return (
 			<ListItem>
 				<ListItemText>{`${NAMES[this.props.which]}`}</ListItemText>
-				<ListItemText>{currentMapping}</ListItemText>
+				<ListItemText>{this.currentMapping}</ListItemText>
 				<Button variant="contained" onClick={this.mapButton}>
 					Map To Button
 				</Button>
@@ -185,7 +195,7 @@ class ControllerMapper extends PureComponent {
 	}
 }
 
-class KeyboardMapper extends PureComponent {
+class KeyboardMapper extends Component {
 	constructor(props) {
 		super(props);
 
@@ -199,10 +209,12 @@ class KeyboardMapper extends PureComponent {
 		};
 	}
 
-	mapKey() {
-		let inputHandler = this.props.inputHandler;
+	shouldComponentUpdate() {
+		return true;
+	}
 
-		console.log(inputHandler);
+	mapKey() {
+		let inputHandler = window.inputHandler;
 
 		inputHandler.keyboard.lastPressedKey = null;
 
@@ -225,6 +237,8 @@ class KeyboardMapper extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
+		let inputHandler = window.inputHandler;
+
 		if (this.state.waiting) {
 			return (
 				<ListItem>
@@ -235,9 +249,7 @@ class KeyboardMapper extends PureComponent {
 			);
 		}
 
-		let currentMapping = this.props.inputHandler.keyboard.map2[
-			parseInt(this.props.which)
-		];
+		let currentMapping = inputHandler.keyboard.map2[parseInt(this.props.which)];
 
 		return (
 			<ListItem>
@@ -276,7 +288,7 @@ const styles = (theme) => ({
 	},
 });
 
-class InputMapperModal extends PureComponent {
+class InputMapperModal extends Component {
 	constructor(props) {
 		super(props);
 
@@ -291,26 +303,30 @@ class InputMapperModal extends PureComponent {
 	}
 
 	handleChange(event) {
-		console.log(event.target.value);
-		this.props.inputHandler.controller.settings.controllerIndex = "" + event.target.value;
+		let inputHandler = window.inputHandler;
+		inputHandler.controller.settings.controllerIndex = "" + event.target.value;
 		this.setState({});
 	}
 
 	update() {
-		console.log("re-rendering Input Mapper Modal");
 		this.setState({});
+	}
+
+	shouldComponentUpdate() {
+		return true;
 	}
 
 	render() {
 		const { classes } = this.props;
 
+		console.log("re-rendering InputMapperModal.");
+
 		let which = this.props.history.location.pathname.indexOf("/controller") > -1 ? 0 : 1;
 
-		let inputHandler = this.props.inputHandler;
+		let inputHandler = window.inputHandler;
 		let gamepadWrapper = inputHandler.gamepadWrapper;
 
 		let activeGamepadIndex = inputHandler.controller.settings.controllerIndex;
-		let activeGamepad = gamepadWrapper.controllers[activeGamepadIndex];
 
 		let gamepads = [];
 		for (let gamepadIndex in gamepadWrapper.controllers) {
@@ -402,7 +418,6 @@ class InputMapperModal extends PureComponent {
 												<ControllerMapper
 													key={i}
 													update={this.update}
-													inputHandler={inputHandler}
 													type="button"
 													which={i}
 												/>
@@ -411,7 +426,6 @@ class InputMapperModal extends PureComponent {
 												<ControllerMapper
 													key={i}
 													update={this.update}
-													inputHandler={inputHandler}
 													type="axis"
 													which={i}
 												/>
@@ -451,7 +465,4 @@ class InputMapperModal extends PureComponent {
 	}
 }
 
-export default compose(
-	withRouter,
-	withStyles(styles),
-)(InputMapperModal);
+export default compose(withRouter, withStyles(styles))(InputMapperModal);

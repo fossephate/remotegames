@@ -1,6 +1,5 @@
 // react:
 import React, { Component, PureComponent } from "react";
-import PropTypes from "prop-types";
 
 // components:
 import MyCheckbox from "src/components/General/MyCheckbox.jsx";
@@ -10,7 +9,7 @@ import ControlQueue from "./ControlQueue.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
+import { Paper } from "@material-ui/core";
 
 // redux:
 import { connect } from "react-redux";
@@ -109,8 +108,5 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(Player);

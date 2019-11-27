@@ -1,4 +1,4 @@
-import ControllerState from "./ControllerState.js";
+import { ControllerState, MouseState } from "./DeviceStates.js";
 import { AxisSettings } from "./VirtualController.js";
 const restPos = 0;
 
@@ -7,25 +7,21 @@ import { clamp } from "libs/tools.js";
 export default class VirtualMouse {
 	constructor() {
 		this.canvas = null;
+		this.ctx = null;
+
 		this.toggle = this.toggle.bind(this);
 		this.getMouseInput1 = this.getMouseInput1.bind(this);
 		this.getMouseInput2 = this.getMouseInput2.bind(this);
 		this.onPointerLockChange = this.onPointerLockChange.bind(this);
+
 		this.getControllerState = this.getControllerState.bind(this);
-		this.getMouseState = this.getMouseState.bind(this);
+		this.getState = this.getState.bind(this);
+
+		this.drawCircle = this.drawCircle.bind(this);
 
 		this.cstate = new ControllerState();
-		this.mstate = {
-			mouse: {
-				dx: 0,
-				dy: 0,
-				btns: {
-					left: 0,
-					right: 0,
-					middle: 0,
-				},
-			},
-		};
+		this.mstate = new MouseState();
+
 		this.btnMap = {
 			0: "left",
 			1: "middle",
@@ -37,6 +33,7 @@ export default class VirtualMouse {
 
 		this.settings = {
 			enabled: false,
+			realMode: false,
 
 			axes: [
 				// new AxisSettings(0.08, 0, 0), // 15
@@ -57,6 +54,18 @@ export default class VirtualMouse {
 		}
 	}
 
+	drawCircle(x, y) {
+		this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+		this.ctx.beginPath();
+		this.ctx.fillStyle = "#000";
+		this.ctx.arc(x, y, 15, 0, 2 * Math.PI, true);
+		this.ctx.fill();
+		this.ctx.beginPath();
+		this.ctx.fillStyle = "#FFF";
+		this.ctx.arc(x, y, 13, 0, 2 * Math.PI, true);
+		this.ctx.fill();
+	}
+
 	getMouseInput1(event) {
 		// on mouse stop:
 		clearTimeout(this.mouseMoveTimer);
@@ -75,11 +84,17 @@ export default class VirtualMouse {
 		this.mstate.dy = clamp(y, -1, 1);
 		this.cstate.axes[2] = this.mstate.dx;
 		this.cstate.axes[3] = this.mstate.dy;
+
+		this.mstate.x += x * 14;
+		this.mstate.y -= y * 14;
+		this.mstate.x = clamp(this.mstate.x, 0, this.canvas.width);
+		this.mstate.y = clamp(this.mstate.y, 0, this.canvas.height);
+		this.drawCircle(parseInt(this.mstate.x), parseInt(this.mstate.y));
 	}
 
 	getMouseInput2(event) {
-		let pressed = event.type == "mousedown" ? 1 : 0;
 		this.changed = true;
+		let pressed = event.type == "mousedown" ? 1 : 0;
 		this.cstate.buttons[this.settings.map.buttons[event.which - 1]] = pressed;
 		let which = this.btnMap[event.which - 1];
 		this.mstate.btns[which] = pressed;
@@ -87,6 +102,9 @@ export default class VirtualMouse {
 
 	init(canvas) {
 		this.canvas = canvas;
+		this.ctx = this.canvas.getContext("2d");
+		window.ctx = this.ctx;
+		window.canvas = this.canvas;
 		canvas.requestPointerLock = canvas.requestPointerLock || canvas.mozRequestPointerLock;
 		document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 	}
@@ -124,7 +142,8 @@ export default class VirtualMouse {
 		return this.cstate.getState();
 	}
 
-	getMouseState() {
+	getState() {
+		// return this.mstate.getState();
 		return this.mstate;
 	}
 }

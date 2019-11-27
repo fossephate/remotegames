@@ -11,8 +11,10 @@ import { updateClientInfo } from "src/actions/clientInfo.js";
 import { updateSettings } from "src/actions/settings.js";
 import { updateMessages } from "src/actions/chat.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
+import { updateStreamInfo } from "src/actions/info.js";
 
 // redux-saga:
+// import spawn from "redux-saga";
 import handleStreamActions from "src/sagas/stream";
 import handleStreamEvents from "src/sockets/stream";
 
@@ -22,26 +24,15 @@ import Picture from "src/components/Stream/Picture.jsx";
 import Chat from "src/components/Stream/Chat/Chat.jsx";
 import StreamInfo from "src/components/Stream/StreamInfo.jsx";
 
-// loading circle:
-// import LoadingCircle from "src/components/LoadingCircle.jsx";
-
 // components:
 
 // secondary components:
 
-// modals:
-import LoginRegisterModal from "src/components/Modals/LoginRegisterModal.jsx";
-import AccountModal from "src/components/Modals/AccountModal.jsx";
-import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
-
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
+// import { Snackbar } from "@material-ui/core";
 
-import { Snackbar, SnackbarContent } from "@material-ui/core";
-import { amber } from "@material-ui/core/colors";
-import WarningIcon from "@material-ui/icons/Warning";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
+import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -51,28 +42,17 @@ import { compose } from "recompose";
 // device sizes:
 import { device } from "src/constants/DeviceSizes.js";
 
-// libs:
-// jquery:
-let $ = require("jquery");
-window.$ = $;
-
 // input handler:
 import InputHandler from "libs/InputHandler/InputHandler.js";
 
-// const textFitPercent = require("js/textfitpercent.js");
-import { deleteAllCookies, fixedLengthString, getStickString } from "libs/tools.js";
+import { deleteAllCookies, getStickString } from "libs/tools.js";
 import localforage from "localforage";
 window.localforage = localforage;
-import swal from "sweetalert2";
-window.swal = swal;
 import socketio from "socket.io-client";
 
 // rr:
 import Lagless2 from "libs/lagless/lagless2.js";
-// import Lagless4 from "libs/lagless/lagless4.js";
-// import LaglessAudio from "libs/lagless/laglessAudio.js";
-
-// swal.fire("stream is down right now, don't put anything in #bug-reports.");
+import Lagless4 from "libs/lagless/lagless4.js";
 
 // jss:
 const styles = {
@@ -101,15 +81,6 @@ const styles = {
 	[device.laptop]: {
 		root: {},
 	},
-	warning: {
-		backgroundColor: amber[700],
-	},
-	icon: {
-		fontSize: 20,
-		opacity: 0.9,
-		// marginRight: theme.spacing(1),
-		marginRight: "8px",
-	},
 };
 
 class Stream extends Component {
@@ -118,84 +89,97 @@ class Stream extends Component {
 
 		this.afkTime = 1000 * 60 * 60; // 1 hour
 		this.afkTimer = null;
-		this.laglessAudio = null;
 		this.stream = null;
-		this.socket = null;
-		this.accountServerConnection = this.props.accountServerConnection;
+		// window.stream = this.stream;
+		this.hostConnection = null;
 
 		this.setStreamVolume = this.setStreamVolume.bind(this);
 		this.exitFullscreen = this.exitFullscreen.bind(this);
 		this.sendControllerState = this.sendControllerState.bind(this);
 		this.afk = this.afk.bind(this);
-		this.start = this.start.bind(this);
+		this.recieveStream = this.recieveStream.bind(this);
 
-		this.state = {
-			warningOpen: false,
-		};
+		this.state = {};
 
 		this.inputHandler = new InputHandler(false);
+		// todo:
 		window.inputHandler = this.inputHandler; // for lagless canvas
 	}
 
-	start(data) {
-		if (this.socket) {
-			this.socket.close();
-			this.socket = null;
-		}
+	recieveStream(data) {
+		this.props.updateStreamInfo({ ...data });
+
 		if (this.stream) {
 			this.stream.pause();
 		}
-		this.socket = socketio(`https://${data.hostServerIP}`, {
-			path: `/${data.hostServerPort}/socket.io`,
-			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
-		});
-		window.socket = this.socket;
-
-		// listen to events and dispatch actions:
-		handleStreamEvents(this.socket, this.props.store.dispatch);
-		// handle outgoing events & listen to actions:
-		// and maybe dispatch more actions:
-		this.props.sagaMiddleware.run(handleStreamActions, {
-			socket: this.socket,
-			dispatch: this.props.store.dispatch,
-		});
-
-		if (!data.videoServerIP) {
-			console.log("something went wrong, (video server IP missing)");
-			return;
+		if (this.hostConnection) {
+			this.hostConnection.removeAllListeners();
+			this.hostConnection.destroy();
 		}
-
-		// lagless setup:
-		/* switch 2.0 */
-		this.stream = new Lagless2(`https://${data.videoServerIP}`, {
-			path: `/${data.videoServerPort}/socket.io`,
-			audio: true,
-		});
-		window.stream = this.stream;
-		this.setStreamVolume(this.props);
-		setTimeout(() => {
-			this.setStreamVolume(this.props);
-		}, 5000);
 
 		setTimeout(() => {
 			if (!this.props.clientInfo.loggedIn) {
-				swal.fire("You need to login / register first!");
+				alert("You have to login / register first!");
 				return;
 			}
-			this.stream.resume(document.getElementById("videoCanvas"));
+
+			this.hostConnection = socketio(`https://${data.hostServerIP}`, {
+				path: `/${data.hostServerPort}/socket.io`,
+				transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+			});
+			window.hostConnection = this.hostConnection;
+
+			// listen to events and dispatch actions:
+			handleStreamEvents(this.hostConnection, this.props.store.dispatch);
+			// handle outgoing events & listen to actions:
+			// and maybe dispatch more actions:
+			this.props.sagaMiddleware.run(handleStreamActions, {
+				socket: this.hostConnection,
+				dispatch: this.props.store.dispatch,
+			});
+
+			window.sagaMiddleware = this.props.sagaMiddleware;
+
+			if (!data.videoServerIP) {
+				console.log("something went wrong, (video server IP missing)");
+				return;
+			}
+
+			// lagless setup:
+
+			if (this.props.streamType === "mpeg2") {
+				this.stream = new Lagless2({
+					url: `https://${data.videoServerIP}`,
+					path: `/${data.videoServerPort}/socket.io`,
+					audio: true,
+					video: true,
+				});
+			} else if (this.props.streamType === "webRTC") {
+				this.stream = new Lagless4({
+					url: `https://${data.videoServerIP}`,
+					path: `/${data.videoServerPort}/socket.io`,
+				});
+				this.stream.run();
+			} else {
+				alert("stream type error: " + this.props.streamType);
+			}
+
+			window.stream = this.stream;
+			this.setStreamVolume(this.props);
+			setTimeout(() => {
+				this.setStreamVolume(this.props);
+			}, 5000);
+
+			if (this.props.streamType === "mpeg2") {
+				this.stream.resume(document.getElementById("canvas"));
+			} else if (this.props.streamType === "webRTC") {
+				this.stream.resume(document.getElementById("video"));
+			}
 		}, 3000);
-
-		/* AUDIO WEBRTC @@@@@@@@@@@@@@@@ */
-		// this.laglessAudio = new LaglessAudio(this.socket);
-
-		// if (this.props.settings.audioThree) {
-		// 	this.laglessAudio.resume();
-		// }
 	}
 
 	componentDidMount() {
-		// todo move to a saga:
-		this.accountServerConnection.emit(
+		this.props.accountConnection.emit(
 			"getStreamInfo",
 			{ username: this.props.match.params.username },
 			(data) => {
@@ -203,31 +187,11 @@ class Stream extends Component {
 					alert(data.reason);
 					return;
 				}
-
-				this.start(data);
+				this.recieveStream(data);
 			},
 		);
 
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
-
-		// save settings on close:
-		/* ON CLOSE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ */
-		// window.addEventListener("beforeunload", () => {
-		window.onbeforeunload = () => {
-			console.log("saving settings");
-			localforage.setItem("settings", JSON.stringify(this.props.settings));
-			return null;
-		};
-
-		/* AUTHENTICATION */
-
-		// socket.on("needToLogIn", () => {
-		// 	swal.fire("You need to log in!");
-		// 	setTimeout(() => {
-		// 		deleteAllCookies();
-		// 		location.reload(true);
-		// 	}, 1000);
-		// });
 
 		// fullscreen:
 		document.addEventListener("webkitfullscreenchange", this.exitFullscreen, false);
@@ -264,7 +228,11 @@ class Stream extends Component {
 				// prevent arrow key & spacebar scrolling:
 				if ([38, 40, 32].indexOf(event.keyCode) > -1) {
 					// check if chat isn't focused:
-					if (!(document.activeElement === document.getElementById("messageBox"))) {
+					if (
+						document.activeElement !== document.getElementById("messageBox") &&
+						document.activeElement.type !== "textarea" &&
+						document.activeElement.type !== "text"
+					) {
 						event.preventDefault();
 					}
 				}
@@ -279,39 +247,30 @@ class Stream extends Component {
 
 	componentWillUnmount() {
 		clearInterval(this.sendInputTimer);
-		if (this.socket) {
-			this.socket.close();
-			this.socket = null;
-		}
 		if (this.stream) {
 			this.stream.pause();
 		}
+		if (this.hostConnection) {
+			this.hostConnection.removeAllListeners();
+			this.hostConnection.destroy();
+		}
 		this.props.updateMessages([]);
+
+		// save settings on close:
+		console.log("saving settings");
+		localforage.setItem("settings", JSON.stringify(this.props.settings));
 	}
 
 	afk() {
-		if (this.socket) {
-			this.socket.close();
-			this.socket = null;
-		}
 		if (this.stream) {
 			this.stream.pause();
 		}
-		swal
-			.fire({
-				title: "Are you still there?",
-				text: "You've been AFK for an hour.",
-				type: "warning",
-				// showCancelButton: true,
-				confirmButtonColor: "#3085d6",
-				cancelButtonColor: "#d33",
-				confirmButtonText: "No, I'm still here.",
-			})
-			.then((result) => {
-				if (result.value) {
-					window.location.reload();
-				}
-			});
+		if (this.hostConnection) {
+			this.hostConnection.removeAllListeners();
+			this.hostConnection.destroy();
+		}
+		alert("Are you still there?");
+		window.location.reload();
 	}
 
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
@@ -387,7 +346,12 @@ class Stream extends Component {
 		}
 
 		// return if chat is focused:
-		if (document.activeElement === document.getElementById("messageBox")) {
+		// if (document.activeElement === document.getElementById("messageBox")) {
+		if (
+			document.activeElement.type === "text" ||
+			document.activeElement.type === "textarea" ||
+			document.activeElement === document.getElementById("messageBox")
+		) {
 			return;
 		}
 
@@ -411,7 +375,6 @@ class Stream extends Component {
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
-			this.setState({ warningOpen: true });
 			return;
 		}
 
@@ -419,6 +382,8 @@ class Stream extends Component {
 			...this.inputHandler.getState(),
 			cNum: -1,
 		};
+		obj.btns = obj.controller.btns;
+		obj.axes = obj.controller.axes;
 
 		// for (let i = 0; i < this.props.controlQueues.length; i++) {
 		// 	if (this.props.controlQueues[i][0] == this.props.clientInfo.userid) {
@@ -429,7 +394,7 @@ class Stream extends Component {
 			obj.cNum = this.props.settings.currentPlayer;
 		}
 
-		let buttons = obj.btns.toString(2);
+		let buttons = obj.controller.btns.toString(2);
 		buttons = "0".repeat(18).substr(buttons.length) + buttons;
 
 		if (!this.props.settings.realKeyboardMouse) {
@@ -451,16 +416,15 @@ class Stream extends Component {
 				// fixedLengthString(obj.axes[5], "0", 3),
 			);
 		} else {
-			console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
+			// console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
 		}
-		// console.log("0 0 0\n 0 9 0\n 0 0 0");
 
 		// let s1x = getStickString(obj.axes[0]);
 		// let s1y = getStickString(obj.axes[1]);
 		// console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
 
-		if (this.socket) {
-			this.socket.emit("sendControllerState", obj);
+		if (this.hostConnection) {
+			this.hostConnection.emit("sendControllerState", obj);
 		} else {
 			console.log("the socket is null!");
 		}
@@ -468,14 +432,10 @@ class Stream extends Component {
 
 	setStreamVolume(props) {
 		if (this.stream) {
-			this.stream.player.volume = props.settings.volume / 100;
-			// if (!props.settings.audioThree) {
-			// 	// this.laglessAudio.audio.volume = 0;
-			// 	this.stream.player.volume = props.settings.volume / 100;
-			// } else {
-			// 	// this.laglessAudio.audio.volume = props.settings.volume / 100;
-			// 	this.stream.player.volume = 0;
-			// }
+			if (this.props.streamType === "mpeg2") {
+				this.stream.player.volume = props.settings.volume / 100;
+			} else if (this.props.streamType === "webRTC") {
+			}
 		}
 	}
 
@@ -484,11 +444,6 @@ class Stream extends Component {
 		this.setStreamVolume(nextProps);
 
 		this.inputHandler.realMode = nextProps.settings.realKeyboardMouse;
-
-		// if (this.props.settings.volume != nextProps.settings.volume) {
-		// 	this.setStreamVolume(nextProps);
-		// 	return false;
-		// }
 
 		if (JSON.stringify(this.props.clientInfo) != JSON.stringify(nextProps.clientInfo)) {
 			return true;
@@ -523,7 +478,6 @@ class Stream extends Component {
 			return true;
 		}
 
-		// console.log(nextProps);
 		return false;
 	}
 
@@ -534,7 +488,7 @@ class Stream extends Component {
 
 		if (window.location.pathname == "/reset") {
 			this.resetSettings();
-			swal.fire(
+			alert(
 				"Try logging in again, if it doesn't work, try clicking the reset all settings button and try again.",
 			);
 		}
@@ -550,56 +504,14 @@ class Stream extends Component {
 				<Chat hide={this.props.settings.hideChat} />
 				<StreamInfo />
 
-				<Snackbar
-					anchorOrigin={{
-						vertical: "bottom",
-						horizontal: "left",
-					}}
-					open={this.state.warningOpen}
-					autoHideDuration={5000}
-				>
-					<SnackbarContent
-						className={classes.warning}
-						message={
-							<span id="message-id">
-								<WarningIcon className={classes.icon} />
-								It's not your turn yet!
-							</span>
-						}
-						action={[
-							<IconButton
-								key="close"
-								color="inherit"
-								className=""
-								onClick={() => {
-									this.setState({ warningOpen: false });
-								}}
-							>
-								<CloseIcon />
-							</IconButton>,
-						]}
-					></SnackbarContent>
-				</Snackbar>
-
 				{/* selects the first matching path: */}
 				<Switch>
-					<Route
+					{/* <Route
 						path="/(login|register)"
 						render={(props) => {
 							return <LoginRegisterModal {...props} history={this.props.history} />;
 						}}
-					/>
-					<Route
-						path="/account"
-						render={(props) => {
-							return (
-								<AccountModal
-									{...props}
-									accountServerConnection={this.props.accountServerConnection}
-								/>
-							);
-						}}
-					/>
+					/> */}
 					<Route
 						path="/remap"
 						render={(props) => {
@@ -618,6 +530,7 @@ const mapStateToProps = (state) => {
 		clientInfo: state.clientInfo,
 		settings: state.settings,
 		playerCount: state.stream.players.count,
+		streamType: state.stream.info.streamType,
 	};
 };
 
@@ -638,14 +551,14 @@ const mapDispatchToProps = (dispatch) => {
 		updateMessages: (messages) => {
 			dispatch(updateMessages(messages));
 		},
+		updateStreamInfo: (data) => {
+			dispatch(updateStreamInfo(data));
+		},
 	};
 };
 
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(Stream);

@@ -1,6 +1,5 @@
 // react:
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 
 // components:
 import Message from "./Message.jsx";
@@ -20,10 +19,6 @@ import { sendMessage } from "src/actions/chat.js";
 
 // recompose:
 import { compose } from "recompose";
-
-// libs:
-import swal from "sweetalert2";
-// import ScrollableFeed from "react-scrollable-feed";
 
 // jss:
 
@@ -65,7 +60,7 @@ class MessageList extends Component {
 		super(props);
 
 		this.messagesEnd = null;
-		this.rootRef = null;
+		this.rootRef = React.createRef();
 		this.shouldScroll = false;
 		// this.scrollToBottom = this.scrollToBottom.bind(this);
 		this.handleClick = this.handleClick.bind(this);
@@ -104,23 +99,6 @@ class MessageList extends Component {
 		let messages = [];
 		for (let i = 0; i < this.props.messages.length; i++) {
 			let isLastMessage = i == this.props.messages.length - 1;
-			let userid = this.props.messages[i].userid;
-			let onClick = () => {};
-			if (this.props.isMod) {
-				onClick = () => {
-					if (!this.props.accountMap[userid]) {
-						swal.fire("user info not loaded (yet).");
-						return;
-					}
-					let timePlayed = this.props.accountMap[userid].timePlayed;
-					if (timePlayed < 60 * 60) {
-						timePlayed = (timePlayed / 60).toFixed(2) + " minutes";
-					} else {
-						timePlayed = (timePlayed / (60 * 60)).toFixed(2) + " hours";
-					}
-					swal.fire(`${userid}\n${timePlayed}`);
-				};
-			}
 
 			if (this.props.messages[i].isBanned) {
 				if (!this.props.isBanned && !this.props.isMod) {
@@ -129,10 +107,9 @@ class MessageList extends Component {
 			}
 			messages.push(
 				<Message
-					key={this.props.messages[i].id}
+					key={i}
 					{...this.props.messages[i]}
 					isLastMessage={isLastMessage}
-					onClick={onClick}
 					onContextMenu={this.handleClick}
 				/>,
 			);
@@ -232,17 +209,6 @@ class MessageList extends Component {
 	}
 }
 
-MessageList.propTypes = {
-	messages: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.number.isRequired,
-			text: PropTypes.string.isRequired,
-			username: PropTypes.string.isRequired,
-			userid: PropTypes.string.isRequired,
-		}).isRequired,
-	).isRequired,
-};
-
 const mapStateToProps = (state) => {
 	return {
 		messages: state.stream.chat.messages,
@@ -263,8 +229,5 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(MessageList);

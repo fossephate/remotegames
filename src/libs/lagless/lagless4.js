@@ -1,36 +1,48 @@
 import SimplePeer from "simple-peer";
+import socketio from "socket.io-client";
 
 export default class Lagless4 {
-
-	constructor(socket) {
-
+	constructor(options) {
+		this.options = options;
 		this.canvas = null;
 		this.player = null;
-		this.socket = socket;
 		this.connected = false;
 
-		let videoPeer = new SimplePeer({
+		this.videoConnection = null;
+
+		this.run = this.run.bind(this);
+		this.pause = this.pause.bind(this);
+		this.resume = this.resume.bind(this);
+	}
+
+	run() {
+		this.videoConnection = socketio(this.options.url, {
+			path: this.options.path,
+			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+		});
+
+		this.peer = new SimplePeer({
 			initiator: false,
 			trickle: true,
 		});
-		videoPeer.on("error", (error) => {
-			console.log("error", error)
+		this.peer.on("error", (error) => {
+			console.log("error", error);
 		});
-		videoPeer.on("signal", (data) => {
+		this.peer.on("signal", (data) => {
 			console.log("SIGNAL", JSON.stringify(data));
-			this.socket.emit("clientPeerSignalV", JSON.stringify(data));
+			this.videoConnection.emit("clientPeerSignal", JSON.stringify(data));
 		});
-		videoPeer.on("connect", () => {
+		this.peer.on("connect", () => {
 			console.log("CONNECT");
-			videoPeer.send(Math.random());
+			this.peer.send(Math.random());
 		});
-		videoPeer.on("data", (data) => {
-			console.log("data: " + data)
+		this.peer.on("data", (data) => {
+			console.log("data: " + data);
 		});
-		this.socket.on("hostPeerSignalV", (data) => {
-			videoPeer.signal(JSON.parse(data));
+		this.videoConnection.on("hostPeerSignal", (data) => {
+			this.peer.signal(JSON.parse(data));
 		});
-		videoPeer.on("stream", (stream) => {
+		this.peer.on("stream", (stream) => {
 			// if (canvas == null) {
 			// 	return;
 			// }
@@ -38,15 +50,11 @@ export default class Lagless4 {
 			try {
 				this.canvas.src = window.URL.createObjectURL(stream); // deprecated
 				this.canvas.play();
-			} catch(error) {
+			} catch (error) {
 				this.canvas.srcObject = stream;
 				this.canvas.play();
 			}
-
 		});
-
-		this.pause = this.pause.bind(this);
-		this.resume = this.resume.bind(this);
 	}
 
 	pause() {
@@ -60,12 +68,11 @@ export default class Lagless4 {
 
 		if (!this.connected) {
 			this.connected = true;
-			this.socket.emit("requestVideo");
+			this.videoConnection.emit("requestVideo");
 		} else {
 			try {
 				this.canvas.play();
 			} catch (error) {}
 		}
 	}
-
 }

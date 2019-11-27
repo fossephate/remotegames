@@ -1,18 +1,19 @@
 // react:
 import React, { PureComponent } from "react";
-import PropTypes from "prop-types";
 
 // redux:
 import { connect } from "react-redux";
 
+// components:
+
 // material ui:
+import { withStyles } from "@material-ui/core/styles";
+
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
-// import { withTheme } from "@material-ui/core/styles";
-import { withStyles } from "@material-ui/core/styles";
+import Username from "src/components/General/Username.jsx";
 
 // recompose:
 import { compose } from "recompose";
@@ -45,7 +46,6 @@ class ControlQueue extends PureComponent {
 		const { classes } = this.props;
 
 		let queue = [];
-		let accountMap = this.props.accountMap;
 		let userids = this.props.controlQueues[this.props.num];
 
 		if (userids.length == 0) {
@@ -62,10 +62,13 @@ class ControlQueue extends PureComponent {
 			let listItemClasses = classNames(classes.listItem, {
 				[classes.highlighted]: this.props.userid == userids[i],
 			});
+
 			queue.push(
-				<ListItem button key={i} className={listItemClasses} userid={userids[i]}>
-					<ListItemText primary={username} />
-				</ListItem>,
+				<Username key={i} style={{ width: "100%" }} userid={userids[i]}>
+					<ListItem button key={i} className={listItemClasses} userid={userids[i]}>
+						<ListItemText primary={username} />
+					</ListItem>
+				</Username>,
 			);
 		}
 
@@ -94,7 +97,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default compose(
-	withStyles(styles),
-	connect(mapStateToProps),
-)(ControlQueue);
+export default compose(withStyles(styles), connect(mapStateToProps))(ControlQueue);

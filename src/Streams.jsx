@@ -31,15 +31,9 @@ import { device } from "src/constants/DeviceSizes.js";
 // jss:
 const styles = (theme) => ({
 	root: {
-		// padding: "1%",
 		display: "flex",
 		flexDirection: "column",
-		// display: "grid",
-		// gridTemplateAreas: `
-		// 	"nav"
-		// 	"streams"`,
 		width: "100%",
-		// gridGap: "5px",
 	},
 	[device.tablet]: {
 		root: {},
@@ -52,12 +46,6 @@ const styles = (theme) => ({
 class Streams extends PureComponent {
 	constructor(props) {
 		super(props);
-
-		this.socket = this.props.accountServerConnection;
-
-		this.socket.emit("getStreams", null, (data) => {
-			this.setState({ streams: data.streams });
-		});
 
 		this.state = {
 			streams: [],
@@ -79,16 +67,16 @@ class Streams extends PureComponent {
 	}
 
 	componentDidMount() {
+		this.props.accountConnection.emit("getStreams", null, (data) => {
+			this.setState({ streams: data.streams });
+		});
+
 		window.addEventListener("resize", this.updateDimensions.bind(this));
 		this.updateDimensions();
 	}
 
 	componentWillUnmount() {
 		window.removeEventListener("resize", this.updateDimensions.bind(this));
-		if (this.socket) {
-			this.socket.close();
-			this.socket = null;
-		}
 	}
 
 	toggleDrawer(bool) {
@@ -115,7 +103,6 @@ class Streams extends PureComponent {
 					drawerOpen={this.state.drawerOpen}
 					handleToggleDrawer={this.toggleDrawer}
 				/>
-				{/* <StreamList drawerOpen={this.state.drawerOpen} streams={this.props.streamList} /> */}
 				<StreamList drawerOpen={this.state.drawerOpen} streams={this.state.streams} />
 			</div>
 		);
@@ -135,8 +122,5 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(Streams);

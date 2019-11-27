@@ -135,7 +135,7 @@ class StreamList extends PureComponent {
 							title="Photo"
 						/>
 						<CardContent>
-							<Typography component="p">{stream.title}</Typography>
+							<Typography component="p">{stream.title || "Untitled Stream"}</Typography>
 							<Typography component="p">{stream.username}</Typography>
 						</CardContent>
 					</CardActionArea>

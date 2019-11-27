@@ -1,9 +1,15 @@
 // react:
 import React, { Component } from "react";
 import ReactDOM from "react-dom";
+
 // react-router:
-import { Router, Route, Switch } from "react-router";
+import { Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
+
+// modals:
+import LoginRegisterModal from "src/components/Modals/LoginRegisterModal.jsx";
+import AccountModal from "src/components/Modals/AccountModal.jsx";
+// import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -13,6 +19,8 @@ import { createMuiTheme } from "@material-ui/core/styles";
 // components:
 import About from "src/About.jsx";
 import FAQ from "src/FAQ.jsx";
+import ToS from "src/ToS.jsx";
+import Privacy from "src/Privacy.jsx";
 // import CurrentPlayers from "src/CurrentPlayers.jsx";
 import Streams from "src/Streams.jsx";
 import Stream from "src/Stream.jsx";
@@ -27,15 +35,14 @@ import rootReducer from "./reducers";
 import { updateSettings } from "src/actions/settings.js";
 import { updateClientInfo } from "src/actions/clientInfo.js";
 
-// // redux-saga:
+// redux-saga:
 import createSagaMiddleware from "redux-saga";
-// import handleActions from "src/sagas";
-// import handleEvents from "src/sockets";
+import handleAccountActions from "src/sagas/account/";
+import handleAccountEvents from "src/sockets/account/";
 
 // libs:
 import socketio from "socket.io-client";
 import localforage from "localforage";
-// import "normalize.css";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -47,6 +54,9 @@ let preloadedState = {
 	// },
 
 	stream: {
+		info: {
+			streamType: "mpeg2",
+		},
 		chat: {
 			messages: [],
 			userids: [],
@@ -78,10 +88,6 @@ let preloadedState = {
 		connectedAccounts: [],
 		validUsernames: [],
 		usernameIndex: 0,
-		// banTime: 0,
-		// currentPlayer: 0,
-		// isMod: false,
-		// isBanned: false,
 		waitlisted: false,
 		timePlayed: 0,
 		emailVerified: false,
@@ -145,7 +151,7 @@ function loadState() {
 	localforage.getItem("settings").then((value) => {
 		let settings = {};
 		// If they exist, write them
-		if (typeof value != "undefined") {
+		if (value) {
 			settings = Object.assign({}, JSON.parse(value));
 			settings.streamNumber = 0; // force streamNumber to be 0 bc things rely on it loading first
 			settings.currentPlayer = 0; // same as above
@@ -155,7 +161,7 @@ function loadState() {
 
 		// check if banned:
 		localforage.getItem("banned").then((value) => {
-			if (value != null) {
+			if (value) {
 				store.dispatch(updateClientInfo({ isBanned: true }));
 				window.banned = true;
 			} else {
@@ -179,20 +185,20 @@ const store = createStore(
 	composeEnhancers(applyMiddleware(sagaMiddleware)),
 );
 
-let accountServerConnection = socketio("https://remotegames.io", {
+let accountConnection = socketio("https://remotegames.io", {
 	path: "/8099/socket.io",
 	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 });
 
-import handleAccountEvents from "src/sockets/account";
 // listen to events and dispatch actions:
-handleAccountEvents(accountServerConnection, store.dispatch);
+handleAccountEvents(accountConnection, store.dispatch);
 
 // handle outgoing events & listen to actions:
 // and maybe dispatch more actions:
-// sagaMiddleware.run(handleActions, {
-// 	socket,
-// });
+sagaMiddleware.run(handleAccountActions, {
+	socket: accountConnection,
+	dispatch: store.dispatch,
+});
 
 class Index extends Component {
 	constructor(props) {
@@ -217,14 +223,14 @@ class Index extends Component {
 	}
 
 	componentDidMount() {
-		store.dispatch(updateSettings({ theme: "spooky" }));
+		// store.dispatch(updateSettings({ theme: "spooky" }));
 	}
 
 	switchTheme(themeName) {
 		let theme = {};
 		switch (themeName) {
 			case "light":
-				theme = /*merge(this.state.theme, */ {
+				theme = {
 					palette: {
 						type: "light",
 						primary: {
@@ -237,7 +243,7 @@ class Index extends Component {
 							paper: "#fafafa",
 						},
 					},
-				} /*)*/;
+				};
 				break;
 			case "dark":
 				theme = {
@@ -308,6 +314,18 @@ class Index extends Component {
 									return <FAQ {...props} />;
 								}}
 							/>
+							<Route
+								path="/privacy"
+								render={(props) => {
+									return <Privacy {...props} />;
+								}}
+							/>
+							<Route
+								path="/tos"
+								render={(props) => {
+									return <ToS {...props} />;
+								}}
+							/>
 							{/* <Route
 								path="/CurrentPlayers"
 								render={(props) => {
@@ -317,24 +335,50 @@ class Index extends Component {
 							<Route
 								path="/streams"
 								render={(props) => {
-									return (
-										<Streams
-											{...props}
-											accountServerConnection={accountServerConnection}
-										/>
-									);
+									return <Streams {...props} accountConnection={accountConnection} />;
 								}}
 							/>
 							<Route
 								// path="/s/:username"
-								path="/(s|login|register|account|remap)/:username?"
+								path="/u/:username"
 								render={(props) => {
 									return (
 										<Stream
 											{...props}
 											store={store}
 											sagaMiddleware={sagaMiddleware}
-											accountServerConnection={accountServerConnection}
+											accountConnection={accountConnection}
+										/>
+									);
+								}}
+							/>
+							<Route
+								path="/(login|register)"
+								render={(props) => {
+									return <LoginRegisterModal {...props} history={this.props.history} />;
+								}}
+							/>
+							<Route
+								path="/account"
+								render={(props) => {
+									return <AccountModal {...props} history={this.props.history} />;
+								}}
+							/>
+							{/* <Route
+								path="/remap"
+								render={(props) => {
+									return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
+								}}
+							/> */}
+							<Route
+								path="/(s|remap)/:username?"
+								render={(props) => {
+									return (
+										<Stream
+											{...props}
+											store={store}
+											sagaMiddleware={sagaMiddleware}
+											accountConnection={accountConnection}
 										/>
 									);
 								}}
@@ -347,7 +391,7 @@ class Index extends Component {
 										<Streams
 											{...props}
 											store={store}
-											accountServerConnection={accountServerConnection}
+											accountConnection={accountConnection}
 											sagaMiddleware={sagaMiddleware}
 										/>
 									);
@@ -360,21 +404,6 @@ class Index extends Component {
 		);
 	}
 }
-
-// const mapStateToProps = (state) => {
-// 	return {
-// 		theme: state.settings.theme,
-// 	};
-// };
-//
-// // const Index2 = connect(mapStateToProps)(Index);
-//
-// function connectWithStore(store, WrappedComponent, ...args) {
-// 	let ConnectedWrappedComponent = connect(...args)(WrappedComponent);
-// 	return (props) => (<ConnectedWrappedComponent {...props} store={store}/>);
-// }
-//
-// const Index2 = connectWithStore(store, Index, mapStateToProps);
 
 export default Index;
 

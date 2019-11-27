@@ -15,7 +15,7 @@ import { connect } from "react-redux";
 import { compose } from "recompose";
 
 // libs:
-let classNames = require("classnames");
+import classNames from "classnames";
 
 // jss:
 const styles = (theme) => ({

@@ -3,7 +3,7 @@ import React, { PureComponent } from "react";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { Button } from "@material-ui/core";
 
 // redux:
 import { connect } from "react-redux";
@@ -88,8 +88,5 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(PlayerQueueButton);

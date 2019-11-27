@@ -1,7 +1,7 @@
 require("libs/keymaster.js");
-import { mathZoom } from "libs/tools.js";
+// import { mathZoom } from "libs/tools.js";
 
-import ControllerState from "./ControllerState.js";
+import { ControllerState, KeyboardState } from "./DeviceStates.js";
 
 const SPECIAL_KEYS = {
 	8: "backspace",
@@ -27,10 +27,10 @@ export default class VirtualKeyboard {
 	constructor() {
 		this.changed = false;
 		this.cstate = new ControllerState();
+		this.kstate = new KeyboardState();
+
 		this.getControllerState = this.getControllerState.bind(this);
-		this.kstate = {
-			keys: [],
-		};
+		this.getState = this.getState.bind(this);
 
 		// a list of keys to keep track of:
 		this.keysToTrack = [];
@@ -336,7 +336,7 @@ export default class VirtualKeyboard {
 		return this.cstate.getState();
 	}
 
-	getKeyboardState() {
+	getState() {
 		return this.kstate;
 	}
 }

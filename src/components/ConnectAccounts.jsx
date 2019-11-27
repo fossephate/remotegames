@@ -3,7 +3,7 @@ import React, { PureComponent } from "react";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import { Paper, Button } from "@material-ui/core";
+import { Paper, Button, Checkbox, Link } from "@material-ui/core";
 
 // redux:
 import { connect } from "react-redux";
@@ -49,6 +49,16 @@ const styles = (theme) => ({
 class ConnectAccounts extends PureComponent {
 	constructor(props) {
 		super(props);
+
+		this.state = {
+			TOSAgreed: false,
+		};
+
+		this.agreeTOS = this.agreeTOS.bind(this);
+	}
+
+	agreeTOS(event) {
+		this.setState({ TOSAgreed: event.target.checked });
 	}
 
 	connectAccountOrLogin(type) {
@@ -63,13 +73,20 @@ class ConnectAccounts extends PureComponent {
 	}
 
 	render() {
-		const { classes } = this.props;
+		const { classes, showTOS } = this.props;
 
 		let canDelete =
 			this.props.connectedAccounts.length > 1 || this.props.validUsernames.length > 1;
 
 		return (
 			<Paper className={classes.root} elevation={0}>
+				{showTOS && (
+					<div>
+						<Checkbox onChange={this.agreeTOS} />
+						<span>I have read and agree to the </span>
+						<Link href="/tos.html">Terms and Conditions</Link>
+					</div>
+				)}
 				<div className={classes.connectWithButton}>
 					<Button
 						fullWidth
@@ -79,6 +96,7 @@ class ConnectAccounts extends PureComponent {
 						onClick={() => {
 							this.connectAccountOrLogin("twitch");
 						}}
+						disabled={!this.state.TOSAgreed && showTOS}
 					>
 						<span>Connect with</span>
 						<img className={classes.twitchLogo} src="/images/Twitch_Purple_RGB.png" />
@@ -104,6 +122,7 @@ class ConnectAccounts extends PureComponent {
 						onClick={() => {
 							this.connectAccountOrLogin("youtube");
 						}}
+						disabled={!this.state.TOSAgreed && showTOS}
 					>
 						<span>Connect with</span>
 						<img className={classes.youtubeLogo} src="/images/yt_logo_rgb_light.png" />
@@ -129,12 +148,9 @@ class ConnectAccounts extends PureComponent {
 						onClick={() => {
 							this.connectAccountOrLogin("google");
 						}}
+						disabled={!this.state.TOSAgreed && showTOS}
 					>
 						<span id="connectWithGoogleText">Connect with Google</span>
-						{/* <div id="googleConnectButton" className="customGPlusSignIn">
-								<span className="googleIcon" />
-								<span className="googleButtonText">Google</span>
-							</div> */}
 					</Button>
 					{this.props.connectedAccounts.includes("google") && canDelete && (
 						<Button
@@ -157,6 +173,7 @@ class ConnectAccounts extends PureComponent {
 						onClick={() => {
 							this.connectAccountOrLogin("discord");
 						}}
+						disabled={!this.state.TOSAgreed && showTOS}
 					>
 						<span>Connect with</span>
 						<img className={classes.discordLogo} src="/images/discord_logo.png" />
@@ -186,7 +203,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default compose(
-	withStyles(styles),
-	connect(mapStateToProps),
-)(ConnectAccounts);
+export default compose(withStyles(styles), connect(mapStateToProps))(ConnectAccounts);

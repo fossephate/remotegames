@@ -1,10 +1,9 @@
 import JSMpeg from "libs/jsmpeg.min.js";
-import io from "socket.io-client";
-window.io = io;
+import socketio from "socket.io-client";
+window.io = socketio;
 
 export default class Lagless2 {
-	constructor(url, options) {
-		this.url = url;
+	constructor(options) {
 		this.options = options;
 		this.canvas = null;
 		this.context = null;
@@ -65,14 +64,14 @@ export default class Lagless2 {
 
 		let videoBufferSize = 256 * 1024; // 256kb (256 * 1024)
 		let audioBufferSize = 128 * 1024; // 128kb (128 * 1024)
-		this.player = new JSMpeg.Player(this.url, {
+		this.player = new JSMpeg.Player(this.options.url, {
 			canvas: this.canvas,
-			video: true,
 			videoBufferSize: videoBufferSize,
 			audioBufferSize: audioBufferSize,
 			maxAudioLag: 0.5,
 			onVideoDecode: this.onVideoDecode,
 			audio: !!this.options.audio,
+			video: !!this.options.video,
 			path: this.options.path,
 		});
 		// this.canvas.width = this.player.renderer.canvas.width;

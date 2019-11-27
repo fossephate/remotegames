@@ -240,6 +240,7 @@ let accountSchema = Schema({
 		controllerCount: Number,
 		keyboardEnabled: Boolean,
 		mouseEnabled: Boolean,
+		streamType: String, // "webRTC" or "mpeg2"
 	},
 
 	sublist: [],
@@ -640,7 +641,7 @@ app.get("/redirect", (req, res) => {
 			}
 		});
 
-		let time = 7 * 60 * 24 * 60 * 1000; // 7 days
+		let time = 14 * 60 * 24 * 60 * 1000; // 14 days
 		res.cookie("RemoteGames", authToken, {
 			maxAge: time,
 		});
@@ -709,11 +710,11 @@ app.get("/deleteDB", (req, res) => {
 
 app.get("/download", (req, res) => {
 	request(
-		"https://s3.amazonaws.com/remote-games-host/latest.yml",
+		"https://s3.amazonaws.com/rgio-host/latest.yml",
 		{ json: true },
 		(err, res2, body) => {
 			let path = yaml.load(body).path;
-			res.redirect(302, `https://s3.amazonaws.com/remote-games-host/${path}`);
+			res.redirect(302, `https://s3.amazonaws.com/rgio-host/${path}`);
 		},
 	);
 });
@@ -1306,6 +1307,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 		if (typeof data.username !== "string") {
+			cb({ success: false, reason: "INVALID_USERNAME" });
 			return;
 		}
 
@@ -1328,6 +1330,7 @@ io.on("connection", (socket) => {
 							hostServerPort: account.hostServerPort,
 							videoServerIP: account.videoServerIP,
 							videoServerPort: account.videoServerPort,
+							streamType: account.streamSettings.streamType || "mpeg2",
 						});
 					} else {
 						cb({ success: false, reason: "ACCOUNT_NOT_STREAMING" });
@@ -1403,6 +1406,7 @@ io.on("connection", (socket) => {
 				videoPort: servers.video.port,
 				hostIP: servers.host.ip,
 				hostPort: servers.host.port,
+				servers: { ...servers },
 				streamKey: videoStreamKey,
 			});
 			// send to videoServer:
@@ -1417,6 +1421,8 @@ io.on("connection", (socket) => {
 				streamKey: videoStreamKey,
 				videoIP: servers.video.ip,
 				videoPort: servers.video.port,
+				settings: data.streamSettings,
+				// servers: {...servers},
 			});
 
 			// update account info:
@@ -1447,6 +1453,7 @@ io.on("connection", (socket) => {
 			account.streamSettings.height = data.streamSettings.height;
 			account.streamSettings.offsetX = data.streamSettings.offsetX;
 			account.streamSettings.offsetY = data.streamSettings.offsetY;
+			account.streamSettings.streamType = data.streamSettings.streamType;
 			// account.streamSettings = { ...account.streamSettings, ...data.streamSettings };
 
 			// update the account details:
@@ -1669,7 +1676,11 @@ io.on("connection", (socket) => {
 
 		let queryObj;
 
-		if (data.userid === "fosse" || data.userid === "fosse2") {
+		if (
+			data.userid === "fosse" ||
+			data.userid === "fosse2" ||
+			data.userid === "fossephate"
+		) {
 			queryObj = { usernameLower: data.userid.toLowerCase() };
 		} else {
 			queryObj = { _id: data.userid };

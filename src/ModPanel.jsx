@@ -75,7 +75,6 @@ import Lagless2 from "libs/lagless/lagless2.js";
 // import Lagless4 from "libs/lagless/lagless4.js";
 import LaglessAudio from "libs/lagless/laglessAudio.js";
 
-
 let sendInputTimer;
 let isMobile = false;
 
@@ -128,14 +127,13 @@ class ModPanel extends Component {
 	constructor(props) {
 		super(props);
 
-
 		this.afkTime = 1000 * 60 * 60; // 1 hour
 		this.afkTimer = null;
 		this.laglessAudio = null;
 		this.streams = [];
 		window.streams = this.streams;
 		this.socket = null;
-		this.accountServerConnection = this.props.accountServerConnection;
+		this.accountConnection = this.props.accountConnection;
 
 		// this.exitFullscreen = this.exitFullscreen.bind(this);
 
@@ -169,11 +167,13 @@ class ModPanel extends Component {
 			socket: socket2,
 		});
 
-
 		// lagless setup:
 		/* switch 2.0 */
 		this.streams.push(
-			new Lagless2(`https://${data.videoServerIP}`, { path: `/${data.videoServerPort}/socket.io`, audio: true }),
+			new Lagless2(`https://${data.videoServerIP}`, {
+				path: `/${data.videoServerPort}/socket.io`,
+				audio: true,
+			}),
 		);
 		setTimeout(() => {
 			if (!this.props.clientInfo.loggedIn) {
@@ -209,7 +209,6 @@ class ModPanel extends Component {
 	}
 
 	componentDidMount() {
-
 		if (window.location.pathname === "/") {
 			this.start({
 				videoServerIP: "remotegames.io",
@@ -218,39 +217,48 @@ class ModPanel extends Component {
 				hostServerPort: 8100,
 			});
 		} else {
-
-
 			let authToken = Cookie.get("RemoteGames");
 			if (authToken) {
 				console.log("test");
-				this.accountServerConnection.emit("authenticate", {
-					authToken: authToken,
-					usernameIndex: 0,
-					socketid: 1,
-				}, (data) => {
-					if (data.success) {
-						console.log(data);
-						this.props.updateClientInfo({ ...data.clientInfo, authToken: authToken, loggedIn: true });
-					} else {
-						alert(`AUTHENTICATION_FAILURE: ${data.reason}`);
-						// remove the authToken if it doesn't work:
-						if (data.reason === "ACCOUNT_NOT_FOUND") {
-							Cookie.remove("RemoteGames");
-							this.props.updateClientInfo({ authToken: null });
+				this.accountConnection.emit(
+					"authenticate",
+					{
+						authToken: authToken,
+						usernameIndex: 0,
+						socketid: 1,
+					},
+					(data) => {
+						if (data.success) {
+							console.log(data);
+							this.props.updateClientInfo({
+								...data.clientInfo,
+								authToken: authToken,
+								loggedIn: true,
+							});
+						} else {
+							alert(`AUTHENTICATION_FAILURE: ${data.reason}`);
+							// remove the authToken if it doesn't work:
+							if (data.reason === "ACCOUNT_NOT_FOUND") {
+								Cookie.remove("RemoteGames");
+								this.props.updateClientInfo({ authToken: null });
+							}
 						}
-					}
-				});
+					},
+				);
 			}
 
-			this.accountServerConnection.emit("getStreamInfo", { username: this.props.match.params.username}, (data) => {
+			this.accountConnection.emit(
+				"getStreamInfo",
+				{ username: this.props.match.params.username },
+				(data) => {
+					if (!data.success) {
+						alert(data.reason);
+						return;
+					}
 
-				if (!data.success) {
-					alert(data.reason);
-					return;
-				}
-
-				this.start(data);
-			});
+					this.start(data);
+				},
+			);
 		}
 
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
@@ -282,8 +290,6 @@ class ModPanel extends Component {
 
 		// lagless setup:
 
-
-
 		this.sendInputTimer = setInterval(() => {
 			if (!this.props.clientInfo.loggedIn) {
 				return;
@@ -312,11 +318,7 @@ class ModPanel extends Component {
 		);
 	}
 
-
-	componentWillUnmount() {
-
-	}
-
+	componentWillUnmount() {}
 
 	afk() {
 		for (let i = 0; i < this.streams.length; i++) {
@@ -407,7 +409,10 @@ class ModPanel extends Component {
 		) {
 			return;
 		}
-		if (this.inputHandler.currentInputMode == "touch" && !this.props.settings.touchControls) {
+		if (
+			this.inputHandler.currentInputMode == "touch" &&
+			!this.props.settings.touchControls
+		) {
 			return;
 		}
 
