@@ -36,9 +36,6 @@ export class InputState {
 	constructor() {
 		this.changed = false;
 
-		this.btns = 0;
-		this.axes = [0, 0, 0, 0, 0, 0];
-
 		this.controller = {
 			btns: 0,
 			axes: [0, 0, 0, 0, 0, 0],
@@ -56,6 +53,8 @@ export class InputState {
 		};
 
 		this.mouse = {
+			x: 0,
+			y: 0,
 			dx: 0,
 			dy: 0,
 			btns: {
@@ -68,8 +67,6 @@ export class InputState {
 		this.keyboard = {
 			keys: [],
 		};
-
-		this.keys = [];
 	}
 
 	setControllerState(state) {
@@ -77,7 +74,17 @@ export class InputState {
 		this.controller.axes = state.axes;
 	}
 
-	setMouseState(state) {}
+	setKeyboardState(state) {
+		this.keyboard.keys = state.keys;
+	}
+
+	setMouseState(state) {
+		this.mouse.x = state.x;
+		this.mouse.y = state.y;
+		this.mouse.dx = state.dx;
+		this.mouse.dy = state.dy;
+		this.mouse.btns = { ...state.btns };
+	}
 
 	setState(state) {
 		// controller
@@ -89,20 +96,16 @@ export class InputState {
 			this.mouse = state.mouse;
 		}
 		// keyboard
-		if (state.keys != null) {
-			this.keys = state.keys;
+		if (state.keyboard != null) {
+			this.keyboard = state.keyboard;
 		}
 	}
 
 	getState() {
 		return {
-			// btns: this.btns,
-			// axes: this.axes,
-			// gyro: this.gyro,
-			// accel: this.accel,
 			controller: this.controller,
 			mouse: this.mouse,
-			keys: this.keys,
+			keyboard: this.keyboard,
 		};
 	}
 }
@@ -155,7 +158,7 @@ export default class InputHandler {
 				if (this.controller.changed) {
 					this.controller.changed = false;
 					this.currentInputMode = "controller";
-					updatedState.setControllerState(this.controller.getControllerState());
+					updatedState.setControllerState(this.controller.getState());
 				} else {
 					// keyboard:
 					this.keyboard.poll();
@@ -181,7 +184,7 @@ export default class InputHandler {
 			} else {
 				// keyboard & mouse:
 				this.keyboard.poll();
-				updatedState.setState(this.keyboard.getKeyboardState());
+				updatedState.setKeyboardState(this.keyboard.getState());
 				if (this.mouse.settings.enabled && this.mouse.changed) {
 					this.mouse.changed = false;
 					updatedState.setMouseState(this.mouse.getState());
@@ -192,9 +195,6 @@ export default class InputHandler {
 		let updatedStateString = JSON.stringify(updatedState);
 
 		if (updatedStateString != this.oldInputStateString) {
-			// this.controller.state.setState(updatedState);
-			// this.keyboard.state.setState(updatedState);
-
 			this.inputState.setState(updatedState);
 
 			this.oldInputState = updatedState;

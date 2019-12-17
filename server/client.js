@@ -16,6 +16,7 @@ class Client {
 
 		this.ip = this.socket.handshake.headers["x-real-ip"];
 		this.port = this.socket.handshake.headers["x-real-port"];
+		this.lastMessageTimes = []; // for rate limiting
 
 		this.roles = {};
 		// this.isHost = false;

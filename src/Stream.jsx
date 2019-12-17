@@ -216,7 +216,7 @@ class Stream extends Component {
 				// escape, f11
 				if ([27, 122].indexOf(event.keyCode) > -1) {
 					event.preventDefault();
-					$("body").removeClass("hideScrollbar");
+					// $("body").removeClass("hideScrollbar");
 
 					// turn off mouse controls:
 					this.inputHandler.mouse.toggle(false);
@@ -384,6 +384,7 @@ class Stream extends Component {
 		};
 		obj.btns = obj.controller.btns;
 		obj.axes = obj.controller.axes;
+		obj.keys = obj.keyboard.keys;
 
 		// for (let i = 0; i < this.props.controlQueues.length; i++) {
 		// 	if (this.props.controlQueues[i][0] == this.props.clientInfo.userid) {
@@ -424,6 +425,7 @@ class Stream extends Component {
 		// console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
 
 		if (this.hostConnection) {
+			// todo: rename to sendInputState
 			this.hostConnection.emit("sendControllerState", obj);
 		} else {
 			console.log("the socket is null!");

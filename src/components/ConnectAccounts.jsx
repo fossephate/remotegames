@@ -84,7 +84,7 @@ class ConnectAccounts extends PureComponent {
 					<div>
 						<Checkbox onChange={this.agreeTOS} />
 						<span>I have read and agree to the </span>
-						<Link href="/tos.html">Terms and Conditions</Link>
+						<Link href="/tos">Terms and Conditions</Link>
 					</div>
 				)}
 				<div className={classes.connectWithButton}>

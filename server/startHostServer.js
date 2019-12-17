@@ -90,18 +90,18 @@ hostServers[port] = new HostServer({
 });
 hostServers[port].init();
 
-port = 8051;
-ports[port] = false;
-hostServers[port] = new HostServer({
-	socket: accountConnection,
-	port: port,
-	ip: ip,
-	videoPort: 8000,
-	streamKey: "b",
-	hostUserid: "fosse2",
-	settings: {},
-});
-hostServers[port].init();
+// port = 8051;
+// ports[port] = false;
+// hostServers[port] = new HostServer({
+// 	socket: accountConnection,
+// 	port: port,
+// 	ip: ip,
+// 	videoPort: 8000,
+// 	streamKey: "b",
+// 	hostUserid: "fosse2",
+// 	settings: {},
+// });
+// hostServers[port].init();
 // hostServers[port].locked = true;
 
 register();

@@ -1,4 +1,4 @@
-export default class MouseState {
+export class MouseState {
 	constructor() {
 		this.x = 0;
 		this.y = 0;

@@ -96,7 +96,7 @@ redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
 	// store back in database:
 	// store account at uniqueID location, at clients key:
 	redisClient.setAsync("bannedIPs", databaseIPsString).then((success) => {
-		console.log("stored banned IPs: " + success);
+		console.log(`stored banned IPs: ${success}`);
 	});
 });
 
@@ -150,7 +150,7 @@ function updateOrCreateUser(profile, type, req) {
 	}
 
 	// check if the account already exists:
-	let queryObj = { [type + ".id"]: profile.id };
+	let queryObj = { [`${type}.id`]: profile.id };
 	Account.findOne(queryObj).exec((error, account) => {
 		// error check:
 		if (error) {
@@ -364,7 +364,7 @@ function clientInfoFromAccount(account, usernameIndex, hostUserid, cb) {
 
 	if (account.connectedAccounts.indexOf("discord") > -1) {
 		clientInfo.validUsernames.push(
-			account.discord.username + "#" + account.discord.discriminator,
+			`${account.discord.username}#${account.discord.discriminator}`,
 		);
 	}
 	if (account.connectedAccounts.indexOf("twitch") > -1) {
@@ -613,7 +613,7 @@ app.get("/redirect", (req, res) => {
 
 		// get account:
 		let queryObj = {};
-		queryObj[type + "." + "id"] = id;
+		queryObj[`${type}.id`] = id;
 
 		Account.findOne(queryObj).exec((error, account) => {
 			if (error) {
@@ -846,7 +846,7 @@ io.on("connection", (socket) => {
 							if (error) {
 								console.log(error);
 							} else {
-								console.log("Email sent: " + info.response);
+								console.log(`Email sent: ${info.response}`);
 							}
 						});
 					});
@@ -1123,7 +1123,7 @@ io.on("connection", (socket) => {
 					if (error) {
 						console.log(error);
 					} else {
-						console.log("Email sent: " + info.response);
+						console.log(`Email sent: ${info.response}`);
 					}
 				});
 			});
@@ -1889,9 +1889,9 @@ function synchronizeServers() {
 				if (!hostServerAlive) {
 					let server = findAvailableServers(hostServers, null);
 					// update account:
-					account.hostServerSocketid = server.host.sid;
-					account.hostServerIP = server.host.ip;
-					account.hostServerPort = server.host.port;
+					accounts[i].hostServerSocketid = server.host.sid;
+					accounts[i].hostServerIP = server.host.ip;
+					accounts[i].hostServerPort = server.host.port;
 					// send to hostServer:
 					io.to(server.host.sid).emit("startHost", {
 						hostUserid: ("" + account._id).trim(),
@@ -1905,9 +1905,9 @@ function synchronizeServers() {
 				if (!videoServerAlive) {
 					let server = findAvailableServers(null, videoServers);
 					// update account:
-					account.videoServerSocketid = server.video.sid;
-					account.videoServerIP = server.video.ip;
-					account.videoServerPort = server.video.port;
+					accounts[i].videoServerSocketid = server.video.sid;
+					accounts[i].videoServerIP = server.video.ip;
+					accounts[i].videoServerPort = server.video.port;
 					// send to videoServer:
 					io.to(server.video.sid).emit("startVideo", {
 						port: server.video.port,
@@ -1918,7 +1918,7 @@ function synchronizeServers() {
 				// if either server was down, update the account:
 				if (!hostServerAlive || !videoServerAlive) {
 					// save:
-					account.save((error) => {
+					accounts[i].save((error) => {
 						if (error) {
 							throw error;
 						}
@@ -1939,6 +1939,28 @@ setInterval(sendServerTime, 30000);
 setInterval(generateStreamList, 120000);
 
 // for testing:
+
+// set all streams as stopped:
+Account.find({ isStreaming: true })
+	.exec()
+	.then((accounts) => {
+		if (!accounts) {
+			return;
+		}
+
+		for (let i = 0; i < accounts.length; i++) {
+			accounts[i].isStreaming = false;
+
+			// update the account details:
+			accounts[i].save((error) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+			});
+		}
+	});
+
 // try and get account by authToken:
 Account.findOne({ username: "fosse" }).exec((error, account) => {
 	// error check:

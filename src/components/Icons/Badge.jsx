@@ -42,7 +42,7 @@ class Badge extends PureComponent {
 				break;
 			case "host":
 				src += "AdminBadge.png";
-				text = "This is the host of the stream.";
+				text = "Host";
 				break;
 			case "mod":
 				src += "ModBadge.png";

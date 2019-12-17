@@ -48,60 +48,15 @@ const styles = (theme) => ({
 		marginLeft: "auto",
 		// marginRight: "auto",
 	},
-	card: {
-		width: 345,
-	},
-	media: {
-		height: 300,
-	},
-	imagesContainer: {
-		display: "flex",
-		justifyContent: "space-evenly",
-		padding: "10px",
-		flexWrap: "wrap",
-		marginBottom: "10px",
-	},
-	donationButtons: {
-		display: "flex",
-		flexWrap: "wrap",
-	},
-	twitch: {
+	iframe: {
 		marginLeft: "auto",
 		marginRight: "auto",
+		width: "100%",
+		height: "99960px",
+		backgroundColor: "#FFF",
+		borderRadius: "5px",
 	},
-
-	container: {
-		display: "flex",
-		flexDirection: "column",
-		justifyContent: "space-evenly",
-		padding: "10px",
-	},
-	QA: {
-		width: "99%",
-		padding: "2%",
-		marginBottom: "40px",
-	},
-	commands: {
-		width: "99%",
-		padding: "2%",
-	},
-	subCommands: {
-		padding: "10px",
-		marginTop: "20px",
-		marginBottom: "20px",
-	},
-	[device.laptop]: {
-		container: {
-			flexDirection: "row",
-		},
-		QA: {
-			width: "49%",
-			marginBottom: "0",
-		},
-		commands: {
-			width: "49%",
-		},
-	},
+	[device.laptop]: {},
 });
 
 class ToS extends PureComponent {
@@ -125,13 +80,9 @@ class ToS extends PureComponent {
 						Back
 					</Button>
 
-					<h2>Terms of Service</h2>
-
 					<iframe
-						className={classes.twitch}
+						className={classes.iframe}
 						src="https://remotegames.io/tos.html"
-						// height="360"
-						// width="640"
 						frameBorder="0"
 					></iframe>
 				</Paper>

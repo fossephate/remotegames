@@ -37,7 +37,9 @@ class VideoServer {
 
 			socket.on("videoData", (data) => {
 				clearTimeout(this.keepAliveTimer);
-				this.keepAliveTimer = setTimeout(this.afk, 1000 * 60);
+				this.keepAliveTimer = setTimeout(this.afk, 1000 * 120);
+
+				data = data.data || data;
 
 				if (socket.rooms.hasOwnProperty("host")) {
 					socket.compress(false).broadcast.emit("videoData", data);

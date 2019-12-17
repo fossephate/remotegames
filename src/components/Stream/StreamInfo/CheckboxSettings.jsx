@@ -2,11 +2,7 @@
 import React, { PureComponent } from "react";
 
 // material ui:
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Paper from "@material-ui/core/Paper";
+import { List, ListItem, Paper } from "@material-ui/core";
 
 // components:
 import MyCheckbox from "src/components/General/MyCheckbox.jsx";
@@ -91,8 +87,9 @@ class CheckboxSettings extends PureComponent {
 							text={"Enable Fullscreen Mode"}
 							handleChange={(state) => {
 								if (state) {
-									$(document).scrollTop(0);
-									$("body").addClass("hideScrollbar");
+									// $(document).scrollTop(0);
+									document.body.scrollTop = document.documentElement.scrollTop = 0;
+									// $("body").addClass("hideScrollbar");
 									// $("#root").children()[0].style.padding = "0";
 									this.props.updateSettings({
 										fullscreen: state,
@@ -100,10 +97,10 @@ class CheckboxSettings extends PureComponent {
 										hideChat: true,
 										hideNav: true,
 									});
-									toggleFullscreen($("html")[0]);
+									toggleFullscreen(document.getElementsByTagName("html")[0]);
 								} else {
-									console.log("exiting fullscreen");
-									$("body").removeClass("hideScrollbar");
+									// console.log("exiting fullscreen");
+									// $("body").removeClass("hideScrollbar");
 									// $("#root").children()[0].style.padding = "";
 									this.props.updateSettings({
 										fullscreen: state,
@@ -200,7 +197,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(
-	mapStateToProps,
-	mapDispatchToProps,
-)(CheckboxSettings);
+export default connect(mapStateToProps, mapDispatchToProps)(CheckboxSettings);

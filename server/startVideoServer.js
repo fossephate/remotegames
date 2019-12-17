@@ -81,13 +81,13 @@ videoServers[port] = new VideoServer({
 videoServers[port].init();
 
 // fosse2:
-port = 8001;
-ports[port] = false;
-videoServers[port] = new VideoServer({
-	socket: accountConnection,
-	port: port,
-	streamKey: "b",
-});
-videoServers[port].init();
+// port = 8001;
+// ports[port] = false;
+// videoServers[port] = new VideoServer({
+// 	socket: accountConnection,
+// 	port: port,
+// 	streamKey: "b",
+// });
+// videoServers[port].init();
 
 register();

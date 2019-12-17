@@ -1,6 +1,4 @@
-import JSMpeg from "libs/jsmpeg.min.js";
-import socketio from "socket.io-client";
-window.io = socketio;
+import { JSMpeg } from "libs/jsmpeg-classes/jsmpeg.js";
 
 export default class Lagless2 {
 	constructor(options) {
@@ -68,7 +66,7 @@ export default class Lagless2 {
 			canvas: this.canvas,
 			videoBufferSize: videoBufferSize,
 			audioBufferSize: audioBufferSize,
-			maxAudioLag: 0.5,
+			maxAudioLag: 0.25,
 			onVideoDecode: this.onVideoDecode,
 			audio: !!this.options.audio,
 			video: !!this.options.video,

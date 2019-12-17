@@ -1,22 +1,27 @@
 {
-	presets: [
-		["@babel/env", {
-			"modules": "commonjs",
-			"targets": {
-	           "node": "current",
-	            "chrome": 66,
-	            "firefox": 60,
-	         },
-			}],
-		"@babel/preset-react",
+	"presets": [
+		[
+			"@babel/env",
+			{
+				"modules": "commonjs",
+				"targets": {
+					"node": "current",
+					"chrome": 66,
+					"firefox": 60
+				}
+			}
+		],
+		"@babel/preset-react"
 	],
-	plugins: [
+	"plugins": [
 		"@babel/plugin-proposal-class-properties",
 		"add-module-exports",
 		"@babel/plugin-syntax-import-meta",
-		//"@babel/plugin-syntax-dynamic-import",
 		"syntax-dynamic-import",
 		"@babel/plugin-proposal-export-default-from",
-		["@babel/plugin-proposal-decorators", { decoratorsBeforeExport: true, legacy: false }],
-	],
+		[
+			"@babel/plugin-proposal-decorators",
+			{ "decoratorsBeforeExport": true, "legacy": false }
+		]
+	]
 }

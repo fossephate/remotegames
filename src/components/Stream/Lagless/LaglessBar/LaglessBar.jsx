@@ -88,6 +88,7 @@ class LaglessBar extends PureComponent {
 						this.props.history.push("/remap/keyboard");
 					}}
 				>
+					{"Remap "}
 					<KeyboardIcon />|<VideogameAssetIcon />
 				</Button>
 
@@ -116,8 +117,5 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(LaglessBar);
