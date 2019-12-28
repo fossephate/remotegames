@@ -126,9 +126,9 @@ export default class VirtualController {
 					new ButtonMapping("left"),
 					new ButtonMapping("right"),
 					new ButtonMapping("home"),
+					new ButtonMapping("capture"),
 
 					// extra:
-					new ButtonMapping("a"),
 					new ButtonMapping("a"),
 					new ButtonMapping("a"),
 					new ButtonMapping("a"),
