@@ -4,7 +4,7 @@ const restPos = 0;
 
 import { clamp } from "libs/tools.js";
 
-export default class VirtualMouse {
+export class VirtualMouse {
 	constructor() {
 		this.canvas = null;
 		this.ctx = null;

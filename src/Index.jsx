@@ -118,13 +118,14 @@ let preloadedState = {
 		controllerView: true,
 		fullscreen: false,
 		largescreen: false,
+		hideChat: false,
+		hideNav: false,
 		audioThree: false,
 		analogStickMode: false,
 		dpadSwap: false,
 		TDSConfig: false,
 
 		currentPlayer: 0,
-		streamNumber: 0,
 		volume: 0,
 		theme: "dark",
 	},
@@ -153,7 +154,6 @@ function loadState() {
 		// If they exist, write them
 		if (value) {
 			settings = Object.assign({}, JSON.parse(value));
-			settings.streamNumber = 0; // force streamNumber to be 0 bc things rely on it loading first
 			settings.currentPlayer = 0; // same as above
 		}
 
@@ -383,7 +383,7 @@ class Index extends Component {
 									);
 								}}
 							/>
-							// order matters here, can't do exact path or /login and /register break:
+							{/* order matters here, can't do exact path or /login and /register break: */}
 							<Route
 								path="/"
 								render={(props) => {

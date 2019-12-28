@@ -262,6 +262,9 @@ class Stream extends Component {
 	}
 
 	afk() {
+		if (window.disableAFK) {
+			return;
+		}
 		if (this.stream) {
 			this.stream.pause();
 		}
@@ -451,6 +454,10 @@ class Stream extends Component {
 			return true;
 		}
 
+		if (this.props.settings.hideNav != nextProps.settings.hideNav) {
+			return true;
+		}
+
 		if (this.props.settings.hideChat != nextProps.settings.hideChat) {
 			return true;
 		}
@@ -500,7 +507,7 @@ class Stream extends Component {
 				{/* <NavTabs history={this.props.history} /> */}
 				<StreamsAppBar
 					history={this.props.history}
-					hide={this.props.settings.fullscreen}
+					hide={this.props.settings.fullscreen || this.props.settings.hideNav}
 				/>
 				<Picture />
 				<Chat hide={this.props.settings.hideChat} />

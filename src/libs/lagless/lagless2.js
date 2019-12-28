@@ -1,4 +1,5 @@
-import { JSMpeg } from "libs/jsmpeg-classes/jsmpeg.js";
+import { JSMpeg } from "libs/jsmpeg/src/jsmpeg.js";
+// import JSMpeg from "libs/jsmpeg/jsmpeg.min.js";
 
 export default class Lagless2 {
 	constructor(options) {

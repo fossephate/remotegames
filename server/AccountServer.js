@@ -65,11 +65,7 @@ bluebird.promisifyAll(redis);
 let redisClient = redis.createClient({ host: "localhost", port: 6379 });
 
 let useridToSocketidMap = {};
-let masterAccountMap = {
-	TPNSbot: {
-		isMod: true,
-	},
-};
+let masterAccountMap = {};
 let localizedAccountMaps = {};
 let bannedIPs = [
 	"84.197.3.92",
@@ -1076,7 +1072,7 @@ io.on("connection", (socket) => {
 				});
 			}
 		});
-		if (data.userid != null) {
+		if (data.userid !== null) {
 			redisClient.delAsync(`users:${data.userid}`);
 		}
 		if (localizedAccountMaps[socket.id]) {
@@ -1675,15 +1671,10 @@ io.on("connection", (socket) => {
 		}
 
 		let queryObj;
-
-		if (
-			data.userid === "fosse" ||
-			data.userid === "fosse2" ||
-			data.userid === "fossephate"
-		) {
-			queryObj = { usernameLower: data.userid.toLowerCase() };
-		} else {
+		if (data.userid) {
 			queryObj = { _id: data.userid };
+		} else if (data.username) {
+			queryObj = { usernameLower: data.username.toLowerCase() };
 		}
 
 		// try and get account:

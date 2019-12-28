@@ -1,19 +1,5 @@
-
-class GenericGamePad {
-
+export class GamepadWrapper {
 	constructor() {
-
-		this.buttons = [];
-		this.axes = [];
-
-	}
-
-}
-
-class GamepadWrapper {
-
-	constructor() {
-
 		this.controllers = {};
 		this.controllerStates = [];
 		this.haveEvents = "ongamepadconnected" in window;
@@ -29,7 +15,7 @@ class GamepadWrapper {
 		window.addEventListener("gamepadconnected", this.connectHandler);
 		window.addEventListener("gamepaddisconnected", this.disconnectHandler);
 
-		this.pollTimer = setInterval(this.pollGamepads, (1000 / 120));
+		this.pollTimer = setInterval(this.pollGamepads, 1000 / 120);
 
 		this.callbacksAfterPoll = [];
 	}
@@ -45,7 +31,6 @@ class GamepadWrapper {
 		this.addGamepad(event.gamepad);
 	}
 
-
 	removeGamepad(gamepad) {
 		delete this.controllers[gamepad.index];
 	}
@@ -55,7 +40,11 @@ class GamepadWrapper {
 	}
 
 	scanGamepads() {
-		let gamepads = navigator.getGamepads ? navigator.getGamepads() : (navigator.webkitGetGamepads ? navigator.webkitGetGamepads() : []);
+		let gamepads = navigator.getGamepads
+			? navigator.getGamepads()
+			: navigator.webkitGetGamepads
+			? navigator.webkitGetGamepads()
+			: [];
 		for (let i = 0; i < gamepads.length; i++) {
 			if (gamepads[i]) {
 				if (gamepads[i].id.indexOf("vJoy") > -1) {
@@ -71,7 +60,6 @@ class GamepadWrapper {
 	}
 
 	pollGamepads() {
-
 		if (!this.haveEvents) {
 			this.scanGamepads();
 		}
@@ -80,7 +68,4 @@ class GamepadWrapper {
 			this.callbacksAfterPoll[i]();
 		}
 	}
-
 }
-
-module.exports = GamepadWrapper;

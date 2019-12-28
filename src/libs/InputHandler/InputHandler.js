@@ -5,11 +5,11 @@
 
 // input types:
 // each should handle each type of device:
-import GamepadWrapper from "./GamepadWrapper.js";
-import VirtualController from "./VirtualController.js";
-import VirtualKeyboard from "./VirtualKeyboard.js";
-import VirtualMouse from "./VirtualMouse.js";
-require("libs/keymaster.js");
+import { GamepadWrapper } from "./GamepadWrapper.js";
+import { KeyboardWrapper } from "./KeyboardWrapper.js";
+import { VirtualController } from "./VirtualController.js";
+import { VirtualKeyboard } from "./VirtualKeyboard.js";
+import { VirtualMouse } from "./VirtualMouse.js";
 
 const BIT_MAP = {
 	up: 0,
@@ -115,7 +115,11 @@ export default class InputHandler {
 	constructor(isMobile) {
 		// initialize gamepad wrapper:
 		this.gamepadWrapper = new GamepadWrapper();
-		window.gamepadWrapper = this.gamepadWrapper; // for debugging
+		this.keyboardWrapper = new KeyboardWrapper();
+
+		// for debugging:
+		// window.gamepadWrapper = this.gamepadWrapper;
+		// window.keyboardWrapper = this.keyboardWrapper;
 
 		this.isMobile = isMobile;
 
@@ -126,7 +130,7 @@ export default class InputHandler {
 		// pass gamepadWrapper to constructor:
 		this.controller = new VirtualController(this.gamepadWrapper);
 		// the current state of the keyboard:
-		this.keyboard = new VirtualKeyboard();
+		this.keyboard = new VirtualKeyboard(this.keyboardWrapper);
 		// the current state of the mouse:
 		this.mouse = new VirtualMouse(); // todo
 		// the touch controls state:

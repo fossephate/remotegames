@@ -50,11 +50,10 @@ class ButtonState {
 	}
 }
 
-export default class VirtualController {
+export class VirtualController {
 	constructor(gamepadWrapper) {
 		this.gamepadWrapper = gamepadWrapper;
 
-		// this.activeControllers = [1];
 		this.cstate = new ControllerState();
 		this.getState = this.getState.bind(this);
 
@@ -126,6 +125,7 @@ export default class VirtualController {
 					new ButtonMapping("left"),
 					new ButtonMapping("right"),
 					new ButtonMapping("home"),
+					new ButtonMapping("capture"),
 
 					// extra:
 					new ButtonMapping("a"),
@@ -192,6 +192,7 @@ export default class VirtualController {
 			}
 			keys.push(key);
 		}
+
 		// didn't find a known controller, just pick the first one if there is one:
 		if (this.settings.controllerIndex == null && keys.length > 0) {
 			this.settings.controllerIndex = keys[0];
@@ -218,6 +219,11 @@ export default class VirtualController {
 		let oldState = JSON.stringify(this.cstate.getState());
 
 		// map buttons and axes to VirtualProController:
+
+		// reset buttons:
+		for (let i = 0; i < this.cstate.buttons.length; i++) {
+			this.cstate.buttons[i] = 0;
+		}
 
 		// buttons:
 		for (let j = 0; j < controller.buttons.length; j++) {
@@ -255,7 +261,9 @@ export default class VirtualController {
 			}
 
 			if (mapping.type == "button") {
-				this.cstate.buttons[mapping.which] = button.pressed ? 1 : 0;
+				// this.cstate.buttons[mapping.which] = button.pressed ? 1 : 0;
+				this.cstate.buttons[mapping.which] =
+					this.cstate.buttons[mapping.which] | (button.pressed ? 1 : 0);
 			} else if (mapping.type == "axis") {
 				console.log("something is wrong");
 				// TODO:

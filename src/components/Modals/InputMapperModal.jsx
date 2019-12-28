@@ -25,8 +25,6 @@ import DialogContent from "@material-ui/core/DialogContent";
 // recompose:
 import { compose } from "recompose";
 
-const classNames = require("classnames");
-
 const BUTTON_NAMES = [
 	"b",
 	"a",
@@ -181,7 +179,17 @@ class ControllerMapper extends Component {
 		}
 
 		return (
-			<ListItem>
+			// <ListItem>
+			// 	<ListItemText>{`${NAMES[this.props.which]}`}</ListItemText>
+			// 	<ListItemText>{this.currentMapping}</ListItemText>
+			// 	<Button variant="contained" onClick={this.mapButton}>
+			// 		Map To Button
+			// 	</Button>
+			// 	<Button variant="contained" onClick={this.mapAxis}>
+			// 		Map To Axis
+			// 	</Button>
+			// </ListItem>
+			<ListItem className={classes.listItem}>
 				<ListItemText>{`${NAMES[this.props.which]}`}</ListItemText>
 				<ListItemText>{this.currentMapping}</ListItemText>
 				<Button variant="contained" onClick={this.mapButton}>
@@ -224,10 +232,13 @@ class KeyboardMapper extends Component {
 			if (inputHandler.keyboard.lastPressedKey != null) {
 				clearInterval(this.mapKeyTimer);
 
-				inputHandler.keyboard.map2[parseInt(this.props.which)] =
-					inputHandler.keyboard.lastPressedKey;
+				// inputHandler.keyboard.map2[parseInt(this.props.which)] =
+				// 	inputHandler.keyboard.lastPressedKey;
 
+				inputHandler.keyboard.map[KEYBOARD_MAP[parseInt(this.props.which)]] =
+					inputHandler.keyboard.lastPressedKey;
 				inputHandler.keyboard.lastPressedKey = null;
+
 				this.setState({ waiting: false });
 				this.props.update();
 			}
@@ -249,10 +260,12 @@ class KeyboardMapper extends Component {
 			);
 		}
 
-		let currentMapping = inputHandler.keyboard.map2[parseInt(this.props.which)];
+		// let currentMapping = inputHandler.keyboard.map2[parseInt(this.props.which)];
+		let currentMapping =
+			inputHandler.keyboard.map[KEYBOARD_MAP[parseInt(this.props.which)]];
 
 		return (
-			<ListItem>
+			<ListItem className={classes.listItem}>
 				<ListItemText>{`${KEYBOARD_MAP[this.props.which]}`}</ListItemText>
 				<ListItemText>{currentMapping}</ListItemText>
 				<Button variant="contained" onClick={this.mapKey}>
@@ -285,6 +298,11 @@ const styles = (theme) => ({
 	list: {
 		maxHeight: "400px",
 		overflowY: "auto",
+	},
+	listItem: {
+		"& > div": {
+			width: "10%",
+		},
 	},
 });
 
@@ -420,6 +438,7 @@ class InputMapperModal extends Component {
 													update={this.update}
 													type="button"
 													which={i}
+													classes={this.props.classes}
 												/>
 											))}
 											{[...Array(4)].map((e, i) => (
@@ -428,6 +447,7 @@ class InputMapperModal extends Component {
 													update={this.update}
 													type="axis"
 													which={i}
+													classes={this.props.classes}
 												/>
 											))}
 										</List>
@@ -451,6 +471,7 @@ class InputMapperModal extends Component {
 													inputHandler={inputHandler}
 													type="button"
 													which={i}
+													classes={this.props.classes}
 												/>
 											))}
 										</List>

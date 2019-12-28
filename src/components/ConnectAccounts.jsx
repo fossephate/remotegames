@@ -15,7 +15,7 @@ import { compose } from "recompose";
 const styles = (theme) => ({
 	root: {
 		width: "100%",
-		height: "200px",
+		minHeight: "220px",
 		textAlign: "center",
 		display: "flex",
 		flexDirection: "column",

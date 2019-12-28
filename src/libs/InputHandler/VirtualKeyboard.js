@@ -1,4 +1,3 @@
-require("libs/keymaster.js");
 // import { mathZoom } from "libs/tools.js";
 
 import { ControllerState, KeyboardState } from "./DeviceStates.js";
@@ -23,8 +22,13 @@ const SPECIAL_KEYS = {
 	46: "delete",
 };
 
-export default class VirtualKeyboard {
-	constructor() {
+export class VirtualKeyboard {
+	constructor(keyboardWrapper) {
+		// this.keyboardWrapper = keyboardWrapper;
+		// this.kW = this.keyboardWrapper;
+
+		this.kW = keyboardWrapper;
+
 		this.changed = false;
 		this.cstate = new ControllerState();
 		this.kstate = new KeyboardState();
@@ -38,65 +42,6 @@ export default class VirtualKeyboard {
 		// function to call when state updates:
 		// this.updateParentState = () => {};
 
-		this.map1 = {
-			LU: 0,
-			LD: 1,
-			LL: 2,
-			LR: 3,
-			RU: 4,
-			RD: 5,
-			RL: 6,
-			RR: 7,
-			a: 8,
-			b: 9,
-			x: 10,
-			y: 11,
-			up: 12,
-			down: 13,
-			left: 14,
-			right: 15,
-			lstick: 16,
-			rstick: 17,
-			l: 18,
-			zl: 19,
-			r: 20,
-			zr: 21,
-			minus: 22,
-			plus: 23,
-			capture: 24,
-			home: 25,
-		};
-
-		this.map2 = [
-			"W",
-			"S",
-			"A",
-			"D",
-			"I",
-			"K",
-			"J",
-			"L",
-			"right",
-			"down",
-			"up",
-			"left",
-			"T",
-			"G",
-			"F",
-			"H",
-			"R",
-			"Y",
-			"U",
-			"Q",
-			"O",
-			"E",
-			"-",
-			"=",
-			"1",
-			"2",
-		];
-
-		// todo: combine map1 and map2:
 		this.map = {
 			LU: "W",
 			LD: "S",
@@ -136,12 +81,7 @@ export default class VirtualKeyboard {
 
 		this.lastPressedKey = null;
 
-		// document.addEventListener("keypress", (event) => {
-		// 	console.log(event.key);
-		// 	this.lastPressedKey = event.key;
-		// });
 		document.addEventListener("keydown", (event) => {
-			// console.log(event.key);
 			let key = event.key;
 			if (!key) {
 				return;
@@ -160,152 +100,152 @@ export default class VirtualKeyboard {
 
 		this.cstate.axes[0] = 0;
 		this.cstate.axes[1] = 0;
-		if (key.isPressed(this.map2[this.map1["LU"]])) {
+		if (this.kW.isPressed(this.map.LU)) {
 			this.cstate.axes[1] += 1;
-		} else if (key.wasPressed(this.map2[this.map1["LU"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.LU, this.wasPressedKeyCodes)) {
 			this.cstate.axes[1] = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["LD"]])) {
+		if (this.kW.isPressed(this.map.LD)) {
 			this.cstate.axes[1] -= 1;
-		} else if (key.wasPressed(this.map2[this.map1["LD"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.LD, this.wasPressedKeyCodes)) {
 			this.cstate.axes[1] = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["LL"]])) {
+		if (this.kW.isPressed(this.map.LL)) {
 			this.cstate.axes[0] -= 1;
-		} else if (key.wasPressed(this.map2[this.map1["LL"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.LL, this.wasPressedKeyCodes)) {
 			this.cstate.axes[0] = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["LR"]])) {
+		if (this.kW.isPressed(this.map.LR)) {
 			this.cstate.axes[0] += 1;
-		} else if (key.wasPressed(this.map2[this.map1["LR"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.LR, this.wasPressedKeyCodes)) {
 			this.cstate.axes[0] = 0;
 		}
 
-		if (key.isPressed(this.map2[this.map1["a"]])) {
+		if (this.kW.isPressed(this.map.a)) {
 			this.cstate.buttons.a = 1;
-		} else if (key.wasPressed(this.map2[this.map1["a"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.a, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.a = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["b"]])) {
+		if (this.kW.isPressed(this.map.b)) {
 			this.cstate.buttons.b = 1;
-		} else if (key.wasPressed(this.map2[this.map1["b"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.b, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.b = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["x"]])) {
+		if (this.kW.isPressed(this.map.x)) {
 			this.cstate.buttons.x = 1;
-		} else if (key.wasPressed(this.map2[this.map1["x"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.x, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.x = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["y"]])) {
+		if (this.kW.isPressed(this.map.y)) {
 			this.cstate.buttons.y = 1;
-		} else if (key.wasPressed(this.map2[this.map1["y"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.y, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.y = 0;
 		}
 
-		if (key.isPressed(this.map2[this.map1["up"]])) {
+		if (this.kW.isPressed(this.map.up)) {
 			this.cstate.buttons.up = 1;
-		} else if (key.wasPressed(this.map2[this.map1["up"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.up, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.up = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["down"]])) {
+		if (this.kW.isPressed(this.map.down)) {
 			this.cstate.buttons.down = 1;
-		} else if (key.wasPressed(this.map2[this.map1["down"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.down, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.down = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["left"]])) {
+		if (this.kW.isPressed(this.map.left)) {
 			this.cstate.buttons.left = 1;
-		} else if (key.wasPressed(this.map2[this.map1["left"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.left, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.left = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["right"]])) {
+		if (this.kW.isPressed(this.map.right)) {
 			this.cstate.buttons.right = 1;
-		} else if (key.wasPressed(this.map2[this.map1["right"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.right, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.right = 0;
 		}
 
 		this.cstate.axes[2] = 0;
 		this.cstate.axes[3] = 0;
-		if (key.isPressed(this.map2[this.map1["RU"]])) {
+		if (this.kW.isPressed(this.map.RU)) {
 			this.cstate.axes[3] += 1;
-		} else if (key.wasPressed(this.map2[this.map1["RU"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.RU, this.wasPressedKeyCodes)) {
 			this.cstate.axes[3] = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["RD"]])) {
+		if (this.kW.isPressed(this.map.RD)) {
 			this.cstate.axes[3] -= 1;
-		} else if (key.wasPressed(this.map2[this.map1["RD"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.RD, this.wasPressedKeyCodes)) {
 			this.cstate.axes[3] = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["RL"]])) {
+		if (this.kW.isPressed(this.map.RL)) {
 			this.cstate.axes[2] -= 1;
-		} else if (key.wasPressed(this.map2[this.map1["RL"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.RL, this.wasPressedKeyCodes)) {
 			this.cstate.axes[2] = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["RR"]])) {
+		if (this.kW.isPressed(this.map.RR)) {
 			this.cstate.axes[2] += 1;
-		} else if (key.wasPressed(this.map2[this.map1["RR"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.RR, this.wasPressedKeyCodes)) {
 			this.cstate.axes[2] = 0;
 		}
 
-		if (key.isPressed(this.map2[this.map1["minus"]])) {
+		if (this.kW.isPressed(this.map.minus)) {
 			this.cstate.buttons.minus = 1;
-		} else if (key.wasPressed(this.map2[this.map1["minus"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.minus, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.minus = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["plus"]])) {
+		if (this.kW.isPressed(this.map.plus)) {
 			this.cstate.buttons.plus = 1;
-		} else if (key.wasPressed(this.map2[this.map1["plus"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.plus, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.plus = 0;
 		}
 
-		if (key.isPressed(this.map2[this.map1["capture"]])) {
+		if (this.kW.isPressed(this.map.capture)) {
 			this.cstate.buttons.capture = 1;
-		} else if (key.wasPressed(this.map2[this.map1["capture"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.capture, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.capture = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["home"]])) {
+		if (this.kW.isPressed(this.map.home)) {
 			this.cstate.buttons.home = 1;
-		} else if (key.wasPressed(this.map2[this.map1["home"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.home, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.home = 0;
 		}
 
-		if (key.isPressed(this.map2[this.map1["l"]])) {
+		if (this.kW.isPressed(this.map.l)) {
 			this.cstate.buttons.l = 1;
-		} else if (key.wasPressed(this.map2[this.map1["l"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.l, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.l = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["r"]])) {
+		if (this.kW.isPressed(this.map.r)) {
 			this.cstate.buttons.r = 1;
-		} else if (key.wasPressed(this.map2[this.map1["r"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.r, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.r = 0;
 		}
 
-		if (key.isPressed(this.map2[this.map1["zl"]])) {
+		if (this.kW.isPressed(this.map.zl)) {
 			this.cstate.buttons.zl = 1;
 			this.cstate.axes[4] = 1;
-		} else if (key.wasPressed(this.map2[this.map1["zl"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.zl, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.zl = 0;
 			this.cstate.axes[4] = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["zr"]])) {
+		if (this.kW.isPressed(this.map.zr)) {
 			this.cstate.buttons.zr = 1;
 			this.cstate.axes[5] = 1;
-		} else if (key.wasPressed(this.map2[this.map1["zr"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.zr, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.zr = 0;
 			this.cstate.axes[5] = 0;
 		}
 
-		if (key.isPressed(this.map2[this.map1["lstick"]])) {
+		if (this.kW.isPressed(this.map.lstick)) {
 			this.cstate.buttons.lstick = 1;
-		} else if (key.wasPressed(this.map2[this.map1["lstick"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.lstick, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.lstick = 0;
 		}
-		if (key.isPressed(this.map2[this.map1["rstick"]])) {
+		if (this.kW.isPressed(this.map.rstick)) {
 			this.cstate.buttons.rstick = 1;
-		} else if (key.wasPressed(this.map2[this.map1["rstick"]], this.wasPressedKeyCodes)) {
+		} else if (this.kW.wasPressed(this.map.rstick, this.wasPressedKeyCodes)) {
 			this.cstate.buttons.rstick = 0;
 		}
 
-		let newKeycodes = key.getPressedKeyCodes();
+		let newKeycodes = this.kW.getPressedKeyCodes();
 
 		if (JSON.stringify(newKeycodes) != JSON.stringify(this.wasPressedKeyCodes)) {
 			this.changed = true;

@@ -85,7 +85,7 @@ hostServers[port] = new HostServer({
 	ip: ip,
 	videoPort: 8000,
 	streamKey: "a",
-	hostUserid: "fosse",
+	hostUsername: "fosse",
 	settings: {},
 });
 hostServers[port].init();
@@ -98,7 +98,7 @@ hostServers[port].init();
 // 	ip: ip,
 // 	videoPort: 8000,
 // 	streamKey: "b",
-// 	hostUserid: "fosse2",
+// 	hostUsername: "fosse2",
 // 	settings: {},
 // });
 // hostServers[port].init();

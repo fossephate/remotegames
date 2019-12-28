@@ -33,8 +33,9 @@ class HostServer {
 
 		this.alive = true;
 
-		// userid of the host:
-		this.hostUserid = options.hostUserid;
+		// host info:
+		this.hostUserid = options.hostUserid || null;
+		this.hostUsername = options.hostUsername || null;
 		this.hostUser = {};
 
 		// where to find the video feed (sent to clients on connect):
@@ -869,7 +870,15 @@ class HostServer {
 	}
 
 	getHostInfo() {
-		this.accountConnection.emit("getHostInfo", { userid: this.hostUserid }, (data) => {
+		let obj;
+
+		if (this.hostUserid) {
+			obj = { userid: this.hostUserid };
+		} else {
+			obj = { username: this.hostUsername };
+		}
+
+		this.accountConnection.emit("getHostInfo", obj, (data) => {
 			if (!data.success) {
 				console.log("something went wrong, getHostInfo");
 				console.log(data.reason);
