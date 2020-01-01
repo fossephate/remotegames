@@ -165,8 +165,7 @@ class ControllerMapper extends Component {
 					break;
 				}
 			}
-		}
-		if (this.props.type == "axis") {
+		} else if (this.props.type == "axis") {
 			// this.currentMapping += inputHandler.controller.settings.map.axes[parseInt(this.props.which)].which;
 			for (let i = 0; i < inputHandler.controller.settings.map.axes.length; i++) {
 				let axis = inputHandler.controller.settings.map.axes[i];
@@ -231,9 +230,6 @@ class KeyboardMapper extends Component {
 		this.mapKeyTimer = setInterval(() => {
 			if (inputHandler.keyboard.lastPressedKey != null) {
 				clearInterval(this.mapKeyTimer);
-
-				// inputHandler.keyboard.map2[parseInt(this.props.which)] =
-				// 	inputHandler.keyboard.lastPressedKey;
 
 				inputHandler.keyboard.map[KEYBOARD_MAP[parseInt(this.props.which)]] =
 					inputHandler.keyboard.lastPressedKey;
@@ -312,6 +308,7 @@ class InputMapperModal extends Component {
 
 		this.handleChange = this.handleChange.bind(this);
 		this.update = this.update.bind(this);
+		this.rescanGamepads = this.rescanGamepads.bind(this);
 		this.handleClose = this.handleClose.bind(this);
 	}
 
@@ -324,6 +321,11 @@ class InputMapperModal extends Component {
 		let inputHandler = window.inputHandler;
 		inputHandler.controller.settings.controllerIndex = "" + event.target.value;
 		this.setState({});
+	}
+
+	rescanGamepads() {
+		window.inputHandler.controller.autoSelectGamepad();
+		this.update();
 	}
 
 	update() {
@@ -388,7 +390,7 @@ class InputMapperModal extends Component {
 					<AppBar position="static">
 						<Toolbar>
 							<Typography variant="h6" color="inherit">
-								Remapper
+								Controls
 							</Typography>
 						</Toolbar>
 					</AppBar>
@@ -403,10 +405,10 @@ class InputMapperModal extends Component {
 						// scrollButtons="auto"
 						onChange={(event, value) => {
 							if (value === 0) {
-								this.props.history.replace("/remap/controller");
+								this.props.history.replace("/controls/controller");
 							}
 							if (value === 1) {
-								this.props.history.replace("/remap/keyboard");
+								this.props.history.replace("/controls/keyboard");
 							}
 						}}
 					>
@@ -416,19 +418,27 @@ class InputMapperModal extends Component {
 					</Tabs>
 
 					<Route
-						path="/remap/controller"
+						path="/controls/controller"
 						render={(props) => {
 							return (
 								<Paper className={classes.controllerRemapper} elevation={4}>
 									<ListItemText>Active Gamepad:</ListItemText>
 
-									<Select
-										value={activeGamepadIndex}
-										onChange={this.handleChange}
-										input={<OutlinedInput labelWidth={0} />}
-									>
-										{gamepads}
-									</Select>
+									<div style={{ display: "flex", justifyContent: "space-between" }}>
+										<Select
+											value={activeGamepadIndex}
+											onChange={this.handleChange}
+											input={<OutlinedInput labelWidth={0} />}
+											style={{
+												width: "80%",
+											}}
+										>
+											{gamepads}
+										</Select>
+										<Button variant="contained" onClick={this.rescanGamepads}>
+											Rescan
+										</Button>
+									</div>
 
 									<Paper elevation={2} style={{ marginTop: 15 }}>
 										<List className={classes.list}>
@@ -458,7 +468,7 @@ class InputMapperModal extends Component {
 					/>
 
 					<Route
-						path="/remap/keyboard"
+						path="/controls/keyboard"
 						render={(props) => {
 							return (
 								<Paper className={classes.keyboardRemapper} elevation={4}>

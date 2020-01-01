@@ -1,4 +1,4 @@
-exports.getCookie = (name) => {
+export function getCookie(name) {
 	let dc = document.cookie;
 	let prefix = name + "=";
 	let begin = dc.indexOf("; " + prefix);
@@ -18,7 +18,7 @@ exports.getCookie = (name) => {
 	return decodeURI(dc.substring(begin + prefix.length, end));
 };
 
-exports.setCookie = (name, value, seconds) => {
+export function setCookie(name, value, seconds) {
 	let expires = "";
 	if (seconds) {
 		let date = new Date();
@@ -28,16 +28,16 @@ exports.setCookie = (name, value, seconds) => {
 	document.cookie = name + "=" + (value || "") + expires + "; path=/";
 };
 
-exports.clamp = (n, min, max) => {
+export function clamp(n, min, max) {
 	return Math.min(Math.max(n, min), max);
 };
 
-exports.round = (value, precision) => {
+export function round(value, precision) {
 	let multiplier = Math.pow(10, precision || 0);
 	return Math.round(value * multiplier) / multiplier;
 };
 
-exports.msToTime = (duration) => {
+export function msToTime(duration) {
 	// 	var milliseconds = parseInt((duration % 1000) / 100);
 	let milliseconds = parseInt((((duration / 1000) % 60) % 1) * 1000);
 	let seconds = parseInt((duration / 1000) % 60);
@@ -64,7 +64,7 @@ exports.msToTime = (duration) => {
 	return time;
 };
 
-exports.toggleFullscreen = (elem) => {
+export function toggleFullscreen(elem) {
 	// ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
 	if (
 		(document.fullScreenElement !== undefined && document.fullScreenElement === null) ||
@@ -95,7 +95,7 @@ exports.toggleFullscreen = (elem) => {
 	}
 };
 
-exports.setToPercentParent = (elem, percent) => {
+export function setToPercentParent(elem, percent) {
 	$(elem).height(0);
 	let parentHeight = $(elem)
 		.parent()
@@ -105,7 +105,7 @@ exports.setToPercentParent = (elem, percent) => {
 };
 
 // like sleep, but worse:
-exports.wait = (ms) => {
+export function wait(ms) {
 	var start = new Date().getTime();
 	var end = start;
 	while (end < start + ms) {
@@ -114,7 +114,7 @@ exports.wait = (ms) => {
 };
 
 // brings number closer to target by accel
-exports.mathZoom = (current, target, accel) => {
+export function mathZoom(current, target, accel) {
 	if (current == target) {
 		return current;
 	}
@@ -128,7 +128,7 @@ exports.mathZoom = (current, target, accel) => {
 	}
 };
 
-exports.normalizeVector = (vector, scale) => {
+export function normalizeVector(vector, scale) {
 	let norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
 	if (norm !== 0) {
 		vector.x = (scale * vector.x) / norm;
@@ -137,12 +137,12 @@ exports.normalizeVector = (vector, scale) => {
 	return vector;
 };
 
-exports.abs = (n) => {
+export function abs(n) {
 	return Math.abs(n);
 };
 
 // delete all cookies:
-exports.deleteAllCookies = () => {
+export function deleteAllCookies() {
 	let cookies = document.cookie.split(";");
 	for (let i = 0; i < cookies.length; i++) {
 		let cookie = cookies[i];
@@ -152,7 +152,7 @@ exports.deleteAllCookies = () => {
 	}
 };
 
-exports.fixedLengthString = (string, pad, length) => {
+export function fixedLengthString(string, pad, length) {
 	string = string + "";
 	while (string.length < length) {
 		string = pad + string;
@@ -160,7 +160,7 @@ exports.fixedLengthString = (string, pad, length) => {
 	return string;
 };
 
-exports.getStickString = (num) => {
+export function getStickString(num) {
 	// round to nearest tenth:
 	num = (Math.round((num + 1) * 10) / 10).toFixed(2);
 	let n = num * 10;
@@ -182,7 +182,9 @@ exports.getStickString = (num) => {
 	return String(n).padStart(3, "0");
 };
 
-exports.getAverage = (array) => array.reduce((a, b) => a + b) / array.length;
+export function getAverage(array) {
+	return array.reduce((a, b) => a + b) / array.length;
+}
 
 // String.prototype.replaceAll = function(search, replacement) {
 // 	let target = this;

@@ -21,13 +21,16 @@ import About from "src/About.jsx";
 import FAQ from "src/FAQ.jsx";
 import ToS from "src/ToS.jsx";
 import Privacy from "src/Privacy.jsx";
+
 // import CurrentPlayers from "src/CurrentPlayers.jsx";
 import Streams from "src/Streams.jsx";
 import Stream from "src/Stream.jsx";
 
 // redux:
 import { Provider } from "react-redux";
-import { createStore, applyMiddleware, compose } from "redux";
+// import { createStore, applyMiddleware, compose } from "redux";
+import { applyMiddleware, compose } from "redux";
+import { configureStore } from "@reduxjs/toolkit";
 
 import rootReducer from "./reducers";
 
@@ -365,13 +368,13 @@ class Index extends Component {
 								}}
 							/>
 							{/* <Route
-								path="/remap"
+								path="/controls"
 								render={(props) => {
 									return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
 								}}
 							/> */}
 							<Route
-								path="/(s|remap)/:username?"
+								path="/(s|controls)/:username?"
 								render={(props) => {
 									return (
 										<Stream

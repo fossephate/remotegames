@@ -359,7 +359,7 @@ class Stream extends Component {
 		}
 
 		// return if trying to re-map inputs:
-		if (window.location.pathname == "/remap") {
+		if (window.location.pathname.indexOf("/controls") > -1) {
 			return;
 		}
 
@@ -522,7 +522,7 @@ class Stream extends Component {
 						}}
 					/> */}
 					<Route
-						path="/remap"
+						path="/controls"
 						render={(props) => {
 							return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
 						}}

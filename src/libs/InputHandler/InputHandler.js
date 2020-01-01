@@ -11,26 +11,26 @@ import { VirtualController } from "./VirtualController.js";
 import { VirtualKeyboard } from "./VirtualKeyboard.js";
 import { VirtualMouse } from "./VirtualMouse.js";
 
-const BIT_MAP = {
-	up: 0,
-	down: 1,
-	left: 2,
-	right: 3,
-	l: 4,
-	zl: 5,
-	lstick: 6,
-	minus: 7,
-	capture: 8,
-	a: 9,
-	b: 10,
-	x: 11,
-	y: 12,
-	r: 13,
-	zr: 14,
-	rstick: 15,
-	plus: 16,
-	home: 17,
-};
+// const BIT_MAP = {
+// 	up: 0,
+// 	down: 1,
+// 	left: 2,
+// 	right: 3,
+// 	l: 4,
+// 	zl: 5,
+// 	lstick: 6,
+// 	minus: 7,
+// 	capture: 8,
+// 	a: 9,
+// 	b: 10,
+// 	x: 11,
+// 	y: 12,
+// 	r: 13,
+// 	zr: 14,
+// 	rstick: 15,
+// 	plus: 16,
+// 	home: 17,
+// };
 
 export class InputState {
 	constructor() {

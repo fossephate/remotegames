@@ -78,6 +78,7 @@ export class VirtualController {
 
 		this.poll = this.poll.bind(this);
 		this.autoSelectGamepad = this.autoSelectGamepad.bind(this);
+		this.autoSelectInterval = null;
 
 		this.settings = {
 			controllerIndex: null,
@@ -128,20 +129,20 @@ export class VirtualController {
 					new ButtonMapping("capture"),
 
 					// extra:
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
-					new ButtonMapping("a"),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
+					new ButtonMapping(""),
 				],
 
 				axes: [
@@ -170,6 +171,7 @@ export class VirtualController {
 	autoSelectGamepad() {
 		// only auto select if one hasn't already been selected:
 		if (this.settings.controllerIndex != null) {
+			clearInterval(this.autoSelectInterval);
 			return;
 		}
 
@@ -202,7 +204,7 @@ export class VirtualController {
 	init() {
 		this.gamepadWrapper.callbacksAfterPoll.push(this.poll);
 		setTimeout(this.autoSelectGamepad, 2000);
-		setInterval(this.autoSelectGamepad, 10000);
+		this.autoSelectInterval = setInterval(this.autoSelectGamepad, 10000);
 	}
 
 	poll() {
@@ -221,8 +223,8 @@ export class VirtualController {
 		// map buttons and axes to VirtualProController:
 
 		// reset buttons:
-		for (let i = 0; i < this.cstate.buttons.length; i++) {
-			this.cstate.buttons[i] = 0;
+		for (let key in this.cstate.buttons) {
+			this.cstate.buttons[key] = 0;
 		}
 
 		// buttons:
@@ -254,17 +256,17 @@ export class VirtualController {
 
 			if (this.triggerIndexes.length < 2) {
 				// check if it's a float:
-				if (button.value % 1 != 0 && this.triggerIndexes.indexOf(j) == -1) {
+				if (button.value % 1 != 0 && this.triggerIndexes.indexOf(j) === -1) {
 					this.triggerIndexes.push(j);
 					this.triggerIndexes.sort();
 				}
 			}
 
-			if (mapping.type == "button") {
+			if (mapping.type === "button") {
 				// this.cstate.buttons[mapping.which] = button.pressed ? 1 : 0;
 				this.cstate.buttons[mapping.which] =
 					this.cstate.buttons[mapping.which] | (button.pressed ? 1 : 0);
-			} else if (mapping.type == "axis") {
+			} else if (mapping.type === "axis") {
 				console.log("something is wrong");
 				// TODO:
 				// this.cstate.axes[mapping.which] = button.pressed ? button.value : 0;

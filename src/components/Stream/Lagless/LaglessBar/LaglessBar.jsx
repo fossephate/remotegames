@@ -6,7 +6,6 @@ import { withRouter } from "react-router";
 
 // components:
 import VolumeSlider from "./VolumeSlider.jsx";
-// import MyCheckbox from "src/components/General/MyCheckbox.jsx";
 import ViewerDropdown from "./ViewerDropdown.jsx";
 import Ping from "./Ping.jsx";
 
@@ -15,9 +14,8 @@ import { withStyles } from "@material-ui/core/styles";
 // icons:
 import KeyboardIcon from "@material-ui/icons/Keyboard";
 import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
-// components:
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
+// import { KeyboardIcon, VideogameAssetIcon} from "@material-ui/icons";
+import { Paper, Button } from "@material-ui/core";
 
 // recompose:
 import { compose } from "recompose";
@@ -25,8 +23,6 @@ import { compose } from "recompose";
 // redux:
 import { connect } from "react-redux";
 import { updateSettings } from "src/actions/settings.js";
-
-import _ from "lodash";
 
 // jss:
 
@@ -80,15 +76,14 @@ class LaglessBar extends PureComponent {
 						this.props.setVolume(100);
 					}}
 				/>
-				{/* <MyCheckbox text={"Audio 3.0"} handleChange={this.toggleAudioThree} checked={this.state.audioThree}/> */}
 				<Button
 					variant="contained"
 					color="primary"
 					onClick={() => {
-						this.props.history.push("/remap/keyboard");
+						this.props.history.push("/controls/controller");
 					}}
 				>
-					{"Remap "}
+					{"Controls "}
 					<KeyboardIcon />|<VideogameAssetIcon />
 				</Button>
 
