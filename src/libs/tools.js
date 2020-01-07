@@ -16,7 +16,7 @@ export function getCookie(name) {
 	// because unescape has been deprecated, replaced with decodeURI
 	//return unescape(dc.substring(begin + prefix.length, end));
 	return decodeURI(dc.substring(begin + prefix.length, end));
-};
+}
 
 export function setCookie(name, value, seconds) {
 	let expires = "";
@@ -26,16 +26,16 @@ export function setCookie(name, value, seconds) {
 		expires = "; expires=" + date.toUTCString();
 	}
 	document.cookie = name + "=" + (value || "") + expires + "; path=/";
-};
+}
 
 export function clamp(n, min, max) {
 	return Math.min(Math.max(n, min), max);
-};
+}
 
 export function round(value, precision) {
 	let multiplier = Math.pow(10, precision || 0);
 	return Math.round(value * multiplier) / multiplier;
-};
+}
 
 export function msToTime(duration) {
 	// 	var milliseconds = parseInt((duration % 1000) / 100);
@@ -62,7 +62,7 @@ export function msToTime(duration) {
 	let time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
 	time = time.replaceAll("-", ""); // remove negative signs
 	return time;
-};
+}
 
 export function toggleFullscreen(elem) {
 	// ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
@@ -93,7 +93,7 @@ export function toggleFullscreen(elem) {
 			document.msExitFullscreen();
 		}
 	}
-};
+}
 
 export function setToPercentParent(elem, percent) {
 	$(elem).height(0);
@@ -102,7 +102,7 @@ export function setToPercentParent(elem, percent) {
 		.height();
 	let newHeight = (percent / 100) * parentHeight;
 	$(elem).height(newHeight);
-};
+}
 
 // like sleep, but worse:
 export function wait(ms) {
@@ -111,7 +111,7 @@ export function wait(ms) {
 	while (end < start + ms) {
 		end = new Date().getTime();
 	}
-};
+}
 
 // brings number closer to target by accel
 export function mathZoom(current, target, accel) {
@@ -126,7 +126,7 @@ export function mathZoom(current, target, accel) {
 	} else {
 		return current - accel;
 	}
-};
+}
 
 export function normalizeVector(vector, scale) {
 	let norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
@@ -135,11 +135,11 @@ export function normalizeVector(vector, scale) {
 		vector.y = (scale * vector.y) / norm;
 	}
 	return vector;
-};
+}
 
 export function abs(n) {
 	return Math.abs(n);
-};
+}
 
 // delete all cookies:
 export function deleteAllCookies() {
@@ -150,7 +150,7 @@ export function deleteAllCookies() {
 		let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
 		document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
 	}
-};
+}
 
 export function fixedLengthString(string, pad, length) {
 	string = string + "";
@@ -158,7 +158,7 @@ export function fixedLengthString(string, pad, length) {
 		string = pad + string;
 	}
 	return string;
-};
+}
 
 export function getStickString(num) {
 	// round to nearest tenth:
@@ -180,10 +180,14 @@ export function getStickString(num) {
 		n = (20 - n) * 9;
 	}
 	return String(n).padStart(3, "0");
-};
+}
 
 export function getAverage(array) {
 	return array.reduce((a, b) => a + b) / array.length;
+}
+
+export function pick(...props) {
+	return (o) => props.reduce((a, e) => ({ ...a, [e]: o[e] }), {});
 }
 
 // String.prototype.replaceAll = function(search, replacement) {

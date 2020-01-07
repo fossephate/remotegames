@@ -2,8 +2,9 @@
 import React, { PureComponent } from "react";
 
 import LaglessCanvas from "./LaglessCanvas.jsx";
-import LeftControllerView from "./LeftControllerView.jsx";
-import RightControllerView from "./RightControllerView.jsx";
+import ControllerView from "./ControllerView.jsx";
+// import LeftControllerView from "./LeftControllerView.jsx";
+// import RightControllerView from "./RightControllerView.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
@@ -67,39 +68,28 @@ class LaglessView extends PureComponent {
 
 		let controllerNumber = 0;
 
-		let isXbox = this.props.streamNumber === 1;
+		let isXbox = false;
 		let controllerType = isXbox ? "xbox" : "joycon";
+
+		displayLagless = displayLagless ? <LaglessCanvas classes={videoClasses} /> : null;
 
 		return (
 			<div className={laglessClasses}>
 				{this.props.controllerView ? (
-					<LeftControllerView
+					<ControllerView
+						overlay={this.props.mobileMode}
 						controllerState={this.props.controllerStates[controllerNumber]}
 						type={controllerType}
-					/>
-				) : null}
-
-				{displayLagless ? <LaglessCanvas classes={videoClasses} /> : null}
-				{/* <iframe
-					id="twitchVideo"
-					className={classes.twitch}
-					src="https://player.twitch.tv/?channel=remotegames&muted=true&autoplay=true"
-					frameBorder="0"
-					scrolling="no"
-					allowFullScreen={true}
-					style={twitchStyle}
-				/> */}
+					>
+						{displayLagless}
+					</ControllerView>
+				) : (
+					displayLagless
+				)}
 
 				<div id="twitchVideo" className={classes.twitch} style={twitchStyle}>
 					You need to login first or this stream is offline.
 				</div>
-
-				{this.props.controllerView ? (
-					<RightControllerView
-						controllerState={this.props.controllerStates[controllerNumber]}
-						type={controllerType}
-					/>
-				) : null}
 			</div>
 		);
 	}
@@ -107,17 +97,14 @@ class LaglessView extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		loggedIn: state.clientInfo.loggedIn,
-		waitlisted: state.clientInfo.waitlisted,
+		loggedIn: state.client.loggedIn,
+		waitlisted: state.client.waitlisted,
 		controllerStates: state.stream.players.controllerStates,
 		controllerView: state.settings.controllerView, // whether to render the joycons
 		fullscreen: state.settings.fullscreen,
 		largescreen: state.settings.largescreen,
-		streamNumber: 0,
+		mobileMode: state.settings.mobileMode,
 	};
 };
 
-export default compose(
-	withStyles(styles),
-	connect(mapStateToProps),
-)(LaglessView);
+export default compose(withStyles(styles), connect(mapStateToProps))(LaglessView);

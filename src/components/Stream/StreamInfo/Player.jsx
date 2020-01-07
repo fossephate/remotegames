@@ -89,7 +89,7 @@ const mapStateToProps = (state) => {
 	return {
 		// turnTimers: state.turnTimers,
 		controlQueues: state.stream.players.controlQueues,
-		userid: state.clientInfo.userid,
+		userid: state.client.userid,
 		// time: state.time,
 		currentPlayer: state.settings.currentPlayer,
 	};

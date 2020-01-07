@@ -1,5 +1,5 @@
 // react:
-import React, { Component } from "react";
+import React, { Component, Suspense, lazy } from "react";
 import ReactDOM from "react-dom";
 
 // react-router:
@@ -7,9 +7,12 @@ import { Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 
 // modals:
-import LoginRegisterModal from "src/components/Modals/LoginRegisterModal.jsx";
-import AccountModal from "src/components/Modals/AccountModal.jsx";
-// import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
+// import LoginRegisterModal from "components/Modals/LoginRegisterModal.jsx";
+// import AccountModal from "components/Modals/AccountModal.jsx";
+// import InputMapperModal from "components/Modals/InputMapperModal.jsx";
+const LoginRegisterModal = lazy(() => import("components/Modals/LoginRegisterModal.jsx"));
+const AccountModal = lazy(() => import("components/Modals/AccountModal.jsx"));
+// const InputMapperModal = lazy(() => import("components/Modals/InputMapperModal.jsx"));
 
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -17,19 +20,25 @@ import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 
 // components:
-import About from "src/About.jsx";
-import FAQ from "src/FAQ.jsx";
-import ToS from "src/ToS.jsx";
-import Privacy from "src/Privacy.jsx";
+import Loading from "components/General/Loading.jsx";
+// import About from "src/About.jsx";
+// import FAQ from "src/FAQ.jsx";
+// import ToS from "src/ToS.jsx";
+// import Privacy from "src/Privacy.jsx";
 
 // import CurrentPlayers from "src/CurrentPlayers.jsx";
-import Streams from "src/Streams.jsx";
-import Stream from "src/Stream.jsx";
+// import Streams from "src/Streams.jsx";
+// import Stream from "src/Stream.jsx";
+
+const About = lazy(() => import("src/About.jsx"));
+const FAQ = lazy(() => import("src/FAQ.jsx"));
+const ToS = lazy(() => import("src/ToS.jsx"));
+const Privacy = lazy(() => import("src/Privacy.jsx"));
+const Streams = lazy(() => import("src/Streams.jsx"));
+const Stream = lazy(() => import("src/Stream.jsx"));
 
 // redux:
 import { Provider } from "react-redux";
-// import { createStore, applyMiddleware, compose } from "redux";
-import { applyMiddleware, compose } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 
 import rootReducer from "./reducers";
@@ -48,8 +57,6 @@ import socketio from "socket.io-client";
 import localforage from "localforage";
 
 const sagaMiddleware = createSagaMiddleware();
-
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let preloadedState = {
 	// account: {
@@ -83,9 +90,10 @@ let preloadedState = {
 		streamList: [],
 	},
 
-	clientInfo: {
+	client: {
 		authToken: null,
 		loggedIn: false,
+		hostAuthed: false,
 		userid: null,
 		username: "???",
 		connectedAccounts: [],
@@ -98,25 +106,11 @@ let preloadedState = {
 	},
 
 	settings: {
-		// general: {
-		// 	keyboardControls: true,
-		// 	controllerControls: true,
-		// 	mouseControls: false,
-		// 	touchControls: false,
-		// 	controllerView: true,
-		// 	fullscreen: false,
-		// 	largescreen: false,
-		// 	audioThree: false,
-		// 	analogStickMode: false,
-		// 	currentPlayer: 0,
-		// 	volume: 50,
-		// 	theme: "dark",
-		// },
-
 		keyboardControls: true,
 		controllerControls: true,
 		mouseControls: false,
 		touchControls: false,
+		mobileMode: false,
 		realKeyboardMouse: false,
 		controllerView: true,
 		fullscreen: false,
@@ -176,17 +170,17 @@ function loadState() {
 
 loadState();
 
-// window.onbeforeunload = () => {
-// 	console.log("saving settings");
-// 	localforage.setItem("settings", JSON.stringify(this.props.settings));
-// 	return null;
-// };
+const store = configureStore({
+	reducer: rootReducer,
+	preloadedState: preloadedState,
+	middleware: [sagaMiddleware],
+});
 
-const store = createStore(
-	rootReducer,
-	preloadedState,
-	composeEnhancers(applyMiddleware(sagaMiddleware)),
-);
+window.onbeforeunload = () => {
+	console.log("saving settings");
+	localforage.setItem("settings", JSON.stringify(store.getState().settings));
+	return null;
+};
 
 let accountConnection = socketio("https://remotegames.io", {
 	path: "/8099/socket.io",
@@ -304,45 +298,35 @@ class Index extends Component {
 					<CssBaseline />
 					<BrowserRouter>
 						{/* selects the first matching path: */}
-						<Switch>
-							<Route
-								path="/about"
-								render={(props) => {
-									return <About {...props} />;
-								}}
-							/>
-							<Route
-								path="/FAQ"
-								render={(props) => {
-									return <FAQ {...props} />;
-								}}
-							/>
-							<Route
-								path="/privacy"
-								render={(props) => {
-									return <Privacy {...props} />;
-								}}
-							/>
-							<Route
-								path="/tos"
-								render={(props) => {
-									return <ToS {...props} />;
-								}}
-							/>
-							{/* <Route
-								path="/CurrentPlayers"
-								render={(props) => {
-									return <CurrentPlayers {...props} />;
-								}}
-							/> */}
-							<Route
-								path="/streams"
-								render={(props) => {
-									return <Streams {...props} accountConnection={accountConnection} />;
-								}}
-							/>
-							<Route
-								// path="/s/:username"
+						{/* <Switch> */}
+						<Suspense fallback={<Loading />}>
+							<Switch>
+								<Route
+									path="/about"
+									render={(props) => {
+										return <About {...props} />;
+									}}
+								/>
+								<Route
+									path="/FAQ"
+									render={(props) => {
+										return <FAQ {...props} />;
+									}}
+								/>
+								<Route
+									path="/privacy"
+									render={(props) => {
+										return <Privacy {...props} />;
+									}}
+								/>
+								<Route
+									path="/tos"
+									render={(props) => {
+										return <ToS {...props} />;
+									}}
+								/>
+								{/* </Suspense> */}
+								{/* <Route
 								path="/u/:username"
 								render={(props) => {
 									return (
@@ -354,53 +338,62 @@ class Index extends Component {
 										/>
 									);
 								}}
-							/>
-							<Route
-								path="/(login|register)"
-								render={(props) => {
-									return <LoginRegisterModal {...props} history={this.props.history} />;
-								}}
-							/>
-							<Route
-								path="/account"
-								render={(props) => {
-									return <AccountModal {...props} history={this.props.history} />;
-								}}
-							/>
-							{/* <Route
+							/> */}
+								{/* </Suspense> */}
+
+								<Route
+									path="/(login|register)"
+									render={(props) => {
+										return <LoginRegisterModal {...props} history={this.props.history} />;
+									}}
+								/>
+								<Route
+									path="/account"
+									render={(props) => {
+										return <AccountModal {...props} history={this.props.history} />;
+									}}
+								/>
+
+								{/* <Route
 								path="/controls"
 								render={(props) => {
 									return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
 								}}
 							/> */}
-							<Route
-								path="/(s|controls)/:username?"
-								render={(props) => {
-									return (
-										<Stream
-											{...props}
-											store={store}
-											sagaMiddleware={sagaMiddleware}
-											accountConnection={accountConnection}
-										/>
-									);
-								}}
-							/>
-							{/* order matters here, can't do exact path or /login and /register break: */}
-							<Route
-								path="/"
-								render={(props) => {
-									return (
-										<Streams
-											{...props}
-											store={store}
-											accountConnection={accountConnection}
-											sagaMiddleware={sagaMiddleware}
-										/>
-									);
-								}}
-							/>
-						</Switch>
+								{/* <Suspense fallback={<Loading />}> */}
+								<Route
+									path="/(s|controls|settings)/:username?"
+									// path="/s/:username?"
+									render={(props) => {
+										return (
+											<Stream
+												{...props}
+												store={store}
+												sagaMiddleware={sagaMiddleware}
+												accountConnection={accountConnection}
+											/>
+										);
+									}}
+								/>
+								{/* </Suspense> */}
+								{/* order matters here, can't do exact path or /login and /register break: */}
+								{/* <Suspense fallback={<Loading />}> */}
+								<Route
+									path="/"
+									render={(props) => {
+										return (
+											<Streams
+												{...props}
+												store={store}
+												accountConnection={accountConnection}
+												sagaMiddleware={sagaMiddleware}
+											/>
+										);
+									}}
+								/>
+								{/* </Suspense> */}
+							</Switch>
+						</Suspense>
 					</BrowserRouter>
 				</ThemeProvider>
 			</Provider>

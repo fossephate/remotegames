@@ -1,6 +1,7 @@
 import * as types from "src/actions/ActionTypes.js";
 
-import { updateClientInfo } from "src/actions/clientInfo.js";
+// import { updateClientInfo } from "src/actions/clientInfo.js";
+import { updateClient } from "src/features/client.js";
 
 // libs:
 import localforage from "localforage";
@@ -19,7 +20,7 @@ function getAccountInfo(socket, dispatch) {
 				console.log(data);
 				if (data.success) {
 					dispatch(
-						updateClientInfo({
+						updateClient({
 							...data.clientInfo,
 							authToken: authToken,
 							loggedIn: true,

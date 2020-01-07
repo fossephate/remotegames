@@ -197,9 +197,9 @@ class ConnectAccounts extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		authToken: state.clientInfo.authToken,
-		connectedAccounts: state.clientInfo.connectedAccounts,
-		validUsernames: state.clientInfo.validUsernames,
+		authToken: state.client.authToken,
+		connectedAccounts: state.client.connectedAccounts,
+		validUsernames: state.client.validUsernames,
 	};
 };
 

@@ -8,11 +8,14 @@ import streams from "./streams/index.js";
 import clientInfo from "./clientInfo.js";
 import settings from "./settings.js";
 
+import client from "src/features/client.js";
+
 const rootReducer = combineReducers({
 	stream,
 	streams,
 	// account,
-	clientInfo,
+	// clientInfo,
+	client,
 	settings,
 	form,
 });

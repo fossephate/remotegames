@@ -1038,6 +1038,8 @@ io.on("connection", (socket) => {
 							localizedAccountMaps[socket.id][clientInfo.userid] = {
 								...clientInfo,
 							};
+							// update the host server with the new info:
+							updateSpecificLocalAccountMap(socket.id);
 
 							cb({
 								success: true,
@@ -1730,6 +1732,10 @@ function sendLocalizedAccountMaps() {
 	for (let hostSocketid in localizedAccountMaps) {
 		io.to(hostSocketid).emit("accountMap", localizedAccountMaps[hostSocketid]);
 	}
+}
+
+function updateSpecificLocalAccountMap(socketid) {
+	io.to(socketid).emit("accountMap", localizedAccountMaps[socketid]);
 }
 
 function sendServerTime() {

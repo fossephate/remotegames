@@ -1,9 +1,8 @@
 // react:
 import React, { PureComponent } from "react";
-import ReactDOM from "react-dom";
 
 // react-router:
-import { Router, Route, Switch, withRouter } from "react-router";
+import { withRouter } from "react-router";
 
 // redux:
 import { connect } from "react-redux";
@@ -12,6 +11,7 @@ import { connect } from "react-redux";
 import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
 import StreamList from "src/components/Streams/StreamList.jsx";
 import StreamsDrawer from "src/components/Streams/StreamsDrawer.jsx";
+import StreamsFooter from "src/components/Streams/StreamsFooter.jsx";
 
 // secondary components:
 
@@ -104,6 +104,8 @@ class Streams extends PureComponent {
 					handleToggleDrawer={this.toggleDrawer}
 				/>
 				<StreamList drawerOpen={this.state.drawerOpen} streams={this.state.streams} />
+
+				<StreamsFooter drawerOpen={this.state.drawerOpen} />
 			</div>
 		);
 	}

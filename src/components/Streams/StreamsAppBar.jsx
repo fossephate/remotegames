@@ -343,7 +343,7 @@ class StreamsAppBar extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		loggedIn: state.clientInfo.loggedIn,
+		loggedIn: state.client.loggedIn,
 	};
 };
 
@@ -354,8 +354,5 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
 	withRouter,
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(StreamsAppBar);

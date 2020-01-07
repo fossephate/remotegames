@@ -173,7 +173,7 @@ class Message extends PureComponent {
 const mapStateToProps = (state) => {
 	return {
 		accountMap: state.stream.accountMap,
-		myUsername: state.clientInfo.username,
+		myUsername: state.client.username,
 	};
 };
 

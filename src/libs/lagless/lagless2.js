@@ -4,8 +4,9 @@ import { JSMpeg } from "libs/jsmpeg/src/jsmpeg.js";
 export default class Lagless2 {
 	constructor(options) {
 		this.options = options;
-		this.canvas = null;
-		this.context = null;
+		this.videoCanvas = null;
+		this.graphicsCanvas = null;
+		this.context = null; // graphics context2d
 		this.player = {};
 
 		this.pause = this.pause.bind(this);
@@ -49,12 +50,30 @@ export default class Lagless2 {
 			this.times.shift();
 		}
 		this.times.push(now);
-		this.fps = this.times.length;
+
+		if (this.fps != this.times.length) {
+			this.fps = this.times.length;
+
+			// this.context.font = "25px sans-serif";
+			// this.context.lineWidth = 1;
+			// this.context.clearRect(0, 0, 1000, 500);
+
+			// this.context.fillStyle = "#FFF";
+			// this.context.fillText(`FPS: ${this.fps}`, 5, 50);
+			// // this.context.fillStyle = "#000";
+			// // this.context.strokeText(`FPS: ${this.fps}`, 5, 50);
+		}
 	}
 
-	resume(canvas) {
-		this.canvas = canvas;
-		// this.context = this.canvas.getContext("2d");
+	resume(videoCanvas, graphicsCanvas) {
+		this.videoCanvas = videoCanvas;
+		this.graphicsCanvas = graphicsCanvas || null;
+
+		let onDecode = null;
+		if (this.graphicsCanvas) {
+			this.context = this.graphicsCanvas.getContext("2d");
+			onDecode = this.onVideoDecode;
+		}
 
 		// destroy audio instance if it exists:
 		try {
@@ -64,16 +83,16 @@ export default class Lagless2 {
 		let videoBufferSize = 256 * 1024; // 256kb (256 * 1024)
 		let audioBufferSize = 128 * 1024; // 128kb (128 * 1024)
 		this.player = new JSMpeg.Player(this.options.url, {
-			canvas: this.canvas,
+			canvas: this.videoCanvas,
 			videoBufferSize: videoBufferSize,
 			audioBufferSize: audioBufferSize,
 			maxAudioLag: 0.25,
-			onVideoDecode: this.onVideoDecode,
+			onVideoDecode: onDecode,
 			audio: !!this.options.audio,
 			video: !!this.options.video,
 			path: this.options.path,
 		});
-		// this.canvas.width = this.player.renderer.canvas.width;
-		// this.canvas.height = this.player.renderer.canvas.height;
+		// this.videoCanvas.width = this.player.renderer.canvas.width;
+		// this.videoCanvas.height = this.player.renderer.canvas.height;
 	}
 }

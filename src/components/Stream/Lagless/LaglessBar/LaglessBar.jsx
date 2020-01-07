@@ -14,6 +14,7 @@ import { withStyles } from "@material-ui/core/styles";
 // icons:
 import KeyboardIcon from "@material-ui/icons/Keyboard";
 import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
+import SettingsIcon from "@material-ui/icons/Settings";
 // import { KeyboardIcon, VideogameAssetIcon} from "@material-ui/icons";
 import { Paper, Button } from "@material-ui/core";
 
@@ -76,7 +77,7 @@ class LaglessBar extends PureComponent {
 						this.props.setVolume(100);
 					}}
 				/>
-				<Button
+				{/* <Button
 					variant="contained"
 					color="primary"
 					onClick={() => {
@@ -85,6 +86,16 @@ class LaglessBar extends PureComponent {
 				>
 					{"Controls "}
 					<KeyboardIcon />|<VideogameAssetIcon />
+				</Button> */}
+				<Button
+					variant="contained"
+					color="primary"
+					onClick={() => {
+						this.props.history.push("/settings/av");
+					}}
+				>
+					{"Settings "}
+					<SettingsIcon />
 				</Button>
 
 				<Ping />

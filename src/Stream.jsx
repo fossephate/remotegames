@@ -1,5 +1,6 @@
 // react:
-import React, { Component } from "react";
+// import React, { Component } from "react";
+import React, { Component, Suspense, lazy } from "react";
 
 // react-router:
 import { Route, Switch, withRouter } from "react-router";
@@ -7,7 +8,7 @@ import { Route, Switch, withRouter } from "react-router";
 // redux:
 import { connect } from "react-redux";
 
-import { updateClientInfo } from "src/actions/clientInfo.js";
+import { updateClient } from "features/client.js";
 import { updateSettings } from "src/actions/settings.js";
 import { updateMessages } from "src/actions/chat.js";
 import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
@@ -19,10 +20,14 @@ import handleStreamActions from "src/sagas/stream";
 import handleStreamEvents from "src/sockets/stream";
 
 // main components:
+import Loading from "components/General/Loading.jsx";
 import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
-import Picture from "src/components/Stream/Picture.jsx";
-import Chat from "src/components/Stream/Chat/Chat.jsx";
-import StreamInfo from "src/components/Stream/StreamInfo.jsx";
+// import Picture from "src/components/Stream/Picture.jsx";
+// import Chat from "src/components/Stream/Chat/Chat.jsx";
+// import StreamInfo from "src/components/Stream/StreamInfo.jsx";
+const Picture = lazy(() => import("src/components/Stream/Picture.jsx"));
+const Chat = lazy(() => import("src/components/Stream/Chat/Chat.jsx"));
+const StreamInfo = lazy(() => import("src/components/Stream/StreamInfo.jsx"));
 
 // components:
 
@@ -32,7 +37,8 @@ import StreamInfo from "src/components/Stream/StreamInfo.jsx";
 import { withStyles } from "@material-ui/core/styles";
 // import { Snackbar } from "@material-ui/core";
 
-import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
+import SettingsModal from "src/components/Modals/SettingsModal.jsx";
+// import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
 
 // import { Client } from "./parsec/src/client.js";
 
@@ -101,12 +107,14 @@ class Stream extends Component {
 
 		this.state = {};
 
-		this.inputHandler = new InputHandler(false);
+		let isMobile = window.innerWidth < 400;
+
+		this.inputHandler = new InputHandler(isMobile);
 		// todo:
 		window.inputHandler = this.inputHandler; // for lagless canvas
 	}
 
-	recieveStream(data) {
+	recieveStream(data, tryCount) {
 		this.props.updateStreamInfo({ ...data });
 
 		if (this.stream) {
@@ -117,65 +125,74 @@ class Stream extends Component {
 			this.hostConnection.destroy();
 		}
 
-		setTimeout(() => {
-			if (!this.props.clientInfo.loggedIn) {
-				alert("You have to login / register first!");
-				return;
-			}
-
-			this.hostConnection = socketio(`https://${data.hostServerIP}`, {
-				path: `/${data.hostServerPort}/socket.io`,
-				transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
-			});
-			window.hostConnection = this.hostConnection;
-
-			// listen to events and dispatch actions:
-			handleStreamEvents(this.hostConnection, this.props.store.dispatch);
-			// handle outgoing events & listen to actions:
-			// and maybe dispatch more actions:
-			this.props.sagaMiddleware.run(handleStreamActions, {
-				socket: this.hostConnection,
-				dispatch: this.props.store.dispatch,
-			});
-
-			window.sagaMiddleware = this.props.sagaMiddleware;
-
-			if (!data.videoServerIP) {
-				console.log("something went wrong, (video server IP missing)");
-				return;
-			}
-
-			// lagless setup:
-
-			if (this.props.streamType === "mpeg2") {
-				this.stream = new Lagless2({
-					url: `https://${data.videoServerIP}`,
-					path: `/${data.videoServerPort}/socket.io`,
-					audio: true,
-					video: true,
-				});
-			} else if (this.props.streamType === "webRTC") {
-				this.stream = new Lagless4({
-					url: `https://${data.videoServerIP}`,
-					path: `/${data.videoServerPort}/socket.io`,
-				});
-				this.stream.run();
+		// setTimeout(() => {
+		if (!this.props.client.loggedIn) {
+			if (tryCount < 3) {
+				setTimeout(() => {
+					this.recieveStream(data, tryCount + 1);
+				}, 1000);
 			} else {
-				alert("stream type error: " + this.props.streamType);
+				alert("You need to login to see the stream!");
+				return;
 			}
+		}
 
-			window.stream = this.stream;
+		this.hostConnection = socketio(`https://${data.hostServerIP}`, {
+			path: `/${data.hostServerPort}/socket.io`,
+			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+		});
+		window.hostConnection = this.hostConnection;
+
+		// listen to events and dispatch actions:
+		handleStreamEvents(this.hostConnection, this.props.store.dispatch);
+		// handle outgoing events & listen to actions:
+		// and maybe dispatch more actions:
+		this.props.sagaMiddleware.run(handleStreamActions, {
+			socket: this.hostConnection,
+			dispatch: this.props.store.dispatch,
+		});
+
+		window.sagaMiddleware = this.props.sagaMiddleware;
+
+		if (!data.videoServerIP) {
+			console.log("something went wrong, (video server IP missing)");
+			return;
+		}
+
+		// lagless setup:
+
+		if (this.props.streamType === "mpeg2") {
+			this.stream = new Lagless2({
+				url: `https://${data.videoServerIP}`,
+				path: `/${data.videoServerPort}/socket.io`,
+				audio: true,
+				video: true,
+			});
+		} else if (this.props.streamType === "webRTC") {
+			this.stream = new Lagless4({
+				url: `https://${data.videoServerIP}`,
+				path: `/${data.videoServerPort}/socket.io`,
+			});
+			this.stream.run();
+		} else {
+			alert("stream type error: " + this.props.streamType);
+		}
+
+		window.stream = this.stream;
+		this.setStreamVolume(this.props);
+		setTimeout(() => {
 			this.setStreamVolume(this.props);
-			setTimeout(() => {
-				this.setStreamVolume(this.props);
-			}, 5000);
+		}, 5000);
 
-			if (this.props.streamType === "mpeg2") {
-				this.stream.resume(document.getElementById("canvas"));
-			} else if (this.props.streamType === "webRTC") {
-				this.stream.resume(document.getElementById("video"));
-			}
-		}, 3000);
+		if (this.props.streamType === "mpeg2") {
+			this.stream.resume(
+				document.getElementById("videoCanvas"),
+				document.getElementById("graphicsCanvas"),
+			);
+		} else if (this.props.streamType === "webRTC") {
+			this.stream.resume(document.getElementById("videoCanvas"));
+		}
+		// }, 3000);
 	}
 
 	componentDidMount() {
@@ -187,7 +204,7 @@ class Stream extends Component {
 					alert(data.reason);
 					return;
 				}
-				this.recieveStream(data);
+				this.recieveStream(data, 0);
 			},
 		);
 
@@ -202,7 +219,7 @@ class Stream extends Component {
 		// lagless setup:
 
 		this.sendInputTimer = setInterval(() => {
-			if (!this.props.clientInfo.loggedIn) {
+			if (!this.props.client.loggedIn) {
 				return;
 			}
 			this.inputHandler.pollDevices();
@@ -249,7 +266,23 @@ class Stream extends Component {
 		clearInterval(this.sendInputTimer);
 		if (this.stream) {
 			this.stream.pause();
+			this.stream = null;
 		}
+		// else {
+		// 	setTimeout(() => {
+		// 		if (this.stream) {
+		// 			this.stream.pause();
+		// 			this.stream = null;
+		// 		}
+		// 	}, 1000);
+		// 	setTimeout(() => {
+		// 		if (this.stream) {
+		// 			this.stream.pause();
+		// 			this.stream = null;
+		// 		}
+		// 	}, 3000);
+		// }
+
 		if (this.hostConnection) {
 			this.hostConnection.removeAllListeners();
 			this.hostConnection.destroy();
@@ -342,7 +375,7 @@ class Stream extends Component {
 			return;
 		}
 		if (
-			this.inputHandler.currentInputMode == "touch" &&
+			this.inputHandler.currentInputMode == "touchpad" &&
 			!this.props.settings.touchControls
 		) {
 			return;
@@ -363,10 +396,14 @@ class Stream extends Component {
 			return;
 		}
 
+		if (window.location.pathname.indexOf("/settings") > -1) {
+			return;
+		}
+
 		// if not in the queue, attempt to join it:
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
-				this.props.clientInfo.userid,
+				this.props.client.userid,
 			) == -1
 		) {
 			this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
@@ -374,7 +411,7 @@ class Stream extends Component {
 
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
-				this.props.clientInfo.userid,
+				this.props.client.userid,
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
@@ -390,7 +427,7 @@ class Stream extends Component {
 		obj.keys = obj.keyboard.keys;
 
 		// for (let i = 0; i < this.props.controlQueues.length; i++) {
-		// 	if (this.props.controlQueues[i][0] == this.props.clientInfo.userid) {
+		// 	if (this.props.controlQueues[i][0] == this.props.client.userid) {
 		// 		obj.cNum = i;
 		// 	}
 		// }
@@ -450,7 +487,7 @@ class Stream extends Component {
 
 		this.inputHandler.realMode = nextProps.settings.realKeyboardMouse;
 
-		if (JSON.stringify(this.props.clientInfo) != JSON.stringify(nextProps.clientInfo)) {
+		if (JSON.stringify(this.props.client) != JSON.stringify(nextProps.client)) {
 			return true;
 		}
 
@@ -509,9 +546,11 @@ class Stream extends Component {
 					history={this.props.history}
 					hide={this.props.settings.fullscreen || this.props.settings.hideNav}
 				/>
-				<Picture />
-				<Chat hide={this.props.settings.hideChat} />
-				<StreamInfo />
+				<Suspense fallback={<Loading />}>
+					<Picture />
+					<Chat hide={this.props.settings.hideChat} />
+					<StreamInfo />
+				</Suspense>
 
 				{/* selects the first matching path: */}
 				<Switch>
@@ -521,10 +560,16 @@ class Stream extends Component {
 							return <LoginRegisterModal {...props} history={this.props.history} />;
 						}}
 					/> */}
-					<Route
+					{/* <Route
 						path="/controls"
 						render={(props) => {
 							return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
+						}}
+					/> */}
+					<Route
+						path="/settings"
+						render={(props) => {
+							return <SettingsModal {...props} inputHandler={this.inputHandler} />;
 						}}
 					/>
 				</Switch>
@@ -536,7 +581,7 @@ class Stream extends Component {
 const mapStateToProps = (state) => {
 	return {
 		controlQueues: state.stream.players.controlQueues,
-		clientInfo: state.clientInfo,
+		client: state.client,
 		settings: state.settings,
 		playerCount: state.stream.players.count,
 		streamType: state.stream.info.streamType,
@@ -554,8 +599,8 @@ const mapDispatchToProps = (dispatch) => {
 		joinPlayerControlQueue: (controllerNumber) => {
 			dispatch(joinPlayerControlQueue(controllerNumber));
 		},
-		updateClientInfo: (clientInfo) => {
-			dispatch(updateClientInfo(clientInfo));
+		updateClient: (client) => {
+			dispatch(updateClient(client));
 		},
 		updateMessages: (messages) => {
 			dispatch(updateMessages(messages));

@@ -73,8 +73,8 @@ class UsernameDropdown extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		username: state.clientInfo.username,
-		validUsernames: state.clientInfo.validUsernames,
+		username: state.client.username,
+		validUsernames: state.client.validUsernames,
 	};
 };
 
@@ -88,8 +88,5 @@ const mapDispatchToProps = (dispatch) => {
 
 export default compose(
 	withStyles(styles),
-	connect(
-		mapStateToProps,
-		mapDispatchToProps,
-	),
+	connect(mapStateToProps, mapDispatchToProps),
 )(UsernameDropdown);

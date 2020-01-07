@@ -1,4 +1,4 @@
-import { Ajax } from "./ajax.js";
+import { AjaxSource } from "./ajax.js";
 
 export class WASM {
 	constructor() {
@@ -14,7 +14,7 @@ export class WASM {
 
 	loadFromFile = function(url, callback) {
 		this.onInitCallback = callback;
-		var ajax = new Ajax(url, {});
+		var ajax = new AjaxSource(url, {});
 		ajax.connect(this);
 		ajax.start();
 	};

@@ -3,6 +3,7 @@ const path = require("path");
 module.exports = {
 	entry: {
 		index: "./src/Index.jsx",
+		// streams: "./src/Streams.jsx",
 	},
 	output: {
 		// `filename` provides a template for naming your bundles (remember to use `[name]`)
@@ -16,7 +17,8 @@ module.exports = {
 	},
 	optimization: {
 		splitChunks: {
-			chunks: "async", // all, async, and initial
+			// chunks: "async", // all, async, and initial
+			chunks: "all", // all, async, and initial
 		},
 	},
 	module: {
@@ -30,6 +32,10 @@ module.exports = {
 				test: /\.css$/,
 				use: ["style-loader", "css-loader"],
 			},
+			{
+				test: /\.bundle\.js$/,
+				use: "bundle-loader",
+			},
 		],
 	},
 	// 	modules: [path.resolve(__dirname, "app"), "node_modules"],
@@ -42,6 +48,7 @@ module.exports = {
 			sagas: path.resolve(__dirname, "src/sagas/"),
 			reducers: path.resolve(__dirname, "src/reducers/"),
 			constants: path.resolve(__dirname, "src/constants/"),
+			features: path.resolve(__dirname, "src/features/"),
 			src: path.resolve(__dirname, "src/"),
 		},
 	},

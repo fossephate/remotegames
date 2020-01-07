@@ -7,30 +7,11 @@
 // each should handle each type of device:
 import { GamepadWrapper } from "./GamepadWrapper.js";
 import { KeyboardWrapper } from "./KeyboardWrapper.js";
+import { TouchWrapper } from "./TouchWrapper.js";
 import { VirtualController } from "./VirtualController.js";
 import { VirtualKeyboard } from "./VirtualKeyboard.js";
 import { VirtualMouse } from "./VirtualMouse.js";
-
-// const BIT_MAP = {
-// 	up: 0,
-// 	down: 1,
-// 	left: 2,
-// 	right: 3,
-// 	l: 4,
-// 	zl: 5,
-// 	lstick: 6,
-// 	minus: 7,
-// 	capture: 8,
-// 	a: 9,
-// 	b: 10,
-// 	x: 11,
-// 	y: 12,
-// 	r: 13,
-// 	zr: 14,
-// 	rstick: 15,
-// 	plus: 16,
-// 	home: 17,
-// };
+import { VirtualTouchpad } from "./VirtualTouchpad.js";
 
 export class InputState {
 	constructor() {
@@ -132,9 +113,9 @@ export default class InputHandler {
 		// the current state of the keyboard:
 		this.keyboard = new VirtualKeyboard(this.keyboardWrapper);
 		// the current state of the mouse:
-		this.mouse = new VirtualMouse(); // todo
+		this.mouse = new VirtualMouse();
 		// the touch controls state:
-		// this.touch = new ???(); // todo
+		this.touchpad = new VirtualTouchpad();
 
 		// real mode:
 		this.realMode = false;
@@ -193,6 +174,14 @@ export default class InputHandler {
 					this.mouse.changed = false;
 					updatedState.setMouseState(this.mouse.getState());
 				}
+			}
+		} else {
+			// touchpad:
+			this.touchpad.poll();
+			if (this.touchpad.changed) {
+				this.touchpad.changed = false;
+				this.currentInputMode = "touchpad";
+				updatedState.setControllerState(this.touchpad.getControllerState());
 			}
 		}
 

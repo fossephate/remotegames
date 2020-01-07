@@ -18,15 +18,14 @@ const timeEvents = (socket, dispatch) => {
 	// 	let ping = Date.now() - time;
 	// 	dispatch(updatePing(ping));
 	// });
-	let pings = [];
+	// let pings = [];
+	let ping = 0;
+	let avgSize = 5;
 	setInterval(() => {
 		socket.emit("ping2", Date.now(), (startTime) => {
 			let latency = Date.now() - startTime;
-			pings.push(latency);
-			if (pings.length > 5) {
-				pings.shift();
-			}
-			dispatch(updatePing(Math.round(getAverage(pings))));
+			ping = (ping * (avgSize - 1) + latency) / avgSize;
+			dispatch(updatePing(Math.round(ping)));
 		});
 	}, 1000);
 

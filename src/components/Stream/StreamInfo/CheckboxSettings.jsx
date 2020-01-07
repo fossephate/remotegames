@@ -74,6 +74,50 @@ class CheckboxSettings extends PureComponent {
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
+							text={"Mobile Mode"}
+							handleChange={(state) => {
+								this.props.updateSettings({ mobileMode: state, touchControls: state });
+								// if (state && this.props.settings.controllerView) {
+								// 	this.props.updateSettings({ controllerView: false });
+								// } else if (!state && !this.props.settings.controllerView) {
+								// 	this.props.updateSettings({ controllerView: true });
+								// }
+								// if (state && !this.props.settings.hideChat) {
+								// 	this.props.updateSettings({ hideChat: false });
+								// } else if (!state && this.props.settings.hideChat) {
+								// 	this.props.updateSettings({ hideChat: true });
+								// }
+								// if (state && !this.props.settings.hideNav) {
+								// 	this.props.updateSettings({ hideNav: false });
+								// } else if (!state && this.props.settings.hideNav) {
+								// 	this.props.updateSettings({ hideNav: true });
+								// }
+
+								if (state) {
+									this.props.updateSettings({
+										hideChat: true,
+										hideNav: true,
+										controllerView: true,
+										largescreen: true,
+									});
+								} else {
+									this.props.updateSettings({
+										hideChat: false,
+										hideNav: false,
+										controllerView: true,
+										largescreen: false,
+									});
+								}
+
+								setTimeout(() => {
+									window.dispatchEvent(new Event("resize"));
+								}, 200);
+							}}
+							checked={this.props.settings.mobileMode}
+						/>
+					</ListItem>
+					<ListItem>
+						<MyCheckbox
 							text={"Audio 3.0"}
 							handleChange={this.props.toggleAudioThree}
 							checked={this.props.settings.audioThree}

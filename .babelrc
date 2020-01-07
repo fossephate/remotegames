@@ -1,16 +1,16 @@
 {
 	"presets": [
-		[
-			"@babel/env",
-			{
-				"modules": "commonjs",
-				"targets": {
-					"node": "current",
-					"chrome": 66,
-					"firefox": 60
-				}
-			}
-		],
+		// [
+		// 	"@babel/env",
+		// 	{
+		// 		"modules": "commonjs",
+		// 		"targets": {
+		// 			"node": "current",
+		// 			"chrome": 66,
+		// 			"firefox": 60
+		// 		}
+		// 	}
+		// ],
 		"@babel/preset-react"
 	],
 	"plugins": [

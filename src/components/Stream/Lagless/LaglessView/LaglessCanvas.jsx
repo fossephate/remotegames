@@ -25,7 +25,7 @@ class LaglessCanvas extends PureComponent {
 		this.enableMouseControls = this.enableMouseControls.bind(this);
 
 		// this.videoRef = React.createRef();
-		this.mouseCanvasRef = React.createRef();
+		this.graphicsCanvasRef = React.createRef();
 
 		this.state = {
 			alertOpen: false,
@@ -54,7 +54,7 @@ class LaglessCanvas extends PureComponent {
 		// }
 		// window.inputHandler.mouse.init(document.getElementById(id));
 
-		window.inputHandler.mouse.init(this.mouseCanvasRef.current);
+		window.inputHandler.mouse.init(this.graphicsCanvasRef.current);
 		window.inputHandler.mouse.toggle(true);
 	}
 
@@ -65,7 +65,7 @@ class LaglessCanvas extends PureComponent {
 		if (this.props.streamType === "mpeg2") {
 			videoCanvas = (
 				<canvas
-					id="canvas"
+					id="videoCanvas"
 					// onClick={this.handleClick}
 					className={this.props.classes}
 					// ref={this.videoRef}
@@ -74,7 +74,7 @@ class LaglessCanvas extends PureComponent {
 		} else if (this.props.streamType === "webRTC") {
 			videoCanvas = (
 				<video
-					id="video"
+					id="videoCanvas"
 					// onClick={this.handleClick}
 					className={this.props.classes}
 					// ref={this.videoRef}
@@ -86,7 +86,9 @@ class LaglessCanvas extends PureComponent {
 			<>
 				{videoCanvas}
 				<canvas
-					ref={this.mouseCanvasRef}
+					id="graphicsCanvas"
+					className={this.props.classes}
+					ref={this.graphicsCanvasRef}
 					onClick={this.handleClick}
 					style={{ position: "absolute", width: "73.2%", height: "100%" }}
 					width="1280"
