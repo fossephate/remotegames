@@ -1,5 +1,3 @@
-// JSMpeg.Renderer.Canvas2D = (function(){ "use strict";
-
 export class CanvasRenderer {
 	constructor(options) {
 		this.canvas = options.canvas || document.createElement("canvas");

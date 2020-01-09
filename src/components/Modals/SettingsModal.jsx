@@ -23,6 +23,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 // components:
 
 import InputMapper from "./Settings/InputMapper.jsx";
+import Site from "./Settings/Site.jsx";
+import AudioVideo from "./Settings/AudioVideo.jsx";
 
 // recompose:
 import { compose } from "recompose";
@@ -146,6 +148,28 @@ class SettingsModal extends Component {
 							return (
 								<Paper className={classes.controls} elevation={4}>
 									<InputMapper />
+								</Paper>
+							);
+						}}
+					/>
+
+					<Route
+						path="/settings/site"
+						render={(props) => {
+							return (
+								<Paper className={classes.controls} elevation={4}>
+									<Site />
+								</Paper>
+							);
+						}}
+					/>
+
+					<Route
+						path="/settings/av"
+						render={(props) => {
+							return (
+								<Paper className={classes.controls} elevation={4}>
+									<AudioVideo />
 								</Paper>
 							);
 						}}

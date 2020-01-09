@@ -1,9 +1,8 @@
 // react:
 import React, { PureComponent } from "react";
-import ReactDOM from "react-dom";
 
 // react-router:
-import { Router, Route, Switch, withRouter } from "react-router";
+import { withRouter } from "react-router";
 
 // redux:
 import { connect } from "react-redux";
@@ -15,16 +14,16 @@ import { withStyles } from "@material-ui/core/styles";
 
 // components:
 import AppBar from "@material-ui/core/AppBar";
-import ListItemText from "@material-ui/core/ListItemText";
+// import ListItemText from "@material-ui/core/ListItemText";
 import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
+// import Paper from "@material-ui/core/Paper";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import AccountCircle from "@material-ui/icons/AccountCircle";
-import MailIcon from "@material-ui/icons/Mail";
+// import MailIcon from "@material-ui/icons/Mail";
 // import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -160,6 +159,14 @@ class StreamsAppBar extends PureComponent {
 		this.setState({ mobileMoreAnchorEl: null });
 	};
 
+	handleDownloadHostFiles = () => {
+		window.location.href = "https://remotegames.io/8099/download/";
+	};
+
+	handleDiscord = () => {
+		window.location.href = "https://discord.io/rgio/";
+	};
+
 	render() {
 		console.log("re-rendering streamsappbar.");
 
@@ -206,27 +213,25 @@ class StreamsAppBar extends PureComponent {
 				open={isMobileMenuOpen}
 				onClose={this.handleMenuClose}
 			>
-				<MenuItem onClick={this.handleMobileMenuClose}>
+				<MenuItem onClick={this.handleProfileMenuOpen}>
+					<IconButton color="inherit">
+						<AccountCircle />
+					</IconButton>
+					<p>Profile</p>
+				</MenuItem>
+				{/* <MenuItem onClick={this.handleMobileMenuClose}>
 					<IconButton color="inherit">
 						<Badge badgeContent={0} color="secondary">
 							<MailIcon />
 						</Badge>
 					</IconButton>
 					<p>Messages</p>
-				</MenuItem>
-				{/* <MenuItem onClick={this.handleMobileMenuClose}>
-					<IconButton color="inherit">
-						<Badge badgeContent={0} color="secondary">
-							<NotificationsIcon />
-						</Badge>
-					</IconButton>
-					<p>Notifications</p>
 				</MenuItem> */}
-				<MenuItem onClick={this.handleProfileMenuOpen}>
-					<IconButton color="inherit">
-						<AccountCircle />
-					</IconButton>
-					<p>Profile</p>
+				<MenuItem onClick={this.handleDownloadHostFiles}>
+					<p>Download Host Files</p>
+				</MenuItem>
+				<MenuItem onClick={this.handleDiscord}>
+					<p>Discord Server</p>
 				</MenuItem>
 			</Menu>
 		);
@@ -269,33 +274,30 @@ class StreamsAppBar extends PureComponent {
 							/>
 						</div>
 						<div className={classes.grow} />
-						<Button
-							color="default"
-							variant="contained"
-							onClick={() => {
-								window.location.href = "https://remotegames.io/8099/download/";
-							}}
-						>
-							Download Host Files
-						</Button>
-						<div style={{ width: "10px" }} />
-						<Button
-							color="default"
-							variant="contained"
-							onClick={() => {
-								window.location.href = "https://discord.io/rgio/";
-							}}
-						>
-							Discord Server
-						</Button>
+
 						{this.props.loggedIn ? (
 							<>
 								<div className={classes.sectionDesktop}>
-									<IconButton color="inherit">
+									<Button
+										color="default"
+										variant="contained"
+										onClick={this.handleDownloadHostFiles}
+									>
+										Download Host Files
+									</Button>
+									<div style={{ width: "10px" }} />
+									<Button
+										color="default"
+										variant="contained"
+										onClick={this.handleDiscord}
+									>
+										Discord Server
+									</Button>
+									{/* <IconButton color="inherit">
 										<Badge badgeContent={0} color="secondary">
 											<MailIcon />
 										</Badge>
-									</IconButton>
+									</IconButton> */}
 									{/* <IconButton color="inherit">
 										<Badge badgeContent={0} color="secondary">
 											<NotificationsIcon />

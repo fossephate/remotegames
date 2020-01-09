@@ -1,6 +1,753 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[14],{248:function(e,t,a){var r;
-/*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/!function(){"use strict";var a={}.hasOwnProperty;function n(){for(var e=[],t=0;t<arguments.length;t++){var r=arguments[t];if(r){var o=typeof r;if("string"===o||"number"===o)e.push(r);else if(Array.isArray(r)&&r.length){var s=n.apply(null,r);s&&e.push(s)}else if("object"===o)for(var i in r)a.call(r,i)&&r[i]&&e.push(i)}}return e.join(" ")}e.exports?(n.default=n,e.exports=n):void 0===(r=function(){return n}.apply(t,[]))||(e.exports=r)}()},272:function(e,t,a){"use strict";var r=a(2),n=a(9),o=a(0),s=a.n(o),i=(a(10),a(245)),l=a(265),c=a(111),p=a(508),d=s.a.forwardRef((function(e,t){var a=e.autoFocus,o=e.checked,c=e.checkedIcon,d=e.classes,u=e.className,h=e.defaultChecked,m=e.disabled,b=e.icon,f=e.id,g=e.inputProps,v=e.inputRef,y=e.name,C=e.onBlur,E=e.onChange,k=e.onFocus,O=e.readOnly,x=e.required,j=e.tabIndex,P=e.type,w=e.value,S=Object(n.a)(e,["autoFocus","checked","checkedIcon","classes","className","defaultChecked","disabled","icon","id","inputProps","inputRef","name","onBlur","onChange","onFocus","readOnly","required","tabIndex","type","value"]),I=s.a.useRef(null!=o).current,N=s.a.useState(Boolean(h)),T=N[0],M=N[1],Q=I?o:T,B=Object(l.a)(),L=m;B&&void 0===L&&(L=B.disabled);var z="checkbox"===P||"radio"===P;return s.a.createElement(p.a,Object(r.a)({component:"span",className:Object(i.a)(d.root,u,Q&&d.checked,L&&d.disabled),disabled:L,tabIndex:null,role:void 0,onFocus:function(e){k&&k(e),B&&B.onFocus&&B.onFocus(e)},onBlur:function(e){C&&C(e),B&&B.onBlur&&B.onBlur(e)},ref:t},S),s.a.createElement("input",Object(r.a)({autoFocus:a,checked:o,defaultChecked:h,className:d.input,disabled:L,id:z&&f,name:y,onChange:function(e){var t=e.target.checked;I||M(t),E&&E(e,t)},readOnly:O,ref:v,required:x,tabIndex:j,type:P,value:w},g)),Q?c:b)}));t.a=Object(c.a)({root:{padding:9},checked:{},disabled:{},input:{cursor:"inherit",position:"absolute",opacity:0,width:"100%",height:"100%",top:0,left:0,margin:0,padding:0,zIndex:1}},{name:"PrivateSwitchBase"})(d)},304:function(e,t,a){"use strict";a.d(t,"a",(function(){return i}));var r=a(0),n=a.n(r),o=a(350),s=a(372);class i extends r.PureComponent{constructor(e){super(e),this.state={}}render(){return n.a.createElement(s.a,{control:n.a.createElement(o.a,{onChange:e=>{this.props.handleChange(e.target.checked)},type:"checkbox",checked:this.props.checked||!1,color:"primary"}),label:this.props.text})}}},305:function(e,t,a){"use strict";var r=a(0),n=a.n(r),o=a(505),s=a(494),i=a(509);var l=e=>n.a.createElement(o.a,{open:e.open,anchorEl:e.anchorEl,onClose:e.onClose,anchorOrigin:{vertical:"bottom",horizontal:"center"},transformOrigin:{vertical:"top",horizontal:"center"}},n.a.createElement(s.a,{elevation:4,style:{padding:"10px"}},n.a.createElement(i.a,{variant:"contained",color:"primary"},"View Profile"),n.a.createElement(i.a,{variant:"contained",color:"secondary"},"Ban"),n.a.createElement(i.a,{variant:"contained",color:"primary"},"Kick from Queue"))),c=a(111),p=a(70),d=a(246);class u extends r.PureComponent{constructor(e){super(e),this.state={popoverOpen:!1},this.ref=n.a.createRef(),this.handleOpenPopover=this.handleOpenPopover.bind(this),this.handleClosePopover=this.handleClosePopover.bind(this)}handleOpenPopover(){this.setState({popoverOpen:!0})}handleClosePopover(){this.setState({popoverOpen:!1})}render(){return n.a.createElement(n.a.Fragment,null,n.a.createElement("div",{style:this.props.style,onClick:this.handleOpenPopover,ref:e=>{this.ref=e}},this.props.children),n.a.createElement(l,{open:this.state.popoverOpen,onClose:this.handleClosePopover,anchorEl:this.ref}))}}t.a=Object(d.a)(Object(c.a)(e=>({root:{}})),Object(p.b)(e=>({})))(u)},350:function(e,t,a){"use strict";var r=a(2),n=a(9),o=a(0),s=a.n(o),i=(a(10),a(245)),l=a(272),c=a(253),p=Object(c.a)(s.a.createElement("path",{d:"M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"}),"CheckBoxOutlineBlank"),d=Object(c.a)(s.a.createElement("path",{d:"M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"}),"CheckBox"),u=a(35),h=Object(c.a)(s.a.createElement("path",{d:"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"}),"IndeterminateCheckBox"),m=a(247),b=a(111),f=s.a.createElement(d,null),g=s.a.createElement(p,null),v=s.a.createElement(h,null),y=s.a.forwardRef((function(e,t){var a=e.checkedIcon,o=void 0===a?f:a,c=e.classes,p=e.color,d=void 0===p?"secondary":p,u=e.disabled,h=void 0!==u&&u,b=e.icon,y=void 0===b?g:b,C=e.indeterminate,E=void 0!==C&&C,k=e.indeterminateIcon,O=void 0===k?v:k,x=e.inputProps,j=e.size,P=void 0===j?"medium":j,w=Object(n.a)(e,["checkedIcon","classes","color","disabled","icon","indeterminate","indeterminateIcon","inputProps","size"]);return s.a.createElement(l.a,Object(r.a)({type:"checkbox",classes:{root:Object(i.a)(c.root,c["color".concat(Object(m.a)(d))],E&&c.indeterminate),checked:c.checked,disabled:c.disabled},color:d,inputProps:Object(r.a)({"data-indeterminate":E},x),icon:s.a.cloneElement(E?O:y,{fontSize:"small"===P?"small":"default"}),checkedIcon:s.a.cloneElement(E?O:o,{fontSize:"small"===P?"small":"default"}),ref:t,disabled:h},w))}));t.a=Object(b.a)((function(e){return{root:{color:e.palette.text.secondary},checked:{},disabled:{},indeterminate:{},colorPrimary:{"&$checked":{color:e.palette.primary.main,"&:hover":{backgroundColor:Object(u.c)(e.palette.primary.main,e.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:e.palette.action.disabled}},colorSecondary:{"&$checked":{color:e.palette.secondary.main,"&:hover":{backgroundColor:Object(u.c)(e.palette.secondary.main,e.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:e.palette.action.disabled}}}}),{name:"MuiCheckbox"})(y)},372:function(e,t,a){"use strict";var r=a(2),n=a(9),o=a(0),s=a.n(o),i=(a(10),a(245)),l=a(265),c=a(111),p=a(320),d=a(247),u=s.a.forwardRef((function(e,t){e.checked;var a=e.classes,o=e.className,c=e.control,u=e.disabled,h=(e.inputRef,e.label),m=e.labelPlacement,b=void 0===m?"end":m,f=(e.name,e.onChange,e.value,Object(n.a)(e,["checked","classes","className","control","disabled","inputRef","label","labelPlacement","name","onChange","value"])),g=Object(l.a)(),v=u;void 0===v&&void 0!==c.props.disabled&&(v=c.props.disabled),void 0===v&&g&&(v=g.disabled);var y={disabled:v};return["checked","name","onChange","value","inputRef"].forEach((function(t){void 0===c.props[t]&&void 0!==e[t]&&(y[t]=e[t])})),s.a.createElement("label",Object(r.a)({className:Object(i.a)(a.root,o,"end"!==b&&a["labelPlacement".concat(Object(d.a)(b))],v&&a.disabled),ref:t},f),s.a.cloneElement(c,y),s.a.createElement(p.a,{component:"span",className:Object(i.a)(a.label,v&&a.disabled)},h))}));t.a=Object(c.a)((function(e){return{root:{display:"inline-flex",alignItems:"center",cursor:"pointer",verticalAlign:"middle",WebkitTapHighlightColor:"transparent",marginLeft:-11,marginRight:16,"&$disabled":{cursor:"default"}},labelPlacementStart:{flexDirection:"row-reverse",marginLeft:16,marginRight:-11},labelPlacementTop:{flexDirection:"column-reverse",marginLeft:16},labelPlacementBottom:{flexDirection:"column",marginLeft:16},disabled:{},label:{"&$disabled":{color:e.palette.text.disabled}}}}),{name:"MuiFormControlLabel"})(u)},523:function(e,t,a){"use strict";a.r(t);var r=a(0),n=a.n(r),o=a(304),s=a(111),i=a(2),l=a(9),c=(a(10),a(245)),p=a(247),d=a(35),u=a(260),h=n.a.forwardRef((function(e,t){var a=e.classes,r=e.className,o=e.color,s=void 0===o?"primary":o,d=e.value,h=e.valueBuffer,m=e.variant,b=void 0===m?"indeterminate":m,f=Object(l.a)(e,["classes","className","color","value","valueBuffer","variant"]),g=Object(u.a)(),v={},y={bar1:{},bar2:{}};if("determinate"===b||"buffer"===b)if(void 0!==d){v["aria-valuenow"]=Math.round(d);var C=d-100;"rtl"===g.direction&&(C=-C),y.bar1.transform="translateX(".concat(C,"%)")}else 0;if("buffer"===b)if(void 0!==h){var E=(h||0)-100;"rtl"===g.direction&&(E=-E),y.bar2.transform="translateX(".concat(E,"%)")}else 0;return n.a.createElement("div",Object(i.a)({className:Object(c.a)(a.root,a["color".concat(Object(p.a)(s))],r,{determinate:a.determinate,indeterminate:a.indeterminate,buffer:a.buffer,query:a.query}[b]),role:"progressbar"},v,{ref:t},f),"buffer"===b?n.a.createElement("div",{className:Object(c.a)(a.dashed,a["dashedColor".concat(Object(p.a)(s))])}):null,n.a.createElement("div",{className:Object(c.a)(a.bar,a["barColor".concat(Object(p.a)(s))],("indeterminate"===b||"query"===b)&&a.bar1Indeterminate,{determinate:a.bar1Determinate,buffer:a.bar1Buffer}[b]),style:y.bar1}),"determinate"===b?null:n.a.createElement("div",{className:Object(c.a)(a.bar,("indeterminate"===b||"query"===b)&&a.bar2Indeterminate,"buffer"===b?[a["color".concat(Object(p.a)(s))],a.bar2Buffer]:a["barColor".concat(Object(p.a)(s))]),style:y.bar2}))})),m=Object(s.a)((function(e){var t=function(t){return"light"===e.palette.type?Object(d.e)(t,.62):Object(d.a)(t,.5)},a=t(e.palette.primary.main),r=t(e.palette.secondary.main);return{root:{position:"relative",overflow:"hidden",height:4},colorPrimary:{backgroundColor:a},colorSecondary:{backgroundColor:r},determinate:{},indeterminate:{},buffer:{backgroundColor:"transparent"},query:{transform:"rotate(180deg)"},dashed:{position:"absolute",marginTop:0,height:"100%",width:"100%",animation:"$buffer 3s infinite linear"},dashedColorPrimary:{backgroundImage:"radial-gradient(".concat(a," 0%, ").concat(a," 16%, transparent 42%)"),backgroundSize:"10px 10px",backgroundPosition:"0px -23px"},dashedColorSecondary:{backgroundImage:"radial-gradient(".concat(r," 0%, ").concat(r," 16%, transparent 42%)"),backgroundSize:"10px 10px",backgroundPosition:"0px -23px"},bar:{width:"100%",position:"absolute",left:0,bottom:0,top:0,transition:"transform 0.2s linear",transformOrigin:"left"},barColorPrimary:{backgroundColor:e.palette.primary.main},barColorSecondary:{backgroundColor:e.palette.secondary.main},bar1Indeterminate:{width:"auto",animation:"$indeterminate1 2.1s cubic-bezier(0.65, 0.815, 0.735, 0.395) infinite"},bar1Determinate:{transition:"transform .".concat(4,"s linear")},bar1Buffer:{zIndex:1,transition:"transform .".concat(4,"s linear")},bar2Indeterminate:{width:"auto",animation:"$indeterminate2 2.1s cubic-bezier(0.165, 0.84, 0.44, 1) 1.15s infinite"},bar2Buffer:{transition:"transform .".concat(4,"s linear")},"@keyframes indeterminate1":{"0%":{left:"-35%",right:"100%"},"60%":{left:"100%",right:"-90%"},"100%":{left:"100%",right:"-90%"}},"@keyframes indeterminate2":{"0%":{left:"-200%",right:"100%"},"60%":{left:"107%",right:"-8%"},"100%":{left:"107%",right:"-8%"}},"@keyframes buffer":{"0%":{opacity:1,backgroundPosition:"0px -23px"},"50%":{opacity:0,backgroundPosition:"0px -23px"},"100%":{opacity:1,backgroundPosition:"-200px -23px"}}}}),{name:"MuiLinearProgress"})(h),b=a(70),f=a(248),g=a.n(f);class v extends r.PureComponent{constructor(e){super(e),this.state={}}getBarText(){if(null==this.props.name){if("turn"==this.props.type)return"No one is playing right now.";if("forfeit"==this.props.type)return null}else{if("turn"==this.props.type)return`${this.props.name}: ${this.props.timeLeft} seconds`;if("forfeit"==this.props.type)return`${this.props.timeLeft} seconds until turn forfeit.`}}getStyle(){return null==this.props.name?{width:"100%"}:{width:this.props.percent+"%"}}render(){const{classes:e}=this.props;let t="turn"==this.props.type,a=t?"primary":"secondary",r=g()({[e.turn]:t,[e.forfeit]:!t}),o=null==this.props.name?100:this.props.percent,s=g()({[e.turnText]:t,[e.forfeitText]:!t});return n.a.createElement("div",{className:e.root},n.a.createElement(m,{classes:{root:r},variant:"determinate",value:o,color:a}),n.a.createElement("div",{className:s},this.getBarText()))}}var y=Object(s.a)({root:{position:"relative",marginBottom:"5px"},turnText:{width:"100%",position:"absolute",top:"0px",lineHeight:"24px"},forfeitText:{width:"100%",position:"absolute",top:"0px",lineHeight:"15px"},turn:{height:"24px",borderRadius:"6px"},forfeit:{height:"15px",borderRadius:"6px"}})(v);class C extends r.PureComponent{constructor(e){super(e),this.state={time:0}}componentDidMount(){this.interval=setInterval(()=>{this.setState({time:Date.now()})},1e3)}componentWillUnmount(){clearInterval(this.interval)}render(){let e=this.props.num,t=this.props.time.server,a=Date.now()-this.props.time.lastServerUpdate+t,r=this.props.turnTimers[e].turnStartTime,o=this.props.turnTimers[e].turnLength,s=o-(a-r),i=s/o*100,l=this.props.turnTimers[e].forfeitStartTime,c=this.props.turnTimers[e].forfeitLength,p=c-(a-l),d=p/c*100,u=this.props.accountMap[this.props.controlQueues[e][0]];return u=u?u.username:"loading",this.props.controlQueues[e][0]||(u=null),n.a.createElement(n.a.Fragment,null,n.a.createElement(y,{type:"turn",name:u,timeLeft:parseInt(s/1e3),percent:parseInt(i)}),n.a.createElement(y,{type:"forfeit",name:u,timeLeft:parseInt(p/1e3),percent:parseInt(d)}))}}var E=Object(b.b)(e=>({time:e.stream.time,turnTimers:e.stream.players.turnTimers,controlQueues:e.stream.players.controlQueues,accountMap:e.stream.accountMap}),e=>({}))(C),k=a(509),O=a(289),x=a(246);a(248);class j extends r.PureComponent{constructor(e){super(e),this.joinLeaveQueue=this.joinLeaveQueue.bind(this),this.state={}}joinLeaveQueue(){if(this.props.controlQueue.indexOf(this.props.userid)>-1)this.props.leavePlayerControlQueue(this.props.num);else{for(let e=0;e<this.props.playerCount;e++)e!=this.props.num&&this.props.leavePlayerControlQueue(e);this.props.joinPlayerControlQueue(this.props.num)}}render(){const{classes:e}=this.props;let t;this.props.num;return t=this.props.controlQueue.indexOf(this.props.userid)>-1?"Leave Queue":"Join Queue",n.a.createElement(k.a,{className:e.root,variant:"contained",onClick:this.joinLeaveQueue},t)}}var P=Object(x.a)(Object(s.a)(e=>({root:{width:"100%"}})),Object(b.b)(e=>({playerCount:e.stream.players.count}),e=>({leavePlayerControlQueue:t=>{e(Object(O.b)(t))},joinPlayerControlQueue:t=>{e(Object(O.a)(t))}})))(j),w=a(371),S=a(333),I=a(415),N=a(305);let T=a(248);class M extends r.PureComponent{constructor(e){super(e)}getQueue(){const{classes:e}=this.props;let t=[],a=this.props.controlQueues[this.props.num];if(0==a.length)return n.a.createElement(S.a,{key:"0"},n.a.createElement(I.a,{primary:"The queue is empty."}));for(let r=0;r<a.length;r++){let o=this.props.accountMap[a[r]];o=o?o.username:"loading";let s=T(e.listItem,{[e.highlighted]:this.props.userid==a[r]});t.push(n.a.createElement(N.a,{key:r,style:{width:"100%"},userid:a[r]},n.a.createElement(S.a,{button:!0,key:r,className:s,userid:a[r]},n.a.createElement(I.a,{primary:o}))))}return t}render(){const{classes:e}=this.props;return n.a.createElement(w.a,{className:e.root},this.getQueue())}}var Q=Object(x.a)(Object(s.a)(e=>({root:{width:"100%",backgroundColor:e.palette.background.paper},listItem:{cursor:"pointer",userSelect:"none",width:"100%"},highlighted:{backgroundColor:e.palette.secondary.light}})),Object(b.b)(e=>({userid:e.client.userid,controlQueues:e.stream.players.controlQueues,accountMap:e.stream.accountMap})))(M),B=a(494),L=a(72),z=a(250);class R extends r.PureComponent{constructor(e){super(e),this.choosePlayer=this.choosePlayer.bind(this),this.state={}}choosePlayer(){[0,1,2,3,4,5,6,7].forEach(e=>{this.props.leavePlayerControlQueue(e)}),this.props.choosePlayer(this.props.num)}render(){const{classes:e}=this.props;let t=this.props.num;return n.a.createElement(B.a,{elevation:4,className:e.root},n.a.createElement(o.a,{text:`Player ${this.props.num+1}`,handleChange:this.choosePlayer,checked:this.props.currentPlayer==this.props.num}),n.a.createElement(E,{num:this.props.num}),n.a.createElement(P,{num:this.props.num,controlQueue:this.props.controlQueues[t],userid:this.props.userid}),n.a.createElement(Q,{num:this.props.num}))}}var F=Object(x.a)(Object(s.a)(e=>({root:{width:"100%",padding:"5px"},[z.a.tablet]:{root:{width:"100%"}},[z.a.laptop]:{root:{width:"24%"}}})),Object(b.b)(e=>({controlQueues:e.stream.players.controlQueues,userid:e.client.userid,currentPlayer:e.settings.currentPlayer}),e=>({choosePlayer:t=>{e(Object(L.a)({currentPlayer:t}))},leavePlayerControlQueue:t=>{e(Object(O.b)(t))}})))(R);const V={root:{display:"flex",flexDirection:"column",justifyContent:"space-evenly",overflowX:"hidden",padding:"10px",flexWrap:"wrap"},[z.a.tablet]:{root:{flexDirection:"row"}},[z.a.laptop]:{root:{}}};class $ extends r.PureComponent{constructor(e){super(e),this.state={}}render(){const{classes:e}=this.props;return n.a.createElement(B.a,{className:e.root,elevation:0},n.a.createElement(F,{num:0}),n.a.createElement(F,{num:1}),n.a.createElement(F,{num:2}),n.a.createElement(F,{num:3}))}}var D=Object(x.a)(Object(s.a)(V),Object(b.b)(e=>({}),e=>({})))($),H=a(465),A=a(416);a(248);const q=["Light","Dark","Spooky"],K=["light","dark","spooky"];class X extends r.PureComponent{constructor(e){super(e),this.handleClick=this.handleClick.bind(this),this.handleMenuItemClick=this.handleMenuItemClick.bind(this),this.handleClose=this.handleClose.bind(this),this.state={anchorEl:null}}handleClick(e){this.setState({anchorEl:e.currentTarget})}handleMenuItemClick(e,t){this.setState({anchorEl:null}),this.props.switchTheme(K[t])}handleClose(){this.setState({anchorEl:null})}render(){const{classes:e}=this.props,t=Boolean(this.state.anchorEl);let a=K.indexOf(this.props.theme);return n.a.createElement(n.a.Fragment,null,n.a.createElement(k.a,{variant:"contained",onClick:this.handleClick},"Select Theme"),n.a.createElement(H.a,{id:"themeSelector",anchorEl:this.state.anchorEl,open:t,onClose:this.handleClose,PaperProps:{style:{maxHeight:216,width:200}}},q.map((e,t)=>n.a.createElement(A.a,{key:e,disabled:t===a,selected:t===a,onClick:e=>this.handleMenuItemClick(e,t)},e))))}}var J=Object(x.a)(Object(s.a)(e=>({root:{}})),Object(b.b)(e=>({theme:e.settings.theme}),e=>({switchTheme:t=>{e(Object(L.a)({theme:t}))}})))(X),W=a(268);class U extends r.PureComponent{constructor(e){super(e),this.state={}}render(){return n.a.createElement(B.a,{elevation:5},n.a.createElement(w.a,null,n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Enable Keyboard Controls",handleChange:e=>{this.props.updateSettings({keyboardControls:e})},checked:this.props.settings.keyboardControls})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Enable Controller Controls",handleChange:e=>{this.props.updateSettings({controllerControls:e})},checked:this.props.settings.controllerControls})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Real keyboard / mouse",handleChange:e=>{this.props.updateSettings({realKeyboardMouse:e})},checked:this.props.settings.realKeyboardMouse})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Enable Largescreen Mode",handleChange:e=>{this.props.updateSettings({largescreen:e}),e&&this.props.settings.controllerView?this.props.updateSettings({controllerView:!1}):e||this.props.settings.controllerView||this.props.updateSettings({controllerView:!0}),setTimeout(()=>{window.dispatchEvent(new Event("resize"))},200)},checked:this.props.settings.largescreen})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Mobile Mode",handleChange:e=>{this.props.updateSettings({mobileMode:e,touchControls:e}),e?this.props.updateSettings({hideChat:!0,hideNav:!0,controllerView:!0,largescreen:!0}):this.props.updateSettings({hideChat:!1,hideNav:!1,controllerView:!0,largescreen:!1}),setTimeout(()=>{window.dispatchEvent(new Event("resize"))},200)},checked:this.props.settings.mobileMode})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Audio 3.0",handleChange:this.props.toggleAudioThree,checked:this.props.settings.audioThree})),n.a.createElement(S.a,null,n.a.createElement(J,null)),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Enable Fullscreen Mode",handleChange:e=>{e?(document.body.scrollTop=document.documentElement.scrollTop=0,this.props.updateSettings({fullscreen:e,controllerView:!1,hideChat:!0,hideNav:!0}),Object(W.d)(document.getElementsByTagName("html")[0])):this.props.updateSettings({fullscreen:e,largescreen:!1,controllerView:!0,hideChat:!1,hideNav:!1})},checked:this.props.settings.fullscreen})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Analog Stick Mode",handleChange:e=>{this.props.updateSettings({analogStickMode:e})},checked:this.props.settings.analogStickMode})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Hide Chat",handleChange:e=>{this.props.updateSettings({hideChat:e})},checked:this.props.settings.hideChat})),n.a.createElement(S.a,null,n.a.createElement(o.a,{text:"Hide Nav Bar",handleChange:e=>{this.props.updateSettings({hideNav:e})},checked:this.props.settings.hideNav}))))}}var G=Object(b.b)(e=>({settings:e.settings}),e=>({updateSettings:t=>{e(Object(L.a)(t))}}))(U);let Y=a(248);class Z extends r.PureComponent{constructor(e){super(e)}render(){const{classes:e}=this.props;Y(e.root,{[e.hideChat]:this.props.hideChat});return n.a.createElement(B.a,{elevation:3,className:e.root},n.a.createElement(D,null),n.a.createElement(B.a,{className:e.settings,elevation:0},n.a.createElement(G,{toggleAudioThree:()=>{console.log("todo")}}),n.a.createElement(B.a,{className:e.settingsPanel,elevation:5},n.a.createElement(I.a,null,"General Settings"),n.a.createElement("hr",null),n.a.createElement(k.a,{variant:"contained",onClick:()=>{console.log("todo")}},"Reset All Settings"))))}}t.default=Object(x.a)(Object(s.a)(e=>({root:{gridArea:"info",display:"flex",flexDirection:"column",width:"100%",padding:0,margin:0,overflowX:"hidden",textAlign:"center"},hideChat:{gridColumn:"1/3"},settings:{display:"flex",width:"100%",overflowY:"hidden",justifyContent:"space-evenly",padding:"10px"},settingsPanel:{width:"24%"}})),Object(b.b)(e=>({hideChat:e.settings.hideChat})))(Z)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[14],{
+
+/***/ "./src/components/ConnectAccounts.jsx":
+/*!********************************************!*\
+  !*** ./src/components/ConnectAccounts.jsx ***!
+  \********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+// react:
+ // material ui:
+
+
+ // redux:
+
+ // recompose:
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    width: "100%",
+    minHeight: "220px",
+    textAlign: "center",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    flexWrap: "wrap",
+    // flex: "1",
+    paddingLeft: "25px",
+    paddingRight: "25px"
+  },
+  connectWithButton: {
+    display: "flex"
+  },
+  twitchLogo: {
+    width: "60px",
+    marginLeft: "10px",
+    marginRight: "10px"
+  },
+  googleLogo: {
+    width: "80px"
+  },
+  youtubeLogo: {
+    width: "80px",
+    marginLeft: "10px"
+  },
+  discordLogo: {
+    width: "80px",
+    marginLeft: "4px"
+  }
+});
+
+class ConnectAccounts extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.state = {
+      TOSAgreed: false
+    };
+    this.agreeTOS = this.agreeTOS.bind(this);
+  }
+
+  agreeTOS(event) {
+    this.setState({
+      TOSAgreed: event.target.checked
+    });
+  }
+
+  connectAccountOrLogin(type) {
+    if (window.banned) {
+      return;
+    }
+
+    let url = window.location.origin + "/8099/auth/" + type + "/";
+
+    if (this.props.authToken != null) {
+      url += "?authToken=" + this.props.authToken;
+    }
+
+    window.location.href = url;
+  }
+
+  render() {
+    const {
+      classes,
+      showTOS
+    } = this.props;
+    let canDelete = this.props.connectedAccounts.length > 1 || this.props.validUsernames.length > 1;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Paper"], {
+      className: classes.root,
+      elevation: 0
+    }, showTOS && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+      onChange: this.agreeTOS
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "I have read and agree to the "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+      href: "/tos"
+    }, "Terms and Conditions")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.connectWithButton
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      fullWidth: true,
+      variant: "contained",
+      color: "default",
+      className: null,
+      onClick: () => {
+        this.connectAccountOrLogin("twitch");
+      },
+      disabled: !this.state.TOSAgreed && showTOS
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Connect with"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: classes.twitchLogo,
+      src: "/images/Twitch_Purple_RGB.png"
+    })), this.props.connectedAccounts.includes("twitch") && canDelete && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      variant: "contained",
+      color: "secondary",
+      onClick: () => {
+        this.props.onRemoveAccount("twitch");
+      }
+    }, "X")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.connectWithButton
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      fullWidth: true,
+      variant: "contained",
+      color: "default",
+      className: null,
+      onClick: () => {
+        this.connectAccountOrLogin("youtube");
+      },
+      disabled: !this.state.TOSAgreed && showTOS
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Connect with"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: classes.youtubeLogo,
+      src: "/images/yt_logo_rgb_light.png"
+    })), this.props.connectedAccounts.includes("youtube") && canDelete && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      variant: "contained",
+      color: "secondary",
+      onClick: () => {
+        this.props.onRemoveAccount("youtube");
+      }
+    }, "X")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.connectWithButton
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      fullWidth: true,
+      variant: "contained",
+      color: "default",
+      className: null,
+      onClick: () => {
+        this.connectAccountOrLogin("google");
+      },
+      disabled: !this.state.TOSAgreed && showTOS
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      id: "connectWithGoogleText"
+    }, "Connect with Google")), this.props.connectedAccounts.includes("google") && canDelete && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      variant: "contained",
+      color: "secondary",
+      onClick: () => {
+        this.props.onRemoveAccount("google");
+      }
+    }, "X")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.connectWithButton
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      fullWidth: true,
+      variant: "contained",
+      color: "default",
+      className: null,
+      onClick: () => {
+        this.connectAccountOrLogin("discord");
+      },
+      disabled: !this.state.TOSAgreed && showTOS
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "Connect with"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: classes.discordLogo,
+      src: "/images/discord_logo.png"
+    })), this.props.connectedAccounts.includes("discord") && canDelete && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      variant: "contained",
+      color: "secondary",
+      onClick: () => {
+        this.props.onRemoveAccount("discord");
+      }
+    }, "X")));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    authToken: state.client.authToken,
+    connectedAccounts: state.client.connectedAccounts,
+    validUsernames: state.client.validUsernames
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_4__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps))(ConnectAccounts));
+
+/***/ }),
+
+/***/ "./src/components/Modals/AccountModal.jsx":
+/*!************************************************!*\
+  !*** ./src/components/Modals/AccountModal.jsx ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var src_components_ConnectAccounts_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/components/ConnectAccounts.jsx */ "./src/components/ConnectAccounts.jsx");
+/* harmony import */ var src_components_UsernameDropdown_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/components//UsernameDropdown.jsx */ "./src/components/UsernameDropdown.jsx");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
+/* harmony import */ var _material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/Dialog */ "./node_modules/@material-ui/core/esm/Dialog/index.js");
+/* harmony import */ var _material_ui_core_DialogContent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/DialogContent */ "./node_modules/@material-ui/core/esm/DialogContent/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_13__);
+/* harmony import */ var libs_tools_js__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! libs/tools.js */ "./src/libs/tools.js");
+/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
+// react:
+ // react-router:
+
+ // components:
+
+
+ // material ui:
+
+
+
+
+
+
+
+ // redux:
+
+ // recompose:
+
+ // libs:
+
+
+ // device sizes:
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    padding: "0px 0px 25px 0px !important"
+  },
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_15__["device"].tablet]: {
+    root: {
+      flexDirection: "column"
+    }
+  },
+  center: {
+    position: "fixed",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)"
+  },
+  list: {
+    maxHeight: "400px",
+    overflowY: "auto"
+  },
+  logout: {
+    width: "30%"
+  },
+  main: {
+    width: "80%",
+    display: "flex",
+    flexDirection: "column"
+  },
+  topBar: {
+    display: "flex",
+    justifyContent: "space-evenly",
+    margin: "20px 25px 10px",
+    padding: "5px",
+    lineHeight: "60px"
+  }
+});
+
+class AccountModal extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.accountConnection = this.props.accountConnection;
+    this.handleClose = this.handleClose.bind(this);
+    this.handleRemoveAccount = this.handleRemoveAccount.bind(this);
+  }
+
+  handleClose() {
+    // this.props.history.push("/");
+    this.props.history.goBack();
+  }
+
+  handleLogout() {
+    Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_14__["deleteAllCookies"])();
+    location.reload(true);
+  }
+
+  handleRemoveAccount(type) {
+    this.accountConnection.emit("removeConnectedAccount", {
+      authToken: this.props.authToken,
+      type: type
+    }, data => {
+      if (!data.success) {
+        alert(data.reason);
+        return;
+      } else {
+        alert("success");
+      }
+
+      location.reload(true);
+    });
+  }
+
+  getTime(t) {
+    if (t < 60) {
+      return t.toFixed(1) + " seconds.";
+    } else if (t < 60 * 60) {
+      return (t / 60).toFixed(1) + " minutes";
+    } else {
+      return (t / 60 / 60).toFixed(1) + " hours";
+    }
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_9__["default"], {
+      open: true,
+      scroll: "body",
+      maxWidth: "sm",
+      fullWidth: true,
+      onClose: this.handleClose
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_DialogContent__WEBPACK_IMPORTED_MODULE_10__["default"], {
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_5__["AppBar"], {
+      position: "static"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_5__["Toolbar"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_5__["Typography"], {
+      variant: "h6",
+      color: "inherit"
+    }, "Account"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      className: classes.topBar,
+      elevation: 2
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_UsernameDropdown_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      className: classes.logout,
+      variant: "contained",
+      color: "secondary",
+      onClick: this.handleLogout
+    }, "Logout")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_ConnectAccounts_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      onRemoveAccount: this.handleRemoveAccount,
+      showTOS: false
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      style: {
+        margin: "0 auto"
+      }
+    }, "You've played for ", this.getTime(this.props.timePlayed))));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    timePlayed: state.client.timePlayed,
+    // email: state.client.email,
+    emailVerified: state.client.emailVerified,
+    authToken: state.client.authToken
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_12__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_11__["connect"])(mapStateToProps))(AccountModal));
+
+/***/ }),
+
+/***/ "./src/components/UsernameDropdown.jsx":
+/*!*********************************************!*\
+  !*** ./src/components/UsernameDropdown.jsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/MenuItem */ "./node_modules/@material-ui/core/esm/MenuItem/index.js");
+/* harmony import */ var _material_ui_core_Select__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Select */ "./node_modules/@material-ui/core/esm/Select/index.js");
+/* harmony import */ var _material_ui_core_OutlinedInput__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/OutlinedInput */ "./node_modules/@material-ui/core/esm/OutlinedInput/index.js");
+/* harmony import */ var _material_ui_core_FilledInput__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/FilledInput */ "./node_modules/@material-ui/core/esm/FilledInput/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+// react:
+ // material ui:
+
+
+
+ // import InputLabel from "@material-ui/core/InputLabel";
+
+
+ // redux:
+
+ // recompose:
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    alignSelf: "center",
+    background: "transparent"
+  }
+});
+
+class UsernameDropdown extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  handleChange(event) {}
+
+  getUsernameList() {
+    let usernames = [];
+
+    for (let i = 0; i < this.props.validUsernames.length; i++) {
+      usernames.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        key: i,
+        value: i
+      }, this.props.validUsernames[i], "\xA0\xA0"));
+    }
+
+    if (this.props.validUsernames.length == 0) {
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        key: 0,
+        value: 0
+      }, "Not signed in.");
+    }
+
+    return usernames;
+  }
+
+  render() {
+    let usernameIndex = this.props.validUsernames.indexOf(this.props.username);
+
+    if (usernameIndex == -1) {
+      usernameIndex = 0;
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Select__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      value: usernameIndex,
+      onChange: this.props.handleChange,
+      input: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_OutlinedInput__WEBPACK_IMPORTED_MODULE_4__["default"], {
+        labelWidth: 0
+      })
+    }, this.getUsernameList());
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    username: state.client.username,
+    validUsernames: state.client.validUsernames
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {// updateSettings: (settings) => {
+    // 	dispatch(updateSettings(settings))
+    // },
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_7__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, mapDispatchToProps))(UsernameDropdown));
+
+/***/ }),
+
+/***/ "./src/constants/DeviceSizes.js":
+/*!**************************************!*\
+  !*** ./src/constants/DeviceSizes.js ***!
+  \**************************************/
+/*! exports provided: device */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "device", function() { return device; });
+const size = {
+  mobile: "600px",
+  tablet: "768px",
+  laptop: "1024px",
+  desktop: "1440px"
+};
+const device = {
+  mobile: `@media (min-width: ${size.mobile})`,
+  tablet: `@media (min-width: ${size.tablet})`,
+  laptop: `@media (min-width: ${size.laptop})`,
+  desktop: `@media (min-width: ${size.desktop})`
+};
+
+/***/ }),
+
+/***/ "./src/libs/tools.js":
+/*!***************************!*\
+  !*** ./src/libs/tools.js ***!
+  \***************************/
+/*! exports provided: getCookie, setCookie, clamp, round, msToTime, toggleFullscreen, setToPercentParent, wait, mathZoom, normalizeVector, abs, deleteAllCookies, fixedLengthString, getStickString, getAverage, pick */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getCookie", function() { return getCookie; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setCookie", function() { return setCookie; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clamp", function() { return clamp; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "round", function() { return round; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "msToTime", function() { return msToTime; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toggleFullscreen", function() { return toggleFullscreen; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setToPercentParent", function() { return setToPercentParent; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "wait", function() { return wait; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "mathZoom", function() { return mathZoom; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "normalizeVector", function() { return normalizeVector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "abs", function() { return abs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "deleteAllCookies", function() { return deleteAllCookies; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fixedLengthString", function() { return fixedLengthString; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getStickString", function() { return getStickString; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAverage", function() { return getAverage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "pick", function() { return pick; });
+function getCookie(name) {
+  let dc = document.cookie;
+  let prefix = name + "=";
+  let begin = dc.indexOf("; " + prefix);
+  let end;
+
+  if (begin == -1) {
+    begin = dc.indexOf(prefix);
+    if (begin !== 0) return null;
+  } else {
+    begin += 2;
+    end = document.cookie.indexOf(";", begin);
+
+    if (end == -1) {
+      end = dc.length;
+    }
+  } // because unescape has been deprecated, replaced with decodeURI
+  //return unescape(dc.substring(begin + prefix.length, end));
+
+
+  return decodeURI(dc.substring(begin + prefix.length, end));
+}
+function setCookie(name, value, seconds) {
+  let expires = "";
+
+  if (seconds) {
+    let date = new Date();
+    date.setTime(date.getTime() + seconds * 1000);
+    expires = "; expires=" + date.toUTCString();
+  }
+
+  document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+function clamp(n, min, max) {
+  return Math.min(Math.max(n, min), max);
+}
+function round(value, precision) {
+  let multiplier = Math.pow(10, precision || 0);
+  return Math.round(value * multiplier) / multiplier;
+}
+function msToTime(duration) {
+  // 	var milliseconds = parseInt((duration % 1000) / 100);
+  let milliseconds = parseInt(duration / 1000 % 60 % 1 * 1000);
+  let seconds = parseInt(duration / 1000 % 60);
+  let minutes = parseInt(duration / (1000 * 60) % 60);
+  let hours = parseInt(duration / (1000 * 60 * 60) % 24);
+  hours = hours < 10 ? "0" + hours : hours;
+
+  if (hours.length == 2 || hours.length == 3 && hours[0] == "0") {
+    hours = hours.substr(1);
+  }
+
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+
+  if (minutes.length == 3 || minutes.length == 4) {
+    minutes = minutes.substr(1);
+  }
+
+  seconds = seconds < 10 ? "0" + seconds : seconds;
+
+  if (seconds.length == 3 || seconds.length == 4) {
+    seconds = seconds.substr(1);
+  } //seconds = seconds.replaceAll("-", "");
+
+
+  if (seconds.length < 2) {
+    seconds = "0" + seconds;
+  }
+
+  let time = hours + ":" + minutes + ":" + seconds + "." + milliseconds;
+  time = time.replaceAll("-", ""); // remove negative signs
+
+  return time;
+}
+function toggleFullscreen(elem) {
+  // ## The below if statement seems to work better ## if ((document.fullScreenElement && document.fullScreenElement !== null) || (document.msfullscreenElement && document.msfullscreenElement !== null) || (!document.mozFullScreen && !document.webkitIsFullScreen)) {
+  if (document.fullScreenElement !== undefined && document.fullScreenElement === null || document.msFullscreenElement !== undefined && document.msFullscreenElement === null || document.mozFullScreen !== undefined && !document.mozFullScreen || document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen) {
+    if (elem.requestFullScreen) {
+      elem.requestFullScreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.webkitRequestFullScreen) {
+      elem.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+    } else if (elem.msRequestFullscreen) {
+      elem.msRequestFullscreen();
+    }
+  } else {
+    if (document.cancelFullScreen) {
+      document.cancelFullScreen();
+    } else if (document.mozCancelFullScreen) {
+      document.mozCancelFullScreen();
+    } else if (document.webkitCancelFullScreen) {
+      document.webkitCancelFullScreen();
+    } else if (document.msExitFullscreen) {
+      document.msExitFullscreen();
+    }
+  }
+}
+function setToPercentParent(elem, percent) {
+  $(elem).height(0);
+  let parentHeight = $(elem).parent().height();
+  let newHeight = percent / 100 * parentHeight;
+  $(elem).height(newHeight);
+} // like sleep, but worse:
+
+function wait(ms) {
+  var start = new Date().getTime();
+  var end = start;
+
+  while (end < start + ms) {
+    end = new Date().getTime();
+  }
+} // brings number closer to target by accel
+
+function mathZoom(current, target, accel) {
+  if (current == target) {
+    return current;
+  }
+
+  if (Math.abs(current - target) < accel) {
+    return target;
+  }
+
+  if (current < target) {
+    return current + accel;
+  } else {
+    return current - accel;
+  }
+}
+function normalizeVector(vector, scale) {
+  let norm = Math.sqrt(vector.x * vector.x + vector.y * vector.y);
+
+  if (norm !== 0) {
+    vector.x = scale * vector.x / norm;
+    vector.y = scale * vector.y / norm;
+  }
+
+  return vector;
+}
+function abs(n) {
+  return Math.abs(n);
+} // delete all cookies:
+
+function deleteAllCookies() {
+  let cookies = document.cookie.split(";");
+
+  for (let i = 0; i < cookies.length; i++) {
+    let cookie = cookies[i];
+    let eqPos = cookie.indexOf("=");
+    let name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+  }
+}
+function fixedLengthString(string, pad, length) {
+  string = string + "";
+
+  while (string.length < length) {
+    string = pad + string;
+  }
+
+  return string;
+}
+function getStickString(num) {
+  // round to nearest tenth:
+  num = (Math.round((num + 1) * 10) / 10).toFixed(2);
+  let n = num * 10;
+
+  if (n == 0) {
+    return "900";
+  }
+
+  if (n == 10) {
+    return "090";
+  }
+
+  if (n == 20) {
+    return "009";
+  }
+
+  if (n < 10) {
+    n = 10 - n;
+    n = 90 + 90 * n;
+  } else {
+    n = (20 - n) * 9;
+  }
+
+  return String(n).padStart(3, "0");
+}
+function getAverage(array) {
+  return array.reduce((a, b) => a + b) / array.length;
+}
+function pick(...props) {
+  return o => props.reduce((a, e) => ({ ...a,
+    [e]: o[e]
+  }), {});
+} // String.prototype.replaceAll = function(search, replacement) {
+// 	let target = this;
+// 	return target.replace(new RegExp(search, "g"), replacement);
+// };
+// $.fn.sumHeights = function() {
+// 	let h = 0;
+// 	this.each(function() {
+// 		h += $(this).outerHeight();
+// 	});
+// 	return h;
+// };
+// $.fn.addUp = function(getter) {
+// 	return Array.prototype.reduce.call(this, function(a, b) {
+// 		return a + getter.call($(b));
+// 	}, 0);
+// }
+
+/***/ })
+
+}]);
+//# sourceMappingURL=14.bundle.js.map

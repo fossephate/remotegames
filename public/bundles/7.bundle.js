@@ -1,1 +1,5482 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[7],{250:function(t,e,r){"use strict";r.d(e,"a",(function(){return n}));const n={mobile:`@media (min-width: ${"600px"})`,tablet:`@media (min-width: ${"768px"})`,laptop:`@media (min-width: ${"1024px"})`,desktop:`@media (min-width: ${"1440px"})`}},272:function(t,e,r){"use strict";var n=r(2),i=r(9),o=r(0),a=r.n(o),s=(r(10),r(245)),u=r(265),c=r(111),l=r(508),f=a.a.forwardRef((function(t,e){var r=t.autoFocus,o=t.checked,c=t.checkedIcon,f=t.classes,p=t.className,d=t.defaultChecked,h=t.disabled,v=t.icon,m=t.id,y=t.inputProps,_=t.inputRef,g=t.name,b=t.onBlur,w=t.onChange,S=t.onFocus,O=t.readOnly,E=t.required,x=t.tabIndex,j=t.type,k=t.value,I=Object(i.a)(t,["autoFocus","checked","checkedIcon","classes","className","defaultChecked","disabled","icon","id","inputProps","inputRef","name","onBlur","onChange","onFocus","readOnly","required","tabIndex","type","value"]),C=a.a.useRef(null!=o).current,z=a.a.useState(Boolean(d)),A=z[0],R=z[1],D=C?o:A,F=Object(u.a)(),N=h;F&&void 0===N&&(N=F.disabled);var V="checkbox"===j||"radio"===j;return a.a.createElement(l.a,Object(n.a)({component:"span",className:Object(s.a)(f.root,p,D&&f.checked,N&&f.disabled),disabled:N,tabIndex:null,role:void 0,onFocus:function(t){S&&S(t),F&&F.onFocus&&F.onFocus(t)},onBlur:function(t){b&&b(t),F&&F.onBlur&&F.onBlur(t)},ref:e},I),a.a.createElement("input",Object(n.a)({autoFocus:r,checked:o,defaultChecked:d,className:f.input,disabled:N,id:V&&m,name:g,onChange:function(t){var e=t.target.checked;C||R(e),w&&w(t,e)},readOnly:O,ref:_,required:E,tabIndex:x,type:j,value:k},y)),D?c:v)}));e.a=Object(c.a)({root:{padding:9},checked:{},disabled:{},input:{cursor:"inherit",position:"absolute",opacity:0,width:"100%",height:"100%",top:0,left:0,margin:0,padding:0,zIndex:1}},{name:"PrivateSwitchBase"})(f)},287:function(t,e,r){var n=r(324);t.exports=function(t,e,r){"__proto__"==e&&n?n(t,e,{configurable:!0,enumerable:!0,value:r,writable:!0}):t[e]=r}},298:function(t,e){t.exports=function(t){return t}},299:function(t,e,r){var n=r(29),i=r(57),o=/\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\\]|\\.)*?\1)\]/,a=/^\w*$/;t.exports=function(t,e){if(n(t))return!1;var r=typeof t;return!("number"!=r&&"symbol"!=r&&"boolean"!=r&&null!=t&&!i(t))||(a.test(t)||!o.test(t)||null!=e&&t in Object(e))}},300:function(t,e){t.exports=function(t){return!!t&&("object"==typeof t||"function"==typeof t)&&"function"==typeof t.then}},301:function(t,e,r){"use strict";var n=r(0),i=r.n(n),o=r(111),a=r(494),s=r(350),u=r(414),c=r(509),l=r(70),f=r(246);class p extends n.PureComponent{constructor(t){super(t),this.state={TOSAgreed:!1},this.agreeTOS=this.agreeTOS.bind(this)}agreeTOS(t){this.setState({TOSAgreed:t.target.checked})}connectAccountOrLogin(t){if(window.banned)return;let e=window.location.origin+"/8099/auth/"+t+"/";null!=this.props.authToken&&(e+="?authToken="+this.props.authToken),window.location.href=e}render(){const{classes:t,showTOS:e}=this.props;let r=this.props.connectedAccounts.length>1||this.props.validUsernames.length>1;return i.a.createElement(a.a,{className:t.root,elevation:0},e&&i.a.createElement("div",null,i.a.createElement(s.a,{onChange:this.agreeTOS}),i.a.createElement("span",null,"I have read and agree to the "),i.a.createElement(u.a,{href:"/tos"},"Terms and Conditions")),i.a.createElement("div",{className:t.connectWithButton},i.a.createElement(c.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("twitch")},disabled:!this.state.TOSAgreed&&e},i.a.createElement("span",null,"Connect with"),i.a.createElement("img",{className:t.twitchLogo,src:"/images/Twitch_Purple_RGB.png"})),this.props.connectedAccounts.includes("twitch")&&r&&i.a.createElement(c.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("twitch")}},"X")),i.a.createElement("div",{className:t.connectWithButton},i.a.createElement(c.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("youtube")},disabled:!this.state.TOSAgreed&&e},i.a.createElement("span",null,"Connect with"),i.a.createElement("img",{className:t.youtubeLogo,src:"/images/yt_logo_rgb_light.png"})),this.props.connectedAccounts.includes("youtube")&&r&&i.a.createElement(c.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("youtube")}},"X")),i.a.createElement("div",{className:t.connectWithButton},i.a.createElement(c.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("google")},disabled:!this.state.TOSAgreed&&e},i.a.createElement("span",{id:"connectWithGoogleText"},"Connect with Google")),this.props.connectedAccounts.includes("google")&&r&&i.a.createElement(c.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("google")}},"X")),i.a.createElement("div",{className:t.connectWithButton},i.a.createElement(c.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("discord")},disabled:!this.state.TOSAgreed&&e},i.a.createElement("span",null,"Connect with"),i.a.createElement("img",{className:t.discordLogo,src:"/images/discord_logo.png"})),this.props.connectedAccounts.includes("discord")&&r&&i.a.createElement(c.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("discord")}},"X")))}}e.a=Object(f.a)(Object(o.a)(t=>({root:{width:"100%",minHeight:"220px",textAlign:"center",display:"flex",flexDirection:"column",justifyContent:"space-evenly",flexWrap:"wrap",paddingLeft:"25px",paddingRight:"25px"},connectWithButton:{display:"flex"},twitchLogo:{width:"60px",marginLeft:"10px",marginRight:"10px"},googleLogo:{width:"80px"},youtubeLogo:{width:"80px",marginLeft:"10px"},discordLogo:{width:"80px",marginLeft:"4px"}})),Object(l.b)(t=>({authToken:t.client.authToken,connectedAccounts:t.client.connectedAccounts,validUsernames:t.client.validUsernames})))(p)},322:function(t,e){function r(t,e){for(var r=0;r<e.length;r++){var n=e[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(t,n.key,n)}}t.exports=function(t,e,n){return e&&r(t.prototype,e),n&&r(t,n),t}},323:function(t,e,r){var n=r(287),i=r(75);t.exports=function(t,e,r){(void 0===r||i(t[e],r))&&(void 0!==r||e in t)||n(t,e,r)}},324:function(t,e,r){var n=r(24),i=function(){try{var t=n(Object,"defineProperty");return t({},"",{}),t}catch(t){}}();t.exports=i},325:function(t,e,r){var n=r(375)();t.exports=n},326:function(t,e,r){var n=r(127)(Object.getPrototypeOf,Object);t.exports=n},327:function(t,e){t.exports=function(t,e){if(("constructor"!==e||"function"!=typeof t[e])&&"__proto__"!=e)return t[e]}},328:function(t,e,r){var n=r(126),i=r(387),o=r(114);t.exports=function(t){return o(t)?n(t,!0):i(t)}},329:function(t,e,r){var n=r(71);t.exports=function(t){return t==t&&!n(t)}},330:function(t,e){t.exports=function(t,e){return function(r){return null!=r&&(r[t]===e&&(void 0!==e||t in Object(r)))}}},331:function(t,e,r){var n=r(332),i=r(113);t.exports=function(t,e){for(var r=0,o=(e=n(e,t)).length;null!=t&&r<o;)t=t[i(e[r++])];return r&&r==o?t:void 0}},332:function(t,e,r){var n=r(29),i=r(299),o=r(123),a=r(124);t.exports=function(t,e){return n(t)?t:i(t,e)?[t]:o(a(t))}},350:function(t,e,r){"use strict";var n=r(2),i=r(9),o=r(0),a=r.n(o),s=(r(10),r(245)),u=r(272),c=r(253),l=Object(c.a)(a.a.createElement("path",{d:"M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"}),"CheckBoxOutlineBlank"),f=Object(c.a)(a.a.createElement("path",{d:"M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"}),"CheckBox"),p=r(35),d=Object(c.a)(a.a.createElement("path",{d:"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"}),"IndeterminateCheckBox"),h=r(247),v=r(111),m=a.a.createElement(f,null),y=a.a.createElement(l,null),_=a.a.createElement(d,null),g=a.a.forwardRef((function(t,e){var r=t.checkedIcon,o=void 0===r?m:r,c=t.classes,l=t.color,f=void 0===l?"secondary":l,p=t.disabled,d=void 0!==p&&p,v=t.icon,g=void 0===v?y:v,b=t.indeterminate,w=void 0!==b&&b,S=t.indeterminateIcon,O=void 0===S?_:S,E=t.inputProps,x=t.size,j=void 0===x?"medium":x,k=Object(i.a)(t,["checkedIcon","classes","color","disabled","icon","indeterminate","indeterminateIcon","inputProps","size"]);return a.a.createElement(u.a,Object(n.a)({type:"checkbox",classes:{root:Object(s.a)(c.root,c["color".concat(Object(h.a)(f))],w&&c.indeterminate),checked:c.checked,disabled:c.disabled},color:f,inputProps:Object(n.a)({"data-indeterminate":w},E),icon:a.a.cloneElement(w?O:g,{fontSize:"small"===j?"small":"default"}),checkedIcon:a.a.cloneElement(w?O:o,{fontSize:"small"===j?"small":"default"}),ref:e,disabled:d},k))}));e.a=Object(v.a)((function(t){return{root:{color:t.palette.text.secondary},checked:{},disabled:{},indeterminate:{},colorPrimary:{"&$checked":{color:t.palette.primary.main,"&:hover":{backgroundColor:Object(p.c)(t.palette.primary.main,t.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:t.palette.action.disabled}},colorSecondary:{"&$checked":{color:t.palette.secondary.main,"&:hover":{backgroundColor:Object(p.c)(t.palette.secondary.main,t.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:t.palette.action.disabled}}}}),{name:"MuiCheckbox"})(g)},365:function(t,e,r){"use strict";const n=r(366),i=r(367),o=r(368);function a(t,e){return e.encode?e.strict?n(t):encodeURIComponent(t):t}function s(t,e){return e.decode?i(t):t}function u(t){const e=t.indexOf("#");return-1!==e&&(t=t.slice(0,e)),t}function c(t){const e=(t=u(t)).indexOf("?");return-1===e?"":t.slice(e+1)}function l(t,e){return e.parseNumbers&&!Number.isNaN(Number(t))&&"string"==typeof t&&""!==t.trim()?t=Number(t):!e.parseBooleans||null===t||"true"!==t.toLowerCase()&&"false"!==t.toLowerCase()||(t="true"===t.toLowerCase()),t}function f(t,e){const r=function(t){let e;switch(t.arrayFormat){case"index":return(t,r,n)=>{e=/\[(\d*)\]$/.exec(t),t=t.replace(/\[\d*\]$/,""),e?(void 0===n[t]&&(n[t]={}),n[t][e[1]]=r):n[t]=r};case"bracket":return(t,r,n)=>{e=/(\[\])$/.exec(t),t=t.replace(/\[\]$/,""),e?void 0!==n[t]?n[t]=[].concat(n[t],r):n[t]=[r]:n[t]=r};case"comma":return(t,e,r)=>{const n="string"==typeof e&&e.split("").indexOf(",")>-1?e.split(","):e;r[t]=n};default:return(t,e,r)=>{void 0!==r[t]?r[t]=[].concat(r[t],e):r[t]=e}}}(e=Object.assign({decode:!0,sort:!0,arrayFormat:"none",parseNumbers:!1,parseBooleans:!1},e)),n=Object.create(null);if("string"!=typeof t)return n;if(!(t=t.trim().replace(/^[?#&]/,"")))return n;for(const i of t.split("&")){let[t,a]=o(e.decode?i.replace(/\+/g," "):i,"=");a=void 0===a?null:s(a,e),r(s(t,e),a,n)}for(const t of Object.keys(n)){const r=n[t];if("object"==typeof r&&null!==r)for(const t of Object.keys(r))r[t]=l(r[t],e);else n[t]=l(r,e)}return!1===e.sort?n:(!0===e.sort?Object.keys(n).sort():Object.keys(n).sort(e.sort)).reduce((t,e)=>{const r=n[e];return Boolean(r)&&"object"==typeof r&&!Array.isArray(r)?t[e]=function t(e){return Array.isArray(e)?e.sort():"object"==typeof e?t(Object.keys(e)).sort((t,e)=>Number(t)-Number(e)).map(t=>e[t]):e}(r):t[e]=r,t},Object.create(null))}e.extract=c,e.parse=f,e.stringify=(t,e)=>{if(!t)return"";const r=function(t){switch(t.arrayFormat){case"index":return e=>(r,n)=>{const i=r.length;return void 0===n||t.skipNull&&null===n?r:null===n?[...r,[a(e,t),"[",i,"]"].join("")]:[...r,[a(e,t),"[",a(i,t),"]=",a(n,t)].join("")]};case"bracket":return e=>(r,n)=>void 0===n||t.skipNull&&null===n?r:null===n?[...r,[a(e,t),"[]"].join("")]:[...r,[a(e,t),"[]=",a(n,t)].join("")];case"comma":return e=>(r,n)=>null==n||0===n.length?r:0===r.length?[[a(e,t),"=",a(n,t)].join("")]:[[r,a(n,t)].join(",")];default:return e=>(r,n)=>void 0===n||t.skipNull&&null===n?r:null===n?[...r,a(e,t)]:[...r,[a(e,t),"=",a(n,t)].join("")]}}(e=Object.assign({encode:!0,strict:!0,arrayFormat:"none"},e)),n=Object.assign({},t);if(e.skipNull)for(const t of Object.keys(n))void 0!==n[t]&&null!==n[t]||delete n[t];const i=Object.keys(n);return!1!==e.sort&&i.sort(e.sort),i.map(n=>{const i=t[n];return void 0===i?"":null===i?a(n,e):Array.isArray(i)?i.reduce(r(n),[]).join("&"):a(n,e)+"="+a(i,e)}).filter(t=>t.length>0).join("&")},e.parseUrl=(t,e)=>({url:u(t).split("?")[0]||"",query:f(c(t),e)})},366:function(t,e,r){"use strict";t.exports=t=>encodeURIComponent(t).replace(/[!'()*]/g,t=>`%${t.charCodeAt(0).toString(16).toUpperCase()}`)},367:function(t,e,r){"use strict";var n=new RegExp("%[a-f0-9]{2}","gi"),i=new RegExp("(%[a-f0-9]{2})+","gi");function o(t,e){try{return decodeURIComponent(t.join(""))}catch(t){}if(1===t.length)return t;e=e||1;var r=t.slice(0,e),n=t.slice(e);return Array.prototype.concat.call([],o(r),o(n))}function a(t){try{return decodeURIComponent(t)}catch(i){for(var e=t.match(n),r=1;r<e.length;r++)e=(t=o(e,r).join("")).match(n);return t}}t.exports=function(t){if("string"!=typeof t)throw new TypeError("Expected `encodedURI` to be of type `string`, got `"+typeof t+"`");try{return t=t.replace(/\+/g," "),decodeURIComponent(t)}catch(e){return function(t){for(var e={"%FE%FF":"��","%FF%FE":"��"},r=i.exec(t);r;){try{e[r[0]]=decodeURIComponent(r[0])}catch(t){var n=a(r[0]);n!==r[0]&&(e[r[0]]=n)}r=i.exec(t)}e["%C2"]="�";for(var o=Object.keys(e),s=0;s<o.length;s++){var u=o[s];t=t.replace(new RegExp(u,"g"),e[u])}return t}(t)}}},368:function(t,e,r){"use strict";t.exports=(t,e)=>{if("string"!=typeof t||"string"!=typeof e)throw new TypeError("Expected the arguments to be of type `string`");if(""===e)return[t];const r=t.indexOf(e);return-1===r?[t]:[t.slice(0,r),t.slice(r+e.length)]}},370:function(t,e,r){"use strict";var n=r(9),i=r(28),o=r(2),a=r(0),s=r.n(a),u=(r(10),r(245)),c=r(111),l=r(525),f=r(247),p=s.a.forwardRef((function(t,e){var r=t.classes,i=t.className,a=t.disabled,c=void 0!==a&&a,p=t.disableFocusRipple,d=void 0!==p&&p,h=t.fullWidth,v=t.icon,m=t.indicator,y=t.label,_=t.onChange,g=t.onClick,b=t.selected,w=t.textColor,S=void 0===w?"inherit":w,O=t.value,E=t.wrapped,x=void 0!==E&&E,j=Object(n.a)(t,["classes","className","disabled","disableFocusRipple","fullWidth","icon","indicator","label","onChange","onClick","selected","textColor","value","wrapped"]);return s.a.createElement(l.a,Object(o.a)({focusRipple:!d,className:Object(u.a)(r.root,r["textColor".concat(Object(f.a)(S))],i,c&&r.disabled,b&&r.selected,y&&v&&r.labelIcon,h&&r.fullWidth,x&&r.wrapped),ref:e,role:"tab","aria-selected":b,disabled:c,onClick:function(t){_&&_(t,O),g&&g(t)}},j),s.a.createElement("span",{className:r.wrapper},v,y),m)}));e.a=Object(c.a)((function(t){var e;return{root:Object(o.a)({},t.typography.button,(e={maxWidth:264,minWidth:72,position:"relative",boxSizing:"border-box",minHeight:48,flexShrink:0,padding:"6px 12px"},Object(i.a)(e,t.breakpoints.up("sm"),{padding:"6px 24px"}),Object(i.a)(e,"overflow","hidden"),Object(i.a)(e,"whiteSpace","normal"),Object(i.a)(e,"textAlign","center"),Object(i.a)(e,t.breakpoints.up("sm"),{fontSize:t.typography.pxToRem(13),minWidth:160}),e)),labelIcon:{minHeight:72,paddingTop:9,"& $wrapper > *:first-child":{marginBottom:6}},textColorInherit:{color:"inherit",opacity:.7,"&$selected":{opacity:1},"&$disabled":{opacity:.5}},textColorPrimary:{color:t.palette.text.secondary,"&$selected":{color:t.palette.primary.main},"&$disabled":{color:t.palette.text.disabled}},textColorSecondary:{color:t.palette.text.secondary,"&$selected":{color:t.palette.secondary.main},"&$disabled":{color:t.palette.text.disabled}},selected:{},disabled:{},fullWidth:{flexShrink:1,flexGrow:1,flexBasis:0,maxWidth:"none"},wrapped:{fontSize:t.typography.pxToRem(12),lineHeight:1.5},wrapper:{display:"inline-flex",alignItems:"center",justifyContent:"center",width:"100%",flexDirection:"column"}}}),{name:"MuiTab"})(p)},372:function(t,e,r){"use strict";var n=r(2),i=r(9),o=r(0),a=r.n(o),s=(r(10),r(245)),u=r(265),c=r(111),l=r(320),f=r(247),p=a.a.forwardRef((function(t,e){t.checked;var r=t.classes,o=t.className,c=t.control,p=t.disabled,d=(t.inputRef,t.label),h=t.labelPlacement,v=void 0===h?"end":h,m=(t.name,t.onChange,t.value,Object(i.a)(t,["checked","classes","className","control","disabled","inputRef","label","labelPlacement","name","onChange","value"])),y=Object(u.a)(),_=p;void 0===_&&void 0!==c.props.disabled&&(_=c.props.disabled),void 0===_&&y&&(_=y.disabled);var g={disabled:_};return["checked","name","onChange","value","inputRef"].forEach((function(e){void 0===c.props[e]&&void 0!==t[e]&&(g[e]=t[e])})),a.a.createElement("label",Object(n.a)({className:Object(s.a)(r.root,o,"end"!==v&&r["labelPlacement".concat(Object(f.a)(v))],_&&r.disabled),ref:e},m),a.a.cloneElement(c,g),a.a.createElement(l.a,{component:"span",className:Object(s.a)(r.label,_&&r.disabled)},d))}));e.a=Object(c.a)((function(t){return{root:{display:"inline-flex",alignItems:"center",cursor:"pointer",verticalAlign:"middle",WebkitTapHighlightColor:"transparent",marginLeft:-11,marginRight:16,"&$disabled":{cursor:"default"}},labelPlacementStart:{flexDirection:"row-reverse",marginLeft:16,marginRight:-11},labelPlacementTop:{flexDirection:"column-reverse",marginLeft:16},labelPlacementBottom:{flexDirection:"column",marginLeft:16},disabled:{},label:{"&$disabled":{color:t.palette.text.disabled}}}}),{name:"MuiFormControlLabel"})(p)},373:function(t,e,r){var n=r(374),i=r(389)((function(t,e,r){n(t,e,r)}));t.exports=i},374:function(t,e,r){var n=r(116),i=r(323),o=r(325),a=r(376),s=r(71),u=r(328),c=r(327);t.exports=function t(e,r,l,f,p){e!==r&&o(r,(function(o,u){if(p||(p=new n),s(o))a(e,r,u,l,t,f,p);else{var d=f?f(c(e,u),o,u+"",e,r,p):void 0;void 0===d&&(d=o),i(e,u,d)}}),u)}},375:function(t,e){t.exports=function(t){return function(e,r,n){for(var i=-1,o=Object(e),a=n(e),s=a.length;s--;){var u=a[t?s:++i];if(!1===r(o[u],u,o))break}return e}}},376:function(t,e,r){var n=r(323),i=r(377),o=r(378),a=r(122),s=r(380),u=r(118),c=r(29),l=r(382),f=r(77),p=r(41),d=r(71),h=r(383),v=r(79),m=r(327),y=r(384);t.exports=function(t,e,r,_,g,b,w){var S=m(t,r),O=m(e,r),E=w.get(O);if(E)n(t,r,E);else{var x=b?b(S,O,r+"",t,e,w):void 0,j=void 0===x;if(j){var k=c(O),I=!k&&f(O),C=!k&&!I&&v(O);x=O,k||I||C?c(S)?x=S:l(S)?x=a(S):I?(j=!1,x=i(O,!0)):C?(j=!1,x=o(O,!0)):x=[]:h(O)||u(O)?(x=S,u(S)?x=y(S):d(S)&&!p(S)||(x=s(O))):j=!1}j&&(w.set(O,x),g(x,O,_,b,w),w.delete(O)),n(t,r,x)}}},377:function(t,e,r){(function(t){var n=r(17),i=e&&!e.nodeType&&e,o=i&&"object"==typeof t&&t&&!t.nodeType&&t,a=o&&o.exports===i?n.Buffer:void 0,s=a?a.allocUnsafe:void 0;t.exports=function(t,e){if(e)return t.slice();var r=t.length,n=s?s(r):new t.constructor(r);return t.copy(n),n}}).call(this,r(78)(t))},378:function(t,e,r){var n=r(379);t.exports=function(t,e){var r=e?n(t.buffer):t.buffer;return new t.constructor(r,t.byteOffset,t.length)}},379:function(t,e,r){var n=r(125);t.exports=function(t){var e=new t.constructor(t.byteLength);return new n(e).set(new n(t)),e}},380:function(t,e,r){var n=r(381),i=r(326),o=r(120);t.exports=function(t){return"function"!=typeof t.constructor||o(t)?{}:n(i(t))}},381:function(t,e,r){var n=r(71),i=Object.create,o=function(){function t(){}return function(e){if(!n(e))return{};if(i)return i(e);t.prototype=e;var r=new t;return t.prototype=void 0,r}}();t.exports=o},382:function(t,e,r){var n=r(114),i=r(31);t.exports=function(t){return i(t)&&n(t)}},383:function(t,e,r){var n=r(32),i=r(326),o=r(31),a="[object Object]",s=Function.prototype,u=Object.prototype,c=s.toString,l=u.hasOwnProperty,f=c.call(Object);t.exports=function(t){if(!o(t)||n(t)!=a)return!1;var e=i(t);if(null===e)return!0;var r=l.call(e,"constructor")&&e.constructor;return"function"==typeof r&&r instanceof r&&c.call(r)==f}},384:function(t,e,r){var n=r(385),i=r(328);t.exports=function(t){return n(t,i(t))}},385:function(t,e,r){var n=r(386),i=r(287);t.exports=function(t,e,r,o){var a=!r;r||(r={});for(var s=-1,u=e.length;++s<u;){var c=e[s],l=o?o(r[c],t[c],c,r,t):void 0;void 0===l&&(l=t[c]),a?i(r,c,l):n(r,c,l)}return r}},386:function(t,e,r){var n=r(287),i=r(75),o=Object.prototype.hasOwnProperty;t.exports=function(t,e,r){var a=t[e];o.call(t,e)&&i(a,r)&&(void 0!==r||e in t)||n(t,e,r)}},387:function(t,e,r){var n=r(71),i=r(120),o=r(388),a=Object.prototype.hasOwnProperty;t.exports=function(t){if(!n(t))return o(t);var e=i(t),r=[];for(var s in t)("constructor"!=s||!e&&a.call(t,s))&&r.push(s);return r}},388:function(t,e){t.exports=function(t){var e=[];if(null!=t)for(var r in Object(t))e.push(r);return e}},389:function(t,e,r){var n=r(390),i=r(397);t.exports=function(t){return n((function(e,r){var n=-1,o=r.length,a=o>1?r[o-1]:void 0,s=o>2?r[2]:void 0;for(a=t.length>3&&"function"==typeof a?(o--,a):void 0,s&&i(r[0],r[1],s)&&(a=o<3?void 0:a,o=1),e=Object(e);++n<o;){var u=r[n];u&&t(e,u,n,a)}return e}))}},390:function(t,e,r){var n=r(298),i=r(391),o=r(393);t.exports=function(t,e){return o(i(t,e,n),t+"")}},391:function(t,e,r){var n=r(392),i=Math.max;t.exports=function(t,e,r){return e=i(void 0===e?t.length-1:e,0),function(){for(var o=arguments,a=-1,s=i(o.length-e,0),u=Array(s);++a<s;)u[a]=o[e+a];a=-1;for(var c=Array(e+1);++a<e;)c[a]=o[a];return c[e]=r(u),n(t,this,c)}}},392:function(t,e){t.exports=function(t,e,r){switch(r.length){case 0:return t.call(e);case 1:return t.call(e,r[0]);case 2:return t.call(e,r[0],r[1]);case 3:return t.call(e,r[0],r[1],r[2])}return t.apply(e,r)}},393:function(t,e,r){var n=r(394),i=r(396)(n);t.exports=i},394:function(t,e,r){var n=r(395),i=r(324),o=r(298),a=i?function(t,e){return i(t,"toString",{configurable:!0,enumerable:!1,value:n(e),writable:!0})}:o;t.exports=a},395:function(t,e){t.exports=function(t){return function(){return t}}},396:function(t,e){var r=800,n=16,i=Date.now;t.exports=function(t){var e=0,o=0;return function(){var a=i(),s=n-(a-o);if(o=a,s>0){if(++e>=r)return arguments[0]}else e=0;return t.apply(void 0,arguments)}}},397:function(t,e,r){var n=r(75),i=r(114),o=r(119),a=r(71);t.exports=function(t,e,r){if(!a(r))return!1;var s=typeof e;return!!("number"==s?i(r)&&o(e,r.length):"string"==s&&e in r)&&n(r[e],t)}},398:function(t,e,r){var n=r(287),i=r(399),o=r(400);t.exports=function(t,e){var r={};return e=o(e,3),i(t,(function(t,i,o){n(r,i,e(t,i,o))})),r}},399:function(t,e,r){var n=r(325),i=r(117);t.exports=function(t,e){return t&&n(t,e,i)}},400:function(t,e,r){var n=r(401),i=r(404),o=r(298),a=r(29),s=r(409);t.exports=function(t){return"function"==typeof t?t:null==t?o:"object"==typeof t?a(t)?i(t[0],t[1]):n(t):s(t)}},401:function(t,e,r){var n=r(402),i=r(403),o=r(330);t.exports=function(t){var e=i(t);return 1==e.length&&e[0][2]?o(e[0][0],e[0][1]):function(r){return r===t||n(r,t,e)}}},402:function(t,e,r){var n=r(116),i=r(115),o=1,a=2;t.exports=function(t,e,r,s){var u=r.length,c=u,l=!s;if(null==t)return!c;for(t=Object(t);u--;){var f=r[u];if(l&&f[2]?f[1]!==t[f[0]]:!(f[0]in t))return!1}for(;++u<c;){var p=(f=r[u])[0],d=t[p],h=f[1];if(l&&f[2]){if(void 0===d&&!(p in t))return!1}else{var v=new n;if(s)var m=s(d,h,p,t,e,v);if(!(void 0===m?i(h,d,o|a,s,v):m))return!1}}return!0}},403:function(t,e,r){var n=r(329),i=r(117);t.exports=function(t){for(var e=i(t),r=e.length;r--;){var o=e[r],a=t[o];e[r]=[o,a,n(a)]}return e}},404:function(t,e,r){var n=r(115),i=r(405),o=r(406),a=r(299),s=r(329),u=r(330),c=r(113),l=1,f=2;t.exports=function(t,e){return a(t)&&s(e)?u(c(t),e):function(r){var a=i(r,t);return void 0===a&&a===e?o(r,t):n(e,a,l|f)}}},405:function(t,e,r){var n=r(331);t.exports=function(t,e,r){var i=null==t?void 0:n(t,e);return void 0===i?r:i}},406:function(t,e,r){var n=r(407),i=r(408);t.exports=function(t,e){return null!=t&&i(t,e,n)}},407:function(t,e){t.exports=function(t,e){return null!=t&&e in Object(t)}},408:function(t,e,r){var n=r(332),i=r(118),o=r(29),a=r(119),s=r(80),u=r(113);t.exports=function(t,e,r){for(var c=-1,l=(e=n(e,t)).length,f=!1;++c<l;){var p=u(e[c]);if(!(f=null!=t&&r(t,p)))break;t=t[p]}return f||++c!=l?f:!!(l=null==t?0:t.length)&&s(l)&&a(p,l)&&(o(t)||i(t))}},409:function(t,e,r){var n=r(410),i=r(411),o=r(299),a=r(113);t.exports=function(t){return o(t)?n(a(t)):i(t)}},410:function(t,e){t.exports=function(t){return function(e){return null==e?void 0:e[t]}}},411:function(t,e,r){var n=r(331);t.exports=function(t){return function(e){return n(e,t)}}},412:function(t,e,r){t.exports=function(){"use strict";var t=Array.prototype.slice;function e(t,e){e&&(t.prototype=Object.create(e.prototype)),t.prototype.constructor=t}function r(t){return a(t)?t:H(t)}function n(t){return s(t)?t:$(t)}function i(t){return u(t)?t:J(t)}function o(t){return a(t)&&!c(t)?t:G(t)}function a(t){return!(!t||!t[f])}function s(t){return!(!t||!t[p])}function u(t){return!(!t||!t[d])}function c(t){return s(t)||u(t)}function l(t){return!(!t||!t[h])}e(n,r),e(i,r),e(o,r),r.isIterable=a,r.isKeyed=s,r.isIndexed=u,r.isAssociative=c,r.isOrdered=l,r.Keyed=n,r.Indexed=i,r.Set=o;var f="@@__IMMUTABLE_ITERABLE__@@",p="@@__IMMUTABLE_KEYED__@@",d="@@__IMMUTABLE_INDEXED__@@",h="@@__IMMUTABLE_ORDERED__@@",v=5,m=1<<v,y=m-1,_={},g={value:!1},b={value:!1};function w(t){return t.value=!1,t}function S(t){t&&(t.value=!0)}function O(){}function E(t,e){e=e||0;for(var r=Math.max(0,t.length-e),n=new Array(r),i=0;i<r;i++)n[i]=t[i+e];return n}function x(t){return void 0===t.size&&(t.size=t.__iterate(k)),t.size}function j(t,e){if("number"!=typeof e){var r=e>>>0;if(""+r!==e||4294967295===r)return NaN;e=r}return e<0?x(t)+e:e}function k(){return!0}function I(t,e,r){return(0===t||void 0!==r&&t<=-r)&&(void 0===e||void 0!==r&&e>=r)}function C(t,e){return A(t,e,0)}function z(t,e){return A(t,e,e)}function A(t,e,r){return void 0===t?r:t<0?Math.max(0,e+t):void 0===e?t:Math.min(e,t)}var R=0,D=1,F=2,N="function"==typeof Symbol&&Symbol.iterator,V="@@iterator",M=N||V;function q(t){this.next=t}function W(t,e,r,n){var i=0===t?e:1===t?r:[e,r];return n?n.value=i:n={value:i,done:!1},n}function L(){return{value:void 0,done:!0}}function T(t){return!!B(t)}function P(t){return t&&"function"==typeof t.next}function U(t){var e=B(t);return e&&e.call(t)}function B(t){var e=t&&(N&&t[N]||t[V]);if("function"==typeof e)return e}function K(t){return t&&"number"==typeof t.length}function H(t){return null==t?ot():a(t)?t.toSeq():function(t){var e=ut(t)||"object"==typeof t&&new et(t);if(!e)throw new TypeError("Expected Array or iterable object of values, or keyed object: "+t);return e}(t)}function $(t){return null==t?ot().toKeyedSeq():a(t)?s(t)?t.toSeq():t.fromEntrySeq():at(t)}function J(t){return null==t?ot():a(t)?s(t)?t.entrySeq():t.toIndexedSeq():st(t)}function G(t){return(null==t?ot():a(t)?s(t)?t.entrySeq():t:st(t)).toSetSeq()}q.prototype.toString=function(){return"[Iterator]"},q.KEYS=R,q.VALUES=D,q.ENTRIES=F,q.prototype.inspect=q.prototype.toSource=function(){return this.toString()},q.prototype[M]=function(){return this},e(H,r),H.of=function(){return H(arguments)},H.prototype.toSeq=function(){return this},H.prototype.toString=function(){return this.__toString("Seq {","}")},H.prototype.cacheResult=function(){return!this._cache&&this.__iterateUncached&&(this._cache=this.entrySeq().toArray(),this.size=this._cache.length),this},H.prototype.__iterate=function(t,e){return ct(this,t,e,!0)},H.prototype.__iterator=function(t,e){return lt(this,t,e,!0)},e($,H),$.prototype.toKeyedSeq=function(){return this},e(J,H),J.of=function(){return J(arguments)},J.prototype.toIndexedSeq=function(){return this},J.prototype.toString=function(){return this.__toString("Seq [","]")},J.prototype.__iterate=function(t,e){return ct(this,t,e,!1)},J.prototype.__iterator=function(t,e){return lt(this,t,e,!1)},e(G,H),G.of=function(){return G(arguments)},G.prototype.toSetSeq=function(){return this},H.isSeq=it,H.Keyed=$,H.Set=G,H.Indexed=J;var X,Z,Y,Q="@@__IMMUTABLE_SEQ__@@";function tt(t){this._array=t,this.size=t.length}function et(t){var e=Object.keys(t);this._object=t,this._keys=e,this.size=e.length}function rt(t){this._iterable=t,this.size=t.length||t.size}function nt(t){this._iterator=t,this._iteratorCache=[]}function it(t){return!(!t||!t[Q])}function ot(){return X||(X=new tt([]))}function at(t){var e=Array.isArray(t)?new tt(t).fromEntrySeq():P(t)?new nt(t).fromEntrySeq():T(t)?new rt(t).fromEntrySeq():"object"==typeof t?new et(t):void 0;if(!e)throw new TypeError("Expected Array or iterable object of [k, v] entries, or keyed object: "+t);return e}function st(t){var e=ut(t);if(!e)throw new TypeError("Expected Array or iterable object of values: "+t);return e}function ut(t){return K(t)?new tt(t):P(t)?new nt(t):T(t)?new rt(t):void 0}function ct(t,e,r,n){var i=t._cache;if(i){for(var o=i.length-1,a=0;a<=o;a++){var s=i[r?o-a:a];if(!1===e(s[1],n?s[0]:a,t))return a+1}return a}return t.__iterateUncached(e,r)}function lt(t,e,r,n){var i=t._cache;if(i){var o=i.length-1,a=0;return new q((function(){var t=i[r?o-a:a];return a++>o?{value:void 0,done:!0}:W(e,n?t[0]:a-1,t[1])}))}return t.__iteratorUncached(e,r)}function ft(t,e){return e?function t(e,r,n,i){return Array.isArray(r)?e.call(i,n,J(r).map((function(n,i){return t(e,n,i,r)}))):dt(r)?e.call(i,n,$(r).map((function(n,i){return t(e,n,i,r)}))):r}(e,t,"",{"":t}):pt(t)}function pt(t){return Array.isArray(t)?J(t).map(pt).toList():dt(t)?$(t).map(pt).toMap():t}function dt(t){return t&&(t.constructor===Object||void 0===t.constructor)}function ht(t,e){if(t===e||t!=t&&e!=e)return!0;if(!t||!e)return!1;if("function"==typeof t.valueOf&&"function"==typeof e.valueOf){if((t=t.valueOf())===(e=e.valueOf())||t!=t&&e!=e)return!0;if(!t||!e)return!1}return!("function"!=typeof t.equals||"function"!=typeof e.equals||!t.equals(e))}function vt(t,e){if(t===e)return!0;if(!a(e)||void 0!==t.size&&void 0!==e.size&&t.size!==e.size||void 0!==t.__hash&&void 0!==e.__hash&&t.__hash!==e.__hash||s(t)!==s(e)||u(t)!==u(e)||l(t)!==l(e))return!1;if(0===t.size&&0===e.size)return!0;var r=!c(t);if(l(t)){var n=t.entries();return e.every((function(t,e){var i=n.next().value;return i&&ht(i[1],t)&&(r||ht(i[0],e))}))&&n.next().done}var i=!1;if(void 0===t.size)if(void 0===e.size)"function"==typeof t.cacheResult&&t.cacheResult();else{i=!0;var o=t;t=e,e=o}var f=!0,p=e.__iterate((function(e,n){if(r?!t.has(e):i?!ht(e,t.get(n,_)):!ht(t.get(n,_),e))return f=!1,!1}));return f&&t.size===p}function mt(t,e){if(!(this instanceof mt))return new mt(t,e);if(this._value=t,this.size=void 0===e?1/0:Math.max(0,e),0===this.size){if(Z)return Z;Z=this}}function yt(t,e){if(!t)throw new Error(e)}function _t(t,e,r){if(!(this instanceof _t))return new _t(t,e,r);if(yt(0!==r,"Cannot step a Range by 0"),t=t||0,void 0===e&&(e=1/0),r=void 0===r?1:Math.abs(r),e<t&&(r=-r),this._start=t,this._end=e,this._step=r,this.size=Math.max(0,Math.ceil((e-t)/r-1)+1),0===this.size){if(Y)return Y;Y=this}}function gt(){throw TypeError("Abstract")}function bt(){}function wt(){}function St(){}H.prototype[Q]=!0,e(tt,J),tt.prototype.get=function(t,e){return this.has(t)?this._array[j(this,t)]:e},tt.prototype.__iterate=function(t,e){for(var r=this._array,n=r.length-1,i=0;i<=n;i++)if(!1===t(r[e?n-i:i],i,this))return i+1;return i},tt.prototype.__iterator=function(t,e){var r=this._array,n=r.length-1,i=0;return new q((function(){return i>n?{value:void 0,done:!0}:W(t,i,r[e?n-i++:i++])}))},e(et,$),et.prototype.get=function(t,e){return void 0===e||this.has(t)?this._object[t]:e},et.prototype.has=function(t){return this._object.hasOwnProperty(t)},et.prototype.__iterate=function(t,e){for(var r=this._object,n=this._keys,i=n.length-1,o=0;o<=i;o++){var a=n[e?i-o:o];if(!1===t(r[a],a,this))return o+1}return o},et.prototype.__iterator=function(t,e){var r=this._object,n=this._keys,i=n.length-1,o=0;return new q((function(){var a=n[e?i-o:o];return o++>i?{value:void 0,done:!0}:W(t,a,r[a])}))},et.prototype[h]=!0,e(rt,J),rt.prototype.__iterateUncached=function(t,e){if(e)return this.cacheResult().__iterate(t,e);var r=U(this._iterable),n=0;if(P(r))for(var i;!(i=r.next()).done&&!1!==t(i.value,n++,this););return n},rt.prototype.__iteratorUncached=function(t,e){if(e)return this.cacheResult().__iterator(t,e);var r=U(this._iterable);if(!P(r))return new q(L);var n=0;return new q((function(){var e=r.next();return e.done?e:W(t,n++,e.value)}))},e(nt,J),nt.prototype.__iterateUncached=function(t,e){if(e)return this.cacheResult().__iterate(t,e);for(var r,n=this._iterator,i=this._iteratorCache,o=0;o<i.length;)if(!1===t(i[o],o++,this))return o;for(;!(r=n.next()).done;){var a=r.value;if(i[o]=a,!1===t(a,o++,this))break}return o},nt.prototype.__iteratorUncached=function(t,e){if(e)return this.cacheResult().__iterator(t,e);var r=this._iterator,n=this._iteratorCache,i=0;return new q((function(){if(i>=n.length){var e=r.next();if(e.done)return e;n[i]=e.value}return W(t,i,n[i++])}))},e(mt,J),mt.prototype.toString=function(){return 0===this.size?"Repeat []":"Repeat [ "+this._value+" "+this.size+" times ]"},mt.prototype.get=function(t,e){return this.has(t)?this._value:e},mt.prototype.includes=function(t){return ht(this._value,t)},mt.prototype.slice=function(t,e){var r=this.size;return I(t,e,r)?this:new mt(this._value,z(e,r)-C(t,r))},mt.prototype.reverse=function(){return this},mt.prototype.indexOf=function(t){return ht(this._value,t)?0:-1},mt.prototype.lastIndexOf=function(t){return ht(this._value,t)?this.size:-1},mt.prototype.__iterate=function(t,e){for(var r=0;r<this.size;r++)if(!1===t(this._value,r,this))return r+1;return r},mt.prototype.__iterator=function(t,e){var r=this,n=0;return new q((function(){return n<r.size?W(t,n++,r._value):{value:void 0,done:!0}}))},mt.prototype.equals=function(t){return t instanceof mt?ht(this._value,t._value):vt(t)},e(_t,J),_t.prototype.toString=function(){return 0===this.size?"Range []":"Range [ "+this._start+"..."+this._end+(1!==this._step?" by "+this._step:"")+" ]"},_t.prototype.get=function(t,e){return this.has(t)?this._start+j(this,t)*this._step:e},_t.prototype.includes=function(t){var e=(t-this._start)/this._step;return e>=0&&e<this.size&&e===Math.floor(e)},_t.prototype.slice=function(t,e){return I(t,e,this.size)?this:(t=C(t,this.size),(e=z(e,this.size))<=t?new _t(0,0):new _t(this.get(t,this._end),this.get(e,this._end),this._step))},_t.prototype.indexOf=function(t){var e=t-this._start;if(e%this._step==0){var r=e/this._step;if(r>=0&&r<this.size)return r}return-1},_t.prototype.lastIndexOf=function(t){return this.indexOf(t)},_t.prototype.__iterate=function(t,e){for(var r=this.size-1,n=this._step,i=e?this._start+r*n:this._start,o=0;o<=r;o++){if(!1===t(i,o,this))return o+1;i+=e?-n:n}return o},_t.prototype.__iterator=function(t,e){var r=this.size-1,n=this._step,i=e?this._start+r*n:this._start,o=0;return new q((function(){var a=i;return i+=e?-n:n,o>r?{value:void 0,done:!0}:W(t,o++,a)}))},_t.prototype.equals=function(t){return t instanceof _t?this._start===t._start&&this._end===t._end&&this._step===t._step:vt(this,t)},e(gt,r),e(bt,gt),e(wt,gt),e(St,gt),gt.Keyed=bt,gt.Indexed=wt,gt.Set=St;var Ot="function"==typeof Math.imul&&-2===Math.imul(4294967295,2)?Math.imul:function(t,e){var r=65535&(t|=0),n=65535&(e|=0);return r*n+((t>>>16)*n+r*(e>>>16)<<16>>>0)|0};function Et(t){return t>>>1&1073741824|3221225471&t}function xt(t){if(!1===t||null==t)return 0;if("function"==typeof t.valueOf&&(!1===(t=t.valueOf())||null==t))return 0;if(!0===t)return 1;var e=typeof t;if("number"===e){if(t!=t||t===1/0)return 0;var r=0|t;for(r!==t&&(r^=4294967295*t);t>4294967295;)r^=t/=4294967295;return Et(r)}if("string"===e)return t.length>Dt?function(t){var e=Vt[t];return void 0===e&&(e=jt(t),Nt===Ft&&(Nt=0,Vt={}),Nt++,Vt[t]=e),e}(t):jt(t);if("function"==typeof t.hashCode)return t.hashCode();if("object"===e)return function(t){var e;if(zt&&void 0!==(e=kt.get(t)))return e;if(void 0!==(e=t[Rt]))return e;if(!Ct){if(void 0!==(e=t.propertyIsEnumerable&&t.propertyIsEnumerable[Rt]))return e;if(void 0!==(e=function(t){if(t&&t.nodeType>0)switch(t.nodeType){case 1:return t.uniqueID;case 9:return t.documentElement&&t.documentElement.uniqueID}}(t)))return e}if(e=++At,1073741824&At&&(At=0),zt)kt.set(t,e);else{if(void 0!==It&&!1===It(t))throw new Error("Non-extensible objects are not allowed as keys.");if(Ct)Object.defineProperty(t,Rt,{enumerable:!1,configurable:!1,writable:!1,value:e});else if(void 0!==t.propertyIsEnumerable&&t.propertyIsEnumerable===t.constructor.prototype.propertyIsEnumerable)t.propertyIsEnumerable=function(){return this.constructor.prototype.propertyIsEnumerable.apply(this,arguments)},t.propertyIsEnumerable[Rt]=e;else{if(void 0===t.nodeType)throw new Error("Unable to set a non-enumerable property on object.");t[Rt]=e}}return e}(t);if("function"==typeof t.toString)return jt(t.toString());throw new Error("Value type "+e+" cannot be hashed.")}function jt(t){for(var e=0,r=0;r<t.length;r++)e=31*e+t.charCodeAt(r)|0;return Et(e)}var kt,It=Object.isExtensible,Ct=function(){try{return Object.defineProperty({},"@",{}),!0}catch(t){return!1}}(),zt="function"==typeof WeakMap;zt&&(kt=new WeakMap);var At=0,Rt="__immutablehash__";"function"==typeof Symbol&&(Rt=Symbol(Rt));var Dt=16,Ft=255,Nt=0,Vt={};function Mt(t){yt(t!==1/0,"Cannot perform this action with an infinite size.")}function qt(t){return null==t?Yt():Wt(t)&&!l(t)?t:Yt().withMutations((function(e){var r=n(t);Mt(r.size),r.forEach((function(t,r){return e.set(r,t)}))}))}function Wt(t){return!(!t||!t[Tt])}e(qt,bt),qt.of=function(){var e=t.call(arguments,0);return Yt().withMutations((function(t){for(var r=0;r<e.length;r+=2){if(r+1>=e.length)throw new Error("Missing value for key: "+e[r]);t.set(e[r],e[r+1])}}))},qt.prototype.toString=function(){return this.__toString("Map {","}")},qt.prototype.get=function(t,e){return this._root?this._root.get(0,void 0,t,e):e},qt.prototype.set=function(t,e){return Qt(this,t,e)},qt.prototype.setIn=function(t,e){return this.updateIn(t,_,(function(){return e}))},qt.prototype.remove=function(t){return Qt(this,t,_)},qt.prototype.deleteIn=function(t){return this.updateIn(t,(function(){return _}))},qt.prototype.update=function(t,e,r){return 1===arguments.length?t(this):this.updateIn([t],e,r)},qt.prototype.updateIn=function(t,e,r){r||(r=e,e=void 0);var n=function t(e,r,n,i){var o=e===_,a=r.next();if(a.done){var s=o?n:e,u=i(s);return u===s?e:u}yt(o||e&&e.set,"invalid keyPath");var c=a.value,l=o?_:e.get(c,_),f=t(l,r,n,i);return f===l?e:f===_?e.remove(c):(o?Yt():e).set(c,f)}(this,nr(t),e,r);return n===_?void 0:n},qt.prototype.clear=function(){return 0===this.size?this:this.__ownerID?(this.size=0,this._root=null,this.__hash=void 0,this.__altered=!0,this):Yt()},qt.prototype.merge=function(){return ne(this,void 0,arguments)},qt.prototype.mergeWith=function(e){var r=t.call(arguments,1);return ne(this,e,r)},qt.prototype.mergeIn=function(e){var r=t.call(arguments,1);return this.updateIn(e,Yt(),(function(t){return"function"==typeof t.merge?t.merge.apply(t,r):r[r.length-1]}))},qt.prototype.mergeDeep=function(){return ne(this,ie,arguments)},qt.prototype.mergeDeepWith=function(e){var r=t.call(arguments,1);return ne(this,oe(e),r)},qt.prototype.mergeDeepIn=function(e){var r=t.call(arguments,1);return this.updateIn(e,Yt(),(function(t){return"function"==typeof t.mergeDeep?t.mergeDeep.apply(t,r):r[r.length-1]}))},qt.prototype.sort=function(t){return Ce(He(this,t))},qt.prototype.sortBy=function(t,e){return Ce(He(this,e,t))},qt.prototype.withMutations=function(t){var e=this.asMutable();return t(e),e.wasAltered()?e.__ensureOwner(this.__ownerID):this},qt.prototype.asMutable=function(){return this.__ownerID?this:this.__ensureOwner(new O)},qt.prototype.asImmutable=function(){return this.__ensureOwner()},qt.prototype.wasAltered=function(){return this.__altered},qt.prototype.__iterator=function(t,e){return new Jt(this,t,e)},qt.prototype.__iterate=function(t,e){var r=this,n=0;return this._root&&this._root.iterate((function(e){return n++,t(e[1],e[0],r)}),e),n},qt.prototype.__ensureOwner=function(t){return t===this.__ownerID?this:t?Zt(this.size,this._root,t,this.__hash):(this.__ownerID=t,this.__altered=!1,this)},qt.isMap=Wt;var Lt,Tt="@@__IMMUTABLE_MAP__@@",Pt=qt.prototype;function Ut(t,e){this.ownerID=t,this.entries=e}function Bt(t,e,r){this.ownerID=t,this.bitmap=e,this.nodes=r}function Kt(t,e,r){this.ownerID=t,this.count=e,this.nodes=r}function Ht(t,e,r){this.ownerID=t,this.keyHash=e,this.entries=r}function $t(t,e,r){this.ownerID=t,this.keyHash=e,this.entry=r}function Jt(t,e,r){this._type=e,this._reverse=r,this._stack=t._root&&Xt(t._root)}function Gt(t,e){return W(t,e[0],e[1])}function Xt(t,e){return{node:t,index:0,__prev:e}}function Zt(t,e,r,n){var i=Object.create(Pt);return i.size=t,i._root=e,i.__ownerID=r,i.__hash=n,i.__altered=!1,i}function Yt(){return Lt||(Lt=Zt(0))}function Qt(t,e,r){var n,i;if(t._root){var o=w(g),a=w(b);if(n=te(t._root,t.__ownerID,0,void 0,e,r,o,a),!a.value)return t;i=t.size+(o.value?r===_?-1:1:0)}else{if(r===_)return t;i=1,n=new Ut(t.__ownerID,[[e,r]])}return t.__ownerID?(t.size=i,t._root=n,t.__hash=void 0,t.__altered=!0,t):n?Zt(i,n):Yt()}function te(t,e,r,n,i,o,a,s){return t?t.update(e,r,n,i,o,a,s):o===_?t:(S(s),S(a),new $t(e,n,[i,o]))}function ee(t){return t.constructor===$t||t.constructor===Ht}function re(t,e,r,n,i){if(t.keyHash===n)return new Ht(e,n,[t.entry,i]);var o,a=(0===r?t.keyHash:t.keyHash>>>r)&y,s=(0===r?n:n>>>r)&y;return new Bt(e,1<<a|1<<s,a===s?[re(t,e,r+v,n,i)]:(o=new $t(e,n,i),a<s?[t,o]:[o,t]))}function ne(t,e,r){for(var i=[],o=0;o<r.length;o++){var s=r[o],u=n(s);a(s)||(u=u.map((function(t){return ft(t)}))),i.push(u)}return ae(t,e,i)}function ie(t,e,r){return t&&t.mergeDeep&&a(e)?t.mergeDeep(e):ht(t,e)?t:e}function oe(t){return function(e,r,n){if(e&&e.mergeDeepWith&&a(r))return e.mergeDeepWith(t,r);var i=t(e,r,n);return ht(e,i)?e:i}}function ae(t,e,r){return 0===(r=r.filter((function(t){return 0!==t.size}))).length?t:0!==t.size||t.__ownerID||1!==r.length?t.withMutations((function(t){for(var n=e?function(r,n){t.update(n,_,(function(t){return t===_?r:e(t,r,n)}))}:function(e,r){t.set(r,e)},i=0;i<r.length;i++)r[i].forEach(n)})):t.constructor(r[0])}function se(t){return t=(t=(858993459&(t-=t>>1&1431655765))+(t>>2&858993459))+(t>>4)&252645135,t+=t>>8,127&(t+=t>>16)}function ue(t,e,r,n){var i=n?t:E(t);return i[e]=r,i}Pt[Tt]=!0,Pt.delete=Pt.remove,Pt.removeIn=Pt.deleteIn,Ut.prototype.get=function(t,e,r,n){for(var i=this.entries,o=0,a=i.length;o<a;o++)if(ht(r,i[o][0]))return i[o][1];return n},Ut.prototype.update=function(t,e,r,n,i,o,a){for(var s=i===_,u=this.entries,c=0,l=u.length;c<l&&!ht(n,u[c][0]);c++);var f=c<l;if(f?u[c][1]===i:s)return this;if(S(a),(s||!f)&&S(o),!s||1!==u.length){if(!f&&!s&&u.length>=ce)return function(t,e,r,n){t||(t=new O);for(var i=new $t(t,xt(r),[r,n]),o=0;o<e.length;o++){var a=e[o];i=i.update(t,0,void 0,a[0],a[1])}return i}(t,u,n,i);var p=t&&t===this.ownerID,d=p?u:E(u);return f?s?c===l-1?d.pop():d[c]=d.pop():d[c]=[n,i]:d.push([n,i]),p?(this.entries=d,this):new Ut(t,d)}},Bt.prototype.get=function(t,e,r,n){void 0===e&&(e=xt(r));var i=1<<((0===t?e:e>>>t)&y),o=this.bitmap;return 0==(o&i)?n:this.nodes[se(o&i-1)].get(t+v,e,r,n)},Bt.prototype.update=function(t,e,r,n,i,o,a){void 0===r&&(r=xt(n));var s=(0===e?r:r>>>e)&y,u=1<<s,c=this.bitmap,l=0!=(c&u);if(!l&&i===_)return this;var f=se(c&u-1),p=this.nodes,d=l?p[f]:void 0,h=te(d,t,e+v,r,n,i,o,a);if(h===d)return this;if(!l&&h&&p.length>=le)return function(t,e,r,n,i){for(var o=0,a=new Array(m),s=0;0!==r;s++,r>>>=1)a[s]=1&r?e[o++]:void 0;return a[n]=i,new Kt(t,o+1,a)}(t,p,c,s,h);if(l&&!h&&2===p.length&&ee(p[1^f]))return p[1^f];if(l&&h&&1===p.length&&ee(h))return h;var g=t&&t===this.ownerID,b=l?h?c:c^u:c|u,w=l?h?ue(p,f,h,g):function(t,e,r){var n=t.length-1;if(r&&e===n)return t.pop(),t;for(var i=new Array(n),o=0,a=0;a<n;a++)a===e&&(o=1),i[a]=t[a+o];return i}(p,f,g):function(t,e,r,n){var i=t.length+1;if(n&&e+1===i)return t[e]=r,t;for(var o=new Array(i),a=0,s=0;s<i;s++)s===e?(o[s]=r,a=-1):o[s]=t[s+a];return o}(p,f,h,g);return g?(this.bitmap=b,this.nodes=w,this):new Bt(t,b,w)},Kt.prototype.get=function(t,e,r,n){void 0===e&&(e=xt(r));var i=(0===t?e:e>>>t)&y,o=this.nodes[i];return o?o.get(t+v,e,r,n):n},Kt.prototype.update=function(t,e,r,n,i,o,a){void 0===r&&(r=xt(n));var s=(0===e?r:r>>>e)&y,u=i===_,c=this.nodes,l=c[s];if(u&&!l)return this;var f=te(l,t,e+v,r,n,i,o,a);if(f===l)return this;var p=this.count;if(l){if(!f&&--p<fe)return function(t,e,r,n){for(var i=0,o=0,a=new Array(r),s=0,u=1,c=e.length;s<c;s++,u<<=1){var l=e[s];void 0!==l&&s!==n&&(i|=u,a[o++]=l)}return new Bt(t,i,a)}(t,c,p,s)}else p++;var d=t&&t===this.ownerID,h=ue(c,s,f,d);return d?(this.count=p,this.nodes=h,this):new Kt(t,p,h)},Ht.prototype.get=function(t,e,r,n){for(var i=this.entries,o=0,a=i.length;o<a;o++)if(ht(r,i[o][0]))return i[o][1];return n},Ht.prototype.update=function(t,e,r,n,i,o,a){void 0===r&&(r=xt(n));var s=i===_;if(r!==this.keyHash)return s?this:(S(a),S(o),re(this,t,e,r,[n,i]));for(var u=this.entries,c=0,l=u.length;c<l&&!ht(n,u[c][0]);c++);var f=c<l;if(f?u[c][1]===i:s)return this;if(S(a),(s||!f)&&S(o),s&&2===l)return new $t(t,this.keyHash,u[1^c]);var p=t&&t===this.ownerID,d=p?u:E(u);return f?s?c===l-1?d.pop():d[c]=d.pop():d[c]=[n,i]:d.push([n,i]),p?(this.entries=d,this):new Ht(t,this.keyHash,d)},$t.prototype.get=function(t,e,r,n){return ht(r,this.entry[0])?this.entry[1]:n},$t.prototype.update=function(t,e,r,n,i,o,a){var s=i===_,u=ht(n,this.entry[0]);return(u?i===this.entry[1]:s)?this:(S(a),s?void S(o):u?t&&t===this.ownerID?(this.entry[1]=i,this):new $t(t,this.keyHash,[n,i]):(S(o),re(this,t,e,xt(n),[n,i])))},Ut.prototype.iterate=Ht.prototype.iterate=function(t,e){for(var r=this.entries,n=0,i=r.length-1;n<=i;n++)if(!1===t(r[e?i-n:n]))return!1},Bt.prototype.iterate=Kt.prototype.iterate=function(t,e){for(var r=this.nodes,n=0,i=r.length-1;n<=i;n++){var o=r[e?i-n:n];if(o&&!1===o.iterate(t,e))return!1}},$t.prototype.iterate=function(t,e){return t(this.entry)},e(Jt,q),Jt.prototype.next=function(){for(var t=this._type,e=this._stack;e;){var r,n=e.node,i=e.index++;if(n.entry){if(0===i)return Gt(t,n.entry)}else if(n.entries){if(i<=(r=n.entries.length-1))return Gt(t,n.entries[this._reverse?r-i:i])}else if(i<=(r=n.nodes.length-1)){var o=n.nodes[this._reverse?r-i:i];if(o){if(o.entry)return Gt(t,o.entry);e=this._stack=Xt(o,e)}continue}e=this._stack=this._stack.__prev}return{value:void 0,done:!0}};var ce=m/4,le=m/2,fe=m/4;function pe(t){var e=Se();if(null==t)return e;if(de(t))return t;var r=i(t),n=r.size;return 0===n?e:(Mt(n),n>0&&n<m?we(0,n,v,null,new me(r.toArray())):e.withMutations((function(t){t.setSize(n),r.forEach((function(e,r){return t.set(r,e)}))})))}function de(t){return!(!t||!t[he])}e(pe,wt),pe.of=function(){return this(arguments)},pe.prototype.toString=function(){return this.__toString("List [","]")},pe.prototype.get=function(t,e){if((t=j(this,t))>=0&&t<this.size){var r=xe(this,t+=this._origin);return r&&r.array[t&y]}return e},pe.prototype.set=function(t,e){return function(t,e,r){if((e=j(t,e))!=e)return t;if(e>=t.size||e<0)return t.withMutations((function(t){e<0?je(t,e).set(0,r):je(t,0,e+1).set(e,r)}));e+=t._origin;var n=t._tail,i=t._root,o=w(b);return e>=Ie(t._capacity)?n=Oe(n,t.__ownerID,0,e,r,o):i=Oe(i,t.__ownerID,t._level,e,r,o),o.value?t.__ownerID?(t._root=i,t._tail=n,t.__hash=void 0,t.__altered=!0,t):we(t._origin,t._capacity,t._level,i,n):t}(this,t,e)},pe.prototype.remove=function(t){return this.has(t)?0===t?this.shift():t===this.size-1?this.pop():this.splice(t,1):this},pe.prototype.insert=function(t,e){return this.splice(t,0,e)},pe.prototype.clear=function(){return 0===this.size?this:this.__ownerID?(this.size=this._origin=this._capacity=0,this._level=v,this._root=this._tail=null,this.__hash=void 0,this.__altered=!0,this):Se()},pe.prototype.push=function(){var t=arguments,e=this.size;return this.withMutations((function(r){je(r,0,e+t.length);for(var n=0;n<t.length;n++)r.set(e+n,t[n])}))},pe.prototype.pop=function(){return je(this,0,-1)},pe.prototype.unshift=function(){var t=arguments;return this.withMutations((function(e){je(e,-t.length);for(var r=0;r<t.length;r++)e.set(r,t[r])}))},pe.prototype.shift=function(){return je(this,1)},pe.prototype.merge=function(){return ke(this,void 0,arguments)},pe.prototype.mergeWith=function(e){var r=t.call(arguments,1);return ke(this,e,r)},pe.prototype.mergeDeep=function(){return ke(this,ie,arguments)},pe.prototype.mergeDeepWith=function(e){var r=t.call(arguments,1);return ke(this,oe(e),r)},pe.prototype.setSize=function(t){return je(this,0,t)},pe.prototype.slice=function(t,e){var r=this.size;return I(t,e,r)?this:je(this,C(t,r),z(e,r))},pe.prototype.__iterator=function(t,e){var r=0,n=be(this,e);return new q((function(){var e=n();return e===ge?{value:void 0,done:!0}:W(t,r++,e)}))},pe.prototype.__iterate=function(t,e){for(var r,n=0,i=be(this,e);(r=i())!==ge&&!1!==t(r,n++,this););return n},pe.prototype.__ensureOwner=function(t){return t===this.__ownerID?this:t?we(this._origin,this._capacity,this._level,this._root,this._tail,t,this.__hash):(this.__ownerID=t,this)},pe.isList=de;var he="@@__IMMUTABLE_LIST__@@",ve=pe.prototype;function me(t,e){this.array=t,this.ownerID=e}ve[he]=!0,ve.delete=ve.remove,ve.setIn=Pt.setIn,ve.deleteIn=ve.removeIn=Pt.removeIn,ve.update=Pt.update,ve.updateIn=Pt.updateIn,ve.mergeIn=Pt.mergeIn,ve.mergeDeepIn=Pt.mergeDeepIn,ve.withMutations=Pt.withMutations,ve.asMutable=Pt.asMutable,ve.asImmutable=Pt.asImmutable,ve.wasAltered=Pt.wasAltered,me.prototype.removeBefore=function(t,e,r){if(r===e?1<<e:0===this.array.length)return this;var n=r>>>e&y;if(n>=this.array.length)return new me([],t);var i,o=0===n;if(e>0){var a=this.array[n];if((i=a&&a.removeBefore(t,e-v,r))===a&&o)return this}if(o&&!i)return this;var s=Ee(this,t);if(!o)for(var u=0;u<n;u++)s.array[u]=void 0;return i&&(s.array[n]=i),s},me.prototype.removeAfter=function(t,e,r){if(r===(e?1<<e:0)||0===this.array.length)return this;var n,i=r-1>>>e&y;if(i>=this.array.length)return this;if(e>0){var o=this.array[i];if((n=o&&o.removeAfter(t,e-v,r))===o&&i===this.array.length-1)return this}var a=Ee(this,t);return a.array.splice(i+1),n&&(a.array[i]=n),a};var ye,_e,ge={};function be(t,e){var r=t._origin,n=t._capacity,i=Ie(n),o=t._tail;return a(t._root,t._level,0);function a(t,s,u){return 0===s?function(t,a){var s=a===i?o&&o.array:t&&t.array,u=a>r?0:r-a,c=n-a;return c>m&&(c=m),function(){if(u===c)return ge;var t=e?--c:u++;return s&&s[t]}}(t,u):function(t,i,o){var s,u=t&&t.array,c=o>r?0:r-o>>i,l=1+(n-o>>i);return l>m&&(l=m),function(){for(;;){if(s){var t=s();if(t!==ge)return t;s=null}if(c===l)return ge;var r=e?--l:c++;s=a(u&&u[r],i-v,o+(r<<i))}}}(t,s,u)}}function we(t,e,r,n,i,o,a){var s=Object.create(ve);return s.size=e-t,s._origin=t,s._capacity=e,s._level=r,s._root=n,s._tail=i,s.__ownerID=o,s.__hash=a,s.__altered=!1,s}function Se(){return ye||(ye=we(0,0,v))}function Oe(t,e,r,n,i,o){var a,s=n>>>r&y,u=t&&s<t.array.length;if(!u&&void 0===i)return t;if(r>0){var c=t&&t.array[s],l=Oe(c,e,r-v,n,i,o);return l===c?t:((a=Ee(t,e)).array[s]=l,a)}return u&&t.array[s]===i?t:(S(o),a=Ee(t,e),void 0===i&&s===a.array.length-1?a.array.pop():a.array[s]=i,a)}function Ee(t,e){return e&&t&&e===t.ownerID?t:new me(t?t.array.slice():[],e)}function xe(t,e){if(e>=Ie(t._capacity))return t._tail;if(e<1<<t._level+v){for(var r=t._root,n=t._level;r&&n>0;)r=r.array[e>>>n&y],n-=v;return r}}function je(t,e,r){void 0!==e&&(e|=0),void 0!==r&&(r|=0);var n=t.__ownerID||new O,i=t._origin,o=t._capacity,a=i+e,s=void 0===r?o:r<0?o+r:i+r;if(a===i&&s===o)return t;if(a>=s)return t.clear();for(var u=t._level,c=t._root,l=0;a+l<0;)c=new me(c&&c.array.length?[void 0,c]:[],n),l+=1<<(u+=v);l&&(a+=l,i+=l,s+=l,o+=l);for(var f=Ie(o),p=Ie(s);p>=1<<u+v;)c=new me(c&&c.array.length?[c]:[],n),u+=v;var d=t._tail,h=p<f?xe(t,s-1):p>f?new me([],n):d;if(d&&p>f&&a<o&&d.array.length){for(var m=c=Ee(c,n),_=u;_>v;_-=v){var g=f>>>_&y;m=m.array[g]=Ee(m.array[g],n)}m.array[f>>>v&y]=d}if(s<o&&(h=h&&h.removeAfter(n,0,s)),a>=p)a-=p,s-=p,u=v,c=null,h=h&&h.removeBefore(n,0,a);else if(a>i||p<f){for(l=0;c;){var b=a>>>u&y;if(b!==p>>>u&y)break;b&&(l+=(1<<u)*b),u-=v,c=c.array[b]}c&&a>i&&(c=c.removeBefore(n,u,a-l)),c&&p<f&&(c=c.removeAfter(n,u,p-l)),l&&(a-=l,s-=l)}return t.__ownerID?(t.size=s-a,t._origin=a,t._capacity=s,t._level=u,t._root=c,t._tail=h,t.__hash=void 0,t.__altered=!0,t):we(a,s,u,c,h)}function ke(t,e,r){for(var n=[],o=0,s=0;s<r.length;s++){var u=r[s],c=i(u);c.size>o&&(o=c.size),a(u)||(c=c.map((function(t){return ft(t)}))),n.push(c)}return o>t.size&&(t=t.setSize(o)),ae(t,e,n)}function Ie(t){return t<m?0:t-1>>>v<<v}function Ce(t){return null==t?Re():ze(t)?t:Re().withMutations((function(e){var r=n(t);Mt(r.size),r.forEach((function(t,r){return e.set(r,t)}))}))}function ze(t){return Wt(t)&&l(t)}function Ae(t,e,r,n){var i=Object.create(Ce.prototype);return i.size=t?t.size:0,i._map=t,i._list=e,i.__ownerID=r,i.__hash=n,i}function Re(){return _e||(_e=Ae(Yt(),Se()))}function De(t,e,r){var n,i,o=t._map,a=t._list,s=o.get(e),u=void 0!==s;if(r===_){if(!u)return t;a.size>=m&&a.size>=2*o.size?(n=(i=a.filter((function(t,e){return void 0!==t&&s!==e}))).toKeyedSeq().map((function(t){return t[0]})).flip().toMap(),t.__ownerID&&(n.__ownerID=i.__ownerID=t.__ownerID)):(n=o.remove(e),i=s===a.size-1?a.pop():a.set(s,void 0))}else if(u){if(r===a.get(s)[1])return t;n=o,i=a.set(s,[e,r])}else n=o.set(e,a.size),i=a.set(a.size,[e,r]);return t.__ownerID?(t.size=n.size,t._map=n,t._list=i,t.__hash=void 0,t):Ae(n,i)}function Fe(t,e){this._iter=t,this._useKeys=e,this.size=t.size}function Ne(t){this._iter=t,this.size=t.size}function Ve(t){this._iter=t,this.size=t.size}function Me(t){this._iter=t,this.size=t.size}function qe(t){var e=tr(t);return e._iter=t,e.size=t.size,e.flip=function(){return t},e.reverse=function(){var e=t.reverse.apply(this);return e.flip=function(){return t.reverse()},e},e.has=function(e){return t.includes(e)},e.includes=function(e){return t.has(e)},e.cacheResult=er,e.__iterateUncached=function(e,r){var n=this;return t.__iterate((function(t,r){return!1!==e(r,t,n)}),r)},e.__iteratorUncached=function(e,r){if(e===F){var n=t.__iterator(e,r);return new q((function(){var t=n.next();if(!t.done){var e=t.value[0];t.value[0]=t.value[1],t.value[1]=e}return t}))}return t.__iterator(e===D?R:D,r)},e}function We(t,e,r){var n=tr(t);return n.size=t.size,n.has=function(e){return t.has(e)},n.get=function(n,i){var o=t.get(n,_);return o===_?i:e.call(r,o,n,t)},n.__iterateUncached=function(n,i){var o=this;return t.__iterate((function(t,i,a){return!1!==n(e.call(r,t,i,a),i,o)}),i)},n.__iteratorUncached=function(n,i){var o=t.__iterator(F,i);return new q((function(){var i=o.next();if(i.done)return i;var a=i.value,s=a[0];return W(n,s,e.call(r,a[1],s,t),i)}))},n}function Le(t,e){var r=tr(t);return r._iter=t,r.size=t.size,r.reverse=function(){return t},t.flip&&(r.flip=function(){var e=qe(t);return e.reverse=function(){return t.flip()},e}),r.get=function(r,n){return t.get(e?r:-1-r,n)},r.has=function(r){return t.has(e?r:-1-r)},r.includes=function(e){return t.includes(e)},r.cacheResult=er,r.__iterate=function(e,r){var n=this;return t.__iterate((function(t,r){return e(t,r,n)}),!r)},r.__iterator=function(e,r){return t.__iterator(e,!r)},r}function Te(t,e,r,n){var i=tr(t);return n&&(i.has=function(n){var i=t.get(n,_);return i!==_&&!!e.call(r,i,n,t)},i.get=function(n,i){var o=t.get(n,_);return o!==_&&e.call(r,o,n,t)?o:i}),i.__iterateUncached=function(i,o){var a=this,s=0;return t.__iterate((function(t,o,u){if(e.call(r,t,o,u))return s++,i(t,n?o:s-1,a)}),o),s},i.__iteratorUncached=function(i,o){var a=t.__iterator(F,o),s=0;return new q((function(){for(;;){var o=a.next();if(o.done)return o;var u=o.value,c=u[0],l=u[1];if(e.call(r,l,c,t))return W(i,n?c:s++,l,o)}}))},i}function Pe(t,e,r,n){var i=t.size;if(void 0!==e&&(e|=0),void 0!==r&&(r===1/0?r=i:r|=0),I(e,r,i))return t;var o=C(e,i),a=z(r,i);if(o!=o||a!=a)return Pe(t.toSeq().cacheResult(),e,r,n);var s,u=a-o;u==u&&(s=u<0?0:u);var c=tr(t);return c.size=0===s?s:t.size&&s||void 0,!n&&it(t)&&s>=0&&(c.get=function(e,r){return(e=j(this,e))>=0&&e<s?t.get(e+o,r):r}),c.__iterateUncached=function(e,r){var i=this;if(0===s)return 0;if(r)return this.cacheResult().__iterate(e,r);var a=0,u=!0,c=0;return t.__iterate((function(t,r){if(!u||!(u=a++<o))return c++,!1!==e(t,n?r:c-1,i)&&c!==s})),c},c.__iteratorUncached=function(e,r){if(0!==s&&r)return this.cacheResult().__iterator(e,r);var i=0!==s&&t.__iterator(e,r),a=0,u=0;return new q((function(){for(;a++<o;)i.next();if(++u>s)return{value:void 0,done:!0};var t=i.next();return n||e===D?t:W(e,u-1,e===R?void 0:t.value[1],t)}))},c}function Ue(t,e,r,n){var i=tr(t);return i.__iterateUncached=function(i,o){var a=this;if(o)return this.cacheResult().__iterate(i,o);var s=!0,u=0;return t.__iterate((function(t,o,c){if(!s||!(s=e.call(r,t,o,c)))return u++,i(t,n?o:u-1,a)})),u},i.__iteratorUncached=function(i,o){var a=this;if(o)return this.cacheResult().__iterator(i,o);var s=t.__iterator(F,o),u=!0,c=0;return new q((function(){var t,o,l;do{if((t=s.next()).done)return n||i===D?t:W(i,c++,i===R?void 0:t.value[1],t);var f=t.value;o=f[0],l=f[1],u&&(u=e.call(r,l,o,a))}while(u);return i===F?t:W(i,o,l,t)}))},i}function Be(t,e){var r=s(t),i=[t].concat(e).map((function(t){return a(t)?r&&(t=n(t)):t=r?at(t):st(Array.isArray(t)?t:[t]),t})).filter((function(t){return 0!==t.size}));if(0===i.length)return t;if(1===i.length){var o=i[0];if(o===t||r&&s(o)||u(t)&&u(o))return o}var c=new tt(i);return r?c=c.toKeyedSeq():u(t)||(c=c.toSetSeq()),(c=c.flatten(!0)).size=i.reduce((function(t,e){if(void 0!==t){var r=e.size;if(void 0!==r)return t+r}}),0),c}function Ke(t,e,r){var n=tr(t);return n.__iterateUncached=function(n,i){var o=0,s=!1;return function t(u,c){var l=this;u.__iterate((function(i,u){return(!e||c<e)&&a(i)?t(i,c+1):!1===n(i,r?u:o++,l)&&(s=!0),!s}),i)}(t,0),o},n.__iteratorUncached=function(n,i){var o=t.__iterator(n,i),s=[],u=0;return new q((function(){for(;o;){var t=o.next();if(!1===t.done){var c=t.value;if(n===F&&(c=c[1]),e&&!(s.length<e)||!a(c))return r?t:W(n,u++,c,t);s.push(o),o=c.__iterator(n,i)}else o=s.pop()}return{value:void 0,done:!0}}))},n}function He(t,e,r){e||(e=rr);var n=s(t),i=0,o=t.toSeq().map((function(e,n){return[n,e,i++,r?r(e,n,t):e]})).toArray();return o.sort((function(t,r){return e(t[3],r[3])||t[2]-r[2]})).forEach(n?function(t,e){o[e].length=2}:function(t,e){o[e]=t[1]}),n?$(o):u(t)?J(o):G(o)}function $e(t,e,r){if(e||(e=rr),r){var n=t.toSeq().map((function(e,n){return[e,r(e,n,t)]})).reduce((function(t,r){return Je(e,t[1],r[1])?r:t}));return n&&n[0]}return t.reduce((function(t,r){return Je(e,t,r)?r:t}))}function Je(t,e,r){var n=t(r,e);return 0===n&&r!==e&&(null==r||r!=r)||n>0}function Ge(t,e,n){var i=tr(t);return i.size=new tt(n).map((function(t){return t.size})).min(),i.__iterate=function(t,e){for(var r,n=this.__iterator(D,e),i=0;!(r=n.next()).done&&!1!==t(r.value,i++,this););return i},i.__iteratorUncached=function(t,i){var o=n.map((function(t){return t=r(t),U(i?t.reverse():t)})),a=0,s=!1;return new q((function(){var r;return s||(r=o.map((function(t){return t.next()})),s=r.some((function(t){return t.done}))),s?{value:void 0,done:!0}:W(t,a++,e.apply(null,r.map((function(t){return t.value}))))}))},i}function Xe(t,e){return it(t)?e:t.constructor(e)}function Ze(t){if(t!==Object(t))throw new TypeError("Expected [K, V] tuple: "+t)}function Ye(t){return Mt(t.size),x(t)}function Qe(t){return s(t)?n:u(t)?i:o}function tr(t){return Object.create((s(t)?$:u(t)?J:G).prototype)}function er(){return this._iter.cacheResult?(this._iter.cacheResult(),this.size=this._iter.size,this):H.prototype.cacheResult.call(this)}function rr(t,e){return t>e?1:t<e?-1:0}function nr(t){var e=U(t);if(!e){if(!K(t))throw new TypeError("Expected iterable or array-like: "+t);e=U(r(t))}return e}function ir(t,e){var r,n=function(o){if(o instanceof n)return o;if(!(this instanceof n))return new n(o);if(!r){r=!0;var a=Object.keys(t);!function(t,e){try{e.forEach(ur.bind(void 0,t))}catch(t){}}(i,a),i.size=a.length,i._name=e,i._keys=a,i._defaultValues=t}this._map=qt(o)},i=n.prototype=Object.create(or);return i.constructor=n,n}e(Ce,qt),Ce.of=function(){return this(arguments)},Ce.prototype.toString=function(){return this.__toString("OrderedMap {","}")},Ce.prototype.get=function(t,e){var r=this._map.get(t);return void 0!==r?this._list.get(r)[1]:e},Ce.prototype.clear=function(){return 0===this.size?this:this.__ownerID?(this.size=0,this._map.clear(),this._list.clear(),this):Re()},Ce.prototype.set=function(t,e){return De(this,t,e)},Ce.prototype.remove=function(t){return De(this,t,_)},Ce.prototype.wasAltered=function(){return this._map.wasAltered()||this._list.wasAltered()},Ce.prototype.__iterate=function(t,e){var r=this;return this._list.__iterate((function(e){return e&&t(e[1],e[0],r)}),e)},Ce.prototype.__iterator=function(t,e){return this._list.fromEntrySeq().__iterator(t,e)},Ce.prototype.__ensureOwner=function(t){if(t===this.__ownerID)return this;var e=this._map.__ensureOwner(t),r=this._list.__ensureOwner(t);return t?Ae(e,r,t,this.__hash):(this.__ownerID=t,this._map=e,this._list=r,this)},Ce.isOrderedMap=ze,Ce.prototype[h]=!0,Ce.prototype.delete=Ce.prototype.remove,e(Fe,$),Fe.prototype.get=function(t,e){return this._iter.get(t,e)},Fe.prototype.has=function(t){return this._iter.has(t)},Fe.prototype.valueSeq=function(){return this._iter.valueSeq()},Fe.prototype.reverse=function(){var t=this,e=Le(this,!0);return this._useKeys||(e.valueSeq=function(){return t._iter.toSeq().reverse()}),e},Fe.prototype.map=function(t,e){var r=this,n=We(this,t,e);return this._useKeys||(n.valueSeq=function(){return r._iter.toSeq().map(t,e)}),n},Fe.prototype.__iterate=function(t,e){var r,n=this;return this._iter.__iterate(this._useKeys?function(e,r){return t(e,r,n)}:(r=e?Ye(this):0,function(i){return t(i,e?--r:r++,n)}),e)},Fe.prototype.__iterator=function(t,e){if(this._useKeys)return this._iter.__iterator(t,e);var r=this._iter.__iterator(D,e),n=e?Ye(this):0;return new q((function(){var i=r.next();return i.done?i:W(t,e?--n:n++,i.value,i)}))},Fe.prototype[h]=!0,e(Ne,J),Ne.prototype.includes=function(t){return this._iter.includes(t)},Ne.prototype.__iterate=function(t,e){var r=this,n=0;return this._iter.__iterate((function(e){return t(e,n++,r)}),e)},Ne.prototype.__iterator=function(t,e){var r=this._iter.__iterator(D,e),n=0;return new q((function(){var e=r.next();return e.done?e:W(t,n++,e.value,e)}))},e(Ve,G),Ve.prototype.has=function(t){return this._iter.includes(t)},Ve.prototype.__iterate=function(t,e){var r=this;return this._iter.__iterate((function(e){return t(e,e,r)}),e)},Ve.prototype.__iterator=function(t,e){var r=this._iter.__iterator(D,e);return new q((function(){var e=r.next();return e.done?e:W(t,e.value,e.value,e)}))},e(Me,$),Me.prototype.entrySeq=function(){return this._iter.toSeq()},Me.prototype.__iterate=function(t,e){var r=this;return this._iter.__iterate((function(e){if(e){Ze(e);var n=a(e);return t(n?e.get(1):e[1],n?e.get(0):e[0],r)}}),e)},Me.prototype.__iterator=function(t,e){var r=this._iter.__iterator(D,e);return new q((function(){for(;;){var e=r.next();if(e.done)return e;var n=e.value;if(n){Ze(n);var i=a(n);return W(t,i?n.get(0):n[0],i?n.get(1):n[1],e)}}}))},Ne.prototype.cacheResult=Fe.prototype.cacheResult=Ve.prototype.cacheResult=Me.prototype.cacheResult=er,e(ir,bt),ir.prototype.toString=function(){return this.__toString(sr(this)+" {","}")},ir.prototype.has=function(t){return this._defaultValues.hasOwnProperty(t)},ir.prototype.get=function(t,e){if(!this.has(t))return e;var r=this._defaultValues[t];return this._map?this._map.get(t,r):r},ir.prototype.clear=function(){if(this.__ownerID)return this._map&&this._map.clear(),this;var t=this.constructor;return t._empty||(t._empty=ar(this,Yt()))},ir.prototype.set=function(t,e){if(!this.has(t))throw new Error('Cannot set unknown key "'+t+'" on '+sr(this));if(this._map&&!this._map.has(t)&&e===this._defaultValues[t])return this;var r=this._map&&this._map.set(t,e);return this.__ownerID||r===this._map?this:ar(this,r)},ir.prototype.remove=function(t){if(!this.has(t))return this;var e=this._map&&this._map.remove(t);return this.__ownerID||e===this._map?this:ar(this,e)},ir.prototype.wasAltered=function(){return this._map.wasAltered()},ir.prototype.__iterator=function(t,e){var r=this;return n(this._defaultValues).map((function(t,e){return r.get(e)})).__iterator(t,e)},ir.prototype.__iterate=function(t,e){var r=this;return n(this._defaultValues).map((function(t,e){return r.get(e)})).__iterate(t,e)},ir.prototype.__ensureOwner=function(t){if(t===this.__ownerID)return this;var e=this._map&&this._map.__ensureOwner(t);return t?ar(this,e,t):(this.__ownerID=t,this._map=e,this)};var or=ir.prototype;function ar(t,e,r){var n=Object.create(Object.getPrototypeOf(t));return n._map=e,n.__ownerID=r,n}function sr(t){return t._name||t.constructor.name||"Record"}function ur(t,e){Object.defineProperty(t,e,{get:function(){return this.get(e)},set:function(t){yt(this.__ownerID,"Cannot set on an immutable record."),this.set(e,t)}})}function cr(t){return null==t?mr():lr(t)&&!l(t)?t:mr().withMutations((function(e){var r=o(t);Mt(r.size),r.forEach((function(t){return e.add(t)}))}))}function lr(t){return!(!t||!t[pr])}or.delete=or.remove,or.deleteIn=or.removeIn=Pt.removeIn,or.merge=Pt.merge,or.mergeWith=Pt.mergeWith,or.mergeIn=Pt.mergeIn,or.mergeDeep=Pt.mergeDeep,or.mergeDeepWith=Pt.mergeDeepWith,or.mergeDeepIn=Pt.mergeDeepIn,or.setIn=Pt.setIn,or.update=Pt.update,or.updateIn=Pt.updateIn,or.withMutations=Pt.withMutations,or.asMutable=Pt.asMutable,or.asImmutable=Pt.asImmutable,e(cr,St),cr.of=function(){return this(arguments)},cr.fromKeys=function(t){return this(n(t).keySeq())},cr.prototype.toString=function(){return this.__toString("Set {","}")},cr.prototype.has=function(t){return this._map.has(t)},cr.prototype.add=function(t){return hr(this,this._map.set(t,!0))},cr.prototype.remove=function(t){return hr(this,this._map.remove(t))},cr.prototype.clear=function(){return hr(this,this._map.clear())},cr.prototype.union=function(){var e=t.call(arguments,0);return 0===(e=e.filter((function(t){return 0!==t.size}))).length?this:0!==this.size||this.__ownerID||1!==e.length?this.withMutations((function(t){for(var r=0;r<e.length;r++)o(e[r]).forEach((function(e){return t.add(e)}))})):this.constructor(e[0])},cr.prototype.intersect=function(){var e=t.call(arguments,0);if(0===e.length)return this;e=e.map((function(t){return o(t)}));var r=this;return this.withMutations((function(t){r.forEach((function(r){e.every((function(t){return t.includes(r)}))||t.remove(r)}))}))},cr.prototype.subtract=function(){var e=t.call(arguments,0);if(0===e.length)return this;e=e.map((function(t){return o(t)}));var r=this;return this.withMutations((function(t){r.forEach((function(r){e.some((function(t){return t.includes(r)}))&&t.remove(r)}))}))},cr.prototype.merge=function(){return this.union.apply(this,arguments)},cr.prototype.mergeWith=function(e){var r=t.call(arguments,1);return this.union.apply(this,r)},cr.prototype.sort=function(t){return yr(He(this,t))},cr.prototype.sortBy=function(t,e){return yr(He(this,e,t))},cr.prototype.wasAltered=function(){return this._map.wasAltered()},cr.prototype.__iterate=function(t,e){var r=this;return this._map.__iterate((function(e,n){return t(n,n,r)}),e)},cr.prototype.__iterator=function(t,e){return this._map.map((function(t,e){return e})).__iterator(t,e)},cr.prototype.__ensureOwner=function(t){if(t===this.__ownerID)return this;var e=this._map.__ensureOwner(t);return t?this.__make(e,t):(this.__ownerID=t,this._map=e,this)},cr.isSet=lr;var fr,pr="@@__IMMUTABLE_SET__@@",dr=cr.prototype;function hr(t,e){return t.__ownerID?(t.size=e.size,t._map=e,t):e===t._map?t:0===e.size?t.__empty():t.__make(e)}function vr(t,e){var r=Object.create(dr);return r.size=t?t.size:0,r._map=t,r.__ownerID=e,r}function mr(){return fr||(fr=vr(Yt()))}function yr(t){return null==t?Sr():_r(t)?t:Sr().withMutations((function(e){var r=o(t);Mt(r.size),r.forEach((function(t){return e.add(t)}))}))}function _r(t){return lr(t)&&l(t)}dr[pr]=!0,dr.delete=dr.remove,dr.mergeDeep=dr.merge,dr.mergeDeepWith=dr.mergeWith,dr.withMutations=Pt.withMutations,dr.asMutable=Pt.asMutable,dr.asImmutable=Pt.asImmutable,dr.__empty=mr,dr.__make=vr,e(yr,cr),yr.of=function(){return this(arguments)},yr.fromKeys=function(t){return this(n(t).keySeq())},yr.prototype.toString=function(){return this.__toString("OrderedSet {","}")},yr.isOrderedSet=_r;var gr,br=yr.prototype;function wr(t,e){var r=Object.create(br);return r.size=t?t.size:0,r._map=t,r.__ownerID=e,r}function Sr(){return gr||(gr=wr(Re()))}function Or(t){return null==t?Cr():Er(t)?t:Cr().unshiftAll(t)}function Er(t){return!(!t||!t[jr])}br[h]=!0,br.__empty=Sr,br.__make=wr,e(Or,wt),Or.of=function(){return this(arguments)},Or.prototype.toString=function(){return this.__toString("Stack [","]")},Or.prototype.get=function(t,e){var r=this._head;for(t=j(this,t);r&&t--;)r=r.next;return r?r.value:e},Or.prototype.peek=function(){return this._head&&this._head.value},Or.prototype.push=function(){if(0===arguments.length)return this;for(var t=this.size+arguments.length,e=this._head,r=arguments.length-1;r>=0;r--)e={value:arguments[r],next:e};return this.__ownerID?(this.size=t,this._head=e,this.__hash=void 0,this.__altered=!0,this):Ir(t,e)},Or.prototype.pushAll=function(t){if(0===(t=i(t)).size)return this;Mt(t.size);var e=this.size,r=this._head;return t.reverse().forEach((function(t){e++,r={value:t,next:r}})),this.__ownerID?(this.size=e,this._head=r,this.__hash=void 0,this.__altered=!0,this):Ir(e,r)},Or.prototype.pop=function(){return this.slice(1)},Or.prototype.unshift=function(){return this.push.apply(this,arguments)},Or.prototype.unshiftAll=function(t){return this.pushAll(t)},Or.prototype.shift=function(){return this.pop.apply(this,arguments)},Or.prototype.clear=function(){return 0===this.size?this:this.__ownerID?(this.size=0,this._head=void 0,this.__hash=void 0,this.__altered=!0,this):Cr()},Or.prototype.slice=function(t,e){if(I(t,e,this.size))return this;var r=C(t,this.size);if(z(e,this.size)!==this.size)return wt.prototype.slice.call(this,t,e);for(var n=this.size-r,i=this._head;r--;)i=i.next;return this.__ownerID?(this.size=n,this._head=i,this.__hash=void 0,this.__altered=!0,this):Ir(n,i)},Or.prototype.__ensureOwner=function(t){return t===this.__ownerID?this:t?Ir(this.size,this._head,t,this.__hash):(this.__ownerID=t,this.__altered=!1,this)},Or.prototype.__iterate=function(t,e){if(e)return this.reverse().__iterate(t);for(var r=0,n=this._head;n&&!1!==t(n.value,r++,this);)n=n.next;return r},Or.prototype.__iterator=function(t,e){if(e)return this.reverse().__iterator(t);var r=0,n=this._head;return new q((function(){if(n){var e=n.value;return n=n.next,W(t,r++,e)}return{value:void 0,done:!0}}))},Or.isStack=Er;var xr,jr="@@__IMMUTABLE_STACK__@@",kr=Or.prototype;function Ir(t,e,r,n){var i=Object.create(kr);return i.size=t,i._head=e,i.__ownerID=r,i.__hash=n,i.__altered=!1,i}function Cr(){return xr||(xr=Ir(0))}function zr(t,e){var r=function(r){t.prototype[r]=e[r]};return Object.keys(e).forEach(r),Object.getOwnPropertySymbols&&Object.getOwnPropertySymbols(e).forEach(r),t}kr[jr]=!0,kr.withMutations=Pt.withMutations,kr.asMutable=Pt.asMutable,kr.asImmutable=Pt.asImmutable,kr.wasAltered=Pt.wasAltered,r.Iterator=q,zr(r,{toArray:function(){Mt(this.size);var t=new Array(this.size||0);return this.valueSeq().__iterate((function(e,r){t[r]=e})),t},toIndexedSeq:function(){return new Ne(this)},toJS:function(){return this.toSeq().map((function(t){return t&&"function"==typeof t.toJS?t.toJS():t})).__toJS()},toJSON:function(){return this.toSeq().map((function(t){return t&&"function"==typeof t.toJSON?t.toJSON():t})).__toJS()},toKeyedSeq:function(){return new Fe(this,!0)},toMap:function(){return qt(this.toKeyedSeq())},toObject:function(){Mt(this.size);var t={};return this.__iterate((function(e,r){t[r]=e})),t},toOrderedMap:function(){return Ce(this.toKeyedSeq())},toOrderedSet:function(){return yr(s(this)?this.valueSeq():this)},toSet:function(){return cr(s(this)?this.valueSeq():this)},toSetSeq:function(){return new Ve(this)},toSeq:function(){return u(this)?this.toIndexedSeq():s(this)?this.toKeyedSeq():this.toSetSeq()},toStack:function(){return Or(s(this)?this.valueSeq():this)},toList:function(){return pe(s(this)?this.valueSeq():this)},toString:function(){return"[Iterable]"},__toString:function(t,e){return 0===this.size?t+e:t+" "+this.toSeq().map(this.__toStringMapper).join(", ")+" "+e},concat:function(){var e=t.call(arguments,0);return Xe(this,Be(this,e))},includes:function(t){return this.some((function(e){return ht(e,t)}))},entries:function(){return this.__iterator(F)},every:function(t,e){Mt(this.size);var r=!0;return this.__iterate((function(n,i,o){if(!t.call(e,n,i,o))return r=!1,!1})),r},filter:function(t,e){return Xe(this,Te(this,t,e,!0))},find:function(t,e,r){var n=this.findEntry(t,e);return n?n[1]:r},forEach:function(t,e){return Mt(this.size),this.__iterate(e?t.bind(e):t)},join:function(t){Mt(this.size),t=void 0!==t?""+t:",";var e="",r=!0;return this.__iterate((function(n){r?r=!1:e+=t,e+=null!=n?n.toString():""})),e},keys:function(){return this.__iterator(R)},map:function(t,e){return Xe(this,We(this,t,e))},reduce:function(t,e,r){var n,i;return Mt(this.size),arguments.length<2?i=!0:n=e,this.__iterate((function(e,o,a){i?(i=!1,n=e):n=t.call(r,n,e,o,a)})),n},reduceRight:function(t,e,r){var n=this.toKeyedSeq().reverse();return n.reduce.apply(n,arguments)},reverse:function(){return Xe(this,Le(this,!0))},slice:function(t,e){return Xe(this,Pe(this,t,e,!0))},some:function(t,e){return!this.every(Nr(t),e)},sort:function(t){return Xe(this,He(this,t))},values:function(){return this.__iterator(D)},butLast:function(){return this.slice(0,-1)},isEmpty:function(){return void 0!==this.size?0===this.size:!this.some((function(){return!0}))},count:function(t,e){return x(t?this.toSeq().filter(t,e):this)},countBy:function(t,e){return function(t,e,r){var n=qt().asMutable();return t.__iterate((function(i,o){n.update(e.call(r,i,o,t),0,(function(t){return t+1}))})),n.asImmutable()}(this,t,e)},equals:function(t){return vt(this,t)},entrySeq:function(){var t=this;if(t._cache)return new tt(t._cache);var e=t.toSeq().map(Fr).toIndexedSeq();return e.fromEntrySeq=function(){return t.toSeq()},e},filterNot:function(t,e){return this.filter(Nr(t),e)},findEntry:function(t,e,r){var n=r;return this.__iterate((function(r,i,o){if(t.call(e,r,i,o))return n=[i,r],!1})),n},findKey:function(t,e){var r=this.findEntry(t,e);return r&&r[0]},findLast:function(t,e,r){return this.toKeyedSeq().reverse().find(t,e,r)},findLastEntry:function(t,e,r){return this.toKeyedSeq().reverse().findEntry(t,e,r)},findLastKey:function(t,e){return this.toKeyedSeq().reverse().findKey(t,e)},first:function(){return this.find(k)},flatMap:function(t,e){return Xe(this,function(t,e,r){var n=Qe(t);return t.toSeq().map((function(i,o){return n(e.call(r,i,o,t))})).flatten(!0)}(this,t,e))},flatten:function(t){return Xe(this,Ke(this,t,!0))},fromEntrySeq:function(){return new Me(this)},get:function(t,e){return this.find((function(e,r){return ht(r,t)}),void 0,e)},getIn:function(t,e){for(var r,n=this,i=nr(t);!(r=i.next()).done;){var o=r.value;if((n=n&&n.get?n.get(o,_):_)===_)return e}return n},groupBy:function(t,e){return function(t,e,r){var n=s(t),i=(l(t)?Ce():qt()).asMutable();t.__iterate((function(o,a){i.update(e.call(r,o,a,t),(function(t){return(t=t||[]).push(n?[a,o]:o),t}))}));var o=Qe(t);return i.map((function(e){return Xe(t,o(e))}))}(this,t,e)},has:function(t){return this.get(t,_)!==_},hasIn:function(t){return this.getIn(t,_)!==_},isSubset:function(t){return t="function"==typeof t.includes?t:r(t),this.every((function(e){return t.includes(e)}))},isSuperset:function(t){return(t="function"==typeof t.isSubset?t:r(t)).isSubset(this)},keyOf:function(t){return this.findKey((function(e){return ht(e,t)}))},keySeq:function(){return this.toSeq().map(Dr).toIndexedSeq()},last:function(){return this.toSeq().reverse().first()},lastKeyOf:function(t){return this.toKeyedSeq().reverse().keyOf(t)},max:function(t){return $e(this,t)},maxBy:function(t,e){return $e(this,e,t)},min:function(t){return $e(this,t?Vr(t):Wr)},minBy:function(t,e){return $e(this,e?Vr(e):Wr,t)},rest:function(){return this.slice(1)},skip:function(t){return this.slice(Math.max(0,t))},skipLast:function(t){return Xe(this,this.toSeq().reverse().skip(t).reverse())},skipWhile:function(t,e){return Xe(this,Ue(this,t,e,!0))},skipUntil:function(t,e){return this.skipWhile(Nr(t),e)},sortBy:function(t,e){return Xe(this,He(this,e,t))},take:function(t){return this.slice(0,Math.max(0,t))},takeLast:function(t){return Xe(this,this.toSeq().reverse().take(t).reverse())},takeWhile:function(t,e){return Xe(this,function(t,e,r){var n=tr(t);return n.__iterateUncached=function(n,i){var o=this;if(i)return this.cacheResult().__iterate(n,i);var a=0;return t.__iterate((function(t,i,s){return e.call(r,t,i,s)&&++a&&n(t,i,o)})),a},n.__iteratorUncached=function(n,i){var o=this;if(i)return this.cacheResult().__iterator(n,i);var a=t.__iterator(F,i),s=!0;return new q((function(){if(!s)return{value:void 0,done:!0};var t=a.next();if(t.done)return t;var i=t.value,u=i[0],c=i[1];return e.call(r,c,u,o)?n===F?t:W(n,u,c,t):(s=!1,{value:void 0,done:!0})}))},n}(this,t,e))},takeUntil:function(t,e){return this.takeWhile(Nr(t),e)},valueSeq:function(){return this.toIndexedSeq()},hashCode:function(){return this.__hash||(this.__hash=function(t){if(t.size===1/0)return 0;var e=l(t),r=s(t),n=e?1:0;return function(t,e){return e=Ot(e,3432918353),e=Ot(e<<15|e>>>-15,461845907),e=Ot(e<<13|e>>>-13,5),e=Ot((e=(e+3864292196|0)^t)^e>>>16,2246822507),e=Et((e=Ot(e^e>>>13,3266489909))^e>>>16)}(t.__iterate(r?e?function(t,e){n=31*n+Lr(xt(t),xt(e))|0}:function(t,e){n=n+Lr(xt(t),xt(e))|0}:e?function(t){n=31*n+xt(t)|0}:function(t){n=n+xt(t)|0}),n)}(this))}});var Ar=r.prototype;Ar[f]=!0,Ar[M]=Ar.values,Ar.__toJS=Ar.toArray,Ar.__toStringMapper=Mr,Ar.inspect=Ar.toSource=function(){return this.toString()},Ar.chain=Ar.flatMap,Ar.contains=Ar.includes,zr(n,{flip:function(){return Xe(this,qe(this))},mapEntries:function(t,e){var r=this,n=0;return Xe(this,this.toSeq().map((function(i,o){return t.call(e,[o,i],n++,r)})).fromEntrySeq())},mapKeys:function(t,e){var r=this;return Xe(this,this.toSeq().flip().map((function(n,i){return t.call(e,n,i,r)})).flip())}});var Rr=n.prototype;function Dr(t,e){return e}function Fr(t,e){return[e,t]}function Nr(t){return function(){return!t.apply(this,arguments)}}function Vr(t){return function(){return-t.apply(this,arguments)}}function Mr(t){return"string"==typeof t?JSON.stringify(t):String(t)}function qr(){return E(arguments)}function Wr(t,e){return t<e?1:t>e?-1:0}function Lr(t,e){return t^e+2654435769+(t<<6)+(t>>2)|0}return Rr[p]=!0,Rr[M]=Ar.entries,Rr.__toJS=Ar.toObject,Rr.__toStringMapper=function(t,e){return JSON.stringify(e)+": "+Mr(t)},zr(i,{toKeyedSeq:function(){return new Fe(this,!1)},filter:function(t,e){return Xe(this,Te(this,t,e,!1))},findIndex:function(t,e){var r=this.findEntry(t,e);return r?r[0]:-1},indexOf:function(t){var e=this.keyOf(t);return void 0===e?-1:e},lastIndexOf:function(t){var e=this.lastKeyOf(t);return void 0===e?-1:e},reverse:function(){return Xe(this,Le(this,!1))},slice:function(t,e){return Xe(this,Pe(this,t,e,!1))},splice:function(t,e){var r=arguments.length;if(e=Math.max(0|e,0),0===r||2===r&&!e)return this;t=C(t,t<0?this.count():this.size);var n=this.slice(0,t);return Xe(this,1===r?n:n.concat(E(arguments,2),this.slice(t+e)))},findLastIndex:function(t,e){var r=this.findLastEntry(t,e);return r?r[0]:-1},first:function(){return this.get(0)},flatten:function(t){return Xe(this,Ke(this,t,!1))},get:function(t,e){return(t=j(this,t))<0||this.size===1/0||void 0!==this.size&&t>this.size?e:this.find((function(e,r){return r===t}),void 0,e)},has:function(t){return(t=j(this,t))>=0&&(void 0!==this.size?this.size===1/0||t<this.size:-1!==this.indexOf(t))},interpose:function(t){return Xe(this,function(t,e){var r=tr(t);return r.size=t.size&&2*t.size-1,r.__iterateUncached=function(r,n){var i=this,o=0;return t.__iterate((function(t,n){return(!o||!1!==r(e,o++,i))&&!1!==r(t,o++,i)}),n),o},r.__iteratorUncached=function(r,n){var i,o=t.__iterator(D,n),a=0;return new q((function(){return(!i||a%2)&&(i=o.next()).done?i:a%2?W(r,a++,e):W(r,a++,i.value,i)}))},r}(this,t))},interleave:function(){var t=[this].concat(E(arguments)),e=Ge(this.toSeq(),J.of,t),r=e.flatten(!0);return e.size&&(r.size=e.size*t.length),Xe(this,r)},keySeq:function(){return _t(0,this.size)},last:function(){return this.get(-1)},skipWhile:function(t,e){return Xe(this,Ue(this,t,e,!1))},zip:function(){var t=[this].concat(E(arguments));return Xe(this,Ge(this,qr,t))},zipWith:function(t){var e=E(arguments);return e[0]=this,Xe(this,Ge(this,t,e))}}),i.prototype[d]=!0,i.prototype[h]=!0,zr(o,{get:function(t,e){return this.has(t)?t:e},includes:function(t){return this.has(t)},keySeq:function(){return this.valueSeq()}}),o.prototype.has=Ar.includes,o.prototype.contains=o.prototype.includes,zr($,n.prototype),zr(J,i.prototype),zr(G,o.prototype),zr(bt,n.prototype),zr(wt,i.prototype),zr(St,o.prototype),{Iterable:r,Seq:H,Collection:gt,Map:qt,OrderedMap:Ce,List:pe,Stack:Or,Set:cr,OrderedSet:yr,Record:ir,Range:_t,Repeat:mt,is:ht,fromJS:ft}}()},413:function(t,e,r){"use strict";(function(t){e.a=function(){var e=t;return!(void 0===e||!e.hot||"function"!=typeof e.hot.status||"apply"!==e.hot.status())}}).call(this,r(121)(t))},414:function(t,e,r){"use strict";var n=r(2),i=r(9),o=r(0),a=r.n(o),s=(r(10),r(245)),u=r(247),c=r(111),l=r(278),f=r(251),p=r(320),d=a.a.forwardRef((function(t,e){var r=t.classes,o=t.className,c=t.color,d=void 0===c?"primary":c,h=t.component,v=void 0===h?"a":h,m=t.onBlur,y=t.onFocus,_=t.TypographyClasses,g=t.underline,b=void 0===g?"hover":g,w=t.variant,S=void 0===w?"inherit":w,O=Object(i.a)(t,["classes","className","color","component","onBlur","onFocus","TypographyClasses","underline","variant"]),E=Object(l.a)(),x=E.isFocusVisible,j=E.onBlurVisible,k=E.ref,I=a.a.useState(!1),C=I[0],z=I[1],A=Object(f.a)(e,k);return a.a.createElement(p.a,Object(n.a)({className:Object(s.a)(r.root,r["underline".concat(Object(u.a)(b))],o,C&&r.focusVisible,{button:r.button}[v]),classes:_,color:d,component:v,onBlur:function(t){C&&(j(),z(!1)),m&&m(t)},onFocus:function(t){x(t)&&z(!0),y&&y(t)},ref:A,variant:S},O))}));e.a=Object(c.a)({root:{},underlineNone:{textDecoration:"none"},underlineHover:{textDecoration:"none","&:hover":{textDecoration:"underline"}},underlineAlways:{textDecoration:"underline"},button:{position:"relative",WebkitTapHighlightColor:"transparent",backgroundColor:"transparent",outline:0,border:0,margin:0,borderRadius:0,padding:0,cursor:"pointer",userSelect:"none",verticalAlign:"middle","-moz-appearance":"none","-webkit-appearance":"none","&::-moz-focus-inner":{borderStyle:"none"},"&$focusVisible":{outline:"auto"}},focusVisible:{}},{name:"MuiLink"})(d)},464:function(t,e,r){"use strict";var n,i=r(2),o=r(9),a=r(28),s=r(0),u=r.n(s),c=(r(37),r(10),r(245)),l=r(267),f=r(276),p=!("undefined"==typeof window||!window.document||!window.document.createElement);function d(){if(n)return n;if(!p||!window.document.body)return"indeterminate";var t=window.document.createElement("div");return t.appendChild(document.createTextNode("ABCD")),t.dir="rtl",t.style.fontSize="14px",t.style.width="4px",t.style.height="1px",t.style.position="absolute",t.style.top="-1000px",t.style.overflow="scroll",document.body.appendChild(t),n="reverse",t.scrollLeft>0?n="default":(t.scrollLeft=1,0===t.scrollLeft&&(n="negative")),document.body.removeChild(t),n}function h(t,e){var r=t.scrollLeft;if("rtl"!==e)return r;var n=d();if("indeterminate"===n)return Number.NaN;switch(n){case"negative":return t.scrollWidth-t.clientWidth+r;case"reverse":return t.scrollWidth-t.clientWidth-r}return r}function v(t){return(1+Math.sin(Math.PI*t-Math.PI/2))/2}var m={width:99,height:99,position:"absolute",top:-9999,overflow:"scroll"};function y(t){var e=t.onChange,r=Object(o.a)(t,["onChange"]),n=u.a.useRef(),a=u.a.useRef(null),s=function(){n.current=a.current.offsetHeight-a.current.clientHeight};return u.a.useEffect((function(){var t=Object(l.a)((function(){var t=n.current;s(),t!==n.current&&e(n.current)}));return window.addEventListener("resize",t),function(){t.clear(),window.removeEventListener("resize",t)}}),[e]),u.a.useEffect((function(){s(),e(n.current)}),[e]),u.a.createElement("div",Object(i.a)({style:m,ref:a},r))}var _=r(111),g=r(247),b=u.a.forwardRef((function(t,e){var r=t.classes,n=t.className,a=t.color,s=t.orientation,l=Object(o.a)(t,["classes","className","color","orientation"]);return u.a.createElement("span",Object(i.a)({className:Object(c.a)(r.root,r["color".concat(Object(g.a)(a))],n,{vertical:r.vertical}[s]),ref:e},l))})),w=Object(_.a)((function(t){return{root:{position:"absolute",height:2,bottom:0,width:"100%",transition:t.transitions.create()},colorPrimary:{backgroundColor:t.palette.primary.main},colorSecondary:{backgroundColor:t.palette.secondary.main},vertical:{height:"100%",width:2,right:0}}}),{name:"PrivateTabIndicator"})(b),S=r(253),O=Object(S.a)(u.a.createElement("path",{d:"M15.41 16.09l-4.58-4.59 4.58-4.59L14 5.5l-6 6 6 6z"}),"KeyboardArrowLeft"),E=Object(S.a)(u.a.createElement("path",{d:"M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"}),"KeyboardArrowRight"),x=r(525),j=u.a.createElement(O,{fontSize:"small"}),k=u.a.createElement(E,{fontSize:"small"}),I=u.a.forwardRef((function(t,e){var r=t.classes,n=t.className,a=t.direction,s=t.orientation,l=t.visible,f=Object(o.a)(t,["classes","className","direction","orientation","visible"]),p=Object(c.a)(r.root,n,{vertical:r.vertical}[s]);return l?u.a.createElement(x.a,Object(i.a)({component:"div",className:p,ref:e,role:null,tabIndex:null},f),"left"===a?j:k):u.a.createElement("div",{className:p})})),C=Object(_.a)({root:{width:40,flexShrink:0},vertical:{width:"100%",height:40,"& svg":{transform:"rotate(90deg)"}}},{name:"PrivateTabScrollButton"})(I),z=r(264),A=r(260),R=u.a.forwardRef((function(t,e){var r=t.action,n=t.centered,s=void 0!==n&&n,p=t.children,m=t.classes,_=t.className,g=t.component,b=void 0===g?"div":g,S=t.indicatorColor,O=void 0===S?"secondary":S,E=t.onChange,x=t.orientation,j=void 0===x?"horizontal":x,k=t.ScrollButtonComponent,I=void 0===k?C:k,R=t.scrollButtons,D=void 0===R?"auto":R,F=t.TabIndicatorProps,N=void 0===F?{}:F,V=t.textColor,M=void 0===V?"inherit":V,q=t.value,W=t.variant,L=void 0===W?"standard":W,T=Object(o.a)(t,["action","centered","children","classes","className","component","indicatorColor","onChange","orientation","ScrollButtonComponent","scrollButtons","TabIndicatorProps","textColor","value","variant"]),P=Object(A.a)(),U="scrollable"===L,B="rtl"===P.direction,K="vertical"===j,H=K?"scrollTop":"scrollLeft",$=K?"top":"left",J=K?"bottom":"right",G=K?"clientHeight":"clientWidth",X=K?"height":"width";var Z=u.a.useState(!1),Y=Z[0],Q=Z[1],tt=u.a.useState({}),et=tt[0],rt=tt[1],nt=u.a.useState({start:!1,end:!1}),it=nt[0],ot=nt[1],at=u.a.useState({overflow:"hidden",marginBottom:null}),st=at[0],ut=at[1],ct=new Map,lt=u.a.useRef(null),ft=u.a.useRef(null),pt=function(){var t,e,r=lt.current;if(r){var n=r.getBoundingClientRect();t={clientWidth:r.clientWidth,scrollLeft:r.scrollLeft,scrollTop:r.scrollTop,scrollLeftNormalized:h(r,P.direction),scrollWidth:r.scrollWidth,top:n.top,bottom:n.bottom,left:n.left,right:n.right}}if(r&&!1!==q){var i=ft.current.children;if(i.length>0){var o=i[ct.get(q)];0,e=o?o.getBoundingClientRect():null}}return{tabsMeta:t,tabMeta:e}},dt=Object(z.a)((function(){var t,e=pt(),r=e.tabsMeta,n=e.tabMeta,i=0;if(n&&r)if(K)i=n.top-r.top+r.scrollTop;else{var o=B?r.scrollLeftNormalized+r.clientWidth-r.scrollWidth:r.scrollLeft;i=n.left-r.left+o}var s=(t={},Object(a.a)(t,$,i),Object(a.a)(t,X,n?n[X]:0),t);if(isNaN(et[$])||isNaN(et[X]))rt(s);else{var u=Math.abs(et[$]-s[$]),c=Math.abs(et[X]-s[X]);(u>=1||c>=1)&&rt(s)}})),ht=function(t){!function(t,e,r){var n=arguments.length>3&&void 0!==arguments[3]?arguments[3]:{},i=arguments.length>4&&void 0!==arguments[4]?arguments[4]:function(){},o=n.ease,a=void 0===o?v:o,s=n.duration,u=void 0===s?300:s,c=null,l=e[t],f=!1,p=function(){f=!0};l===r?i(new Error("Element already at target position")):requestAnimationFrame((function n(o){if(f)i(new Error("Animation cancelled"));else{null===c&&(c=o);var s=Math.min(1,(o-c)/u);e[t]=a(s)*(r-l)+l,s>=1?requestAnimationFrame((function(){i(null)})):requestAnimationFrame(n)}}))}(H,lt.current,t)},vt=function(t){var e=lt.current[H];K?e+=t:(e+=t*(B?-1:1),e*=B&&"reverse"===d()?-1:1),ht(e)},mt=function(){vt(-lt.current[G])},yt=function(){vt(lt.current[G])},_t=u.a.useCallback((function(t){ut({overflow:null,marginBottom:-t})}),[]),gt=Object(z.a)((function(){var t=pt(),e=t.tabsMeta,r=t.tabMeta;if(r&&e)if(r[$]<e[$]){var n=e[H]+(r[$]-e[$]);ht(n)}else if(r[J]>e[J]){var i=e[H]+(r[J]-e[J]);ht(i)}})),bt=Object(z.a)((function(){if(U&&"off"!==D){var t,e,r=lt.current,n=r.scrollTop,i=r.scrollHeight,o=r.clientHeight,a=r.scrollWidth,s=r.clientWidth;if(K)t=n>1,e=n<i-o-1;else{var u=h(lt.current,P.direction);t=B?u<a-s-1:u>1,e=B?u>1:u<a-s-1}t===it.start&&e===it.end||ot({start:t,end:e})}}));u.a.useEffect((function(){var t=Object(l.a)((function(){dt(),bt()})),e=Object(f.a)(lt.current);return e.addEventListener("resize",t),function(){t.clear(),e.removeEventListener("resize",t)}}),[dt,bt]);var wt=u.a.useCallback(Object(l.a)((function(){bt()})));u.a.useEffect((function(){return function(){wt.clear()}}),[wt]),u.a.useEffect((function(){Q(!0)}),[]),u.a.useEffect((function(){dt(),bt()})),u.a.useEffect((function(){gt()}),[gt,et]),u.a.useImperativeHandle(r,(function(){return{updateIndicator:dt,updateScrollButtons:bt}}),[dt,bt]);var St=u.a.createElement(w,Object(i.a)({className:m.indicator,orientation:j,color:O},N,{style:Object(i.a)({},et,{},N.style)})),Ot=0,Et=u.a.Children.map(p,(function(t){if(!u.a.isValidElement(t))return null;var e=void 0===t.props.value?Ot:t.props.value;ct.set(e,Ot);var r=e===q;return Ot+=1,u.a.cloneElement(t,{fullWidth:"fullWidth"===L,indicator:r&&!Y&&St,selected:r,onChange:E,textColor:M,value:e})})),xt=function(){var t={};t.scrollbarSizeListener=U?u.a.createElement(y,{className:m.scrollable,onChange:_t}):null;var e=it.start||it.end,r=U&&("auto"===D&&e||"desktop"===D||"on"===D);return t.scrollButtonStart=r?u.a.createElement(I,{orientation:j,direction:B?"right":"left",onClick:mt,visible:it.start,className:Object(c.a)(m.scrollButtons,"on"!==D&&m.scrollButtonsDesktop)}):null,t.scrollButtonEnd=r?u.a.createElement(I,{orientation:j,direction:B?"left":"right",onClick:yt,visible:it.end,className:Object(c.a)(m.scrollButtons,"on"!==D&&m.scrollButtonsDesktop)}):null,t}();return u.a.createElement(b,Object(i.a)({className:Object(c.a)(m.root,_,K&&m.vertical),ref:e},T),xt.scrollButtonStart,xt.scrollbarSizeListener,u.a.createElement("div",{className:Object(c.a)(m.scroller,U?m.scrollable:m.fixed),style:st,ref:lt,onScroll:wt},u.a.createElement("div",{className:Object(c.a)(m.flexContainer,K&&m.flexContainerVertical,s&&!U&&m.centered),ref:ft,role:"tablist"},Et),Y&&St),xt.scrollButtonEnd)}));e.a=Object(_.a)((function(t){return{root:{overflow:"hidden",minHeight:48,WebkitOverflowScrolling:"touch",display:"flex"},vertical:{flexDirection:"column"},flexContainer:{display:"flex"},flexContainerVertical:{flexDirection:"column"},centered:{justifyContent:"center"},scroller:{position:"relative",display:"inline-block",flex:"1 1 auto",whiteSpace:"nowrap"},fixed:{overflowX:"hidden",width:"100%"},scrollable:{overflowX:"scroll",scrollbarWidth:"none","&::-webkit-scrollbar":{display:"none"}},scrollButtons:{},scrollButtonsDesktop:Object(a.a)({},t.breakpoints.down("xs"),{display:"none"}),indicator:{}}}),{name:"MuiTabs"})(R)},521:function(t,e,r){"use strict";r.r(e);var n=r(0),i=r.n(n),o=r(6),a=r(301),s=r(30),u=r.n(s),c=r(322),l=r.n(c),f=r(55),p=r.n(f),d=r(294),h=r(10),v=r.n(h),m=r(16),y=r.n(m),_=r(56),g=r.n(_),b=r(70),w=function(t,e,r,n){var i=e.value;return"checkbox"===t?u()({},e,{checked:!!i}):"radio"===t?u()({},e,{checked:n(i,r),value:r}):"select-multiple"===t?u()({},e,{value:i||[]}):"file"===t?u()({},e,{value:i||void 0}):e},S=function(t,e,r){var n=t.getIn,i=t.toJS,o=t.deepEqual,a=r.asyncError,s=r.asyncValidating,c=r.onBlur,l=r.onChange,f=r.onDrop,p=r.onDragStart,d=r.dirty,h=r.dispatch,v=r.onFocus,m=r.form,y=r.format,_=r.initial,b=(r.parse,r.pristine),S=r.props,O=r.state,E=r.submitError,x=r.submitFailed,j=r.submitting,k=r.syncError,I=r.syncWarning,C=(r.validate,r.value),z=r._value,A=(r.warn,g()(r,["asyncError","asyncValidating","onBlur","onChange","onDrop","onDragStart","dirty","dispatch","onFocus","form","format","initial","parse","pristine","props","state","submitError","submitFailed","submitting","syncError","syncWarning","validate","value","_value","warn"])),R=k||a||E,D=I,F=function(t,r){if(null===r)return t;var n=null==t?"":t;return r?r(t,e):n}(C,y);return{input:w(A.type,{name:e,onBlur:c,onChange:l,onDragStart:p,onDrop:f,onFocus:v,value:F},z,o),meta:u()({},i(O),{active:!(!O||!n(O,"active")),asyncValidating:s,autofilled:!(!O||!n(O,"autofilled")),dirty:d,dispatch:h,error:R,form:m,initial:_,warning:D,invalid:!!R,pristine:b,submitting:!!j,submitFailed:!!x,touched:!(!O||!n(O,"touched")),valid:!R,visited:!(!O||!n(O,"visited"))}),custom:u()({},A,S)}},O=function(t){return!!(t&&t.stopPropagation&&t.preventDefault)},E=function(t,e){if(O(t)){if(!e&&t.nativeEvent&&void 0!==t.nativeEvent.text)return t.nativeEvent.text;if(e&&void 0!==t.nativeEvent)return t.nativeEvent.text;var r=t,n=r.target,i=n.type,o=n.value,a=n.checked,s=n.files,u=r.dataTransfer;return"checkbox"===i?!!a:"file"===i?s||u&&u.files:"select-multiple"===i?function(t){var e=[];if(t)for(var r=0;r<t.length;r++){var n=t[r];n.selected&&e.push(n.value)}return e}(t.target.options):o}return t},x="undefined"!=typeof window&&window.navigator&&window.navigator.product&&"ReactNative"===window.navigator.product,j=function(t,e){var r=e.name,n=e.parse,i=e.normalize,o=E(t,x);return n&&(o=n(o,r)),i&&(o=i(r,o)),o},k="text",I=r(15),C=r(37),z=function(t,e,r){return Object(C.isValidElementType)(t[e])?null:new Error("Invalid prop `"+e+"` supplied to `"+r+"`.")},A=["_reduxForm"],R=function(t){return t&&"object"==typeof t},D=function(t){return t&&"function"==typeof t},F=function(t){R(t)&&D(t.preventDefault)&&t.preventDefault()},N=function(t,e){if(R(t)&&R(t.dataTransfer)&&D(t.dataTransfer.getData))return t.dataTransfer.getData(e)},V=function(t,e,r){R(t)&&R(t.dataTransfer)&&D(t.dataTransfer.setData)&&t.dataTransfer.setData(e,r)},M=function(t){var e=t.deepEqual,r=t.getIn,o=function(r){function o(){for(var t,e=arguments.length,n=new Array(e),o=0;o<e;o++)n[o]=arguments[o];return(t=r.call.apply(r,[this].concat(n))||this).ref=i.a.createRef(),t.isPristine=function(){return t.props.pristine},t.getValue=function(){return t.props.value},t.handleChange=function(e){var r=t.props,n=r.name,i=r.dispatch,o=r.parse,a=r.normalize,s=r.onChange,c=r._reduxForm,l=r.value,f=j(e,{name:n,parse:o,normalize:a}),p=!1;s&&(!x&&O(e)?s(u()({},e,{preventDefault:function(){return p=!0,F(e)}}),f,l,n):p=s(e,f,l,n)),p||(i(c.change(n,f)),c.asyncValidate&&c.asyncValidate(n,f,"change"))},t.handleFocus=function(e){var r=t.props,n=r.name,i=r.dispatch,o=r.onFocus,a=r._reduxForm,s=!1;o&&(x?s=o(e,n):o(u()({},e,{preventDefault:function(){return s=!0,F(e)}}),n)),s||i(a.focus(n))},t.handleBlur=function(e){var r=t.props,n=r.name,i=r.dispatch,o=r.parse,a=r.normalize,s=r.onBlur,c=r._reduxForm,l=r._value,f=r.value,p=j(e,{name:n,parse:o,normalize:a});p===l&&void 0!==l&&(p=f);var d=!1;s&&(x?d=s(e,p,f,n):s(u()({},e,{preventDefault:function(){return d=!0,F(e)}}),p,f,n)),d||(i(c.blur(n,p)),c.asyncValidate&&c.asyncValidate(n,p,"blur"))},t.handleDragStart=function(e){var r=t.props,n=r.name,i=r.onDragStart,o=r.value;V(e,k,null==o?"":o),i&&i(e,n)},t.handleDrop=function(e){var r=t.props,n=r.name,i=r.dispatch,o=r.onDrop,a=r._reduxForm,s=r.value,c=N(e,k),l=!1;o&&o(u()({},e,{preventDefault:function(){return l=!0,F(e)}}),c,s,n),l||(i(a.change(n,c)),F(e))},t}p()(o,r);var a=o.prototype;return a.shouldComponentUpdate=function(t){var r=this,n=Object.keys(t),i=Object.keys(this.props);return!!(this.props.children||t.children||n.length!==i.length||n.some((function(n){return~(t.immutableProps||[]).indexOf(n)?r.props[n]!==t[n]:!~A.indexOf(n)&&!e(r.props[n],t[n])})))},a.getRenderedComponent=function(){return this.ref.current},a.render=function(){var e=this.props,r=e.component,i=e.forwardRef,o=e.name,a=e._reduxForm,s=(e.normalize,e.onBlur,e.onChange,e.onFocus,e.onDragStart,e.onDrop,e.immutableProps,g()(e,["component","forwardRef","name","_reduxForm","normalize","onBlur","onChange","onFocus","onDragStart","onDrop","immutableProps"])),c=S(t,o,u()({},s,{form:a.form,onBlur:this.handleBlur,onChange:this.handleChange,onDrop:this.handleDrop,onDragStart:this.handleDragStart,onFocus:this.handleFocus})),l=c.custom,f=g()(c,["custom"]);if(i&&(l.ref=this.ref),"string"==typeof r){var p=f.input;f.meta;return Object(n.createElement)(r,u()({},p,l))}return Object(n.createElement)(r,u()({},f,l))},o}(n.Component);return o.propTypes={component:z,props:v.a.object},Object(b.b)((function(t,n){var i=n.name,o=n._reduxForm,a=o.initialValues,s=(0,o.getFormState)(t),u=r(s,"initial."+i),c=void 0!==u?u:a&&r(a,i),l=r(s,"values."+i),f=r(s,"submitting"),p=function(t,e){var r=I.a.getIn(t,e);return r&&r._error?r._error:r}(r(s,"syncErrors"),i),d=function(t,e){var n=r(t,e);return n&&n._warning?n._warning:n}(r(s,"syncWarnings"),i),h=e(l,c);return{asyncError:r(s,"asyncErrors."+i),asyncValidating:r(s,"asyncValidating")===i,dirty:!h,pristine:h,state:r(s,"fields."+i),submitError:r(s,"submitErrors."+i),submitFailed:r(s,"submitFailed"),submitting:f,syncError:p,syncWarning:d,initial:c,value:l,_value:n.value}}),void 0,void 0,{forwardRef:!0})(o)},q=r(99),W=r.n(q),L=function(t,e,r,n,i,o){if(o)return t===e},T=function(t,e,r){var n=W()(t.props,e,L),i=W()(t.state,r,L);return!n||!i},P=function(t,e){var r=t._reduxForm.sectionPrefix;return r?r+"."+e:e},U=n.createContext(null),B=function(t,e){var r=e.forwardedRef,i=g()(e,["forwardedRef"]);return function(e){return n.createElement(t,u()({},i,{_reduxForm:e,ref:r}))}},K=function(t){var e=function(e){function r(){return e.apply(this,arguments)||this}return p()(r,e),r.prototype.render=function(){return n.createElement(U.Consumer,{children:B(t,this.props)})},r}(n.Component),r=n.forwardRef((function(t,r){return n.createElement(e,u()({},t,{forwardedRef:r}))}));return r.displayName=t.displayName||t.name||"Component",r},H=function(t){var e=M(t),r=t.setIn,o=function(t){function o(e){var n;if((n=t.call(this,e)||this).ref=i.a.createRef(),n.ref=i.a.createRef(),n.normalize=function(t,e){var i=n.props.normalize;if(!i)return e;var o=n.props._reduxForm.getValues();return i(e,n.value,r(o,t,e),o,t)},!e._reduxForm)throw new Error("Field must be inside a component decorated with reduxForm()");return n}p()(o,t);var a=o.prototype;return a.componentDidMount=function(){var t=this;this.props._reduxForm.register(this.name,"Field",(function(){return t.props.validate}),(function(){return t.props.warn}))},a.shouldComponentUpdate=function(t,e){return T(this,t,e)},a.UNSAFE_componentWillReceiveProps=function(t){var e=P(this.props,this.props.name),r=P(t,t.name);e===r&&I.a.deepEqual(this.props.validate,t.validate)&&I.a.deepEqual(this.props.warn,t.warn)||(this.props._reduxForm.unregister(e),this.props._reduxForm.register(r,"Field",(function(){return t.validate}),(function(){return t.warn})))},a.componentWillUnmount=function(){this.props._reduxForm.unregister(this.name)},a.getRenderedComponent=function(){return y()(this.props.forwardRef,"If you want to access getRenderedComponent(), you must specify a forwardRef prop to Field"),this.ref.current?this.ref.current.getRenderedComponent():void 0},a.render=function(){return Object(n.createElement)(e,u()({},this.props,{name:this.name,normalize:this.normalize,ref:this.ref}))},l()(o,[{key:"name",get:function(){return P(this.props,this.props.name)}},{key:"dirty",get:function(){return!this.pristine}},{key:"pristine",get:function(){return!(!this.ref.current||!this.ref.current.isPristine())}},{key:"value",get:function(){return this.ref.current&&this.ref.current.getValue()}}]),o}(n.Component);return o.propTypes={name:v.a.string.isRequired,component:z,format:v.a.func,normalize:v.a.func,onBlur:v.a.func,onChange:v.a.func,onFocus:v.a.func,onDragStart:v.a.func,onDrop:v.a.func,parse:v.a.func,props:v.a.object,validate:v.a.oneOfType([v.a.func,v.a.arrayOf(v.a.func)]),warn:v.a.oneOfType([v.a.func,v.a.arrayOf(v.a.func)]),forwardRef:v.a.bool,immutableProps:v.a.arrayOf(v.a.string),_reduxForm:v.a.object},Object(d.a)(o),K(o)}(I.a),$=r(373),J=r.n($),G=r(398),X=r.n(G),Z=r(22),Y=r.n(Z),Q=r(300),tt=r.n(Q),et=r(8),rt=r(4),nt={arrayInsert:function(t,e,r,n){return{type:rt.a,meta:{form:t,field:e,index:r},payload:n}},arrayMove:function(t,e,r,n){return{type:rt.b,meta:{form:t,field:e,from:r,to:n}}},arrayPop:function(t,e){return{type:rt.c,meta:{form:t,field:e}}},arrayPush:function(t,e,r){return{type:rt.d,meta:{form:t,field:e},payload:r}},arrayRemove:function(t,e,r){return{type:rt.e,meta:{form:t,field:e,index:r}}},arrayRemoveAll:function(t,e){return{type:rt.f,meta:{form:t,field:e}}},arrayShift:function(t,e){return{type:rt.g,meta:{form:t,field:e}}},arraySplice:function(t,e,r,n,i){var o={type:rt.h,meta:{form:t,field:e,index:r,removeNum:n}};return void 0!==i&&(o.payload=i),o},arraySwap:function(t,e,r,n){if(r===n)throw new Error("Swap indices cannot be equal");if(r<0||n<0)throw new Error("Swap indices cannot be negative");return{type:rt.i,meta:{form:t,field:e,indexA:r,indexB:n}}},arrayUnshift:function(t,e,r){return{type:rt.j,meta:{form:t,field:e},payload:r}},autofill:function(t,e,r){return{type:rt.k,meta:{form:t,field:e},payload:r}},blur:function(t,e,r,n){return{type:rt.l,meta:{form:t,field:e,touch:n},payload:r}},change:function(t,e,r,n,i){return{type:rt.m,meta:{form:t,field:e,touch:n,persistentSubmitErrors:i},payload:r}},clearFields:function(t,e,r){for(var n=arguments.length,i=new Array(n>3?n-3:0),o=3;o<n;o++)i[o-3]=arguments[o];return{type:rt.o,meta:{form:t,keepTouched:e,persistentSubmitErrors:r,fields:i}}},clearSubmit:function(t){return{type:rt.p,meta:{form:t}}},clearSubmitErrors:function(t){return{type:rt.q,meta:{form:t}}},clearAsyncError:function(t,e){return{type:rt.n,meta:{form:t,field:e}}},destroy:function(){for(var t=arguments.length,e=new Array(t),r=0;r<t;r++)e[r]=arguments[r];return{type:rt.r,meta:{form:e}}},focus:function(t,e){return{type:rt.s,meta:{form:t,field:e}}},initialize:function(t,e,r,n){return void 0===n&&(n={}),r instanceof Object&&(n=r,r=!1),{type:rt.t,meta:u()({form:t,keepDirty:r},n),payload:e}},registerField:function(t,e,r){return{type:rt.u,meta:{form:t},payload:{name:e,type:r}}},reset:function(t){return{type:rt.v,meta:{form:t}}},resetSection:function(t){for(var e=arguments.length,r=new Array(e>1?e-1:0),n=1;n<e;n++)r[n-1]=arguments[n];return{type:rt.w,meta:{form:t,sections:r}}},startAsyncValidation:function(t,e){return{type:rt.z,meta:{form:t,field:e}}},startSubmit:function(t){return{type:rt.A,meta:{form:t}}},stopAsyncValidation:function(t,e){return{type:rt.B,meta:{form:t},payload:e,error:!(!e||!Object.keys(e).length)}},stopSubmit:function(t,e){return{type:rt.C,meta:{form:t},payload:e,error:!(!e||!Object.keys(e).length)}},submit:function(t){return{type:rt.D,meta:{form:t}}},setSubmitFailed:function(t){for(var e=arguments.length,r=new Array(e>1?e-1:0),n=1;n<e;n++)r[n-1]=arguments[n];return{type:rt.x,meta:{form:t,fields:r},error:!0}},setSubmitSucceeded:function(t){for(var e=arguments.length,r=new Array(e>1?e-1:0),n=1;n<e;n++)r[n-1]=arguments[n];return{type:rt.y,meta:{form:t,fields:r},error:!1}},touch:function(t){for(var e=arguments.length,r=new Array(e>1?e-1:0),n=1;n<e;n++)r[n-1]=arguments[n];return{type:rt.E,meta:{form:t,fields:r}}},unregisterField:function(t,e,r){return void 0===r&&(r=!0),{type:rt.F,meta:{form:t},payload:{name:e,destroyOnUnmount:r}}},untouch:function(t){for(var e=arguments.length,r=new Array(e>1?e-1:0),n=1;n<e;n++)r[n-1]=arguments[n];return{type:rt.G,meta:{form:t,fields:r}}},updateSyncErrors:function(t,e,r){return void 0===e&&(e={}),{type:rt.H,meta:{form:t},payload:{syncErrors:e,error:r}}},updateSyncWarnings:function(t,e,r){return void 0===e&&(e={}),{type:rt.I,meta:{form:t},payload:{syncWarnings:e,warning:r}}}},it=function(t,e,r,n){e(n);var i=t();if(!tt()(i))throw new Error("asyncValidate function passed to reduxForm must return a promise");var o=function(t){return function(e){if(t){if(e&&Object.keys(e).length)return r(e),e;throw r(),new Error("Asynchronous validation promise was rejected without errors.")}return r(),Promise.resolve()}};return i.then(o(!1),o(!0))},ot=function(t){var e=t.initialized,r=t.trigger,n=t.pristine;if(!t.syncValidationPasses)return!1;switch(r){case"blur":case"change":return!0;case"submit":return!n||!e;default:return!1}},at=function(t){var e=t.values,r=t.nextProps,n=t.initialRender,i=t.lastFieldValidatorKeys,o=t.fieldValidatorKeys,a=t.structure;return!!n||(!a.deepEqual(e,r&&r.values)||!a.deepEqual(i,o))},st=function(t){var e=t.values,r=t.nextProps,n=t.initialRender,i=t.lastFieldValidatorKeys,o=t.fieldValidatorKeys,a=t.structure;return!!n||(!a.deepEqual(e,r&&r.values)||!a.deepEqual(i,o))},ut=function(t){var e=t.values,r=t.nextProps,n=t.initialRender,i=t.lastFieldValidatorKeys,o=t.fieldValidatorKeys,a=t.structure;return!!n||(!a.deepEqual(e,r&&r.values)||!a.deepEqual(i,o))},ct=function(t){var e=O(t);return e&&t.preventDefault(),e},lt=function(t){return function(e){for(var r=arguments.length,n=new Array(r>1?r-1:0),i=1;i<r;i++)n[i-1]=arguments[i];return ct(e)?t.apply(void 0,n):t.apply(void 0,[e].concat(n))}},ft=function(t,e,r,n,i){for(var o=function(t){return Array.isArray(t)?t:[t]}(n),a=0;a<o.length;a++){var s=o[a](t,e,r,i);if(s)return s}},pt=function(t,e){var r=e.getIn;return function(e,n){var i={};return Object.keys(t).forEach((function(o){var a=r(e,o),s=ft(a,e,n,t[o],o);s&&(i=I.a.setIn(i,o,s))})),i}};function dt(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}var ht,vt=function(t){function e(e){var r;return(r=t.call(this,"Submit Validation Failed")||this).errors=e,r}return p()(e,t),e}(function(t){function e(){var t=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"";!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e);var r=dt(this,(e.__proto__||Object.getPrototypeOf(e)).call(this,t));return Object.defineProperty(r,"message",{configurable:!0,enumerable:!1,value:t,writable:!0}),Object.defineProperty(r,"name",{configurable:!0,enumerable:!1,value:r.constructor.name,writable:!0}),Error.hasOwnProperty("captureStackTrace")?(Error.captureStackTrace(r,r.constructor),dt(r)):(Object.defineProperty(r,"stack",{configurable:!0,enumerable:!1,value:new Error(t).stack,writable:!0}),r)}return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}(e,t),e}(function(t){function e(){t.apply(this,arguments)}return e.prototype=Object.create(t.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),Object.setPrototypeOf?Object.setPrototypeOf(e,t):e.__proto__=t,e}(Error))),mt=function(t){return t&&t.name===vt.name};try{var yt=r(412).List;ht=yt.isList}catch(t){ht=function(t){return!1}}var _t=function(t){return ht(t)?t.toArray():t},gt=function(t,e,r){var n,i=r.dispatch,o=r.submitAsSideEffect,a=r.onSubmitFail,s=r.onSubmitSuccess,u=r.startSubmit,c=r.stopSubmit,l=r.setSubmitFailed,f=r.setSubmitSucceeded,p=r.values;e=_t(e);try{n=t(p,i,r)}catch(t){var d=mt(t)?t.errors:void 0;if(c(d),l.apply(void 0,e),a&&a(d,i,t,r),d||a)return d;throw t}if(o)n&&i(n);else{if(tt()(n))return u(),n.then((function(t){return c(),f(),s&&s(t,i,r),t}),(function(t){var n=mt(t)?t.errors:void 0;if(c(n),l.apply(void 0,e),a&&a(n,i,t,r),n||a)return n;throw t}));f(),s&&s(n,i,r)}return n},bt=function(t,e,r,n,i){var o=e.dispatch,a=e.onSubmitFail,s=e.setSubmitFailed,c=e.syncErrors,l=e.asyncErrors,f=e.touch,p=e.persistentSubmitErrors;if(i=_t(i),f.apply(void 0,i),r||p){var d=n&&n();return d?d.then((function(r){if(r)throw r;return gt(t,i,e)})).catch((function(t){return s.apply(void 0,i),a&&a(t,o,null,e),Promise.reject(t)})):gt(t,i,e)}s.apply(void 0,i);var h=function(t){var e=t.asyncErrors,r=t.syncErrors;return e&&"function"==typeof e.merge?e.merge(r).toJS():u()({},e,r)}({asyncErrors:l,syncErrors:c});return a&&a(h,o,null,e),h},wt=function(t){var e=t.getIn;return function(t,r,n,i){return!!(r||n||i)&&function(t,e){switch(e){case"Field":return[t,t+"._error"];case"FieldArray":return[t+"._error"];default:throw new Error("Unknown field type")}}(e(t,"name"),e(t,"type")).some((function(t){return e(r,t)||e(n,t)||e(i,t)}))}},St=function(t){var e=t.getIn,r=t.keys,n=wt(t);return function(t,i,o){return void 0===o&&(o=!1),function(a){var s=(i||function(t){return e(t,"form")})(a);if(e(s,t+".syncError"))return!1;if(!o&&e(s,t+".error"))return!1;var u=e(s,t+".syncErrors"),c=e(s,t+".asyncErrors"),l=o?void 0:e(s,t+".submitErrors");if(!u&&!c&&!l)return!0;var f=e(s,t+".registeredFields");return!f||!r(f).filter((function(t){return e(f,"['"+t+"'].count")>0})).some((function(t){return n(e(f,"['"+t+"']"),u,c,l)}))}}},Ot=function(t){return t.displayName||t.name||"Component"},Et=r(413),xt=nt.arrayInsert,jt=nt.arrayMove,kt=nt.arrayPop,It=nt.arrayPush,Ct=nt.arrayRemove,zt=nt.arrayRemoveAll,At=nt.arrayShift,Rt=nt.arraySplice,Dt=nt.arraySwap,Ft=nt.arrayUnshift,Nt=nt.blur,Vt=nt.change,Mt=nt.focus,qt=g()(nt,["arrayInsert","arrayMove","arrayPop","arrayPush","arrayRemove","arrayRemoveAll","arrayShift","arraySplice","arraySwap","arrayUnshift","blur","change","focus"]),Wt={arrayInsert:xt,arrayMove:jt,arrayPop:kt,arrayPush:It,arrayRemove:Ct,arrayRemoveAll:zt,arrayShift:At,arraySplice:Rt,arraySwap:Dt,arrayUnshift:Ft},Lt=[].concat(Object.keys(nt),["array","asyncErrors","initialValues","syncErrors","syncWarnings","values","registeredFields"]),Tt=function(t){if(!t||"function"!=typeof t)throw new Error("You must either pass handleSubmit() an onSubmit function or pass onSubmit as a prop");return t},Pt=function(t){var e=t.deepEqual,r=t.empty,o=t.getIn,a=t.setIn,s=t.keys,c=t.fromJS,f=St(t);return function(h){var m=u()({touchOnBlur:!0,touchOnChange:!1,persistentSubmitErrors:!1,destroyOnUnmount:!0,shouldAsyncValidate:ot,shouldValidate:at,shouldError:st,shouldWarn:ut,enableReinitialize:!1,keepDirtyOnReinitialize:!1,updateUnregisteredFields:!1,getFormState:function(t){return o(t,"form")},pure:!0,forceUnregisterOnUnmount:!1,submitAsSideEffect:!1},h);return function(h){var _=function(r){function l(){for(var e,n=arguments.length,l=new Array(n),f=0;f<n;f++)l[f]=arguments[f];return(e=r.call.apply(r,[this].concat(l))||this).wrapped=i.a.createRef(),e.destroyed=!1,e.fieldCounts={},e.fieldValidators={},e.lastFieldValidatorKeys=[],e.fieldWarners={},e.lastFieldWarnerKeys=[],e.innerOnSubmit=void 0,e.submitPromise=void 0,e.getValues=function(){return e.props.values},e.isValid=function(){return e.props.valid},e.isPristine=function(){return e.props.pristine},e.register=function(t,r,n,i){var o=(e.fieldCounts[t]||0)+1;e.fieldCounts[t]=o,e.props.registerField(t,r),n&&(e.fieldValidators[t]=n),i&&(e.fieldWarners[t]=i)},e.unregister=function(t){var r=e.fieldCounts[t];if(1===r?delete e.fieldCounts[t]:null!=r&&(e.fieldCounts[t]=r-1),!e.destroyed){var n=e.props,i=n.destroyOnUnmount,o=n.forceUnregisterOnUnmount,a=n.unregisterField;i||o?(a(t,i),e.fieldCounts[t]||(delete e.fieldValidators[t],delete e.fieldWarners[t],e.lastFieldValidatorKeys=e.lastFieldValidatorKeys.filter((function(e){return e!==t})))):a(t,!1)}},e.getFieldList=function(t){var r=e.props.registeredFields,n=[];if(!r)return n;var i=s(r);return t&&(t.excludeFieldArray&&(i=i.filter((function(t){return"FieldArray"!==o(r,"['"+t+"'].type")}))),t.excludeUnregistered&&(i=i.filter((function(t){return 0!==o(r,"['"+t+"'].count")})))),c(i.reduce((function(t,e){return t.push(e),t}),n))},e.getValidators=function(){var t={};return Object.keys(e.fieldValidators).forEach((function(r){var n=e.fieldValidators[r]();n&&(t[r]=n)})),t},e.generateValidator=function(){var r=e.getValidators();return Object.keys(r).length?pt(r,t):void 0},e.getWarners=function(){var t={};return Object.keys(e.fieldWarners).forEach((function(r){var n=e.fieldWarners[r]();n&&(t[r]=n)})),t},e.generateWarner=function(){var r=e.getWarners();return Object.keys(r).length?pt(r,t):void 0},e.asyncValidate=function(t,r,n){var i,s,u=e.props,c=u.asyncBlurFields,l=u.asyncChangeFields,f=u.asyncErrors,p=u.asyncValidate,d=u.dispatch,h=u.initialized,v=u.pristine,m=u.shouldAsyncValidate,y=u.startAsyncValidation,_=u.stopAsyncValidation,g=u.syncErrors,b=u.values,w=!t;if(p){var S=w?b:a(b,t,r),O=w||!o(g,t);if(i=c&&t&&~c.indexOf(t.replace(/\[[0-9]+\]/g,"[]")),s=l&&t&&~l.indexOf(t.replace(/\[[0-9]+\]/g,"[]")),(w||!c&&!l||("blur"===n?i:s))&&m({asyncErrors:f,initialized:h,trigger:w?"submit":n,blurredField:t,pristine:v,syncValidationPasses:O}))return it((function(){return p(S,d,e.props,t)}),y,_,t)}},e.submitCompleted=function(t){return delete e.submitPromise,t},e.submitFailed=function(t){throw delete e.submitPromise,t},e.listenToSubmit=function(t){return tt()(t)?(e.submitPromise=t,t.then(e.submitCompleted,e.submitFailed)):t},e.submit=function(t){var r=e.props,n=r.onSubmit,i=r.blur,o=r.change,a=r.dispatch;return t&&!ct(t)?lt((function(){return!e.submitPromise&&e.listenToSubmit(bt(Tt(t),u()({},e.props,Object(et.bindActionCreators)({blur:i,change:o},a)),e.props.validExceptSubmit,e.asyncValidate,e.getFieldList({excludeFieldArray:!0,excludeUnregistered:!0})))})):e.submitPromise?void 0:e.innerOnSubmit&&e.innerOnSubmit!==e.submit?e.innerOnSubmit():e.listenToSubmit(bt(Tt(n),u()({},e.props,Object(et.bindActionCreators)({blur:i,change:o},a)),e.props.validExceptSubmit,e.asyncValidate,e.getFieldList({excludeFieldArray:!0,excludeUnregistered:!0})))},e.reset=function(){return e.props.reset()},e}p()(l,r);var f=l.prototype;return f.initIfNeeded=function(t){var r=this.props.enableReinitialize;if(t){if((r||!t.initialized)&&!e(this.props.initialValues,t.initialValues)){var n=t.initialized&&this.props.keepDirtyOnReinitialize;this.props.initialize(t.initialValues,n,{keepValues:t.keepValues,lastInitialValues:this.props.initialValues,updateUnregisteredFields:t.updateUnregisteredFields})}}else!this.props.initialValues||this.props.initialized&&!r||this.props.initialize(this.props.initialValues,this.props.keepDirtyOnReinitialize,{keepValues:this.props.keepValues,updateUnregisteredFields:this.props.updateUnregisteredFields})},f.updateSyncErrorsIfNeeded=function(t,e,r){var n=this.props,i=n.error,o=n.updateSyncErrors,a=!(r&&Object.keys(r).length||i),s=!(t&&Object.keys(t).length||e);a&&s||I.a.deepEqual(r,t)&&I.a.deepEqual(i,e)||o(t,e)},f.clearSubmitPromiseIfNeeded=function(t){var e=this.props.submitting;this.submitPromise&&e&&!t.submitting&&delete this.submitPromise},f.submitIfNeeded=function(t){var e=this.props,r=e.clearSubmit;!e.triggerSubmit&&t.triggerSubmit&&(r(),this.submit())},f.shouldErrorFunction=function(){var t=this.props,e=t.shouldValidate,r=t.shouldError;return e!==at&&!(r!==st)?e:r},f.validateIfNeeded=function(e){var r=this.props,n=r.validate,i=r.values,o=this.shouldErrorFunction(),a=this.generateValidator();if(n||a){var s=void 0===e,u=Object.keys(this.getValidators());if(o({values:i,nextProps:e,props:this.props,initialRender:s,lastFieldValidatorKeys:this.lastFieldValidatorKeys,fieldValidatorKeys:u,structure:t})){var c=s||!e?this.props:e,l=J()(n&&n(c.values,c)||{},a&&a(c.values,c)||{}),f=l._error,p=g()(l,["_error"]);this.lastFieldValidatorKeys=u,this.updateSyncErrorsIfNeeded(p,f,c.syncErrors)}}else this.lastFieldValidatorKeys=[]},f.updateSyncWarningsIfNeeded=function(t,e,r){var n=this.props,i=n.warning,o=n.updateSyncWarnings,a=!(r&&Object.keys(r).length||i),s=!(t&&Object.keys(t).length||e);a&&s||I.a.deepEqual(r,t)&&I.a.deepEqual(i,e)||o(t,e)},f.shouldWarnFunction=function(){var t=this.props,e=t.shouldValidate,r=t.shouldWarn;return e!==at&&!(r!==ut)?e:r},f.warnIfNeeded=function(e){var r=this.props,n=r.warn,i=r.values,o=this.shouldWarnFunction(),a=this.generateWarner();if(n||a){var s=void 0===e,u=Object.keys(this.getWarners());if(o({values:i,nextProps:e,props:this.props,initialRender:s,lastFieldValidatorKeys:this.lastFieldWarnerKeys,fieldValidatorKeys:u,structure:t})){var c=s||!e?this.props:e,l=J()(n?n(c.values,c):{},a?a(c.values,c):{}),f=l._warning,p=g()(l,["_warning"]);this.lastFieldWarnerKeys=u,this.updateSyncWarningsIfNeeded(p,f,c.syncWarnings)}}},f.UNSAFE_componentWillMount=function(){Object(Et.a)()||(this.initIfNeeded(),this.validateIfNeeded(),this.warnIfNeeded()),y()(this.props.shouldValidate,"shouldValidate() is deprecated and will be removed in v9.0.0. Use shouldWarn() or shouldError() instead.")},f.UNSAFE_componentWillReceiveProps=function(t){this.initIfNeeded(t),this.validateIfNeeded(t),this.warnIfNeeded(t),this.clearSubmitPromiseIfNeeded(t),this.submitIfNeeded(t);var r=t.onChange,n=t.values,i=t.dispatch;r&&!e(n,this.props.values)&&r(n,i,t,this.props.values)},f.shouldComponentUpdate=function(t){var r=this;if(!this.props.pure)return!0;var n=m.immutableProps,i=void 0===n?[]:n;return!!(this.props.children||t.children||Object.keys(t).some((function(n){return~i.indexOf(n)?r.props[n]!==t[n]:!~Lt.indexOf(n)&&!e(r.props[n],t[n])})))},f.componentDidMount=function(){Object(Et.a)()||(this.initIfNeeded(this.props),this.validateIfNeeded(),this.warnIfNeeded()),y()(this.props.shouldValidate,"shouldValidate() is deprecated and will be removed in v9.0.0. Use shouldWarn() or shouldError() instead.")},f.componentWillUnmount=function(){var t=this.props,e=t.destroyOnUnmount,r=t.destroy;e&&!Object(Et.a)()&&(this.destroyed=!0,r())},f.render=function(){var t,e,r=this,i=this.props,a=i.anyTouched,s=i.array,c=(i.arrayInsert,i.arrayMove,i.arrayPop,i.arrayPush,i.arrayRemove,i.arrayRemoveAll,i.arrayShift,i.arraySplice,i.arraySwap,i.arrayUnshift,i.asyncErrors,i.asyncValidate,i.asyncValidating),l=i.blur,f=i.change,p=i.clearSubmit,d=i.destroy,v=(i.destroyOnUnmount,i.forceUnregisterOnUnmount,i.dirty),m=i.dispatch,y=(i.enableReinitialize,i.error),_=(i.focus,i.form),b=(i.getFormState,i.immutableProps,i.initialize),w=i.initialized,S=i.initialValues,O=i.invalid,E=(i.keepDirtyOnReinitialize,i.keepValues,i.updateUnregisteredFields,i.pristine),x=i.propNamespace,j=(i.registeredFields,i.registerField,i.reset),k=i.resetSection,I=(i.setSubmitFailed,i.setSubmitSucceeded,i.shouldAsyncValidate,i.shouldValidate,i.shouldError,i.shouldWarn,i.startAsyncValidation,i.startSubmit,i.stopAsyncValidation,i.stopSubmit,i.submitAsSideEffect),C=i.submitting,z=i.submitFailed,A=i.submitSucceeded,R=i.touch,D=(i.touchOnBlur,i.touchOnChange,i.persistentSubmitErrors,i.syncErrors,i.syncWarnings,i.unregisterField,i.untouch),F=(i.updateSyncErrors,i.updateSyncWarnings,i.valid),N=(i.validExceptSubmit,i.values,i.warning),V=g()(i,["anyTouched","array","arrayInsert","arrayMove","arrayPop","arrayPush","arrayRemove","arrayRemoveAll","arrayShift","arraySplice","arraySwap","arrayUnshift","asyncErrors","asyncValidate","asyncValidating","blur","change","clearSubmit","destroy","destroyOnUnmount","forceUnregisterOnUnmount","dirty","dispatch","enableReinitialize","error","focus","form","getFormState","immutableProps","initialize","initialized","initialValues","invalid","keepDirtyOnReinitialize","keepValues","updateUnregisteredFields","pristine","propNamespace","registeredFields","registerField","reset","resetSection","setSubmitFailed","setSubmitSucceeded","shouldAsyncValidate","shouldValidate","shouldError","shouldWarn","startAsyncValidation","startSubmit","stopAsyncValidation","stopSubmit","submitAsSideEffect","submitting","submitFailed","submitSucceeded","touch","touchOnBlur","touchOnChange","persistentSubmitErrors","syncErrors","syncWarnings","unregisterField","untouch","updateSyncErrors","updateSyncWarnings","valid","validExceptSubmit","values","warning"]),M=u()({array:s,anyTouched:a,asyncValidate:this.asyncValidate,asyncValidating:c},Object(et.bindActionCreators)({blur:l,change:f},m),{clearSubmit:p,destroy:d,dirty:v,dispatch:m,error:y,form:_,handleSubmit:this.submit,initialize:b,initialized:w,initialValues:S,invalid:O,pristine:E,reset:j,resetSection:k,submitting:C,submitAsSideEffect:I,submitFailed:z,submitSucceeded:A,touch:R,untouch:D,valid:F,warning:N}),q=u()({},x?((t={})[x]=M,t):M,V);e=h,Boolean(e&&e.prototype&&"object"==typeof e.prototype.isReactComponent)&&(q.ref=this.wrapped);var W=u()({},this.props,{getFormState:function(t){return o(r.props.getFormState(t),r.props.form)},asyncValidate:this.asyncValidate,getValues:this.getValues,sectionPrefix:void 0,register:this.register,unregister:this.unregister,registerInnerOnSubmit:function(t){return r.innerOnSubmit=t}});return Object(n.createElement)(U.Provider,{value:W,children:Object(n.createElement)(h,q)})},l}(i.a.Component);_.displayName="Form("+Ot(h)+")",_.WrappedComponent=h,_.propTypes={destroyOnUnmount:v.a.bool,forceUnregisterOnUnmount:v.a.bool,form:v.a.string.isRequired,immutableProps:v.a.arrayOf(v.a.string),initialValues:v.a.oneOfType([v.a.array,v.a.object]),getFormState:v.a.func,onSubmitFail:v.a.func,onSubmitSuccess:v.a.func,propNamespace:v.a.string,validate:v.a.func,warn:v.a.func,touchOnBlur:v.a.bool,touchOnChange:v.a.bool,triggerSubmit:v.a.bool,persistentSubmitErrors:v.a.bool,registeredFields:v.a.any};var w=Object(b.b)((function(t,n){var i=n.form,a=n.getFormState,s=n.initialValues,u=n.enableReinitialize,c=n.keepDirtyOnReinitialize,l=o(a(t)||r,i)||r,p=o(l,"initial"),d=!!p,h=u&&d&&!e(s,p),v=h&&!c,m=s||p||r;h||(m=p||r);var y=o(l,"values")||m;v&&(y=m);var _=v||e(m,y),g=o(l,"asyncErrors"),b=o(l,"syncErrors")||I.a.empty,w=o(l,"syncWarnings")||I.a.empty,S=o(l,"registeredFields"),O=f(i,a,!1)(t),E=f(i,a,!0)(t),x=!!o(l,"anyTouched"),j=!!o(l,"submitting"),k=!!o(l,"submitFailed"),C=!!o(l,"submitSucceeded"),z=o(l,"error"),A=o(l,"warning"),R=o(l,"triggerSubmit");return{anyTouched:x,asyncErrors:g,asyncValidating:o(l,"asyncValidating")||!1,dirty:!_,error:z,initialized:d,invalid:!O,pristine:_,registeredFields:S,submitting:j,submitFailed:k,submitSucceeded:C,syncErrors:b,syncWarnings:w,triggerSubmit:R,values:y,valid:O,validExceptSubmit:E,warning:A}}),(function(t,e){var r=function(t){return t.bind(null,e.form)},n=X()(qt,r),i=X()(Wt,r),o=r(Mt),a=Object(et.bindActionCreators)(n,t),s={insert:Object(et.bindActionCreators)(i.arrayInsert,t),move:Object(et.bindActionCreators)(i.arrayMove,t),pop:Object(et.bindActionCreators)(i.arrayPop,t),push:Object(et.bindActionCreators)(i.arrayPush,t),remove:Object(et.bindActionCreators)(i.arrayRemove,t),removeAll:Object(et.bindActionCreators)(i.arrayRemoveAll,t),shift:Object(et.bindActionCreators)(i.arrayShift,t),splice:Object(et.bindActionCreators)(i.arraySplice,t),swap:Object(et.bindActionCreators)(i.arraySwap,t),unshift:Object(et.bindActionCreators)(i.arrayUnshift,t)};return u()({},a,i,{blur:function(t,r){return Nt(e.form,t,r,!!e.touchOnBlur)},change:function(t,r){return Vt(e.form,t,r,!!e.touchOnChange,!!e.persistentSubmitErrors)},array:s,focus:o,dispatch:t})}),void 0,{forwardRef:!0}),S=Y()(w(_),h);S.defaultProps=m;var O=function(t){function e(){for(var e,r=arguments.length,n=new Array(r),o=0;o<r;o++)n[o]=arguments[o];return(e=t.call.apply(t,[this].concat(n))||this).ref=i.a.createRef(),e}p()(e,t);var o=e.prototype;return o.submit=function(){return this.ref.current&&this.ref.current.submit()},o.reset=function(){this.ref&&this.ref.current.reset()},o.render=function(){var t=this.props,e=t.initialValues,r=g()(t,["initialValues"]);return Object(n.createElement)(S,u()({},r,{ref:this.ref,initialValues:c(e)}))},l()(e,[{key:"valid",get:function(){return!(!this.ref.current||!this.ref.current.isValid())}},{key:"invalid",get:function(){return!this.valid}},{key:"pristine",get:function(){return!(!this.ref.current||!this.ref.current.isPristine())}},{key:"dirty",get:function(){return!this.pristine}},{key:"values",get:function(){return this.ref.current?this.ref.current.getValues():r}},{key:"fieldList",get:function(){return this.ref.current?this.ref.current.getFieldList():[]}},{key:"wrappedInstance",get:function(){return this.ref.current&&this.ref.current.wrapped.current}}]),e}(i.a.Component);Object(d.a)(O);var E=Y()(K(O),h);return E.defaultProps=m,E}}}(I.a),Ut=r(111),Bt=r(501),Kt=r(350),Ht=(r(372),r(504),r(528),r(536),r(507),r(509)),$t=r(246);function Jt(){return(Jt=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(t[n]=r[n])}return t}).apply(this,arguments)}const Gt=({label:t,input:e,meta:{touched:r,invalid:n,error:o},...a})=>i.a.createElement(Bt.a,Jt({label:t,placeholder:t,error:r&&n,helperText:r&&o},e,a));var Xt=Object($t.a)(Object(Ut.a)(t=>({buttons:{display:"flex",flexDirection:"row",justifyContent:"space-evenly"},field:{margin:"20px 0px"}})),Pt({form:"RegisterForm",validate:t=>{const e={};return["username","password1","password2","email"].forEach(r=>{t[r]||(e[r]="Required")}),t.email&&!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(t.email)&&(e.email="Invalid email address"),e}}))(t=>{const{handleSubmit:e,pristine:r,reset:n,submitting:o,classes:a}=t;return i.a.createElement("form",{onSubmit:e},i.a.createElement("div",{className:a.field},i.a.createElement(H,{name:"user",component:Gt,label:"Username or Email",variant:"standard",fullWidth:!0})),i.a.createElement("div",{className:a.field},i.a.createElement(H,{name:"password",component:Gt,label:"Password",type:"password",variant:"standard",fullWidth:!0})),i.a.createElement("div",{className:a.buttons},i.a.createElement(Ht.a,{variant:"contained",color:"primary",type:"submit",disabled:r||o,fullWidth:!0},"Login")))}),Zt=r(414),Yt=r(2),Qt=r(9),te=r(245),ee=i.a.forwardRef((function(t,e){var r=t.classes,n=t.className,o=t.row,a=void 0!==o&&o,s=Object(Qt.a)(t,["classes","className","row"]);return i.a.createElement("div",Object(Yt.a)({className:Object(te.a)(r.root,n,a&&r.row),ref:e},s))})),re=Object(Ut.a)({root:{display:"flex",flexDirection:"column",flexWrap:"wrap"},row:{flexDirection:"row"}},{name:"MuiFormGroup"})(ee),ne=r(251);var ie=i.a.createContext(),oe=(i.a.forwardRef((function(t,e){var r=t.actions,n=t.children,o=t.name,a=t.value,s=t.onChange,u=Object(Qt.a)(t,["actions","children","name","value","onChange"]),c=i.a.useRef(null),l=i.a.useRef(null!=a).current,f=i.a.useState(t.defaultValue),p=f[0],d=f[1],h=l?a:p;i.a.useImperativeHandle(r,(function(){return{focus:function(){var t=c.current.querySelector("input:not(:disabled):checked");t||(t=c.current.querySelector("input:not(:disabled)")),t&&t.focus()}}}),[]);var v=Object(ne.a)(e,c);return i.a.createElement(ie.Provider,{value:{name:o,onChange:function(t){l||d(t.target.value),s&&s(t,t.target.value)},value:h}},i.a.createElement(re,Object(Yt.a)({role:"radiogroup",ref:v},u),n))})),r(272)),ae=r(253),se=Object(ae.a)(i.a.createElement("path",{d:"M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"}),"RadioButtonUnchecked"),ue=Object(ae.a)(i.a.createElement("path",{d:"M8.465 8.465C9.37 7.56 10.62 7 12 7C14.76 7 17 9.24 17 12C17 13.38 16.44 14.63 15.535 15.535C14.63 16.44 13.38 17 12 17C9.24 17 7 14.76 7 12C7 10.62 7.56 9.37 8.465 8.465Z"}),"RadioButtonChecked");var ce=Object(Ut.a)((function(t){return{root:{position:"relative",display:"flex","&$checked $layer":{transform:"scale(1)",transition:t.transitions.create("transform",{easing:t.transitions.easing.easeOut,duration:t.transitions.duration.shortest})}},layer:{left:0,position:"absolute",transform:"scale(0)",transition:t.transitions.create("transform",{easing:t.transitions.easing.easeIn,duration:t.transitions.duration.shortest})},checked:{}}}),{name:"PrivateRadioButtonIcon"})((function(t){var e=t.checked,r=t.classes,n=t.fontSize;return i.a.createElement("div",{className:Object(te.a)(r.root,e&&r.checked)},i.a.createElement(se,{fontSize:n}),i.a.createElement(ue,{fontSize:n,className:r.layer}))})),le=r(35),fe=r(247),pe=r(277);var de=i.a.createElement(ce,{checked:!0}),he=i.a.createElement(ce,null),ve=i.a.forwardRef((function(t,e){var r=t.checked,n=t.classes,o=t.color,a=void 0===o?"secondary":o,s=t.disabled,u=void 0!==s&&s,c=t.name,l=t.onChange,f=t.size,p=void 0===f?"medium":f,d=Object(Qt.a)(t,["checked","classes","color","disabled","name","onChange","size"]),h=i.a.useContext(ie),v=r,m=Object(pe.a)(l,h&&h.onChange),y=c;return h&&(void 0===v&&(v=h.value===t.value),void 0===y&&(y=h.name)),i.a.createElement(oe.a,Object(Yt.a)({color:a,type:"radio",icon:i.a.cloneElement(he,{fontSize:"small"===p?"small":"default"}),checkedIcon:i.a.cloneElement(de,{fontSize:"small"===p?"small":"default"}),classes:{root:Object(te.a)(n.root,n["color".concat(Object(fe.a)(a))]),checked:n.checked,disabled:n.disabled},name:y,checked:v,onChange:m,ref:e,disabled:u},d))}));Object(Ut.a)((function(t){return{root:{color:t.palette.text.secondary},checked:{},disabled:{},colorPrimary:{"&$checked":{color:t.palette.primary.main,"&:hover":{backgroundColor:Object(le.c)(t.palette.primary.main,t.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:t.palette.action.disabled}},colorSecondary:{"&$checked":{color:t.palette.secondary.main,"&:hover":{backgroundColor:Object(le.c)(t.palette.secondary.main,t.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:t.palette.action.disabled}}}}),{name:"MuiRadio"})(ve);function me(){return(me=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(t[n]=r[n])}return t}).apply(this,arguments)}function ye(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}var _e=function(t){var e,r;function n(){var e;return(e=t.call(this)||this).handleExpired=e.handleExpired.bind(ye(e)),e.handleErrored=e.handleErrored.bind(ye(e)),e.handleChange=e.handleChange.bind(ye(e)),e.handleRecaptchaRef=e.handleRecaptchaRef.bind(ye(e)),e}r=t,(e=n).prototype=Object.create(r.prototype),e.prototype.constructor=e,e.__proto__=r;var o=n.prototype;return o.getValue=function(){return this.props.grecaptcha&&void 0!==this._widgetId?this.props.grecaptcha.getResponse(this._widgetId):null},o.getWidgetId=function(){return this.props.grecaptcha&&void 0!==this._widgetId?this._widgetId:null},o.execute=function(){var t=this.props.grecaptcha;if(t&&void 0!==this._widgetId)return t.execute(this._widgetId);this._executeRequested=!0},o.reset=function(){this.props.grecaptcha&&void 0!==this._widgetId&&this.props.grecaptcha.reset(this._widgetId)},o.handleExpired=function(){this.props.onExpired?this.props.onExpired():this.handleChange(null)},o.handleErrored=function(){this.props.onErrored&&this.props.onErrored()},o.handleChange=function(t){this.props.onChange&&this.props.onChange(t)},o.explicitRender=function(){if(this.props.grecaptcha&&this.props.grecaptcha.render&&void 0===this._widgetId){var t=document.createElement("div");this._widgetId=this.props.grecaptcha.render(t,{sitekey:this.props.sitekey,callback:this.handleChange,theme:this.props.theme,type:this.props.type,tabindex:this.props.tabindex,"expired-callback":this.handleExpired,"error-callback":this.handleErrored,size:this.props.size,stoken:this.props.stoken,hl:this.props.hl,badge:this.props.badge}),this.captcha.appendChild(t)}this._executeRequested&&this.props.grecaptcha&&void 0!==this._widgetId&&(this._executeRequested=!1,this.execute())},o.componentDidMount=function(){this.explicitRender()},o.componentDidUpdate=function(){this.explicitRender()},o.componentWillUnmount=function(){void 0!==this._widgetId&&(this.delayOfCaptchaIframeRemoving(),this.reset())},o.delayOfCaptchaIframeRemoving=function(){var t=document.createElement("div");for(document.body.appendChild(t),t.style.display="none";this.captcha.firstChild;)t.appendChild(this.captcha.firstChild);setTimeout((function(){document.body.removeChild(t)}),5e3)},o.handleRecaptchaRef=function(t){this.captcha=t},o.render=function(){var t=this.props,e=(t.sitekey,t.onChange,t.theme,t.type,t.tabindex,t.onExpired,t.onErrored,t.size,t.stoken,t.grecaptcha,t.badge,t.hl,function(t,e){if(null==t)return{};var r,n,i={},o=Object.keys(t);for(n=0;n<o.length;n++)r=o[n],e.indexOf(r)>=0||(i[r]=t[r]);return i}(t,["sitekey","onChange","theme","type","tabindex","onExpired","onErrored","size","stoken","grecaptcha","badge","hl"]));return i.a.createElement("div",me({},e,{ref:this.handleRecaptchaRef}))},n}(i.a.Component);function ge(){return(ge=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(t[n]=r[n])}return t}).apply(this,arguments)}_e.displayName="ReCAPTCHA",_e.propTypes={sitekey:v.a.string.isRequired,onChange:v.a.func,grecaptcha:v.a.object,theme:v.a.oneOf(["dark","light"]),type:v.a.oneOf(["image","audio"]),tabindex:v.a.number,onExpired:v.a.func,onErrored:v.a.func,size:v.a.oneOf(["compact","normal","invisible"]),stoken:v.a.string,hl:v.a.string,badge:v.a.oneOf(["bottomright","bottomleft","inline"])},_e.defaultProps={onChange:function(){},theme:"light",type:"image",tabindex:0,size:"normal",badge:"bottomright"};var be={},we=0;var Se="onloadcallback";var Oe,Ee,xe=(Oe=function(){return"https://"+(("undefined"!=typeof window&&window.recaptchaOptions||{}).useRecaptchaNet?"recaptcha.net":"www.google.com")+"/recaptcha/api.js?onload="+Se+"&render=explicit"},Ee=(Ee={callbackName:Se,globalName:"grecaptcha"})||{},function(t){var e=t.displayName||t.name||"Component",r=function(e){var r,i;function o(t,r){var n;return(n=e.call(this,t,r)||this).state={},n.__scriptURL="",n}i=e,(r=o).prototype=Object.create(i.prototype),r.prototype.constructor=r,r.__proto__=i;var a=o.prototype;return a.asyncScriptLoaderGetScriptLoaderID=function(){return this.__scriptLoaderID||(this.__scriptLoaderID="async-script-loader-"+we++),this.__scriptLoaderID},a.setupScriptURL=function(){return this.__scriptURL="function"==typeof Oe?Oe():Oe,this.__scriptURL},a.asyncScriptLoaderHandleLoad=function(t){var e=this;this.setState(t,(function(){return e.props.asyncScriptOnLoad&&e.props.asyncScriptOnLoad(e.state)}))},a.asyncScriptLoaderTriggerOnScriptLoaded=function(){var t=be[this.__scriptURL];if(!t||!t.loaded)throw new Error("Script is not loaded.");for(var e in t.observers)t.observers[e](t);delete window[Ee.callbackName]},a.componentDidMount=function(){var t=this,e=this.setupScriptURL(),r=this.asyncScriptLoaderGetScriptLoaderID(),n=Ee,i=n.globalName,o=n.callbackName,a=n.scriptId;if(i&&void 0!==window[i]&&(be[e]={loaded:!0,observers:{}}),be[e]){var s=be[e];return s&&(s.loaded||s.errored)?void this.asyncScriptLoaderHandleLoad(s):void(s.observers[r]=function(e){return t.asyncScriptLoaderHandleLoad(e)})}var u={};u[r]=function(e){return t.asyncScriptLoaderHandleLoad(e)},be[e]={loaded:!1,observers:u};var c=document.createElement("script");c.src=e,c.async=!0,a&&(c.id=a);var l=function(t){if(be[e]){var r=be[e].observers;for(var n in r)t(r[n])&&delete r[n]}};o&&"undefined"!=typeof window&&(window[o]=function(){return t.asyncScriptLoaderTriggerOnScriptLoaded()}),c.onload=function(){var t=be[e];t&&(t.loaded=!0,l((function(e){return!o&&(e(t),!0)})))},c.onerror=function(){var t=be[e];t&&(t.errored=!0,l((function(e){return e(t),!0})))},document.body.appendChild(c)},a.componentWillUnmount=function(){var t=this.__scriptURL;if(!0===Ee.removeOnUnmount)for(var e=document.getElementsByTagName("script"),r=0;r<e.length;r+=1)e[r].src.indexOf(t)>-1&&e[r].parentNode&&e[r].parentNode.removeChild(e[r]);var n=be[t];n&&(delete n.observers[this.asyncScriptLoaderGetScriptLoaderID()],!0===Ee.removeOnUnmount&&delete be[t])},a.render=function(){var e=Ee.globalName,r=this.props,i=(r.asyncScriptOnLoad,r.forwardedRef),o=function(t,e){if(null==t)return{};var r,n,i={},o=Object.keys(t);for(n=0;n<o.length;n++)r=o[n],e.indexOf(r)>=0||(i[r]=t[r]);return i}(r,["asyncScriptOnLoad","forwardedRef"]);return e&&"undefined"!=typeof window&&(o[e]=void 0!==window[e]?window[e]:void 0),o.ref=i,Object(n.createElement)(t,o)},o}(n.Component),i=Object(n.forwardRef)((function(t,e){return Object(n.createElement)(r,ge({},t,{forwardedRef:e}))}));return i.displayName="AsyncScriptLoader("+e+")",i.propTypes={asyncScriptOnLoad:v.a.func},Y()(i,t)})(_e);function je(){return(je=Object.assign||function(t){for(var e=1;e<arguments.length;e++){var r=arguments[e];for(var n in r)Object.prototype.hasOwnProperty.call(r,n)&&(t[n]=r[n])}return t}).apply(this,arguments)}const ke=({label:t,input:e,meta:{touched:r,invalid:n,error:o},...a})=>i.a.createElement(Bt.a,je({label:t,placeholder:t,error:r&&n,helperText:r&&o},e,a)),Ie=({input:t})=>i.a.createElement("div",null,i.a.createElement(Kt.a,{checked:!!t.value,onChange:t.onChange}),i.a.createElement("span",null,"I have read and agree to the "),i.a.createElement(Zt.a,{href:"/tos.html"},"Terms and Conditions"));class Ce extends n.PureComponent{constructor(t){super(t),this.state={captchaCompleted:!1,TOSAgreed:!1},this.completeCaptcha=this.completeCaptcha.bind(this),this.agreeTOS=this.agreeTOS.bind(this)}completeCaptcha(){this.setState({captchaCompleted:!0})}agreeTOS(t){this.setState({TOSAgreed:t.target.checked})}render(){const{handleSubmit:t,pristine:e,reset:r,submitting:n,classes:o}=this.props;return i.a.createElement("form",{onSubmit:t},i.a.createElement("div",{className:o.field},i.a.createElement(H,{name:"email",component:ke,label:"Email",variant:"standard",fullWidth:!0})),i.a.createElement("div",{className:o.field},i.a.createElement(H,{name:"username",component:ke,label:"Username",variant:"standard",fullWidth:!0})),i.a.createElement("div",{className:o.field},i.a.createElement(H,{name:"password1",component:ke,label:"Password",type:"password",variant:"standard",fullWidth:!0})),i.a.createElement("div",{className:o.field},i.a.createElement(H,{name:"password2",component:ke,label:"Confirm Password",type:"password",variant:"standard",fullWidth:!0})),i.a.createElement("div",{style:{display:"flex",justifyContent:"flex-start"}},i.a.createElement(H,{name:"agree",component:Ie,onChange:this.agreeTOS})),i.a.createElement("div",{style:{display:"flex",justifyContent:"center",padding:"10px"}},i.a.createElement(xe,{sitekey:"6LeOU6UUAAAAABSPwdKHf-3ttPz9Ql4AgVTWobXI",theme:"dark",size:"normal",onChange:this.completeCaptcha})),i.a.createElement("div",{className:o.buttons},i.a.createElement(Ht.a,{variant:"contained",color:"primary",type:"submit",disabled:e||n||!this.state.captchaCompleted||!this.state.TOSAgreed,fullWidth:!0},"Create Account")))}}var ze=Object($t.a)(Object(Ut.a)(t=>({buttons:{display:"flex",flexDirection:"row",justifyContent:"space-evenly"},field:{margin:"20px 0px"}})),Pt({form:"RegisterForm",validate:t=>{const e={};return["username","password1","password2","email"].forEach(r=>{t[r]||(e[r]="Required")}),t.email&&!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(t.email)&&(e.email="Invalid email address"),e}}))(Ce),Ae=r(499),Re=r(500),De=r(320),Fe=r(464),Ne=r(370),Ve=r(415),Me=r(493),qe=r(498),We=r(95),Le=r(65),Te=r.n(Le),Pe=r(365),Ue=r.n(Pe),Be=r(250);r(248);class Ke extends n.PureComponent{constructor(t){super(t),this.handleClose=this.handleClose.bind(this),this.handleLoginForm=this.handleLoginForm.bind(this),this.handleRegisterForm=this.handleRegisterForm.bind(this)}handleClose(){this.props.history.goBack()}handleLoginForm(t){this.props.login({...t,cb:t=>{if(t.success){alert("success"),Te.a.set("RemoteGames",t.authToken,{expires:7}),this.props.updateClientInfo({authToken:t.authToken,loggedIn:!0,...t.clientInfo}),Ue.a.parse(this.props.location.search).verified?this.props.history.replace("/"):this.props.history.goBack(),setTimeout(()=>{window.location.reload()},1e3)}else alert(t.reason)}})}handleRegisterForm(t){this.props.register({...t,cb:t=>{t.success?(alert("Account created! Please login!"),this.props.history.replace("/login")):alert(t.reason)}})}componentDidMount(){Ue.a.parse(this.props.location.search).verified&&setTimeout(()=>{alert("Email verified.")},2e3)}render(){const{classes:t}=this.props;let e=this.props.history.location.pathname.indexOf("/login")>-1?0:1;return i.a.createElement(Me.a,{open:!0,scroll:"body",maxWidth:"sm",fullWidth:!0,onClose:this.handleClose},i.a.createElement(qe.a,{className:t.root},i.a.createElement(Ae.a,{position:"static"},i.a.createElement(Re.a,null,i.a.createElement(De.a,{variant:"h6",color:"inherit"},"Welcome"))),i.a.createElement(Fe.a,{centered:!0,value:e,classes:{root:t.tabs},variant:"fullWidth",indicatorColor:"primary",textColor:"primary",onChange:(t,e)=>{0===e&&this.props.history.replace("/login"),1===e&&this.props.history.replace("/register")}},i.a.createElement(Ne.a,{label:"Login"}),i.a.createElement(Ne.a,{label:"Register"})),i.a.createElement(o.a,{path:"/login",render:e=>i.a.createElement("div",{className:t.createAnAccount},i.a.createElement(Xt,{onSubmit:this.handleLoginForm}))}),i.a.createElement(o.a,{path:"/register",render:e=>i.a.createElement("div",{className:t.createAnAccount},i.a.createElement(ze,{onSubmit:this.handleRegisterForm}))}),i.a.createElement("div",{className:t.connectAnAccount},i.a.createElement("div",null,i.a.createElement(Ve.a,null,"or")),i.a.createElement("div",{style:{marginTop:"15px"}},i.a.createElement(a.a,{showTOS:!0})))))}}e.default=Object($t.a)(o.f,Object(Ut.a)(t=>({root:{display:"flex",flexDirection:"column",justifyContent:"space-evenly",padding:"0px 0px 25px 0px !important"},[Be.a.tablet]:{root:{flexDirection:"column"}},tabs:{"& button:focus":{outline:"none"}},createAnAccount:{display:"flex",flexDirection:"column",textAlign:"center",padding:"0px 15px"},connectAnAccount:{display:"flex",flexDirection:"column",justifyContent:"start",minWidth:"25%",textAlign:"center",marginTop:"15px"}})),Object(b.b)(t=>({}),t=>({updateClientInfo:e=>{t(Object(We.d)(e))},authenticate:e=>{t(Object(We.a)(e))},login:e=>{t(Object(We.b)(e))},register:e=>{t(Object(We.c)(e))}})))(Ke)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[7],{
+
+/***/ "./node_modules/@jukben/emoji-search/build/index.js":
+/*!**********************************************************!*\
+  !*** ./node_modules/@jukben/emoji-search/build/index.js ***!
+  \**********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var emojilib_1 = __webpack_require__(/*! emojilib */ "./node_modules/emojilib/index.js");
+var match_sorter_1 = __importDefault(__webpack_require__(/*! match-sorter */ "./node_modules/match-sorter/dist/match-sorter.esm.js"));
+/* build proper library with included name of the emoji */
+var library = Object.entries(emojilib_1.lib).map(function (_a) {
+    var name = _a[0], emojiObject = _a[1];
+    return (__assign({}, emojiObject, { keywords: [name].concat(emojiObject.keywords), name: name }));
+});
+exports.default = (function (key) {
+    return match_sorter_1.default(library, key, { keys: ["keywords"] });
+});
+
+
+/***/ }),
+
+/***/ "./node_modules/@material-ui/icons/Close.js":
+/*!**************************************************!*\
+  !*** ./node_modules/@material-ui/icons/Close.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
+  d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
+}), 'Close');
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@material-ui/icons/Send.js":
+/*!*************************************************!*\
+  !*** ./node_modules/@material-ui/icons/Send.js ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
+
+var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
+  d: "M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
+}), 'Send');
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "./node_modules/@webscopeio/react-textarea-autocomplete/dist/react-textarea-autocomplete.es.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/@webscopeio/react-textarea-autocomplete/dist/react-textarea-autocomplete.es.js ***!
+  \*****************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var textarea_caret__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! textarea-caret */ "./node_modules/textarea-caret/index.js");
+/* harmony import */ var textarea_caret__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(textarea_caret__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var custom_event__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! custom-event */ "./node_modules/custom-event/index.js");
+/* harmony import */ var custom_event__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(custom_event__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/**
+ * The MIT License (MIT)
+ *
+ * Copyright (c) 2017 Jakub Beneš <benes@webscope.io>
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
+
+
+
+
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _objectSpread(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+    var ownKeys = Object.keys(source);
+
+    if (typeof Object.getOwnPropertySymbols === 'function') {
+      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
+        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
+      }));
+    }
+
+    ownKeys.forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    });
+  }
+
+  return target;
+}
+
+function _classCallCheck(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+
+function _defineProperties(target, props) {
+  for (var i = 0; i < props.length; i++) {
+    var descriptor = props[i];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor) descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+
+function _createClass(Constructor, protoProps, staticProps) {
+  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+  if (staticProps) _defineProperties(Constructor, staticProps);
+  return Constructor;
+}
+
+function _typeof2(obj) {
+  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
+    _typeof2 = function _typeof2(obj) {
+      return typeof obj;
+    };
+  } else {
+    _typeof2 = function _typeof2(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    };
+  }
+
+  return _typeof2(obj);
+}
+
+function _typeof(obj) {
+  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
+    _typeof = function _typeof(obj) {
+      return _typeof2(obj);
+    };
+  } else {
+    _typeof = function _typeof(obj) {
+      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
+    };
+  }
+
+  return _typeof(obj);
+}
+
+function _assertThisInitialized(self) {
+  if (self === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+
+  return self;
+}
+
+function _possibleConstructorReturn(self, call) {
+  if (call && (_typeof(call) === "object" || typeof call === "function")) {
+    return call;
+  }
+
+  return _assertThisInitialized(self);
+}
+
+function _getPrototypeOf(o) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
+    return o.__proto__ || Object.getPrototypeOf(o);
+  };
+  return _getPrototypeOf(o);
+}
+
+function _setPrototypeOf(o, p) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
+    o.__proto__ = p;
+    return o;
+  };
+
+  return _setPrototypeOf(o, p);
+}
+
+function _inherits(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+
+  subClass.prototype = Object.create(superClass && superClass.prototype, {
+    constructor: {
+      value: subClass,
+      writable: true,
+      configurable: true
+    }
+  });
+  if (superClass) _setPrototypeOf(subClass, superClass);
+}
+
+var KEY_CODES = {
+  ESC: 27,
+  UP: 38,
+  DOWN: 40,
+  LEFT: 37,
+  RIGHT: 39,
+  ENTER: 13,
+  TAB: 9
+}; // This is self-made key shortcuts manager, used for caching key strokes
+
+var Listener = function Listener() {
+  var _this = this;
+
+  _classCallCheck(this, Listener);
+
+  this.startListen = function (ref) {
+    if (!ref) return;
+    ref.addEventListener("keydown", _this.f);
+  };
+
+  this.stopListen = function (ref) {
+    if (!ref) return;
+    ref.removeEventListener("keydown", _this.f);
+  };
+
+  this.add = function (keyCodes, fn) {
+    var keyCode = keyCodes;
+    if (typeof keyCode !== "object") keyCode = [keyCode];
+    _this.listeners[_this.index] = {
+      keyCode: keyCode,
+      fn: fn
+    };
+    return _this.index++;
+  };
+
+  this.remove = function (id) {
+    delete _this.listeners[id];
+  };
+
+  this.removeAll = function () {
+    _this.listeners = {};
+    _this.index = 1;
+  };
+
+  this.index = 1;
+  this.listeners = {};
+
+  this.f = function (e) {
+    if (!e) return;
+    var code = e.keyCode || e.which;
+    Object.values(_this.listeners).forEach(function (_ref) {
+      var keyCode = _ref.keyCode,
+          fn = _ref.fn;
+
+      if (keyCode.includes(code)) {
+        e.stopPropagation();
+        e.preventDefault();
+        fn(e);
+      }
+    });
+  };
+};
+
+var Listeners = new Listener();
+
+var Item =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Item, _React$Component);
+
+  function Item() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, Item);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Item)).call.apply(_getPrototypeOf2, [this].concat(args)));
+
+    _this.selectItem = function () {
+      var _this$props = _this.props,
+          item = _this$props.item,
+          onSelectHandler = _this$props.onSelectHandler;
+      onSelectHandler(item);
+    };
+
+    return _this;
+  }
+
+  _createClass(Item, [{
+    key: "shouldComponentUpdate",
+    value: function shouldComponentUpdate(nextProps) {
+      if (this.props.item !== nextProps.item || this.props.selected !== nextProps.selected || this.props.style !== nextProps.style || this.props.className !== nextProps.className) {
+        return true;
+      }
+
+      return false;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      var _this$props2 = this.props,
+          Component = _this$props2.component,
+          style = _this$props2.style,
+          onClickHandler = _this$props2.onClickHandler,
+          item = _this$props2.item,
+          selected = _this$props2.selected,
+          className = _this$props2.className,
+          innerRef = _this$props2.innerRef;
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("li", {
+        className: "rta__item  ".concat(selected === true ? "rta__item--selected" : "", " ").concat(className || ""),
+        style: style
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        className: "rta__entity ".concat(selected === true ? "rta__entity--selected" : ""),
+        role: "button",
+        tabIndex: 0,
+        onClick: onClickHandler,
+        onFocus: this.selectItem,
+        onMouseEnter: this.selectItem,
+        onTouchStart: function onTouchStart() {
+          _this2.clicked = true;
+
+          _this2.selectItem();
+        },
+        onTouchEnd: function onTouchEnd(e) {
+          e.preventDefault();
+
+          if (_this2.clicked) {
+            onClickHandler(e);
+          }
+        },
+        onTouchMove: function onTouchMove() {
+          _this2.clicked = false;
+        },
+        onTouchCancel: function onTouchCancel() {
+          _this2.clicked = false;
+        }
+        /* $FlowFixMe */
+        ,
+        ref: innerRef
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Component, {
+        selected: selected,
+        entity: item
+      })));
+    }
+  }]);
+
+  return Item;
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
+
+var List =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(List, _React$Component);
+
+  function List() {
+    var _getPrototypeOf2;
+
+    var _this;
+
+    _classCallCheck(this, List);
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(List)).call.apply(_getPrototypeOf2, [this].concat(args)));
+    _this.state = {
+      selectedItem: null
+    };
+    _this.cachedIdOfItems = new Map();
+
+    _this.onPressEnter = function (e) {
+      if (typeof e !== "undefined") {
+        e.preventDefault();
+      }
+
+      var values = _this.props.values;
+
+      _this.modifyText(values[_this.getPositionInList()]);
+    };
+
+    _this.getPositionInList = function () {
+      var values = _this.props.values;
+      var selectedItem = _this.state.selectedItem;
+      if (!selectedItem) return 0;
+      return values.findIndex(function (a) {
+        return _this.getId(a) === _this.getId(selectedItem);
+      });
+    };
+
+    _this.getId = function (item) {
+      if (_this.cachedIdOfItems.has(item)) {
+        // $FlowFixMe
+        return _this.cachedIdOfItems.get(item);
+      }
+
+      var textToReplace = _this.props.getTextToReplace(item);
+
+      var computeId = function computeId() {
+        if (textToReplace) {
+          if (textToReplace.key) {
+            return textToReplace.key;
+          }
+
+          if (typeof item === "string" || !item.key) {
+            return textToReplace.text;
+          }
+        }
+
+        if (!item.key) {
+          throw new Error("Item ".concat(JSON.stringify(item), " has to have defined \"key\" property"));
+        } // $FlowFixMe
+
+
+        return item.key;
+      };
+
+      var id = computeId();
+
+      _this.cachedIdOfItems.set(item, id);
+
+      return id;
+    };
+
+    _this.listeners = [];
+    _this.itemsRef = {};
+
+    _this.modifyText = function (value) {
+      if (!value) return;
+      var onSelect = _this.props.onSelect;
+      onSelect(value);
+    };
+
+    _this.selectItem = function (item) {
+      var keyboard = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      if (_this.state.selectedItem === item) return;
+
+      _this.setState({
+        selectedItem: item
+      }, function () {
+        if (keyboard) {
+          _this.props.dropdownScroll(_this.itemsRef[_this.getId(item)]);
+        }
+      });
+    };
+
+    _this.scroll = function (e) {
+      e.preventDefault();
+      var values = _this.props.values;
+      var code = e.keyCode || e.which;
+
+      var oldPosition = _this.getPositionInList();
+
+      var newPosition;
+
+      switch (code) {
+        case KEY_CODES.DOWN:
+          newPosition = oldPosition + 1;
+          break;
+
+        case KEY_CODES.UP:
+          newPosition = oldPosition - 1;
+          break;
+
+        default:
+          newPosition = oldPosition;
+          break;
+      }
+
+      newPosition = (newPosition % values.length + values.length) % values.length; // eslint-disable-line
+
+      _this.selectItem(values[newPosition], [KEY_CODES.DOWN, KEY_CODES.UP].includes(code));
+    };
+
+    _this.isSelected = function (item) {
+      var selectedItem = _this.state.selectedItem;
+      if (!selectedItem) return false;
+      return _this.getId(selectedItem) === _this.getId(item);
+    };
+
+    return _this;
+  }
+
+  _createClass(List, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.listeners.push(Listeners.add([KEY_CODES.DOWN, KEY_CODES.UP], this.scroll), Listeners.add([KEY_CODES.ENTER, KEY_CODES.TAB], this.onPressEnter));
+      var values = this.props.values;
+      if (values && values[0]) this.selectItem(values[0]);
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(_ref) {
+      var _this2 = this;
+
+      var oldValues = _ref.values;
+      var values = this.props.values;
+      var oldValuesSerialized = oldValues.map(function (val) {
+        return _this2.getId(val);
+      }).join("");
+      var newValuesSerialized = values.map(function (val) {
+        return _this2.getId(val);
+      }).join("");
+
+      if (oldValuesSerialized !== newValuesSerialized && values && values[0]) {
+        this.selectItem(values[0]);
+      }
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      var listener;
+
+      while (this.listeners.length) {
+        listener = this.listeners.pop();
+        Listeners.remove(listener);
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var _this$props = this.props,
+          values = _this$props.values,
+          component = _this$props.component,
+          style = _this$props.style,
+          itemClassName = _this$props.itemClassName,
+          className = _this$props.className,
+          itemStyle = _this$props.itemStyle;
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("ul", {
+        className: "rta__list ".concat(className || ""),
+        style: style
+      }, values.map(function (item) {
+        return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Item, {
+          key: _this3.getId(item),
+          innerRef: function innerRef(ref) {
+            _this3.itemsRef[_this3.getId(item)] = ref;
+          },
+          selected: _this3.isSelected(item),
+          item: item,
+          className: itemClassName,
+          style: itemStyle,
+          onClickHandler: _this3.onPressEnter,
+          onSelectHandler: _this3.selectItem,
+          component: component
+        });
+      }));
+    }
+  }]);
+
+  return List;
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
+
+function defaultScrollToItem(container, item) {
+  var itemHeight = parseInt(getComputedStyle(item).getPropertyValue("height"), 10);
+  var containerHight = parseInt(getComputedStyle(container).getPropertyValue("height"), 10) - itemHeight;
+  var itemOffsetTop = item.offsetTop;
+  var actualScrollTop = container.scrollTop;
+
+  if (itemOffsetTop < actualScrollTop + containerHight && actualScrollTop < itemOffsetTop) {
+    return;
+  } // eslint-disable-next-line
+
+
+  container.scrollTop = itemOffsetTop;
+}
+
+var DEFAULT_CARET_POSITION = "next";
+var POSITION_CONFIGURATION = {
+  X: {
+    LEFT: "rta__autocomplete--left",
+    RIGHT: "rta__autocomplete--right"
+  },
+  Y: {
+    TOP: "rta__autocomplete--top",
+    BOTTOM: "rta__autocomplete--bottom"
+  }
+};
+
+var errorMessage = function errorMessage(message) {
+  return console.error("RTA: dataProvider fails: ".concat(message, "\n    \nCheck the documentation or create issue if you think it's bug. https://github.com/webscopeio/react-textarea-autocomplete/issues"));
+}; // The main purpose of this component is to figure out to which side the autocomplete should be opened
+
+
+var Autocomplete =
+/*#__PURE__*/
+function (_React$Component) {
+  _inherits(Autocomplete, _React$Component);
+
+  function Autocomplete() {
+    _classCallCheck(this, Autocomplete);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Autocomplete).apply(this, arguments));
+  }
+
+  _createClass(Autocomplete, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      var boundariesElement = this.props.boundariesElement;
+
+      if (typeof boundariesElement === "string") {
+        var elem = document.querySelector(boundariesElement);
+
+        if (!elem) {
+          throw new Error("RTA: Invalid prop boundariesElement: it has to be string or HTMLElement.");
+        }
+
+        this.containerElem = elem;
+      } else if (boundariesElement instanceof HTMLElement) {
+        this.containerElem = boundariesElement;
+      } else {
+        throw new Error("RTA: Invalid prop boundariesElement: it has to be string or HTMLElement.");
+      }
+
+      if (!this.containerElem || !this.containerElem.contains(this.ref)) {
+        if (true) {
+          throw new Error("RTA: Invalid prop boundariesElement: it has to be one of the parents of the RTA.");
+        }
+      }
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate() {
+      var _this$ref$classList, _this$ref$classList2;
+
+      var top = this.props.top || 0;
+      var left = this.props.left || 0;
+      var usedClasses = [];
+      var unusedClasses = [];
+      var topPosition = 0;
+      var leftPosition = 0;
+      var containerBounds = this.containerElem.getBoundingClientRect();
+      var dropdownBounds = this.ref.getBoundingClientRect();
+      var textareaBounds = this.props.textareaRef.getBoundingClientRect();
+      var computedStyle = window.getComputedStyle(this.ref);
+      var marginTop = parseInt(computedStyle.getPropertyValue("margin-top"), 10);
+      var marginBottom = parseInt(computedStyle.getPropertyValue("margin-bottom"), 10);
+      var marginLeft = parseInt(computedStyle.getPropertyValue("margin-left"), 10);
+      var marginRight = parseInt(computedStyle.getPropertyValue("margin-right"), 10);
+      var dropdownBottom = marginTop + marginBottom + textareaBounds.top + top + dropdownBounds.height;
+      var dropdownRight = marginLeft + marginRight + textareaBounds.left + left + dropdownBounds.width;
+
+      if (dropdownRight > containerBounds.right) {
+        leftPosition = left - dropdownBounds.width;
+        usedClasses.push(POSITION_CONFIGURATION.X.LEFT);
+        unusedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
+      } else {
+        leftPosition = left;
+        usedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
+        unusedClasses.push(POSITION_CONFIGURATION.X.LEFT);
+      }
+
+      if (dropdownBottom > containerBounds.bottom) {
+        topPosition = top - dropdownBounds.height;
+        usedClasses.push(POSITION_CONFIGURATION.Y.TOP);
+        unusedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
+      } else {
+        topPosition = top;
+        usedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
+        unusedClasses.push(POSITION_CONFIGURATION.Y.TOP);
+      }
+
+      if (this.props.renderToBody) {
+        topPosition += textareaBounds.top;
+        leftPosition += textareaBounds.left;
+      }
+
+      this.ref.style.top = "".concat(topPosition, "px");
+      this.ref.style.left = "".concat(leftPosition, "px");
+
+      (_this$ref$classList = this.ref.classList).remove.apply(_this$ref$classList, unusedClasses);
+
+      (_this$ref$classList2 = this.ref.classList).add.apply(_this$ref$classList2, usedClasses);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this = this;
+
+      var _this$props = this.props,
+          style = _this$props.style,
+          className = _this$props.className,
+          innerRef = _this$props.innerRef,
+          children = _this$props.children,
+          renderToBody = _this$props.renderToBody;
+      var body = document.body;
+      var autocompleteContainer = react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        ref: function ref(_ref) {
+          // $FlowFixMe
+          _this.ref = _ref; // $FlowFixMe
+
+          innerRef(_ref);
+        },
+        className: "rta__autocomplete ".concat(className || ""),
+        style: style
+      }, children);
+      return renderToBody && body !== null ? react_dom__WEBPACK_IMPORTED_MODULE_0___default.a.createPortal(autocompleteContainer, body) : autocompleteContainer;
+    }
+  }]);
+
+  return Autocomplete;
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
+
+var ReactTextareaAutocomplete =
+/*#__PURE__*/
+function (_React$Component2) {
+  _inherits(ReactTextareaAutocomplete, _React$Component2);
+
+  function ReactTextareaAutocomplete(_props) {
+    var _this2;
+
+    _classCallCheck(this, ReactTextareaAutocomplete);
+
+    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(ReactTextareaAutocomplete).call(this, _props));
+    _this2.state = {
+      top: null,
+      left: null,
+      currentTrigger: null,
+      actualToken: "",
+      data: null,
+      value: "",
+      dataLoading: false,
+      selectionEnd: 0,
+      component: null,
+      textToReplace: null
+    };
+
+    _this2.escListenerInit = function () {
+      if (!_this2.escListener) {
+        _this2.escListener = Listeners.add(KEY_CODES.ESC, _this2._closeAutocomplete);
+      }
+    };
+
+    _this2.escListenerDestroy = function () {
+      if (_this2.escListener) {
+        Listeners.remove(_this2.escListener);
+        _this2.escListener = null;
+      }
+    };
+
+    _this2.getSelectionPosition = function () {
+      if (!_this2.textareaRef) return null;
+      return {
+        selectionStart: _this2.textareaRef.selectionStart,
+        selectionEnd: _this2.textareaRef.selectionEnd
+      };
+    };
+
+    _this2.getSelectedText = function () {
+      if (!_this2.textareaRef) return null;
+      var _this2$textareaRef = _this2.textareaRef,
+          selectionStart = _this2$textareaRef.selectionStart,
+          selectionEnd = _this2$textareaRef.selectionEnd;
+      if (selectionStart === selectionEnd) return null;
+      return _this2.state.value.substr(selectionStart, selectionEnd - selectionStart);
+    };
+
+    _this2.setCaretPosition = function () {
+      var position = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+      if (!_this2.textareaRef) return;
+
+      _this2.textareaRef.focus();
+
+      _this2.textareaRef.setSelectionRange(position, position);
+    };
+
+    _this2.getCaretPosition = function () {
+      if (!_this2.textareaRef) {
+        return 0;
+      }
+
+      var position = _this2.textareaRef.selectionEnd;
+      return position;
+    };
+
+    _this2._handleCaretChange = function (e) {
+      var cleanLastTrigger = function cleanLastTrigger() {
+        var beforeHandle = _this2.getCaretPosition() - 1;
+        _this2.lastTrigger = _this2.lastTrigger ? beforeHandle : 0;
+      };
+
+      if (e.type === "keydown") {
+        // $FlowFixMe
+        var code = e.keyCode || e.which;
+
+        switch (code) {
+          case KEY_CODES.UP:
+          case KEY_CODES.DOWN:
+            if (!_this2._isAutocompleteOpen()) {
+              cleanLastTrigger();
+            }
+
+            break;
+
+          case KEY_CODES.LEFT:
+          case KEY_CODES.RIGHT:
+            cleanLastTrigger();
+            break;
+
+          default:
+        }
+
+        return;
+      }
+
+      cleanLastTrigger();
+    };
+
+    _this2._onSelect = function (item) {
+      var _this2$state = _this2.state,
+          selectionEnd = _this2$state.selectionEnd,
+          currentTrigger = _this2$state.currentTrigger,
+          textareaValue = _this2$state.value;
+      var _this2$props = _this2.props,
+          trigger = _this2$props.trigger,
+          onItemSelected = _this2$props.onItemSelected;
+      if (!currentTrigger) return;
+
+      var getTextToReplaceForCurrentTrigger = _this2._getTextToReplace(currentTrigger);
+
+      if (!getTextToReplaceForCurrentTrigger) {
+        _this2._closeAutocomplete();
+
+        return;
+      }
+
+      var newToken = getTextToReplaceForCurrentTrigger(item);
+
+      if (!newToken) {
+        _this2._closeAutocomplete();
+
+        return;
+      }
+
+      if (onItemSelected) {
+        onItemSelected({
+          currentTrigger: currentTrigger,
+          item: item
+        });
+      }
+
+      var computeCaretPosition = function computeCaretPosition(position, token, startToken) {
+        switch (position) {
+          case "start":
+            return startToken;
+
+          case "next":
+          case "end":
+            return startToken + token.length;
+
+          default:
+            if (!Number.isInteger(position)) {
+              throw new Error('RTA: caretPosition should be "start", "next", "end" or number.');
+            }
+
+            return position;
+        }
+      };
+
+      var textToModify = textareaValue.slice(0, selectionEnd);
+      var startOfTokenPosition = textToModify.search(
+      /**
+       * It's important to escape the currentTrigger char for chars like [, (,...
+       */
+      new RegExp("\\".concat(currentTrigger, "[^\\".concat(currentTrigger).concat(trigger[currentTrigger].allowWhitespace ? "" : "\\s", "]"), "*$"))); // we add space after emoji is selected if a caret position is next
+
+      var newTokenString = newToken.caretPosition === "next" ? "".concat(newToken.text, " ") : newToken.text;
+      var newCaretPosition = computeCaretPosition(newToken.caretPosition, newTokenString, startOfTokenPosition);
+      var modifiedText = textToModify.substring(0, startOfTokenPosition) + newTokenString;
+      var newValue = textareaValue.replace(textToModify, modifiedText); // set the new textarea value and after that set the caret back to its position
+
+      _this2.setState({
+        value: newValue,
+        dataLoading: false
+      }, function () {
+        var insertedTrigger = _this2.tokenRegExpEnding.exec(newTokenString);
+
+        var insertedTriggerModifier = insertedTrigger ? insertedTrigger[0].length : 1;
+        _this2.lastTrigger = newCaretPosition ? newCaretPosition - insertedTriggerModifier : newCaretPosition;
+        _this2.textareaRef.value = newValue;
+        _this2.textareaRef.selectionEnd = newCaretPosition;
+
+        _this2._changeHandler();
+
+        var scrollTop = _this2.textareaRef.scrollTop;
+
+        _this2.setCaretPosition(newCaretPosition);
+        /*
+          Chrome does not maintain scroll position
+          Relevant discussion https://github.com/webscopeio/react-textarea-autocomplete/pull/97
+        */
+
+
+        if (window.chrome) {
+          _this2.textareaRef.scrollTop = scrollTop;
+        }
+      });
+    };
+
+    _this2._getTextToReplace = function (currentTrigger) {
+      var triggerSettings = _this2.props.trigger[currentTrigger];
+      if (!currentTrigger || !triggerSettings) return null;
+      var output = triggerSettings.output;
+      return function (item) {
+        if (typeof item === "object" && (!output || typeof output !== "function")) {
+          throw new Error('Output functor is not defined! If you are using items as object you have to define "output" function. https://github.com/webscopeio/react-textarea-autocomplete#trigger-type');
+        }
+
+        if (output) {
+          var textToReplace = output(item, currentTrigger);
+
+          if (textToReplace === undefined || typeof textToReplace === "number") {
+            throw new Error("Output functor should return string or object in shape {text: string, caretPosition: string | number}.\nGot \"".concat(String(textToReplace), "\". Check the implementation for trigger \"").concat(currentTrigger, "\"\n\nSee https://github.com/webscopeio/react-textarea-autocomplete#trigger-type for more information.\n"));
+          }
+
+          if (textToReplace === null) return null;
+
+          if (typeof textToReplace === "string") {
+            return {
+              text: textToReplace,
+              caretPosition: DEFAULT_CARET_POSITION
+            };
+          }
+
+          if (!textToReplace.text) {
+            throw new Error("Output \"text\" is not defined! Object should has shape {text: string, caretPosition: string | number}. Check the implementation for trigger \"".concat(currentTrigger, "\"\n"));
+          }
+
+          if (!textToReplace.caretPosition) {
+            throw new Error("Output \"caretPosition\" is not defined! Object should has shape {text: string, caretPosition: string | number}. Check the implementation for trigger \"".concat(currentTrigger, "\"\n"));
+          }
+
+          return textToReplace;
+        }
+
+        if (typeof item !== "string") {
+          throw new Error("Output item should be string\n");
+        }
+
+        return {
+          text: "".concat(currentTrigger).concat(item).concat(currentTrigger),
+          caretPosition: DEFAULT_CARET_POSITION
+        };
+      };
+    };
+
+    _this2._getCurrentTriggerSettings = function () {
+      var currentTrigger = _this2.state.currentTrigger;
+      if (!currentTrigger) return null;
+      return _this2.props.trigger[currentTrigger];
+    };
+
+    _this2._getValuesFromProvider = function () {
+      var _this2$state2 = _this2.state,
+          currentTrigger = _this2$state2.currentTrigger,
+          actualToken = _this2$state2.actualToken;
+
+      var triggerSettings = _this2._getCurrentTriggerSettings();
+
+      if (!currentTrigger || !triggerSettings) {
+        return;
+      }
+
+      var dataProvider = triggerSettings.dataProvider,
+          component = triggerSettings.component;
+
+      if (typeof dataProvider !== "function") {
+        throw new Error("Trigger provider has to be a function!");
+      }
+
+      _this2.setState({
+        dataLoading: true
+      });
+
+      var providedData = dataProvider(actualToken);
+
+      if (!(providedData instanceof Promise)) {
+        providedData = Promise.resolve(providedData);
+      }
+
+      providedData.then(function (data) {
+        if (!Array.isArray(data)) {
+          throw new Error("Trigger provider has to provide an array!");
+        }
+
+        if (typeof component !== "function") {
+          throw new Error("Component should be defined!");
+        } // throw away if we resolved old trigger
+
+
+        if (currentTrigger !== _this2.state.currentTrigger) return; // if we haven't resolved any data let's close the autocomplete
+
+        if (!data.length) {
+          _this2._closeAutocomplete();
+
+          return;
+        }
+
+        _this2.setState({
+          dataLoading: false,
+          data: data,
+          component: component
+        });
+      }).catch(function (e) {
+        return errorMessage(e.message);
+      });
+    };
+
+    _this2._getSuggestions = function () {
+      var _this2$state3 = _this2.state,
+          currentTrigger = _this2$state3.currentTrigger,
+          data = _this2$state3.data;
+      if (!currentTrigger || !data || data && !data.length) return null;
+      return data;
+    };
+
+    _this2._createRegExp = function () {
+      var trigger = _this2.props.trigger; // negative lookahead to match only the trigger + the actual token = "bladhwd:adawd:word test" => ":word"
+      // https://stackoverflow.com/a/8057827/2719917
+
+      _this2.tokenRegExp = new RegExp("(".concat(Object.keys(trigger) // the sort is important for multi-char combos as "/kick", "/"
+      .sort(function (a, b) {
+        if (a < b) {
+          return 1;
+        }
+
+        if (a > b) {
+          return -1;
+        }
+
+        return 0;
+      }).map(function (a) {
+        return "\\".concat(a);
+      }).join("|"), ")((?:(?!\\1)[^\\s])*$)"));
+      _this2.tokenRegExpEnding = new RegExp("(".concat(Object.keys(trigger) // the sort is important for multi-char combos as "/kick", "/"
+      .sort(function (a, b) {
+        if (a < b) {
+          return 1;
+        }
+
+        if (a > b) {
+          return -1;
+        }
+
+        return 0;
+      }).map(function (a) {
+        return "\\".concat(a);
+      }).join("|"), ")$"));
+    };
+
+    _this2._closeAutocomplete = function () {
+      _this2.escListenerDestroy();
+
+      _this2.setState({
+        data: null,
+        dataLoading: false,
+        currentTrigger: null
+      });
+    };
+
+    _this2._cleanUpProps = function () {
+      var props = _objectSpread({}, _this2.props);
+
+      var notSafe = ["loadingComponent", "boundariesElement", "containerStyle", "minChar", "scrollToItem", "ref", "innerRef", "onChange", "onCaretPositionChange", "className", "value", "trigger", "listStyle", "itemStyle", "containerStyle", "loaderStyle", "className", "containerClassName", "listClassName", "itemClassName", "loaderClassName", "dropdownStyle", "dropdownClassName", "movePopupAsYouType", "textAreaComponent", "renderToBody", "onItemSelected"]; // eslint-disable-next-line
+
+      for (var prop in props) {
+        if (notSafe.includes(prop)) delete props[prop];
+      }
+
+      return props;
+    };
+
+    _this2._changeHandler = function (e) {
+      var _this2$props2 = _this2.props,
+          trigger = _this2$props2.trigger,
+          onChange = _this2$props2.onChange,
+          minChar = _this2$props2.minChar,
+          onCaretPositionChange = _this2$props2.onCaretPositionChange,
+          movePopupAsYouType = _this2$props2.movePopupAsYouType;
+      var _this2$state4 = _this2.state,
+          top = _this2$state4.top,
+          left = _this2$state4.left;
+      var event = e;
+
+      if (!event) {
+        // fire onChange event after successful selection
+        event = new custom_event__WEBPACK_IMPORTED_MODULE_2___default.a("change", {
+          bubbles: true
+        });
+
+        _this2.textareaRef.dispatchEvent(event);
+      }
+
+      var textarea = event.target;
+      var selectionEnd = textarea.selectionEnd;
+      var value = textarea.value;
+      _this2.lastValueBubbledEvent = value;
+
+      if (onChange && event) {
+        event.persist && event.persist();
+        onChange(event);
+      }
+
+      if (onCaretPositionChange) {
+        var caretPosition = _this2.getCaretPosition();
+
+        onCaretPositionChange(caretPosition);
+      }
+
+      _this2.setState({
+        value: value
+      });
+
+      var setTopLeft = function setTopLeft() {
+        var _getCaretCoordinates = textarea_caret__WEBPACK_IMPORTED_MODULE_1___default()(textarea, selectionEnd),
+            newTop = _getCaretCoordinates.top,
+            newLeft = _getCaretCoordinates.left;
+
+        _this2.setState({
+          // make position relative to textarea
+          top: newTop - _this2.textareaRef.scrollTop || 0,
+          left: newLeft
+        });
+      };
+
+      var cleanLastTrigger = function cleanLastTrigger(triggerLength) {
+        _this2.lastTrigger = selectionEnd - triggerLength;
+
+        _this2._closeAutocomplete();
+
+        setTopLeft();
+      };
+
+      if (selectionEnd <= _this2.lastTrigger) {
+        var _affectedTextareaValue = value.slice(0, selectionEnd);
+
+        var _newTrigger = _this2.tokenRegExp.exec(_affectedTextareaValue);
+
+        cleanLastTrigger(_newTrigger ? _newTrigger[0].length : 0);
+      }
+
+      var affectedTextareaValue = value.slice(_this2.lastTrigger, selectionEnd);
+
+      var tokenMatch = _this2.tokenRegExp.exec(affectedTextareaValue);
+
+      var lastToken = tokenMatch && tokenMatch[0];
+      var currentTrigger = tokenMatch && tokenMatch[1] || null;
+      var currentTriggerLength = currentTrigger ? currentTrigger.length - 1 : 0; // with this approach we want to know if the user just inserted a new trigger sequence
+
+      var newTrigger = _this2.tokenRegExpEnding.exec(affectedTextareaValue);
+
+      if (newTrigger) {
+        cleanLastTrigger(newTrigger[0].length);
+      } else if (!_this2._isAutocompleteOpen()) {
+        _this2._closeAutocomplete();
+      }
+      /*
+       if we lost the trigger token or there is no following character we want to close
+       the autocomplete
+      */
+
+
+      if ((!lastToken || lastToken.length <= minChar + currentTriggerLength) && ( // check if our current trigger disallows whitespace
+      _this2.state.currentTrigger && !trigger[_this2.state.currentTrigger].allowWhitespace || !_this2.state.currentTrigger)) {
+        _this2._closeAutocomplete();
+
+        return;
+      }
+      /**
+       * This code has to be sync that is the reason why we obtain the currentTrigger
+       * from currentTrigger not this.state.currentTrigger
+       *
+       * Check if the currently typed token has to be afterWhitespace, or not.
+       *
+       * This setting means that there has to be whitespace before the token (on it has to be the the first character typed into textarea)
+       */
+
+
+      if (currentTrigger && trigger[currentTrigger].afterWhitespace && !/\s/.test(value[selectionEnd - lastToken.length - 1]) && value[selectionEnd - lastToken.length - 1] !== undefined) {
+        _this2._closeAutocomplete();
+
+        return;
+      }
+      /**
+        If our current trigger allows whitespace
+        get the correct token for DataProvider, so we need to construct new RegExp
+       */
+
+
+      if (_this2.state.currentTrigger && trigger[_this2.state.currentTrigger].allowWhitespace) {
+        tokenMatch = new RegExp("\\".concat(_this2.state.currentTrigger, ".*$")).exec(value.slice(0, selectionEnd));
+        lastToken = tokenMatch && tokenMatch[0];
+
+        if (!lastToken) {
+          _this2._closeAutocomplete();
+
+          return;
+        }
+
+        currentTrigger = Object.keys(trigger).find(function (a) {
+          return a === lastToken[0];
+        }) || null;
+      }
+
+      var actualToken = lastToken.slice(1); // if trigger is not configured step out from the function, otherwise proceed
+
+      if (!currentTrigger) {
+        return;
+      }
+
+      if (movePopupAsYouType || top === null && left === null || // if the trigger got changed, let's reposition the autocomplete
+      _this2.state.currentTrigger !== currentTrigger) {
+        setTopLeft();
+      }
+
+      _this2.escListenerInit();
+
+      var textToReplace = _this2._getTextToReplace(currentTrigger);
+
+      _this2.setState({
+        selectionEnd: selectionEnd,
+        currentTrigger: currentTrigger,
+        textToReplace: textToReplace,
+        actualToken: actualToken
+      }, function () {
+        try {
+          _this2._getValuesFromProvider();
+        } catch (err) {
+          errorMessage(err.message);
+        }
+      });
+    };
+
+    _this2._selectHandler = function (e) {
+      var _this2$props3 = _this2.props,
+          onCaretPositionChange = _this2$props3.onCaretPositionChange,
+          onSelect = _this2$props3.onSelect;
+
+      if (onCaretPositionChange) {
+        var caretPosition = _this2.getCaretPosition();
+
+        onCaretPositionChange(caretPosition);
+      }
+
+      if (onSelect) {
+        e.persist();
+        onSelect(e);
+      }
+    };
+
+    _this2._shouldStayOpen = function (e) {
+      var el = e.relatedTarget; // IE11 doesn't know about `relatedTarget` // https://stackoverflow.com/a/49325196/2719917
+
+      if (el === null) {
+        el = document.activeElement;
+      }
+
+      if (_this2.dropdownRef && el instanceof Node && _this2.dropdownRef.contains(el)) {
+        return true;
+      }
+
+      return false;
+    };
+
+    _this2._onClick = function (e) {
+      var onClick = _this2.props.onClick;
+
+      if (onClick) {
+        e.persist();
+        onClick(e);
+      }
+
+      if (_this2._shouldStayOpen(e)) {
+        return;
+      }
+
+      _this2._closeAutocomplete();
+    };
+
+    _this2._onBlur = function (e) {
+      var onBlur = _this2.props.onBlur;
+
+      if (onBlur) {
+        e.persist();
+        onBlur(e);
+      }
+
+      if (_this2._shouldStayOpen(e)) {
+        return;
+      }
+
+      _this2._closeAutocomplete();
+    };
+
+    _this2._onScrollHandler = function () {
+      _this2._closeAutocomplete();
+    };
+
+    _this2._dropdownScroll = function (item) {
+      var scrollToItem = _this2.props.scrollToItem;
+      if (!scrollToItem) return;
+
+      if (scrollToItem === true) {
+        defaultScrollToItem(_this2.dropdownRef, item);
+        return;
+      }
+
+      if (typeof scrollToItem !== "function" || scrollToItem.length !== 2) {
+        throw new Error("`scrollToItem` has to be boolean (true for default implementation) or function with two parameters: container, item.");
+      }
+
+      scrollToItem(_this2.dropdownRef, item);
+    };
+
+    _this2._isAutocompleteOpen = function () {
+      var _this2$state5 = _this2.state,
+          dataLoading = _this2$state5.dataLoading,
+          currentTrigger = _this2$state5.currentTrigger;
+
+      var suggestionData = _this2._getSuggestions();
+
+      return !!((dataLoading || suggestionData) && currentTrigger);
+    };
+
+    _this2._textareaRef = function (ref) {
+      // $FlowFixMe - ref is actually a `?HTMLTextAreaElement`
+      _this2.props.innerRef && _this2.props.innerRef(ref);
+      _this2.textareaRef = ref;
+    };
+
+    _this2.lastTrigger = 0;
+    _this2.escListener = null;
+    var _this2$props4 = _this2.props,
+        loadingComponent = _this2$props4.loadingComponent,
+        _trigger = _this2$props4.trigger,
+        _value = _this2$props4.value;
+    if (_value) _this2.state.value = _value;
+
+    _this2._createRegExp();
+
+    if (!loadingComponent) {
+      throw new Error("RTA: loadingComponent is not defined");
+    }
+
+    if (!_trigger) {
+      throw new Error("RTA: trigger is not defined");
+    }
+
+    return _this2;
+  }
+
+  _createClass(ReactTextareaAutocomplete, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      Listeners.startListen(this.textareaRef); // handle caret change
+
+      this.textareaRef && this.textareaRef.addEventListener("focus", this._handleCaretChange);
+      this.textareaRef && this.textareaRef.addEventListener("click", this._handleCaretChange);
+      this.textareaRef && this.textareaRef.addEventListener("keydown", this._handleCaretChange);
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(_ref2) {
+      var oldTrigger = _ref2.trigger,
+          oldValue = _ref2.value;
+      var _this$props2 = this.props,
+          trigger = _this$props2.trigger,
+          value = _this$props2.value;
+
+      if (Object.keys(trigger).join("") !== Object.keys(oldTrigger).join("")) {
+        this._createRegExp();
+      }
+
+      if (oldValue !== value && this.lastValueBubbledEvent !== value) {
+        this.lastTrigger = 0;
+
+        this._changeHandler();
+      }
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      this.escListenerDestroy();
+      Listeners.stopListen(this.textareaRef); // handle caret change
+
+      this.textareaRef && this.textareaRef.removeEventListener("focus", this._handleCaretChange);
+      this.textareaRef && this.textareaRef.removeEventListener("click", this._handleCaretChange);
+      this.textareaRef && this.textareaRef.removeEventListener("keydown", this._handleCaretChange);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this3 = this;
+
+      var _this$props3 = this.props,
+          Loader = _this$props3.loadingComponent,
+          style = _this$props3.style,
+          className = _this$props3.className,
+          listStyle = _this$props3.listStyle,
+          itemStyle = _this$props3.itemStyle,
+          boundariesElement = _this$props3.boundariesElement,
+          movePopupAsYouType = _this$props3.movePopupAsYouType,
+          listClassName = _this$props3.listClassName,
+          itemClassName = _this$props3.itemClassName,
+          dropdownClassName = _this$props3.dropdownClassName,
+          dropdownStyle = _this$props3.dropdownStyle,
+          containerStyle = _this$props3.containerStyle,
+          containerClassName = _this$props3.containerClassName,
+          loaderStyle = _this$props3.loaderStyle,
+          loaderClassName = _this$props3.loaderClassName,
+          textAreaComponent = _this$props3.textAreaComponent,
+          renderToBody = _this$props3.renderToBody;
+      var _this$state = this.state,
+          left = _this$state.left,
+          top = _this$state.top,
+          dataLoading = _this$state.dataLoading,
+          component = _this$state.component,
+          value = _this$state.value,
+          textToReplace = _this$state.textToReplace;
+
+      var isAutocompleteOpen = this._isAutocompleteOpen();
+
+      var suggestionData = this._getSuggestions();
+
+      var extraAttrs = {};
+      var TextAreaComponent;
+
+      if (textAreaComponent.component) {
+        TextAreaComponent = textAreaComponent.component;
+        extraAttrs[textAreaComponent.ref] = this._textareaRef;
+      } else {
+        TextAreaComponent = textAreaComponent;
+        extraAttrs.ref = this._textareaRef;
+      }
+
+      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        className: "rta ".concat(dataLoading === true ? "rta--loading" : "", " ").concat(containerClassName || ""),
+        style: containerStyle
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(TextAreaComponent, Object.assign({}, this._cleanUpProps(), {
+        className: "rta__textarea ".concat(className || ""),
+        onChange: this._changeHandler,
+        onSelect: this._selectHandler,
+        onScroll: this._onScrollHandler,
+        onClick: // The textarea itself is outside the autoselect dropdown.
+        this._onClick,
+        onBlur: this._onBlur,
+        value: value,
+        style: style
+      }, extraAttrs)), isAutocompleteOpen && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Autocomplete, {
+        innerRef: function innerRef(ref) {
+          // $FlowFixMe
+          _this3.dropdownRef = ref;
+        },
+        top: top,
+        left: left,
+        style: dropdownStyle,
+        className: dropdownClassName,
+        movePopupAsYouType: movePopupAsYouType,
+        boundariesElement: boundariesElement,
+        textareaRef: this.textareaRef,
+        renderToBody: renderToBody
+      }, suggestionData && component && textToReplace && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(List, {
+        values: suggestionData,
+        component: component,
+        style: listStyle,
+        className: listClassName,
+        itemClassName: itemClassName,
+        itemStyle: itemStyle,
+        getTextToReplace: textToReplace,
+        onSelect: this._onSelect,
+        dropdownScroll: this._dropdownScroll
+      }), dataLoading && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
+        className: "rta__loader ".concat(suggestionData !== null ? "rta__loader--suggestion-data" : "rta__loader--empty-suggestion-data", " ").concat(loaderClassName || ""),
+        style: loaderStyle
+      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Loader, {
+        data: suggestionData
+      }))));
+    }
+  }], [{
+    key: "getDerivedStateFromProps",
+    value: function getDerivedStateFromProps(_ref3) {
+      var value = _ref3.value;
+      if (value === null || value === undefined) return null;
+      return {
+        value: value
+      };
+    }
+  }]);
+
+  return ReactTextareaAutocomplete;
+}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
+
+ReactTextareaAutocomplete.defaultProps = {
+  movePopupAsYouType: false,
+  value: null,
+  minChar: 1,
+  boundariesElement: "body",
+  scrollToItem: true,
+  textAreaComponent: "textarea",
+  renderToBody: false
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (ReactTextareaAutocomplete);
+
+
+/***/ }),
+
+/***/ "./node_modules/custom-event/index.js":
+/*!********************************************!*\
+  !*** ./node_modules/custom-event/index.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(global) {
+var NativeCustomEvent = global.CustomEvent;
+
+function useNative () {
+  try {
+    var p = new NativeCustomEvent('cat', { detail: { foo: 'bar' } });
+    return  'cat' === p.type && 'bar' === p.detail.foo;
+  } catch (e) {
+  }
+  return false;
+}
+
+/**
+ * Cross-browser `CustomEvent` constructor.
+ *
+ * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent.CustomEvent
+ *
+ * @public
+ */
+
+module.exports = useNative() ? NativeCustomEvent :
+
+// IE >= 9
+'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent (type, params) {
+  var e = document.createEvent('CustomEvent');
+  if (params) {
+    e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
+  } else {
+    e.initCustomEvent(type, false, false, void 0);
+  }
+  return e;
+} :
+
+// IE <= 8
+function CustomEvent (type, params) {
+  var e = document.createEventObject();
+  e.type = type;
+  if (params) {
+    e.bubbles = Boolean(params.bubbles);
+    e.cancelable = Boolean(params.cancelable);
+    e.detail = params.detail;
+  } else {
+    e.bubbles = false;
+    e.cancelable = false;
+    e.detail = void 0;
+  }
+  return e;
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+
+/***/ }),
+
+/***/ "./node_modules/emojilib/emojis.json":
+/*!*******************************************!*\
+  !*** ./node_modules/emojilib/emojis.json ***!
+  \*******************************************/
+/*! exports provided: 100, 1234, grinning, grimacing, grin, joy, rofl, partying, smiley, smile, sweat_smile, laughing, innocent, wink, blush, slightly_smiling_face, upside_down_face, relaxed, yum, relieved, heart_eyes, smiling_face_with_three_hearts, kissing_heart, kissing, kissing_smiling_eyes, kissing_closed_eyes, stuck_out_tongue_winking_eye, zany, raised_eyebrow, monocle, stuck_out_tongue_closed_eyes, stuck_out_tongue, money_mouth_face, nerd_face, sunglasses, star_struck, clown_face, cowboy_hat_face, hugs, smirk, no_mouth, neutral_face, expressionless, unamused, roll_eyes, thinking, lying_face, hand_over_mouth, shushing, symbols_over_mouth, exploding_head, flushed, disappointed, worried, angry, rage, pensive, confused, slightly_frowning_face, frowning_face, persevere, confounded, tired_face, weary, pleading, triumph, open_mouth, scream, fearful, cold_sweat, hushed, frowning, anguished, cry, disappointed_relieved, drooling_face, sleepy, sweat, hot, cold, sob, dizzy_face, astonished, zipper_mouth_face, nauseated_face, sneezing_face, vomiting, mask, face_with_thermometer, face_with_head_bandage, woozy, sleeping, zzz, poop, smiling_imp, imp, japanese_ogre, japanese_goblin, skull, ghost, alien, robot, smiley_cat, smile_cat, joy_cat, heart_eyes_cat, smirk_cat, kissing_cat, scream_cat, crying_cat_face, pouting_cat, palms_up, raised_hands, clap, wave, call_me_hand, +1, -1, facepunch, fist, fist_left, fist_right, v, ok_hand, raised_hand, raised_back_of_hand, open_hands, muscle, pray, foot, leg, handshake, point_up, point_up_2, point_down, point_left, point_right, fu, raised_hand_with_fingers_splayed, love_you, metal, crossed_fingers, vulcan_salute, writing_hand, selfie, nail_care, lips, tooth, tongue, ear, nose, eye, eyes, brain, bust_in_silhouette, busts_in_silhouette, speaking_head, baby, child, boy, girl, adult, man, woman, blonde_woman, blonde_man, bearded_person, older_adult, older_man, older_woman, man_with_gua_pi_mao, woman_with_headscarf, woman_with_turban, man_with_turban, policewoman, policeman, construction_worker_woman, construction_worker_man, guardswoman, guardsman, female_detective, male_detective, woman_health_worker, man_health_worker, woman_farmer, man_farmer, woman_cook, man_cook, woman_student, man_student, woman_singer, man_singer, woman_teacher, man_teacher, woman_factory_worker, man_factory_worker, woman_technologist, man_technologist, woman_office_worker, man_office_worker, woman_mechanic, man_mechanic, woman_scientist, man_scientist, woman_artist, man_artist, woman_firefighter, man_firefighter, woman_pilot, man_pilot, woman_astronaut, man_astronaut, woman_judge, man_judge, woman_superhero, man_superhero, woman_supervillain, man_supervillain, mrs_claus, santa, sorceress, wizard, woman_elf, man_elf, woman_vampire, man_vampire, woman_zombie, man_zombie, woman_genie, man_genie, mermaid, merman, woman_fairy, man_fairy, angel, pregnant_woman, breastfeeding, princess, prince, bride_with_veil, man_in_tuxedo, running_woman, running_man, walking_woman, walking_man, dancer, man_dancing, dancing_women, dancing_men, couple, two_men_holding_hands, two_women_holding_hands, bowing_woman, bowing_man, man_facepalming, woman_facepalming, woman_shrugging, man_shrugging, tipping_hand_woman, tipping_hand_man, no_good_woman, no_good_man, ok_woman, ok_man, raising_hand_woman, raising_hand_man, pouting_woman, pouting_man, frowning_woman, frowning_man, haircut_woman, haircut_man, massage_woman, massage_man, woman_in_steamy_room, man_in_steamy_room, couple_with_heart_woman_man, couple_with_heart_woman_woman, couple_with_heart_man_man, couplekiss_man_woman, couplekiss_woman_woman, couplekiss_man_man, family_man_woman_boy, family_man_woman_girl, family_man_woman_girl_boy, family_man_woman_boy_boy, family_man_woman_girl_girl, family_woman_woman_boy, family_woman_woman_girl, family_woman_woman_girl_boy, family_woman_woman_boy_boy, family_woman_woman_girl_girl, family_man_man_boy, family_man_man_girl, family_man_man_girl_boy, family_man_man_boy_boy, family_man_man_girl_girl, family_woman_boy, family_woman_girl, family_woman_girl_boy, family_woman_boy_boy, family_woman_girl_girl, family_man_boy, family_man_girl, family_man_girl_boy, family_man_boy_boy, family_man_girl_girl, yarn, thread, coat, labcoat, womans_clothes, tshirt, jeans, necktie, dress, bikini, kimono, lipstick, kiss, footprints, flat_shoe, high_heel, sandal, boot, mans_shoe, athletic_shoe, hiking_boot, socks, gloves, scarf, womans_hat, tophat, billed_hat, rescue_worker_helmet, mortar_board, crown, school_satchel, luggage, pouch, purse, handbag, briefcase, eyeglasses, dark_sunglasses, goggles, ring, closed_umbrella, dog, cat, mouse, hamster, rabbit, fox_face, bear, panda_face, koala, tiger, lion, cow, pig, pig_nose, frog, squid, octopus, shrimp, monkey_face, gorilla, see_no_evil, hear_no_evil, speak_no_evil, monkey, chicken, penguin, bird, baby_chick, hatching_chick, hatched_chick, duck, eagle, owl, bat, wolf, boar, horse, unicorn, honeybee, bug, butterfly, snail, beetle, ant, grasshopper, spider, scorpion, crab, snake, lizard, t-rex, sauropod, turtle, tropical_fish, fish, blowfish, dolphin, shark, whale, whale2, crocodile, leopard, zebra, tiger2, water_buffalo, ox, cow2, deer, dromedary_camel, camel, giraffe, elephant, rhinoceros, goat, ram, sheep, racehorse, pig2, rat, mouse2, rooster, turkey, dove, dog2, poodle, cat2, rabbit2, chipmunk, hedgehog, raccoon, llama, hippopotamus, kangaroo, badger, swan, peacock, parrot, lobster, mosquito, paw_prints, dragon, dragon_face, cactus, christmas_tree, evergreen_tree, deciduous_tree, palm_tree, seedling, herb, shamrock, four_leaf_clover, bamboo, tanabata_tree, leaves, fallen_leaf, maple_leaf, ear_of_rice, hibiscus, sunflower, rose, wilted_flower, tulip, blossom, cherry_blossom, bouquet, mushroom, chestnut, jack_o_lantern, shell, spider_web, earth_americas, earth_africa, earth_asia, full_moon, waning_gibbous_moon, last_quarter_moon, waning_crescent_moon, new_moon, waxing_crescent_moon, first_quarter_moon, waxing_gibbous_moon, new_moon_with_face, full_moon_with_face, first_quarter_moon_with_face, last_quarter_moon_with_face, sun_with_face, crescent_moon, star, star2, dizzy, sparkles, comet, sunny, sun_behind_small_cloud, partly_sunny, sun_behind_large_cloud, sun_behind_rain_cloud, cloud, cloud_with_rain, cloud_with_lightning_and_rain, cloud_with_lightning, zap, fire, boom, snowflake, cloud_with_snow, snowman, snowman_with_snow, wind_face, dash, tornado, fog, open_umbrella, umbrella, droplet, sweat_drops, ocean, green_apple, apple, pear, tangerine, lemon, banana, watermelon, grapes, strawberry, melon, cherries, peach, pineapple, coconut, kiwi_fruit, mango, avocado, broccoli, tomato, eggplant, cucumber, carrot, hot_pepper, potato, corn, leafy_greens, sweet_potato, peanuts, honey_pot, croissant, bread, baguette_bread, bagel, pretzel, cheese, egg, bacon, steak, pancakes, poultry_leg, meat_on_bone, bone, fried_shrimp, fried_egg, hamburger, fries, stuffed_flatbread, hotdog, pizza, sandwich, canned_food, spaghetti, taco, burrito, green_salad, shallow_pan_of_food, ramen, stew, fish_cake, fortune_cookie, sushi, bento, curry, rice_ball, rice, rice_cracker, oden, dango, shaved_ice, ice_cream, icecream, pie, cake, cupcake, moon_cake, birthday, custard, candy, lollipop, chocolate_bar, popcorn, dumpling, doughnut, cookie, milk_glass, beer, beers, clinking_glasses, wine_glass, tumbler_glass, cocktail, tropical_drink, champagne, sake, tea, cup_with_straw, coffee, baby_bottle, salt, spoon, fork_and_knife, plate_with_cutlery, bowl_with_spoon, takeout_box, chopsticks, soccer, basketball, football, baseball, softball, tennis, volleyball, rugby_football, flying_disc, 8ball, golf, golfing_woman, golfing_man, ping_pong, badminton, goal_net, ice_hockey, field_hockey, lacrosse, cricket, ski, skier, snowboarder, person_fencing, women_wrestling, men_wrestling, woman_cartwheeling, man_cartwheeling, woman_playing_handball, man_playing_handball, ice_skate, curling_stone, skateboard, sled, bow_and_arrow, fishing_pole_and_fish, boxing_glove, martial_arts_uniform, rowing_woman, rowing_man, climbing_woman, climbing_man, swimming_woman, swimming_man, woman_playing_water_polo, man_playing_water_polo, woman_in_lotus_position, man_in_lotus_position, surfing_woman, surfing_man, bath, basketball_woman, basketball_man, weight_lifting_woman, weight_lifting_man, biking_woman, biking_man, mountain_biking_woman, mountain_biking_man, horse_racing, business_suit_levitating, trophy, running_shirt_with_sash, medal_sports, medal_military, 1st_place_medal, 2nd_place_medal, 3rd_place_medal, reminder_ribbon, rosette, ticket, tickets, performing_arts, art, circus_tent, woman_juggling, man_juggling, microphone, headphones, musical_score, musical_keyboard, drum, saxophone, trumpet, guitar, violin, clapper, video_game, space_invader, dart, game_die, chess_pawn, slot_machine, jigsaw, bowling, red_car, taxi, blue_car, bus, trolleybus, racing_car, police_car, ambulance, fire_engine, minibus, truck, articulated_lorry, tractor, kick_scooter, motorcycle, bike, motor_scooter, rotating_light, oncoming_police_car, oncoming_bus, oncoming_automobile, oncoming_taxi, aerial_tramway, mountain_cableway, suspension_railway, railway_car, train, monorail, bullettrain_side, bullettrain_front, light_rail, mountain_railway, steam_locomotive, train2, metro, tram, station, flying_saucer, helicopter, small_airplane, airplane, flight_departure, flight_arrival, sailboat, motor_boat, speedboat, ferry, passenger_ship, rocket, artificial_satellite, seat, canoe, anchor, construction, fuelpump, busstop, vertical_traffic_light, traffic_light, checkered_flag, ship, ferris_wheel, roller_coaster, carousel_horse, building_construction, foggy, tokyo_tower, factory, fountain, rice_scene, mountain, mountain_snow, mount_fuji, volcano, japan, camping, tent, national_park, motorway, railway_track, sunrise, sunrise_over_mountains, desert, beach_umbrella, desert_island, city_sunrise, city_sunset, cityscape, night_with_stars, bridge_at_night, milky_way, stars, sparkler, fireworks, rainbow, houses, european_castle, japanese_castle, stadium, statue_of_liberty, house, house_with_garden, derelict_house, office, department_store, post_office, european_post_office, hospital, bank, hotel, convenience_store, school, love_hotel, wedding, classical_building, church, mosque, synagogue, kaaba, shinto_shrine, watch, iphone, calling, computer, keyboard, desktop_computer, printer, computer_mouse, trackball, joystick, clamp, minidisc, floppy_disk, cd, dvd, vhs, camera, camera_flash, video_camera, movie_camera, film_projector, film_strip, telephone_receiver, phone, pager, fax, tv, radio, studio_microphone, level_slider, control_knobs, compass, stopwatch, timer_clock, alarm_clock, mantelpiece_clock, hourglass_flowing_sand, hourglass, satellite, battery, electric_plug, bulb, flashlight, candle, fire_extinguisher, wastebasket, oil_drum, money_with_wings, dollar, yen, euro, pound, moneybag, credit_card, gem, balance_scale, toolbox, wrench, hammer, hammer_and_pick, hammer_and_wrench, pick, nut_and_bolt, gear, brick, chains, magnet, gun, bomb, firecracker, hocho, dagger, crossed_swords, shield, smoking, skull_and_crossbones, coffin, funeral_urn, amphora, crystal_ball, prayer_beads, nazar_amulet, barber, alembic, telescope, microscope, hole, pill, syringe, dna, microbe, petri_dish, test_tube, thermometer, broom, basket, toilet_paper, label, bookmark, toilet, shower, bathtub, soap, sponge, lotion_bottle, key, old_key, couch_and_lamp, sleeping_bed, bed, door, bellhop_bell, teddy_bear, framed_picture, world_map, parasol_on_ground, moyai, shopping, shopping_cart, balloon, flags, ribbon, gift, confetti_ball, tada, dolls, wind_chime, crossed_flags, izakaya_lantern, red_envelope, email, envelope_with_arrow, incoming_envelope, e-mail, love_letter, postbox, mailbox_closed, mailbox, mailbox_with_mail, mailbox_with_no_mail, package, postal_horn, inbox_tray, outbox_tray, scroll, page_with_curl, bookmark_tabs, receipt, bar_chart, chart_with_upwards_trend, chart_with_downwards_trend, page_facing_up, date, calendar, spiral_calendar, card_index, card_file_box, ballot_box, file_cabinet, clipboard, spiral_notepad, file_folder, open_file_folder, card_index_dividers, newspaper_roll, newspaper, notebook, closed_book, green_book, blue_book, orange_book, notebook_with_decorative_cover, ledger, books, open_book, safety_pin, link, paperclip, paperclips, scissors, triangular_ruler, straight_ruler, abacus, pushpin, round_pushpin, triangular_flag_on_post, white_flag, black_flag, rainbow_flag, closed_lock_with_key, lock, unlock, lock_with_ink_pen, pen, fountain_pen, black_nib, memo, pencil2, crayon, paintbrush, mag, mag_right, heart, orange_heart, yellow_heart, green_heart, blue_heart, purple_heart, black_heart, broken_heart, heavy_heart_exclamation, two_hearts, revolving_hearts, heartbeat, heartpulse, sparkling_heart, cupid, gift_heart, heart_decoration, peace_symbol, latin_cross, star_and_crescent, om, wheel_of_dharma, star_of_david, six_pointed_star, menorah, yin_yang, orthodox_cross, place_of_worship, ophiuchus, aries, taurus, gemini, cancer, leo, virgo, libra, scorpius, sagittarius, capricorn, aquarius, pisces, id, atom_symbol, u7a7a, u5272, radioactive, biohazard, mobile_phone_off, vibration_mode, u6709, u7121, u7533, u55b6, u6708, eight_pointed_black_star, vs, accept, white_flower, ideograph_advantage, secret, congratulations, u5408, u6e80, u7981, a, b, ab, cl, o2, sos, no_entry, name_badge, no_entry_sign, x, o, stop_sign, anger, hotsprings, no_pedestrians, do_not_litter, no_bicycles, non-potable_water, underage, no_mobile_phones, exclamation, grey_exclamation, question, grey_question, bangbang, interrobang, low_brightness, high_brightness, trident, fleur_de_lis, part_alternation_mark, warning, children_crossing, beginner, recycle, u6307, chart, sparkle, eight_spoked_asterisk, negative_squared_cross_mark, white_check_mark, diamond_shape_with_a_dot_inside, cyclone, loop, globe_with_meridians, m, atm, sa, passport_control, customs, baggage_claim, left_luggage, wheelchair, no_smoking, wc, parking, potable_water, mens, womens, baby_symbol, restroom, put_litter_in_its_place, cinema, signal_strength, koko, ng, ok, up, cool, new, free, zero, one, two, three, four, five, six, seven, eight, nine, keycap_ten, asterisk, eject_button, arrow_forward, pause_button, next_track_button, stop_button, record_button, play_or_pause_button, previous_track_button, fast_forward, rewind, twisted_rightwards_arrows, repeat, repeat_one, arrow_backward, arrow_up_small, arrow_down_small, arrow_double_up, arrow_double_down, arrow_right, arrow_left, arrow_up, arrow_down, arrow_upper_right, arrow_lower_right, arrow_lower_left, arrow_upper_left, arrow_up_down, left_right_arrow, arrows_counterclockwise, arrow_right_hook, leftwards_arrow_with_hook, arrow_heading_up, arrow_heading_down, hash, information_source, abc, abcd, capital_abcd, symbols, musical_note, notes, wavy_dash, curly_loop, heavy_check_mark, arrows_clockwise, heavy_plus_sign, heavy_minus_sign, heavy_division_sign, heavy_multiplication_x, infinity, heavy_dollar_sign, currency_exchange, copyright, registered, tm, end, back, on, top, soon, ballot_box_with_check, radio_button, white_circle, black_circle, red_circle, large_blue_circle, small_orange_diamond, small_blue_diamond, large_orange_diamond, large_blue_diamond, small_red_triangle, black_small_square, white_small_square, black_large_square, white_large_square, small_red_triangle_down, black_medium_square, white_medium_square, black_medium_small_square, white_medium_small_square, black_square_button, white_square_button, speaker, sound, loud_sound, mute, mega, loudspeaker, bell, no_bell, black_joker, mahjong, spades, clubs, hearts, diamonds, flower_playing_cards, thought_balloon, right_anger_bubble, speech_balloon, left_speech_bubble, clock1, clock2, clock3, clock4, clock5, clock6, clock7, clock8, clock9, clock10, clock11, clock12, clock130, clock230, clock330, clock430, clock530, clock630, clock730, clock830, clock930, clock1030, clock1130, clock1230, afghanistan, aland_islands, albania, algeria, american_samoa, andorra, angola, anguilla, antarctica, antigua_barbuda, argentina, armenia, aruba, australia, austria, azerbaijan, bahamas, bahrain, bangladesh, barbados, belarus, belgium, belize, benin, bermuda, bhutan, bolivia, caribbean_netherlands, bosnia_herzegovina, botswana, brazil, british_indian_ocean_territory, british_virgin_islands, brunei, bulgaria, burkina_faso, burundi, cape_verde, cambodia, cameroon, canada, canary_islands, cayman_islands, central_african_republic, chad, chile, cn, christmas_island, cocos_islands, colombia, comoros, congo_brazzaville, congo_kinshasa, cook_islands, costa_rica, croatia, cuba, curacao, cyprus, czech_republic, denmark, djibouti, dominica, dominican_republic, ecuador, egypt, el_salvador, equatorial_guinea, eritrea, estonia, ethiopia, eu, falkland_islands, faroe_islands, fiji, finland, fr, french_guiana, french_polynesia, french_southern_territories, gabon, gambia, georgia, de, ghana, gibraltar, greece, greenland, grenada, guadeloupe, guam, guatemala, guernsey, guinea, guinea_bissau, guyana, haiti, honduras, hong_kong, hungary, iceland, india, indonesia, iran, iraq, ireland, isle_of_man, israel, it, cote_divoire, jamaica, jp, jersey, jordan, kazakhstan, kenya, kiribati, kosovo, kuwait, kyrgyzstan, laos, latvia, lebanon, lesotho, liberia, libya, liechtenstein, lithuania, luxembourg, macau, macedonia, madagascar, malawi, malaysia, maldives, mali, malta, marshall_islands, martinique, mauritania, mauritius, mayotte, mexico, micronesia, moldova, monaco, mongolia, montenegro, montserrat, morocco, mozambique, myanmar, namibia, nauru, nepal, netherlands, new_caledonia, new_zealand, nicaragua, niger, nigeria, niue, norfolk_island, northern_mariana_islands, north_korea, norway, oman, pakistan, palau, palestinian_territories, panama, papua_new_guinea, paraguay, peru, philippines, pitcairn_islands, poland, portugal, puerto_rico, qatar, reunion, romania, ru, rwanda, st_barthelemy, st_helena, st_kitts_nevis, st_lucia, st_pierre_miquelon, st_vincent_grenadines, samoa, san_marino, sao_tome_principe, saudi_arabia, senegal, serbia, seychelles, sierra_leone, singapore, sint_maarten, slovakia, slovenia, solomon_islands, somalia, south_africa, south_georgia_south_sandwich_islands, kr, south_sudan, es, sri_lanka, sudan, suriname, swaziland, sweden, switzerland, syria, taiwan, tajikistan, tanzania, thailand, timor_leste, togo, tokelau, tonga, trinidad_tobago, tunisia, tr, turkmenistan, turks_caicos_islands, tuvalu, uganda, ukraine, united_arab_emirates, uk, england, scotland, wales, us, us_virgin_islands, uruguay, uzbekistan, vanuatu, vatican_city, venezuela, vietnam, wallis_futuna, western_sahara, yemen, zambia, zimbabwe, united_nations, pirate_flag, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("{\"100\":{\"keywords\":[\"score\",\"perfect\",\"numbers\",\"century\",\"exam\",\"quiz\",\"test\",\"pass\",\"hundred\"],\"char\":\"💯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"1234\":{\"keywords\":[\"numbers\",\"blue-square\"],\"char\":\"🔢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"grinning\":{\"keywords\":[\"face\",\"smile\",\"happy\",\"joy\",\":D\",\"grin\"],\"char\":\"😀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"grimacing\":{\"keywords\":[\"face\",\"grimace\",\"teeth\"],\"char\":\"😬\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"grin\":{\"keywords\":[\"face\",\"happy\",\"smile\",\"joy\",\"kawaii\"],\"char\":\"😁\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"joy\":{\"keywords\":[\"face\",\"cry\",\"tears\",\"weep\",\"happy\",\"happytears\",\"haha\"],\"char\":\"😂\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"rofl\":{\"keywords\":[\"face\",\"rolling\",\"floor\",\"laughing\",\"lol\",\"haha\"],\"char\":\"🤣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"partying\":{\"keywords\":[\"face\",\"celebration\",\"woohoo\"],\"char\":\"🥳\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiley\":{\"keywords\":[\"face\",\"happy\",\"joy\",\"haha\",\":D\",\":)\",\"smile\",\"funny\"],\"char\":\"😃\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smile\":{\"keywords\":[\"face\",\"happy\",\"joy\",\"funny\",\"haha\",\"laugh\",\"like\",\":D\",\":)\"],\"char\":\"😄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sweat_smile\":{\"keywords\":[\"face\",\"hot\",\"happy\",\"laugh\",\"sweat\",\"smile\",\"relief\"],\"char\":\"😅\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"laughing\":{\"keywords\":[\"happy\",\"joy\",\"lol\",\"satisfied\",\"haha\",\"face\",\"glad\",\"XD\",\"laugh\"],\"char\":\"😆\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"innocent\":{\"keywords\":[\"face\",\"angel\",\"heaven\",\"halo\"],\"char\":\"😇\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"wink\":{\"keywords\":[\"face\",\"happy\",\"mischievous\",\"secret\",\";)\",\"smile\",\"eye\"],\"char\":\"😉\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"blush\":{\"keywords\":[\"face\",\"smile\",\"happy\",\"flushed\",\"crush\",\"embarrassed\",\"shy\",\"joy\"],\"char\":\"😊\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"slightly_smiling_face\":{\"keywords\":[\"face\",\"smile\"],\"char\":\"🙂\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"upside_down_face\":{\"keywords\":[\"face\",\"flipped\",\"silly\",\"smile\"],\"char\":\"🙃\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"relaxed\":{\"keywords\":[\"face\",\"blush\",\"massage\",\"happiness\"],\"char\":\"☺️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"yum\":{\"keywords\":[\"happy\",\"joy\",\"tongue\",\"smile\",\"face\",\"silly\",\"yummy\",\"nom\",\"delicious\",\"savouring\"],\"char\":\"😋\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"relieved\":{\"keywords\":[\"face\",\"relaxed\",\"phew\",\"massage\",\"happiness\"],\"char\":\"😌\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"heart_eyes\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"crush\",\"heart\"],\"char\":\"😍\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiling_face_with_three_hearts\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"crush\",\"hearts\",\"adore\"],\"char\":\"🥰\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_heart\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😘\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing\":{\"keywords\":[\"love\",\"like\",\"face\",\"3\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😗\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_smiling_eyes\":{\"keywords\":[\"face\",\"affection\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😙\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_closed_eyes\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😚\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"stuck_out_tongue_winking_eye\":{\"keywords\":[\"face\",\"prank\",\"childish\",\"playful\",\"mischievous\",\"smile\",\"wink\",\"tongue\"],\"char\":\"😜\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"zany\":{\"keywords\":[\"face\",\"goofy\",\"crazy\"],\"char\":\"🤪\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"raised_eyebrow\":{\"keywords\":[\"face\",\"distrust\",\"scepticism\",\"disapproval\",\"disbelief\",\"surprise\"],\"char\":\"🤨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"monocle\":{\"keywords\":[\"face\",\"stuffy\",\"wealthy\"],\"char\":\"🧐\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"stuck_out_tongue_closed_eyes\":{\"keywords\":[\"face\",\"prank\",\"playful\",\"mischievous\",\"smile\",\"tongue\"],\"char\":\"😝\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"stuck_out_tongue\":{\"keywords\":[\"face\",\"prank\",\"childish\",\"playful\",\"mischievous\",\"smile\",\"tongue\"],\"char\":\"😛\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"money_mouth_face\":{\"keywords\":[\"face\",\"rich\",\"dollar\",\"money\"],\"char\":\"🤑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"nerd_face\":{\"keywords\":[\"face\",\"nerdy\",\"geek\",\"dork\"],\"char\":\"🤓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sunglasses\":{\"keywords\":[\"face\",\"cool\",\"smile\",\"summer\",\"beach\",\"sunglass\"],\"char\":\"😎\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"star_struck\":{\"keywords\":[\"face\",\"smile\",\"starry\",\"eyes\",\"grinning\"],\"char\":\"🤩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"clown_face\":{\"keywords\":[\"face\"],\"char\":\"🤡\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cowboy_hat_face\":{\"keywords\":[\"face\",\"cowgirl\",\"hat\"],\"char\":\"🤠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hugs\":{\"keywords\":[\"face\",\"smile\",\"hug\"],\"char\":\"🤗\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smirk\":{\"keywords\":[\"face\",\"smile\",\"mean\",\"prank\",\"smug\",\"sarcasm\"],\"char\":\"😏\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"no_mouth\":{\"keywords\":[\"face\",\"hellokitty\"],\"char\":\"😶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"neutral_face\":{\"keywords\":[\"indifference\",\"meh\",\":|\",\"neutral\"],\"char\":\"😐\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"expressionless\":{\"keywords\":[\"face\",\"indifferent\",\"-_-\",\"meh\",\"deadpan\"],\"char\":\"😑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"unamused\":{\"keywords\":[\"indifference\",\"bored\",\"straight face\",\"serious\",\"sarcasm\",\"unimpressed\",\"skeptical\",\"dubious\",\"side_eye\"],\"char\":\"😒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"roll_eyes\":{\"keywords\":[\"face\",\"eyeroll\",\"frustrated\"],\"char\":\"🙄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"thinking\":{\"keywords\":[\"face\",\"hmmm\",\"think\",\"consider\"],\"char\":\"🤔\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"lying_face\":{\"keywords\":[\"face\",\"lie\",\"pinocchio\"],\"char\":\"🤥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hand_over_mouth\":{\"keywords\":[\"face\",\"whoops\",\"shock\",\"surprise\"],\"char\":\"🤭\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"shushing\":{\"keywords\":[\"face\",\"quiet\",\"shhh\"],\"char\":\"🤫\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"symbols_over_mouth\":{\"keywords\":[\"face\",\"swearing\",\"cursing\",\"cussing\",\"profanity\",\"expletive\"],\"char\":\"🤬\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"exploding_head\":{\"keywords\":[\"face\",\"shocked\",\"mind\",\"blown\"],\"char\":\"🤯\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"flushed\":{\"keywords\":[\"face\",\"blush\",\"shy\",\"flattered\"],\"char\":\"😳\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"disappointed\":{\"keywords\":[\"face\",\"sad\",\"upset\",\"depressed\",\":(\"],\"char\":\"😞\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"worried\":{\"keywords\":[\"face\",\"concern\",\"nervous\",\":(\"],\"char\":\"😟\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"angry\":{\"keywords\":[\"mad\",\"face\",\"annoyed\",\"frustrated\"],\"char\":\"😠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"rage\":{\"keywords\":[\"angry\",\"mad\",\"hate\",\"despise\"],\"char\":\"😡\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pensive\":{\"keywords\":[\"face\",\"sad\",\"depressed\",\"upset\"],\"char\":\"😔\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"confused\":{\"keywords\":[\"face\",\"indifference\",\"huh\",\"weird\",\"hmmm\",\":/\"],\"char\":\"😕\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"slightly_frowning_face\":{\"keywords\":[\"face\",\"frowning\",\"disappointed\",\"sad\",\"upset\"],\"char\":\"🙁\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"frowning_face\":{\"keywords\":[\"face\",\"sad\",\"upset\",\"frown\"],\"char\":\"☹\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"persevere\":{\"keywords\":[\"face\",\"sick\",\"no\",\"upset\",\"oops\"],\"char\":\"😣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"confounded\":{\"keywords\":[\"face\",\"confused\",\"sick\",\"unwell\",\"oops\",\":S\"],\"char\":\"😖\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tired_face\":{\"keywords\":[\"sick\",\"whine\",\"upset\",\"frustrated\"],\"char\":\"😫\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"weary\":{\"keywords\":[\"face\",\"tired\",\"sleepy\",\"sad\",\"frustrated\",\"upset\"],\"char\":\"😩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pleading\":{\"keywords\":[\"face\",\"begging\",\"mercy\"],\"char\":\"🥺\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"triumph\":{\"keywords\":[\"face\",\"gas\",\"phew\",\"proud\",\"pride\"],\"char\":\"😤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"open_mouth\":{\"keywords\":[\"face\",\"surprise\",\"impressed\",\"wow\",\"whoa\",\":O\"],\"char\":\"😮\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"scream\":{\"keywords\":[\"face\",\"munch\",\"scared\",\"omg\"],\"char\":\"😱\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"fearful\":{\"keywords\":[\"face\",\"scared\",\"terrified\",\"nervous\",\"oops\",\"huh\"],\"char\":\"😨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cold_sweat\":{\"keywords\":[\"face\",\"nervous\",\"sweat\"],\"char\":\"😰\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hushed\":{\"keywords\":[\"face\",\"woo\",\"shh\"],\"char\":\"😯\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"frowning\":{\"keywords\":[\"face\",\"aw\",\"what\"],\"char\":\"😦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"anguished\":{\"keywords\":[\"face\",\"stunned\",\"nervous\"],\"char\":\"😧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cry\":{\"keywords\":[\"face\",\"tears\",\"sad\",\"depressed\",\"upset\",\":'(\"],\"char\":\"😢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"disappointed_relieved\":{\"keywords\":[\"face\",\"phew\",\"sweat\",\"nervous\"],\"char\":\"😥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"drooling_face\":{\"keywords\":[\"face\"],\"char\":\"🤤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sleepy\":{\"keywords\":[\"face\",\"tired\",\"rest\",\"nap\"],\"char\":\"😪\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sweat\":{\"keywords\":[\"face\",\"hot\",\"sad\",\"tired\",\"exercise\"],\"char\":\"😓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hot\":{\"keywords\":[\"face\",\"feverish\",\"heat\",\"red\",\"sweating\"],\"char\":\"🥵\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cold\":{\"keywords\":[\"face\",\"blue\",\"freezing\",\"frozen\",\"frostbite\",\"icicles\"],\"char\":\"🥶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sob\":{\"keywords\":[\"face\",\"cry\",\"tears\",\"sad\",\"upset\",\"depressed\"],\"char\":\"😭\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dizzy_face\":{\"keywords\":[\"spent\",\"unconscious\",\"xox\",\"dizzy\"],\"char\":\"😵\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"astonished\":{\"keywords\":[\"face\",\"xox\",\"surprised\",\"poisoned\"],\"char\":\"😲\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"zipper_mouth_face\":{\"keywords\":[\"face\",\"sealed\",\"zipper\",\"secret\"],\"char\":\"🤐\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"nauseated_face\":{\"keywords\":[\"face\",\"vomit\",\"gross\",\"green\",\"sick\",\"throw up\",\"ill\"],\"char\":\"🤢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sneezing_face\":{\"keywords\":[\"face\",\"gesundheit\",\"sneeze\",\"sick\",\"allergy\"],\"char\":\"🤧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"vomiting\":{\"keywords\":[\"face\",\"sick\"],\"char\":\"🤮\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mask\":{\"keywords\":[\"face\",\"sick\",\"ill\",\"disease\"],\"char\":\"😷\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"face_with_thermometer\":{\"keywords\":[\"sick\",\"temperature\",\"thermometer\",\"cold\",\"fever\"],\"char\":\"🤒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"face_with_head_bandage\":{\"keywords\":[\"injured\",\"clumsy\",\"bandage\",\"hurt\"],\"char\":\"🤕\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"woozy\":{\"keywords\":[\"face\",\"dizzy\",\"intoxicated\",\"tipsy\",\"wavy\"],\"char\":\"🥴\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sleeping\":{\"keywords\":[\"face\",\"tired\",\"sleepy\",\"night\",\"zzz\"],\"char\":\"😴\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"zzz\":{\"keywords\":[\"sleepy\",\"tired\",\"dream\"],\"char\":\"💤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"poop\":{\"keywords\":[\"hankey\",\"shitface\",\"fail\",\"turd\",\"shit\"],\"char\":\"💩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiling_imp\":{\"keywords\":[\"devil\",\"horns\"],\"char\":\"😈\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"imp\":{\"keywords\":[\"devil\",\"angry\",\"horns\"],\"char\":\"👿\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"japanese_ogre\":{\"keywords\":[\"monster\",\"red\",\"mask\",\"halloween\",\"scary\",\"creepy\",\"devil\",\"demon\",\"japanese\",\"ogre\"],\"char\":\"👹\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"japanese_goblin\":{\"keywords\":[\"red\",\"evil\",\"mask\",\"monster\",\"scary\",\"creepy\",\"japanese\",\"goblin\"],\"char\":\"👺\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"skull\":{\"keywords\":[\"dead\",\"skeleton\",\"creepy\",\"death\"],\"char\":\"💀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"ghost\":{\"keywords\":[\"halloween\",\"spooky\",\"scary\"],\"char\":\"👻\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"alien\":{\"keywords\":[\"UFO\",\"paul\",\"weird\",\"outer_space\"],\"char\":\"👽\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"robot\":{\"keywords\":[\"computer\",\"machine\",\"bot\"],\"char\":\"🤖\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiley_cat\":{\"keywords\":[\"animal\",\"cats\",\"happy\",\"smile\"],\"char\":\"😺\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smile_cat\":{\"keywords\":[\"animal\",\"cats\",\"smile\"],\"char\":\"😸\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"joy_cat\":{\"keywords\":[\"animal\",\"cats\",\"haha\",\"happy\",\"tears\"],\"char\":\"😹\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"heart_eyes_cat\":{\"keywords\":[\"animal\",\"love\",\"like\",\"affection\",\"cats\",\"valentines\",\"heart\"],\"char\":\"😻\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smirk_cat\":{\"keywords\":[\"animal\",\"cats\",\"smirk\"],\"char\":\"😼\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_cat\":{\"keywords\":[\"animal\",\"cats\",\"kiss\"],\"char\":\"😽\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"scream_cat\":{\"keywords\":[\"animal\",\"cats\",\"munch\",\"scared\",\"scream\"],\"char\":\"🙀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"crying_cat_face\":{\"keywords\":[\"animal\",\"tears\",\"weep\",\"sad\",\"cats\",\"upset\",\"cry\"],\"char\":\"😿\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pouting_cat\":{\"keywords\":[\"animal\",\"cats\"],\"char\":\"😾\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"palms_up\":{\"keywords\":[\"hands\",\"gesture\",\"cupped\",\"prayer\"],\"char\":\"🤲\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_hands\":{\"keywords\":[\"gesture\",\"hooray\",\"yea\",\"celebration\",\"hands\"],\"char\":\"🙌\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"clap\":{\"keywords\":[\"hands\",\"praise\",\"applause\",\"congrats\",\"yay\"],\"char\":\"👏\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"wave\":{\"keywords\":[\"hands\",\"gesture\",\"goodbye\",\"solong\",\"farewell\",\"hello\",\"hi\",\"palm\"],\"char\":\"👋\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"call_me_hand\":{\"keywords\":[\"hands\",\"gesture\"],\"char\":\"🤙\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"+1\":{\"keywords\":[\"thumbsup\",\"yes\",\"awesome\",\"good\",\"agree\",\"accept\",\"cool\",\"hand\",\"like\"],\"char\":\"👍\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"-1\":{\"keywords\":[\"thumbsdown\",\"no\",\"dislike\",\"hand\"],\"char\":\"👎\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"facepunch\":{\"keywords\":[\"angry\",\"violence\",\"fist\",\"hit\",\"attack\",\"hand\"],\"char\":\"👊\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fist\":{\"keywords\":[\"fingers\",\"hand\",\"grasp\"],\"char\":\"✊\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fist_left\":{\"keywords\":[\"hand\",\"fistbump\"],\"char\":\"🤛\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fist_right\":{\"keywords\":[\"hand\",\"fistbump\"],\"char\":\"🤜\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"v\":{\"keywords\":[\"fingers\",\"ohyeah\",\"hand\",\"peace\",\"victory\",\"two\"],\"char\":\"✌\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"ok_hand\":{\"keywords\":[\"fingers\",\"limbs\",\"perfect\",\"ok\",\"okay\"],\"char\":\"👌\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_hand\":{\"keywords\":[\"fingers\",\"stop\",\"highfive\",\"palm\",\"ban\"],\"char\":\"✋\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_back_of_hand\":{\"keywords\":[\"fingers\",\"raised\",\"backhand\"],\"char\":\"🤚\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"open_hands\":{\"keywords\":[\"fingers\",\"butterfly\",\"hands\",\"open\"],\"char\":\"👐\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"muscle\":{\"keywords\":[\"arm\",\"flex\",\"hand\",\"summer\",\"strong\",\"biceps\"],\"char\":\"💪\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pray\":{\"keywords\":[\"please\",\"hope\",\"wish\",\"namaste\",\"highfive\"],\"char\":\"🙏\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"foot\":{\"keywords\":[\"kick\",\"stomp\"],\"char\":\"🦶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"leg\":{\"keywords\":[\"kick\",\"limb\"],\"char\":\"🦵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"handshake\":{\"keywords\":[\"agreement\",\"shake\"],\"char\":\"🤝\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"point_up\":{\"keywords\":[\"hand\",\"fingers\",\"direction\",\"up\"],\"char\":\"☝\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_up_2\":{\"keywords\":[\"fingers\",\"hand\",\"direction\",\"up\"],\"char\":\"👆\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_down\":{\"keywords\":[\"fingers\",\"hand\",\"direction\",\"down\"],\"char\":\"👇\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_left\":{\"keywords\":[\"direction\",\"fingers\",\"hand\",\"left\"],\"char\":\"👈\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_right\":{\"keywords\":[\"fingers\",\"hand\",\"direction\",\"right\"],\"char\":\"👉\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fu\":{\"keywords\":[\"hand\",\"fingers\",\"rude\",\"middle\",\"flipping\"],\"char\":\"🖕\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_hand_with_fingers_splayed\":{\"keywords\":[\"hand\",\"fingers\",\"palm\"],\"char\":\"🖐\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"love_you\":{\"keywords\":[\"hand\",\"fingers\",\"gesture\"],\"char\":\"🤟\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"metal\":{\"keywords\":[\"hand\",\"fingers\",\"evil_eye\",\"sign_of_horns\",\"rock_on\"],\"char\":\"🤘\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"crossed_fingers\":{\"keywords\":[\"good\",\"lucky\"],\"char\":\"🤞\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"vulcan_salute\":{\"keywords\":[\"hand\",\"fingers\",\"spock\",\"star trek\"],\"char\":\"🖖\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"writing_hand\":{\"keywords\":[\"lower_left_ballpoint_pen\",\"stationery\",\"write\",\"compose\"],\"char\":\"✍\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"selfie\":{\"keywords\":[\"camera\",\"phone\"],\"char\":\"🤳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"nail_care\":{\"keywords\":[\"beauty\",\"manicure\",\"finger\",\"fashion\",\"nail\"],\"char\":\"💅\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"lips\":{\"keywords\":[\"mouth\",\"kiss\"],\"char\":\"👄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tooth\":{\"keywords\":[\"teeth\",\"dentist\"],\"char\":\"🦷\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tongue\":{\"keywords\":[\"mouth\",\"playful\"],\"char\":\"👅\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"ear\":{\"keywords\":[\"face\",\"hear\",\"sound\",\"listen\"],\"char\":\"👂\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"nose\":{\"keywords\":[\"smell\",\"sniff\"],\"char\":\"👃\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"eye\":{\"keywords\":[\"face\",\"look\",\"see\",\"watch\",\"stare\"],\"char\":\"👁\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"eyes\":{\"keywords\":[\"look\",\"watch\",\"stalk\",\"peek\",\"see\"],\"char\":\"👀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"brain\":{\"keywords\":[\"smart\",\"intelligent\"],\"char\":\"🧠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"bust_in_silhouette\":{\"keywords\":[\"user\",\"person\",\"human\"],\"char\":\"👤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"busts_in_silhouette\":{\"keywords\":[\"user\",\"person\",\"human\",\"group\",\"team\"],\"char\":\"👥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"speaking_head\":{\"keywords\":[\"user\",\"person\",\"human\",\"sing\",\"say\",\"talk\"],\"char\":\"🗣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"baby\":{\"keywords\":[\"child\",\"boy\",\"girl\",\"toddler\"],\"char\":\"👶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"child\":{\"keywords\":[\"gender-neutral\",\"young\"],\"char\":\"🧒\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"boy\":{\"keywords\":[\"man\",\"male\",\"guy\",\"teenager\"],\"char\":\"👦\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"girl\":{\"keywords\":[\"female\",\"woman\",\"teenager\"],\"char\":\"👧\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"adult\":{\"keywords\":[\"gender-neutral\",\"person\"],\"char\":\"🧑\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man\":{\"keywords\":[\"mustache\",\"father\",\"dad\",\"guy\",\"classy\",\"sir\",\"moustache\"],\"char\":\"👨\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman\":{\"keywords\":[\"female\",\"girls\",\"lady\"],\"char\":\"👩\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"blonde_woman\":{\"keywords\":[\"woman\",\"female\",\"girl\",\"blonde\",\"person\"],\"char\":\"👱‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"blonde_man\":{\"keywords\":[\"man\",\"male\",\"boy\",\"blonde\",\"guy\",\"person\"],\"char\":\"👱\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"bearded_person\":{\"keywords\":[\"person\",\"bewhiskered\"],\"char\":\"🧔\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"older_adult\":{\"keywords\":[\"human\",\"elder\",\"senior\",\"gender-neutral\"],\"char\":\"🧓\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"older_man\":{\"keywords\":[\"human\",\"male\",\"men\",\"old\",\"elder\",\"senior\"],\"char\":\"👴\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"older_woman\":{\"keywords\":[\"human\",\"female\",\"women\",\"lady\",\"old\",\"elder\",\"senior\"],\"char\":\"👵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_with_gua_pi_mao\":{\"keywords\":[\"male\",\"boy\",\"chinese\"],\"char\":\"👲\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_with_headscarf\":{\"keywords\":[\"female\",\"hijab\",\"mantilla\",\"tichel\"],\"char\":\"🧕\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_with_turban\":{\"keywords\":[\"female\",\"indian\",\"hinduism\",\"arabs\",\"woman\"],\"char\":\"👳‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_with_turban\":{\"keywords\":[\"male\",\"indian\",\"hinduism\",\"arabs\"],\"char\":\"👳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"policewoman\":{\"keywords\":[\"woman\",\"police\",\"law\",\"legal\",\"enforcement\",\"arrest\",\"911\",\"female\"],\"char\":\"👮‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"policeman\":{\"keywords\":[\"man\",\"police\",\"law\",\"legal\",\"enforcement\",\"arrest\",\"911\"],\"char\":\"👮\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"construction_worker_woman\":{\"keywords\":[\"female\",\"human\",\"wip\",\"build\",\"construction\",\"worker\",\"labor\",\"woman\"],\"char\":\"👷‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"construction_worker_man\":{\"keywords\":[\"male\",\"human\",\"wip\",\"guy\",\"build\",\"construction\",\"worker\",\"labor\"],\"char\":\"👷\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"guardswoman\":{\"keywords\":[\"uk\",\"gb\",\"british\",\"female\",\"royal\",\"woman\"],\"char\":\"💂‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"guardsman\":{\"keywords\":[\"uk\",\"gb\",\"british\",\"male\",\"guy\",\"royal\"],\"char\":\"💂\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"female_detective\":{\"keywords\":[\"human\",\"spy\",\"detective\",\"female\",\"woman\"],\"char\":\"🕵️‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"male_detective\":{\"keywords\":[\"human\",\"spy\",\"detective\"],\"char\":\"🕵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_health_worker\":{\"keywords\":[\"doctor\",\"nurse\",\"therapist\",\"healthcare\",\"woman\",\"human\"],\"char\":\"👩‍⚕️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_health_worker\":{\"keywords\":[\"doctor\",\"nurse\",\"therapist\",\"healthcare\",\"man\",\"human\"],\"char\":\"👨‍⚕️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_farmer\":{\"keywords\":[\"rancher\",\"gardener\",\"woman\",\"human\"],\"char\":\"👩‍🌾\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_farmer\":{\"keywords\":[\"rancher\",\"gardener\",\"man\",\"human\"],\"char\":\"👨‍🌾\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_cook\":{\"keywords\":[\"chef\",\"woman\",\"human\"],\"char\":\"👩‍🍳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_cook\":{\"keywords\":[\"chef\",\"man\",\"human\"],\"char\":\"👨‍🍳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_student\":{\"keywords\":[\"graduate\",\"woman\",\"human\"],\"char\":\"👩‍🎓\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_student\":{\"keywords\":[\"graduate\",\"man\",\"human\"],\"char\":\"👨‍🎓\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_singer\":{\"keywords\":[\"rockstar\",\"entertainer\",\"woman\",\"human\"],\"char\":\"👩‍🎤\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_singer\":{\"keywords\":[\"rockstar\",\"entertainer\",\"man\",\"human\"],\"char\":\"👨‍🎤\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_teacher\":{\"keywords\":[\"instructor\",\"professor\",\"woman\",\"human\"],\"char\":\"👩‍🏫\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_teacher\":{\"keywords\":[\"instructor\",\"professor\",\"man\",\"human\"],\"char\":\"👨‍🏫\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_factory_worker\":{\"keywords\":[\"assembly\",\"industrial\",\"woman\",\"human\"],\"char\":\"👩‍🏭\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_factory_worker\":{\"keywords\":[\"assembly\",\"industrial\",\"man\",\"human\"],\"char\":\"👨‍🏭\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_technologist\":{\"keywords\":[\"coder\",\"developer\",\"engineer\",\"programmer\",\"software\",\"woman\",\"human\",\"laptop\",\"computer\"],\"char\":\"👩‍💻\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_technologist\":{\"keywords\":[\"coder\",\"developer\",\"engineer\",\"programmer\",\"software\",\"man\",\"human\",\"laptop\",\"computer\"],\"char\":\"👨‍💻\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_office_worker\":{\"keywords\":[\"business\",\"manager\",\"woman\",\"human\"],\"char\":\"👩‍💼\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_office_worker\":{\"keywords\":[\"business\",\"manager\",\"man\",\"human\"],\"char\":\"👨‍💼\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_mechanic\":{\"keywords\":[\"plumber\",\"woman\",\"human\",\"wrench\"],\"char\":\"👩‍🔧\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_mechanic\":{\"keywords\":[\"plumber\",\"man\",\"human\",\"wrench\"],\"char\":\"👨‍🔧\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_scientist\":{\"keywords\":[\"biologist\",\"chemist\",\"engineer\",\"physicist\",\"woman\",\"human\"],\"char\":\"👩‍🔬\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_scientist\":{\"keywords\":[\"biologist\",\"chemist\",\"engineer\",\"physicist\",\"man\",\"human\"],\"char\":\"👨‍🔬\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_artist\":{\"keywords\":[\"painter\",\"woman\",\"human\"],\"char\":\"👩‍🎨\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_artist\":{\"keywords\":[\"painter\",\"man\",\"human\"],\"char\":\"👨‍🎨\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_firefighter\":{\"keywords\":[\"fireman\",\"woman\",\"human\"],\"char\":\"👩‍🚒\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_firefighter\":{\"keywords\":[\"fireman\",\"man\",\"human\"],\"char\":\"👨‍🚒\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_pilot\":{\"keywords\":[\"aviator\",\"plane\",\"woman\",\"human\"],\"char\":\"👩‍✈️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_pilot\":{\"keywords\":[\"aviator\",\"plane\",\"man\",\"human\"],\"char\":\"👨‍✈️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_astronaut\":{\"keywords\":[\"space\",\"rocket\",\"woman\",\"human\"],\"char\":\"👩‍🚀\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_astronaut\":{\"keywords\":[\"space\",\"rocket\",\"man\",\"human\"],\"char\":\"👨‍🚀\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_judge\":{\"keywords\":[\"justice\",\"court\",\"woman\",\"human\"],\"char\":\"👩‍⚖️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_judge\":{\"keywords\":[\"justice\",\"court\",\"man\",\"human\"],\"char\":\"👨‍⚖️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_superhero\":{\"keywords\":[\"woman\",\"female\",\"good\",\"heroine\",\"superpowers\"],\"char\":\"🦸‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_superhero\":{\"keywords\":[\"man\",\"male\",\"good\",\"hero\",\"superpowers\"],\"char\":\"🦸‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_supervillain\":{\"keywords\":[\"woman\",\"female\",\"evil\",\"bad\",\"criminal\",\"heroine\",\"superpowers\"],\"char\":\"🦹‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_supervillain\":{\"keywords\":[\"man\",\"male\",\"evil\",\"bad\",\"criminal\",\"hero\",\"superpowers\"],\"char\":\"🦹‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"mrs_claus\":{\"keywords\":[\"woman\",\"female\",\"xmas\",\"mother christmas\"],\"char\":\"🤶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"santa\":{\"keywords\":[\"festival\",\"man\",\"male\",\"xmas\",\"father christmas\"],\"char\":\"🎅\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"sorceress\":{\"keywords\":[\"woman\",\"female\",\"mage\",\"witch\"],\"char\":\"🧙‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"wizard\":{\"keywords\":[\"man\",\"male\",\"mage\",\"sorcerer\"],\"char\":\"🧙‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_elf\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧝‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_elf\":{\"keywords\":[\"man\",\"male\"],\"char\":\"🧝‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_vampire\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧛‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_vampire\":{\"keywords\":[\"man\",\"male\",\"dracula\"],\"char\":\"🧛‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_zombie\":{\"keywords\":[\"woman\",\"female\",\"undead\",\"walking dead\"],\"char\":\"🧟‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"man_zombie\":{\"keywords\":[\"man\",\"male\",\"dracula\",\"undead\",\"walking dead\"],\"char\":\"🧟‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"woman_genie\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧞‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"man_genie\":{\"keywords\":[\"man\",\"male\"],\"char\":\"🧞‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mermaid\":{\"keywords\":[\"woman\",\"female\",\"merwoman\",\"ariel\"],\"char\":\"🧜‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"merman\":{\"keywords\":[\"man\",\"male\",\"triton\"],\"char\":\"🧜‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_fairy\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧚‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_fairy\":{\"keywords\":[\"man\",\"male\"],\"char\":\"🧚‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"angel\":{\"keywords\":[\"heaven\",\"wings\",\"halo\"],\"char\":\"👼\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pregnant_woman\":{\"keywords\":[\"baby\"],\"char\":\"🤰\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"breastfeeding\":{\"keywords\":[\"nursing\",\"baby\"],\"char\":\"🤱\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"princess\":{\"keywords\":[\"girl\",\"woman\",\"female\",\"blond\",\"crown\",\"royal\",\"queen\"],\"char\":\"👸\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"prince\":{\"keywords\":[\"boy\",\"man\",\"male\",\"crown\",\"royal\",\"king\"],\"char\":\"🤴\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"bride_with_veil\":{\"keywords\":[\"couple\",\"marriage\",\"wedding\",\"woman\",\"bride\"],\"char\":\"👰\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_in_tuxedo\":{\"keywords\":[\"couple\",\"marriage\",\"wedding\",\"groom\"],\"char\":\"🤵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"running_woman\":{\"keywords\":[\"woman\",\"walking\",\"exercise\",\"race\",\"running\",\"female\"],\"char\":\"🏃‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"running_man\":{\"keywords\":[\"man\",\"walking\",\"exercise\",\"race\",\"running\"],\"char\":\"🏃\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"walking_woman\":{\"keywords\":[\"human\",\"feet\",\"steps\",\"woman\",\"female\"],\"char\":\"🚶‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"walking_man\":{\"keywords\":[\"human\",\"feet\",\"steps\"],\"char\":\"🚶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"dancer\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"fun\"],\"char\":\"💃\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_dancing\":{\"keywords\":[\"male\",\"boy\",\"fun\",\"dancer\"],\"char\":\"🕺\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"dancing_women\":{\"keywords\":[\"female\",\"bunny\",\"women\",\"girls\"],\"char\":\"👯\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dancing_men\":{\"keywords\":[\"male\",\"bunny\",\"men\",\"boys\"],\"char\":\"👯‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couple\":{\"keywords\":[\"pair\",\"people\",\"human\",\"love\",\"date\",\"dating\",\"like\",\"affection\",\"valentines\",\"marriage\"],\"char\":\"👫\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"two_men_holding_hands\":{\"keywords\":[\"pair\",\"couple\",\"love\",\"like\",\"bromance\",\"friendship\",\"people\",\"human\"],\"char\":\"👬\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"two_women_holding_hands\":{\"keywords\":[\"pair\",\"friendship\",\"couple\",\"love\",\"like\",\"female\",\"people\",\"human\"],\"char\":\"👭\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"bowing_woman\":{\"keywords\":[\"woman\",\"female\",\"girl\"],\"char\":\"🙇‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"bowing_man\":{\"keywords\":[\"man\",\"male\",\"boy\"],\"char\":\"🙇\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_facepalming\":{\"keywords\":[\"man\",\"male\",\"boy\",\"disbelief\"],\"char\":\"🤦‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_facepalming\":{\"keywords\":[\"woman\",\"female\",\"girl\",\"disbelief\"],\"char\":\"🤦‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_shrugging\":{\"keywords\":[\"woman\",\"female\",\"girl\",\"confused\",\"indifferent\",\"doubt\"],\"char\":\"🤷\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_shrugging\":{\"keywords\":[\"man\",\"male\",\"boy\",\"confused\",\"indifferent\",\"doubt\"],\"char\":\"🤷‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"tipping_hand_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"human\",\"information\"],\"char\":\"💁\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"tipping_hand_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"human\",\"information\"],\"char\":\"💁‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"no_good_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"nope\"],\"char\":\"🙅\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"no_good_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"nope\"],\"char\":\"🙅‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"ok_woman\":{\"keywords\":[\"women\",\"girl\",\"female\",\"pink\",\"human\",\"woman\"],\"char\":\"🙆\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"ok_man\":{\"keywords\":[\"men\",\"boy\",\"male\",\"blue\",\"human\",\"man\"],\"char\":\"🙆‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raising_hand_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\"],\"char\":\"🙋\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raising_hand_man\":{\"keywords\":[\"male\",\"boy\",\"man\"],\"char\":\"🙋‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pouting_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\"],\"char\":\"🙎\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pouting_man\":{\"keywords\":[\"male\",\"boy\",\"man\"],\"char\":\"🙎‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"frowning_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"sad\",\"depressed\",\"discouraged\",\"unhappy\"],\"char\":\"🙍\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"frowning_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"sad\",\"depressed\",\"discouraged\",\"unhappy\"],\"char\":\"🙍‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"haircut_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\"],\"char\":\"💇\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"haircut_man\":{\"keywords\":[\"male\",\"boy\",\"man\"],\"char\":\"💇‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"massage_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"head\"],\"char\":\"💆\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"massage_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"head\"],\"char\":\"💆‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_in_steamy_room\":{\"keywords\":[\"female\",\"woman\",\"spa\",\"steamroom\",\"sauna\"],\"char\":\"🧖‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_in_steamy_room\":{\"keywords\":[\"male\",\"man\",\"spa\",\"steamroom\",\"sauna\"],\"char\":\"🧖‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"couple_with_heart_woman_man\":{\"keywords\":[\"pair\",\"love\",\"like\",\"affection\",\"human\",\"dating\",\"valentines\",\"marriage\"],\"char\":\"💑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couple_with_heart_woman_woman\":{\"keywords\":[\"pair\",\"love\",\"like\",\"affection\",\"human\",\"dating\",\"valentines\",\"marriage\"],\"char\":\"👩‍❤️‍👩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couple_with_heart_man_man\":{\"keywords\":[\"pair\",\"love\",\"like\",\"affection\",\"human\",\"dating\",\"valentines\",\"marriage\"],\"char\":\"👨‍❤️‍👨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couplekiss_man_woman\":{\"keywords\":[\"pair\",\"valentines\",\"love\",\"like\",\"dating\",\"marriage\"],\"char\":\"💏\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couplekiss_woman_woman\":{\"keywords\":[\"pair\",\"valentines\",\"love\",\"like\",\"dating\",\"marriage\"],\"char\":\"👩‍❤️‍💋‍👩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couplekiss_man_man\":{\"keywords\":[\"pair\",\"valentines\",\"love\",\"like\",\"dating\",\"marriage\"],\"char\":\"👨‍❤️‍💋‍👨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_boy\":{\"keywords\":[\"home\",\"parents\",\"child\",\"mom\",\"dad\",\"father\",\"mother\",\"people\",\"human\"],\"char\":\"👪\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"child\"],\"char\":\"👨‍👩‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_girl_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👩‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_boy_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👩‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_girl_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👩‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_girl_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_boy_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_girl_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_girl_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_boy_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_girl_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👩‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👩‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_girl_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_boy_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_girl_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👨‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👨‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_girl_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_boy_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_girl_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"yarn\":{\"keywords\":[\"ball\",\"crochet\",\"knit\"],\"char\":\"🧶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"thread\":{\"keywords\":[\"needle\",\"sewing\",\"spool\",\"string\"],\"char\":\"🧵\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"coat\":{\"keywords\":[\"jacket\"],\"char\":\"🧥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"labcoat\":{\"keywords\":[\"doctor\",\"experiment\",\"scientist\",\"chemist\"],\"char\":\"🥼\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"womans_clothes\":{\"keywords\":[\"fashion\",\"shopping_bags\",\"female\"],\"char\":\"👚\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tshirt\":{\"keywords\":[\"fashion\",\"cloth\",\"casual\",\"shirt\",\"tee\"],\"char\":\"👕\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"jeans\":{\"keywords\":[\"fashion\",\"shopping\"],\"char\":\"👖\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"necktie\":{\"keywords\":[\"shirt\",\"suitup\",\"formal\",\"fashion\",\"cloth\",\"business\"],\"char\":\"👔\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dress\":{\"keywords\":[\"clothes\",\"fashion\",\"shopping\"],\"char\":\"👗\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"bikini\":{\"keywords\":[\"swimming\",\"female\",\"woman\",\"girl\",\"fashion\",\"beach\",\"summer\"],\"char\":\"👙\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kimono\":{\"keywords\":[\"dress\",\"fashion\",\"women\",\"female\",\"japanese\"],\"char\":\"👘\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"lipstick\":{\"keywords\":[\"female\",\"girl\",\"fashion\",\"woman\"],\"char\":\"💄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kiss\":{\"keywords\":[\"face\",\"lips\",\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💋\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"footprints\":{\"keywords\":[\"feet\",\"tracking\",\"walking\",\"beach\"],\"char\":\"👣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"flat_shoe\":{\"keywords\":[\"ballet\",\"slip-on\",\"slipper\"],\"char\":\"🥿\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"high_heel\":{\"keywords\":[\"fashion\",\"shoes\",\"female\",\"pumps\",\"stiletto\"],\"char\":\"👠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sandal\":{\"keywords\":[\"shoes\",\"fashion\",\"flip flops\"],\"char\":\"👡\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"boot\":{\"keywords\":[\"shoes\",\"fashion\"],\"char\":\"👢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mans_shoe\":{\"keywords\":[\"fashion\",\"male\"],\"char\":\"👞\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"athletic_shoe\":{\"keywords\":[\"shoes\",\"sports\",\"sneakers\"],\"char\":\"👟\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hiking_boot\":{\"keywords\":[\"backpacking\",\"camping\",\"hiking\"],\"char\":\"🥾\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"socks\":{\"keywords\":[\"stockings\",\"clothes\"],\"char\":\"🧦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"gloves\":{\"keywords\":[\"hands\",\"winter\",\"clothes\"],\"char\":\"🧤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"scarf\":{\"keywords\":[\"neck\",\"winter\",\"clothes\"],\"char\":\"🧣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"womans_hat\":{\"keywords\":[\"fashion\",\"accessories\",\"female\",\"lady\",\"spring\"],\"char\":\"👒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tophat\":{\"keywords\":[\"magic\",\"gentleman\",\"classy\",\"circus\"],\"char\":\"🎩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"billed_hat\":{\"keywords\":[\"cap\",\"baseball\"],\"char\":\"🧢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"rescue_worker_helmet\":{\"keywords\":[\"construction\",\"build\"],\"char\":\"⛑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mortar_board\":{\"keywords\":[\"school\",\"college\",\"degree\",\"university\",\"graduation\",\"cap\",\"hat\",\"legal\",\"learn\",\"education\"],\"char\":\"🎓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"crown\":{\"keywords\":[\"king\",\"kod\",\"leader\",\"royalty\",\"lord\"],\"char\":\"👑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"school_satchel\":{\"keywords\":[\"student\",\"education\",\"bag\",\"backpack\"],\"char\":\"🎒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"luggage\":{\"keywords\":[\"packing\",\"travel\"],\"char\":\"🧳\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pouch\":{\"keywords\":[\"bag\",\"accessories\",\"shopping\"],\"char\":\"👝\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"purse\":{\"keywords\":[\"fashion\",\"accessories\",\"money\",\"sales\",\"shopping\"],\"char\":\"👛\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"handbag\":{\"keywords\":[\"fashion\",\"accessory\",\"accessories\",\"shopping\"],\"char\":\"👜\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"briefcase\":{\"keywords\":[\"business\",\"documents\",\"work\",\"law\",\"legal\",\"job\",\"career\"],\"char\":\"💼\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"eyeglasses\":{\"keywords\":[\"fashion\",\"accessories\",\"eyesight\",\"nerdy\",\"dork\",\"geek\"],\"char\":\"👓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dark_sunglasses\":{\"keywords\":[\"face\",\"cool\",\"accessories\"],\"char\":\"🕶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"goggles\":{\"keywords\":[\"eyes\",\"protection\",\"safety\"],\"char\":\"🥽\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"ring\":{\"keywords\":[\"wedding\",\"propose\",\"marriage\",\"valentines\",\"diamond\",\"fashion\",\"jewelry\",\"gem\",\"engagement\"],\"char\":\"💍\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"closed_umbrella\":{\"keywords\":[\"weather\",\"rain\",\"drizzle\"],\"char\":\"🌂\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dog\":{\"keywords\":[\"animal\",\"friend\",\"nature\",\"woof\",\"puppy\",\"pet\",\"faithful\"],\"char\":\"🐶\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cat\":{\"keywords\":[\"animal\",\"meow\",\"nature\",\"pet\",\"kitten\"],\"char\":\"🐱\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mouse\":{\"keywords\":[\"animal\",\"nature\",\"cheese_wedge\",\"rodent\"],\"char\":\"🐭\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hamster\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐹\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rabbit\":{\"keywords\":[\"animal\",\"nature\",\"pet\",\"spring\",\"magic\",\"bunny\"],\"char\":\"🐰\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fox_face\":{\"keywords\":[\"animal\",\"nature\",\"face\"],\"char\":\"🦊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bear\":{\"keywords\":[\"animal\",\"nature\",\"wild\"],\"char\":\"🐻\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"panda_face\":{\"keywords\":[\"animal\",\"nature\",\"panda\"],\"char\":\"🐼\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"koala\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tiger\":{\"keywords\":[\"animal\",\"cat\",\"danger\",\"wild\",\"nature\",\"roar\"],\"char\":\"🐯\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"lion\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🦁\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cow\":{\"keywords\":[\"beef\",\"ox\",\"animal\",\"nature\",\"moo\",\"milk\"],\"char\":\"🐮\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"pig\":{\"keywords\":[\"animal\",\"oink\",\"nature\"],\"char\":\"🐷\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"pig_nose\":{\"keywords\":[\"animal\",\"oink\"],\"char\":\"🐽\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"frog\":{\"keywords\":[\"animal\",\"nature\",\"croak\",\"toad\"],\"char\":\"🐸\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"squid\":{\"keywords\":[\"animal\",\"nature\",\"ocean\",\"sea\"],\"char\":\"🦑\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"octopus\":{\"keywords\":[\"animal\",\"creature\",\"ocean\",\"sea\",\"nature\",\"beach\"],\"char\":\"🐙\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shrimp\":{\"keywords\":[\"animal\",\"ocean\",\"nature\",\"seafood\"],\"char\":\"🦐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"monkey_face\":{\"keywords\":[\"animal\",\"nature\",\"circus\"],\"char\":\"🐵\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"gorilla\":{\"keywords\":[\"animal\",\"nature\",\"circus\"],\"char\":\"🦍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"see_no_evil\":{\"keywords\":[\"monkey\",\"animal\",\"nature\",\"haha\"],\"char\":\"🙈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hear_no_evil\":{\"keywords\":[\"animal\",\"monkey\",\"nature\"],\"char\":\"🙉\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"speak_no_evil\":{\"keywords\":[\"monkey\",\"animal\",\"nature\",\"omg\"],\"char\":\"🙊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"monkey\":{\"keywords\":[\"animal\",\"nature\",\"banana\",\"circus\"],\"char\":\"🐒\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"chicken\":{\"keywords\":[\"animal\",\"cluck\",\"nature\",\"bird\"],\"char\":\"🐔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"penguin\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐧\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bird\":{\"keywords\":[\"animal\",\"nature\",\"fly\",\"tweet\",\"spring\"],\"char\":\"🐦\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"baby_chick\":{\"keywords\":[\"animal\",\"chicken\",\"bird\"],\"char\":\"🐤\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hatching_chick\":{\"keywords\":[\"animal\",\"chicken\",\"egg\",\"born\",\"baby\",\"bird\"],\"char\":\"🐣\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hatched_chick\":{\"keywords\":[\"animal\",\"chicken\",\"baby\",\"bird\"],\"char\":\"🐥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"duck\":{\"keywords\":[\"animal\",\"nature\",\"bird\",\"mallard\"],\"char\":\"🦆\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"eagle\":{\"keywords\":[\"animal\",\"nature\",\"bird\"],\"char\":\"🦅\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"owl\":{\"keywords\":[\"animal\",\"nature\",\"bird\",\"hoot\"],\"char\":\"🦉\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bat\":{\"keywords\":[\"animal\",\"nature\",\"blind\",\"vampire\"],\"char\":\"🦇\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"wolf\":{\"keywords\":[\"animal\",\"nature\",\"wild\"],\"char\":\"🐺\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"boar\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐗\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"horse\":{\"keywords\":[\"animal\",\"brown\",\"nature\"],\"char\":\"🐴\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"unicorn\":{\"keywords\":[\"animal\",\"nature\",\"mystical\"],\"char\":\"🦄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"honeybee\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"bug\",\"spring\",\"honey\"],\"char\":\"🐝\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bug\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"worm\"],\"char\":\"🐛\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"butterfly\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"caterpillar\"],\"char\":\"🦋\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snail\":{\"keywords\":[\"slow\",\"animal\",\"shell\"],\"char\":\"🐌\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"beetle\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"ladybug\"],\"char\":\"🐞\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ant\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"bug\"],\"char\":\"🐜\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"grasshopper\":{\"keywords\":[\"animal\",\"cricket\",\"chirp\"],\"char\":\"🦗\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"spider\":{\"keywords\":[\"animal\",\"arachnid\"],\"char\":\"🕷\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"scorpion\":{\"keywords\":[\"animal\",\"arachnid\"],\"char\":\"🦂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"crab\":{\"keywords\":[\"animal\",\"crustacean\"],\"char\":\"🦀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snake\":{\"keywords\":[\"animal\",\"evil\",\"nature\",\"hiss\",\"python\"],\"char\":\"🐍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"lizard\":{\"keywords\":[\"animal\",\"nature\",\"reptile\"],\"char\":\"🦎\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"t-rex\":{\"keywords\":[\"animal\",\"nature\",\"dinosaur\",\"tyrannosaurus\",\"extinct\"],\"char\":\"🦖\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sauropod\":{\"keywords\":[\"animal\",\"nature\",\"dinosaur\",\"brachiosaurus\",\"brontosaurus\",\"diplodocus\",\"extinct\"],\"char\":\"🦕\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"turtle\":{\"keywords\":[\"animal\",\"slow\",\"nature\",\"tortoise\"],\"char\":\"🐢\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tropical_fish\":{\"keywords\":[\"animal\",\"swim\",\"ocean\",\"beach\",\"nemo\"],\"char\":\"🐠\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fish\":{\"keywords\":[\"animal\",\"food\",\"nature\"],\"char\":\"🐟\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"blowfish\":{\"keywords\":[\"animal\",\"nature\",\"food\",\"sea\",\"ocean\"],\"char\":\"🐡\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dolphin\":{\"keywords\":[\"animal\",\"nature\",\"fish\",\"sea\",\"ocean\",\"flipper\",\"fins\",\"beach\"],\"char\":\"🐬\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shark\":{\"keywords\":[\"animal\",\"nature\",\"fish\",\"sea\",\"ocean\",\"jaws\",\"fins\",\"beach\"],\"char\":\"🦈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"whale\":{\"keywords\":[\"animal\",\"nature\",\"sea\",\"ocean\"],\"char\":\"🐳\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"whale2\":{\"keywords\":[\"animal\",\"nature\",\"sea\",\"ocean\"],\"char\":\"🐋\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"crocodile\":{\"keywords\":[\"animal\",\"nature\",\"reptile\",\"lizard\",\"alligator\"],\"char\":\"🐊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"leopard\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐆\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"zebra\":{\"keywords\":[\"animal\",\"nature\",\"stripes\",\"safari\"],\"char\":\"🦓\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tiger2\":{\"keywords\":[\"animal\",\"nature\",\"roar\"],\"char\":\"🐅\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"water_buffalo\":{\"keywords\":[\"animal\",\"nature\",\"ox\",\"cow\"],\"char\":\"🐃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ox\":{\"keywords\":[\"animal\",\"cow\",\"beef\"],\"char\":\"🐂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cow2\":{\"keywords\":[\"beef\",\"ox\",\"animal\",\"nature\",\"moo\",\"milk\"],\"char\":\"🐄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"deer\":{\"keywords\":[\"animal\",\"nature\",\"horns\",\"venison\"],\"char\":\"🦌\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dromedary_camel\":{\"keywords\":[\"animal\",\"hot\",\"desert\",\"hump\"],\"char\":\"🐪\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"camel\":{\"keywords\":[\"animal\",\"nature\",\"hot\",\"desert\",\"hump\"],\"char\":\"🐫\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"giraffe\":{\"keywords\":[\"animal\",\"nature\",\"spots\",\"safari\"],\"char\":\"🦒\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"elephant\":{\"keywords\":[\"animal\",\"nature\",\"nose\",\"th\",\"circus\"],\"char\":\"🐘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rhinoceros\":{\"keywords\":[\"animal\",\"nature\",\"horn\"],\"char\":\"🦏\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"goat\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ram\":{\"keywords\":[\"animal\",\"sheep\",\"nature\"],\"char\":\"🐏\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sheep\":{\"keywords\":[\"animal\",\"nature\",\"wool\",\"shipit\"],\"char\":\"🐑\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"racehorse\":{\"keywords\":[\"animal\",\"gamble\",\"luck\"],\"char\":\"🐎\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"pig2\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐖\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rat\":{\"keywords\":[\"animal\",\"mouse\",\"rodent\"],\"char\":\"🐀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mouse2\":{\"keywords\":[\"animal\",\"nature\",\"rodent\"],\"char\":\"🐁\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rooster\":{\"keywords\":[\"animal\",\"nature\",\"chicken\"],\"char\":\"🐓\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"turkey\":{\"keywords\":[\"animal\",\"bird\"],\"char\":\"🦃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dove\":{\"keywords\":[\"animal\",\"bird\"],\"char\":\"🕊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dog2\":{\"keywords\":[\"animal\",\"nature\",\"friend\",\"doge\",\"pet\",\"faithful\"],\"char\":\"🐕\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"poodle\":{\"keywords\":[\"dog\",\"animal\",\"101\",\"nature\",\"pet\"],\"char\":\"🐩\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cat2\":{\"keywords\":[\"animal\",\"meow\",\"pet\",\"cats\"],\"char\":\"🐈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rabbit2\":{\"keywords\":[\"animal\",\"nature\",\"pet\",\"magic\",\"spring\"],\"char\":\"🐇\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"chipmunk\":{\"keywords\":[\"animal\",\"nature\",\"rodent\",\"squirrel\"],\"char\":\"🐿\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hedgehog\":{\"keywords\":[\"animal\",\"nature\",\"spiny\"],\"char\":\"🦔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"raccoon\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🦝\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"llama\":{\"keywords\":[\"animal\",\"nature\",\"alpaca\"],\"char\":\"🦙\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hippopotamus\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🦛\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"kangaroo\":{\"keywords\":[\"animal\",\"nature\",\"australia\",\"joey\",\"hop\",\"marsupial\"],\"char\":\"🦘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"badger\":{\"keywords\":[\"animal\",\"nature\",\"honey\"],\"char\":\"🦡\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"swan\":{\"keywords\":[\"animal\",\"nature\",\"bird\"],\"char\":\"🦢\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"peacock\":{\"keywords\":[\"animal\",\"nature\",\"peahen\",\"bird\"],\"char\":\"🦚\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"parrot\":{\"keywords\":[\"animal\",\"nature\",\"bird\",\"pirate\",\"talk\"],\"char\":\"🦜\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"lobster\":{\"keywords\":[\"animal\",\"nature\",\"bisque\",\"claws\",\"seafood\"],\"char\":\"🦞\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mosquito\":{\"keywords\":[\"animal\",\"nature\",\"insect\",\"malaria\"],\"char\":\"🦟\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"paw_prints\":{\"keywords\":[\"animal\",\"tracking\",\"footprints\",\"dog\",\"cat\",\"pet\",\"feet\"],\"char\":\"🐾\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dragon\":{\"keywords\":[\"animal\",\"myth\",\"nature\",\"chinese\",\"green\"],\"char\":\"🐉\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dragon_face\":{\"keywords\":[\"animal\",\"myth\",\"nature\",\"chinese\",\"green\"],\"char\":\"🐲\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cactus\":{\"keywords\":[\"vegetable\",\"plant\",\"nature\"],\"char\":\"🌵\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"christmas_tree\":{\"keywords\":[\"festival\",\"vacation\",\"december\",\"xmas\",\"celebration\"],\"char\":\"🎄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"evergreen_tree\":{\"keywords\":[\"plant\",\"nature\"],\"char\":\"🌲\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"deciduous_tree\":{\"keywords\":[\"plant\",\"nature\"],\"char\":\"🌳\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"palm_tree\":{\"keywords\":[\"plant\",\"vegetable\",\"nature\",\"summer\",\"beach\",\"mojito\",\"tropical\"],\"char\":\"🌴\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"seedling\":{\"keywords\":[\"plant\",\"nature\",\"grass\",\"lawn\",\"spring\"],\"char\":\"🌱\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"herb\":{\"keywords\":[\"vegetable\",\"plant\",\"medicine\",\"weed\",\"grass\",\"lawn\"],\"char\":\"🌿\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shamrock\":{\"keywords\":[\"vegetable\",\"plant\",\"nature\",\"irish\",\"clover\"],\"char\":\"☘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"four_leaf_clover\":{\"keywords\":[\"vegetable\",\"plant\",\"nature\",\"lucky\",\"irish\"],\"char\":\"🍀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bamboo\":{\"keywords\":[\"plant\",\"nature\",\"vegetable\",\"panda\",\"pine_decoration\"],\"char\":\"🎍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tanabata_tree\":{\"keywords\":[\"plant\",\"nature\",\"branch\",\"summer\"],\"char\":\"🎋\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"leaves\":{\"keywords\":[\"nature\",\"plant\",\"tree\",\"vegetable\",\"grass\",\"lawn\",\"spring\"],\"char\":\"🍃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fallen_leaf\":{\"keywords\":[\"nature\",\"plant\",\"vegetable\",\"leaves\"],\"char\":\"🍂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"maple_leaf\":{\"keywords\":[\"nature\",\"plant\",\"vegetable\",\"ca\",\"fall\"],\"char\":\"🍁\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ear_of_rice\":{\"keywords\":[\"nature\",\"plant\"],\"char\":\"🌾\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hibiscus\":{\"keywords\":[\"plant\",\"vegetable\",\"flowers\",\"beach\"],\"char\":\"🌺\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sunflower\":{\"keywords\":[\"nature\",\"plant\",\"fall\"],\"char\":\"🌻\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rose\":{\"keywords\":[\"flowers\",\"valentines\",\"love\",\"spring\"],\"char\":\"🌹\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"wilted_flower\":{\"keywords\":[\"plant\",\"nature\",\"flower\"],\"char\":\"🥀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tulip\":{\"keywords\":[\"flowers\",\"plant\",\"nature\",\"summer\",\"spring\"],\"char\":\"🌷\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"blossom\":{\"keywords\":[\"nature\",\"flowers\",\"yellow\"],\"char\":\"🌼\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cherry_blossom\":{\"keywords\":[\"nature\",\"plant\",\"spring\",\"flower\"],\"char\":\"🌸\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bouquet\":{\"keywords\":[\"flowers\",\"nature\",\"spring\"],\"char\":\"💐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mushroom\":{\"keywords\":[\"plant\",\"vegetable\"],\"char\":\"🍄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"chestnut\":{\"keywords\":[\"food\",\"squirrel\"],\"char\":\"🌰\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"jack_o_lantern\":{\"keywords\":[\"halloween\",\"light\",\"pumpkin\",\"creepy\",\"fall\"],\"char\":\"🎃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shell\":{\"keywords\":[\"nature\",\"sea\",\"beach\"],\"char\":\"🐚\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"spider_web\":{\"keywords\":[\"animal\",\"insect\",\"arachnid\",\"silk\"],\"char\":\"🕸\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"earth_americas\":{\"keywords\":[\"globe\",\"world\",\"USA\",\"international\"],\"char\":\"🌎\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"earth_africa\":{\"keywords\":[\"globe\",\"world\",\"international\"],\"char\":\"🌍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"earth_asia\":{\"keywords\":[\"globe\",\"world\",\"east\",\"international\"],\"char\":\"🌏\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"full_moon\":{\"keywords\":[\"nature\",\"yellow\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌕\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waning_gibbous_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\",\"waxing_gibbous_moon\"],\"char\":\"🌖\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"last_quarter_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌗\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waning_crescent_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"new_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌑\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waxing_crescent_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌒\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"first_quarter_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌓\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waxing_gibbous_moon\":{\"keywords\":[\"nature\",\"night\",\"sky\",\"gray\",\"twilight\",\"planet\",\"space\",\"evening\",\"sleep\"],\"char\":\"🌔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"new_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌚\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"full_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌝\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"first_quarter_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌛\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"last_quarter_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌜\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_with_face\":{\"keywords\":[\"nature\",\"morning\",\"sky\"],\"char\":\"🌞\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"crescent_moon\":{\"keywords\":[\"night\",\"sleep\",\"sky\",\"evening\",\"magic\"],\"char\":\"🌙\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"star\":{\"keywords\":[\"night\",\"yellow\"],\"char\":\"⭐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"star2\":{\"keywords\":[\"night\",\"sparkle\",\"awesome\",\"good\",\"magic\"],\"char\":\"🌟\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dizzy\":{\"keywords\":[\"star\",\"sparkle\",\"shoot\",\"magic\"],\"char\":\"💫\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sparkles\":{\"keywords\":[\"stars\",\"shine\",\"shiny\",\"cool\",\"awesome\",\"good\",\"magic\"],\"char\":\"✨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"comet\":{\"keywords\":[\"space\"],\"char\":\"☄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sunny\":{\"keywords\":[\"weather\",\"nature\",\"brightness\",\"summer\",\"beach\",\"spring\"],\"char\":\"☀️\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_behind_small_cloud\":{\"keywords\":[\"weather\"],\"char\":\"🌤\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"partly_sunny\":{\"keywords\":[\"weather\",\"nature\",\"cloudy\",\"morning\",\"fall\",\"spring\"],\"char\":\"⛅\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_behind_large_cloud\":{\"keywords\":[\"weather\"],\"char\":\"🌥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_behind_rain_cloud\":{\"keywords\":[\"weather\"],\"char\":\"🌦\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud\":{\"keywords\":[\"weather\",\"sky\"],\"char\":\"☁️\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_rain\":{\"keywords\":[\"weather\"],\"char\":\"🌧\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_lightning_and_rain\":{\"keywords\":[\"weather\",\"lightning\"],\"char\":\"⛈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_lightning\":{\"keywords\":[\"weather\",\"thunder\"],\"char\":\"🌩\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"zap\":{\"keywords\":[\"thunder\",\"weather\",\"lightning bolt\",\"fast\"],\"char\":\"⚡\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fire\":{\"keywords\":[\"hot\",\"cook\",\"flame\"],\"char\":\"🔥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"boom\":{\"keywords\":[\"bomb\",\"explode\",\"explosion\",\"collision\",\"blown\"],\"char\":\"💥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snowflake\":{\"keywords\":[\"winter\",\"season\",\"cold\",\"weather\",\"christmas\",\"xmas\"],\"char\":\"❄️\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_snow\":{\"keywords\":[\"weather\"],\"char\":\"🌨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snowman\":{\"keywords\":[\"winter\",\"season\",\"cold\",\"weather\",\"christmas\",\"xmas\",\"frozen\",\"without_snow\"],\"char\":\"⛄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snowman_with_snow\":{\"keywords\":[\"winter\",\"season\",\"cold\",\"weather\",\"christmas\",\"xmas\",\"frozen\"],\"char\":\"☃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"wind_face\":{\"keywords\":[\"gust\",\"air\"],\"char\":\"🌬\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dash\":{\"keywords\":[\"wind\",\"air\",\"fast\",\"shoo\",\"fart\",\"smoke\",\"puff\"],\"char\":\"💨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tornado\":{\"keywords\":[\"weather\",\"cyclone\",\"twister\"],\"char\":\"🌪\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fog\":{\"keywords\":[\"weather\"],\"char\":\"🌫\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"open_umbrella\":{\"keywords\":[\"weather\",\"spring\"],\"char\":\"☂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"umbrella\":{\"keywords\":[\"rainy\",\"weather\",\"spring\"],\"char\":\"☔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"droplet\":{\"keywords\":[\"water\",\"drip\",\"faucet\",\"spring\"],\"char\":\"💧\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sweat_drops\":{\"keywords\":[\"water\",\"drip\",\"oops\"],\"char\":\"💦\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ocean\":{\"keywords\":[\"sea\",\"water\",\"wave\",\"nature\",\"tsunami\",\"disaster\"],\"char\":\"🌊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"green_apple\":{\"keywords\":[\"fruit\",\"nature\"],\"char\":\"🍏\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"apple\":{\"keywords\":[\"fruit\",\"mac\",\"school\"],\"char\":\"🍎\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pear\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍐\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tangerine\":{\"keywords\":[\"food\",\"fruit\",\"nature\",\"orange\"],\"char\":\"🍊\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"lemon\":{\"keywords\":[\"fruit\",\"nature\"],\"char\":\"🍋\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"banana\":{\"keywords\":[\"fruit\",\"food\",\"monkey\"],\"char\":\"🍌\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"watermelon\":{\"keywords\":[\"fruit\",\"food\",\"picnic\",\"summer\"],\"char\":\"🍉\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"grapes\":{\"keywords\":[\"fruit\",\"food\",\"wine\"],\"char\":\"🍇\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"strawberry\":{\"keywords\":[\"fruit\",\"food\",\"nature\"],\"char\":\"🍓\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"melon\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍈\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cherries\":{\"keywords\":[\"food\",\"fruit\"],\"char\":\"🍒\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"peach\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍑\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pineapple\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍍\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"coconut\":{\"keywords\":[\"fruit\",\"nature\",\"food\",\"palm\"],\"char\":\"🥥\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"kiwi_fruit\":{\"keywords\":[\"fruit\",\"food\"],\"char\":\"🥝\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"mango\":{\"keywords\":[\"fruit\",\"food\",\"tropical\"],\"char\":\"🥭\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"avocado\":{\"keywords\":[\"fruit\",\"food\"],\"char\":\"🥑\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"broccoli\":{\"keywords\":[\"fruit\",\"food\",\"vegetable\"],\"char\":\"🥦\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tomato\":{\"keywords\":[\"fruit\",\"vegetable\",\"nature\",\"food\"],\"char\":\"🍅\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"eggplant\":{\"keywords\":[\"vegetable\",\"nature\",\"food\",\"aubergine\"],\"char\":\"🍆\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cucumber\":{\"keywords\":[\"fruit\",\"food\",\"pickle\"],\"char\":\"🥒\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"carrot\":{\"keywords\":[\"vegetable\",\"food\",\"orange\"],\"char\":\"🥕\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"hot_pepper\":{\"keywords\":[\"food\",\"spicy\",\"chilli\",\"chili\"],\"char\":\"🌶\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"potato\":{\"keywords\":[\"food\",\"tuber\",\"vegatable\",\"starch\"],\"char\":\"🥔\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"corn\":{\"keywords\":[\"food\",\"vegetable\",\"plant\"],\"char\":\"🌽\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"leafy_greens\":{\"keywords\":[\"food\",\"vegetable\",\"plant\",\"bok choy\",\"cabbage\",\"kale\",\"lettuce\"],\"char\":\"🥬\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sweet_potato\":{\"keywords\":[\"food\",\"nature\"],\"char\":\"🍠\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"peanuts\":{\"keywords\":[\"food\",\"nut\"],\"char\":\"🥜\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"honey_pot\":{\"keywords\":[\"bees\",\"sweet\",\"kitchen\"],\"char\":\"🍯\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"croissant\":{\"keywords\":[\"food\",\"bread\",\"french\"],\"char\":\"🥐\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bread\":{\"keywords\":[\"food\",\"wheat\",\"breakfast\",\"toast\"],\"char\":\"🍞\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"baguette_bread\":{\"keywords\":[\"food\",\"bread\",\"french\"],\"char\":\"🥖\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bagel\":{\"keywords\":[\"food\",\"bread\",\"bakery\",\"schmear\"],\"char\":\"🥯\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pretzel\":{\"keywords\":[\"food\",\"bread\",\"twisted\"],\"char\":\"🥨\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cheese\":{\"keywords\":[\"food\",\"chadder\"],\"char\":\"🧀\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"egg\":{\"keywords\":[\"food\",\"chicken\",\"breakfast\"],\"char\":\"🥚\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bacon\":{\"keywords\":[\"food\",\"breakfast\",\"pork\",\"pig\",\"meat\"],\"char\":\"🥓\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"steak\":{\"keywords\":[\"food\",\"cow\",\"meat\",\"cut\",\"chop\",\"lambchop\",\"porkchop\"],\"char\":\"🥩\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pancakes\":{\"keywords\":[\"food\",\"breakfast\",\"flapjacks\",\"hotcakes\"],\"char\":\"🥞\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"poultry_leg\":{\"keywords\":[\"food\",\"meat\",\"drumstick\",\"bird\",\"chicken\",\"turkey\"],\"char\":\"🍗\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"meat_on_bone\":{\"keywords\":[\"good\",\"food\",\"drumstick\"],\"char\":\"🍖\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bone\":{\"keywords\":[\"skeleton\"],\"char\":\"🦴\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fried_shrimp\":{\"keywords\":[\"food\",\"animal\",\"appetizer\",\"summer\"],\"char\":\"🍤\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fried_egg\":{\"keywords\":[\"food\",\"breakfast\",\"kitchen\",\"egg\"],\"char\":\"🍳\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"hamburger\":{\"keywords\":[\"meat\",\"fast food\",\"beef\",\"cheeseburger\",\"mcdonalds\",\"burger king\"],\"char\":\"🍔\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fries\":{\"keywords\":[\"chips\",\"snack\",\"fast food\"],\"char\":\"🍟\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"stuffed_flatbread\":{\"keywords\":[\"food\",\"flatbread\",\"stuffed\",\"gyro\"],\"char\":\"🥙\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"hotdog\":{\"keywords\":[\"food\",\"frankfurter\"],\"char\":\"🌭\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pizza\":{\"keywords\":[\"food\",\"party\"],\"char\":\"🍕\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sandwich\":{\"keywords\":[\"food\",\"lunch\",\"bread\"],\"char\":\"🥪\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"canned_food\":{\"keywords\":[\"food\",\"soup\"],\"char\":\"🥫\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"spaghetti\":{\"keywords\":[\"food\",\"italian\",\"noodle\"],\"char\":\"🍝\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"taco\":{\"keywords\":[\"food\",\"mexican\"],\"char\":\"🌮\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"burrito\":{\"keywords\":[\"food\",\"mexican\"],\"char\":\"🌯\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"green_salad\":{\"keywords\":[\"food\",\"healthy\",\"lettuce\"],\"char\":\"🥗\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"shallow_pan_of_food\":{\"keywords\":[\"food\",\"cooking\",\"casserole\",\"paella\"],\"char\":\"🥘\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"ramen\":{\"keywords\":[\"food\",\"japanese\",\"noodle\",\"chopsticks\"],\"char\":\"🍜\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"stew\":{\"keywords\":[\"food\",\"meat\",\"soup\"],\"char\":\"🍲\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fish_cake\":{\"keywords\":[\"food\",\"japan\",\"sea\",\"beach\",\"narutomaki\",\"pink\",\"swirl\",\"kamaboko\",\"surimi\",\"ramen\"],\"char\":\"🍥\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fortune_cookie\":{\"keywords\":[\"food\",\"prophecy\"],\"char\":\"🥠\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sushi\":{\"keywords\":[\"food\",\"fish\",\"japanese\",\"rice\"],\"char\":\"🍣\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bento\":{\"keywords\":[\"food\",\"japanese\",\"box\"],\"char\":\"🍱\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"curry\":{\"keywords\":[\"food\",\"spicy\",\"hot\",\"indian\"],\"char\":\"🍛\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"rice_ball\":{\"keywords\":[\"food\",\"japanese\"],\"char\":\"🍙\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"rice\":{\"keywords\":[\"food\",\"china\",\"asian\"],\"char\":\"🍚\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"rice_cracker\":{\"keywords\":[\"food\",\"japanese\"],\"char\":\"🍘\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"oden\":{\"keywords\":[\"food\",\"japanese\"],\"char\":\"🍢\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"dango\":{\"keywords\":[\"food\",\"dessert\",\"sweet\",\"japanese\",\"barbecue\",\"meat\"],\"char\":\"🍡\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"shaved_ice\":{\"keywords\":[\"hot\",\"dessert\",\"summer\"],\"char\":\"🍧\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"ice_cream\":{\"keywords\":[\"food\",\"hot\",\"dessert\"],\"char\":\"🍨\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"icecream\":{\"keywords\":[\"food\",\"hot\",\"dessert\",\"summer\"],\"char\":\"🍦\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pie\":{\"keywords\":[\"food\",\"dessert\",\"pastry\"],\"char\":\"🥧\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cake\":{\"keywords\":[\"food\",\"dessert\"],\"char\":\"🍰\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cupcake\":{\"keywords\":[\"food\",\"dessert\",\"bakery\",\"sweet\"],\"char\":\"🧁\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"moon_cake\":{\"keywords\":[\"food\",\"autumn\"],\"char\":\"🥮\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"birthday\":{\"keywords\":[\"food\",\"dessert\",\"cake\"],\"char\":\"🎂\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"custard\":{\"keywords\":[\"dessert\",\"food\"],\"char\":\"🍮\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"candy\":{\"keywords\":[\"snack\",\"dessert\",\"sweet\",\"lolly\"],\"char\":\"🍬\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"lollipop\":{\"keywords\":[\"food\",\"snack\",\"candy\",\"sweet\"],\"char\":\"🍭\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"chocolate_bar\":{\"keywords\":[\"food\",\"snack\",\"dessert\",\"sweet\"],\"char\":\"🍫\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"popcorn\":{\"keywords\":[\"food\",\"movie theater\",\"films\",\"snack\"],\"char\":\"🍿\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"dumpling\":{\"keywords\":[\"food\",\"empanada\",\"pierogi\",\"potsticker\"],\"char\":\"🥟\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"doughnut\":{\"keywords\":[\"food\",\"dessert\",\"snack\",\"sweet\",\"donut\"],\"char\":\"🍩\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cookie\":{\"keywords\":[\"food\",\"snack\",\"oreo\",\"chocolate\",\"sweet\",\"dessert\"],\"char\":\"🍪\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"milk_glass\":{\"keywords\":[\"beverage\",\"drink\",\"cow\"],\"char\":\"🥛\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"beer\":{\"keywords\":[\"relax\",\"beverage\",\"drink\",\"drunk\",\"party\",\"pub\",\"summer\",\"alcohol\",\"booze\"],\"char\":\"🍺\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"beers\":{\"keywords\":[\"relax\",\"beverage\",\"drink\",\"drunk\",\"party\",\"pub\",\"summer\",\"alcohol\",\"booze\"],\"char\":\"🍻\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"clinking_glasses\":{\"keywords\":[\"beverage\",\"drink\",\"party\",\"alcohol\",\"celebrate\",\"cheers\",\"wine\",\"champagne\",\"toast\"],\"char\":\"🥂\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"wine_glass\":{\"keywords\":[\"drink\",\"beverage\",\"drunk\",\"alcohol\",\"booze\"],\"char\":\"🍷\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tumbler_glass\":{\"keywords\":[\"drink\",\"beverage\",\"drunk\",\"alcohol\",\"liquor\",\"booze\",\"bourbon\",\"scotch\",\"whisky\",\"glass\",\"shot\"],\"char\":\"🥃\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cocktail\":{\"keywords\":[\"drink\",\"drunk\",\"alcohol\",\"beverage\",\"booze\",\"mojito\"],\"char\":\"🍸\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tropical_drink\":{\"keywords\":[\"beverage\",\"cocktail\",\"summer\",\"beach\",\"alcohol\",\"booze\",\"mojito\"],\"char\":\"🍹\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"champagne\":{\"keywords\":[\"drink\",\"wine\",\"bottle\",\"celebration\"],\"char\":\"🍾\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sake\":{\"keywords\":[\"wine\",\"drink\",\"drunk\",\"beverage\",\"japanese\",\"alcohol\",\"booze\"],\"char\":\"🍶\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tea\":{\"keywords\":[\"drink\",\"bowl\",\"breakfast\",\"green\",\"british\"],\"char\":\"🍵\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cup_with_straw\":{\"keywords\":[\"drink\",\"soda\"],\"char\":\"🥤\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"coffee\":{\"keywords\":[\"beverage\",\"caffeine\",\"latte\",\"espresso\"],\"char\":\"☕\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"baby_bottle\":{\"keywords\":[\"food\",\"container\",\"milk\"],\"char\":\"🍼\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"salt\":{\"keywords\":[\"condiment\",\"shaker\"],\"char\":\"🧂\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"spoon\":{\"keywords\":[\"cutlery\",\"kitchen\",\"tableware\"],\"char\":\"🥄\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fork_and_knife\":{\"keywords\":[\"cutlery\",\"kitchen\"],\"char\":\"🍴\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"plate_with_cutlery\":{\"keywords\":[\"food\",\"eat\",\"meal\",\"lunch\",\"dinner\",\"restaurant\"],\"char\":\"🍽\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bowl_with_spoon\":{\"keywords\":[\"food\",\"breakfast\",\"cereal\",\"oatmeal\",\"porridge\"],\"char\":\"🥣\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"takeout_box\":{\"keywords\":[\"food\",\"leftovers\"],\"char\":\"🥡\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"chopsticks\":{\"keywords\":[\"food\"],\"char\":\"🥢\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"soccer\":{\"keywords\":[\"sports\",\"football\"],\"char\":\"⚽\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"basketball\":{\"keywords\":[\"sports\",\"balls\",\"NBA\"],\"char\":\"🏀\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"football\":{\"keywords\":[\"sports\",\"balls\",\"NFL\"],\"char\":\"🏈\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"baseball\":{\"keywords\":[\"sports\",\"balls\"],\"char\":\"⚾\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"softball\":{\"keywords\":[\"sports\",\"balls\"],\"char\":\"🥎\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"tennis\":{\"keywords\":[\"sports\",\"balls\",\"green\"],\"char\":\"🎾\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"volleyball\":{\"keywords\":[\"sports\",\"balls\"],\"char\":\"🏐\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"rugby_football\":{\"keywords\":[\"sports\",\"team\"],\"char\":\"🏉\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"flying_disc\":{\"keywords\":[\"sports\",\"frisbee\",\"ultimate\"],\"char\":\"🥏\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"8ball\":{\"keywords\":[\"pool\",\"hobby\",\"game\",\"luck\",\"magic\"],\"char\":\"🎱\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"golf\":{\"keywords\":[\"sports\",\"business\",\"flag\",\"hole\",\"summer\"],\"char\":\"⛳\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"golfing_woman\":{\"keywords\":[\"sports\",\"business\",\"woman\",\"female\"],\"char\":\"🏌️‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"golfing_man\":{\"keywords\":[\"sports\",\"business\"],\"char\":\"🏌\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"ping_pong\":{\"keywords\":[\"sports\",\"pingpong\"],\"char\":\"🏓\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"badminton\":{\"keywords\":[\"sports\"],\"char\":\"🏸\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"goal_net\":{\"keywords\":[\"sports\"],\"char\":\"🥅\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"ice_hockey\":{\"keywords\":[\"sports\"],\"char\":\"🏒\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"field_hockey\":{\"keywords\":[\"sports\"],\"char\":\"🏑\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"lacrosse\":{\"keywords\":[\"sports\",\"ball\",\"stick\"],\"char\":\"🥍\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"cricket\":{\"keywords\":[\"sports\"],\"char\":\"🏏\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"ski\":{\"keywords\":[\"sports\",\"winter\",\"cold\",\"snow\"],\"char\":\"🎿\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"skier\":{\"keywords\":[\"sports\",\"winter\",\"snow\"],\"char\":\"⛷\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"snowboarder\":{\"keywords\":[\"sports\",\"winter\"],\"char\":\"🏂\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"person_fencing\":{\"keywords\":[\"sports\",\"fencing\",\"sword\"],\"char\":\"🤺\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"women_wrestling\":{\"keywords\":[\"sports\",\"wrestlers\"],\"char\":\"🤼‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"men_wrestling\":{\"keywords\":[\"sports\",\"wrestlers\"],\"char\":\"🤼‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"woman_cartwheeling\":{\"keywords\":[\"gymnastics\"],\"char\":\"🤸‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_cartwheeling\":{\"keywords\":[\"gymnastics\"],\"char\":\"🤸‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"woman_playing_handball\":{\"keywords\":[\"sports\"],\"char\":\"🤾‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_playing_handball\":{\"keywords\":[\"sports\"],\"char\":\"🤾‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"ice_skate\":{\"keywords\":[\"sports\"],\"char\":\"⛸\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"curling_stone\":{\"keywords\":[\"sports\"],\"char\":\"🥌\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"skateboard\":{\"keywords\":[\"board\"],\"char\":\"🛹\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"sled\":{\"keywords\":[\"sleigh\",\"luge\",\"toboggan\"],\"char\":\"🛷\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"bow_and_arrow\":{\"keywords\":[\"sports\"],\"char\":\"🏹\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"fishing_pole_and_fish\":{\"keywords\":[\"food\",\"hobby\",\"summer\"],\"char\":\"🎣\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"boxing_glove\":{\"keywords\":[\"sports\",\"fighting\"],\"char\":\"🥊\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"martial_arts_uniform\":{\"keywords\":[\"judo\",\"karate\",\"taekwondo\"],\"char\":\"🥋\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"rowing_woman\":{\"keywords\":[\"sports\",\"hobby\",\"water\",\"ship\",\"woman\",\"female\"],\"char\":\"🚣‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"rowing_man\":{\"keywords\":[\"sports\",\"hobby\",\"water\",\"ship\"],\"char\":\"🚣\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"climbing_woman\":{\"keywords\":[\"sports\",\"hobby\",\"woman\",\"female\",\"rock\"],\"char\":\"🧗‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"climbing_man\":{\"keywords\":[\"sports\",\"hobby\",\"man\",\"male\",\"rock\"],\"char\":\"🧗‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"swimming_woman\":{\"keywords\":[\"sports\",\"exercise\",\"human\",\"athlete\",\"water\",\"summer\",\"woman\",\"female\"],\"char\":\"🏊‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"swimming_man\":{\"keywords\":[\"sports\",\"exercise\",\"human\",\"athlete\",\"water\",\"summer\"],\"char\":\"🏊\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"woman_playing_water_polo\":{\"keywords\":[\"sports\",\"pool\"],\"char\":\"🤽‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_playing_water_polo\":{\"keywords\":[\"sports\",\"pool\"],\"char\":\"🤽‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"woman_in_lotus_position\":{\"keywords\":[\"woman\",\"female\",\"meditation\",\"yoga\",\"serenity\",\"zen\",\"mindfulness\"],\"char\":\"🧘‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_in_lotus_position\":{\"keywords\":[\"man\",\"male\",\"meditation\",\"yoga\",\"serenity\",\"zen\",\"mindfulness\"],\"char\":\"🧘‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"surfing_woman\":{\"keywords\":[\"sports\",\"ocean\",\"sea\",\"summer\",\"beach\",\"woman\",\"female\"],\"char\":\"🏄‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"surfing_man\":{\"keywords\":[\"sports\",\"ocean\",\"sea\",\"summer\",\"beach\"],\"char\":\"🏄\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"bath\":{\"keywords\":[\"clean\",\"shower\",\"bathroom\"],\"char\":\"🛀\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"basketball_woman\":{\"keywords\":[\"sports\",\"human\",\"woman\",\"female\"],\"char\":\"⛹️‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"basketball_man\":{\"keywords\":[\"sports\",\"human\"],\"char\":\"⛹\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"weight_lifting_woman\":{\"keywords\":[\"sports\",\"training\",\"exercise\",\"woman\",\"female\"],\"char\":\"🏋️‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"weight_lifting_man\":{\"keywords\":[\"sports\",\"training\",\"exercise\"],\"char\":\"🏋\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"biking_woman\":{\"keywords\":[\"sports\",\"bike\",\"exercise\",\"hipster\",\"woman\",\"female\"],\"char\":\"🚴‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"biking_man\":{\"keywords\":[\"sports\",\"bike\",\"exercise\",\"hipster\"],\"char\":\"🚴\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"mountain_biking_woman\":{\"keywords\":[\"transportation\",\"sports\",\"human\",\"race\",\"bike\",\"woman\",\"female\"],\"char\":\"🚵‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"mountain_biking_man\":{\"keywords\":[\"transportation\",\"sports\",\"human\",\"race\",\"bike\"],\"char\":\"🚵\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"horse_racing\":{\"keywords\":[\"animal\",\"betting\",\"competition\",\"gambling\",\"luck\"],\"char\":\"🏇\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"business_suit_levitating\":{\"keywords\":[\"suit\",\"business\",\"levitate\",\"hover\",\"jump\"],\"char\":\"🕴\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"trophy\":{\"keywords\":[\"win\",\"award\",\"contest\",\"place\",\"ftw\",\"ceremony\"],\"char\":\"🏆\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"running_shirt_with_sash\":{\"keywords\":[\"play\",\"pageant\"],\"char\":\"🎽\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"medal_sports\":{\"keywords\":[\"award\",\"winning\"],\"char\":\"🏅\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"medal_military\":{\"keywords\":[\"award\",\"winning\",\"army\"],\"char\":\"🎖\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"1st_place_medal\":{\"keywords\":[\"award\",\"winning\",\"first\"],\"char\":\"🥇\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"2nd_place_medal\":{\"keywords\":[\"award\",\"second\"],\"char\":\"🥈\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"3rd_place_medal\":{\"keywords\":[\"award\",\"third\"],\"char\":\"🥉\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"reminder_ribbon\":{\"keywords\":[\"sports\",\"cause\",\"support\",\"awareness\"],\"char\":\"🎗\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"rosette\":{\"keywords\":[\"flower\",\"decoration\",\"military\"],\"char\":\"🏵\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"ticket\":{\"keywords\":[\"event\",\"concert\",\"pass\"],\"char\":\"🎫\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"tickets\":{\"keywords\":[\"sports\",\"concert\",\"entrance\"],\"char\":\"🎟\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"performing_arts\":{\"keywords\":[\"acting\",\"theater\",\"drama\"],\"char\":\"🎭\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"art\":{\"keywords\":[\"design\",\"paint\",\"draw\",\"colors\"],\"char\":\"🎨\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"circus_tent\":{\"keywords\":[\"festival\",\"carnival\",\"party\"],\"char\":\"🎪\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"woman_juggling\":{\"keywords\":[\"juggle\",\"balance\",\"skill\",\"multitask\"],\"char\":\"🤹‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_juggling\":{\"keywords\":[\"juggle\",\"balance\",\"skill\",\"multitask\"],\"char\":\"🤹‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"microphone\":{\"keywords\":[\"sound\",\"music\",\"PA\",\"sing\",\"talkshow\"],\"char\":\"🎤\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"headphones\":{\"keywords\":[\"music\",\"score\",\"gadgets\"],\"char\":\"🎧\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"musical_score\":{\"keywords\":[\"treble\",\"clef\",\"compose\"],\"char\":\"🎼\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"musical_keyboard\":{\"keywords\":[\"piano\",\"instrument\",\"compose\"],\"char\":\"🎹\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"drum\":{\"keywords\":[\"music\",\"instrument\",\"drumsticks\",\"snare\"],\"char\":\"🥁\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"saxophone\":{\"keywords\":[\"music\",\"instrument\",\"jazz\",\"blues\"],\"char\":\"🎷\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"trumpet\":{\"keywords\":[\"music\",\"brass\"],\"char\":\"🎺\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"guitar\":{\"keywords\":[\"music\",\"instrument\"],\"char\":\"🎸\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"violin\":{\"keywords\":[\"music\",\"instrument\",\"orchestra\",\"symphony\"],\"char\":\"🎻\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"clapper\":{\"keywords\":[\"movie\",\"film\",\"record\"],\"char\":\"🎬\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"video_game\":{\"keywords\":[\"play\",\"console\",\"PS4\",\"controller\"],\"char\":\"🎮\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"space_invader\":{\"keywords\":[\"game\",\"arcade\",\"play\"],\"char\":\"👾\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"dart\":{\"keywords\":[\"game\",\"play\",\"bar\",\"target\",\"bullseye\"],\"char\":\"🎯\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"game_die\":{\"keywords\":[\"dice\",\"random\",\"tabletop\",\"play\",\"luck\"],\"char\":\"🎲\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"chess_pawn\":{\"keywords\":[\"expendable\"],\"char\":\"♟\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"slot_machine\":{\"keywords\":[\"bet\",\"gamble\",\"vegas\",\"fruit machine\",\"luck\",\"casino\"],\"char\":\"🎰\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"jigsaw\":{\"keywords\":[\"interlocking\",\"puzzle\",\"piece\"],\"char\":\"🧩\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"bowling\":{\"keywords\":[\"sports\",\"fun\",\"play\"],\"char\":\"🎳\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"red_car\":{\"keywords\":[\"red\",\"transportation\",\"vehicle\"],\"char\":\"🚗\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"taxi\":{\"keywords\":[\"uber\",\"vehicle\",\"cars\",\"transportation\"],\"char\":\"🚕\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"blue_car\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚙\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bus\":{\"keywords\":[\"car\",\"vehicle\",\"transportation\"],\"char\":\"🚌\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"trolleybus\":{\"keywords\":[\"bart\",\"transportation\",\"vehicle\"],\"char\":\"🚎\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"racing_car\":{\"keywords\":[\"sports\",\"race\",\"fast\",\"formula\",\"f1\"],\"char\":\"🏎\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"police_car\":{\"keywords\":[\"vehicle\",\"cars\",\"transportation\",\"law\",\"legal\",\"enforcement\"],\"char\":\"🚓\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ambulance\":{\"keywords\":[\"health\",\"911\",\"hospital\"],\"char\":\"🚑\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fire_engine\":{\"keywords\":[\"transportation\",\"cars\",\"vehicle\"],\"char\":\"🚒\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"minibus\":{\"keywords\":[\"vehicle\",\"car\",\"transportation\"],\"char\":\"🚐\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"truck\":{\"keywords\":[\"cars\",\"transportation\"],\"char\":\"🚚\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"articulated_lorry\":{\"keywords\":[\"vehicle\",\"cars\",\"transportation\",\"express\"],\"char\":\"🚛\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tractor\":{\"keywords\":[\"vehicle\",\"car\",\"farming\",\"agriculture\"],\"char\":\"🚜\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"kick_scooter\":{\"keywords\":[\"vehicle\",\"kick\",\"razor\"],\"char\":\"🛴\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motorcycle\":{\"keywords\":[\"race\",\"sports\",\"fast\"],\"char\":\"🏍\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bike\":{\"keywords\":[\"sports\",\"bicycle\",\"exercise\",\"hipster\"],\"char\":\"🚲\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motor_scooter\":{\"keywords\":[\"vehicle\",\"vespa\",\"sasha\"],\"char\":\"🛵\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rotating_light\":{\"keywords\":[\"police\",\"ambulance\",\"911\",\"emergency\",\"alert\",\"error\",\"pinged\",\"law\",\"legal\"],\"char\":\"🚨\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_police_car\":{\"keywords\":[\"vehicle\",\"law\",\"legal\",\"enforcement\",\"911\"],\"char\":\"🚔\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_bus\":{\"keywords\":[\"vehicle\",\"transportation\"],\"char\":\"🚍\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_automobile\":{\"keywords\":[\"car\",\"vehicle\",\"transportation\"],\"char\":\"🚘\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_taxi\":{\"keywords\":[\"vehicle\",\"cars\",\"uber\"],\"char\":\"🚖\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"aerial_tramway\":{\"keywords\":[\"transportation\",\"vehicle\",\"ski\"],\"char\":\"🚡\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain_cableway\":{\"keywords\":[\"transportation\",\"vehicle\",\"ski\"],\"char\":\"🚠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"suspension_railway\":{\"keywords\":[\"vehicle\",\"transportation\"],\"char\":\"🚟\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"railway_car\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚃\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"train\":{\"keywords\":[\"transportation\",\"vehicle\",\"carriage\",\"public\",\"travel\"],\"char\":\"🚋\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"monorail\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚝\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bullettrain_side\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚄\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bullettrain_front\":{\"keywords\":[\"transportation\",\"vehicle\",\"speed\",\"fast\",\"public\",\"travel\"],\"char\":\"🚅\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"light_rail\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚈\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain_railway\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚞\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"steam_locomotive\":{\"keywords\":[\"transportation\",\"vehicle\",\"train\"],\"char\":\"🚂\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"train2\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚆\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"metro\":{\"keywords\":[\"transportation\",\"blue-square\",\"mrt\",\"underground\",\"tube\"],\"char\":\"🚇\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tram\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚊\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"station\":{\"keywords\":[\"transportation\",\"vehicle\",\"public\"],\"char\":\"🚉\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"flying_saucer\":{\"keywords\":[\"transportation\",\"vehicle\",\"ufo\"],\"char\":\"🛸\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"helicopter\":{\"keywords\":[\"transportation\",\"vehicle\",\"fly\"],\"char\":\"🚁\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"small_airplane\":{\"keywords\":[\"flight\",\"transportation\",\"fly\",\"vehicle\"],\"char\":\"🛩\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"airplane\":{\"keywords\":[\"vehicle\",\"transportation\",\"flight\",\"fly\"],\"char\":\"✈️\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"flight_departure\":{\"keywords\":[\"airport\",\"flight\",\"landing\"],\"char\":\"🛫\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"flight_arrival\":{\"keywords\":[\"airport\",\"flight\",\"boarding\"],\"char\":\"🛬\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sailboat\":{\"keywords\":[\"ship\",\"summer\",\"transportation\",\"water\",\"sailing\"],\"char\":\"⛵\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motor_boat\":{\"keywords\":[\"ship\"],\"char\":\"🛥\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"speedboat\":{\"keywords\":[\"ship\",\"transportation\",\"vehicle\",\"summer\"],\"char\":\"🚤\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ferry\":{\"keywords\":[\"boat\",\"ship\",\"yacht\"],\"char\":\"⛴\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"passenger_ship\":{\"keywords\":[\"yacht\",\"cruise\",\"ferry\"],\"char\":\"🛳\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rocket\":{\"keywords\":[\"launch\",\"ship\",\"staffmode\",\"NASA\",\"outer space\",\"outer_space\",\"fly\"],\"char\":\"🚀\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"artificial_satellite\":{\"keywords\":[\"communication\",\"gps\",\"orbit\",\"spaceflight\",\"NASA\",\"ISS\"],\"char\":\"🛰\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"seat\":{\"keywords\":[\"sit\",\"airplane\",\"transport\",\"bus\",\"flight\",\"fly\"],\"char\":\"💺\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"canoe\":{\"keywords\":[\"boat\",\"paddle\",\"water\",\"ship\"],\"char\":\"🛶\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"anchor\":{\"keywords\":[\"ship\",\"ferry\",\"sea\",\"boat\"],\"char\":\"⚓\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"construction\":{\"keywords\":[\"wip\",\"progress\",\"caution\",\"warning\"],\"char\":\"🚧\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fuelpump\":{\"keywords\":[\"gas station\",\"petroleum\"],\"char\":\"⛽\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"busstop\":{\"keywords\":[\"transportation\",\"wait\"],\"char\":\"🚏\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"vertical_traffic_light\":{\"keywords\":[\"transportation\",\"driving\"],\"char\":\"🚦\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"traffic_light\":{\"keywords\":[\"transportation\",\"signal\"],\"char\":\"🚥\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"checkered_flag\":{\"keywords\":[\"contest\",\"finishline\",\"race\",\"gokart\"],\"char\":\"🏁\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ship\":{\"keywords\":[\"transportation\",\"titanic\",\"deploy\"],\"char\":\"🚢\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ferris_wheel\":{\"keywords\":[\"photo\",\"carnival\",\"londoneye\"],\"char\":\"🎡\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"roller_coaster\":{\"keywords\":[\"carnival\",\"playground\",\"photo\",\"fun\"],\"char\":\"🎢\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"carousel_horse\":{\"keywords\":[\"photo\",\"carnival\"],\"char\":\"🎠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"building_construction\":{\"keywords\":[\"wip\",\"working\",\"progress\"],\"char\":\"🏗\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"foggy\":{\"keywords\":[\"photo\",\"mountain\"],\"char\":\"🌁\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tokyo_tower\":{\"keywords\":[\"photo\",\"japanese\"],\"char\":\"🗼\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"factory\":{\"keywords\":[\"building\",\"industry\",\"pollution\",\"smoke\"],\"char\":\"🏭\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fountain\":{\"keywords\":[\"photo\",\"summer\",\"water\",\"fresh\"],\"char\":\"⛲\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rice_scene\":{\"keywords\":[\"photo\",\"japan\",\"asia\",\"tsukimi\"],\"char\":\"🎑\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain\":{\"keywords\":[\"photo\",\"nature\",\"environment\"],\"char\":\"⛰\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain_snow\":{\"keywords\":[\"photo\",\"nature\",\"environment\",\"winter\",\"cold\"],\"char\":\"🏔\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mount_fuji\":{\"keywords\":[\"photo\",\"mountain\",\"nature\",\"japanese\"],\"char\":\"🗻\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"volcano\":{\"keywords\":[\"photo\",\"nature\",\"disaster\"],\"char\":\"🌋\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"japan\":{\"keywords\":[\"nation\",\"country\",\"japanese\",\"asia\"],\"char\":\"🗾\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"camping\":{\"keywords\":[\"photo\",\"outdoors\",\"tent\"],\"char\":\"🏕\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tent\":{\"keywords\":[\"photo\",\"camping\",\"outdoors\"],\"char\":\"⛺\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"national_park\":{\"keywords\":[\"photo\",\"environment\",\"nature\"],\"char\":\"🏞\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motorway\":{\"keywords\":[\"road\",\"cupertino\",\"interstate\",\"highway\"],\"char\":\"🛣\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"railway_track\":{\"keywords\":[\"train\",\"transportation\"],\"char\":\"🛤\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sunrise\":{\"keywords\":[\"morning\",\"view\",\"vacation\",\"photo\"],\"char\":\"🌅\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sunrise_over_mountains\":{\"keywords\":[\"view\",\"vacation\",\"photo\"],\"char\":\"🌄\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"desert\":{\"keywords\":[\"photo\",\"warm\",\"saharah\"],\"char\":\"🏜\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"beach_umbrella\":{\"keywords\":[\"weather\",\"summer\",\"sunny\",\"sand\",\"mojito\"],\"char\":\"🏖\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"desert_island\":{\"keywords\":[\"photo\",\"tropical\",\"mojito\"],\"char\":\"🏝\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"city_sunrise\":{\"keywords\":[\"photo\",\"good morning\",\"dawn\"],\"char\":\"🌇\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"city_sunset\":{\"keywords\":[\"photo\",\"evening\",\"sky\",\"buildings\"],\"char\":\"🌆\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"cityscape\":{\"keywords\":[\"photo\",\"night life\",\"urban\"],\"char\":\"🏙\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"night_with_stars\":{\"keywords\":[\"evening\",\"city\",\"downtown\"],\"char\":\"🌃\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bridge_at_night\":{\"keywords\":[\"photo\",\"sanfrancisco\"],\"char\":\"🌉\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"milky_way\":{\"keywords\":[\"photo\",\"space\",\"stars\"],\"char\":\"🌌\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"stars\":{\"keywords\":[\"night\",\"photo\"],\"char\":\"🌠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sparkler\":{\"keywords\":[\"stars\",\"night\",\"shine\"],\"char\":\"🎇\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fireworks\":{\"keywords\":[\"photo\",\"festival\",\"carnival\",\"congratulations\"],\"char\":\"🎆\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rainbow\":{\"keywords\":[\"nature\",\"happy\",\"unicorn_face\",\"photo\",\"sky\",\"spring\"],\"char\":\"🌈\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"houses\":{\"keywords\":[\"buildings\",\"photo\"],\"char\":\"🏘\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"european_castle\":{\"keywords\":[\"building\",\"royalty\",\"history\"],\"char\":\"🏰\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"japanese_castle\":{\"keywords\":[\"photo\",\"building\"],\"char\":\"🏯\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"stadium\":{\"keywords\":[\"photo\",\"place\",\"sports\",\"concert\",\"venue\"],\"char\":\"🏟\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"statue_of_liberty\":{\"keywords\":[\"american\",\"newyork\"],\"char\":\"🗽\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"house\":{\"keywords\":[\"building\",\"home\"],\"char\":\"🏠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"house_with_garden\":{\"keywords\":[\"home\",\"plant\",\"nature\"],\"char\":\"🏡\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"derelict_house\":{\"keywords\":[\"abandon\",\"evict\",\"broken\",\"building\"],\"char\":\"🏚\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"office\":{\"keywords\":[\"building\",\"bureau\",\"work\"],\"char\":\"🏢\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"department_store\":{\"keywords\":[\"building\",\"shopping\",\"mall\"],\"char\":\"🏬\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"post_office\":{\"keywords\":[\"building\",\"envelope\",\"communication\"],\"char\":\"🏣\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"european_post_office\":{\"keywords\":[\"building\",\"email\"],\"char\":\"🏤\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"hospital\":{\"keywords\":[\"building\",\"health\",\"surgery\",\"doctor\"],\"char\":\"🏥\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bank\":{\"keywords\":[\"building\",\"money\",\"sales\",\"cash\",\"business\",\"enterprise\"],\"char\":\"🏦\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"hotel\":{\"keywords\":[\"building\",\"accomodation\",\"checkin\"],\"char\":\"🏨\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"convenience_store\":{\"keywords\":[\"building\",\"shopping\",\"groceries\"],\"char\":\"🏪\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"school\":{\"keywords\":[\"building\",\"student\",\"education\",\"learn\",\"teach\"],\"char\":\"🏫\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"love_hotel\":{\"keywords\":[\"like\",\"affection\",\"dating\"],\"char\":\"🏩\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"wedding\":{\"keywords\":[\"love\",\"like\",\"affection\",\"couple\",\"marriage\",\"bride\",\"groom\"],\"char\":\"💒\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"classical_building\":{\"keywords\":[\"art\",\"culture\",\"history\"],\"char\":\"🏛\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"church\":{\"keywords\":[\"building\",\"religion\",\"christ\"],\"char\":\"⛪\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mosque\":{\"keywords\":[\"islam\",\"worship\",\"minaret\"],\"char\":\"🕌\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"synagogue\":{\"keywords\":[\"judaism\",\"worship\",\"temple\",\"jewish\"],\"char\":\"🕍\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"kaaba\":{\"keywords\":[\"mecca\",\"mosque\",\"islam\"],\"char\":\"🕋\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"shinto_shrine\":{\"keywords\":[\"temple\",\"japan\",\"kyoto\"],\"char\":\"⛩\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"watch\":{\"keywords\":[\"time\",\"accessories\"],\"char\":\"⌚\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"iphone\":{\"keywords\":[\"technology\",\"apple\",\"gadgets\",\"dial\"],\"char\":\"📱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"calling\":{\"keywords\":[\"iphone\",\"incoming\"],\"char\":\"📲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"computer\":{\"keywords\":[\"technology\",\"laptop\",\"screen\",\"display\",\"monitor\"],\"char\":\"💻\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"keyboard\":{\"keywords\":[\"technology\",\"computer\",\"type\",\"input\",\"text\"],\"char\":\"⌨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"desktop_computer\":{\"keywords\":[\"technology\",\"computing\",\"screen\"],\"char\":\"🖥\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"printer\":{\"keywords\":[\"paper\",\"ink\"],\"char\":\"🖨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"computer_mouse\":{\"keywords\":[\"click\"],\"char\":\"🖱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"trackball\":{\"keywords\":[\"technology\",\"trackpad\"],\"char\":\"🖲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"joystick\":{\"keywords\":[\"game\",\"play\"],\"char\":\"🕹\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"clamp\":{\"keywords\":[\"tool\"],\"char\":\"🗜\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"minidisc\":{\"keywords\":[\"technology\",\"record\",\"data\",\"disk\",\"90s\"],\"char\":\"💽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"floppy_disk\":{\"keywords\":[\"oldschool\",\"technology\",\"save\",\"90s\",\"80s\"],\"char\":\"💾\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"cd\":{\"keywords\":[\"technology\",\"dvd\",\"disk\",\"disc\",\"90s\"],\"char\":\"💿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dvd\":{\"keywords\":[\"cd\",\"disk\",\"disc\"],\"char\":\"📀\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"vhs\":{\"keywords\":[\"record\",\"video\",\"oldschool\",\"90s\",\"80s\"],\"char\":\"📼\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"camera\":{\"keywords\":[\"gadgets\",\"photography\"],\"char\":\"📷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"camera_flash\":{\"keywords\":[\"photography\",\"gadgets\"],\"char\":\"📸\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"video_camera\":{\"keywords\":[\"film\",\"record\"],\"char\":\"📹\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"movie_camera\":{\"keywords\":[\"film\",\"record\"],\"char\":\"🎥\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"film_projector\":{\"keywords\":[\"video\",\"tape\",\"record\",\"movie\"],\"char\":\"📽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"film_strip\":{\"keywords\":[\"movie\"],\"char\":\"🎞\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"telephone_receiver\":{\"keywords\":[\"technology\",\"communication\",\"dial\"],\"char\":\"📞\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"phone\":{\"keywords\":[\"technology\",\"communication\",\"dial\",\"telephone\"],\"char\":\"☎️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pager\":{\"keywords\":[\"bbcall\",\"oldschool\",\"90s\"],\"char\":\"📟\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"fax\":{\"keywords\":[\"communication\",\"technology\"],\"char\":\"📠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"tv\":{\"keywords\":[\"technology\",\"program\",\"oldschool\",\"show\",\"television\"],\"char\":\"📺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"radio\":{\"keywords\":[\"communication\",\"music\",\"podcast\",\"program\"],\"char\":\"📻\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"studio_microphone\":{\"keywords\":[\"sing\",\"recording\",\"artist\",\"talkshow\"],\"char\":\"🎙\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"level_slider\":{\"keywords\":[\"scale\"],\"char\":\"🎚\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"control_knobs\":{\"keywords\":[\"dial\"],\"char\":\"🎛\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"compass\":{\"keywords\":[\"magnetic\",\"navigation\",\"orienteering\"],\"char\":\"🧭\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"stopwatch\":{\"keywords\":[\"time\",\"deadline\"],\"char\":\"⏱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"timer_clock\":{\"keywords\":[\"alarm\"],\"char\":\"⏲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"alarm_clock\":{\"keywords\":[\"time\",\"wake\"],\"char\":\"⏰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mantelpiece_clock\":{\"keywords\":[\"time\"],\"char\":\"🕰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hourglass_flowing_sand\":{\"keywords\":[\"oldschool\",\"time\",\"countdown\"],\"char\":\"⏳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hourglass\":{\"keywords\":[\"time\",\"clock\",\"oldschool\",\"limit\",\"exam\",\"quiz\",\"test\"],\"char\":\"⌛\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"satellite\":{\"keywords\":[\"communication\",\"future\",\"radio\",\"space\"],\"char\":\"📡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"battery\":{\"keywords\":[\"power\",\"energy\",\"sustain\"],\"char\":\"🔋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"electric_plug\":{\"keywords\":[\"charger\",\"power\"],\"char\":\"🔌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bulb\":{\"keywords\":[\"light\",\"electricity\",\"idea\"],\"char\":\"💡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"flashlight\":{\"keywords\":[\"dark\",\"camping\",\"sight\",\"night\"],\"char\":\"🔦\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"candle\":{\"keywords\":[\"fire\",\"wax\"],\"char\":\"🕯\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"fire_extinguisher\":{\"keywords\":[\"quench\"],\"char\":\"🧯\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"wastebasket\":{\"keywords\":[\"bin\",\"trash\",\"rubbish\",\"garbage\",\"toss\"],\"char\":\"🗑\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"oil_drum\":{\"keywords\":[\"barrell\"],\"char\":\"🛢\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"money_with_wings\":{\"keywords\":[\"dollar\",\"bills\",\"payment\",\"sale\"],\"char\":\"💸\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dollar\":{\"keywords\":[\"money\",\"sales\",\"bill\",\"currency\"],\"char\":\"💵\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"yen\":{\"keywords\":[\"money\",\"sales\",\"japanese\",\"dollar\",\"currency\"],\"char\":\"💴\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"euro\":{\"keywords\":[\"money\",\"sales\",\"dollar\",\"currency\"],\"char\":\"💶\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pound\":{\"keywords\":[\"british\",\"sterling\",\"money\",\"sales\",\"bills\",\"uk\",\"england\",\"currency\"],\"char\":\"💷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"moneybag\":{\"keywords\":[\"dollar\",\"payment\",\"coins\",\"sale\"],\"char\":\"💰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"credit_card\":{\"keywords\":[\"money\",\"sales\",\"dollar\",\"bill\",\"payment\",\"shopping\"],\"char\":\"💳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gem\":{\"keywords\":[\"blue\",\"ruby\",\"diamond\",\"jewelry\"],\"char\":\"💎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"balance_scale\":{\"keywords\":[\"law\",\"fairness\",\"weight\"],\"char\":\"⚖\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"toolbox\":{\"keywords\":[\"tools\",\"diy\",\"fix\",\"maintainer\",\"mechanic\"],\"char\":\"🧰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"wrench\":{\"keywords\":[\"tools\",\"diy\",\"ikea\",\"fix\",\"maintainer\"],\"char\":\"🔧\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hammer\":{\"keywords\":[\"tools\",\"build\",\"create\"],\"char\":\"🔨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hammer_and_pick\":{\"keywords\":[\"tools\",\"build\",\"create\"],\"char\":\"⚒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hammer_and_wrench\":{\"keywords\":[\"tools\",\"build\",\"create\"],\"char\":\"🛠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pick\":{\"keywords\":[\"tools\",\"dig\"],\"char\":\"⛏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"nut_and_bolt\":{\"keywords\":[\"handy\",\"tools\",\"fix\"],\"char\":\"🔩\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gear\":{\"keywords\":[\"cog\"],\"char\":\"⚙\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"brick\":{\"keywords\":[\"bricks\"],\"char\":\"🧱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"chains\":{\"keywords\":[\"lock\",\"arrest\"],\"char\":\"⛓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"magnet\":{\"keywords\":[\"attraction\",\"magnetic\"],\"char\":\"🧲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gun\":{\"keywords\":[\"violence\",\"weapon\",\"pistol\",\"revolver\"],\"char\":\"🔫\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bomb\":{\"keywords\":[\"boom\",\"explode\",\"explosion\",\"terrorism\"],\"char\":\"💣\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"firecracker\":{\"keywords\":[\"dynamite\",\"boom\",\"explode\",\"explosion\",\"explosive\"],\"char\":\"🧨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hocho\":{\"keywords\":[\"knife\",\"blade\",\"cutlery\",\"kitchen\",\"weapon\"],\"char\":\"🔪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dagger\":{\"keywords\":[\"weapon\"],\"char\":\"🗡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crossed_swords\":{\"keywords\":[\"weapon\"],\"char\":\"⚔\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shield\":{\"keywords\":[\"protection\",\"security\"],\"char\":\"🛡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"smoking\":{\"keywords\":[\"kills\",\"tobacco\",\"cigarette\",\"joint\",\"smoke\"],\"char\":\"🚬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"skull_and_crossbones\":{\"keywords\":[\"poison\",\"danger\",\"deadly\",\"scary\",\"death\",\"pirate\",\"evil\"],\"char\":\"☠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"coffin\":{\"keywords\":[\"vampire\",\"dead\",\"die\",\"death\",\"rip\",\"graveyard\",\"cemetery\",\"casket\",\"funeral\",\"box\"],\"char\":\"⚰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"funeral_urn\":{\"keywords\":[\"dead\",\"die\",\"death\",\"rip\",\"ashes\"],\"char\":\"⚱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"amphora\":{\"keywords\":[\"vase\",\"jar\"],\"char\":\"🏺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crystal_ball\":{\"keywords\":[\"disco\",\"party\",\"magic\",\"circus\",\"fortune_teller\"],\"char\":\"🔮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"prayer_beads\":{\"keywords\":[\"dhikr\",\"religious\"],\"char\":\"📿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"nazar_amulet\":{\"keywords\":[\"bead\",\"charm\"],\"char\":\"🧿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"barber\":{\"keywords\":[\"hair\",\"salon\",\"style\"],\"char\":\"💈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"alembic\":{\"keywords\":[\"distilling\",\"science\",\"experiment\",\"chemistry\"],\"char\":\"⚗\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"telescope\":{\"keywords\":[\"stars\",\"space\",\"zoom\",\"science\",\"astronomy\"],\"char\":\"🔭\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"microscope\":{\"keywords\":[\"laboratory\",\"experiment\",\"zoomin\",\"science\",\"study\"],\"char\":\"🔬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hole\":{\"keywords\":[\"embarrassing\"],\"char\":\"🕳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pill\":{\"keywords\":[\"health\",\"medicine\",\"doctor\",\"pharmacy\",\"drug\"],\"char\":\"💊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"syringe\":{\"keywords\":[\"health\",\"hospital\",\"drugs\",\"blood\",\"medicine\",\"needle\",\"doctor\",\"nurse\"],\"char\":\"💉\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dna\":{\"keywords\":[\"biologist\",\"genetics\",\"life\"],\"char\":\"🧬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"microbe\":{\"keywords\":[\"amoeba\",\"bacteria\",\"germs\"],\"char\":\"🦠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"petri_dish\":{\"keywords\":[\"bacteria\",\"biology\",\"culture\",\"lab\"],\"char\":\"🧫\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"test_tube\":{\"keywords\":[\"chemistry\",\"experiment\",\"lab\",\"science\"],\"char\":\"🧪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"thermometer\":{\"keywords\":[\"weather\",\"temperature\",\"hot\",\"cold\"],\"char\":\"🌡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"broom\":{\"keywords\":[\"cleaning\",\"sweeping\",\"witch\"],\"char\":\"🧹\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"basket\":{\"keywords\":[\"laundry\"],\"char\":\"🧺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"toilet_paper\":{\"keywords\":[\"roll\"],\"char\":\"🧻\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"label\":{\"keywords\":[\"sale\",\"tag\"],\"char\":\"🏷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bookmark\":{\"keywords\":[\"favorite\",\"label\",\"save\"],\"char\":\"🔖\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"toilet\":{\"keywords\":[\"restroom\",\"wc\",\"washroom\",\"bathroom\",\"potty\"],\"char\":\"🚽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shower\":{\"keywords\":[\"clean\",\"water\",\"bathroom\"],\"char\":\"🚿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bathtub\":{\"keywords\":[\"clean\",\"shower\",\"bathroom\"],\"char\":\"🛁\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"soap\":{\"keywords\":[\"bar\",\"bathing\",\"cleaning\",\"lather\"],\"char\":\"🧼\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"sponge\":{\"keywords\":[\"absorbing\",\"cleaning\",\"porous\"],\"char\":\"🧽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"lotion_bottle\":{\"keywords\":[\"moisturizer\",\"sunscreen\"],\"char\":\"🧴\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"key\":{\"keywords\":[\"lock\",\"door\",\"password\"],\"char\":\"🔑\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"old_key\":{\"keywords\":[\"lock\",\"door\",\"password\"],\"char\":\"🗝\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"couch_and_lamp\":{\"keywords\":[\"read\",\"chill\"],\"char\":\"🛋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"sleeping_bed\":{\"keywords\":[\"bed\",\"rest\"],\"char\":\"🛌\",\"fitzpatrick_scale\":true,\"category\":\"objects\"},\"bed\":{\"keywords\":[\"sleep\",\"rest\"],\"char\":\"🛏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"door\":{\"keywords\":[\"house\",\"entry\",\"exit\"],\"char\":\"🚪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bellhop_bell\":{\"keywords\":[\"service\"],\"char\":\"🛎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"teddy_bear\":{\"keywords\":[\"plush\",\"stuffed\"],\"char\":\"🧸\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"framed_picture\":{\"keywords\":[\"photography\"],\"char\":\"🖼\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"world_map\":{\"keywords\":[\"location\",\"direction\"],\"char\":\"🗺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"parasol_on_ground\":{\"keywords\":[\"weather\",\"summer\"],\"char\":\"⛱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"moyai\":{\"keywords\":[\"rock\",\"easter island\",\"moai\"],\"char\":\"🗿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shopping\":{\"keywords\":[\"mall\",\"buy\",\"purchase\"],\"char\":\"🛍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shopping_cart\":{\"keywords\":[\"trolley\"],\"char\":\"🛒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"balloon\":{\"keywords\":[\"party\",\"celebration\",\"birthday\",\"circus\"],\"char\":\"🎈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"flags\":{\"keywords\":[\"fish\",\"japanese\",\"koinobori\",\"carp\",\"banner\"],\"char\":\"🎏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"ribbon\":{\"keywords\":[\"decoration\",\"pink\",\"girl\",\"bowtie\"],\"char\":\"🎀\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gift\":{\"keywords\":[\"present\",\"birthday\",\"christmas\",\"xmas\"],\"char\":\"🎁\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"confetti_ball\":{\"keywords\":[\"festival\",\"party\",\"birthday\",\"circus\"],\"char\":\"🎊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"tada\":{\"keywords\":[\"party\",\"congratulations\",\"birthday\",\"magic\",\"circus\",\"celebration\"],\"char\":\"🎉\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dolls\":{\"keywords\":[\"japanese\",\"toy\",\"kimono\"],\"char\":\"🎎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"wind_chime\":{\"keywords\":[\"nature\",\"ding\",\"spring\",\"bell\"],\"char\":\"🎐\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crossed_flags\":{\"keywords\":[\"japanese\",\"nation\",\"country\",\"border\"],\"char\":\"🎌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"izakaya_lantern\":{\"keywords\":[\"light\",\"paper\",\"halloween\",\"spooky\"],\"char\":\"🏮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"red_envelope\":{\"keywords\":[\"gift\"],\"char\":\"🧧\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"email\":{\"keywords\":[\"letter\",\"postal\",\"inbox\",\"communication\"],\"char\":\"✉️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"envelope_with_arrow\":{\"keywords\":[\"email\",\"communication\"],\"char\":\"📩\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"incoming_envelope\":{\"keywords\":[\"email\",\"inbox\"],\"char\":\"📨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"e-mail\":{\"keywords\":[\"communication\",\"inbox\"],\"char\":\"📧\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"love_letter\":{\"keywords\":[\"email\",\"like\",\"affection\",\"envelope\",\"valentines\"],\"char\":\"💌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"postbox\":{\"keywords\":[\"email\",\"letter\",\"envelope\"],\"char\":\"📮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox_closed\":{\"keywords\":[\"email\",\"communication\",\"inbox\"],\"char\":\"📪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox\":{\"keywords\":[\"email\",\"inbox\",\"communication\"],\"char\":\"📫\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox_with_mail\":{\"keywords\":[\"email\",\"inbox\",\"communication\"],\"char\":\"📬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox_with_no_mail\":{\"keywords\":[\"email\",\"inbox\"],\"char\":\"📭\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"package\":{\"keywords\":[\"mail\",\"gift\",\"cardboard\",\"box\",\"moving\"],\"char\":\"📦\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"postal_horn\":{\"keywords\":[\"instrument\",\"music\"],\"char\":\"📯\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"inbox_tray\":{\"keywords\":[\"email\",\"documents\"],\"char\":\"📥\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"outbox_tray\":{\"keywords\":[\"inbox\",\"email\"],\"char\":\"📤\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"scroll\":{\"keywords\":[\"documents\",\"ancient\",\"history\",\"paper\"],\"char\":\"📜\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"page_with_curl\":{\"keywords\":[\"documents\",\"office\",\"paper\"],\"char\":\"📃\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bookmark_tabs\":{\"keywords\":[\"favorite\",\"save\",\"order\",\"tidy\"],\"char\":\"📑\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"receipt\":{\"keywords\":[\"accounting\",\"expenses\"],\"char\":\"🧾\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bar_chart\":{\"keywords\":[\"graph\",\"presentation\",\"stats\"],\"char\":\"📊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"chart_with_upwards_trend\":{\"keywords\":[\"graph\",\"presentation\",\"stats\",\"recovery\",\"business\",\"economics\",\"money\",\"sales\",\"good\",\"success\"],\"char\":\"📈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"chart_with_downwards_trend\":{\"keywords\":[\"graph\",\"presentation\",\"stats\",\"recession\",\"business\",\"economics\",\"money\",\"sales\",\"bad\",\"failure\"],\"char\":\"📉\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"page_facing_up\":{\"keywords\":[\"documents\",\"office\",\"paper\",\"information\"],\"char\":\"📄\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"date\":{\"keywords\":[\"calendar\",\"schedule\"],\"char\":\"📅\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"calendar\":{\"keywords\":[\"schedule\",\"date\",\"planning\"],\"char\":\"📆\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"spiral_calendar\":{\"keywords\":[\"date\",\"schedule\",\"planning\"],\"char\":\"🗓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"card_index\":{\"keywords\":[\"business\",\"stationery\"],\"char\":\"📇\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"card_file_box\":{\"keywords\":[\"business\",\"stationery\"],\"char\":\"🗃\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"ballot_box\":{\"keywords\":[\"election\",\"vote\"],\"char\":\"🗳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"file_cabinet\":{\"keywords\":[\"filing\",\"organizing\"],\"char\":\"🗄\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"clipboard\":{\"keywords\":[\"stationery\",\"documents\"],\"char\":\"📋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"spiral_notepad\":{\"keywords\":[\"memo\",\"stationery\"],\"char\":\"🗒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"file_folder\":{\"keywords\":[\"documents\",\"business\",\"office\"],\"char\":\"📁\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"open_file_folder\":{\"keywords\":[\"documents\",\"load\"],\"char\":\"📂\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"card_index_dividers\":{\"keywords\":[\"organizing\",\"business\",\"stationery\"],\"char\":\"🗂\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"newspaper_roll\":{\"keywords\":[\"press\",\"headline\"],\"char\":\"🗞\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"newspaper\":{\"keywords\":[\"press\",\"headline\"],\"char\":\"📰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"notebook\":{\"keywords\":[\"stationery\",\"record\",\"notes\",\"paper\",\"study\"],\"char\":\"📓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"closed_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"textbook\",\"learn\"],\"char\":\"📕\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"green_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"study\"],\"char\":\"📗\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"blue_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"learn\",\"study\"],\"char\":\"📘\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"orange_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"textbook\",\"study\"],\"char\":\"📙\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"notebook_with_decorative_cover\":{\"keywords\":[\"classroom\",\"notes\",\"record\",\"paper\",\"study\"],\"char\":\"📔\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"ledger\":{\"keywords\":[\"notes\",\"paper\"],\"char\":\"📒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"books\":{\"keywords\":[\"literature\",\"library\",\"study\"],\"char\":\"📚\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"open_book\":{\"keywords\":[\"book\",\"read\",\"library\",\"knowledge\",\"literature\",\"learn\",\"study\"],\"char\":\"📖\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"safety_pin\":{\"keywords\":[\"diaper\"],\"char\":\"🧷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"link\":{\"keywords\":[\"rings\",\"url\"],\"char\":\"🔗\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"paperclip\":{\"keywords\":[\"documents\",\"stationery\"],\"char\":\"📎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"paperclips\":{\"keywords\":[\"documents\",\"stationery\"],\"char\":\"🖇\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"scissors\":{\"keywords\":[\"stationery\",\"cut\"],\"char\":\"✂️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"triangular_ruler\":{\"keywords\":[\"stationery\",\"math\",\"architect\",\"sketch\"],\"char\":\"📐\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"straight_ruler\":{\"keywords\":[\"stationery\",\"calculate\",\"length\",\"math\",\"school\",\"drawing\",\"architect\",\"sketch\"],\"char\":\"📏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"abacus\":{\"keywords\":[\"calculation\"],\"char\":\"🧮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pushpin\":{\"keywords\":[\"stationery\",\"mark\",\"here\"],\"char\":\"📌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"round_pushpin\":{\"keywords\":[\"stationery\",\"location\",\"map\",\"here\"],\"char\":\"📍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"triangular_flag_on_post\":{\"keywords\":[\"mark\",\"milestone\",\"place\"],\"char\":\"🚩\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"white_flag\":{\"keywords\":[\"losing\",\"loser\",\"lost\",\"surrender\",\"give up\",\"fail\"],\"char\":\"🏳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"black_flag\":{\"keywords\":[\"pirate\"],\"char\":\"🏴\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"rainbow_flag\":{\"keywords\":[\"flag\",\"rainbow\",\"pride\",\"gay\",\"lgbt\",\"glbt\",\"queer\",\"homosexual\",\"lesbian\",\"bisexual\",\"transgender\"],\"char\":\"🏳️‍🌈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"closed_lock_with_key\":{\"keywords\":[\"security\",\"privacy\"],\"char\":\"🔐\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"lock\":{\"keywords\":[\"security\",\"password\",\"padlock\"],\"char\":\"🔒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"unlock\":{\"keywords\":[\"privacy\",\"security\"],\"char\":\"🔓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"lock_with_ink_pen\":{\"keywords\":[\"security\",\"secret\"],\"char\":\"🔏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pen\":{\"keywords\":[\"stationery\",\"writing\",\"write\"],\"char\":\"🖊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"fountain_pen\":{\"keywords\":[\"stationery\",\"writing\",\"write\"],\"char\":\"🖋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"black_nib\":{\"keywords\":[\"pen\",\"stationery\",\"writing\",\"write\"],\"char\":\"✒️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"memo\":{\"keywords\":[\"write\",\"documents\",\"stationery\",\"pencil\",\"paper\",\"writing\",\"legal\",\"exam\",\"quiz\",\"test\",\"study\",\"compose\"],\"char\":\"📝\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pencil2\":{\"keywords\":[\"stationery\",\"write\",\"paper\",\"writing\",\"school\",\"study\"],\"char\":\"✏️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crayon\":{\"keywords\":[\"drawing\",\"creativity\"],\"char\":\"🖍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"paintbrush\":{\"keywords\":[\"drawing\",\"creativity\",\"art\"],\"char\":\"🖌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mag\":{\"keywords\":[\"search\",\"zoom\",\"find\",\"detective\"],\"char\":\"🔍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mag_right\":{\"keywords\":[\"search\",\"zoom\",\"find\",\"detective\"],\"char\":\"🔎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"heart\":{\"keywords\":[\"love\",\"like\",\"valentines\"],\"char\":\"❤️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"orange_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"🧡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"yellow_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"green_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"blue_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"purple_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_heart\":{\"keywords\":[\"evil\"],\"char\":\"🖤\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"broken_heart\":{\"keywords\":[\"sad\",\"sorry\",\"break\",\"heart\",\"heartbreak\"],\"char\":\"💔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_heart_exclamation\":{\"keywords\":[\"decoration\",\"love\"],\"char\":\"❣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"two_hearts\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\",\"heart\"],\"char\":\"💕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"revolving_hearts\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💞\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heartbeat\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\",\"pink\",\"heart\"],\"char\":\"💓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heartpulse\":{\"keywords\":[\"like\",\"love\",\"affection\",\"valentines\",\"pink\"],\"char\":\"💗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sparkling_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cupid\":{\"keywords\":[\"love\",\"like\",\"heart\",\"affection\",\"valentines\"],\"char\":\"💘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"gift_heart\":{\"keywords\":[\"love\",\"valentines\"],\"char\":\"💝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heart_decoration\":{\"keywords\":[\"purple-square\",\"love\",\"like\"],\"char\":\"💟\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"peace_symbol\":{\"keywords\":[\"hippie\"],\"char\":\"☮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"latin_cross\":{\"keywords\":[\"christianity\"],\"char\":\"✝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"star_and_crescent\":{\"keywords\":[\"islam\"],\"char\":\"☪\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"om\":{\"keywords\":[\"hinduism\",\"buddhism\",\"sikhism\",\"jainism\"],\"char\":\"🕉\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wheel_of_dharma\":{\"keywords\":[\"hinduism\",\"buddhism\",\"sikhism\",\"jainism\"],\"char\":\"☸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"star_of_david\":{\"keywords\":[\"judaism\"],\"char\":\"✡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"six_pointed_star\":{\"keywords\":[\"purple-square\",\"religion\",\"jewish\",\"hexagram\"],\"char\":\"🔯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"menorah\":{\"keywords\":[\"hanukkah\",\"candles\",\"jewish\"],\"char\":\"🕎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"yin_yang\":{\"keywords\":[\"balance\"],\"char\":\"☯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"orthodox_cross\":{\"keywords\":[\"suppedaneum\",\"religion\"],\"char\":\"☦\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"place_of_worship\":{\"keywords\":[\"religion\",\"church\",\"temple\",\"prayer\"],\"char\":\"🛐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ophiuchus\":{\"keywords\":[\"sign\",\"purple-square\",\"constellation\",\"astrology\"],\"char\":\"⛎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"aries\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♈\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"taurus\":{\"keywords\":[\"purple-square\",\"sign\",\"zodiac\",\"astrology\"],\"char\":\"♉\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"gemini\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♊\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cancer\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♋\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"leo\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♌\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"virgo\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♍\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"libra\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"scorpius\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\",\"scorpio\"],\"char\":\"♏\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sagittarius\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"capricorn\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"aquarius\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♒\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"pisces\":{\"keywords\":[\"purple-square\",\"sign\",\"zodiac\",\"astrology\"],\"char\":\"♓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"id\":{\"keywords\":[\"purple-square\",\"words\"],\"char\":\"🆔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"atom_symbol\":{\"keywords\":[\"science\",\"physics\",\"chemistry\"],\"char\":\"⚛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7a7a\":{\"keywords\":[\"kanji\",\"japanese\",\"chinese\",\"empty\",\"sky\",\"blue-square\"],\"char\":\"🈳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u5272\":{\"keywords\":[\"cut\",\"divide\",\"chinese\",\"kanji\",\"pink-square\"],\"char\":\"🈹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"radioactive\":{\"keywords\":[\"nuclear\",\"danger\"],\"char\":\"☢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"biohazard\":{\"keywords\":[\"danger\"],\"char\":\"☣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mobile_phone_off\":{\"keywords\":[\"mute\",\"orange-square\",\"silence\",\"quiet\"],\"char\":\"📴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"vibration_mode\":{\"keywords\":[\"orange-square\",\"phone\"],\"char\":\"📳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6709\":{\"keywords\":[\"orange-square\",\"chinese\",\"have\",\"kanji\"],\"char\":\"🈶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7121\":{\"keywords\":[\"nothing\",\"chinese\",\"kanji\",\"japanese\",\"orange-square\"],\"char\":\"🈚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7533\":{\"keywords\":[\"chinese\",\"japanese\",\"kanji\",\"orange-square\"],\"char\":\"🈸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u55b6\":{\"keywords\":[\"japanese\",\"opening hours\",\"orange-square\"],\"char\":\"🈺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6708\":{\"keywords\":[\"chinese\",\"month\",\"moon\",\"japanese\",\"orange-square\",\"kanji\"],\"char\":\"🈷️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eight_pointed_black_star\":{\"keywords\":[\"orange-square\",\"shape\",\"polygon\"],\"char\":\"✴️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"vs\":{\"keywords\":[\"words\",\"orange-square\"],\"char\":\"🆚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"accept\":{\"keywords\":[\"ok\",\"good\",\"chinese\",\"kanji\",\"agree\",\"yes\",\"orange-circle\"],\"char\":\"🉑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_flower\":{\"keywords\":[\"japanese\",\"spring\"],\"char\":\"💮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ideograph_advantage\":{\"keywords\":[\"chinese\",\"kanji\",\"obtain\",\"get\",\"circle\"],\"char\":\"🉐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"secret\":{\"keywords\":[\"privacy\",\"chinese\",\"sshh\",\"kanji\",\"red-circle\"],\"char\":\"㊙️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"congratulations\":{\"keywords\":[\"chinese\",\"kanji\",\"japanese\",\"red-circle\"],\"char\":\"㊗️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u5408\":{\"keywords\":[\"japanese\",\"chinese\",\"join\",\"kanji\",\"red-square\"],\"char\":\"🈴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6e80\":{\"keywords\":[\"full\",\"chinese\",\"japanese\",\"red-square\",\"kanji\"],\"char\":\"🈵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7981\":{\"keywords\":[\"kanji\",\"japanese\",\"chinese\",\"forbidden\",\"limit\",\"restricted\",\"red-square\"],\"char\":\"🈲\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"a\":{\"keywords\":[\"red-square\",\"alphabet\",\"letter\"],\"char\":\"🅰️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"b\":{\"keywords\":[\"red-square\",\"alphabet\",\"letter\"],\"char\":\"🅱️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ab\":{\"keywords\":[\"red-square\",\"alphabet\"],\"char\":\"🆎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cl\":{\"keywords\":[\"alphabet\",\"words\",\"red-square\"],\"char\":\"🆑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"o2\":{\"keywords\":[\"alphabet\",\"red-square\",\"letter\"],\"char\":\"🅾️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sos\":{\"keywords\":[\"help\",\"red-square\",\"words\",\"emergency\",\"911\"],\"char\":\"🆘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_entry\":{\"keywords\":[\"limit\",\"security\",\"privacy\",\"bad\",\"denied\",\"stop\",\"circle\"],\"char\":\"⛔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"name_badge\":{\"keywords\":[\"fire\",\"forbid\"],\"char\":\"📛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_entry_sign\":{\"keywords\":[\"forbid\",\"stop\",\"limit\",\"denied\",\"disallow\",\"circle\"],\"char\":\"🚫\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"x\":{\"keywords\":[\"no\",\"delete\",\"remove\",\"cancel\",\"red\"],\"char\":\"❌\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"o\":{\"keywords\":[\"circle\",\"round\"],\"char\":\"⭕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"stop_sign\":{\"keywords\":[\"stop\"],\"char\":\"🛑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"anger\":{\"keywords\":[\"angry\",\"mad\"],\"char\":\"💢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"hotsprings\":{\"keywords\":[\"bath\",\"warm\",\"relax\"],\"char\":\"♨️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_pedestrians\":{\"keywords\":[\"rules\",\"crossing\",\"walking\",\"circle\"],\"char\":\"🚷\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"do_not_litter\":{\"keywords\":[\"trash\",\"bin\",\"garbage\",\"circle\"],\"char\":\"🚯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_bicycles\":{\"keywords\":[\"cyclist\",\"prohibited\",\"circle\"],\"char\":\"🚳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"non-potable_water\":{\"keywords\":[\"drink\",\"faucet\",\"tap\",\"circle\"],\"char\":\"🚱\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"underage\":{\"keywords\":[\"18\",\"drink\",\"pub\",\"night\",\"minor\",\"circle\"],\"char\":\"🔞\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_mobile_phones\":{\"keywords\":[\"iphone\",\"mute\",\"circle\"],\"char\":\"📵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"exclamation\":{\"keywords\":[\"heavy_exclamation_mark\",\"danger\",\"surprise\",\"punctuation\",\"wow\",\"warning\"],\"char\":\"❗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"grey_exclamation\":{\"keywords\":[\"surprise\",\"punctuation\",\"gray\",\"wow\",\"warning\"],\"char\":\"❕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"question\":{\"keywords\":[\"doubt\",\"confused\"],\"char\":\"❓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"grey_question\":{\"keywords\":[\"doubts\",\"gray\",\"huh\",\"confused\"],\"char\":\"❔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"bangbang\":{\"keywords\":[\"exclamation\",\"surprise\"],\"char\":\"‼️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"interrobang\":{\"keywords\":[\"wat\",\"punctuation\",\"surprise\"],\"char\":\"⁉️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"low_brightness\":{\"keywords\":[\"sun\",\"afternoon\",\"warm\",\"summer\"],\"char\":\"🔅\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"high_brightness\":{\"keywords\":[\"sun\",\"light\"],\"char\":\"🔆\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"trident\":{\"keywords\":[\"weapon\",\"spear\"],\"char\":\"🔱\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"fleur_de_lis\":{\"keywords\":[\"decorative\",\"scout\"],\"char\":\"⚜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"part_alternation_mark\":{\"keywords\":[\"graph\",\"presentation\",\"stats\",\"business\",\"economics\",\"bad\"],\"char\":\"〽️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"warning\":{\"keywords\":[\"exclamation\",\"wip\",\"alert\",\"error\",\"problem\",\"issue\"],\"char\":\"⚠️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"children_crossing\":{\"keywords\":[\"school\",\"warning\",\"danger\",\"sign\",\"driving\",\"yellow-diamond\"],\"char\":\"🚸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"beginner\":{\"keywords\":[\"badge\",\"shield\"],\"char\":\"🔰\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"recycle\":{\"keywords\":[\"arrow\",\"environment\",\"garbage\",\"trash\"],\"char\":\"♻️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6307\":{\"keywords\":[\"chinese\",\"point\",\"green-square\",\"kanji\"],\"char\":\"🈯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"chart\":{\"keywords\":[\"green-square\",\"graph\",\"presentation\",\"stats\"],\"char\":\"💹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sparkle\":{\"keywords\":[\"stars\",\"green-square\",\"awesome\",\"good\",\"fireworks\"],\"char\":\"❇️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eight_spoked_asterisk\":{\"keywords\":[\"star\",\"sparkle\",\"green-square\"],\"char\":\"✳️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"negative_squared_cross_mark\":{\"keywords\":[\"x\",\"green-square\",\"no\",\"deny\"],\"char\":\"❎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_check_mark\":{\"keywords\":[\"green-square\",\"ok\",\"agree\",\"vote\",\"election\",\"answer\",\"tick\"],\"char\":\"✅\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"diamond_shape_with_a_dot_inside\":{\"keywords\":[\"jewel\",\"blue\",\"gem\",\"crystal\",\"fancy\"],\"char\":\"💠\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cyclone\":{\"keywords\":[\"weather\",\"swirl\",\"blue\",\"cloud\",\"vortex\",\"spiral\",\"whirlpool\",\"spin\",\"tornado\",\"hurricane\",\"typhoon\"],\"char\":\"🌀\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"loop\":{\"keywords\":[\"tape\",\"cassette\"],\"char\":\"➿\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"globe_with_meridians\":{\"keywords\":[\"earth\",\"international\",\"world\",\"internet\",\"interweb\",\"i18n\"],\"char\":\"🌐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"m\":{\"keywords\":[\"alphabet\",\"blue-circle\",\"letter\"],\"char\":\"Ⓜ️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"atm\":{\"keywords\":[\"money\",\"sales\",\"cash\",\"blue-square\",\"payment\",\"bank\"],\"char\":\"🏧\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sa\":{\"keywords\":[\"japanese\",\"blue-square\",\"katakana\"],\"char\":\"🈂️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"passport_control\":{\"keywords\":[\"custom\",\"blue-square\"],\"char\":\"🛂\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"customs\":{\"keywords\":[\"passport\",\"border\",\"blue-square\"],\"char\":\"🛃\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"baggage_claim\":{\"keywords\":[\"blue-square\",\"airport\",\"transport\"],\"char\":\"🛄\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"left_luggage\":{\"keywords\":[\"blue-square\",\"travel\"],\"char\":\"🛅\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wheelchair\":{\"keywords\":[\"blue-square\",\"disabled\",\"a11y\",\"accessibility\"],\"char\":\"♿\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_smoking\":{\"keywords\":[\"cigarette\",\"blue-square\",\"smell\",\"smoke\"],\"char\":\"🚭\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wc\":{\"keywords\":[\"toilet\",\"restroom\",\"blue-square\"],\"char\":\"🚾\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"parking\":{\"keywords\":[\"cars\",\"blue-square\",\"alphabet\",\"letter\"],\"char\":\"🅿️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"potable_water\":{\"keywords\":[\"blue-square\",\"liquid\",\"restroom\",\"cleaning\",\"faucet\"],\"char\":\"🚰\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mens\":{\"keywords\":[\"toilet\",\"restroom\",\"wc\",\"blue-square\",\"gender\",\"male\"],\"char\":\"🚹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"womens\":{\"keywords\":[\"purple-square\",\"woman\",\"female\",\"toilet\",\"loo\",\"restroom\",\"gender\"],\"char\":\"🚺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"baby_symbol\":{\"keywords\":[\"orange-square\",\"child\"],\"char\":\"🚼\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"restroom\":{\"keywords\":[\"blue-square\",\"toilet\",\"refresh\",\"wc\",\"gender\"],\"char\":\"🚻\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"put_litter_in_its_place\":{\"keywords\":[\"blue-square\",\"sign\",\"human\",\"info\"],\"char\":\"🚮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cinema\":{\"keywords\":[\"blue-square\",\"record\",\"film\",\"movie\",\"curtain\",\"stage\",\"theater\"],\"char\":\"🎦\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"signal_strength\":{\"keywords\":[\"blue-square\",\"reception\",\"phone\",\"internet\",\"connection\",\"wifi\",\"bluetooth\",\"bars\"],\"char\":\"📶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"koko\":{\"keywords\":[\"blue-square\",\"here\",\"katakana\",\"japanese\",\"destination\"],\"char\":\"🈁\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ng\":{\"keywords\":[\"blue-square\",\"words\",\"shape\",\"icon\"],\"char\":\"🆖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ok\":{\"keywords\":[\"good\",\"agree\",\"yes\",\"blue-square\"],\"char\":\"🆗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"up\":{\"keywords\":[\"blue-square\",\"above\",\"high\"],\"char\":\"🆙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cool\":{\"keywords\":[\"words\",\"blue-square\"],\"char\":\"🆒\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"new\":{\"keywords\":[\"blue-square\",\"words\",\"start\"],\"char\":\"🆕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"free\":{\"keywords\":[\"blue-square\",\"words\"],\"char\":\"🆓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"zero\":{\"keywords\":[\"0\",\"numbers\",\"blue-square\",\"null\"],\"char\":\"0️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"one\":{\"keywords\":[\"blue-square\",\"numbers\",\"1\"],\"char\":\"1️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"two\":{\"keywords\":[\"numbers\",\"2\",\"prime\",\"blue-square\"],\"char\":\"2️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"three\":{\"keywords\":[\"3\",\"numbers\",\"prime\",\"blue-square\"],\"char\":\"3️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"four\":{\"keywords\":[\"4\",\"numbers\",\"blue-square\"],\"char\":\"4️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"five\":{\"keywords\":[\"5\",\"numbers\",\"blue-square\",\"prime\"],\"char\":\"5️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"six\":{\"keywords\":[\"6\",\"numbers\",\"blue-square\"],\"char\":\"6️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"seven\":{\"keywords\":[\"7\",\"numbers\",\"blue-square\",\"prime\"],\"char\":\"7️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eight\":{\"keywords\":[\"8\",\"blue-square\",\"numbers\"],\"char\":\"8️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"nine\":{\"keywords\":[\"blue-square\",\"numbers\",\"9\"],\"char\":\"9️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"keycap_ten\":{\"keywords\":[\"numbers\",\"10\",\"blue-square\"],\"char\":\"🔟\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"asterisk\":{\"keywords\":[\"star\",\"keycap\"],\"char\":\"*⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eject_button\":{\"keywords\":[\"blue-square\"],\"char\":\"⏏️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_forward\":{\"keywords\":[\"blue-square\",\"right\",\"direction\",\"play\"],\"char\":\"▶️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"pause_button\":{\"keywords\":[\"pause\",\"blue-square\"],\"char\":\"⏸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"next_track_button\":{\"keywords\":[\"forward\",\"next\",\"blue-square\"],\"char\":\"⏭\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"stop_button\":{\"keywords\":[\"blue-square\"],\"char\":\"⏹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"record_button\":{\"keywords\":[\"blue-square\"],\"char\":\"⏺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"play_or_pause_button\":{\"keywords\":[\"blue-square\",\"play\",\"pause\"],\"char\":\"⏯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"previous_track_button\":{\"keywords\":[\"backward\"],\"char\":\"⏮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"fast_forward\":{\"keywords\":[\"blue-square\",\"play\",\"speed\",\"continue\"],\"char\":\"⏩\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"rewind\":{\"keywords\":[\"play\",\"blue-square\"],\"char\":\"⏪\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"twisted_rightwards_arrows\":{\"keywords\":[\"blue-square\",\"shuffle\",\"music\",\"random\"],\"char\":\"🔀\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"repeat\":{\"keywords\":[\"loop\",\"record\"],\"char\":\"🔁\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"repeat_one\":{\"keywords\":[\"blue-square\",\"loop\"],\"char\":\"🔂\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_backward\":{\"keywords\":[\"blue-square\",\"left\",\"direction\"],\"char\":\"◀️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_up_small\":{\"keywords\":[\"blue-square\",\"triangle\",\"direction\",\"point\",\"forward\",\"top\"],\"char\":\"🔼\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_down_small\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"🔽\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_double_up\":{\"keywords\":[\"blue-square\",\"direction\",\"top\"],\"char\":\"⏫\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_double_down\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"⏬\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_right\":{\"keywords\":[\"blue-square\",\"next\"],\"char\":\"➡️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_left\":{\"keywords\":[\"blue-square\",\"previous\",\"back\"],\"char\":\"⬅️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_up\":{\"keywords\":[\"blue-square\",\"continue\",\"top\",\"direction\"],\"char\":\"⬆️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_down\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"⬇️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_upper_right\":{\"keywords\":[\"blue-square\",\"point\",\"direction\",\"diagonal\",\"northeast\"],\"char\":\"↗️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_lower_right\":{\"keywords\":[\"blue-square\",\"direction\",\"diagonal\",\"southeast\"],\"char\":\"↘️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_lower_left\":{\"keywords\":[\"blue-square\",\"direction\",\"diagonal\",\"southwest\"],\"char\":\"↙️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_upper_left\":{\"keywords\":[\"blue-square\",\"point\",\"direction\",\"diagonal\",\"northwest\"],\"char\":\"↖️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_up_down\":{\"keywords\":[\"blue-square\",\"direction\",\"way\",\"vertical\"],\"char\":\"↕️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"left_right_arrow\":{\"keywords\":[\"shape\",\"direction\",\"horizontal\",\"sideways\"],\"char\":\"↔️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrows_counterclockwise\":{\"keywords\":[\"blue-square\",\"sync\",\"cycle\"],\"char\":\"🔄\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_right_hook\":{\"keywords\":[\"blue-square\",\"return\",\"rotate\",\"direction\"],\"char\":\"↪️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"leftwards_arrow_with_hook\":{\"keywords\":[\"back\",\"return\",\"blue-square\",\"undo\",\"enter\"],\"char\":\"↩️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_heading_up\":{\"keywords\":[\"blue-square\",\"direction\",\"top\"],\"char\":\"⤴️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_heading_down\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"⤵️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"hash\":{\"keywords\":[\"symbol\",\"blue-square\",\"twitter\"],\"char\":\"#️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"information_source\":{\"keywords\":[\"blue-square\",\"alphabet\",\"letter\"],\"char\":\"ℹ️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"abc\":{\"keywords\":[\"blue-square\",\"alphabet\"],\"char\":\"🔤\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"abcd\":{\"keywords\":[\"blue-square\",\"alphabet\"],\"char\":\"🔡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"capital_abcd\":{\"keywords\":[\"alphabet\",\"words\",\"blue-square\"],\"char\":\"🔠\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"symbols\":{\"keywords\":[\"blue-square\",\"music\",\"note\",\"ampersand\",\"percent\",\"glyphs\",\"characters\"],\"char\":\"🔣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"musical_note\":{\"keywords\":[\"score\",\"tone\",\"sound\"],\"char\":\"🎵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"notes\":{\"keywords\":[\"music\",\"score\"],\"char\":\"🎶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wavy_dash\":{\"keywords\":[\"draw\",\"line\",\"moustache\",\"mustache\",\"squiggle\",\"scribble\"],\"char\":\"〰️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"curly_loop\":{\"keywords\":[\"scribble\",\"draw\",\"shape\",\"squiggle\"],\"char\":\"➰\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_check_mark\":{\"keywords\":[\"ok\",\"nike\",\"answer\",\"yes\",\"tick\"],\"char\":\"✔️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrows_clockwise\":{\"keywords\":[\"sync\",\"cycle\",\"round\",\"repeat\"],\"char\":\"🔃\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_plus_sign\":{\"keywords\":[\"math\",\"calculation\",\"addition\",\"more\",\"increase\"],\"char\":\"➕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_minus_sign\":{\"keywords\":[\"math\",\"calculation\",\"subtract\",\"less\"],\"char\":\"➖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_division_sign\":{\"keywords\":[\"divide\",\"math\",\"calculation\"],\"char\":\"➗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_multiplication_x\":{\"keywords\":[\"math\",\"calculation\"],\"char\":\"✖️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"infinity\":{\"keywords\":[\"forever\"],\"char\":\"♾\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_dollar_sign\":{\"keywords\":[\"money\",\"sales\",\"payment\",\"currency\",\"buck\"],\"char\":\"💲\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"currency_exchange\":{\"keywords\":[\"money\",\"sales\",\"dollar\",\"travel\"],\"char\":\"💱\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"copyright\":{\"keywords\":[\"ip\",\"license\",\"circle\",\"law\",\"legal\"],\"char\":\"©️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"registered\":{\"keywords\":[\"alphabet\",\"circle\"],\"char\":\"®️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"tm\":{\"keywords\":[\"trademark\",\"brand\",\"law\",\"legal\"],\"char\":\"™️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"end\":{\"keywords\":[\"words\",\"arrow\"],\"char\":\"🔚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"back\":{\"keywords\":[\"arrow\",\"words\",\"return\"],\"char\":\"🔙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"on\":{\"keywords\":[\"arrow\",\"words\"],\"char\":\"🔛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"top\":{\"keywords\":[\"words\",\"blue-square\"],\"char\":\"🔝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"soon\":{\"keywords\":[\"arrow\",\"words\"],\"char\":\"🔜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ballot_box_with_check\":{\"keywords\":[\"ok\",\"agree\",\"confirm\",\"black-square\",\"vote\",\"election\",\"yes\",\"tick\"],\"char\":\"☑️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"radio_button\":{\"keywords\":[\"input\",\"old\",\"music\",\"circle\"],\"char\":\"🔘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_circle\":{\"keywords\":[\"shape\",\"round\"],\"char\":\"⚪\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_circle\":{\"keywords\":[\"shape\",\"button\",\"round\"],\"char\":\"⚫\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"red_circle\":{\"keywords\":[\"shape\",\"error\",\"danger\"],\"char\":\"🔴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"large_blue_circle\":{\"keywords\":[\"shape\",\"icon\",\"button\"],\"char\":\"🔵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_orange_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_blue_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"large_orange_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"large_blue_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔷\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_red_triangle\":{\"keywords\":[\"shape\",\"direction\",\"up\",\"top\"],\"char\":\"🔺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_small_square\":{\"keywords\":[\"shape\",\"icon\"],\"char\":\"▪️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_small_square\":{\"keywords\":[\"shape\",\"icon\"],\"char\":\"▫️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_large_square\":{\"keywords\":[\"shape\",\"icon\",\"button\"],\"char\":\"⬛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_large_square\":{\"keywords\":[\"shape\",\"icon\",\"stone\",\"button\"],\"char\":\"⬜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_red_triangle_down\":{\"keywords\":[\"shape\",\"direction\",\"bottom\"],\"char\":\"🔻\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_medium_square\":{\"keywords\":[\"shape\",\"button\",\"icon\"],\"char\":\"◼️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_medium_square\":{\"keywords\":[\"shape\",\"stone\",\"icon\"],\"char\":\"◻️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_medium_small_square\":{\"keywords\":[\"icon\",\"shape\",\"button\"],\"char\":\"◾\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_medium_small_square\":{\"keywords\":[\"shape\",\"stone\",\"icon\",\"button\"],\"char\":\"◽\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_square_button\":{\"keywords\":[\"shape\",\"input\",\"frame\"],\"char\":\"🔲\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_square_button\":{\"keywords\":[\"shape\",\"input\"],\"char\":\"🔳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"speaker\":{\"keywords\":[\"sound\",\"volume\",\"silence\",\"broadcast\"],\"char\":\"🔈\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sound\":{\"keywords\":[\"volume\",\"speaker\",\"broadcast\"],\"char\":\"🔉\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"loud_sound\":{\"keywords\":[\"volume\",\"noise\",\"noisy\",\"speaker\",\"broadcast\"],\"char\":\"🔊\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mute\":{\"keywords\":[\"sound\",\"volume\",\"silence\",\"quiet\"],\"char\":\"🔇\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mega\":{\"keywords\":[\"sound\",\"speaker\",\"volume\"],\"char\":\"📣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"loudspeaker\":{\"keywords\":[\"volume\",\"sound\"],\"char\":\"📢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"bell\":{\"keywords\":[\"sound\",\"notification\",\"christmas\",\"xmas\",\"chime\"],\"char\":\"🔔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_bell\":{\"keywords\":[\"sound\",\"volume\",\"mute\",\"quiet\",\"silent\"],\"char\":\"🔕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_joker\":{\"keywords\":[\"poker\",\"cards\",\"game\",\"play\",\"magic\"],\"char\":\"🃏\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mahjong\":{\"keywords\":[\"game\",\"play\",\"chinese\",\"kanji\"],\"char\":\"🀄\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"spades\":{\"keywords\":[\"poker\",\"cards\",\"suits\",\"magic\"],\"char\":\"♠️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clubs\":{\"keywords\":[\"poker\",\"cards\",\"magic\",\"suits\"],\"char\":\"♣️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"hearts\":{\"keywords\":[\"poker\",\"cards\",\"magic\",\"suits\"],\"char\":\"♥️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"diamonds\":{\"keywords\":[\"poker\",\"cards\",\"magic\",\"suits\"],\"char\":\"♦️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"flower_playing_cards\":{\"keywords\":[\"game\",\"sunset\",\"red\"],\"char\":\"🎴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"thought_balloon\":{\"keywords\":[\"bubble\",\"cloud\",\"speech\",\"thinking\",\"dream\"],\"char\":\"💭\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"right_anger_bubble\":{\"keywords\":[\"caption\",\"speech\",\"thinking\",\"mad\"],\"char\":\"🗯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"speech_balloon\":{\"keywords\":[\"bubble\",\"words\",\"message\",\"talk\",\"chatting\"],\"char\":\"💬\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"left_speech_bubble\":{\"keywords\":[\"words\",\"message\",\"talk\",\"chatting\"],\"char\":\"🗨\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock2\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock3\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕒\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock4\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock5\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock6\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\",\"dawn\",\"dusk\"],\"char\":\"🕕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock7\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock8\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock9\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock10\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock11\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock12\":{\"keywords\":[\"time\",\"noon\",\"midnight\",\"midday\",\"late\",\"early\",\"schedule\"],\"char\":\"🕛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock130\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock230\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock330\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕞\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock430\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕟\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock530\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕠\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock630\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock730\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock830\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock930\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕤\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1030\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕥\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1130\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕦\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1230\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕧\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"afghanistan\":{\"keywords\":[\"af\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"aland_islands\":{\"keywords\":[\"Åland\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"albania\":{\"keywords\":[\"al\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"algeria\":{\"keywords\":[\"dz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"american_samoa\":{\"keywords\":[\"american\",\"ws\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"andorra\":{\"keywords\":[\"ad\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"angola\":{\"keywords\":[\"ao\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"anguilla\":{\"keywords\":[\"ai\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"antarctica\":{\"keywords\":[\"aq\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"antigua_barbuda\":{\"keywords\":[\"antigua\",\"barbuda\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"argentina\":{\"keywords\":[\"ar\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"armenia\":{\"keywords\":[\"am\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"aruba\":{\"keywords\":[\"aw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"australia\":{\"keywords\":[\"au\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"austria\":{\"keywords\":[\"at\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"azerbaijan\":{\"keywords\":[\"az\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bahamas\":{\"keywords\":[\"bs\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bahrain\":{\"keywords\":[\"bh\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bangladesh\":{\"keywords\":[\"bd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"barbados\":{\"keywords\":[\"bb\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"belarus\":{\"keywords\":[\"by\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"belgium\":{\"keywords\":[\"be\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"belize\":{\"keywords\":[\"bz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"benin\":{\"keywords\":[\"bj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bermuda\":{\"keywords\":[\"bm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bhutan\":{\"keywords\":[\"bt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bolivia\":{\"keywords\":[\"bo\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"caribbean_netherlands\":{\"keywords\":[\"bonaire\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bosnia_herzegovina\":{\"keywords\":[\"bosnia\",\"herzegovina\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"botswana\":{\"keywords\":[\"bw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"brazil\":{\"keywords\":[\"br\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"british_indian_ocean_territory\":{\"keywords\":[\"british\",\"indian\",\"ocean\",\"territory\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"british_virgin_islands\":{\"keywords\":[\"british\",\"virgin\",\"islands\",\"bvi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"brunei\":{\"keywords\":[\"bn\",\"darussalam\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bulgaria\":{\"keywords\":[\"bg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"burkina_faso\":{\"keywords\":[\"burkina\",\"faso\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"burundi\":{\"keywords\":[\"bi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cape_verde\":{\"keywords\":[\"cabo\",\"verde\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cambodia\":{\"keywords\":[\"kh\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cameroon\":{\"keywords\":[\"cm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"canada\":{\"keywords\":[\"ca\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"canary_islands\":{\"keywords\":[\"canary\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cayman_islands\":{\"keywords\":[\"cayman\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"central_african_republic\":{\"keywords\":[\"central\",\"african\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"chad\":{\"keywords\":[\"td\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"chile\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cn\":{\"keywords\":[\"china\",\"chinese\",\"prc\",\"flag\",\"country\",\"nation\",\"banner\"],\"char\":\"🇨🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"christmas_island\":{\"keywords\":[\"christmas\",\"island\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cocos_islands\":{\"keywords\":[\"cocos\",\"keeling\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"colombia\":{\"keywords\":[\"co\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"comoros\":{\"keywords\":[\"km\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"congo_brazzaville\":{\"keywords\":[\"congo\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"congo_kinshasa\":{\"keywords\":[\"congo\",\"democratic\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cook_islands\":{\"keywords\":[\"cook\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"costa_rica\":{\"keywords\":[\"costa\",\"rica\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"croatia\":{\"keywords\":[\"hr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cuba\":{\"keywords\":[\"cu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"curacao\":{\"keywords\":[\"curaçao\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cyprus\":{\"keywords\":[\"cy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"czech_republic\":{\"keywords\":[\"cz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"denmark\":{\"keywords\":[\"dk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"djibouti\":{\"keywords\":[\"dj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"dominica\":{\"keywords\":[\"dm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"dominican_republic\":{\"keywords\":[\"dominican\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ecuador\":{\"keywords\":[\"ec\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"egypt\":{\"keywords\":[\"eg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"el_salvador\":{\"keywords\":[\"el\",\"salvador\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"equatorial_guinea\":{\"keywords\":[\"equatorial\",\"gn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"eritrea\":{\"keywords\":[\"er\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"estonia\":{\"keywords\":[\"ee\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ethiopia\":{\"keywords\":[\"et\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"eu\":{\"keywords\":[\"european\",\"union\",\"flag\",\"banner\"],\"char\":\"🇪🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"falkland_islands\":{\"keywords\":[\"falkland\",\"islands\",\"malvinas\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"faroe_islands\":{\"keywords\":[\"faroe\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"fiji\":{\"keywords\":[\"fj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"finland\":{\"keywords\":[\"fi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"fr\":{\"keywords\":[\"banner\",\"flag\",\"nation\",\"france\",\"french\",\"country\"],\"char\":\"🇫🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"french_guiana\":{\"keywords\":[\"french\",\"guiana\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"french_polynesia\":{\"keywords\":[\"french\",\"polynesia\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"french_southern_territories\":{\"keywords\":[\"french\",\"southern\",\"territories\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"gabon\":{\"keywords\":[\"ga\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"gambia\":{\"keywords\":[\"gm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"georgia\":{\"keywords\":[\"ge\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"de\":{\"keywords\":[\"german\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇩🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ghana\":{\"keywords\":[\"gh\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"gibraltar\":{\"keywords\":[\"gi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"greece\":{\"keywords\":[\"gr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"greenland\":{\"keywords\":[\"gl\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"grenada\":{\"keywords\":[\"gd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guadeloupe\":{\"keywords\":[\"gp\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guam\":{\"keywords\":[\"gu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guatemala\":{\"keywords\":[\"gt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guernsey\":{\"keywords\":[\"gg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guinea\":{\"keywords\":[\"gn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guinea_bissau\":{\"keywords\":[\"gw\",\"bissau\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guyana\":{\"keywords\":[\"gy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"haiti\":{\"keywords\":[\"ht\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"honduras\":{\"keywords\":[\"hn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"hong_kong\":{\"keywords\":[\"hong\",\"kong\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"hungary\":{\"keywords\":[\"hu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"iceland\":{\"keywords\":[\"is\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"india\":{\"keywords\":[\"in\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"indonesia\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"iran\":{\"keywords\":[\"iran,\",\"islamic\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"iraq\":{\"keywords\":[\"iq\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ireland\":{\"keywords\":[\"ie\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"isle_of_man\":{\"keywords\":[\"isle\",\"man\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"israel\":{\"keywords\":[\"il\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"it\":{\"keywords\":[\"italy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cote_divoire\":{\"keywords\":[\"ivory\",\"coast\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jamaica\":{\"keywords\":[\"jm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇯🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jp\":{\"keywords\":[\"japanese\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇯🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jersey\":{\"keywords\":[\"je\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇯🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jordan\":{\"keywords\":[\"jo\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇯🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kazakhstan\":{\"keywords\":[\"kz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kenya\":{\"keywords\":[\"ke\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kiribati\":{\"keywords\":[\"ki\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kosovo\":{\"keywords\":[\"xk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇽🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kuwait\":{\"keywords\":[\"kw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kyrgyzstan\":{\"keywords\":[\"kg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"laos\":{\"keywords\":[\"lao\",\"democratic\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"latvia\":{\"keywords\":[\"lv\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"lebanon\":{\"keywords\":[\"lb\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"lesotho\":{\"keywords\":[\"ls\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"liberia\":{\"keywords\":[\"lr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"libya\":{\"keywords\":[\"ly\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"liechtenstein\":{\"keywords\":[\"li\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"lithuania\":{\"keywords\":[\"lt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"luxembourg\":{\"keywords\":[\"lu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"macau\":{\"keywords\":[\"macao\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"macedonia\":{\"keywords\":[\"macedonia,\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"madagascar\":{\"keywords\":[\"mg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"malawi\":{\"keywords\":[\"mw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"malaysia\":{\"keywords\":[\"my\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"maldives\":{\"keywords\":[\"mv\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mali\":{\"keywords\":[\"ml\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"malta\":{\"keywords\":[\"mt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"marshall_islands\":{\"keywords\":[\"marshall\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"martinique\":{\"keywords\":[\"mq\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mauritania\":{\"keywords\":[\"mr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mauritius\":{\"keywords\":[\"mu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mayotte\":{\"keywords\":[\"yt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇾🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mexico\":{\"keywords\":[\"mx\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"micronesia\":{\"keywords\":[\"micronesia,\",\"federated\",\"states\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"moldova\":{\"keywords\":[\"moldova,\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"monaco\":{\"keywords\":[\"mc\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mongolia\":{\"keywords\":[\"mn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"montenegro\":{\"keywords\":[\"me\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"montserrat\":{\"keywords\":[\"ms\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"morocco\":{\"keywords\":[\"ma\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mozambique\":{\"keywords\":[\"mz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"myanmar\":{\"keywords\":[\"mm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"namibia\":{\"keywords\":[\"na\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nauru\":{\"keywords\":[\"nr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nepal\":{\"keywords\":[\"np\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"netherlands\":{\"keywords\":[\"nl\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"new_caledonia\":{\"keywords\":[\"new\",\"caledonia\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"new_zealand\":{\"keywords\":[\"new\",\"zealand\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nicaragua\":{\"keywords\":[\"ni\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"niger\":{\"keywords\":[\"ne\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nigeria\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"niue\":{\"keywords\":[\"nu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"norfolk_island\":{\"keywords\":[\"norfolk\",\"island\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"northern_mariana_islands\":{\"keywords\":[\"northern\",\"mariana\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"north_korea\":{\"keywords\":[\"north\",\"korea\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇰🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"norway\":{\"keywords\":[\"no\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"oman\":{\"keywords\":[\"om_symbol\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇴🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"pakistan\":{\"keywords\":[\"pk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"palau\":{\"keywords\":[\"pw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"palestinian_territories\":{\"keywords\":[\"palestine\",\"palestinian\",\"territories\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"panama\":{\"keywords\":[\"pa\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"papua_new_guinea\":{\"keywords\":[\"papua\",\"new\",\"guinea\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"paraguay\":{\"keywords\":[\"py\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"peru\":{\"keywords\":[\"pe\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"philippines\":{\"keywords\":[\"ph\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"pitcairn_islands\":{\"keywords\":[\"pitcairn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"poland\":{\"keywords\":[\"pl\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"portugal\":{\"keywords\":[\"pt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"puerto_rico\":{\"keywords\":[\"puerto\",\"rico\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"qatar\":{\"keywords\":[\"qa\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇶🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"reunion\":{\"keywords\":[\"réunion\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"romania\":{\"keywords\":[\"ro\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ru\":{\"keywords\":[\"russian\",\"federation\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"rwanda\":{\"keywords\":[\"rw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_barthelemy\":{\"keywords\":[\"saint\",\"barthélemy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_helena\":{\"keywords\":[\"saint\",\"helena\",\"ascension\",\"tristan\",\"cunha\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_kitts_nevis\":{\"keywords\":[\"saint\",\"kitts\",\"nevis\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_lucia\":{\"keywords\":[\"saint\",\"lucia\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_pierre_miquelon\":{\"keywords\":[\"saint\",\"pierre\",\"miquelon\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_vincent_grenadines\":{\"keywords\":[\"saint\",\"vincent\",\"grenadines\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"samoa\":{\"keywords\":[\"ws\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇼🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"san_marino\":{\"keywords\":[\"san\",\"marino\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sao_tome_principe\":{\"keywords\":[\"sao\",\"tome\",\"principe\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"saudi_arabia\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"senegal\":{\"keywords\":[\"sn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"serbia\":{\"keywords\":[\"rs\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"seychelles\":{\"keywords\":[\"sc\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sierra_leone\":{\"keywords\":[\"sierra\",\"leone\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"singapore\":{\"keywords\":[\"sg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sint_maarten\":{\"keywords\":[\"sint\",\"maarten\",\"dutch\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"slovakia\":{\"keywords\":[\"sk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"slovenia\":{\"keywords\":[\"si\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"solomon_islands\":{\"keywords\":[\"solomon\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"somalia\":{\"keywords\":[\"so\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"south_africa\":{\"keywords\":[\"south\",\"africa\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇿🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"south_georgia_south_sandwich_islands\":{\"keywords\":[\"south\",\"georgia\",\"sandwich\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kr\":{\"keywords\":[\"south\",\"korea\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇰🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"south_sudan\":{\"keywords\":[\"south\",\"sd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"es\":{\"keywords\":[\"spain\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sri_lanka\":{\"keywords\":[\"sri\",\"lanka\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sudan\":{\"keywords\":[\"sd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"suriname\":{\"keywords\":[\"sr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"swaziland\":{\"keywords\":[\"sz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sweden\":{\"keywords\":[\"se\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"switzerland\":{\"keywords\":[\"ch\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"syria\":{\"keywords\":[\"syrian\",\"arab\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"taiwan\":{\"keywords\":[\"tw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tajikistan\":{\"keywords\":[\"tj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tanzania\":{\"keywords\":[\"tanzania,\",\"united\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"thailand\":{\"keywords\":[\"th\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"timor_leste\":{\"keywords\":[\"timor\",\"leste\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"togo\":{\"keywords\":[\"tg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tokelau\":{\"keywords\":[\"tk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tonga\":{\"keywords\":[\"to\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"trinidad_tobago\":{\"keywords\":[\"trinidad\",\"tobago\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tunisia\":{\"keywords\":[\"tn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tr\":{\"keywords\":[\"turkey\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"turkmenistan\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"turks_caicos_islands\":{\"keywords\":[\"turks\",\"caicos\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tuvalu\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uganda\":{\"keywords\":[\"ug\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ukraine\":{\"keywords\":[\"ua\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"united_arab_emirates\":{\"keywords\":[\"united\",\"arab\",\"emirates\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uk\":{\"keywords\":[\"united\",\"kingdom\",\"great\",\"britain\",\"northern\",\"ireland\",\"flag\",\"nation\",\"country\",\"banner\",\"british\",\"UK\",\"english\",\"england\",\"union jack\"],\"char\":\"🇬🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"england\":{\"keywords\":[\"flag\",\"english\"],\"char\":\"🏴󠁧󠁢󠁥󠁮󠁧󠁿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"scotland\":{\"keywords\":[\"flag\",\"scottish\"],\"char\":\"🏴󠁧󠁢󠁳󠁣󠁴󠁿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"wales\":{\"keywords\":[\"flag\",\"welsh\"],\"char\":\"🏴󠁧󠁢󠁷󠁬󠁳󠁿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"us\":{\"keywords\":[\"united\",\"states\",\"america\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"us_virgin_islands\":{\"keywords\":[\"virgin\",\"islands\",\"us\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uruguay\":{\"keywords\":[\"uy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uzbekistan\":{\"keywords\":[\"uz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"vanuatu\":{\"keywords\":[\"vu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"vatican_city\":{\"keywords\":[\"vatican\",\"city\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"venezuela\":{\"keywords\":[\"ve\",\"bolivarian\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"vietnam\":{\"keywords\":[\"viet\",\"nam\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"wallis_futuna\":{\"keywords\":[\"wallis\",\"futuna\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇼🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"western_sahara\":{\"keywords\":[\"western\",\"sahara\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"yemen\":{\"keywords\":[\"ye\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇾🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"zambia\":{\"keywords\":[\"zm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇿🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"zimbabwe\":{\"keywords\":[\"zw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇿🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"united_nations\":{\"keywords\":[\"un\",\"flag\",\"banner\"],\"char\":\"🇺🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"pirate_flag\":{\"keywords\":[\"skull\",\"crossbones\",\"flag\",\"banner\"],\"char\":\"🏴‍☠️\",\"fitzpatrick_scale\":false,\"category\":\"flags\"}}");
+
+/***/ }),
+
+/***/ "./node_modules/emojilib/index.js":
+/*!****************************************!*\
+  !*** ./node_modules/emojilib/index.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = {
+  lib: __webpack_require__(/*! ./emojis */ "./node_modules/emojilib/emojis.json"),
+  ordered: __webpack_require__(/*! ./ordered */ "./node_modules/emojilib/ordered.json"),
+  fitzpatrick_scale_modifiers: ["🏻", "🏼", "🏽", "🏾", "🏿"]
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/emojilib/ordered.json":
+/*!********************************************!*\
+  !*** ./node_modules/emojilib/ordered.json ***!
+  \********************************************/
+/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634, 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 650, 651, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 696, 697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742, 743, 744, 745, 746, 747, 748, 749, 750, 751, 752, 753, 754, 755, 756, 757, 758, 759, 760, 761, 762, 763, 764, 765, 766, 767, 768, 769, 770, 771, 772, 773, 774, 775, 776, 777, 778, 779, 780, 781, 782, 783, 784, 785, 786, 787, 788, 789, 790, 791, 792, 793, 794, 795, 796, 797, 798, 799, 800, 801, 802, 803, 804, 805, 806, 807, 808, 809, 810, 811, 812, 813, 814, 815, 816, 817, 818, 819, 820, 821, 822, 823, 824, 825, 826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837, 838, 839, 840, 841, 842, 843, 844, 845, 846, 847, 848, 849, 850, 851, 852, 853, 854, 855, 856, 857, 858, 859, 860, 861, 862, 863, 864, 865, 866, 867, 868, 869, 870, 871, 872, 873, 874, 875, 876, 877, 878, 879, 880, 881, 882, 883, 884, 885, 886, 887, 888, 889, 890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931, 932, 933, 934, 935, 936, 937, 938, 939, 940, 941, 942, 943, 944, 945, 946, 947, 948, 949, 950, 951, 952, 953, 954, 955, 956, 957, 958, 959, 960, 961, 962, 963, 964, 965, 966, 967, 968, 969, 970, 971, 972, 973, 974, 975, 976, 977, 978, 979, 980, 981, 982, 983, 984, 985, 986, 987, 988, 989, 990, 991, 992, 993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1036, 1037, 1038, 1039, 1040, 1041, 1042, 1043, 1044, 1045, 1046, 1047, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1058, 1059, 1060, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118, 1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1128, 1129, 1130, 1131, 1132, 1133, 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154, 1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163, 1164, 1165, 1166, 1167, 1168, 1169, 1170, 1171, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1179, 1180, 1181, 1182, 1183, 1184, 1185, 1186, 1187, 1188, 1189, 1190, 1191, 1192, 1193, 1194, 1195, 1196, 1197, 1198, 1199, 1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1234, 1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243, 1244, 1245, 1246, 1247, 1248, 1249, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1259, 1260, 1261, 1262, 1263, 1264, 1265, 1266, 1267, 1268, 1269, 1270, 1271, 1272, 1273, 1274, 1275, 1276, 1277, 1278, 1279, 1280, 1281, 1282, 1283, 1284, 1285, 1286, 1287, 1288, 1289, 1290, 1291, 1292, 1293, 1294, 1295, 1296, 1297, 1298, 1299, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312, 1313, 1314, 1315, 1316, 1317, 1318, 1319, 1320, 1321, 1322, 1323, 1324, 1325, 1326, 1327, 1328, 1329, 1330, 1331, 1332, 1333, 1334, 1335, 1336, 1337, 1338, 1339, 1340, 1341, 1342, 1343, 1344, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1352, 1353, 1354, 1355, 1356, 1357, 1358, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1366, 1367, 1368, 1369, 1370, 1371, 1372, 1373, 1374, 1375, 1376, 1377, 1378, 1379, 1380, 1381, 1382, 1383, 1384, 1385, 1386, 1387, 1388, 1389, 1390, 1391, 1392, 1393, 1394, 1395, 1396, 1397, 1398, 1399, 1400, 1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1414, 1415, 1416, 1417, 1418, 1419, 1420, 1421, 1422, 1423, 1424, 1425, 1426, 1427, 1428, 1429, 1430, 1431, 1432, 1433, 1434, 1435, 1436, 1437, 1438, 1439, 1440, 1441, 1442, 1443, 1444, 1445, 1446, 1447, 1448, 1449, 1450, 1451, 1452, 1453, 1454, 1455, 1456, 1457, 1458, 1459, 1460, 1461, 1462, 1463, 1464, 1465, 1466, 1467, 1468, 1469, 1470, 1471, 1472, 1473, 1474, 1475, 1476, 1477, 1478, 1479, 1480, 1481, 1482, 1483, 1484, 1485, 1486, 1487, 1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1497, 1498, 1499, 1500, 1501, 1502, 1503, 1504, 1505, 1506, 1507, 1508, 1509, 1510, 1511, 1512, 1513, 1514, 1515, 1516, 1517, 1518, 1519, 1520, 1521, 1522, 1523, 1524, 1525, 1526, 1527, 1528, 1529, 1530, 1531, 1532, 1533, 1534, 1535, 1536, 1537, 1538, 1539, 1540, 1541, 1542, 1543, 1544, 1545, 1546, 1547, 1548, 1549, 1550, 1551, 1552, 1553, 1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561, 1562, 1563, 1564, 1565, 1566, 1567, 1568, 1569, default */
+/***/ (function(module) {
+
+module.exports = JSON.parse("[\"grinning\",\"smiley\",\"smile\",\"grin\",\"laughing\",\"sweat_smile\",\"joy\",\"rofl\",\"relaxed\",\"blush\",\"innocent\",\"slightly_smiling_face\",\"upside_down_face\",\"wink\",\"relieved\",\"heart_eyes\",\"smiling_face_with_three_hearts\",\"kissing_heart\",\"kissing\",\"kissing_smiling_eyes\",\"kissing_closed_eyes\",\"yum\",\"stuck_out_tongue\",\"stuck_out_tongue_closed_eyes\",\"stuck_out_tongue_winking_eye\",\"zany\",\"raised_eyebrow\",\"monocle\",\"nerd_face\",\"sunglasses\",\"star_struck\",\"partying\",\"smirk\",\"unamused\",\"disappointed\",\"pensive\",\"worried\",\"confused\",\"slightly_frowning_face\",\"frowning_face\",\"persevere\",\"confounded\",\"tired_face\",\"weary\",\"pleading\",\"cry\",\"sob\",\"triumph\",\"angry\",\"rage\",\"symbols_over_mouth\",\"exploding_head\",\"flushed\",\"hot\",\"cold\",\"scream\",\"fearful\",\"cold_sweat\",\"disappointed_relieved\",\"sweat\",\"hugs\",\"thinking\",\"hand_over_mouth\",\"shushing\",\"lying_face\",\"no_mouth\",\"neutral_face\",\"expressionless\",\"grimacing\",\"roll_eyes\",\"hushed\",\"frowning\",\"anguished\",\"open_mouth\",\"astonished\",\"sleeping\",\"drooling_face\",\"sleepy\",\"dizzy_face\",\"zipper_mouth_face\",\"woozy\",\"nauseated_face\",\"vomiting\",\"sneezing_face\",\"mask\",\"face_with_thermometer\",\"face_with_head_bandage\",\"money_mouth_face\",\"cowboy_hat_face\",\"smiling_imp\",\"imp\",\"japanese_ogre\",\"japanese_goblin\",\"clown_face\",\"poop\",\"ghost\",\"skull\",\"skull_and_crossbones\",\"alien\",\"space_invader\",\"robot\",\"jack_o_lantern\",\"smiley_cat\",\"smile_cat\",\"joy_cat\",\"heart_eyes_cat\",\"smirk_cat\",\"kissing_cat\",\"scream_cat\",\"crying_cat_face\",\"pouting_cat\",\"palms_up\",\"open_hands\",\"raised_hands\",\"clap\",\"handshake\",\"+1\",\"-1\",\"facepunch\",\"fist\",\"fist_left\",\"fist_right\",\"crossed_fingers\",\"v\",\"love_you\",\"metal\",\"ok_hand\",\"point_left\",\"point_right\",\"point_up\",\"point_down\",\"point_up_2\",\"raised_hand\",\"raised_back_of_hand\",\"raised_hand_with_fingers_splayed\",\"vulcan_salute\",\"wave\",\"call_me_hand\",\"muscle\",\"fu\",\"writing_hand\",\"pray\",\"foot\",\"leg\",\"ring\",\"lipstick\",\"kiss\",\"lips\",\"tooth\",\"tongue\",\"ear\",\"nose\",\"footprints\",\"eye\",\"eyes\",\"brain\",\"speaking_head\",\"bust_in_silhouette\",\"busts_in_silhouette\",\"baby\",\"girl\",\"child\",\"boy\",\"woman\",\"adult\",\"man\",\"blonde_woman\",\"blonde_man\",\"bearded_person\",\"older_woman\",\"older_adult\",\"older_man\",\"man_with_gua_pi_mao\",\"woman_with_headscarf\",\"woman_with_turban\",\"man_with_turban\",\"policewoman\",\"policeman\",\"construction_worker_woman\",\"construction_worker_man\",\"guardswoman\",\"guardsman\",\"female_detective\",\"male_detective\",\"woman_health_worker\",\"man_health_worker\",\"woman_farmer\",\"man_farmer\",\"woman_cook\",\"man_cook\",\"woman_student\",\"man_student\",\"woman_singer\",\"man_singer\",\"woman_teacher\",\"man_teacher\",\"woman_factory_worker\",\"man_factory_worker\",\"woman_technologist\",\"man_technologist\",\"woman_office_worker\",\"man_office_worker\",\"woman_mechanic\",\"man_mechanic\",\"woman_scientist\",\"man_scientist\",\"woman_artist\",\"man_artist\",\"woman_firefighter\",\"man_firefighter\",\"woman_pilot\",\"man_pilot\",\"woman_astronaut\",\"man_astronaut\",\"woman_judge\",\"man_judge\",\"bride_with_veil\",\"man_in_tuxedo\",\"princess\",\"prince\",\"woman_superhero\",\"man_superhero\",\"woman_supervillain\",\"man_supervillain\",\"mrs_claus\",\"santa\",\"sorceress\",\"wizard\",\"woman_elf\",\"man_elf\",\"woman_vampire\",\"man_vampire\",\"woman_zombie\",\"man_zombie\",\"woman_genie\",\"man_genie\",\"mermaid\",\"merman\",\"woman_fairy\",\"man_fairy\",\"angel\",\"pregnant_woman\",\"breastfeeding\",\"bowing_woman\",\"bowing_man\",\"tipping_hand_woman\",\"tipping_hand_man\",\"no_good_woman\",\"no_good_man\",\"ok_woman\",\"ok_man\",\"raising_hand_woman\",\"raising_hand_man\",\"woman_facepalming\",\"man_facepalming\",\"woman_shrugging\",\"man_shrugging\",\"pouting_woman\",\"pouting_man\",\"frowning_woman\",\"frowning_man\",\"haircut_woman\",\"haircut_man\",\"massage_woman\",\"massage_man\",\"woman_in_steamy_room\",\"man_in_steamy_room\",\"nail_care\",\"selfie\",\"dancer\",\"man_dancing\",\"dancing_women\",\"dancing_men\",\"business_suit_levitating\",\"walking_woman\",\"walking_man\",\"running_woman\",\"running_man\",\"couple\",\"two_women_holding_hands\",\"two_men_holding_hands\",\"couple_with_heart_woman_man\",\"couple_with_heart_woman_woman\",\"couple_with_heart_man_man\",\"couplekiss_man_woman\",\"couplekiss_woman_woman\",\"couplekiss_man_man\",\"family_man_woman_boy\",\"family_man_woman_girl\",\"family_man_woman_girl_boy\",\"family_man_woman_boy_boy\",\"family_man_woman_girl_girl\",\"family_woman_woman_boy\",\"family_woman_woman_girl\",\"family_woman_woman_girl_boy\",\"family_woman_woman_boy_boy\",\"family_woman_woman_girl_girl\",\"family_man_man_boy\",\"family_man_man_girl\",\"family_man_man_girl_boy\",\"family_man_man_boy_boy\",\"family_man_man_girl_girl\",\"family_woman_boy\",\"family_woman_girl\",\"family_woman_girl_boy\",\"family_woman_boy_boy\",\"family_woman_girl_girl\",\"family_man_boy\",\"family_man_girl\",\"family_man_girl_boy\",\"family_man_boy_boy\",\"family_man_girl_girl\",\"yarn\",\"thread\",\"coat\",\"labcoat\",\"womans_clothes\",\"tshirt\",\"jeans\",\"necktie\",\"dress\",\"bikini\",\"kimono\",\"flat_shoe\",\"high_heel\",\"sandal\",\"boot\",\"mans_shoe\",\"athletic_shoe\",\"hiking_boot\",\"socks\",\"gloves\",\"scarf\",\"tophat\",\"billed_hat\",\"womans_hat\",\"mortar_board\",\"rescue_worker_helmet\",\"crown\",\"pouch\",\"purse\",\"handbag\",\"briefcase\",\"school_satchel\",\"luggage\",\"eyeglasses\",\"dark_sunglasses\",\"goggles\",\"closed_umbrella\",\"dog\",\"cat\",\"mouse\",\"hamster\",\"rabbit\",\"fox_face\",\"bear\",\"panda_face\",\"koala\",\"tiger\",\"lion\",\"cow\",\"pig\",\"pig_nose\",\"frog\",\"monkey_face\",\"see_no_evil\",\"hear_no_evil\",\"speak_no_evil\",\"monkey\",\"chicken\",\"penguin\",\"bird\",\"baby_chick\",\"hatching_chick\",\"hatched_chick\",\"duck\",\"eagle\",\"owl\",\"bat\",\"wolf\",\"boar\",\"horse\",\"unicorn\",\"honeybee\",\"bug\",\"butterfly\",\"snail\",\"shell\",\"beetle\",\"ant\",\"mosquito\",\"grasshopper\",\"spider\",\"spider_web\",\"scorpion\",\"turtle\",\"snake\",\"lizard\",\"t-rex\",\"sauropod\",\"octopus\",\"squid\",\"shrimp\",\"lobster\",\"crab\",\"blowfish\",\"tropical_fish\",\"fish\",\"dolphin\",\"whale\",\"whale2\",\"shark\",\"crocodile\",\"tiger2\",\"leopard\",\"zebra\",\"gorilla\",\"elephant\",\"hippopotamus\",\"rhinoceros\",\"dromedary_camel\",\"giraffe\",\"kangaroo\",\"camel\",\"water_buffalo\",\"ox\",\"cow2\",\"racehorse\",\"pig2\",\"ram\",\"sheep\",\"llama\",\"goat\",\"deer\",\"dog2\",\"poodle\",\"cat2\",\"rooster\",\"turkey\",\"peacock\",\"parrot\",\"swan\",\"dove\",\"rabbit2\",\"raccoon\",\"badger\",\"rat\",\"mouse2\",\"chipmunk\",\"hedgehog\",\"paw_prints\",\"dragon\",\"dragon_face\",\"cactus\",\"christmas_tree\",\"evergreen_tree\",\"deciduous_tree\",\"palm_tree\",\"seedling\",\"herb\",\"shamrock\",\"four_leaf_clover\",\"bamboo\",\"tanabata_tree\",\"leaves\",\"fallen_leaf\",\"maple_leaf\",\"ear_of_rice\",\"hibiscus\",\"sunflower\",\"rose\",\"wilted_flower\",\"tulip\",\"blossom\",\"cherry_blossom\",\"bouquet\",\"mushroom\",\"earth_americas\",\"earth_africa\",\"earth_asia\",\"full_moon\",\"waning_gibbous_moon\",\"last_quarter_moon\",\"waning_crescent_moon\",\"new_moon\",\"waxing_crescent_moon\",\"first_quarter_moon\",\"waxing_gibbous_moon\",\"new_moon_with_face\",\"full_moon_with_face\",\"first_quarter_moon_with_face\",\"last_quarter_moon_with_face\",\"sun_with_face\",\"crescent_moon\",\"star\",\"star2\",\"dizzy\",\"sparkles\",\"comet\",\"sunny\",\"sun_behind_small_cloud\",\"partly_sunny\",\"sun_behind_large_cloud\",\"sun_behind_rain_cloud\",\"cloud\",\"cloud_with_rain\",\"cloud_with_lightning_and_rain\",\"cloud_with_lightning\",\"zap\",\"fire\",\"boom\",\"snowflake\",\"cloud_with_snow\",\"snowman\",\"snowman_with_snow\",\"wind_face\",\"dash\",\"tornado\",\"fog\",\"open_umbrella\",\"umbrella\",\"droplet\",\"sweat_drops\",\"ocean\",\"green_apple\",\"apple\",\"pear\",\"tangerine\",\"lemon\",\"banana\",\"watermelon\",\"grapes\",\"strawberry\",\"melon\",\"cherries\",\"peach\",\"mango\",\"pineapple\",\"coconut\",\"kiwi_fruit\",\"tomato\",\"eggplant\",\"avocado\",\"broccoli\",\"leafy_greens\",\"cucumber\",\"hot_pepper\",\"corn\",\"carrot\",\"potato\",\"sweet_potato\",\"croissant\",\"bagel\",\"bread\",\"baguette_bread\",\"pretzel\",\"cheese\",\"egg\",\"fried_egg\",\"pancakes\",\"bacon\",\"steak\",\"poultry_leg\",\"meat_on_bone\",\"bone\",\"hotdog\",\"hamburger\",\"fries\",\"pizza\",\"sandwich\",\"stuffed_flatbread\",\"taco\",\"burrito\",\"green_salad\",\"shallow_pan_of_food\",\"canned_food\",\"spaghetti\",\"ramen\",\"stew\",\"curry\",\"sushi\",\"bento\",\"fried_shrimp\",\"rice_ball\",\"rice\",\"rice_cracker\",\"fish_cake\",\"fortune_cookie\",\"moon_cake\",\"oden\",\"dango\",\"shaved_ice\",\"ice_cream\",\"icecream\",\"pie\",\"cupcake\",\"cake\",\"birthday\",\"custard\",\"lollipop\",\"candy\",\"chocolate_bar\",\"popcorn\",\"doughnut\",\"dumpling\",\"cookie\",\"chestnut\",\"peanuts\",\"honey_pot\",\"milk_glass\",\"baby_bottle\",\"coffee\",\"tea\",\"cup_with_straw\",\"sake\",\"beer\",\"beers\",\"clinking_glasses\",\"wine_glass\",\"tumbler_glass\",\"cocktail\",\"tropical_drink\",\"champagne\",\"spoon\",\"fork_and_knife\",\"plate_with_cutlery\",\"bowl_with_spoon\",\"takeout_box\",\"chopsticks\",\"salt\",\"soccer\",\"basketball\",\"football\",\"baseball\",\"softball\",\"tennis\",\"volleyball\",\"rugby_football\",\"flying_disc\",\"8ball\",\"golf\",\"golfing_woman\",\"golfing_man\",\"ping_pong\",\"badminton\",\"goal_net\",\"ice_hockey\",\"field_hockey\",\"lacrosse\",\"cricket\",\"ski\",\"skier\",\"snowboarder\",\"person_fencing\",\"women_wrestling\",\"men_wrestling\",\"woman_cartwheeling\",\"man_cartwheeling\",\"woman_playing_handball\",\"man_playing_handball\",\"ice_skate\",\"curling_stone\",\"skateboard\",\"sled\",\"bow_and_arrow\",\"fishing_pole_and_fish\",\"boxing_glove\",\"martial_arts_uniform\",\"rowing_woman\",\"rowing_man\",\"climbing_woman\",\"climbing_man\",\"swimming_woman\",\"swimming_man\",\"woman_playing_water_polo\",\"man_playing_water_polo\",\"woman_in_lotus_position\",\"man_in_lotus_position\",\"surfing_woman\",\"surfing_man\",\"basketball_woman\",\"basketball_man\",\"weight_lifting_woman\",\"weight_lifting_man\",\"biking_woman\",\"biking_man\",\"mountain_biking_woman\",\"mountain_biking_man\",\"horse_racing\",\"trophy\",\"running_shirt_with_sash\",\"medal_sports\",\"medal_military\",\"1st_place_medal\",\"2nd_place_medal\",\"3rd_place_medal\",\"reminder_ribbon\",\"rosette\",\"ticket\",\"tickets\",\"performing_arts\",\"art\",\"circus_tent\",\"woman_juggling\",\"man_juggling\",\"microphone\",\"headphones\",\"musical_score\",\"musical_keyboard\",\"drum\",\"saxophone\",\"trumpet\",\"guitar\",\"violin\",\"clapper\",\"video_game\",\"dart\",\"game_die\",\"chess_pawn\",\"slot_machine\",\"jigsaw\",\"bowling\",\"red_car\",\"taxi\",\"blue_car\",\"bus\",\"trolleybus\",\"racing_car\",\"police_car\",\"ambulance\",\"fire_engine\",\"minibus\",\"truck\",\"articulated_lorry\",\"tractor\",\"kick_scooter\",\"motorcycle\",\"bike\",\"motor_scooter\",\"rotating_light\",\"oncoming_police_car\",\"oncoming_bus\",\"oncoming_automobile\",\"oncoming_taxi\",\"aerial_tramway\",\"mountain_cableway\",\"suspension_railway\",\"railway_car\",\"train\",\"monorail\",\"bullettrain_side\",\"bullettrain_front\",\"light_rail\",\"mountain_railway\",\"steam_locomotive\",\"train2\",\"metro\",\"tram\",\"station\",\"flying_saucer\",\"helicopter\",\"small_airplane\",\"airplane\",\"flight_departure\",\"flight_arrival\",\"sailboat\",\"motor_boat\",\"speedboat\",\"ferry\",\"passenger_ship\",\"rocket\",\"artificial_satellite\",\"seat\",\"canoe\",\"anchor\",\"construction\",\"fuelpump\",\"busstop\",\"vertical_traffic_light\",\"traffic_light\",\"ship\",\"ferris_wheel\",\"roller_coaster\",\"carousel_horse\",\"building_construction\",\"foggy\",\"tokyo_tower\",\"factory\",\"fountain\",\"rice_scene\",\"mountain\",\"mountain_snow\",\"mount_fuji\",\"volcano\",\"japan\",\"camping\",\"tent\",\"national_park\",\"motorway\",\"railway_track\",\"sunrise\",\"sunrise_over_mountains\",\"desert\",\"beach_umbrella\",\"desert_island\",\"city_sunrise\",\"city_sunset\",\"cityscape\",\"night_with_stars\",\"bridge_at_night\",\"milky_way\",\"stars\",\"sparkler\",\"fireworks\",\"rainbow\",\"houses\",\"european_castle\",\"japanese_castle\",\"stadium\",\"statue_of_liberty\",\"house\",\"house_with_garden\",\"derelict_house\",\"office\",\"department_store\",\"post_office\",\"european_post_office\",\"hospital\",\"bank\",\"hotel\",\"convenience_store\",\"school\",\"love_hotel\",\"wedding\",\"classical_building\",\"church\",\"mosque\",\"synagogue\",\"kaaba\",\"shinto_shrine\",\"watch\",\"iphone\",\"calling\",\"computer\",\"keyboard\",\"desktop_computer\",\"printer\",\"computer_mouse\",\"trackball\",\"joystick\",\"clamp\",\"minidisc\",\"floppy_disk\",\"cd\",\"dvd\",\"vhs\",\"camera\",\"camera_flash\",\"video_camera\",\"movie_camera\",\"film_projector\",\"film_strip\",\"telephone_receiver\",\"phone\",\"pager\",\"fax\",\"tv\",\"radio\",\"studio_microphone\",\"level_slider\",\"control_knobs\",\"compass\",\"stopwatch\",\"timer_clock\",\"alarm_clock\",\"mantelpiece_clock\",\"hourglass_flowing_sand\",\"hourglass\",\"satellite\",\"battery\",\"electric_plug\",\"bulb\",\"flashlight\",\"candle\",\"fire_extinguisher\",\"wastebasket\",\"oil_drum\",\"money_with_wings\",\"dollar\",\"yen\",\"euro\",\"pound\",\"moneybag\",\"credit_card\",\"gem\",\"balance_scale\",\"toolbox\",\"wrench\",\"hammer\",\"hammer_and_pick\",\"hammer_and_wrench\",\"pick\",\"nut_and_bolt\",\"gear\",\"brick\",\"chains\",\"magnet\",\"gun\",\"bomb\",\"firecracker\",\"hocho\",\"dagger\",\"crossed_swords\",\"shield\",\"smoking\",\"coffin\",\"funeral_urn\",\"amphora\",\"crystal_ball\",\"prayer_beads\",\"nazar_amulet\",\"barber\",\"alembic\",\"telescope\",\"microscope\",\"hole\",\"pill\",\"syringe\",\"dna\",\"microbe\",\"petri_dish\",\"test_tube\",\"thermometer\",\"broom\",\"basket\",\"toilet_paper\",\"label\",\"bookmark\",\"toilet\",\"shower\",\"bathtub\",\"bath\",\"soap\",\"sponge\",\"lotion_bottle\",\"key\",\"old_key\",\"couch_and_lamp\",\"sleeping_bed\",\"bed\",\"door\",\"bellhop_bell\",\"teddy_bear\",\"framed_picture\",\"world_map\",\"parasol_on_ground\",\"moyai\",\"shopping\",\"shopping_cart\",\"balloon\",\"flags\",\"ribbon\",\"gift\",\"confetti_ball\",\"tada\",\"dolls\",\"wind_chime\",\"crossed_flags\",\"izakaya_lantern\",\"red_envelope\",\"email\",\"envelope_with_arrow\",\"incoming_envelope\",\"e-mail\",\"love_letter\",\"postbox\",\"mailbox_closed\",\"mailbox\",\"mailbox_with_mail\",\"mailbox_with_no_mail\",\"package\",\"postal_horn\",\"inbox_tray\",\"outbox_tray\",\"scroll\",\"page_with_curl\",\"bookmark_tabs\",\"receipt\",\"bar_chart\",\"chart_with_upwards_trend\",\"chart_with_downwards_trend\",\"page_facing_up\",\"date\",\"calendar\",\"spiral_calendar\",\"card_index\",\"card_file_box\",\"ballot_box\",\"file_cabinet\",\"clipboard\",\"spiral_notepad\",\"file_folder\",\"open_file_folder\",\"card_index_dividers\",\"newspaper_roll\",\"newspaper\",\"notebook\",\"closed_book\",\"green_book\",\"blue_book\",\"orange_book\",\"notebook_with_decorative_cover\",\"ledger\",\"books\",\"open_book\",\"safety_pin\",\"link\",\"paperclip\",\"paperclips\",\"scissors\",\"triangular_ruler\",\"straight_ruler\",\"abacus\",\"pushpin\",\"round_pushpin\",\"closed_lock_with_key\",\"lock\",\"unlock\",\"lock_with_ink_pen\",\"pen\",\"fountain_pen\",\"black_nib\",\"memo\",\"pencil2\",\"crayon\",\"paintbrush\",\"mag\",\"mag_right\",\"heart\",\"orange_heart\",\"yellow_heart\",\"green_heart\",\"blue_heart\",\"purple_heart\",\"black_heart\",\"broken_heart\",\"heavy_heart_exclamation\",\"two_hearts\",\"revolving_hearts\",\"heartbeat\",\"heartpulse\",\"sparkling_heart\",\"cupid\",\"gift_heart\",\"heart_decoration\",\"peace_symbol\",\"latin_cross\",\"star_and_crescent\",\"om\",\"wheel_of_dharma\",\"star_of_david\",\"six_pointed_star\",\"menorah\",\"yin_yang\",\"orthodox_cross\",\"place_of_worship\",\"ophiuchus\",\"aries\",\"taurus\",\"gemini\",\"cancer\",\"leo\",\"virgo\",\"libra\",\"scorpius\",\"sagittarius\",\"capricorn\",\"aquarius\",\"pisces\",\"id\",\"atom_symbol\",\"u7a7a\",\"u5272\",\"radioactive\",\"biohazard\",\"mobile_phone_off\",\"vibration_mode\",\"u6709\",\"u7121\",\"u7533\",\"u55b6\",\"u6708\",\"eight_pointed_black_star\",\"vs\",\"accept\",\"white_flower\",\"ideograph_advantage\",\"secret\",\"congratulations\",\"u5408\",\"u6e80\",\"u7981\",\"a\",\"b\",\"ab\",\"cl\",\"o2\",\"sos\",\"no_entry\",\"name_badge\",\"no_entry_sign\",\"x\",\"o\",\"stop_sign\",\"anger\",\"hotsprings\",\"no_pedestrians\",\"do_not_litter\",\"no_bicycles\",\"non-potable_water\",\"underage\",\"no_mobile_phones\",\"exclamation\",\"grey_exclamation\",\"question\",\"grey_question\",\"bangbang\",\"interrobang\",\"100\",\"low_brightness\",\"high_brightness\",\"trident\",\"fleur_de_lis\",\"part_alternation_mark\",\"warning\",\"children_crossing\",\"beginner\",\"recycle\",\"u6307\",\"chart\",\"sparkle\",\"eight_spoked_asterisk\",\"negative_squared_cross_mark\",\"white_check_mark\",\"diamond_shape_with_a_dot_inside\",\"cyclone\",\"loop\",\"globe_with_meridians\",\"m\",\"atm\",\"zzz\",\"sa\",\"passport_control\",\"customs\",\"baggage_claim\",\"left_luggage\",\"wheelchair\",\"no_smoking\",\"wc\",\"parking\",\"potable_water\",\"mens\",\"womens\",\"baby_symbol\",\"restroom\",\"put_litter_in_its_place\",\"cinema\",\"signal_strength\",\"koko\",\"ng\",\"ok\",\"up\",\"cool\",\"new\",\"free\",\"zero\",\"one\",\"two\",\"three\",\"four\",\"five\",\"six\",\"seven\",\"eight\",\"nine\",\"keycap_ten\",\"asterisk\",\"1234\",\"eject_button\",\"arrow_forward\",\"pause_button\",\"next_track_button\",\"stop_button\",\"record_button\",\"play_or_pause_button\",\"previous_track_button\",\"fast_forward\",\"rewind\",\"twisted_rightwards_arrows\",\"repeat\",\"repeat_one\",\"arrow_backward\",\"arrow_up_small\",\"arrow_down_small\",\"arrow_double_up\",\"arrow_double_down\",\"arrow_right\",\"arrow_left\",\"arrow_up\",\"arrow_down\",\"arrow_upper_right\",\"arrow_lower_right\",\"arrow_lower_left\",\"arrow_upper_left\",\"arrow_up_down\",\"left_right_arrow\",\"arrows_counterclockwise\",\"arrow_right_hook\",\"leftwards_arrow_with_hook\",\"arrow_heading_up\",\"arrow_heading_down\",\"hash\",\"information_source\",\"abc\",\"abcd\",\"capital_abcd\",\"symbols\",\"musical_note\",\"notes\",\"wavy_dash\",\"curly_loop\",\"heavy_check_mark\",\"arrows_clockwise\",\"heavy_plus_sign\",\"heavy_minus_sign\",\"heavy_division_sign\",\"heavy_multiplication_x\",\"infinity\",\"heavy_dollar_sign\",\"currency_exchange\",\"copyright\",\"registered\",\"tm\",\"end\",\"back\",\"on\",\"top\",\"soon\",\"ballot_box_with_check\",\"radio_button\",\"white_circle\",\"black_circle\",\"red_circle\",\"large_blue_circle\",\"small_orange_diamond\",\"small_blue_diamond\",\"large_orange_diamond\",\"large_blue_diamond\",\"small_red_triangle\",\"black_small_square\",\"white_small_square\",\"black_large_square\",\"white_large_square\",\"small_red_triangle_down\",\"black_medium_square\",\"white_medium_square\",\"black_medium_small_square\",\"white_medium_small_square\",\"black_square_button\",\"white_square_button\",\"speaker\",\"sound\",\"loud_sound\",\"mute\",\"mega\",\"loudspeaker\",\"bell\",\"no_bell\",\"black_joker\",\"mahjong\",\"spades\",\"clubs\",\"hearts\",\"diamonds\",\"flower_playing_cards\",\"thought_balloon\",\"right_anger_bubble\",\"speech_balloon\",\"left_speech_bubble\",\"clock1\",\"clock2\",\"clock3\",\"clock4\",\"clock5\",\"clock6\",\"clock7\",\"clock8\",\"clock9\",\"clock10\",\"clock11\",\"clock12\",\"clock130\",\"clock230\",\"clock330\",\"clock430\",\"clock530\",\"clock630\",\"clock730\",\"clock830\",\"clock930\",\"clock1030\",\"clock1130\",\"clock1230\",\"white_flag\",\"black_flag\",\"pirate_flag\",\"checkered_flag\",\"triangular_flag_on_post\",\"rainbow_flag\",\"united_nations\",\"afghanistan\",\"aland_islands\",\"albania\",\"algeria\",\"american_samoa\",\"andorra\",\"angola\",\"anguilla\",\"antarctica\",\"antigua_barbuda\",\"argentina\",\"armenia\",\"aruba\",\"australia\",\"austria\",\"azerbaijan\",\"bahamas\",\"bahrain\",\"bangladesh\",\"barbados\",\"belarus\",\"belgium\",\"belize\",\"benin\",\"bermuda\",\"bhutan\",\"bolivia\",\"caribbean_netherlands\",\"bosnia_herzegovina\",\"botswana\",\"brazil\",\"british_indian_ocean_territory\",\"british_virgin_islands\",\"brunei\",\"bulgaria\",\"burkina_faso\",\"burundi\",\"cape_verde\",\"cambodia\",\"cameroon\",\"canada\",\"canary_islands\",\"cayman_islands\",\"central_african_republic\",\"chad\",\"chile\",\"cn\",\"christmas_island\",\"cocos_islands\",\"colombia\",\"comoros\",\"congo_brazzaville\",\"congo_kinshasa\",\"cook_islands\",\"costa_rica\",\"croatia\",\"cuba\",\"curacao\",\"cyprus\",\"czech_republic\",\"denmark\",\"djibouti\",\"dominica\",\"dominican_republic\",\"ecuador\",\"egypt\",\"el_salvador\",\"equatorial_guinea\",\"eritrea\",\"estonia\",\"ethiopia\",\"eu\",\"falkland_islands\",\"faroe_islands\",\"fiji\",\"finland\",\"fr\",\"french_guiana\",\"french_polynesia\",\"french_southern_territories\",\"gabon\",\"gambia\",\"georgia\",\"de\",\"ghana\",\"gibraltar\",\"greece\",\"greenland\",\"grenada\",\"guadeloupe\",\"guam\",\"guatemala\",\"guernsey\",\"guinea\",\"guinea_bissau\",\"guyana\",\"haiti\",\"honduras\",\"hong_kong\",\"hungary\",\"iceland\",\"india\",\"indonesia\",\"iran\",\"iraq\",\"ireland\",\"isle_of_man\",\"israel\",\"it\",\"cote_divoire\",\"jamaica\",\"jp\",\"jersey\",\"jordan\",\"kazakhstan\",\"kenya\",\"kiribati\",\"kosovo\",\"kuwait\",\"kyrgyzstan\",\"laos\",\"latvia\",\"lebanon\",\"lesotho\",\"liberia\",\"libya\",\"liechtenstein\",\"lithuania\",\"luxembourg\",\"macau\",\"macedonia\",\"madagascar\",\"malawi\",\"malaysia\",\"maldives\",\"mali\",\"malta\",\"marshall_islands\",\"martinique\",\"mauritania\",\"mauritius\",\"mayotte\",\"mexico\",\"micronesia\",\"moldova\",\"monaco\",\"mongolia\",\"montenegro\",\"montserrat\",\"morocco\",\"mozambique\",\"myanmar\",\"namibia\",\"nauru\",\"nepal\",\"netherlands\",\"new_caledonia\",\"new_zealand\",\"nicaragua\",\"niger\",\"nigeria\",\"niue\",\"norfolk_island\",\"northern_mariana_islands\",\"north_korea\",\"norway\",\"oman\",\"pakistan\",\"palau\",\"palestinian_territories\",\"panama\",\"papua_new_guinea\",\"paraguay\",\"peru\",\"philippines\",\"pitcairn_islands\",\"poland\",\"portugal\",\"puerto_rico\",\"qatar\",\"reunion\",\"romania\",\"ru\",\"rwanda\",\"st_barthelemy\",\"st_helena\",\"st_kitts_nevis\",\"st_lucia\",\"st_pierre_miquelon\",\"st_vincent_grenadines\",\"samoa\",\"san_marino\",\"sao_tome_principe\",\"saudi_arabia\",\"senegal\",\"serbia\",\"seychelles\",\"sierra_leone\",\"singapore\",\"sint_maarten\",\"slovakia\",\"slovenia\",\"solomon_islands\",\"somalia\",\"south_africa\",\"south_georgia_south_sandwich_islands\",\"kr\",\"south_sudan\",\"es\",\"sri_lanka\",\"sudan\",\"suriname\",\"swaziland\",\"sweden\",\"switzerland\",\"syria\",\"taiwan\",\"tajikistan\",\"tanzania\",\"thailand\",\"timor_leste\",\"togo\",\"tokelau\",\"tonga\",\"trinidad_tobago\",\"tunisia\",\"tr\",\"turkmenistan\",\"turks_caicos_islands\",\"tuvalu\",\"uganda\",\"ukraine\",\"united_arab_emirates\",\"uk\",\"england\",\"scotland\",\"wales\",\"us\",\"us_virgin_islands\",\"uruguay\",\"uzbekistan\",\"vanuatu\",\"vatican_city\",\"venezuela\",\"vietnam\",\"wallis_futuna\",\"western_sahara\",\"yemen\",\"zambia\",\"zimbabwe\"]");
+
+/***/ }),
+
+/***/ "./node_modules/linkify-it/index.js":
+/*!******************************************!*\
+  !*** ./node_modules/linkify-it/index.js ***!
+  \******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// Helpers
+
+// Merge objects
+//
+function assign(obj /*from1, from2, from3, ...*/) {
+  var sources = Array.prototype.slice.call(arguments, 1);
+
+  sources.forEach(function (source) {
+    if (!source) { return; }
+
+    Object.keys(source).forEach(function (key) {
+      obj[key] = source[key];
+    });
+  });
+
+  return obj;
+}
+
+function _class(obj) { return Object.prototype.toString.call(obj); }
+function isString(obj) { return _class(obj) === '[object String]'; }
+function isObject(obj) { return _class(obj) === '[object Object]'; }
+function isRegExp(obj) { return _class(obj) === '[object RegExp]'; }
+function isFunction(obj) { return _class(obj) === '[object Function]'; }
+
+
+function escapeRE(str) { return str.replace(/[.?*+^$[\]\\(){}|-]/g, '\\$&'); }
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+var defaultOptions = {
+  fuzzyLink: true,
+  fuzzyEmail: true,
+  fuzzyIP: false
+};
+
+
+function isOptionsObj(obj) {
+  return Object.keys(obj || {}).reduce(function (acc, k) {
+    return acc || defaultOptions.hasOwnProperty(k);
+  }, false);
+}
+
+
+var defaultSchemas = {
+  'http:': {
+    validate: function (text, pos, self) {
+      var tail = text.slice(pos);
+
+      if (!self.re.http) {
+        // compile lazily, because "host"-containing variables can change on tlds update.
+        self.re.http =  new RegExp(
+          '^\\/\\/' + self.re.src_auth + self.re.src_host_port_strict + self.re.src_path, 'i'
+        );
+      }
+      if (self.re.http.test(tail)) {
+        return tail.match(self.re.http)[0].length;
+      }
+      return 0;
+    }
+  },
+  'https:':  'http:',
+  'ftp:':    'http:',
+  '//':      {
+    validate: function (text, pos, self) {
+      var tail = text.slice(pos);
+
+      if (!self.re.no_http) {
+      // compile lazily, because "host"-containing variables can change on tlds update.
+        self.re.no_http =  new RegExp(
+          '^' +
+          self.re.src_auth +
+          // Don't allow single-level domains, because of false positives like '//test'
+          // with code comments
+          '(?:localhost|(?:(?:' + self.re.src_domain + ')\\.)+' + self.re.src_domain_root + ')' +
+          self.re.src_port +
+          self.re.src_host_terminator +
+          self.re.src_path,
+
+          'i'
+        );
+      }
+
+      if (self.re.no_http.test(tail)) {
+        // should not be `://` & `///`, that protects from errors in protocol name
+        if (pos >= 3 && text[pos - 3] === ':') { return 0; }
+        if (pos >= 3 && text[pos - 3] === '/') { return 0; }
+        return tail.match(self.re.no_http)[0].length;
+      }
+      return 0;
+    }
+  },
+  'mailto:': {
+    validate: function (text, pos, self) {
+      var tail = text.slice(pos);
+
+      if (!self.re.mailto) {
+        self.re.mailto =  new RegExp(
+          '^' + self.re.src_email_name + '@' + self.re.src_host_strict, 'i'
+        );
+      }
+      if (self.re.mailto.test(tail)) {
+        return tail.match(self.re.mailto)[0].length;
+      }
+      return 0;
+    }
+  }
+};
+
+/*eslint-disable max-len*/
+
+// RE pattern for 2-character tlds (autogenerated by ./support/tlds_2char_gen.js)
+var tlds_2ch_src_re = 'a[cdefgilmnoqrstuwxz]|b[abdefghijmnorstvwyz]|c[acdfghiklmnoruvwxyz]|d[ejkmoz]|e[cegrstu]|f[ijkmor]|g[abdefghilmnpqrstuwy]|h[kmnrtu]|i[delmnoqrst]|j[emop]|k[eghimnprwyz]|l[abcikrstuvy]|m[acdeghklmnopqrstuvwxyz]|n[acefgilopruz]|om|p[aefghklmnrstwy]|qa|r[eosuw]|s[abcdeghijklmnortuvxyz]|t[cdfghjklmnortvwz]|u[agksyz]|v[aceginu]|w[fs]|y[et]|z[amw]';
+
+// DON'T try to make PRs with changes. Extend TLDs with LinkifyIt.tlds() instead
+var tlds_default = 'biz|com|edu|gov|net|org|pro|web|xxx|aero|asia|coop|info|museum|name|shop|рф'.split('|');
+
+/*eslint-enable max-len*/
+
+////////////////////////////////////////////////////////////////////////////////
+
+function resetScanCache(self) {
+  self.__index__ = -1;
+  self.__text_cache__   = '';
+}
+
+function createValidator(re) {
+  return function (text, pos) {
+    var tail = text.slice(pos);
+
+    if (re.test(tail)) {
+      return tail.match(re)[0].length;
+    }
+    return 0;
+  };
+}
+
+function createNormalizer() {
+  return function (match, self) {
+    self.normalize(match);
+  };
+}
+
+// Schemas compiler. Build regexps.
+//
+function compile(self) {
+
+  // Load & clone RE patterns.
+  var re = self.re = __webpack_require__(/*! ./lib/re */ "./node_modules/linkify-it/lib/re.js")(self.__opts__);
+
+  // Define dynamic patterns
+  var tlds = self.__tlds__.slice();
+
+  self.onCompile();
+
+  if (!self.__tlds_replaced__) {
+    tlds.push(tlds_2ch_src_re);
+  }
+  tlds.push(re.src_xn);
+
+  re.src_tlds = tlds.join('|');
+
+  function untpl(tpl) { return tpl.replace('%TLDS%', re.src_tlds); }
+
+  re.email_fuzzy      = RegExp(untpl(re.tpl_email_fuzzy), 'i');
+  re.link_fuzzy       = RegExp(untpl(re.tpl_link_fuzzy), 'i');
+  re.link_no_ip_fuzzy = RegExp(untpl(re.tpl_link_no_ip_fuzzy), 'i');
+  re.host_fuzzy_test  = RegExp(untpl(re.tpl_host_fuzzy_test), 'i');
+
+  //
+  // Compile each schema
+  //
+
+  var aliases = [];
+
+  self.__compiled__ = {}; // Reset compiled data
+
+  function schemaError(name, val) {
+    throw new Error('(LinkifyIt) Invalid schema "' + name + '": ' + val);
+  }
+
+  Object.keys(self.__schemas__).forEach(function (name) {
+    var val = self.__schemas__[name];
+
+    // skip disabled methods
+    if (val === null) { return; }
+
+    var compiled = { validate: null, link: null };
+
+    self.__compiled__[name] = compiled;
+
+    if (isObject(val)) {
+      if (isRegExp(val.validate)) {
+        compiled.validate = createValidator(val.validate);
+      } else if (isFunction(val.validate)) {
+        compiled.validate = val.validate;
+      } else {
+        schemaError(name, val);
+      }
+
+      if (isFunction(val.normalize)) {
+        compiled.normalize = val.normalize;
+      } else if (!val.normalize) {
+        compiled.normalize = createNormalizer();
+      } else {
+        schemaError(name, val);
+      }
+
+      return;
+    }
+
+    if (isString(val)) {
+      aliases.push(name);
+      return;
+    }
+
+    schemaError(name, val);
+  });
+
+  //
+  // Compile postponed aliases
+  //
+
+  aliases.forEach(function (alias) {
+    if (!self.__compiled__[self.__schemas__[alias]]) {
+      // Silently fail on missed schemas to avoid errons on disable.
+      // schemaError(alias, self.__schemas__[alias]);
+      return;
+    }
+
+    self.__compiled__[alias].validate =
+      self.__compiled__[self.__schemas__[alias]].validate;
+    self.__compiled__[alias].normalize =
+      self.__compiled__[self.__schemas__[alias]].normalize;
+  });
+
+  //
+  // Fake record for guessed links
+  //
+  self.__compiled__[''] = { validate: null, normalize: createNormalizer() };
+
+  //
+  // Build schema condition
+  //
+  var slist = Object.keys(self.__compiled__)
+                      .filter(function (name) {
+                        // Filter disabled & fake schemas
+                        return name.length > 0 && self.__compiled__[name];
+                      })
+                      .map(escapeRE)
+                      .join('|');
+  // (?!_) cause 1.5x slowdown
+  self.re.schema_test   = RegExp('(^|(?!_)(?:[><\uff5c]|' + re.src_ZPCc + '))(' + slist + ')', 'i');
+  self.re.schema_search = RegExp('(^|(?!_)(?:[><\uff5c]|' + re.src_ZPCc + '))(' + slist + ')', 'ig');
+
+  self.re.pretest = RegExp(
+    '(' + self.re.schema_test.source + ')|(' + self.re.host_fuzzy_test.source + ')|@',
+    'i'
+  );
+
+  //
+  // Cleanup
+  //
+
+  resetScanCache(self);
+}
+
+/**
+ * class Match
+ *
+ * Match result. Single element of array, returned by [[LinkifyIt#match]]
+ **/
+function Match(self, shift) {
+  var start = self.__index__,
+      end   = self.__last_index__,
+      text  = self.__text_cache__.slice(start, end);
+
+  /**
+   * Match#schema -> String
+   *
+   * Prefix (protocol) for matched string.
+   **/
+  this.schema    = self.__schema__.toLowerCase();
+  /**
+   * Match#index -> Number
+   *
+   * First position of matched string.
+   **/
+  this.index     = start + shift;
+  /**
+   * Match#lastIndex -> Number
+   *
+   * Next position after matched string.
+   **/
+  this.lastIndex = end + shift;
+  /**
+   * Match#raw -> String
+   *
+   * Matched string.
+   **/
+  this.raw       = text;
+  /**
+   * Match#text -> String
+   *
+   * Notmalized text of matched string.
+   **/
+  this.text      = text;
+  /**
+   * Match#url -> String
+   *
+   * Normalized url of matched string.
+   **/
+  this.url       = text;
+}
+
+function createMatch(self, shift) {
+  var match = new Match(self, shift);
+
+  self.__compiled__[match.schema].normalize(match, self);
+
+  return match;
+}
+
+
+/**
+ * class LinkifyIt
+ **/
+
+/**
+ * new LinkifyIt(schemas, options)
+ * - schemas (Object): Optional. Additional schemas to validate (prefix/validator)
+ * - options (Object): { fuzzyLink|fuzzyEmail|fuzzyIP: true|false }
+ *
+ * Creates new linkifier instance with optional additional schemas.
+ * Can be called without `new` keyword for convenience.
+ *
+ * By default understands:
+ *
+ * - `http(s)://...` , `ftp://...`, `mailto:...` & `//...` links
+ * - "fuzzy" links and emails (example.com, foo@bar.com).
+ *
+ * `schemas` is an object, where each key/value describes protocol/rule:
+ *
+ * - __key__ - link prefix (usually, protocol name with `:` at the end, `skype:`
+ *   for example). `linkify-it` makes shure that prefix is not preceeded with
+ *   alphanumeric char and symbols. Only whitespaces and punctuation allowed.
+ * - __value__ - rule to check tail after link prefix
+ *   - _String_ - just alias to existing rule
+ *   - _Object_
+ *     - _validate_ - validator function (should return matched length on success),
+ *       or `RegExp`.
+ *     - _normalize_ - optional function to normalize text & url of matched result
+ *       (for example, for @twitter mentions).
+ *
+ * `options`:
+ *
+ * - __fuzzyLink__ - recognige URL-s without `http(s):` prefix. Default `true`.
+ * - __fuzzyIP__ - allow IPs in fuzzy links above. Can conflict with some texts
+ *   like version numbers. Default `false`.
+ * - __fuzzyEmail__ - recognize emails without `mailto:` prefix.
+ *
+ **/
+function LinkifyIt(schemas, options) {
+  if (!(this instanceof LinkifyIt)) {
+    return new LinkifyIt(schemas, options);
+  }
+
+  if (!options) {
+    if (isOptionsObj(schemas)) {
+      options = schemas;
+      schemas = {};
+    }
+  }
+
+  this.__opts__           = assign({}, defaultOptions, options);
+
+  // Cache last tested result. Used to skip repeating steps on next `match` call.
+  this.__index__          = -1;
+  this.__last_index__     = -1; // Next scan position
+  this.__schema__         = '';
+  this.__text_cache__     = '';
+
+  this.__schemas__        = assign({}, defaultSchemas, schemas);
+  this.__compiled__       = {};
+
+  this.__tlds__           = tlds_default;
+  this.__tlds_replaced__  = false;
+
+  this.re = {};
+
+  compile(this);
+}
+
+
+/** chainable
+ * LinkifyIt#add(schema, definition)
+ * - schema (String): rule name (fixed pattern prefix)
+ * - definition (String|RegExp|Object): schema definition
+ *
+ * Add new rule definition. See constructor description for details.
+ **/
+LinkifyIt.prototype.add = function add(schema, definition) {
+  this.__schemas__[schema] = definition;
+  compile(this);
+  return this;
+};
+
+
+/** chainable
+ * LinkifyIt#set(options)
+ * - options (Object): { fuzzyLink|fuzzyEmail|fuzzyIP: true|false }
+ *
+ * Set recognition options for links without schema.
+ **/
+LinkifyIt.prototype.set = function set(options) {
+  this.__opts__ = assign(this.__opts__, options);
+  return this;
+};
+
+
+/**
+ * LinkifyIt#test(text) -> Boolean
+ *
+ * Searches linkifiable pattern and returns `true` on success or `false` on fail.
+ **/
+LinkifyIt.prototype.test = function test(text) {
+  // Reset scan cache
+  this.__text_cache__ = text;
+  this.__index__      = -1;
+
+  if (!text.length) { return false; }
+
+  var m, ml, me, len, shift, next, re, tld_pos, at_pos;
+
+  // try to scan for link with schema - that's the most simple rule
+  if (this.re.schema_test.test(text)) {
+    re = this.re.schema_search;
+    re.lastIndex = 0;
+    while ((m = re.exec(text)) !== null) {
+      len = this.testSchemaAt(text, m[2], re.lastIndex);
+      if (len) {
+        this.__schema__     = m[2];
+        this.__index__      = m.index + m[1].length;
+        this.__last_index__ = m.index + m[0].length + len;
+        break;
+      }
+    }
+  }
+
+  if (this.__opts__.fuzzyLink && this.__compiled__['http:']) {
+    // guess schemaless links
+    tld_pos = text.search(this.re.host_fuzzy_test);
+    if (tld_pos >= 0) {
+      // if tld is located after found link - no need to check fuzzy pattern
+      if (this.__index__ < 0 || tld_pos < this.__index__) {
+        if ((ml = text.match(this.__opts__.fuzzyIP ? this.re.link_fuzzy : this.re.link_no_ip_fuzzy)) !== null) {
+
+          shift = ml.index + ml[1].length;
+
+          if (this.__index__ < 0 || shift < this.__index__) {
+            this.__schema__     = '';
+            this.__index__      = shift;
+            this.__last_index__ = ml.index + ml[0].length;
+          }
+        }
+      }
+    }
+  }
+
+  if (this.__opts__.fuzzyEmail && this.__compiled__['mailto:']) {
+    // guess schemaless emails
+    at_pos = text.indexOf('@');
+    if (at_pos >= 0) {
+      // We can't skip this check, because this cases are possible:
+      // 192.168.1.1@gmail.com, my.in@example.com
+      if ((me = text.match(this.re.email_fuzzy)) !== null) {
+
+        shift = me.index + me[1].length;
+        next  = me.index + me[0].length;
+
+        if (this.__index__ < 0 || shift < this.__index__ ||
+            (shift === this.__index__ && next > this.__last_index__)) {
+          this.__schema__     = 'mailto:';
+          this.__index__      = shift;
+          this.__last_index__ = next;
+        }
+      }
+    }
+  }
+
+  return this.__index__ >= 0;
+};
+
+
+/**
+ * LinkifyIt#pretest(text) -> Boolean
+ *
+ * Very quick check, that can give false positives. Returns true if link MAY BE
+ * can exists. Can be used for speed optimization, when you need to check that
+ * link NOT exists.
+ **/
+LinkifyIt.prototype.pretest = function pretest(text) {
+  return this.re.pretest.test(text);
+};
+
+
+/**
+ * LinkifyIt#testSchemaAt(text, name, position) -> Number
+ * - text (String): text to scan
+ * - name (String): rule (schema) name
+ * - position (Number): text offset to check from
+ *
+ * Similar to [[LinkifyIt#test]] but checks only specific protocol tail exactly
+ * at given position. Returns length of found pattern (0 on fail).
+ **/
+LinkifyIt.prototype.testSchemaAt = function testSchemaAt(text, schema, pos) {
+  // If not supported schema check requested - terminate
+  if (!this.__compiled__[schema.toLowerCase()]) {
+    return 0;
+  }
+  return this.__compiled__[schema.toLowerCase()].validate(text, pos, this);
+};
+
+
+/**
+ * LinkifyIt#match(text) -> Array|null
+ *
+ * Returns array of found link descriptions or `null` on fail. We strongly
+ * recommend to use [[LinkifyIt#test]] first, for best speed.
+ *
+ * ##### Result match description
+ *
+ * - __schema__ - link schema, can be empty for fuzzy links, or `//` for
+ *   protocol-neutral  links.
+ * - __index__ - offset of matched text
+ * - __lastIndex__ - index of next char after mathch end
+ * - __raw__ - matched text
+ * - __text__ - normalized text
+ * - __url__ - link, generated from matched text
+ **/
+LinkifyIt.prototype.match = function match(text) {
+  var shift = 0, result = [];
+
+  // Try to take previous element from cache, if .test() called before
+  if (this.__index__ >= 0 && this.__text_cache__ === text) {
+    result.push(createMatch(this, shift));
+    shift = this.__last_index__;
+  }
+
+  // Cut head if cache was used
+  var tail = shift ? text.slice(shift) : text;
+
+  // Scan string until end reached
+  while (this.test(tail)) {
+    result.push(createMatch(this, shift));
+
+    tail = tail.slice(this.__last_index__);
+    shift += this.__last_index__;
+  }
+
+  if (result.length) {
+    return result;
+  }
+
+  return null;
+};
+
+
+/** chainable
+ * LinkifyIt#tlds(list [, keepOld]) -> this
+ * - list (Array): list of tlds
+ * - keepOld (Boolean): merge with current list if `true` (`false` by default)
+ *
+ * Load (or merge) new tlds list. Those are user for fuzzy links (without prefix)
+ * to avoid false positives. By default this algorythm used:
+ *
+ * - hostname with any 2-letter root zones are ok.
+ * - biz|com|edu|gov|net|org|pro|web|xxx|aero|asia|coop|info|museum|name|shop|рф
+ *   are ok.
+ * - encoded (`xn--...`) root zones are ok.
+ *
+ * If list is replaced, then exact match for 2-chars root zones will be checked.
+ **/
+LinkifyIt.prototype.tlds = function tlds(list, keepOld) {
+  list = Array.isArray(list) ? list : [ list ];
+
+  if (!keepOld) {
+    this.__tlds__ = list.slice();
+    this.__tlds_replaced__ = true;
+    compile(this);
+    return this;
+  }
+
+  this.__tlds__ = this.__tlds__.concat(list)
+                                  .sort()
+                                  .filter(function (el, idx, arr) {
+                                    return el !== arr[idx - 1];
+                                  })
+                                  .reverse();
+
+  compile(this);
+  return this;
+};
+
+/**
+ * LinkifyIt#normalize(match)
+ *
+ * Default normalizer (if schema does not define it's own).
+ **/
+LinkifyIt.prototype.normalize = function normalize(match) {
+
+  // Do minimal possible changes by default. Need to collect feedback prior
+  // to move forward https://github.com/markdown-it/linkify-it/issues/1
+
+  if (!match.schema) { match.url = 'http://' + match.url; }
+
+  if (match.schema === 'mailto:' && !/^mailto:/i.test(match.url)) {
+    match.url = 'mailto:' + match.url;
+  }
+};
+
+
+/**
+ * LinkifyIt#onCompile()
+ *
+ * Override to modify basic RegExp-s.
+ **/
+LinkifyIt.prototype.onCompile = function onCompile() {
+};
+
+
+module.exports = LinkifyIt;
+
+
+/***/ }),
+
+/***/ "./node_modules/linkify-it/lib/re.js":
+/*!*******************************************!*\
+  !*** ./node_modules/linkify-it/lib/re.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+
+module.exports = function (opts) {
+  var re = {};
+
+  // Use direct extract instead of `regenerate` to reduse browserified size
+  re.src_Any = __webpack_require__(/*! uc.micro/properties/Any/regex */ "./node_modules/uc.micro/properties/Any/regex.js").source;
+  re.src_Cc  = __webpack_require__(/*! uc.micro/categories/Cc/regex */ "./node_modules/uc.micro/categories/Cc/regex.js").source;
+  re.src_Z   = __webpack_require__(/*! uc.micro/categories/Z/regex */ "./node_modules/uc.micro/categories/Z/regex.js").source;
+  re.src_P   = __webpack_require__(/*! uc.micro/categories/P/regex */ "./node_modules/uc.micro/categories/P/regex.js").source;
+
+  // \p{\Z\P\Cc\CF} (white spaces + control + format + punctuation)
+  re.src_ZPCc = [ re.src_Z, re.src_P, re.src_Cc ].join('|');
+
+  // \p{\Z\Cc} (white spaces + control)
+  re.src_ZCc = [ re.src_Z, re.src_Cc ].join('|');
+
+  // Experimental. List of chars, completely prohibited in links
+  // because can separate it from other part of text
+  var text_separators = '[><\uff5c]';
+
+  // All possible word characters (everything without punctuation, spaces & controls)
+  // Defined via punctuation & spaces to save space
+  // Should be something like \p{\L\N\S\M} (\w but without `_`)
+  re.src_pseudo_letter       = '(?:(?!' + text_separators + '|' + re.src_ZPCc + ')' + re.src_Any + ')';
+  // The same as abothe but without [0-9]
+  // var src_pseudo_letter_non_d = '(?:(?![0-9]|' + src_ZPCc + ')' + src_Any + ')';
+
+  ////////////////////////////////////////////////////////////////////////////////
+
+  re.src_ip4 =
+
+    '(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
+
+  // Prohibit any of "@/[]()" in user/pass to avoid wrong domain fetch.
+  re.src_auth    = '(?:(?:(?!' + re.src_ZCc + '|[@/\\[\\]()]).)+@)?';
+
+  re.src_port =
+
+    '(?::(?:6(?:[0-4]\\d{3}|5(?:[0-4]\\d{2}|5(?:[0-2]\\d|3[0-5])))|[1-5]?\\d{1,4}))?';
+
+  re.src_host_terminator =
+
+    '(?=$|' + text_separators + '|' + re.src_ZPCc + ')(?!-|_|:\\d|\\.-|\\.(?!$|' + re.src_ZPCc + '))';
+
+  re.src_path =
+
+    '(?:' +
+      '[/?#]' +
+        '(?:' +
+          '(?!' + re.src_ZCc + '|' + text_separators + '|[()[\\]{}.,"\'?!\\-]).|' +
+          '\\[(?:(?!' + re.src_ZCc + '|\\]).)*\\]|' +
+          '\\((?:(?!' + re.src_ZCc + '|[)]).)*\\)|' +
+          '\\{(?:(?!' + re.src_ZCc + '|[}]).)*\\}|' +
+          '\\"(?:(?!' + re.src_ZCc + '|["]).)+\\"|' +
+          "\\'(?:(?!" + re.src_ZCc + "|[']).)+\\'|" +
+          "\\'(?=" + re.src_pseudo_letter + '|[-]).|' +  // allow `I'm_king` if no pair found
+          '\\.{2,4}[a-zA-Z0-9%/]|' + // github has ... in commit range links,
+                                     // google has .... in links (issue #66)
+                                     // Restrict to
+                                     // - english
+                                     // - percent-encoded
+                                     // - parts of file path
+                                     // until more examples found.
+          '\\.(?!' + re.src_ZCc + '|[.]).|' +
+          (opts && opts['---'] ?
+            '\\-(?!--(?:[^-]|$))(?:-*)|' // `---` => long dash, terminate
+            :
+            '\\-+|'
+          ) +
+          '\\,(?!' + re.src_ZCc + ').|' +      // allow `,,,` in paths
+          '\\!(?!' + re.src_ZCc + '|[!]).|' +
+          '\\?(?!' + re.src_ZCc + '|[?]).' +
+        ')+' +
+      '|\\/' +
+    ')?';
+
+  // Allow anything in markdown spec, forbid quote (") at the first position
+  // because emails enclosed in quotes are far more common
+  re.src_email_name =
+
+    '[\\-;:&=\\+\\$,\\.a-zA-Z0-9_][\\-;:&=\\+\\$,\\"\\.a-zA-Z0-9_]*';
+
+  re.src_xn =
+
+    'xn--[a-z0-9\\-]{1,59}';
+
+  // More to read about domain names
+  // http://serverfault.com/questions/638260/
+
+  re.src_domain_root =
+
+    // Allow letters & digits (http://test1)
+    '(?:' +
+      re.src_xn +
+      '|' +
+      re.src_pseudo_letter + '{1,63}' +
+    ')';
+
+  re.src_domain =
+
+    '(?:' +
+      re.src_xn +
+      '|' +
+      '(?:' + re.src_pseudo_letter + ')' +
+      '|' +
+      '(?:' + re.src_pseudo_letter + '(?:-|' + re.src_pseudo_letter + '){0,61}' + re.src_pseudo_letter + ')' +
+    ')';
+
+  re.src_host =
+
+    '(?:' +
+    // Don't need IP check, because digits are already allowed in normal domain names
+    //   src_ip4 +
+    // '|' +
+      '(?:(?:(?:' + re.src_domain + ')\\.)*' + re.src_domain/*_root*/ + ')' +
+    ')';
+
+  re.tpl_host_fuzzy =
+
+    '(?:' +
+      re.src_ip4 +
+    '|' +
+      '(?:(?:(?:' + re.src_domain + ')\\.)+(?:%TLDS%))' +
+    ')';
+
+  re.tpl_host_no_ip_fuzzy =
+
+    '(?:(?:(?:' + re.src_domain + ')\\.)+(?:%TLDS%))';
+
+  re.src_host_strict =
+
+    re.src_host + re.src_host_terminator;
+
+  re.tpl_host_fuzzy_strict =
+
+    re.tpl_host_fuzzy + re.src_host_terminator;
+
+  re.src_host_port_strict =
+
+    re.src_host + re.src_port + re.src_host_terminator;
+
+  re.tpl_host_port_fuzzy_strict =
+
+    re.tpl_host_fuzzy + re.src_port + re.src_host_terminator;
+
+  re.tpl_host_port_no_ip_fuzzy_strict =
+
+    re.tpl_host_no_ip_fuzzy + re.src_port + re.src_host_terminator;
+
+
+  ////////////////////////////////////////////////////////////////////////////////
+  // Main rules
+
+  // Rude test fuzzy links by host, for quick deny
+  re.tpl_host_fuzzy_test =
+
+    'localhost|www\\.|\\.\\d{1,3}\\.|(?:\\.(?:%TLDS%)(?:' + re.src_ZPCc + '|>|$))';
+
+  re.tpl_email_fuzzy =
+
+      '(^|' + text_separators + '|"|\\(|' + re.src_ZCc + ')' +
+      '(' + re.src_email_name + '@' + re.tpl_host_fuzzy_strict + ')';
+
+  re.tpl_link_fuzzy =
+      // Fuzzy link can't be prepended with .:/\- and non punctuation.
+      // but can start with > (markdown blockquote)
+      '(^|(?![.:/\\-_@])(?:[$+<=>^`|\uff5c]|' + re.src_ZPCc + '))' +
+      '((?![$+<=>^`|\uff5c])' + re.tpl_host_port_fuzzy_strict + re.src_path + ')';
+
+  re.tpl_link_no_ip_fuzzy =
+      // Fuzzy link can't be prepended with .:/\- and non punctuation.
+      // but can start with > (markdown blockquote)
+      '(^|(?![.:/\\-_@])(?:[$+<=>^`|\uff5c]|' + re.src_ZPCc + '))' +
+      '((?![$+<=>^`|\uff5c])' + re.tpl_host_port_no_ip_fuzzy_strict + re.src_path + ')';
+
+  return re;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/match-sorter/dist/match-sorter.esm.js":
+/*!************************************************************!*\
+  !*** ./node_modules/match-sorter/dist/match-sorter.esm.js ***!
+  \************************************************************/
+/*! exports provided: default, rankings */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rankings", function() { return rankings; });
+/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
+/* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! remove-accents */ "./node_modules/remove-accents/index.js");
+/* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(remove_accents__WEBPACK_IMPORTED_MODULE_1__);
+
+
+
+var rankings = {
+  CASE_SENSITIVE_EQUAL: 9,
+  EQUAL: 8,
+  STARTS_WITH: 7,
+  WORD_STARTS_WITH: 6,
+  STRING_CASE: 5,
+  STRING_CASE_ACRONYM: 4,
+  CONTAINS: 3,
+  ACRONYM: 2,
+  MATCHES: 1,
+  NO_MATCH: 0
+};
+var caseRankings = {
+  CAMEL: 0.8,
+  PASCAL: 0.6,
+  KEBAB: 0.4,
+  SNAKE: 0.2,
+  NO_CASE: 0
+};
+matchSorter.rankings = rankings;
+matchSorter.caseRankings = caseRankings;
+/**
+ * Takes an array of items and a value and returns a new array with the items that match the given value
+ * @param {Array} items - the items to sort
+ * @param {String} value - the value to use for ranking
+ * @param {Object} options - Some options to configure the sorter
+ * @return {Array} - the new sorted array
+ */
+
+function matchSorter(items, value, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  // not performing any search/sort if value(search term) is empty
+  if (!value) return items;
+  var _options = options,
+      keys = _options.keys,
+      _options$threshold = _options.threshold,
+      threshold = _options$threshold === void 0 ? rankings.MATCHES : _options$threshold;
+  var matchedItems = items.reduce(reduceItemsToRanked, []);
+  return matchedItems.sort(sortRankedItems).map(function (_ref) {
+    var item = _ref.item;
+    return item;
+  });
+
+  function reduceItemsToRanked(matches, item, index) {
+    var _getHighestRanking = getHighestRanking(item, keys, value, options),
+        rankedItem = _getHighestRanking.rankedItem,
+        rank = _getHighestRanking.rank,
+        keyIndex = _getHighestRanking.keyIndex,
+        _getHighestRanking$ke = _getHighestRanking.keyThreshold,
+        keyThreshold = _getHighestRanking$ke === void 0 ? threshold : _getHighestRanking$ke;
+
+    if (rank >= keyThreshold) {
+      matches.push({
+        rankedItem: rankedItem,
+        item: item,
+        rank: rank,
+        index: index,
+        keyIndex: keyIndex
+      });
+    }
+
+    return matches;
+  }
+}
+/**
+ * Gets the highest ranking for value for the given item based on its values for the given keys
+ * @param {*} item - the item to rank
+ * @param {Array} keys - the keys to get values from the item for the ranking
+ * @param {String} value - the value to rank against
+ * @param {Object} options - options to control the ranking
+ * @return {{rank: Number, keyIndex: Number, keyThreshold: Number}} - the highest ranking
+ */
+
+
+function getHighestRanking(item, keys, value, options) {
+  if (!keys) {
+    return {
+      // ends up being duplicate of 'item' in matches but consistent
+      rankedItem: item,
+      rank: getMatchRanking(item, value, options),
+      keyIndex: -1,
+      keyThreshold: options.threshold
+    };
+  }
+
+  var valuesToRank = getAllValuesToRank(item, keys);
+  return valuesToRank.reduce(function (_ref2, _ref3, i) {
+    var rank = _ref2.rank,
+        keyIndex = _ref2.keyIndex,
+        keyThreshold = _ref2.keyThreshold;
+    var itemValue = _ref3.itemValue,
+        attributes = _ref3.attributes;
+    var newRank = getMatchRanking(itemValue, value, options);
+    var minRanking = attributes.minRanking,
+        maxRanking = attributes.maxRanking,
+        threshold = attributes.threshold;
+
+    if (newRank < minRanking && newRank >= rankings.MATCHES) {
+      newRank = minRanking;
+    } else if (newRank > maxRanking) {
+      newRank = maxRanking;
+    }
+
+    if (newRank > rank) {
+      rank = newRank;
+      keyIndex = i;
+      keyThreshold = threshold;
+    }
+
+    return {
+      rankedItem: itemValue,
+      rank: rank,
+      keyIndex: keyIndex,
+      keyThreshold: keyThreshold
+    };
+  }, {
+    rank: rankings.NO_MATCH,
+    keyIndex: -1,
+    keyThreshold: options.threshold
+  });
+}
+/**
+ * Gives a rankings score based on how well the two strings match.
+ * @param {String} testString - the string to test against
+ * @param {String} stringToRank - the string to rank
+ * @param {Object} options - options for the match (like keepDiacritics for comparison)
+ * @returns {Number} the ranking for how well stringToRank matches testString
+ */
+
+
+function getMatchRanking(testString, stringToRank, options) {
+  /* eslint complexity:[2, 12] */
+  testString = prepareValueForComparison(testString, options);
+  stringToRank = prepareValueForComparison(stringToRank, options); // too long
+
+  if (stringToRank.length > testString.length) {
+    return rankings.NO_MATCH;
+  } // case sensitive equals
+
+
+  if (testString === stringToRank) {
+    return rankings.CASE_SENSITIVE_EQUAL;
+  }
+
+  var caseRank = getCaseRanking(testString);
+  var isPartial = isPartialOfCase(testString, stringToRank, caseRank);
+  var isCasedAcronym = isCaseAcronym(testString, stringToRank, caseRank); // Lower casing before further comparison
+
+  testString = testString.toLowerCase();
+  stringToRank = stringToRank.toLowerCase(); // case insensitive equals
+
+  if (testString === stringToRank) {
+    return rankings.EQUAL + caseRank;
+  } // starts with
+
+
+  if (testString.indexOf(stringToRank) === 0) {
+    return rankings.STARTS_WITH + caseRank;
+  } // word starts with
+
+
+  if (testString.indexOf(" " + stringToRank) !== -1) {
+    return rankings.WORD_STARTS_WITH + caseRank;
+  } // is a part inside a cased string
+
+
+  if (isPartial) {
+    return rankings.STRING_CASE + caseRank;
+  } // is acronym for a cased string
+
+
+  if (caseRank > 0 && isCasedAcronym) {
+    return rankings.STRING_CASE_ACRONYM + caseRank;
+  } // contains
+
+
+  if (testString.indexOf(stringToRank) !== -1) {
+    return rankings.CONTAINS + caseRank;
+  } else if (stringToRank.length === 1) {
+    // If the only character in the given stringToRank
+    //   isn't even contained in the testString, then
+    //   it's definitely not a match.
+    return rankings.NO_MATCH;
+  } // acronym
+
+
+  if (getAcronym(testString).indexOf(stringToRank) !== -1) {
+    return rankings.ACRONYM + caseRank;
+  } // will return a number between rankings.MATCHES and
+  // rankings.MATCHES + 1 depending  on how close of a match it is.
+
+
+  return getClosenessRanking(testString, stringToRank);
+}
+/**
+ * Generates an acronym for a string.
+ *
+ * @param {String} string the string for which to produce the acronym
+ * @returns {String} the acronym
+ */
+
+
+function getAcronym(string) {
+  var acronym = '';
+  var wordsInString = string.split(' ');
+  wordsInString.forEach(function (wordInString) {
+    var splitByHyphenWords = wordInString.split('-');
+    splitByHyphenWords.forEach(function (splitByHyphenWord) {
+      acronym += splitByHyphenWord.substr(0, 1);
+    });
+  });
+  return acronym;
+}
+/**
+ * Returns a score base on the case of the testString
+ * @param {String} testString - the string to test against
+ * @returns {Number} the number of the ranking,
+ * based on the case between 0 and 1 for how the testString matches the case
+ */
+
+
+function getCaseRanking(testString) {
+  var containsUpperCase = testString.toLowerCase() !== testString;
+  var containsDash = testString.indexOf('-') >= 0;
+  var containsUnderscore = testString.indexOf('_') >= 0;
+
+  if (!containsUpperCase && !containsUnderscore && containsDash) {
+    return caseRankings.KEBAB;
+  }
+
+  if (!containsUpperCase && containsUnderscore && !containsDash) {
+    return caseRankings.SNAKE;
+  }
+
+  if (containsUpperCase && !containsDash && !containsUnderscore) {
+    var startsWithUpperCase = testString[0].toUpperCase() === testString[0];
+
+    if (startsWithUpperCase) {
+      return caseRankings.PASCAL;
+    }
+
+    return caseRankings.CAMEL;
+  }
+
+  return caseRankings.NO_CASE;
+}
+/**
+ * Returns whether the stringToRank is one of the case parts in the testString (works with any string case)
+ * @example
+ * // returns true
+ * isPartialOfCase('helloWorld', 'world', caseRankings.CAMEL)
+ * @example
+ * // returns false
+ * isPartialOfCase('helloWorld', 'oworl', caseRankings.CAMEL)
+ * @param {String} testString - the string to test against
+ * @param {String} stringToRank - the string to rank
+ * @param {Number} caseRanking - the ranking score based on case of testString
+ * @returns {Boolean} whether the stringToRank is one of the case parts in the testString
+ */
+
+
+function isPartialOfCase(testString, stringToRank, caseRanking) {
+  var testIndex = testString.toLowerCase().indexOf(stringToRank.toLowerCase());
+
+  switch (caseRanking) {
+    case caseRankings.SNAKE:
+      return testString[testIndex - 1] === '_';
+
+    case caseRankings.KEBAB:
+      return testString[testIndex - 1] === '-';
+
+    case caseRankings.PASCAL:
+    case caseRankings.CAMEL:
+      return testIndex !== -1 && testString[testIndex] === testString[testIndex].toUpperCase();
+
+    default:
+      return false;
+  }
+}
+/**
+ * Check if stringToRank is an acronym for a partial case
+ * @example
+ * // returns true
+ * isCaseAcronym('super_duper_file', 'sdf', caseRankings.SNAKE)
+ * @param {String} testString - the string to test against
+ * @param {String} stringToRank - the acronym to test
+ * @param {Number} caseRank - the ranking of the case
+ * @returns {Boolean} whether the stringToRank is an acronym for the testString
+ */
+
+
+function isCaseAcronym(testString, stringToRank, caseRank) {
+  var splitValue = null;
+
+  switch (caseRank) {
+    case caseRankings.SNAKE:
+      splitValue = '_';
+      break;
+
+    case caseRankings.KEBAB:
+      splitValue = '-';
+      break;
+
+    case caseRankings.PASCAL:
+    case caseRankings.CAMEL:
+      splitValue = /(?=[A-Z])/;
+      break;
+
+    default:
+      splitValue = null;
+  }
+
+  var splitTestString = testString.split(splitValue);
+  return stringToRank.toLowerCase().split('').reduce(function (correct, char, charIndex) {
+    var splitItem = splitTestString[charIndex];
+    return correct && splitItem && splitItem[0].toLowerCase() === char;
+  }, true);
+}
+/**
+ * Returns a score based on how spread apart the
+ * characters from the stringToRank are within the testString.
+ * A number close to rankings.MATCHES represents a loose match. A number close
+ * to rankings.MATCHES + 1 represents a tighter match.
+ * @param {String} testString - the string to test against
+ * @param {String} stringToRank - the string to rank
+ * @returns {Number} the number between rankings.MATCHES and
+ * rankings.MATCHES + 1 for how well stringToRank matches testString
+ */
+
+
+function getClosenessRanking(testString, stringToRank) {
+  var matchingInOrderCharCount = 0;
+  var charNumber = 0;
+
+  function findMatchingCharacter(matchChar, string, index) {
+    for (var j = index; j < string.length; j++) {
+      var stringChar = string[j];
+
+      if (stringChar === matchChar) {
+        matchingInOrderCharCount += 1;
+        return j + 1;
+      }
+    }
+
+    return -1;
+  }
+
+  function getRanking(spread) {
+    var inOrderPercentage = matchingInOrderCharCount / stringToRank.length;
+    var ranking = rankings.MATCHES + inOrderPercentage * (1 / spread);
+    return ranking;
+  }
+
+  var firstIndex = findMatchingCharacter(stringToRank[0], testString, 0);
+
+  if (firstIndex < 0) {
+    return rankings.NO_MATCH;
+  }
+
+  charNumber = firstIndex;
+
+  for (var i = 1; i < stringToRank.length; i++) {
+    var matchChar = stringToRank[i];
+    charNumber = findMatchingCharacter(matchChar, testString, charNumber);
+    var found = charNumber > -1;
+
+    if (!found) {
+      return rankings.NO_MATCH;
+    }
+  }
+
+  var spread = charNumber - firstIndex;
+  return getRanking(spread);
+}
+/**
+ * Sorts items that have a rank, index, and keyIndex
+ * @param {Object} a - the first item to sort
+ * @param {Object} b - the second item to sort
+ * @return {Number} -1 if a should come first, 1 if b should come first
+ * Note: will never return 0
+ */
+
+
+function sortRankedItems(a, b) {
+  var aFirst = -1;
+  var bFirst = 1;
+  var aRankedItem = a.rankedItem,
+      aRank = a.rank,
+      aKeyIndex = a.keyIndex;
+  var bRankedItem = b.rankedItem,
+      bRank = b.rank,
+      bKeyIndex = b.keyIndex;
+
+  if (aRank === bRank) {
+    if (aKeyIndex === bKeyIndex) {
+      return String(aRankedItem).localeCompare(bRankedItem);
+    } else {
+      return aKeyIndex < bKeyIndex ? aFirst : bFirst;
+    }
+  } else {
+    return aRank > bRank ? aFirst : bFirst;
+  }
+}
+/**
+ * Prepares value for comparison by stringifying it, removing diacritics (if specified)
+ * @param {String} value - the value to clean
+ * @param {Object} options - {keepDiacritics: whether to remove diacritics}
+ * @return {String} the prepared value
+ */
+
+
+function prepareValueForComparison(value, _ref4) {
+  var keepDiacritics = _ref4.keepDiacritics;
+  value = "" + value; // toString
+
+  if (!keepDiacritics) {
+    value = remove_accents__WEBPACK_IMPORTED_MODULE_1___default()(value);
+  }
+
+  return value;
+}
+/**
+ * Gets value for key in item at arbitrarily nested keypath
+ * @param {Object} item - the item
+ * @param {Object|Function} key - the potentially nested keypath or property callback
+ * @return {Array} - an array containing the value(s) at the nested keypath
+ */
+
+
+function getItemValues(item, key) {
+  if (typeof key === 'object') {
+    key = key.key;
+  }
+
+  var value;
+
+  if (typeof key === 'function') {
+    value = key(item); // eslint-disable-next-line no-negated-condition
+  } else if (key.indexOf('.') !== -1) {
+    // handle nested keys
+    value = key.split('.').reduce(function (itemObj, nestedKey) {
+      return itemObj ? itemObj[nestedKey] : null;
+    }, item);
+  } else {
+    value = item[key];
+  } // concat because `value` can be a string or an array
+  // eslint-disable-next-line
+
+
+  return value != null ? [].concat(value) : null;
+}
+/**
+ * Gets all the values for the given keys in the given item and returns an array of those values
+ * @param {Object} item - the item from which the values will be retrieved
+ * @param {Array} keys - the keys to use to retrieve the values
+ * @return {Array} objects with {itemValue, attributes}
+ */
+
+
+function getAllValuesToRank(item, keys) {
+  return keys.reduce(function (allVals, key) {
+    var values = getItemValues(item, key);
+
+    if (values) {
+      values.forEach(function (itemValue) {
+        allVals.push({
+          itemValue: itemValue,
+          attributes: getKeyAttributes(key)
+        });
+      });
+    }
+
+    return allVals;
+  }, []);
+}
+/**
+ * Gets all the attributes for the given key
+ * @param {Object|String} key - the key from which the attributes will be retrieved
+ * @return {Object} object containing the key's attributes
+ */
+
+
+function getKeyAttributes(key) {
+  if (typeof key === 'string') {
+    key = {
+      key: key
+    };
+  }
+
+  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
+    maxRanking: Infinity,
+    minRanking: -Infinity
+  }, key);
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (matchSorter);
+
+
+
+/***/ }),
+
+/***/ "./node_modules/react-linkify/dist/components/Linkify.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/react-linkify/dist/components/Linkify.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var React = _interopRequireWildcard(_react);
+
+var _defaultComponentDecorator = __webpack_require__(/*! ../decorators/defaultComponentDecorator */ "./node_modules/react-linkify/dist/decorators/defaultComponentDecorator.js");
+
+var _defaultComponentDecorator2 = _interopRequireDefault(_defaultComponentDecorator);
+
+var _defaultHrefDecorator = __webpack_require__(/*! ../decorators/defaultHrefDecorator */ "./node_modules/react-linkify/dist/decorators/defaultHrefDecorator.js");
+
+var _defaultHrefDecorator2 = _interopRequireDefault(_defaultHrefDecorator);
+
+var _defaultMatchDecorator = __webpack_require__(/*! ../decorators/defaultMatchDecorator */ "./node_modules/react-linkify/dist/decorators/defaultMatchDecorator.js");
+
+var _defaultMatchDecorator2 = _interopRequireDefault(_defaultMatchDecorator);
+
+var _defaultTextDecorator = __webpack_require__(/*! ../decorators/defaultTextDecorator */ "./node_modules/react-linkify/dist/decorators/defaultTextDecorator.js");
+
+var _defaultTextDecorator2 = _interopRequireDefault(_defaultTextDecorator);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Linkify = function (_React$Component) {
+  _inherits(Linkify, _React$Component);
+
+  function Linkify() {
+    _classCallCheck(this, Linkify);
+
+    return _possibleConstructorReturn(this, (Linkify.__proto__ || Object.getPrototypeOf(Linkify)).apply(this, arguments));
+  }
+
+  _createClass(Linkify, [{
+    key: 'parseString',
+    value: function parseString(string) {
+      var _this2 = this;
+
+      if (string === '') {
+        return string;
+      }
+
+      var matches = this.props.matchDecorator(string);
+      if (!matches) {
+        return string;
+      }
+
+      var elements = [];
+      var lastIndex = 0;
+      matches.forEach(function (match, i) {
+        // Push preceding text if there is any
+        if (match.index > lastIndex) {
+          elements.push(string.substring(lastIndex, match.index));
+        }
+
+        var decoratedHref = _this2.props.hrefDecorator(match.url);
+        var decoratedText = _this2.props.textDecorator(match.text);
+        var decoratedComponent = _this2.props.componentDecorator(decoratedHref, decoratedText, i);
+        elements.push(decoratedComponent);
+
+        lastIndex = match.lastIndex;
+      });
+
+      // Push remaining text if there is any
+      if (string.length > lastIndex) {
+        elements.push(string.substring(lastIndex));
+      }
+
+      return elements.length === 1 ? elements[0] : elements;
+    }
+  }, {
+    key: 'parse',
+    value: function parse(children) {
+      var _this3 = this;
+
+      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+      if (typeof children === 'string') {
+        return this.parseString(children);
+      } else if (React.isValidElement(children) && children.type !== 'a' && children.type !== 'button') {
+        return React.cloneElement(children, { key: key }, this.parse(children.props.children));
+      } else if (Array.isArray(children)) {
+        return children.map(function (child, i) {
+          return _this3.parse(child, i);
+        });
+      }
+
+      return children;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return React.createElement(
+        React.Fragment,
+        null,
+        this.parse(this.props.children)
+      );
+    }
+  }]);
+
+  return Linkify;
+}(React.Component);
+
+Linkify.defaultProps = {
+  componentDecorator: _defaultComponentDecorator2.default,
+  hrefDecorator: _defaultHrefDecorator2.default,
+  matchDecorator: _defaultMatchDecorator2.default,
+  textDecorator: _defaultTextDecorator2.default
+};
+exports.default = Linkify;
+
+/***/ }),
+
+/***/ "./node_modules/react-linkify/dist/decorators/defaultComponentDecorator.js":
+/*!*********************************************************************************!*\
+  !*** ./node_modules/react-linkify/dist/decorators/defaultComponentDecorator.js ***!
+  \*********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var React = _interopRequireWildcard(_react);
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+exports.default = function (decoratedHref, decoratedText, key) {
+  return React.createElement(
+    'a',
+    { href: decoratedHref, key: key },
+    decoratedText
+  );
+};
+
+/***/ }),
+
+/***/ "./node_modules/react-linkify/dist/decorators/defaultHrefDecorator.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/react-linkify/dist/decorators/defaultHrefDecorator.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (href) {
+  return href;
+};
+
+/***/ }),
+
+/***/ "./node_modules/react-linkify/dist/decorators/defaultMatchDecorator.js":
+/*!*****************************************************************************!*\
+  !*** ./node_modules/react-linkify/dist/decorators/defaultMatchDecorator.js ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _linkifyIt = __webpack_require__(/*! linkify-it */ "./node_modules/linkify-it/index.js");
+
+var _linkifyIt2 = _interopRequireDefault(_linkifyIt);
+
+var _tlds = __webpack_require__(/*! tlds */ "./node_modules/tlds/index.js");
+
+var _tlds2 = _interopRequireDefault(_tlds);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var linkify = new _linkifyIt2.default();
+linkify.tlds(_tlds2.default);
+
+exports.default = function (text) {
+  return linkify.match(text);
+};
+
+/***/ }),
+
+/***/ "./node_modules/react-linkify/dist/decorators/defaultTextDecorator.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/react-linkify/dist/decorators/defaultTextDecorator.js ***!
+  \****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = function (text) {
+  return text;
+};
+
+/***/ }),
+
+/***/ "./node_modules/react-linkify/dist/index.js":
+/*!**************************************************!*\
+  !*** ./node_modules/react-linkify/dist/index.js ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _Linkify = __webpack_require__(/*! ./components/Linkify */ "./node_modules/react-linkify/dist/components/Linkify.js");
+
+var _Linkify2 = _interopRequireDefault(_Linkify);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = _Linkify2.default;
+
+/***/ }),
+
+/***/ "./node_modules/remove-accents/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/remove-accents/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+var characterMap = {
+	"À": "A",
+	"Á": "A",
+	"Â": "A",
+	"Ã": "A",
+	"Ä": "A",
+	"Å": "A",
+	"Ấ": "A",
+	"Ắ": "A",
+	"Ẳ": "A",
+	"Ẵ": "A",
+	"Ặ": "A",
+	"Æ": "AE",
+	"Ầ": "A",
+	"Ằ": "A",
+	"Ȃ": "A",
+	"Ç": "C",
+	"Ḉ": "C",
+	"È": "E",
+	"É": "E",
+	"Ê": "E",
+	"Ë": "E",
+	"Ế": "E",
+	"Ḗ": "E",
+	"Ề": "E",
+	"Ḕ": "E",
+	"Ḝ": "E",
+	"Ȇ": "E",
+	"Ì": "I",
+	"Í": "I",
+	"Î": "I",
+	"Ï": "I",
+	"Ḯ": "I",
+	"Ȋ": "I",
+	"Ð": "D",
+	"Ñ": "N",
+	"Ò": "O",
+	"Ó": "O",
+	"Ô": "O",
+	"Õ": "O",
+	"Ö": "O",
+	"Ø": "O",
+	"Ố": "O",
+	"Ṍ": "O",
+	"Ṓ": "O",
+	"Ȏ": "O",
+	"Ù": "U",
+	"Ú": "U",
+	"Û": "U",
+	"Ü": "U",
+	"Ý": "Y",
+	"à": "a",
+	"á": "a",
+	"â": "a",
+	"ã": "a",
+	"ä": "a",
+	"å": "a",
+	"ấ": "a",
+	"ắ": "a",
+	"ẳ": "a",
+	"ẵ": "a",
+	"ặ": "a",
+	"æ": "ae",
+	"ầ": "a",
+	"ằ": "a",
+	"ȃ": "a",
+	"ç": "c",
+	"ḉ": "c",
+	"è": "e",
+	"é": "e",
+	"ê": "e",
+	"ë": "e",
+	"ế": "e",
+	"ḗ": "e",
+	"ề": "e",
+	"ḕ": "e",
+	"ḝ": "e",
+	"ȇ": "e",
+	"ì": "i",
+	"í": "i",
+	"î": "i",
+	"ï": "i",
+	"ḯ": "i",
+	"ȋ": "i",
+	"ð": "d",
+	"ñ": "n",
+	"ò": "o",
+	"ó": "o",
+	"ô": "o",
+	"õ": "o",
+	"ö": "o",
+	"ø": "o",
+	"ố": "o",
+	"ṍ": "o",
+	"ṓ": "o",
+	"ȏ": "o",
+	"ù": "u",
+	"ú": "u",
+	"û": "u",
+	"ü": "u",
+	"ý": "y",
+	"ÿ": "y",
+	"Ā": "A",
+	"ā": "a",
+	"Ă": "A",
+	"ă": "a",
+	"Ą": "A",
+	"ą": "a",
+	"Ć": "C",
+	"ć": "c",
+	"Ĉ": "C",
+	"ĉ": "c",
+	"Ċ": "C",
+	"ċ": "c",
+	"Č": "C",
+	"č": "c",
+	"C̆": "C",
+	"c̆": "c",
+	"Ď": "D",
+	"ď": "d",
+	"Đ": "D",
+	"đ": "d",
+	"Ē": "E",
+	"ē": "e",
+	"Ĕ": "E",
+	"ĕ": "e",
+	"Ė": "E",
+	"ė": "e",
+	"Ę": "E",
+	"ę": "e",
+	"Ě": "E",
+	"ě": "e",
+	"Ĝ": "G",
+	"Ǵ": "G",
+	"ĝ": "g",
+	"ǵ": "g",
+	"Ğ": "G",
+	"ğ": "g",
+	"Ġ": "G",
+	"ġ": "g",
+	"Ģ": "G",
+	"ģ": "g",
+	"Ĥ": "H",
+	"ĥ": "h",
+	"Ħ": "H",
+	"ħ": "h",
+	"Ḫ": "H",
+	"ḫ": "h",
+	"Ĩ": "I",
+	"ĩ": "i",
+	"Ī": "I",
+	"ī": "i",
+	"Ĭ": "I",
+	"ĭ": "i",
+	"Į": "I",
+	"į": "i",
+	"İ": "I",
+	"ı": "i",
+	"Ĳ": "IJ",
+	"ĳ": "ij",
+	"Ĵ": "J",
+	"ĵ": "j",
+	"Ķ": "K",
+	"ķ": "k",
+	"Ḱ": "K",
+	"ḱ": "k",
+	"K̆": "K",
+	"k̆": "k",
+	"Ĺ": "L",
+	"ĺ": "l",
+	"Ļ": "L",
+	"ļ": "l",
+	"Ľ": "L",
+	"ľ": "l",
+	"Ŀ": "L",
+	"ŀ": "l",
+	"Ł": "l",
+	"ł": "l",
+	"Ḿ": "M",
+	"ḿ": "m",
+	"M̆": "M",
+	"m̆": "m",
+	"Ń": "N",
+	"ń": "n",
+	"Ņ": "N",
+	"ņ": "n",
+	"Ň": "N",
+	"ň": "n",
+	"ŉ": "n",
+	"N̆": "N",
+	"n̆": "n",
+	"Ō": "O",
+	"ō": "o",
+	"Ŏ": "O",
+	"ŏ": "o",
+	"Ő": "O",
+	"ő": "o",
+	"Œ": "OE",
+	"œ": "oe",
+	"P̆": "P",
+	"p̆": "p",
+	"Ŕ": "R",
+	"ŕ": "r",
+	"Ŗ": "R",
+	"ŗ": "r",
+	"Ř": "R",
+	"ř": "r",
+	"R̆": "R",
+	"r̆": "r",
+	"Ȓ": "R",
+	"ȓ": "r",
+	"Ś": "S",
+	"ś": "s",
+	"Ŝ": "S",
+	"ŝ": "s",
+	"Ş": "S",
+	"Ș": "S",
+	"ș": "s",
+	"ş": "s",
+	"Š": "S",
+	"š": "s",
+	"Ţ": "T",
+	"ţ": "t",
+	"ț": "t",
+	"Ț": "T",
+	"Ť": "T",
+	"ť": "t",
+	"Ŧ": "T",
+	"ŧ": "t",
+	"T̆": "T",
+	"t̆": "t",
+	"Ũ": "U",
+	"ũ": "u",
+	"Ū": "U",
+	"ū": "u",
+	"Ŭ": "U",
+	"ŭ": "u",
+	"Ů": "U",
+	"ů": "u",
+	"Ű": "U",
+	"ű": "u",
+	"Ų": "U",
+	"ų": "u",
+	"Ȗ": "U",
+	"ȗ": "u",
+	"V̆": "V",
+	"v̆": "v",
+	"Ŵ": "W",
+	"ŵ": "w",
+	"Ẃ": "W",
+	"ẃ": "w",
+	"X̆": "X",
+	"x̆": "x",
+	"Ŷ": "Y",
+	"ŷ": "y",
+	"Ÿ": "Y",
+	"Y̆": "Y",
+	"y̆": "y",
+	"Ź": "Z",
+	"ź": "z",
+	"Ż": "Z",
+	"ż": "z",
+	"Ž": "Z",
+	"ž": "z",
+	"ſ": "s",
+	"ƒ": "f",
+	"Ơ": "O",
+	"ơ": "o",
+	"Ư": "U",
+	"ư": "u",
+	"Ǎ": "A",
+	"ǎ": "a",
+	"Ǐ": "I",
+	"ǐ": "i",
+	"Ǒ": "O",
+	"ǒ": "o",
+	"Ǔ": "U",
+	"ǔ": "u",
+	"Ǖ": "U",
+	"ǖ": "u",
+	"Ǘ": "U",
+	"ǘ": "u",
+	"Ǚ": "U",
+	"ǚ": "u",
+	"Ǜ": "U",
+	"ǜ": "u",
+	"Ứ": "U",
+	"ứ": "u",
+	"Ṹ": "U",
+	"ṹ": "u",
+	"Ǻ": "A",
+	"ǻ": "a",
+	"Ǽ": "AE",
+	"ǽ": "ae",
+	"Ǿ": "O",
+	"ǿ": "o",
+	"Þ": "TH",
+	"þ": "th",
+	"Ṕ": "P",
+	"ṕ": "p",
+	"Ṥ": "S",
+	"ṥ": "s",
+	"X́": "X",
+	"x́": "x",
+	"Ѓ": "Г",
+	"ѓ": "г",
+	"Ќ": "К",
+	"ќ": "к",
+	"A̋": "A",
+	"a̋": "a",
+	"E̋": "E",
+	"e̋": "e",
+	"I̋": "I",
+	"i̋": "i",
+	"Ǹ": "N",
+	"ǹ": "n",
+	"Ồ": "O",
+	"ồ": "o",
+	"Ṑ": "O",
+	"ṑ": "o",
+	"Ừ": "U",
+	"ừ": "u",
+	"Ẁ": "W",
+	"ẁ": "w",
+	"Ỳ": "Y",
+	"ỳ": "y",
+	"Ȁ": "A",
+	"ȁ": "a",
+	"Ȅ": "E",
+	"ȅ": "e",
+	"Ȉ": "I",
+	"ȉ": "i",
+	"Ȍ": "O",
+	"ȍ": "o",
+	"Ȑ": "R",
+	"ȑ": "r",
+	"Ȕ": "U",
+	"ȕ": "u",
+	"B̌": "B",
+	"b̌": "b",
+	"Č̣": "C",
+	"č̣": "c",
+	"Ê̌": "E",
+	"ê̌": "e",
+	"F̌": "F",
+	"f̌": "f",
+	"Ǧ": "G",
+	"ǧ": "g",
+	"Ȟ": "H",
+	"ȟ": "h",
+	"J̌": "J",
+	"ǰ": "j",
+	"Ǩ": "K",
+	"ǩ": "k",
+	"M̌": "M",
+	"m̌": "m",
+	"P̌": "P",
+	"p̌": "p",
+	"Q̌": "Q",
+	"q̌": "q",
+	"Ř̩": "R",
+	"ř̩": "r",
+	"Ṧ": "S",
+	"ṧ": "s",
+	"V̌": "V",
+	"v̌": "v",
+	"W̌": "W",
+	"w̌": "w",
+	"X̌": "X",
+	"x̌": "x",
+	"Y̌": "Y",
+	"y̌": "y",
+	"A̧": "A",
+	"a̧": "a",
+	"B̧": "B",
+	"b̧": "b",
+	"Ḑ": "D",
+	"ḑ": "d",
+	"Ȩ": "E",
+	"ȩ": "e",
+	"Ɛ̧": "E",
+	"ɛ̧": "e",
+	"Ḩ": "H",
+	"ḩ": "h",
+	"I̧": "I",
+	"i̧": "i",
+	"Ɨ̧": "I",
+	"ɨ̧": "i",
+	"M̧": "M",
+	"m̧": "m",
+	"O̧": "O",
+	"o̧": "o",
+	"Q̧": "Q",
+	"q̧": "q",
+	"U̧": "U",
+	"u̧": "u",
+	"X̧": "X",
+	"x̧": "x",
+	"Z̧": "Z",
+	"z̧": "z",
+};
+
+var chars = Object.keys(characterMap).join('|');
+var allAccents = new RegExp(chars, 'g');
+var firstAccent = new RegExp(chars, '');
+
+var removeAccents = function(string) {	
+	return string.replace(allAccents, function(match) {
+		return characterMap[match];
+	});
+};
+
+var hasAccents = function(string) {
+	return !!string.match(firstAccent);
+};
+
+module.exports = removeAccents;
+module.exports.has = hasAccents;
+module.exports.remove = removeAccents;
+
+
+/***/ }),
+
+/***/ "./node_modules/textarea-caret/index.js":
+/*!**********************************************!*\
+  !*** ./node_modules/textarea-caret/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* jshint browser: true */
+
+(function () {
+
+// The properties that we copy into a mirrored div.
+// Note that some browsers, such as Firefox,
+// do not concatenate properties, i.e. padding-top, bottom etc. -> padding,
+// so we have to do every single property specifically.
+var properties = [
+  'direction',  // RTL support
+  'boxSizing',
+  'width',  // on Chrome and IE, exclude the scrollbar, so the mirror div wraps exactly as the textarea does
+  'height',
+  'overflowX',
+  'overflowY',  // copy the scrollbar for IE
+
+  'borderTopWidth',
+  'borderRightWidth',
+  'borderBottomWidth',
+  'borderLeftWidth',
+  'borderStyle',
+
+  'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
+
+  // https://developer.mozilla.org/en-US/docs/Web/CSS/font
+  'fontStyle',
+  'fontVariant',
+  'fontWeight',
+  'fontStretch',
+  'fontSize',
+  'fontSizeAdjust',
+  'lineHeight',
+  'fontFamily',
+
+  'textAlign',
+  'textTransform',
+  'textIndent',
+  'textDecoration',  // might not make a difference, but better be safe
+
+  'letterSpacing',
+  'wordSpacing',
+
+  'tabSize',
+  'MozTabSize'
+
+];
+
+var isBrowser = (typeof window !== 'undefined');
+var isFirefox = (isBrowser && window.mozInnerScreenX != null);
+
+function getCaretCoordinates(element, position, options) {
+  if(!isBrowser) {
+    throw new Error('textarea-caret-position#getCaretCoordinates should only be called in a browser');
+  }
+
+  var debug = options && options.debug || false;
+  if (debug) {
+    var el = document.querySelector('#input-textarea-caret-position-mirror-div');
+    if ( el ) { el.parentNode.removeChild(el); }
+  }
+
+  // mirrored div
+  var div = document.createElement('div');
+  div.id = 'input-textarea-caret-position-mirror-div';
+  document.body.appendChild(div);
+
+  var style = div.style;
+  var computed = window.getComputedStyle? getComputedStyle(element) : element.currentStyle;  // currentStyle for IE < 9
+
+  // default textarea styles
+  style.whiteSpace = 'pre-wrap';
+  if (element.nodeName !== 'INPUT')
+    style.wordWrap = 'break-word';  // only for textarea-s
+
+  // position off-screen
+  style.position = 'absolute';  // required to return coordinates properly
+  if (!debug)
+    style.visibility = 'hidden';  // not 'display: none' because we want rendering
+
+  // transfer the element's properties to the div
+  properties.forEach(function (prop) {
+    style[prop] = computed[prop];
+  });
+
+  if (isFirefox) {
+    // Firefox lies about the overflow property for textareas: https://bugzilla.mozilla.org/show_bug.cgi?id=984275
+    if (element.scrollHeight > parseInt(computed.height))
+      style.overflowY = 'scroll';
+  } else {
+    style.overflow = 'hidden';  // for Chrome to not render a scrollbar; IE keeps overflowY = 'scroll'
+  }
+
+  div.textContent = element.value.substring(0, position);
+  // the second special handling for input type="text" vs textarea: spaces need to be replaced with non-breaking spaces - http://stackoverflow.com/a/13402035/1269037
+  if (element.nodeName === 'INPUT')
+    div.textContent = div.textContent.replace(/\s/g, '\u00a0');
+
+  var span = document.createElement('span');
+  // Wrapping must be replicated *exactly*, including when a long word gets
+  // onto the next line, with whitespace at the end of the line before (#7).
+  // The  *only* reliable way to do that is to copy the *entire* rest of the
+  // textarea's content into the <span> created at the caret position.
+  // for inputs, just '.' would be enough, but why bother?
+  span.textContent = element.value.substring(position) || '.';  // || because a completely empty faux span doesn't render at all
+  div.appendChild(span);
+
+  var coordinates = {
+    top: span.offsetTop + parseInt(computed['borderTopWidth']),
+    left: span.offsetLeft + parseInt(computed['borderLeftWidth'])
+  };
+
+  if (debug) {
+    span.style.backgroundColor = '#aaa';
+  } else {
+    document.body.removeChild(div);
+  }
+
+  return coordinates;
+}
+
+if ( true && typeof module.exports != 'undefined') {
+  module.exports = getCaretCoordinates;
+} else if(isBrowser){
+  window.getCaretCoordinates = getCaretCoordinates;
+}
+
+}());
+
+
+/***/ }),
+
+/***/ "./node_modules/tlds/index.js":
+/*!************************************!*\
+  !*** ./node_modules/tlds/index.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = [
+  "aaa",
+  "aarp",
+  "abarth",
+  "abb",
+  "abbott",
+  "abbvie",
+  "abc",
+  "able",
+  "abogado",
+  "abudhabi",
+  "ac",
+  "academy",
+  "accenture",
+  "accountant",
+  "accountants",
+  "aco",
+  "active",
+  "actor",
+  "ad",
+  "adac",
+  "ads",
+  "adult",
+  "ae",
+  "aeg",
+  "aero",
+  "aetna",
+  "af",
+  "afamilycompany",
+  "afl",
+  "africa",
+  "ag",
+  "agakhan",
+  "agency",
+  "ai",
+  "aig",
+  "aigo",
+  "airbus",
+  "airforce",
+  "airtel",
+  "akdn",
+  "al",
+  "alfaromeo",
+  "alibaba",
+  "alipay",
+  "allfinanz",
+  "allstate",
+  "ally",
+  "alsace",
+  "alstom",
+  "am",
+  "americanexpress",
+  "americanfamily",
+  "amex",
+  "amfam",
+  "amica",
+  "amsterdam",
+  "analytics",
+  "android",
+  "anquan",
+  "anz",
+  "ao",
+  "aol",
+  "apartments",
+  "app",
+  "apple",
+  "aq",
+  "aquarelle",
+  "ar",
+  "arab",
+  "aramco",
+  "archi",
+  "army",
+  "arpa",
+  "art",
+  "arte",
+  "as",
+  "asda",
+  "asia",
+  "associates",
+  "at",
+  "athleta",
+  "attorney",
+  "au",
+  "auction",
+  "audi",
+  "audible",
+  "audio",
+  "auspost",
+  "author",
+  "auto",
+  "autos",
+  "avianca",
+  "aw",
+  "aws",
+  "ax",
+  "axa",
+  "az",
+  "azure",
+  "ba",
+  "baby",
+  "baidu",
+  "banamex",
+  "bananarepublic",
+  "band",
+  "bank",
+  "bar",
+  "barcelona",
+  "barclaycard",
+  "barclays",
+  "barefoot",
+  "bargains",
+  "baseball",
+  "basketball",
+  "bauhaus",
+  "bayern",
+  "bb",
+  "bbc",
+  "bbt",
+  "bbva",
+  "bcg",
+  "bcn",
+  "bd",
+  "be",
+  "beats",
+  "beauty",
+  "beer",
+  "bentley",
+  "berlin",
+  "best",
+  "bestbuy",
+  "bet",
+  "bf",
+  "bg",
+  "bh",
+  "bharti",
+  "bi",
+  "bible",
+  "bid",
+  "bike",
+  "bing",
+  "bingo",
+  "bio",
+  "biz",
+  "bj",
+  "black",
+  "blackfriday",
+  "blanco",
+  "blockbuster",
+  "blog",
+  "bloomberg",
+  "blue",
+  "bm",
+  "bms",
+  "bmw",
+  "bn",
+  "bnl",
+  "bnpparibas",
+  "bo",
+  "boats",
+  "boehringer",
+  "bofa",
+  "bom",
+  "bond",
+  "boo",
+  "book",
+  "booking",
+  "bosch",
+  "bostik",
+  "boston",
+  "bot",
+  "boutique",
+  "box",
+  "br",
+  "bradesco",
+  "bridgestone",
+  "broadway",
+  "broker",
+  "brother",
+  "brussels",
+  "bs",
+  "bt",
+  "budapest",
+  "bugatti",
+  "build",
+  "builders",
+  "business",
+  "buy",
+  "buzz",
+  "bv",
+  "bw",
+  "by",
+  "bz",
+  "bzh",
+  "ca",
+  "cab",
+  "cafe",
+  "cal",
+  "call",
+  "calvinklein",
+  "cam",
+  "camera",
+  "camp",
+  "cancerresearch",
+  "canon",
+  "capetown",
+  "capital",
+  "capitalone",
+  "car",
+  "caravan",
+  "cards",
+  "care",
+  "career",
+  "careers",
+  "cars",
+  "cartier",
+  "casa",
+  "case",
+  "caseih",
+  "cash",
+  "casino",
+  "cat",
+  "catering",
+  "catholic",
+  "cba",
+  "cbn",
+  "cbre",
+  "cbs",
+  "cc",
+  "cd",
+  "ceb",
+  "center",
+  "ceo",
+  "cern",
+  "cf",
+  "cfa",
+  "cfd",
+  "cg",
+  "ch",
+  "chanel",
+  "channel",
+  "chase",
+  "chat",
+  "cheap",
+  "chintai",
+  "christmas",
+  "chrome",
+  "chrysler",
+  "church",
+  "ci",
+  "cipriani",
+  "circle",
+  "cisco",
+  "citadel",
+  "citi",
+  "citic",
+  "city",
+  "cityeats",
+  "ck",
+  "cl",
+  "claims",
+  "cleaning",
+  "click",
+  "clinic",
+  "clinique",
+  "clothing",
+  "cloud",
+  "club",
+  "clubmed",
+  "cm",
+  "cn",
+  "co",
+  "coach",
+  "codes",
+  "coffee",
+  "college",
+  "cologne",
+  "com",
+  "comcast",
+  "commbank",
+  "community",
+  "company",
+  "compare",
+  "computer",
+  "comsec",
+  "condos",
+  "construction",
+  "consulting",
+  "contact",
+  "contractors",
+  "cooking",
+  "cookingchannel",
+  "cool",
+  "coop",
+  "corsica",
+  "country",
+  "coupon",
+  "coupons",
+  "courses",
+  "cr",
+  "credit",
+  "creditcard",
+  "creditunion",
+  "cricket",
+  "crown",
+  "crs",
+  "cruise",
+  "cruises",
+  "csc",
+  "cu",
+  "cuisinella",
+  "cv",
+  "cw",
+  "cx",
+  "cy",
+  "cymru",
+  "cyou",
+  "cz",
+  "dabur",
+  "dad",
+  "dance",
+  "data",
+  "date",
+  "dating",
+  "datsun",
+  "day",
+  "dclk",
+  "dds",
+  "de",
+  "deal",
+  "dealer",
+  "deals",
+  "degree",
+  "delivery",
+  "dell",
+  "deloitte",
+  "delta",
+  "democrat",
+  "dental",
+  "dentist",
+  "desi",
+  "design",
+  "dev",
+  "dhl",
+  "diamonds",
+  "diet",
+  "digital",
+  "direct",
+  "directory",
+  "discount",
+  "discover",
+  "dish",
+  "diy",
+  "dj",
+  "dk",
+  "dm",
+  "dnp",
+  "do",
+  "docs",
+  "doctor",
+  "dodge",
+  "dog",
+  "doha",
+  "domains",
+  "dot",
+  "download",
+  "drive",
+  "dtv",
+  "dubai",
+  "duck",
+  "dunlop",
+  "duns",
+  "dupont",
+  "durban",
+  "dvag",
+  "dvr",
+  "dz",
+  "earth",
+  "eat",
+  "ec",
+  "eco",
+  "edeka",
+  "edu",
+  "education",
+  "ee",
+  "eg",
+  "email",
+  "emerck",
+  "energy",
+  "engineer",
+  "engineering",
+  "enterprises",
+  "epost",
+  "epson",
+  "equipment",
+  "er",
+  "ericsson",
+  "erni",
+  "es",
+  "esq",
+  "estate",
+  "esurance",
+  "et",
+  "etisalat",
+  "eu",
+  "eurovision",
+  "eus",
+  "events",
+  "everbank",
+  "exchange",
+  "expert",
+  "exposed",
+  "express",
+  "extraspace",
+  "fage",
+  "fail",
+  "fairwinds",
+  "faith",
+  "family",
+  "fan",
+  "fans",
+  "farm",
+  "farmers",
+  "fashion",
+  "fast",
+  "fedex",
+  "feedback",
+  "ferrari",
+  "ferrero",
+  "fi",
+  "fiat",
+  "fidelity",
+  "fido",
+  "film",
+  "final",
+  "finance",
+  "financial",
+  "fire",
+  "firestone",
+  "firmdale",
+  "fish",
+  "fishing",
+  "fit",
+  "fitness",
+  "fj",
+  "fk",
+  "flickr",
+  "flights",
+  "flir",
+  "florist",
+  "flowers",
+  "fly",
+  "fm",
+  "fo",
+  "foo",
+  "food",
+  "foodnetwork",
+  "football",
+  "ford",
+  "forex",
+  "forsale",
+  "forum",
+  "foundation",
+  "fox",
+  "fr",
+  "free",
+  "fresenius",
+  "frl",
+  "frogans",
+  "frontdoor",
+  "frontier",
+  "ftr",
+  "fujitsu",
+  "fujixerox",
+  "fun",
+  "fund",
+  "furniture",
+  "futbol",
+  "fyi",
+  "ga",
+  "gal",
+  "gallery",
+  "gallo",
+  "gallup",
+  "game",
+  "games",
+  "gap",
+  "garden",
+  "gb",
+  "gbiz",
+  "gd",
+  "gdn",
+  "ge",
+  "gea",
+  "gent",
+  "genting",
+  "george",
+  "gf",
+  "gg",
+  "ggee",
+  "gh",
+  "gi",
+  "gift",
+  "gifts",
+  "gives",
+  "giving",
+  "gl",
+  "glade",
+  "glass",
+  "gle",
+  "global",
+  "globo",
+  "gm",
+  "gmail",
+  "gmbh",
+  "gmo",
+  "gmx",
+  "gn",
+  "godaddy",
+  "gold",
+  "goldpoint",
+  "golf",
+  "goo",
+  "goodhands",
+  "goodyear",
+  "goog",
+  "google",
+  "gop",
+  "got",
+  "gov",
+  "gp",
+  "gq",
+  "gr",
+  "grainger",
+  "graphics",
+  "gratis",
+  "green",
+  "gripe",
+  "grocery",
+  "group",
+  "gs",
+  "gt",
+  "gu",
+  "guardian",
+  "gucci",
+  "guge",
+  "guide",
+  "guitars",
+  "guru",
+  "gw",
+  "gy",
+  "hair",
+  "hamburg",
+  "hangout",
+  "haus",
+  "hbo",
+  "hdfc",
+  "hdfcbank",
+  "health",
+  "healthcare",
+  "help",
+  "helsinki",
+  "here",
+  "hermes",
+  "hgtv",
+  "hiphop",
+  "hisamitsu",
+  "hitachi",
+  "hiv",
+  "hk",
+  "hkt",
+  "hm",
+  "hn",
+  "hockey",
+  "holdings",
+  "holiday",
+  "homedepot",
+  "homegoods",
+  "homes",
+  "homesense",
+  "honda",
+  "honeywell",
+  "horse",
+  "hospital",
+  "host",
+  "hosting",
+  "hot",
+  "hoteles",
+  "hotels",
+  "hotmail",
+  "house",
+  "how",
+  "hr",
+  "hsbc",
+  "ht",
+  "hu",
+  "hughes",
+  "hyatt",
+  "hyundai",
+  "ibm",
+  "icbc",
+  "ice",
+  "icu",
+  "id",
+  "ie",
+  "ieee",
+  "ifm",
+  "ikano",
+  "il",
+  "im",
+  "imamat",
+  "imdb",
+  "immo",
+  "immobilien",
+  "in",
+  "industries",
+  "infiniti",
+  "info",
+  "ing",
+  "ink",
+  "institute",
+  "insurance",
+  "insure",
+  "int",
+  "intel",
+  "international",
+  "intuit",
+  "investments",
+  "io",
+  "ipiranga",
+  "iq",
+  "ir",
+  "irish",
+  "is",
+  "iselect",
+  "ismaili",
+  "ist",
+  "istanbul",
+  "it",
+  "itau",
+  "itv",
+  "iveco",
+  "iwc",
+  "jaguar",
+  "java",
+  "jcb",
+  "jcp",
+  "je",
+  "jeep",
+  "jetzt",
+  "jewelry",
+  "jio",
+  "jlc",
+  "jll",
+  "jm",
+  "jmp",
+  "jnj",
+  "jo",
+  "jobs",
+  "joburg",
+  "jot",
+  "joy",
+  "jp",
+  "jpmorgan",
+  "jprs",
+  "juegos",
+  "juniper",
+  "kaufen",
+  "kddi",
+  "ke",
+  "kerryhotels",
+  "kerrylogistics",
+  "kerryproperties",
+  "kfh",
+  "kg",
+  "kh",
+  "ki",
+  "kia",
+  "kim",
+  "kinder",
+  "kindle",
+  "kitchen",
+  "kiwi",
+  "km",
+  "kn",
+  "koeln",
+  "komatsu",
+  "kosher",
+  "kp",
+  "kpmg",
+  "kpn",
+  "kr",
+  "krd",
+  "kred",
+  "kuokgroup",
+  "kw",
+  "ky",
+  "kyoto",
+  "kz",
+  "la",
+  "lacaixa",
+  "ladbrokes",
+  "lamborghini",
+  "lamer",
+  "lancaster",
+  "lancia",
+  "lancome",
+  "land",
+  "landrover",
+  "lanxess",
+  "lasalle",
+  "lat",
+  "latino",
+  "latrobe",
+  "law",
+  "lawyer",
+  "lb",
+  "lc",
+  "lds",
+  "lease",
+  "leclerc",
+  "lefrak",
+  "legal",
+  "lego",
+  "lexus",
+  "lgbt",
+  "li",
+  "liaison",
+  "lidl",
+  "life",
+  "lifeinsurance",
+  "lifestyle",
+  "lighting",
+  "like",
+  "lilly",
+  "limited",
+  "limo",
+  "lincoln",
+  "linde",
+  "link",
+  "lipsy",
+  "live",
+  "living",
+  "lixil",
+  "lk",
+  "llc",
+  "loan",
+  "loans",
+  "locker",
+  "locus",
+  "loft",
+  "lol",
+  "london",
+  "lotte",
+  "lotto",
+  "love",
+  "lpl",
+  "lplfinancial",
+  "lr",
+  "ls",
+  "lt",
+  "ltd",
+  "ltda",
+  "lu",
+  "lundbeck",
+  "lupin",
+  "luxe",
+  "luxury",
+  "lv",
+  "ly",
+  "ma",
+  "macys",
+  "madrid",
+  "maif",
+  "maison",
+  "makeup",
+  "man",
+  "management",
+  "mango",
+  "map",
+  "market",
+  "marketing",
+  "markets",
+  "marriott",
+  "marshalls",
+  "maserati",
+  "mattel",
+  "mba",
+  "mc",
+  "mckinsey",
+  "md",
+  "me",
+  "med",
+  "media",
+  "meet",
+  "melbourne",
+  "meme",
+  "memorial",
+  "men",
+  "menu",
+  "meo",
+  "merckmsd",
+  "metlife",
+  "mg",
+  "mh",
+  "miami",
+  "microsoft",
+  "mil",
+  "mini",
+  "mint",
+  "mit",
+  "mitsubishi",
+  "mk",
+  "ml",
+  "mlb",
+  "mls",
+  "mm",
+  "mma",
+  "mn",
+  "mo",
+  "mobi",
+  "mobile",
+  "mobily",
+  "moda",
+  "moe",
+  "moi",
+  "mom",
+  "monash",
+  "money",
+  "monster",
+  "mopar",
+  "mormon",
+  "mortgage",
+  "moscow",
+  "moto",
+  "motorcycles",
+  "mov",
+  "movie",
+  "movistar",
+  "mp",
+  "mq",
+  "mr",
+  "ms",
+  "msd",
+  "mt",
+  "mtn",
+  "mtr",
+  "mu",
+  "museum",
+  "mutual",
+  "mv",
+  "mw",
+  "mx",
+  "my",
+  "mz",
+  "na",
+  "nab",
+  "nadex",
+  "nagoya",
+  "name",
+  "nationwide",
+  "natura",
+  "navy",
+  "nba",
+  "nc",
+  "ne",
+  "nec",
+  "net",
+  "netbank",
+  "netflix",
+  "network",
+  "neustar",
+  "new",
+  "newholland",
+  "news",
+  "next",
+  "nextdirect",
+  "nexus",
+  "nf",
+  "nfl",
+  "ng",
+  "ngo",
+  "nhk",
+  "ni",
+  "nico",
+  "nike",
+  "nikon",
+  "ninja",
+  "nissan",
+  "nissay",
+  "nl",
+  "no",
+  "nokia",
+  "northwesternmutual",
+  "norton",
+  "now",
+  "nowruz",
+  "nowtv",
+  "np",
+  "nr",
+  "nra",
+  "nrw",
+  "ntt",
+  "nu",
+  "nyc",
+  "nz",
+  "obi",
+  "observer",
+  "off",
+  "office",
+  "okinawa",
+  "olayan",
+  "olayangroup",
+  "oldnavy",
+  "ollo",
+  "om",
+  "omega",
+  "one",
+  "ong",
+  "onl",
+  "online",
+  "onyourside",
+  "ooo",
+  "open",
+  "oracle",
+  "orange",
+  "org",
+  "organic",
+  "origins",
+  "osaka",
+  "otsuka",
+  "ott",
+  "ovh",
+  "pa",
+  "page",
+  "panasonic",
+  "panerai",
+  "paris",
+  "pars",
+  "partners",
+  "parts",
+  "party",
+  "passagens",
+  "pay",
+  "pccw",
+  "pe",
+  "pet",
+  "pf",
+  "pfizer",
+  "pg",
+  "ph",
+  "pharmacy",
+  "phd",
+  "philips",
+  "phone",
+  "photo",
+  "photography",
+  "photos",
+  "physio",
+  "piaget",
+  "pics",
+  "pictet",
+  "pictures",
+  "pid",
+  "pin",
+  "ping",
+  "pink",
+  "pioneer",
+  "pizza",
+  "pk",
+  "pl",
+  "place",
+  "play",
+  "playstation",
+  "plumbing",
+  "plus",
+  "pm",
+  "pn",
+  "pnc",
+  "pohl",
+  "poker",
+  "politie",
+  "porn",
+  "post",
+  "pr",
+  "pramerica",
+  "praxi",
+  "press",
+  "prime",
+  "pro",
+  "prod",
+  "productions",
+  "prof",
+  "progressive",
+  "promo",
+  "properties",
+  "property",
+  "protection",
+  "pru",
+  "prudential",
+  "ps",
+  "pt",
+  "pub",
+  "pw",
+  "pwc",
+  "py",
+  "qa",
+  "qpon",
+  "quebec",
+  "quest",
+  "qvc",
+  "racing",
+  "radio",
+  "raid",
+  "re",
+  "read",
+  "realestate",
+  "realtor",
+  "realty",
+  "recipes",
+  "red",
+  "redstone",
+  "redumbrella",
+  "rehab",
+  "reise",
+  "reisen",
+  "reit",
+  "reliance",
+  "ren",
+  "rent",
+  "rentals",
+  "repair",
+  "report",
+  "republican",
+  "rest",
+  "restaurant",
+  "review",
+  "reviews",
+  "rexroth",
+  "rich",
+  "richardli",
+  "ricoh",
+  "rightathome",
+  "ril",
+  "rio",
+  "rip",
+  "rmit",
+  "ro",
+  "rocher",
+  "rocks",
+  "rodeo",
+  "rogers",
+  "room",
+  "rs",
+  "rsvp",
+  "ru",
+  "rugby",
+  "ruhr",
+  "run",
+  "rw",
+  "rwe",
+  "ryukyu",
+  "sa",
+  "saarland",
+  "safe",
+  "safety",
+  "sakura",
+  "sale",
+  "salon",
+  "samsclub",
+  "samsung",
+  "sandvik",
+  "sandvikcoromant",
+  "sanofi",
+  "sap",
+  "sapo",
+  "sarl",
+  "sas",
+  "save",
+  "saxo",
+  "sb",
+  "sbi",
+  "sbs",
+  "sc",
+  "sca",
+  "scb",
+  "schaeffler",
+  "schmidt",
+  "scholarships",
+  "school",
+  "schule",
+  "schwarz",
+  "science",
+  "scjohnson",
+  "scor",
+  "scot",
+  "sd",
+  "se",
+  "search",
+  "seat",
+  "secure",
+  "security",
+  "seek",
+  "select",
+  "sener",
+  "services",
+  "ses",
+  "seven",
+  "sew",
+  "sex",
+  "sexy",
+  "sfr",
+  "sg",
+  "sh",
+  "shangrila",
+  "sharp",
+  "shaw",
+  "shell",
+  "shia",
+  "shiksha",
+  "shoes",
+  "shop",
+  "shopping",
+  "shouji",
+  "show",
+  "showtime",
+  "shriram",
+  "si",
+  "silk",
+  "sina",
+  "singles",
+  "site",
+  "sj",
+  "sk",
+  "ski",
+  "skin",
+  "sky",
+  "skype",
+  "sl",
+  "sling",
+  "sm",
+  "smart",
+  "smile",
+  "sn",
+  "sncf",
+  "so",
+  "soccer",
+  "social",
+  "softbank",
+  "software",
+  "sohu",
+  "solar",
+  "solutions",
+  "song",
+  "sony",
+  "soy",
+  "space",
+  "spiegel",
+  "sport",
+  "spot",
+  "spreadbetting",
+  "sr",
+  "srl",
+  "srt",
+  "st",
+  "stada",
+  "staples",
+  "star",
+  "starhub",
+  "statebank",
+  "statefarm",
+  "statoil",
+  "stc",
+  "stcgroup",
+  "stockholm",
+  "storage",
+  "store",
+  "stream",
+  "studio",
+  "study",
+  "style",
+  "su",
+  "sucks",
+  "supplies",
+  "supply",
+  "support",
+  "surf",
+  "surgery",
+  "suzuki",
+  "sv",
+  "swatch",
+  "swiftcover",
+  "swiss",
+  "sx",
+  "sy",
+  "sydney",
+  "symantec",
+  "systems",
+  "sz",
+  "tab",
+  "taipei",
+  "talk",
+  "taobao",
+  "target",
+  "tatamotors",
+  "tatar",
+  "tattoo",
+  "tax",
+  "taxi",
+  "tc",
+  "tci",
+  "td",
+  "tdk",
+  "team",
+  "tech",
+  "technology",
+  "tel",
+  "telecity",
+  "telefonica",
+  "temasek",
+  "tennis",
+  "teva",
+  "tf",
+  "tg",
+  "th",
+  "thd",
+  "theater",
+  "theatre",
+  "tiaa",
+  "tickets",
+  "tienda",
+  "tiffany",
+  "tips",
+  "tires",
+  "tirol",
+  "tj",
+  "tjmaxx",
+  "tjx",
+  "tk",
+  "tkmaxx",
+  "tl",
+  "tm",
+  "tmall",
+  "tn",
+  "to",
+  "today",
+  "tokyo",
+  "tools",
+  "top",
+  "toray",
+  "toshiba",
+  "total",
+  "tours",
+  "town",
+  "toyota",
+  "toys",
+  "tr",
+  "trade",
+  "trading",
+  "training",
+  "travel",
+  "travelchannel",
+  "travelers",
+  "travelersinsurance",
+  "trust",
+  "trv",
+  "tt",
+  "tube",
+  "tui",
+  "tunes",
+  "tushu",
+  "tv",
+  "tvs",
+  "tw",
+  "tz",
+  "ua",
+  "ubank",
+  "ubs",
+  "uconnect",
+  "ug",
+  "uk",
+  "unicom",
+  "university",
+  "uno",
+  "uol",
+  "ups",
+  "us",
+  "uy",
+  "uz",
+  "va",
+  "vacations",
+  "vana",
+  "vanguard",
+  "vc",
+  "ve",
+  "vegas",
+  "ventures",
+  "verisign",
+  "versicherung",
+  "vet",
+  "vg",
+  "vi",
+  "viajes",
+  "video",
+  "vig",
+  "viking",
+  "villas",
+  "vin",
+  "vip",
+  "virgin",
+  "visa",
+  "vision",
+  "vista",
+  "vistaprint",
+  "viva",
+  "vivo",
+  "vlaanderen",
+  "vn",
+  "vodka",
+  "volkswagen",
+  "volvo",
+  "vote",
+  "voting",
+  "voto",
+  "voyage",
+  "vu",
+  "vuelos",
+  "wales",
+  "walmart",
+  "walter",
+  "wang",
+  "wanggou",
+  "warman",
+  "watch",
+  "watches",
+  "weather",
+  "weatherchannel",
+  "webcam",
+  "weber",
+  "website",
+  "wed",
+  "wedding",
+  "weibo",
+  "weir",
+  "wf",
+  "whoswho",
+  "wien",
+  "wiki",
+  "williamhill",
+  "win",
+  "windows",
+  "wine",
+  "winners",
+  "wme",
+  "wolterskluwer",
+  "woodside",
+  "work",
+  "works",
+  "world",
+  "wow",
+  "ws",
+  "wtc",
+  "wtf",
+  "xbox",
+  "xerox",
+  "xfinity",
+  "xihuan",
+  "xin",
+  "कॉम", // xn--11b4c3d
+  "セール", // xn--1ck2e1b
+  "佛山", // xn--1qqw23a
+  "ಭಾರತ", // xn--2scrj9c
+  "慈善", // xn--30rr7y
+  "集团", // xn--3bst00m
+  "在线", // xn--3ds443g
+  "한국", // xn--3e0b707e
+  "ଭାରତ", // xn--3hcrj9c
+  "大众汽车", // xn--3oq18vl8pn36a
+  "点看", // xn--3pxu8k
+  "คอม", // xn--42c2d9a
+  "ভাৰত", // xn--45br5cyl
+  "ভারত", // xn--45brj9c
+  "八卦", // xn--45q11c
+  "موقع", // xn--4gbrim
+  "বাংলা", // xn--54b7fta0cc
+  "公益", // xn--55qw42g
+  "公司", // xn--55qx5d
+  "香格里拉", // xn--5su34j936bgsg
+  "网站", // xn--5tzm5g
+  "移动", // xn--6frz82g
+  "我爱你", // xn--6qq986b3xl
+  "москва", // xn--80adxhks
+  "қаз", // xn--80ao21a
+  "католик", // xn--80aqecdr1a
+  "онлайн", // xn--80asehdb
+  "сайт", // xn--80aswg
+  "联通", // xn--8y0a063a
+  "срб", // xn--90a3ac
+  "бг", // xn--90ae
+  "бел", // xn--90ais
+  "קום", // xn--9dbq2a
+  "时尚", // xn--9et52u
+  "微博", // xn--9krt00a
+  "淡马锡", // xn--b4w605ferd
+  "ファッション", // xn--bck1b9a5dre4c
+  "орг", // xn--c1avg
+  "नेट", // xn--c2br7g
+  "ストア", // xn--cck2b3b
+  "삼성", // xn--cg4bki
+  "சிங்கப்பூர்", // xn--clchc0ea0b2g2a9gcd
+  "商标", // xn--czr694b
+  "商店", // xn--czrs0t
+  "商城", // xn--czru2d
+  "дети", // xn--d1acj3b
+  "мкд", // xn--d1alf
+  "ею", // xn--e1a4c
+  "ポイント", // xn--eckvdtc9d
+  "新闻", // xn--efvy88h
+  "工行", // xn--estv75g
+  "家電", // xn--fct429k
+  "كوم", // xn--fhbei
+  "中文网", // xn--fiq228c5hs
+  "中信", // xn--fiq64b
+  "中国", // xn--fiqs8s
+  "中國", // xn--fiqz9s
+  "娱乐", // xn--fjq720a
+  "谷歌", // xn--flw351e
+  "భారత్", // xn--fpcrj9c3d
+  "ලංකා", // xn--fzc2c9e2c
+  "電訊盈科", // xn--fzys8d69uvgm
+  "购物", // xn--g2xx48c
+  "クラウド", // xn--gckr3f0f
+  "ભારત", // xn--gecrj9c
+  "通販", // xn--gk3at1e
+  "भारतम्", // xn--h2breg3eve
+  "भारत", // xn--h2brj9c
+  "भारोत", // xn--h2brj9c8c
+  "网店", // xn--hxt814e
+  "संगठन", // xn--i1b6b1a6a2e
+  "餐厅", // xn--imr513n
+  "网络", // xn--io0a7i
+  "ком", // xn--j1aef
+  "укр", // xn--j1amh
+  "香港", // xn--j6w193g
+  "诺基亚", // xn--jlq61u9w7b
+  "食品", // xn--jvr189m
+  "飞利浦", // xn--kcrx77d1x4a
+  "台湾", // xn--kprw13d
+  "台灣", // xn--kpry57d
+  "手表", // xn--kpu716f
+  "手机", // xn--kput3i
+  "мон", // xn--l1acc
+  "الجزائر", // xn--lgbbat1ad8j
+  "عمان", // xn--mgb9awbf
+  "ارامكو", // xn--mgba3a3ejt
+  "ایران", // xn--mgba3a4f16a
+  "العليان", // xn--mgba7c0bbn0a
+  "اتصالات", // xn--mgbaakc7dvf
+  "امارات", // xn--mgbaam7a8h
+  "بازار", // xn--mgbab2bd
+  "پاکستان", // xn--mgbai9azgqp6j
+  "الاردن", // xn--mgbayh7gpa
+  "موبايلي", // xn--mgbb9fbpob
+  "بارت", // xn--mgbbh1a
+  "بھارت", // xn--mgbbh1a71e
+  "المغرب", // xn--mgbc0a9azcg
+  "ابوظبي", // xn--mgbca7dzdo
+  "السعودية", // xn--mgberp4a5d4ar
+  "ڀارت", // xn--mgbgu82a
+  "كاثوليك", // xn--mgbi4ecexp
+  "سودان", // xn--mgbpl2fh
+  "همراه", // xn--mgbt3dhd
+  "عراق", // xn--mgbtx2b
+  "مليسيا", // xn--mgbx4cd0ab
+  "澳門", // xn--mix891f
+  "닷컴", // xn--mk1bu44c
+  "政府", // xn--mxtq1m
+  "شبكة", // xn--ngbc5azd
+  "بيتك", // xn--ngbe9e0a
+  "عرب", // xn--ngbrx
+  "გე", // xn--node
+  "机构", // xn--nqv7f
+  "组织机构", // xn--nqv7fs00ema
+  "健康", // xn--nyqy26a
+  "ไทย", // xn--o3cw4h
+  "سورية", // xn--ogbpf8fl
+  "招聘", // xn--otu796d
+  "рус", // xn--p1acf
+  "рф", // xn--p1ai
+  "珠宝", // xn--pbt977c
+  "تونس", // xn--pgbs0dh
+  "大拿", // xn--pssy2u
+  "みんな", // xn--q9jyb4c
+  "グーグル", // xn--qcka1pmc
+  "ελ", // xn--qxam
+  "世界", // xn--rhqv96g
+  "書籍", // xn--rovu88b
+  "ഭാരതം", // xn--rvc1e0am3e
+  "ਭਾਰਤ", // xn--s9brj9c
+  "网址", // xn--ses554g
+  "닷넷", // xn--t60b56a
+  "コム", // xn--tckwe
+  "天主教", // xn--tiq49xqyj
+  "游戏", // xn--unup4y
+  "vermögensberater", // xn--vermgensberater-ctb
+  "vermögensberatung", // xn--vermgensberatung-pwb
+  "企业", // xn--vhquv
+  "信息", // xn--vuq861b
+  "嘉里大酒店", // xn--w4r85el8fhu5dnra
+  "嘉里", // xn--w4rs40l
+  "مصر", // xn--wgbh1c
+  "قطر", // xn--wgbl6a
+  "广东", // xn--xhq521b
+  "இலங்கை", // xn--xkc2al3hye2a
+  "இந்தியா", // xn--xkc2dl3a5ee0h
+  "հայ", // xn--y9a3aq
+  "新加坡", // xn--yfro4i67o
+  "فلسطين", // xn--ygbi2ammx
+  "政务", // xn--zfr164b
+  "xperia",
+  "xxx",
+  "xyz",
+  "yachts",
+  "yahoo",
+  "yamaxun",
+  "yandex",
+  "ye",
+  "yodobashi",
+  "yoga",
+  "yokohama",
+  "you",
+  "youtube",
+  "yt",
+  "yun",
+  "za",
+  "zappos",
+  "zara",
+  "zero",
+  "zip",
+  "zippo",
+  "zm",
+  "zone",
+  "zuerich",
+  "zw"
+];
+
+
+/***/ }),
+
+/***/ "./node_modules/uc.micro/categories/Cc/regex.js":
+/*!******************************************************!*\
+  !*** ./node_modules/uc.micro/categories/Cc/regex.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports=/[\0-\x1F\x7F-\x9F]/
+
+/***/ }),
+
+/***/ "./node_modules/uc.micro/categories/P/regex.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/uc.micro/categories/P/regex.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports=/[!-#%-\*,-\/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u09FD\u0A76\u0AF0\u0C84\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E4E\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD803[\uDF55-\uDF59]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC8\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDF3C-\uDF3E]|\uD806[\uDC3B\uDE3F-\uDE46\uDE9A-\uDE9C\uDE9E-\uDEA2]|\uD807[\uDC41-\uDC45\uDC70\uDC71\uDEF7\uDEF8]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD81B[\uDE97-\uDE9A]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F]/
+
+/***/ }),
+
+/***/ "./node_modules/uc.micro/categories/Z/regex.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/uc.micro/categories/Z/regex.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports=/[ \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/
+
+/***/ }),
+
+/***/ "./node_modules/uc.micro/properties/Any/regex.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/uc.micro/properties/Any/regex.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports=/[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
+
+/***/ })
+
+}]);
+//# sourceMappingURL=7.bundle.js.map

@@ -11,6 +11,7 @@ import classNames from "classnames";
 // jss:
 const styles = (theme) => ({
 	controllerRoot: {
+		zIndex: 100,
 		background: "transparent",
 		position: "relative",
 		width: "13.4%",
@@ -25,6 +26,9 @@ const styles = (theme) => ({
 		right: 0,
 		width: "18.4%",
 		position: "absolute",
+		opacity: 0.5,
+	},
+	transparent: {
 		opacity: 0.5,
 	},
 	leftStick1: {
@@ -298,11 +302,12 @@ class ControllerView extends PureComponent {
 
 		let x2 = x * Math.sqrt(1 - (y * y) / 2) * 32;
 		let y2 = y * Math.sqrt(1 - (x * x) / 2) * 32;
+		// let scale = window.outerWidth / 1920;
 
-		let scale;
-		scale = window.outerWidth / 1400 - 0.4;
-		if (window.outerWidth < 700) {
-			scale += 0.3;
+		let scale = 1;
+		let stick = document.querySelector("#leftStick");
+		if (stick) {
+			scale = stick.clientWidth / 55;
 		}
 		x2 *= scale;
 		y2 *= scale;
@@ -319,10 +324,10 @@ class ControllerView extends PureComponent {
 		let x2 = x * Math.sqrt(1 - (y * y) / 2) * 32;
 		let y2 = y * Math.sqrt(1 - (x * x) / 2) * 32;
 
-		let scale;
-		scale = window.outerWidth / 1400 - 0.4;
-		if (window.outerWidth < 700) {
-			scale += 0.3;
+		let scale = 1;
+		let stick = document.querySelector("#rightStick");
+		if (stick) {
+			scale = stick.clientWidth / 55;
 		}
 		x2 *= scale;
 		y2 *= scale;
@@ -333,16 +338,11 @@ class ControllerView extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
+		// if (!this.props.displayControllers) {
+		// 	return this.props.children;
+		// }
+
 		this.cstate.setState(this.props.controllerState);
-
-		let leftControllerRoot, rightControllerRoot;
-
-		if (this.props.overlay) {
-			leftControllerRoot = classNames(classes.controllerRoot, classes.leftOverlay);
-			rightControllerRoot = classNames(classes.controllerRoot, classes.rightOverlay);
-		} else {
-			leftControllerRoot = rightControllerRoot = classes.controllerRoot;
-		}
 
 		let highlightedClass;
 		let abxyClass;
@@ -356,12 +356,19 @@ class ControllerView extends PureComponent {
 
 		return (
 			<>
-				<div className={leftControllerRoot}>
+				<div
+					className={classNames(classes.controllerRoot, {
+						[classes.leftOverlay]: this.props.overlay,
+					})}
+				>
 					<img
-						className={classes.image}
-						src={window.location.origin + "/images/leftJoyCon2.png"}
+						className={classNames(classes.image, {
+							[classes.transparent]: this.props.overlay,
+						})}
+						src={`${window.location.origin}/images/leftJoyCon2.png`}
 					/>
 					<div
+						id="leftStick"
 						className={classNames(classes.leftStick1, {
 							[highlightedClass]: this.cstate.buttons.lstick,
 						})}
@@ -432,12 +439,19 @@ class ControllerView extends PureComponent {
 
 				{this.props.children}
 
-				<div className={rightControllerRoot}>
+				<div
+					className={classNames(classes.controllerRoot, {
+						[classes.rightOverlay]: this.props.overlay,
+					})}
+				>
 					<img
-						className={classes.image}
-						src={window.location.origin + "/images/rightJoyCon2.png"}
+						className={classNames(classes.image, {
+							[classes.transparent]: this.props.overlay,
+						})}
+						src={`${window.location.origin}/images/rightJoyCon2.png`}
 					/>
 					<div
+						id="rightStick"
 						className={classNames(classes.rightStick1, {
 							[highlightedClass]: this.cstate.buttons.rstick,
 						})}

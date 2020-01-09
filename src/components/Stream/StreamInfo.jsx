@@ -62,7 +62,7 @@ class StreamInfo extends PureComponent {
 			<Paper elevation={3} className={classes.root}>
 				<PlayerInfo />
 
-				<Paper className={classes.settings} elevation={0}>
+				{/* <Paper className={classes.settings} elevation={0}>
 					<CheckboxSettings toggleAudioThree={() => {console.log("todo")}} />
 
 					<Paper className={classes.settingsPanel} elevation={5}>
@@ -72,7 +72,7 @@ class StreamInfo extends PureComponent {
 							Reset All Settings
 						</Button>
 					</Paper>
-				</Paper>
+				</Paper> */}
 			</Paper>
 		);
 	}
@@ -84,7 +84,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default compose(
-	withStyles(styles),
-	connect(mapStateToProps),
-)(StreamInfo);
+export default compose(withStyles(styles), connect(mapStateToProps))(StreamInfo);

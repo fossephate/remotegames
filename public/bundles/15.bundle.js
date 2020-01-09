@@ -1,6 +1,261 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[15],{248:function(e,t,a){var n;
-/*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/!function(){"use strict";var a={}.hasOwnProperty;function o(){for(var e=[],t=0;t<arguments.length;t++){var n=arguments[t];if(n){var i=typeof n;if("string"===i||"number"===i)e.push(n);else if(Array.isArray(n)&&n.length){var c=o.apply(null,n);c&&e.push(c)}else if("object"===i)for(var r in n)a.call(n,r)&&n[r]&&e.push(r)}}return e.join(" ")}e.exports?(o.default=o,e.exports=o):void 0===(n=function(){return o}.apply(t,[]))||(e.exports=n)}()},272:function(e,t,a){"use strict";var n=a(2),o=a(9),i=a(0),c=a.n(i),r=(a(10),a(245)),s=a(265),d=a(111),l=a(508),u=c.a.forwardRef((function(e,t){var a=e.autoFocus,i=e.checked,d=e.checkedIcon,u=e.classes,b=e.className,p=e.defaultChecked,m=e.disabled,v=e.icon,f=e.id,h=e.inputProps,g=e.inputRef,O=e.name,y=e.onBlur,j=e.onChange,k=e.onFocus,x=e.readOnly,C=e.required,I=e.tabIndex,w=e.type,N=e.value,E=Object(o.a)(e,["autoFocus","checked","checkedIcon","classes","className","defaultChecked","disabled","icon","id","inputProps","inputRef","name","onBlur","onChange","onFocus","readOnly","required","tabIndex","type","value"]),B=c.a.useRef(null!=i).current,F=c.a.useState(Boolean(p)),V=F[0],z=F[1],S=B?i:V,P=Object(s.a)(),R=m;P&&void 0===R&&(R=P.disabled);var H="checkbox"===w||"radio"===w;return c.a.createElement(l.a,Object(n.a)({component:"span",className:Object(r.a)(u.root,b,S&&u.checked,R&&u.disabled),disabled:R,tabIndex:null,role:void 0,onFocus:function(e){k&&k(e),P&&P.onFocus&&P.onFocus(e)},onBlur:function(e){y&&y(e),P&&P.onBlur&&P.onBlur(e)},ref:t},E),c.a.createElement("input",Object(n.a)({autoFocus:a,checked:i,defaultChecked:p,className:u.input,disabled:R,id:H&&f,name:O,onChange:function(e){var t=e.target.checked;B||z(t),j&&j(e,t)},readOnly:x,ref:g,required:C,tabIndex:I,type:w,value:N},h)),S?d:v)}));t.a=Object(d.a)({root:{padding:9},checked:{},disabled:{},input:{cursor:"inherit",position:"absolute",opacity:0,width:"100%",height:"100%",top:0,left:0,margin:0,padding:0,zIndex:1}},{name:"PrivateSwitchBase"})(u)},333:function(e,t,a){"use strict";var n=a(2),o=a(9),i=a(0),c=a.n(i),r=(a(10),a(245)),s=a(111),d=a(525),l=a(279),u=a(251),b=a(261),p=a(34),m=a.n(p),v="undefined"==typeof window?c.a.useEffect:c.a.useLayoutEffect,f=c.a.forwardRef((function(e,t){var a=e.alignItems,i=void 0===a?"center":a,s=e.autoFocus,p=void 0!==s&&s,f=e.button,h=void 0!==f&&f,g=e.children,O=e.classes,y=e.className,j=e.component,k=e.ContainerComponent,x=void 0===k?"li":k,C=e.ContainerProps,I=(C=void 0===C?{}:C).className,w=Object(o.a)(C,["className"]),N=e.dense,E=void 0!==N&&N,B=e.disabled,F=void 0!==B&&B,V=e.disableGutters,z=void 0!==V&&V,S=e.divider,P=void 0!==S&&S,R=e.focusVisibleClassName,H=e.selected,A=void 0!==H&&H,M=Object(o.a)(e,["alignItems","autoFocus","button","children","classes","className","component","ContainerComponent","ContainerProps","dense","disabled","disableGutters","divider","focusVisibleClassName","selected"]),$=c.a.useContext(b.a),D={dense:E||$.dense||!1,alignItems:i},L=c.a.useRef(null);v((function(){p&&L.current&&L.current.focus()}),[p]);var T=c.a.Children.toArray(g),G=T.length&&Object(l.a)(T[T.length-1],["ListItemSecondaryAction"]),q=c.a.useCallback((function(e){L.current=m.a.findDOMNode(e)}),[]),J=Object(u.a)(q,t),W=Object(n.a)({className:Object(r.a)(O.root,y,D.dense&&O.dense,!z&&O.gutters,P&&O.divider,F&&O.disabled,h&&O.button,"center"!==i&&O.alignItemsFlexStart,G&&O.secondaryAction,A&&O.selected),disabled:F},M),K=j||"li";return h&&(W.component=j||"div",W.focusVisibleClassName=Object(r.a)(O.focusVisible,R),K=d.a),G?(K=W.component||j?K:"div","li"===x&&("li"===K?K="div":"li"===W.component&&(W.component="div")),c.a.createElement(b.a.Provider,{value:D},c.a.createElement(x,Object(n.a)({className:Object(r.a)(O.container,I),ref:J},w),c.a.createElement(K,W,T),T.pop()))):c.a.createElement(b.a.Provider,{value:D},c.a.createElement(K,Object(n.a)({ref:J},W),T))}));t.a=Object(s.a)((function(e){return{root:{display:"flex",justifyContent:"flex-start",alignItems:"center",position:"relative",textDecoration:"none",width:"100%",boxSizing:"border-box",textAlign:"left",paddingTop:8,paddingBottom:8,"&$focusVisible":{backgroundColor:e.palette.action.selected},"&$selected, &$selected:hover":{backgroundColor:e.palette.action.selected},"&$disabled":{opacity:.5}},container:{position:"relative"},focusVisible:{},dense:{paddingTop:4,paddingBottom:4},alignItemsFlexStart:{alignItems:"flex-start"},disabled:{},divider:{borderBottom:"1px solid ".concat(e.palette.divider),backgroundClip:"padding-box"},gutters:{paddingLeft:16,paddingRight:16},button:{transition:e.transitions.create("background-color",{duration:e.transitions.duration.shortest}),"&:hover":{textDecoration:"none",backgroundColor:e.palette.action.hover,"@media (hover: none)":{backgroundColor:"transparent"}}},secondaryAction:{paddingRight:48},selected:{}}}),{name:"MuiListItem"})(f)},350:function(e,t,a){"use strict";var n=a(2),o=a(9),i=a(0),c=a.n(i),r=(a(10),a(245)),s=a(272),d=a(253),l=Object(d.a)(c.a.createElement("path",{d:"M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"}),"CheckBoxOutlineBlank"),u=Object(d.a)(c.a.createElement("path",{d:"M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"}),"CheckBox"),b=a(35),p=Object(d.a)(c.a.createElement("path",{d:"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10H7v-2h10v2z"}),"IndeterminateCheckBox"),m=a(247),v=a(111),f=c.a.createElement(u,null),h=c.a.createElement(l,null),g=c.a.createElement(p,null),O=c.a.forwardRef((function(e,t){var a=e.checkedIcon,i=void 0===a?f:a,d=e.classes,l=e.color,u=void 0===l?"secondary":l,b=e.disabled,p=void 0!==b&&b,v=e.icon,O=void 0===v?h:v,y=e.indeterminate,j=void 0!==y&&y,k=e.indeterminateIcon,x=void 0===k?g:k,C=e.inputProps,I=e.size,w=void 0===I?"medium":I,N=Object(o.a)(e,["checkedIcon","classes","color","disabled","icon","indeterminate","indeterminateIcon","inputProps","size"]);return c.a.createElement(s.a,Object(n.a)({type:"checkbox",classes:{root:Object(r.a)(d.root,d["color".concat(Object(m.a)(u))],j&&d.indeterminate),checked:d.checked,disabled:d.disabled},color:u,inputProps:Object(n.a)({"data-indeterminate":j},C),icon:c.a.cloneElement(j?x:O,{fontSize:"small"===w?"small":"default"}),checkedIcon:c.a.cloneElement(j?x:i,{fontSize:"small"===w?"small":"default"}),ref:t,disabled:p},N))}));t.a=Object(v.a)((function(e){return{root:{color:e.palette.text.secondary},checked:{},disabled:{},indeterminate:{},colorPrimary:{"&$checked":{color:e.palette.primary.main,"&:hover":{backgroundColor:Object(b.c)(e.palette.primary.main,e.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:e.palette.action.disabled}},colorSecondary:{"&$checked":{color:e.palette.secondary.main,"&:hover":{backgroundColor:Object(b.c)(e.palette.secondary.main,e.palette.action.hoverOpacity),"@media (hover: none)":{backgroundColor:"transparent"}}},"&$disabled":{color:e.palette.action.disabled}}}}),{name:"MuiCheckbox"})(O)},414:function(e,t,a){"use strict";var n=a(2),o=a(9),i=a(0),c=a.n(i),r=(a(10),a(245)),s=a(247),d=a(111),l=a(278),u=a(251),b=a(320),p=c.a.forwardRef((function(e,t){var a=e.classes,i=e.className,d=e.color,p=void 0===d?"primary":d,m=e.component,v=void 0===m?"a":m,f=e.onBlur,h=e.onFocus,g=e.TypographyClasses,O=e.underline,y=void 0===O?"hover":O,j=e.variant,k=void 0===j?"inherit":j,x=Object(o.a)(e,["classes","className","color","component","onBlur","onFocus","TypographyClasses","underline","variant"]),C=Object(l.a)(),I=C.isFocusVisible,w=C.onBlurVisible,N=C.ref,E=c.a.useState(!1),B=E[0],F=E[1],V=Object(u.a)(t,N);return c.a.createElement(b.a,Object(n.a)({className:Object(r.a)(a.root,a["underline".concat(Object(s.a)(y))],i,B&&a.focusVisible,{button:a.button}[v]),classes:g,color:p,component:v,onBlur:function(e){B&&(w(),F(!1)),f&&f(e)},onFocus:function(e){I(e)&&F(!0),h&&h(e)},ref:V,variant:k},x))}));t.a=Object(d.a)({root:{},underlineNone:{textDecoration:"none"},underlineHover:{textDecoration:"none","&:hover":{textDecoration:"underline"}},underlineAlways:{textDecoration:"underline"},button:{position:"relative",WebkitTapHighlightColor:"transparent",backgroundColor:"transparent",outline:0,border:0,margin:0,borderRadius:0,padding:0,cursor:"pointer",userSelect:"none",verticalAlign:"middle","-moz-appearance":"none","-webkit-appearance":"none","&::-moz-focus-inner":{borderStyle:"none"},"&$focusVisible":{outline:"auto"}},focusVisible:{}},{name:"MuiLink"})(p)},416:function(e,t,a){"use strict";var n=a(9),o=a(28),i=a(2),c=a(0),r=a.n(c),s=(a(10),a(245)),d=a(111),l=a(333),u=r.a.forwardRef((function(e,t){var a,o=e.classes,c=e.className,d=e.component,u=void 0===d?"li":d,b=e.disableGutters,p=void 0!==b&&b,m=e.role,v=void 0===m?"menuitem":m,f=e.selected,h=e.tabIndex,g=Object(n.a)(e,["classes","className","component","disableGutters","role","selected","tabIndex"]);return e.disabled||(a=void 0!==h?h:-1),r.a.createElement(l.a,Object(i.a)({button:!0,role:v,tabIndex:a,component:u,selected:f,disableGutters:p,classes:{dense:o.dense},className:Object(s.a)(o.root,c,f&&o.selected,!p&&o.gutters),ref:t},g))}));t.a=Object(d.a)((function(e){return{root:Object(i.a)({},e.typography.body1,Object(o.a)({minHeight:48,paddingTop:6,paddingBottom:6,boxSizing:"border-box",width:"auto",overflow:"hidden",whiteSpace:"nowrap"},e.breakpoints.up("sm"),{minHeight:"auto"})),gutters:{},selected:{},dense:Object(i.a)({},e.typography.body2,{minHeight:"auto"})}}),{name:"MuiMenuItem"})(u)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[15],{
+
+/***/ "./src/FAQ.jsx":
+/*!*********************!*\
+  !*** ./src/FAQ.jsx ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/List */ "./node_modules/@material-ui/core/esm/List/index.js");
+/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/ListItem */ "./node_modules/@material-ui/core/esm/ListItem/index.js");
+/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
+/* harmony import */ var _material_ui_core_Card__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Card */ "./node_modules/@material-ui/core/esm/Card/index.js");
+/* harmony import */ var _material_ui_core_CardActionArea__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/CardActionArea */ "./node_modules/@material-ui/core/esm/CardActionArea/index.js");
+/* harmony import */ var _material_ui_core_CardActions__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/CardActions */ "./node_modules/@material-ui/core/esm/CardActions/index.js");
+/* harmony import */ var _material_ui_core_CardContent__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/CardContent */ "./node_modules/@material-ui/core/esm/CardContent/index.js");
+/* harmony import */ var _material_ui_core_CardMedia__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/CardMedia */ "./node_modules/@material-ui/core/esm/CardMedia/index.js");
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
+// react:
+ // material ui:
+
+
+
+
+
+
+
+
+
+
+
+
+ // redux:
+
+ // recompose:
+
+ // device sizes:
+
+
+
+let classNames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"); // jss:
+
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "3%",
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.background.default
+  },
+  main: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "98%",
+    height: "100%",
+    padding: "2%"
+  },
+  image: {
+    cursor: "pointer",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
+  back: {
+    marginBottom: "10px",
+    width: "30%",
+    marginLeft: "auto" // marginRight: "auto",
+
+  },
+  card: {
+    width: 345
+  },
+  media: {
+    height: 300
+  },
+  imagesContainer: {
+    display: "flex",
+    justifyContent: "space-evenly",
+    padding: "10px",
+    flexWrap: "wrap",
+    marginBottom: "10px"
+  },
+  donationButtons: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  twitch: {
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    padding: "10px"
+  },
+  QA: {
+    width: "99%",
+    padding: "2%",
+    marginBottom: "40px"
+  },
+  commands: {
+    width: "99%",
+    padding: "2%"
+  },
+  subCommands: {
+    padding: "10px",
+    marginTop: "20px",
+    marginBottom: "20px"
+  },
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_15__["device"].laptop]: {
+    container: {
+      flexDirection: "row"
+    },
+    QA: {
+      width: "49%",
+      marginBottom: "0"
+    },
+    commands: {
+      width: "49%"
+    }
+  }
+});
+
+class FAQ extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 0,
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 3,
+      className: classes.main
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      variant: "contained",
+      className: classes.back,
+      onClick: () => {
+        this.props.history.push("/");
+      }
+    }, "Back"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Frequently Asked Questions and Commands"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 0,
+      className: classes.container
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 3,
+      className: classes.QA
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "FAQ"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Q: How does this work?"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0A: If you're looking for looking for the source code, use the \"!source\" command, if you just want the TLDR: I use a capture card to get the Nintendo Switch's screen, I use a micro controller (Arduino) that acts like a Pro Controller, and use a Python script to send it input. If you have any other questions, just ask @fosse on the discord server.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Q: Why can't I use the Plus/Home/Capture button?"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0A: It's reserved for special roles, it's setup like this to prevent abuse.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Q: What's the friend code for the Twitch account?"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0A: SW-4621-9617-9306.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Q: How do I change the game?"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0A: Use \"!goto [game]\" to switch between games, for a list of games, use \"!games\".")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Q: Something is wrong / broken, what do I do?"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0A: If someone isn't there to help on stream, contact a mod or @fosse on the discord server.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Q: I want a longer turn! xxx is too short."))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0A: If you subscribe on twitch and use it to login, your turn length is doubled.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "Q: Do the same commands used on the stream/site work on this server as well?"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0A: No, they don't, they're only meant for the stream/site.")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 3,
+      className: classes.commands
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Stream Commands"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 2,
+      className: classes.subCommands
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Commands for Everyone"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!commands"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Gives you a list of commands.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!goto [game]"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0use without brackets to switch games, use !games for a list of games.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!games or !gamelist or !goto or !xboxgames or !xboxgamelist"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Shows the list of games currently available (switch or xbox).")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!playing"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Shows who is currently playing.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!source"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Links you to the source code for the project.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!site"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Links you to https://remotegames.io.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!discord"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Links you to the discord invite.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!fc"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Gives you the friend code to the Twitch account.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!restart1 or !restart2 or !restart3"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0refreshes the corresponding stream.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "![mod | plus | sub | ban]list"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0(no brackets) lists people in the corresponding group.")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 2,
+      className: classes.subCommands
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Commands for Plus level users"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Plus level users can use the Plus / Start button in games.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!lock"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Is there a disaster? Maybe someone is being bad and is about to nuke the Switch? Type !lock to lock the controls until a mod can fix it.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!fixcontrollers"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0If the controller order gets messed up, use this command to fix it.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!rr [user - optional]"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Try it and see what happens!")))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 2,
+      className: classes.subCommands
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h4", null, "Commands for Mods"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_4__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "Mods can do basically everything, including Home / Capture")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!restartscript"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Restarts the python script.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!restartserver"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Restarts the server, you shouldn't have to use this.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "![give | remove]plus [user]"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Gives or removes plus permission from [user].")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "![temp | perma]ban [user]"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Temporarily or permanently bans [user].")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "![disable | enable]chat"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Disables or enables Chat commands.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "![disable | enable]goto"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Disables or enables !goto.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "![setturnlength | setforfeitlength] [time in seconds]"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Change the amount of time for turns and forfeits.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!lock or !unlock"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0Lock or unlock the Switch if it is locked.")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("b", null, "!forcegoto or !xboxforcegoto"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__["default"], null, "\xA0\xA0\xA0\xA0!goto but without the democracy.")))))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "The games, consoles, and server costs to run this project are primarily funded through", " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+      href: "https://twitch.tv/remotegames/subscribe/"
+    }, "Twitch subscriptions"), " ", "and donations. If you like the project consider supporting it with the links below."), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.donationButtons
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      border: "0" // width="130"
+      ,
+      alt: "Donate with Twitch",
+      src: "/images/about/twdonatebutton.png",
+      className: classes.image,
+      onClick: () => {
+        window.location = "https://streamlabs.com/remotegames/";
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      border: "0" // width="130"
+      ,
+      alt: "Join the Discord Server",
+      src: "/images/about/discordbutton.png",
+      className: classes.image,
+      onClick: () => {
+        window.location = "https://discord.io/tpns/";
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      border: "0" // width="130"
+      ,
+      alt: "Donate with Paypal",
+      src: "/images/about/ppdonatebutton.png",
+      className: classes.image,
+      onClick: () => {
+        window.location = "https://paypal.me/fossephate/";
+      }
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
+      className: classes.twitch,
+      src: "https://player.twitch.tv/?channel=remotegames&muted=false&autoplay=true",
+      height: "360",
+      width: "640",
+      frameBorder: "0",
+      scrolling: "no",
+      allowFullScreen: true
+    })));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateSettings: settings => {
+      dispatch(updateSettings(settings));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_14__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_13__["connect"])(mapStateToProps, mapDispatchToProps))(FAQ));
+
+/***/ }),
+
+/***/ "./src/constants/DeviceSizes.js":
+/*!**************************************!*\
+  !*** ./src/constants/DeviceSizes.js ***!
+  \**************************************/
+/*! exports provided: device */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "device", function() { return device; });
+const size = {
+  mobile: "600px",
+  tablet: "768px",
+  laptop: "1024px",
+  desktop: "1440px"
+};
+const device = {
+  mobile: `@media (min-width: ${size.mobile})`,
+  tablet: `@media (min-width: ${size.tablet})`,
+  laptop: `@media (min-width: ${size.laptop})`,
+  desktop: `@media (min-width: ${size.desktop})`
+};
+
+/***/ })
+
+}]);
+//# sourceMappingURL=15.bundle.js.map

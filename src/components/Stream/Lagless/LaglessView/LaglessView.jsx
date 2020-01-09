@@ -87,6 +87,17 @@ class LaglessView extends PureComponent {
 					displayLagless
 				)}
 
+				{/* <ControllerView
+					displayControllers={this.props.controllerView}
+					overlay={this.props.mobileMode}
+					controllerState={this.props.controllerStates[controllerNumber]}
+					type={controllerType}
+				>
+					{displayLagless}
+				</ControllerView> */}
+
+				{/* {displayLagless} */}
+
 				<div id="twitchVideo" className={classes.twitch} style={twitchStyle}>
 					You need to login first or this stream is offline.
 				</div>

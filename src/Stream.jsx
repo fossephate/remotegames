@@ -107,9 +107,10 @@ class Stream extends Component {
 
 		this.state = {};
 
-		let isMobile = window.innerWidth < 400;
+		// let isMobile = window.innerWidth < 400;
+		// let isMobile = window.innerWidth < 800;
 
-		this.inputHandler = new InputHandler(isMobile);
+		this.inputHandler = new InputHandler();
 		// todo:
 		window.inputHandler = this.inputHandler; // for lagless canvas
 	}
@@ -125,7 +126,6 @@ class Stream extends Component {
 			this.hostConnection.destroy();
 		}
 
-		// setTimeout(() => {
 		if (!this.props.client.loggedIn) {
 			if (tryCount < 3) {
 				setTimeout(() => {
@@ -192,10 +192,21 @@ class Stream extends Component {
 		} else if (this.props.streamType === "webRTC") {
 			this.stream.resume(document.getElementById("videoCanvas"));
 		}
-		// }, 3000);
 	}
 
 	componentDidMount() {
+		// todo: something like this for "getStreamInfo":
+		// if (!this.props.client.loggedIn) {
+		// 	if (tryCount < 3) {
+		// 		setTimeout(() => {
+		// 			this.recieveStream(data, tryCount + 1);
+		// 		}, 1000);
+		// 	} else {
+		// 		alert("You need to login to see the stream!");
+		// 		return;
+		// 	}
+		// }
+
 		this.props.accountConnection.emit(
 			"getStreamInfo",
 			{ username: this.props.match.params.username },
@@ -222,7 +233,7 @@ class Stream extends Component {
 			if (!this.props.client.loggedIn) {
 				return;
 			}
-			this.inputHandler.pollDevices();
+			this.inputHandler.pollDevices(this.props.settings.touchControls);
 			this.sendControllerState();
 		}, 1000 / 120);
 
@@ -265,7 +276,7 @@ class Stream extends Component {
 	componentWillUnmount() {
 		clearInterval(this.sendInputTimer);
 		if (this.stream) {
-			this.stream.pause();
+			this.stream.destroy();
 			this.stream = null;
 		}
 		// else {
@@ -321,7 +332,7 @@ class Stream extends Component {
 			// from checkbox settings:
 			// todo: not this:
 			console.log("exiting fullscreen");
-			$("body").removeClass("hideScrollbar");
+			// $("body").removeClass("hideScrollbar");
 			this.props.updateSettings({
 				fullscreen: false,
 				largescreen: false,

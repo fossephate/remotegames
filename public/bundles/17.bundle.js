@@ -1,6 +1,152 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[17],{248:function(t,e,a){var r;
-/*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/!function(){"use strict";var a={}.hasOwnProperty;function n(){for(var t=[],e=0;e<arguments.length;e++){var r=arguments[e];if(r){var i=typeof r;if("string"===i||"number"===i)t.push(r);else if(Array.isArray(r)&&r.length){var o=n.apply(null,r);o&&t.push(o)}else if("object"===i)for(var s in r)a.call(r,s)&&r[s]&&t.push(s)}}return t.join(" ")}t.exports?(n.default=n,t.exports=n):void 0===(r=function(){return n}.apply(e,[]))||(t.exports=r)}()},250:function(t,e,a){"use strict";a.d(e,"a",(function(){return r}));const r={mobile:`@media (min-width: ${"600px"})`,tablet:`@media (min-width: ${"768px"})`,laptop:`@media (min-width: ${"1024px"})`,desktop:`@media (min-width: ${"1440px"})`}},513:function(t,e,a){"use strict";a.r(e);var r=a(0),n=a.n(r),i=a(111),o=a(494),s=a(509),c=a(70),p=a(246),l=a(250);a(248);class u extends r.PureComponent{constructor(t){super(t)}render(){const{classes:t}=this.props;return n.a.createElement(o.a,{elevation:0,className:t.root},n.a.createElement(o.a,{elevation:3,className:t.main},n.a.createElement(s.a,{variant:"contained",className:t.back,onClick:()=>{this.props.history.push("/")}},"Back"),n.a.createElement("iframe",{className:t.iframe,src:"https://remotegames.io/privacy.html",frameBorder:"0"})))}}e.default=Object(p.a)(Object(i.a)(t=>({root:{display:"flex",justifyContent:"center",padding:"3%",color:t.palette.primary.contrastText,backgroundColor:t.palette.background.default},main:{display:"flex",flexDirection:"column",justifyContent:"center",width:"98%",height:"100%",padding:"2%"},image:{cursor:"pointer",marginLeft:"auto",marginRight:"auto"},back:{marginBottom:"10px",width:"30%",marginLeft:"auto"},iframe:{marginLeft:"auto",marginRight:"auto",width:"100%",height:"6090px",backgroundColor:"#FFF",borderRadius:"5px"},[l.a.laptop]:{}})),Object(c.b)(t=>({}),t=>({updateSettings:e=>{t(updateSettings(e))}})))(u)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[17],{
+
+/***/ "./src/ToS.jsx":
+/*!*********************!*\
+  !*** ./src/ToS.jsx ***!
+  \*********************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/List */ "./node_modules/@material-ui/core/esm/List/index.js");
+/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/ListItem */ "./node_modules/@material-ui/core/esm/ListItem/index.js");
+/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
+// react:
+ // material ui:
+
+
+
+
+
+
+ // redux:
+
+ // recompose:
+
+ // device sizes:
+
+
+
+let classNames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"); // jss:
+
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "3%",
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.background.default
+  },
+  main: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "98%",
+    height: "100%",
+    padding: "2%"
+  },
+  image: {
+    cursor: "pointer",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
+  back: {
+    marginBottom: "10px",
+    width: "30%",
+    marginLeft: "auto" // marginRight: "auto",
+
+  },
+  iframe: {
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    height: "99960px",
+    backgroundColor: "#FFF",
+    borderRadius: "5px"
+  },
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_9__["device"].laptop]: {}
+});
+
+class ToS extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 0,
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 3,
+      className: classes.main
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      variant: "contained",
+      className: classes.back,
+      onClick: () => {
+        this.props.history.push("/");
+      }
+    }, "Back"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
+      className: classes.iframe,
+      src: "https://remotegames.io/tos.html",
+      frameBorder: "0"
+    })));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateSettings: settings => {
+      dispatch(updateSettings(settings));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_8__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_7__["connect"])(mapStateToProps, mapDispatchToProps))(ToS));
+
+/***/ }),
+
+/***/ "./src/constants/DeviceSizes.js":
+/*!**************************************!*\
+  !*** ./src/constants/DeviceSizes.js ***!
+  \**************************************/
+/*! exports provided: device */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "device", function() { return device; });
+const size = {
+  mobile: "600px",
+  tablet: "768px",
+  laptop: "1024px",
+  desktop: "1440px"
+};
+const device = {
+  mobile: `@media (min-width: ${size.mobile})`,
+  tablet: `@media (min-width: ${size.tablet})`,
+  laptop: `@media (min-width: ${size.laptop})`,
+  desktop: `@media (min-width: ${size.desktop})`
+};
+
+/***/ })
+
+}]);
+//# sourceMappingURL=17.bundle.js.map

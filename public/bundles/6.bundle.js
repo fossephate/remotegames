@@ -1,3250 +1,1713 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[6],{
 
-/***/ "./node_modules/@jukben/emoji-search/build/index.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/@jukben/emoji-search/build/index.js ***!
-  \**********************************************************/
+/***/ "./node_modules/events/events.js":
+/*!***************************************!*\
+  !*** ./node_modules/events/events.js ***!
+  \***************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-var emojilib_1 = __webpack_require__(/*! emojilib */ "./node_modules/emojilib/index.js");
-var match_sorter_1 = __importDefault(__webpack_require__(/*! match-sorter */ "./node_modules/match-sorter/dist/match-sorter.esm.js"));
-/* build proper library with included name of the emoji */
-var library = Object.entries(emojilib_1.lib).map(function (_a) {
-    var name = _a[0], emojiObject = _a[1];
-    return (__assign({}, emojiObject, { keywords: [name].concat(emojiObject.keywords), name: name }));
-});
-exports.default = (function (key) {
-    return match_sorter_1.default(library, key, { keys: ["keywords"] });
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/@material-ui/icons/Close.js":
-/*!**************************************************!*\
-  !*** ./node_modules/@material-ui/icons/Close.js ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
-
-var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
-  d: "M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-}), 'Close');
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@material-ui/icons/Send.js":
-/*!*************************************************!*\
-  !*** ./node_modules/@material-ui/icons/Send.js ***!
-  \*************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
-
-var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
-  d: "M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
-}), 'Send');
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@webscopeio/react-textarea-autocomplete/dist/react-textarea-autocomplete.es.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@webscopeio/react-textarea-autocomplete/dist/react-textarea-autocomplete.es.js ***!
-  \*****************************************************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var textarea_caret__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! textarea-caret */ "./node_modules/textarea-caret/index.js");
-/* harmony import */ var textarea_caret__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(textarea_caret__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var custom_event__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! custom-event */ "./node_modules/custom-event/index.js");
-/* harmony import */ var custom_event__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(custom_event__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
-/**
- * The MIT License (MIT)
- *
- * Copyright (c) 2017 Jakub Beneš <benes@webscope.io>
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- * THE SOFTWARE.
- */
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 
 
-
-
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
+var R = typeof Reflect === 'object' ? Reflect : null
+var ReflectApply = R && typeof R.apply === 'function'
+  ? R.apply
+  : function ReflectApply(target, receiver, args) {
+    return Function.prototype.apply.call(target, receiver, args);
   }
 
-  return obj;
+var ReflectOwnKeys
+if (R && typeof R.ownKeys === 'function') {
+  ReflectOwnKeys = R.ownKeys
+} else if (Object.getOwnPropertySymbols) {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target)
+      .concat(Object.getOwnPropertySymbols(target));
+  };
+} else {
+  ReflectOwnKeys = function ReflectOwnKeys(target) {
+    return Object.getOwnPropertyNames(target);
+  };
 }
 
-function _objectSpread(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-    var ownKeys = Object.keys(source);
+function ProcessEmitWarning(warning) {
+  if (console && console.warn) console.warn(warning);
+}
 
-    if (typeof Object.getOwnPropertySymbols === 'function') {
-      ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) {
-        return Object.getOwnPropertyDescriptor(source, sym).enumerable;
-      }));
+var NumberIsNaN = Number.isNaN || function NumberIsNaN(value) {
+  return value !== value;
+}
+
+function EventEmitter() {
+  EventEmitter.init.call(this);
+}
+module.exports = EventEmitter;
+
+// Backwards-compat with node 0.10.x
+EventEmitter.EventEmitter = EventEmitter;
+
+EventEmitter.prototype._events = undefined;
+EventEmitter.prototype._eventsCount = 0;
+EventEmitter.prototype._maxListeners = undefined;
+
+// By default EventEmitters will print a warning if more than 10 listeners are
+// added to it. This is a useful default which helps finding memory leaks.
+var defaultMaxListeners = 10;
+
+Object.defineProperty(EventEmitter, 'defaultMaxListeners', {
+  enumerable: true,
+  get: function() {
+    return defaultMaxListeners;
+  },
+  set: function(arg) {
+    if (typeof arg !== 'number' || arg < 0 || NumberIsNaN(arg)) {
+      throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received ' + arg + '.');
+    }
+    defaultMaxListeners = arg;
+  }
+});
+
+EventEmitter.init = function() {
+
+  if (this._events === undefined ||
+      this._events === Object.getPrototypeOf(this)._events) {
+    this._events = Object.create(null);
+    this._eventsCount = 0;
+  }
+
+  this._maxListeners = this._maxListeners || undefined;
+};
+
+// Obviously not all Emitters should be limited to 10. This function allows
+// that to be increased. Set to zero for unlimited.
+EventEmitter.prototype.setMaxListeners = function setMaxListeners(n) {
+  if (typeof n !== 'number' || n < 0 || NumberIsNaN(n)) {
+    throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received ' + n + '.');
+  }
+  this._maxListeners = n;
+  return this;
+};
+
+function $getMaxListeners(that) {
+  if (that._maxListeners === undefined)
+    return EventEmitter.defaultMaxListeners;
+  return that._maxListeners;
+}
+
+EventEmitter.prototype.getMaxListeners = function getMaxListeners() {
+  return $getMaxListeners(this);
+};
+
+EventEmitter.prototype.emit = function emit(type) {
+  var args = [];
+  for (var i = 1; i < arguments.length; i++) args.push(arguments[i]);
+  var doError = (type === 'error');
+
+  var events = this._events;
+  if (events !== undefined)
+    doError = (doError && events.error === undefined);
+  else if (!doError)
+    return false;
+
+  // If there is no 'error' event listener then throw.
+  if (doError) {
+    var er;
+    if (args.length > 0)
+      er = args[0];
+    if (er instanceof Error) {
+      // Note: The comments on the `throw` lines are intentional, they show
+      // up in Node's output if this results in an unhandled exception.
+      throw er; // Unhandled 'error' event
+    }
+    // At least give some kind of context to the user
+    var err = new Error('Unhandled error.' + (er ? ' (' + er.message + ')' : ''));
+    err.context = er;
+    throw err; // Unhandled 'error' event
+  }
+
+  var handler = events[type];
+
+  if (handler === undefined)
+    return false;
+
+  if (typeof handler === 'function') {
+    ReflectApply(handler, this, args);
+  } else {
+    var len = handler.length;
+    var listeners = arrayClone(handler, len);
+    for (var i = 0; i < len; ++i)
+      ReflectApply(listeners[i], this, args);
+  }
+
+  return true;
+};
+
+function _addListener(target, type, listener, prepend) {
+  var m;
+  var events;
+  var existing;
+
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+  }
+
+  events = target._events;
+  if (events === undefined) {
+    events = target._events = Object.create(null);
+    target._eventsCount = 0;
+  } else {
+    // To avoid recursion in the case that type === "newListener"! Before
+    // adding it to the listeners, first emit "newListener".
+    if (events.newListener !== undefined) {
+      target.emit('newListener', type,
+                  listener.listener ? listener.listener : listener);
+
+      // Re-assign `events` because a newListener handler could have caused the
+      // this._events to be assigned to a new object
+      events = target._events;
+    }
+    existing = events[type];
+  }
+
+  if (existing === undefined) {
+    // Optimize the case of one listener. Don't need the extra array object.
+    existing = events[type] = listener;
+    ++target._eventsCount;
+  } else {
+    if (typeof existing === 'function') {
+      // Adding the second element, need to change to array.
+      existing = events[type] =
+        prepend ? [listener, existing] : [existing, listener];
+      // If we've already got an array, just append.
+    } else if (prepend) {
+      existing.unshift(listener);
+    } else {
+      existing.push(listener);
     }
 
-    ownKeys.forEach(function (key) {
-      _defineProperty(target, key, source[key]);
-    });
+    // Check for listener leak
+    m = $getMaxListeners(target);
+    if (m > 0 && existing.length > m && !existing.warned) {
+      existing.warned = true;
+      // No error code for this since it is a Warning
+      // eslint-disable-next-line no-restricted-syntax
+      var w = new Error('Possible EventEmitter memory leak detected. ' +
+                          existing.length + ' ' + String(type) + ' listeners ' +
+                          'added. Use emitter.setMaxListeners() to ' +
+                          'increase limit');
+      w.name = 'MaxListenersExceededWarning';
+      w.emitter = target;
+      w.type = type;
+      w.count = existing.length;
+      ProcessEmitWarning(w);
+    }
   }
 
   return target;
 }
 
-function _classCallCheck(instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-}
-
-function _defineProperties(target, props) {
-  for (var i = 0; i < props.length; i++) {
-    var descriptor = props[i];
-    descriptor.enumerable = descriptor.enumerable || false;
-    descriptor.configurable = true;
-    if ("value" in descriptor) descriptor.writable = true;
-    Object.defineProperty(target, descriptor.key, descriptor);
-  }
-}
-
-function _createClass(Constructor, protoProps, staticProps) {
-  if (protoProps) _defineProperties(Constructor.prototype, protoProps);
-  if (staticProps) _defineProperties(Constructor, staticProps);
-  return Constructor;
-}
-
-function _typeof2(obj) {
-  if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof2 = function _typeof2(obj) {
-      return typeof obj;
-    };
-  } else {
-    _typeof2 = function _typeof2(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    };
-  }
-
-  return _typeof2(obj);
-}
-
-function _typeof(obj) {
-  if (typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol") {
-    _typeof = function _typeof(obj) {
-      return _typeof2(obj);
-    };
-  } else {
-    _typeof = function _typeof(obj) {
-      return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : _typeof2(obj);
-    };
-  }
-
-  return _typeof(obj);
-}
-
-function _assertThisInitialized(self) {
-  if (self === void 0) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return self;
-}
-
-function _possibleConstructorReturn(self, call) {
-  if (call && (_typeof(call) === "object" || typeof call === "function")) {
-    return call;
-  }
-
-  return _assertThisInitialized(self);
-}
-
-function _getPrototypeOf(o) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) {
-    return o.__proto__ || Object.getPrototypeOf(o);
-  };
-  return _getPrototypeOf(o);
-}
-
-function _setPrototypeOf(o, p) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) {
-    o.__proto__ = p;
-    return o;
-  };
-
-  return _setPrototypeOf(o, p);
-}
-
-function _inherits(subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function");
-  }
-
-  subClass.prototype = Object.create(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf(subClass, superClass);
-}
-
-var KEY_CODES = {
-  ESC: 27,
-  UP: 38,
-  DOWN: 40,
-  LEFT: 37,
-  RIGHT: 39,
-  ENTER: 13,
-  TAB: 9
-}; // This is self-made key shortcuts manager, used for caching key strokes
-
-var Listener = function Listener() {
-  var _this = this;
-
-  _classCallCheck(this, Listener);
-
-  this.startListen = function (ref) {
-    if (!ref) return;
-    ref.addEventListener("keydown", _this.f);
-  };
-
-  this.stopListen = function (ref) {
-    if (!ref) return;
-    ref.removeEventListener("keydown", _this.f);
-  };
-
-  this.add = function (keyCodes, fn) {
-    var keyCode = keyCodes;
-    if (typeof keyCode !== "object") keyCode = [keyCode];
-    _this.listeners[_this.index] = {
-      keyCode: keyCode,
-      fn: fn
-    };
-    return _this.index++;
-  };
-
-  this.remove = function (id) {
-    delete _this.listeners[id];
-  };
-
-  this.removeAll = function () {
-    _this.listeners = {};
-    _this.index = 1;
-  };
-
-  this.index = 1;
-  this.listeners = {};
-
-  this.f = function (e) {
-    if (!e) return;
-    var code = e.keyCode || e.which;
-    Object.values(_this.listeners).forEach(function (_ref) {
-      var keyCode = _ref.keyCode,
-          fn = _ref.fn;
-
-      if (keyCode.includes(code)) {
-        e.stopPropagation();
-        e.preventDefault();
-        fn(e);
-      }
-    });
-  };
+EventEmitter.prototype.addListener = function addListener(type, listener) {
+  return _addListener(this, type, listener, false);
 };
 
-var Listeners = new Listener();
+EventEmitter.prototype.on = EventEmitter.prototype.addListener;
 
-var Item =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Item, _React$Component);
-
-  function Item() {
-    var _getPrototypeOf2;
-
-    var _this;
-
-    _classCallCheck(this, Item);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(Item)).call.apply(_getPrototypeOf2, [this].concat(args)));
-
-    _this.selectItem = function () {
-      var _this$props = _this.props,
-          item = _this$props.item,
-          onSelectHandler = _this$props.onSelectHandler;
-      onSelectHandler(item);
+EventEmitter.prototype.prependListener =
+    function prependListener(type, listener) {
+      return _addListener(this, type, listener, true);
     };
 
-    return _this;
+function onceWrapper() {
+  var args = [];
+  for (var i = 0; i < arguments.length; i++) args.push(arguments[i]);
+  if (!this.fired) {
+    this.target.removeListener(this.type, this.wrapFn);
+    this.fired = true;
+    ReflectApply(this.listener, this.target, args);
   }
-
-  _createClass(Item, [{
-    key: "shouldComponentUpdate",
-    value: function shouldComponentUpdate(nextProps) {
-      if (this.props.item !== nextProps.item || this.props.selected !== nextProps.selected || this.props.style !== nextProps.style || this.props.className !== nextProps.className) {
-        return true;
-      }
-
-      return false;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this2 = this;
-
-      var _this$props2 = this.props,
-          Component = _this$props2.component,
-          style = _this$props2.style,
-          onClickHandler = _this$props2.onClickHandler,
-          item = _this$props2.item,
-          selected = _this$props2.selected,
-          className = _this$props2.className,
-          innerRef = _this$props2.innerRef;
-      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("li", {
-        className: "rta__item  ".concat(selected === true ? "rta__item--selected" : "", " ").concat(className || ""),
-        style: style
-      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-        className: "rta__entity ".concat(selected === true ? "rta__entity--selected" : ""),
-        role: "button",
-        tabIndex: 0,
-        onClick: onClickHandler,
-        onFocus: this.selectItem,
-        onMouseEnter: this.selectItem,
-        onTouchStart: function onTouchStart() {
-          _this2.clicked = true;
-
-          _this2.selectItem();
-        },
-        onTouchEnd: function onTouchEnd(e) {
-          e.preventDefault();
-
-          if (_this2.clicked) {
-            onClickHandler(e);
-          }
-        },
-        onTouchMove: function onTouchMove() {
-          _this2.clicked = false;
-        },
-        onTouchCancel: function onTouchCancel() {
-          _this2.clicked = false;
-        }
-        /* $FlowFixMe */
-        ,
-        ref: innerRef
-      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Component, {
-        selected: selected,
-        entity: item
-      })));
-    }
-  }]);
-
-  return Item;
-}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
-
-var List =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(List, _React$Component);
-
-  function List() {
-    var _getPrototypeOf2;
-
-    var _this;
-
-    _classCallCheck(this, List);
-
-    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    _this = _possibleConstructorReturn(this, (_getPrototypeOf2 = _getPrototypeOf(List)).call.apply(_getPrototypeOf2, [this].concat(args)));
-    _this.state = {
-      selectedItem: null
-    };
-    _this.cachedIdOfItems = new Map();
-
-    _this.onPressEnter = function (e) {
-      if (typeof e !== "undefined") {
-        e.preventDefault();
-      }
-
-      var values = _this.props.values;
-
-      _this.modifyText(values[_this.getPositionInList()]);
-    };
-
-    _this.getPositionInList = function () {
-      var values = _this.props.values;
-      var selectedItem = _this.state.selectedItem;
-      if (!selectedItem) return 0;
-      return values.findIndex(function (a) {
-        return _this.getId(a) === _this.getId(selectedItem);
-      });
-    };
-
-    _this.getId = function (item) {
-      if (_this.cachedIdOfItems.has(item)) {
-        // $FlowFixMe
-        return _this.cachedIdOfItems.get(item);
-      }
-
-      var textToReplace = _this.props.getTextToReplace(item);
-
-      var computeId = function computeId() {
-        if (textToReplace) {
-          if (textToReplace.key) {
-            return textToReplace.key;
-          }
-
-          if (typeof item === "string" || !item.key) {
-            return textToReplace.text;
-          }
-        }
-
-        if (!item.key) {
-          throw new Error("Item ".concat(JSON.stringify(item), " has to have defined \"key\" property"));
-        } // $FlowFixMe
-
-
-        return item.key;
-      };
-
-      var id = computeId();
-
-      _this.cachedIdOfItems.set(item, id);
-
-      return id;
-    };
-
-    _this.listeners = [];
-    _this.itemsRef = {};
-
-    _this.modifyText = function (value) {
-      if (!value) return;
-      var onSelect = _this.props.onSelect;
-      onSelect(value);
-    };
-
-    _this.selectItem = function (item) {
-      var keyboard = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-      if (_this.state.selectedItem === item) return;
-
-      _this.setState({
-        selectedItem: item
-      }, function () {
-        if (keyboard) {
-          _this.props.dropdownScroll(_this.itemsRef[_this.getId(item)]);
-        }
-      });
-    };
-
-    _this.scroll = function (e) {
-      e.preventDefault();
-      var values = _this.props.values;
-      var code = e.keyCode || e.which;
-
-      var oldPosition = _this.getPositionInList();
-
-      var newPosition;
-
-      switch (code) {
-        case KEY_CODES.DOWN:
-          newPosition = oldPosition + 1;
-          break;
-
-        case KEY_CODES.UP:
-          newPosition = oldPosition - 1;
-          break;
-
-        default:
-          newPosition = oldPosition;
-          break;
-      }
-
-      newPosition = (newPosition % values.length + values.length) % values.length; // eslint-disable-line
-
-      _this.selectItem(values[newPosition], [KEY_CODES.DOWN, KEY_CODES.UP].includes(code));
-    };
-
-    _this.isSelected = function (item) {
-      var selectedItem = _this.state.selectedItem;
-      if (!selectedItem) return false;
-      return _this.getId(selectedItem) === _this.getId(item);
-    };
-
-    return _this;
-  }
-
-  _createClass(List, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      this.listeners.push(Listeners.add([KEY_CODES.DOWN, KEY_CODES.UP], this.scroll), Listeners.add([KEY_CODES.ENTER, KEY_CODES.TAB], this.onPressEnter));
-      var values = this.props.values;
-      if (values && values[0]) this.selectItem(values[0]);
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(_ref) {
-      var _this2 = this;
-
-      var oldValues = _ref.values;
-      var values = this.props.values;
-      var oldValuesSerialized = oldValues.map(function (val) {
-        return _this2.getId(val);
-      }).join("");
-      var newValuesSerialized = values.map(function (val) {
-        return _this2.getId(val);
-      }).join("");
-
-      if (oldValuesSerialized !== newValuesSerialized && values && values[0]) {
-        this.selectItem(values[0]);
-      }
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      var listener;
-
-      while (this.listeners.length) {
-        listener = this.listeners.pop();
-        Listeners.remove(listener);
-      }
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
-
-      var _this$props = this.props,
-          values = _this$props.values,
-          component = _this$props.component,
-          style = _this$props.style,
-          itemClassName = _this$props.itemClassName,
-          className = _this$props.className,
-          itemStyle = _this$props.itemStyle;
-      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("ul", {
-        className: "rta__list ".concat(className || ""),
-        style: style
-      }, values.map(function (item) {
-        return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Item, {
-          key: _this3.getId(item),
-          innerRef: function innerRef(ref) {
-            _this3.itemsRef[_this3.getId(item)] = ref;
-          },
-          selected: _this3.isSelected(item),
-          item: item,
-          className: itemClassName,
-          style: itemStyle,
-          onClickHandler: _this3.onPressEnter,
-          onSelectHandler: _this3.selectItem,
-          component: component
-        });
-      }));
-    }
-  }]);
-
-  return List;
-}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
-
-function defaultScrollToItem(container, item) {
-  var itemHeight = parseInt(getComputedStyle(item).getPropertyValue("height"), 10);
-  var containerHight = parseInt(getComputedStyle(container).getPropertyValue("height"), 10) - itemHeight;
-  var itemOffsetTop = item.offsetTop;
-  var actualScrollTop = container.scrollTop;
-
-  if (itemOffsetTop < actualScrollTop + containerHight && actualScrollTop < itemOffsetTop) {
-    return;
-  } // eslint-disable-next-line
-
-
-  container.scrollTop = itemOffsetTop;
 }
 
-var DEFAULT_CARET_POSITION = "next";
-var POSITION_CONFIGURATION = {
-  X: {
-    LEFT: "rta__autocomplete--left",
-    RIGHT: "rta__autocomplete--right"
-  },
-  Y: {
-    TOP: "rta__autocomplete--top",
-    BOTTOM: "rta__autocomplete--bottom"
+function _onceWrap(target, type, listener) {
+  var state = { fired: false, wrapFn: undefined, target: target, type: type, listener: listener };
+  var wrapped = onceWrapper.bind(state);
+  wrapped.listener = listener;
+  state.wrapFn = wrapped;
+  return wrapped;
+}
+
+EventEmitter.prototype.once = function once(type, listener) {
+  if (typeof listener !== 'function') {
+    throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
   }
+  this.on(type, _onceWrap(this, type, listener));
+  return this;
 };
 
-var errorMessage = function errorMessage(message) {
-  return console.error("RTA: dataProvider fails: ".concat(message, "\n    \nCheck the documentation or create issue if you think it's bug. https://github.com/webscopeio/react-textarea-autocomplete/issues"));
-}; // The main purpose of this component is to figure out to which side the autocomplete should be opened
+EventEmitter.prototype.prependOnceListener =
+    function prependOnceListener(type, listener) {
+      if (typeof listener !== 'function') {
+        throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+      }
+      this.prependListener(type, _onceWrap(this, type, listener));
+      return this;
+    };
 
+// Emits a 'removeListener' event if and only if the listener was removed.
+EventEmitter.prototype.removeListener =
+    function removeListener(type, listener) {
+      var list, events, position, i, originalListener;
 
-var Autocomplete =
-/*#__PURE__*/
-function (_React$Component) {
-  _inherits(Autocomplete, _React$Component);
+      if (typeof listener !== 'function') {
+        throw new TypeError('The "listener" argument must be of type Function. Received type ' + typeof listener);
+      }
 
-  function Autocomplete() {
-    _classCallCheck(this, Autocomplete);
+      events = this._events;
+      if (events === undefined)
+        return this;
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Autocomplete).apply(this, arguments));
-  }
+      list = events[type];
+      if (list === undefined)
+        return this;
 
-  _createClass(Autocomplete, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      var boundariesElement = this.props.boundariesElement;
-
-      if (typeof boundariesElement === "string") {
-        var elem = document.querySelector(boundariesElement);
-
-        if (!elem) {
-          throw new Error("RTA: Invalid prop boundariesElement: it has to be string or HTMLElement.");
+      if (list === listener || list.listener === listener) {
+        if (--this._eventsCount === 0)
+          this._events = Object.create(null);
+        else {
+          delete events[type];
+          if (events.removeListener)
+            this.emit('removeListener', type, list.listener || listener);
         }
+      } else if (typeof list !== 'function') {
+        position = -1;
 
-        this.containerElem = elem;
-      } else if (boundariesElement instanceof HTMLElement) {
-        this.containerElem = boundariesElement;
-      } else {
-        throw new Error("RTA: Invalid prop boundariesElement: it has to be string or HTMLElement.");
-      }
-
-      if (!this.containerElem || !this.containerElem.contains(this.ref)) {
-        if (true) {
-          throw new Error("RTA: Invalid prop boundariesElement: it has to be one of the parents of the RTA.");
-        }
-      }
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate() {
-      var _this$ref$classList, _this$ref$classList2;
-
-      var top = this.props.top || 0;
-      var left = this.props.left || 0;
-      var usedClasses = [];
-      var unusedClasses = [];
-      var topPosition = 0;
-      var leftPosition = 0;
-      var containerBounds = this.containerElem.getBoundingClientRect();
-      var dropdownBounds = this.ref.getBoundingClientRect();
-      var textareaBounds = this.props.textareaRef.getBoundingClientRect();
-      var computedStyle = window.getComputedStyle(this.ref);
-      var marginTop = parseInt(computedStyle.getPropertyValue("margin-top"), 10);
-      var marginBottom = parseInt(computedStyle.getPropertyValue("margin-bottom"), 10);
-      var marginLeft = parseInt(computedStyle.getPropertyValue("margin-left"), 10);
-      var marginRight = parseInt(computedStyle.getPropertyValue("margin-right"), 10);
-      var dropdownBottom = marginTop + marginBottom + textareaBounds.top + top + dropdownBounds.height;
-      var dropdownRight = marginLeft + marginRight + textareaBounds.left + left + dropdownBounds.width;
-
-      if (dropdownRight > containerBounds.right) {
-        leftPosition = left - dropdownBounds.width;
-        usedClasses.push(POSITION_CONFIGURATION.X.LEFT);
-        unusedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
-      } else {
-        leftPosition = left;
-        usedClasses.push(POSITION_CONFIGURATION.X.RIGHT);
-        unusedClasses.push(POSITION_CONFIGURATION.X.LEFT);
-      }
-
-      if (dropdownBottom > containerBounds.bottom) {
-        topPosition = top - dropdownBounds.height;
-        usedClasses.push(POSITION_CONFIGURATION.Y.TOP);
-        unusedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
-      } else {
-        topPosition = top;
-        usedClasses.push(POSITION_CONFIGURATION.Y.BOTTOM);
-        unusedClasses.push(POSITION_CONFIGURATION.Y.TOP);
-      }
-
-      if (this.props.renderToBody) {
-        topPosition += textareaBounds.top;
-        leftPosition += textareaBounds.left;
-      }
-
-      this.ref.style.top = "".concat(topPosition, "px");
-      this.ref.style.left = "".concat(leftPosition, "px");
-
-      (_this$ref$classList = this.ref.classList).remove.apply(_this$ref$classList, unusedClasses);
-
-      (_this$ref$classList2 = this.ref.classList).add.apply(_this$ref$classList2, usedClasses);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this = this;
-
-      var _this$props = this.props,
-          style = _this$props.style,
-          className = _this$props.className,
-          innerRef = _this$props.innerRef,
-          children = _this$props.children,
-          renderToBody = _this$props.renderToBody;
-      var body = document.body;
-      var autocompleteContainer = react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-        ref: function ref(_ref) {
-          // $FlowFixMe
-          _this.ref = _ref; // $FlowFixMe
-
-          innerRef(_ref);
-        },
-        className: "rta__autocomplete ".concat(className || ""),
-        style: style
-      }, children);
-      return renderToBody && body !== null ? react_dom__WEBPACK_IMPORTED_MODULE_0___default.a.createPortal(autocompleteContainer, body) : autocompleteContainer;
-    }
-  }]);
-
-  return Autocomplete;
-}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
-
-var ReactTextareaAutocomplete =
-/*#__PURE__*/
-function (_React$Component2) {
-  _inherits(ReactTextareaAutocomplete, _React$Component2);
-
-  function ReactTextareaAutocomplete(_props) {
-    var _this2;
-
-    _classCallCheck(this, ReactTextareaAutocomplete);
-
-    _this2 = _possibleConstructorReturn(this, _getPrototypeOf(ReactTextareaAutocomplete).call(this, _props));
-    _this2.state = {
-      top: null,
-      left: null,
-      currentTrigger: null,
-      actualToken: "",
-      data: null,
-      value: "",
-      dataLoading: false,
-      selectionEnd: 0,
-      component: null,
-      textToReplace: null
-    };
-
-    _this2.escListenerInit = function () {
-      if (!_this2.escListener) {
-        _this2.escListener = Listeners.add(KEY_CODES.ESC, _this2._closeAutocomplete);
-      }
-    };
-
-    _this2.escListenerDestroy = function () {
-      if (_this2.escListener) {
-        Listeners.remove(_this2.escListener);
-        _this2.escListener = null;
-      }
-    };
-
-    _this2.getSelectionPosition = function () {
-      if (!_this2.textareaRef) return null;
-      return {
-        selectionStart: _this2.textareaRef.selectionStart,
-        selectionEnd: _this2.textareaRef.selectionEnd
-      };
-    };
-
-    _this2.getSelectedText = function () {
-      if (!_this2.textareaRef) return null;
-      var _this2$textareaRef = _this2.textareaRef,
-          selectionStart = _this2$textareaRef.selectionStart,
-          selectionEnd = _this2$textareaRef.selectionEnd;
-      if (selectionStart === selectionEnd) return null;
-      return _this2.state.value.substr(selectionStart, selectionEnd - selectionStart);
-    };
-
-    _this2.setCaretPosition = function () {
-      var position = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-      if (!_this2.textareaRef) return;
-
-      _this2.textareaRef.focus();
-
-      _this2.textareaRef.setSelectionRange(position, position);
-    };
-
-    _this2.getCaretPosition = function () {
-      if (!_this2.textareaRef) {
-        return 0;
-      }
-
-      var position = _this2.textareaRef.selectionEnd;
-      return position;
-    };
-
-    _this2._handleCaretChange = function (e) {
-      var cleanLastTrigger = function cleanLastTrigger() {
-        var beforeHandle = _this2.getCaretPosition() - 1;
-        _this2.lastTrigger = _this2.lastTrigger ? beforeHandle : 0;
-      };
-
-      if (e.type === "keydown") {
-        // $FlowFixMe
-        var code = e.keyCode || e.which;
-
-        switch (code) {
-          case KEY_CODES.UP:
-          case KEY_CODES.DOWN:
-            if (!_this2._isAutocompleteOpen()) {
-              cleanLastTrigger();
-            }
-
+        for (i = list.length - 1; i >= 0; i--) {
+          if (list[i] === listener || list[i].listener === listener) {
+            originalListener = list[i].listener;
+            position = i;
             break;
-
-          case KEY_CODES.LEFT:
-          case KEY_CODES.RIGHT:
-            cleanLastTrigger();
-            break;
-
-          default:
-        }
-
-        return;
-      }
-
-      cleanLastTrigger();
-    };
-
-    _this2._onSelect = function (item) {
-      var _this2$state = _this2.state,
-          selectionEnd = _this2$state.selectionEnd,
-          currentTrigger = _this2$state.currentTrigger,
-          textareaValue = _this2$state.value;
-      var _this2$props = _this2.props,
-          trigger = _this2$props.trigger,
-          onItemSelected = _this2$props.onItemSelected;
-      if (!currentTrigger) return;
-
-      var getTextToReplaceForCurrentTrigger = _this2._getTextToReplace(currentTrigger);
-
-      if (!getTextToReplaceForCurrentTrigger) {
-        _this2._closeAutocomplete();
-
-        return;
-      }
-
-      var newToken = getTextToReplaceForCurrentTrigger(item);
-
-      if (!newToken) {
-        _this2._closeAutocomplete();
-
-        return;
-      }
-
-      if (onItemSelected) {
-        onItemSelected({
-          currentTrigger: currentTrigger,
-          item: item
-        });
-      }
-
-      var computeCaretPosition = function computeCaretPosition(position, token, startToken) {
-        switch (position) {
-          case "start":
-            return startToken;
-
-          case "next":
-          case "end":
-            return startToken + token.length;
-
-          default:
-            if (!Number.isInteger(position)) {
-              throw new Error('RTA: caretPosition should be "start", "next", "end" or number.');
-            }
-
-            return position;
-        }
-      };
-
-      var textToModify = textareaValue.slice(0, selectionEnd);
-      var startOfTokenPosition = textToModify.search(
-      /**
-       * It's important to escape the currentTrigger char for chars like [, (,...
-       */
-      new RegExp("\\".concat(currentTrigger, "[^\\".concat(currentTrigger).concat(trigger[currentTrigger].allowWhitespace ? "" : "\\s", "]"), "*$"))); // we add space after emoji is selected if a caret position is next
-
-      var newTokenString = newToken.caretPosition === "next" ? "".concat(newToken.text, " ") : newToken.text;
-      var newCaretPosition = computeCaretPosition(newToken.caretPosition, newTokenString, startOfTokenPosition);
-      var modifiedText = textToModify.substring(0, startOfTokenPosition) + newTokenString;
-      var newValue = textareaValue.replace(textToModify, modifiedText); // set the new textarea value and after that set the caret back to its position
-
-      _this2.setState({
-        value: newValue,
-        dataLoading: false
-      }, function () {
-        var insertedTrigger = _this2.tokenRegExpEnding.exec(newTokenString);
-
-        var insertedTriggerModifier = insertedTrigger ? insertedTrigger[0].length : 1;
-        _this2.lastTrigger = newCaretPosition ? newCaretPosition - insertedTriggerModifier : newCaretPosition;
-        _this2.textareaRef.value = newValue;
-        _this2.textareaRef.selectionEnd = newCaretPosition;
-
-        _this2._changeHandler();
-
-        var scrollTop = _this2.textareaRef.scrollTop;
-
-        _this2.setCaretPosition(newCaretPosition);
-        /*
-          Chrome does not maintain scroll position
-          Relevant discussion https://github.com/webscopeio/react-textarea-autocomplete/pull/97
-        */
-
-
-        if (window.chrome) {
-          _this2.textareaRef.scrollTop = scrollTop;
-        }
-      });
-    };
-
-    _this2._getTextToReplace = function (currentTrigger) {
-      var triggerSettings = _this2.props.trigger[currentTrigger];
-      if (!currentTrigger || !triggerSettings) return null;
-      var output = triggerSettings.output;
-      return function (item) {
-        if (typeof item === "object" && (!output || typeof output !== "function")) {
-          throw new Error('Output functor is not defined! If you are using items as object you have to define "output" function. https://github.com/webscopeio/react-textarea-autocomplete#trigger-type');
-        }
-
-        if (output) {
-          var textToReplace = output(item, currentTrigger);
-
-          if (textToReplace === undefined || typeof textToReplace === "number") {
-            throw new Error("Output functor should return string or object in shape {text: string, caretPosition: string | number}.\nGot \"".concat(String(textToReplace), "\". Check the implementation for trigger \"").concat(currentTrigger, "\"\n\nSee https://github.com/webscopeio/react-textarea-autocomplete#trigger-type for more information.\n"));
           }
-
-          if (textToReplace === null) return null;
-
-          if (typeof textToReplace === "string") {
-            return {
-              text: textToReplace,
-              caretPosition: DEFAULT_CARET_POSITION
-            };
-          }
-
-          if (!textToReplace.text) {
-            throw new Error("Output \"text\" is not defined! Object should has shape {text: string, caretPosition: string | number}. Check the implementation for trigger \"".concat(currentTrigger, "\"\n"));
-          }
-
-          if (!textToReplace.caretPosition) {
-            throw new Error("Output \"caretPosition\" is not defined! Object should has shape {text: string, caretPosition: string | number}. Check the implementation for trigger \"".concat(currentTrigger, "\"\n"));
-          }
-
-          return textToReplace;
         }
 
-        if (typeof item !== "string") {
-          throw new Error("Output item should be string\n");
+        if (position < 0)
+          return this;
+
+        if (position === 0)
+          list.shift();
+        else {
+          spliceOne(list, position);
         }
 
-        return {
-          text: "".concat(currentTrigger).concat(item).concat(currentTrigger),
-          caretPosition: DEFAULT_CARET_POSITION
-        };
-      };
+        if (list.length === 1)
+          events[type] = list[0];
+
+        if (events.removeListener !== undefined)
+          this.emit('removeListener', type, originalListener || listener);
+      }
+
+      return this;
     };
 
-    _this2._getCurrentTriggerSettings = function () {
-      var currentTrigger = _this2.state.currentTrigger;
-      if (!currentTrigger) return null;
-      return _this2.props.trigger[currentTrigger];
-    };
+EventEmitter.prototype.off = EventEmitter.prototype.removeListener;
 
-    _this2._getValuesFromProvider = function () {
-      var _this2$state2 = _this2.state,
-          currentTrigger = _this2$state2.currentTrigger,
-          actualToken = _this2$state2.actualToken;
+EventEmitter.prototype.removeAllListeners =
+    function removeAllListeners(type) {
+      var listeners, events, i;
 
-      var triggerSettings = _this2._getCurrentTriggerSettings();
+      events = this._events;
+      if (events === undefined)
+        return this;
 
-      if (!currentTrigger || !triggerSettings) {
-        return;
-      }
-
-      var dataProvider = triggerSettings.dataProvider,
-          component = triggerSettings.component;
-
-      if (typeof dataProvider !== "function") {
-        throw new Error("Trigger provider has to be a function!");
-      }
-
-      _this2.setState({
-        dataLoading: true
-      });
-
-      var providedData = dataProvider(actualToken);
-
-      if (!(providedData instanceof Promise)) {
-        providedData = Promise.resolve(providedData);
-      }
-
-      providedData.then(function (data) {
-        if (!Array.isArray(data)) {
-          throw new Error("Trigger provider has to provide an array!");
+      // not listening for removeListener, no need to emit
+      if (events.removeListener === undefined) {
+        if (arguments.length === 0) {
+          this._events = Object.create(null);
+          this._eventsCount = 0;
+        } else if (events[type] !== undefined) {
+          if (--this._eventsCount === 0)
+            this._events = Object.create(null);
+          else
+            delete events[type];
         }
+        return this;
+      }
 
-        if (typeof component !== "function") {
-          throw new Error("Component should be defined!");
-        } // throw away if we resolved old trigger
-
-
-        if (currentTrigger !== _this2.state.currentTrigger) return; // if we haven't resolved any data let's close the autocomplete
-
-        if (!data.length) {
-          _this2._closeAutocomplete();
-
-          return;
+      // emit removeListener for all listeners on all events
+      if (arguments.length === 0) {
+        var keys = Object.keys(events);
+        var key;
+        for (i = 0; i < keys.length; ++i) {
+          key = keys[i];
+          if (key === 'removeListener') continue;
+          this.removeAllListeners(key);
         }
+        this.removeAllListeners('removeListener');
+        this._events = Object.create(null);
+        this._eventsCount = 0;
+        return this;
+      }
 
-        _this2.setState({
-          dataLoading: false,
-          data: data,
-          component: component
-        });
-      }).catch(function (e) {
-        return errorMessage(e.message);
-      });
-    };
+      listeners = events[type];
 
-    _this2._getSuggestions = function () {
-      var _this2$state3 = _this2.state,
-          currentTrigger = _this2$state3.currentTrigger,
-          data = _this2$state3.data;
-      if (!currentTrigger || !data || data && !data.length) return null;
-      return data;
-    };
-
-    _this2._createRegExp = function () {
-      var trigger = _this2.props.trigger; // negative lookahead to match only the trigger + the actual token = "bladhwd:adawd:word test" => ":word"
-      // https://stackoverflow.com/a/8057827/2719917
-
-      _this2.tokenRegExp = new RegExp("(".concat(Object.keys(trigger) // the sort is important for multi-char combos as "/kick", "/"
-      .sort(function (a, b) {
-        if (a < b) {
-          return 1;
+      if (typeof listeners === 'function') {
+        this.removeListener(type, listeners);
+      } else if (listeners !== undefined) {
+        // LIFO order
+        for (i = listeners.length - 1; i >= 0; i--) {
+          this.removeListener(type, listeners[i]);
         }
+      }
 
-        if (a > b) {
-          return -1;
-        }
-
-        return 0;
-      }).map(function (a) {
-        return "\\".concat(a);
-      }).join("|"), ")((?:(?!\\1)[^\\s])*$)"));
-      _this2.tokenRegExpEnding = new RegExp("(".concat(Object.keys(trigger) // the sort is important for multi-char combos as "/kick", "/"
-      .sort(function (a, b) {
-        if (a < b) {
-          return 1;
-        }
-
-        if (a > b) {
-          return -1;
-        }
-
-        return 0;
-      }).map(function (a) {
-        return "\\".concat(a);
-      }).join("|"), ")$"));
+      return this;
     };
 
-    _this2._closeAutocomplete = function () {
-      _this2.escListenerDestroy();
+function _listeners(target, type, unwrap) {
+  var events = target._events;
 
-      _this2.setState({
-        data: null,
-        dataLoading: false,
-        currentTrigger: null
-      });
-    };
+  if (events === undefined)
+    return [];
 
-    _this2._cleanUpProps = function () {
-      var props = _objectSpread({}, _this2.props);
+  var evlistener = events[type];
+  if (evlistener === undefined)
+    return [];
 
-      var notSafe = ["loadingComponent", "boundariesElement", "containerStyle", "minChar", "scrollToItem", "ref", "innerRef", "onChange", "onCaretPositionChange", "className", "value", "trigger", "listStyle", "itemStyle", "containerStyle", "loaderStyle", "className", "containerClassName", "listClassName", "itemClassName", "loaderClassName", "dropdownStyle", "dropdownClassName", "movePopupAsYouType", "textAreaComponent", "renderToBody", "onItemSelected"]; // eslint-disable-next-line
+  if (typeof evlistener === 'function')
+    return unwrap ? [evlistener.listener || evlistener] : [evlistener];
 
-      for (var prop in props) {
-        if (notSafe.includes(prop)) delete props[prop];
-      }
-
-      return props;
-    };
-
-    _this2._changeHandler = function (e) {
-      var _this2$props2 = _this2.props,
-          trigger = _this2$props2.trigger,
-          onChange = _this2$props2.onChange,
-          minChar = _this2$props2.minChar,
-          onCaretPositionChange = _this2$props2.onCaretPositionChange,
-          movePopupAsYouType = _this2$props2.movePopupAsYouType;
-      var _this2$state4 = _this2.state,
-          top = _this2$state4.top,
-          left = _this2$state4.left;
-      var event = e;
-
-      if (!event) {
-        // fire onChange event after successful selection
-        event = new custom_event__WEBPACK_IMPORTED_MODULE_2___default.a("change", {
-          bubbles: true
-        });
-
-        _this2.textareaRef.dispatchEvent(event);
-      }
-
-      var textarea = event.target;
-      var selectionEnd = textarea.selectionEnd;
-      var value = textarea.value;
-      _this2.lastValueBubbledEvent = value;
-
-      if (onChange && event) {
-        event.persist && event.persist();
-        onChange(event);
-      }
-
-      if (onCaretPositionChange) {
-        var caretPosition = _this2.getCaretPosition();
-
-        onCaretPositionChange(caretPosition);
-      }
-
-      _this2.setState({
-        value: value
-      });
-
-      var setTopLeft = function setTopLeft() {
-        var _getCaretCoordinates = textarea_caret__WEBPACK_IMPORTED_MODULE_1___default()(textarea, selectionEnd),
-            newTop = _getCaretCoordinates.top,
-            newLeft = _getCaretCoordinates.left;
-
-        _this2.setState({
-          // make position relative to textarea
-          top: newTop - _this2.textareaRef.scrollTop || 0,
-          left: newLeft
-        });
-      };
-
-      var cleanLastTrigger = function cleanLastTrigger(triggerLength) {
-        _this2.lastTrigger = selectionEnd - triggerLength;
-
-        _this2._closeAutocomplete();
-
-        setTopLeft();
-      };
-
-      if (selectionEnd <= _this2.lastTrigger) {
-        var _affectedTextareaValue = value.slice(0, selectionEnd);
-
-        var _newTrigger = _this2.tokenRegExp.exec(_affectedTextareaValue);
-
-        cleanLastTrigger(_newTrigger ? _newTrigger[0].length : 0);
-      }
-
-      var affectedTextareaValue = value.slice(_this2.lastTrigger, selectionEnd);
-
-      var tokenMatch = _this2.tokenRegExp.exec(affectedTextareaValue);
-
-      var lastToken = tokenMatch && tokenMatch[0];
-      var currentTrigger = tokenMatch && tokenMatch[1] || null;
-      var currentTriggerLength = currentTrigger ? currentTrigger.length - 1 : 0; // with this approach we want to know if the user just inserted a new trigger sequence
-
-      var newTrigger = _this2.tokenRegExpEnding.exec(affectedTextareaValue);
-
-      if (newTrigger) {
-        cleanLastTrigger(newTrigger[0].length);
-      } else if (!_this2._isAutocompleteOpen()) {
-        _this2._closeAutocomplete();
-      }
-      /*
-       if we lost the trigger token or there is no following character we want to close
-       the autocomplete
-      */
-
-
-      if ((!lastToken || lastToken.length <= minChar + currentTriggerLength) && ( // check if our current trigger disallows whitespace
-      _this2.state.currentTrigger && !trigger[_this2.state.currentTrigger].allowWhitespace || !_this2.state.currentTrigger)) {
-        _this2._closeAutocomplete();
-
-        return;
-      }
-      /**
-       * This code has to be sync that is the reason why we obtain the currentTrigger
-       * from currentTrigger not this.state.currentTrigger
-       *
-       * Check if the currently typed token has to be afterWhitespace, or not.
-       *
-       * This setting means that there has to be whitespace before the token (on it has to be the the first character typed into textarea)
-       */
-
-
-      if (currentTrigger && trigger[currentTrigger].afterWhitespace && !/\s/.test(value[selectionEnd - lastToken.length - 1]) && value[selectionEnd - lastToken.length - 1] !== undefined) {
-        _this2._closeAutocomplete();
-
-        return;
-      }
-      /**
-        If our current trigger allows whitespace
-        get the correct token for DataProvider, so we need to construct new RegExp
-       */
-
-
-      if (_this2.state.currentTrigger && trigger[_this2.state.currentTrigger].allowWhitespace) {
-        tokenMatch = new RegExp("\\".concat(_this2.state.currentTrigger, ".*$")).exec(value.slice(0, selectionEnd));
-        lastToken = tokenMatch && tokenMatch[0];
-
-        if (!lastToken) {
-          _this2._closeAutocomplete();
-
-          return;
-        }
-
-        currentTrigger = Object.keys(trigger).find(function (a) {
-          return a === lastToken[0];
-        }) || null;
-      }
-
-      var actualToken = lastToken.slice(1); // if trigger is not configured step out from the function, otherwise proceed
-
-      if (!currentTrigger) {
-        return;
-      }
-
-      if (movePopupAsYouType || top === null && left === null || // if the trigger got changed, let's reposition the autocomplete
-      _this2.state.currentTrigger !== currentTrigger) {
-        setTopLeft();
-      }
-
-      _this2.escListenerInit();
-
-      var textToReplace = _this2._getTextToReplace(currentTrigger);
-
-      _this2.setState({
-        selectionEnd: selectionEnd,
-        currentTrigger: currentTrigger,
-        textToReplace: textToReplace,
-        actualToken: actualToken
-      }, function () {
-        try {
-          _this2._getValuesFromProvider();
-        } catch (err) {
-          errorMessage(err.message);
-        }
-      });
-    };
-
-    _this2._selectHandler = function (e) {
-      var _this2$props3 = _this2.props,
-          onCaretPositionChange = _this2$props3.onCaretPositionChange,
-          onSelect = _this2$props3.onSelect;
-
-      if (onCaretPositionChange) {
-        var caretPosition = _this2.getCaretPosition();
-
-        onCaretPositionChange(caretPosition);
-      }
-
-      if (onSelect) {
-        e.persist();
-        onSelect(e);
-      }
-    };
-
-    _this2._shouldStayOpen = function (e) {
-      var el = e.relatedTarget; // IE11 doesn't know about `relatedTarget` // https://stackoverflow.com/a/49325196/2719917
-
-      if (el === null) {
-        el = document.activeElement;
-      }
-
-      if (_this2.dropdownRef && el instanceof Node && _this2.dropdownRef.contains(el)) {
-        return true;
-      }
-
-      return false;
-    };
-
-    _this2._onClick = function (e) {
-      var onClick = _this2.props.onClick;
-
-      if (onClick) {
-        e.persist();
-        onClick(e);
-      }
-
-      if (_this2._shouldStayOpen(e)) {
-        return;
-      }
-
-      _this2._closeAutocomplete();
-    };
-
-    _this2._onBlur = function (e) {
-      var onBlur = _this2.props.onBlur;
-
-      if (onBlur) {
-        e.persist();
-        onBlur(e);
-      }
-
-      if (_this2._shouldStayOpen(e)) {
-        return;
-      }
-
-      _this2._closeAutocomplete();
-    };
-
-    _this2._onScrollHandler = function () {
-      _this2._closeAutocomplete();
-    };
-
-    _this2._dropdownScroll = function (item) {
-      var scrollToItem = _this2.props.scrollToItem;
-      if (!scrollToItem) return;
-
-      if (scrollToItem === true) {
-        defaultScrollToItem(_this2.dropdownRef, item);
-        return;
-      }
-
-      if (typeof scrollToItem !== "function" || scrollToItem.length !== 2) {
-        throw new Error("`scrollToItem` has to be boolean (true for default implementation) or function with two parameters: container, item.");
-      }
-
-      scrollToItem(_this2.dropdownRef, item);
-    };
-
-    _this2._isAutocompleteOpen = function () {
-      var _this2$state5 = _this2.state,
-          dataLoading = _this2$state5.dataLoading,
-          currentTrigger = _this2$state5.currentTrigger;
-
-      var suggestionData = _this2._getSuggestions();
-
-      return !!((dataLoading || suggestionData) && currentTrigger);
-    };
-
-    _this2._textareaRef = function (ref) {
-      // $FlowFixMe - ref is actually a `?HTMLTextAreaElement`
-      _this2.props.innerRef && _this2.props.innerRef(ref);
-      _this2.textareaRef = ref;
-    };
-
-    _this2.lastTrigger = 0;
-    _this2.escListener = null;
-    var _this2$props4 = _this2.props,
-        loadingComponent = _this2$props4.loadingComponent,
-        _trigger = _this2$props4.trigger,
-        _value = _this2$props4.value;
-    if (_value) _this2.state.value = _value;
-
-    _this2._createRegExp();
-
-    if (!loadingComponent) {
-      throw new Error("RTA: loadingComponent is not defined");
-    }
-
-    if (!_trigger) {
-      throw new Error("RTA: trigger is not defined");
-    }
-
-    return _this2;
-  }
-
-  _createClass(ReactTextareaAutocomplete, [{
-    key: "componentDidMount",
-    value: function componentDidMount() {
-      Listeners.startListen(this.textareaRef); // handle caret change
-
-      this.textareaRef && this.textareaRef.addEventListener("focus", this._handleCaretChange);
-      this.textareaRef && this.textareaRef.addEventListener("click", this._handleCaretChange);
-      this.textareaRef && this.textareaRef.addEventListener("keydown", this._handleCaretChange);
-    }
-  }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(_ref2) {
-      var oldTrigger = _ref2.trigger,
-          oldValue = _ref2.value;
-      var _this$props2 = this.props,
-          trigger = _this$props2.trigger,
-          value = _this$props2.value;
-
-      if (Object.keys(trigger).join("") !== Object.keys(oldTrigger).join("")) {
-        this._createRegExp();
-      }
-
-      if (oldValue !== value && this.lastValueBubbledEvent !== value) {
-        this.lastTrigger = 0;
-
-        this._changeHandler();
-      }
-    }
-  }, {
-    key: "componentWillUnmount",
-    value: function componentWillUnmount() {
-      this.escListenerDestroy();
-      Listeners.stopListen(this.textareaRef); // handle caret change
-
-      this.textareaRef && this.textareaRef.removeEventListener("focus", this._handleCaretChange);
-      this.textareaRef && this.textareaRef.removeEventListener("click", this._handleCaretChange);
-      this.textareaRef && this.textareaRef.removeEventListener("keydown", this._handleCaretChange);
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var _this3 = this;
-
-      var _this$props3 = this.props,
-          Loader = _this$props3.loadingComponent,
-          style = _this$props3.style,
-          className = _this$props3.className,
-          listStyle = _this$props3.listStyle,
-          itemStyle = _this$props3.itemStyle,
-          boundariesElement = _this$props3.boundariesElement,
-          movePopupAsYouType = _this$props3.movePopupAsYouType,
-          listClassName = _this$props3.listClassName,
-          itemClassName = _this$props3.itemClassName,
-          dropdownClassName = _this$props3.dropdownClassName,
-          dropdownStyle = _this$props3.dropdownStyle,
-          containerStyle = _this$props3.containerStyle,
-          containerClassName = _this$props3.containerClassName,
-          loaderStyle = _this$props3.loaderStyle,
-          loaderClassName = _this$props3.loaderClassName,
-          textAreaComponent = _this$props3.textAreaComponent,
-          renderToBody = _this$props3.renderToBody;
-      var _this$state = this.state,
-          left = _this$state.left,
-          top = _this$state.top,
-          dataLoading = _this$state.dataLoading,
-          component = _this$state.component,
-          value = _this$state.value,
-          textToReplace = _this$state.textToReplace;
-
-      var isAutocompleteOpen = this._isAutocompleteOpen();
-
-      var suggestionData = this._getSuggestions();
-
-      var extraAttrs = {};
-      var TextAreaComponent;
-
-      if (textAreaComponent.component) {
-        TextAreaComponent = textAreaComponent.component;
-        extraAttrs[textAreaComponent.ref] = this._textareaRef;
-      } else {
-        TextAreaComponent = textAreaComponent;
-        extraAttrs.ref = this._textareaRef;
-      }
-
-      return react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-        className: "rta ".concat(dataLoading === true ? "rta--loading" : "", " ").concat(containerClassName || ""),
-        style: containerStyle
-      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(TextAreaComponent, Object.assign({}, this._cleanUpProps(), {
-        className: "rta__textarea ".concat(className || ""),
-        onChange: this._changeHandler,
-        onSelect: this._selectHandler,
-        onScroll: this._onScrollHandler,
-        onClick: // The textarea itself is outside the autoselect dropdown.
-        this._onClick,
-        onBlur: this._onBlur,
-        value: value,
-        style: style
-      }, extraAttrs)), isAutocompleteOpen && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Autocomplete, {
-        innerRef: function innerRef(ref) {
-          // $FlowFixMe
-          _this3.dropdownRef = ref;
-        },
-        top: top,
-        left: left,
-        style: dropdownStyle,
-        className: dropdownClassName,
-        movePopupAsYouType: movePopupAsYouType,
-        boundariesElement: boundariesElement,
-        textareaRef: this.textareaRef,
-        renderToBody: renderToBody
-      }, suggestionData && component && textToReplace && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(List, {
-        values: suggestionData,
-        component: component,
-        style: listStyle,
-        className: listClassName,
-        itemClassName: itemClassName,
-        itemStyle: itemStyle,
-        getTextToReplace: textToReplace,
-        onSelect: this._onSelect,
-        dropdownScroll: this._dropdownScroll
-      }), dataLoading && react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("div", {
-        className: "rta__loader ".concat(suggestionData !== null ? "rta__loader--suggestion-data" : "rta__loader--empty-suggestion-data", " ").concat(loaderClassName || ""),
-        style: loaderStyle
-      }, react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(Loader, {
-        data: suggestionData
-      }))));
-    }
-  }], [{
-    key: "getDerivedStateFromProps",
-    value: function getDerivedStateFromProps(_ref3) {
-      var value = _ref3.value;
-      if (value === null || value === undefined) return null;
-      return {
-        value: value
-      };
-    }
-  }]);
-
-  return ReactTextareaAutocomplete;
-}(react__WEBPACK_IMPORTED_MODULE_3___default.a.Component);
-
-ReactTextareaAutocomplete.defaultProps = {
-  movePopupAsYouType: false,
-  value: null,
-  minChar: 1,
-  boundariesElement: "body",
-  scrollToItem: true,
-  textAreaComponent: "textarea",
-  renderToBody: false
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (ReactTextareaAutocomplete);
-
-
-/***/ }),
-
-/***/ "./node_modules/classnames/index.js":
-/*!******************************************!*\
-  !*** ./node_modules/classnames/index.js ***!
-  \******************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
-  Copyright (c) 2017 Jed Watson.
-  Licensed under the MIT License (MIT), see
-  http://jedwatson.github.io/classnames
-*/
-/* global define */
-
-(function () {
-	'use strict';
-
-	var hasOwn = {}.hasOwnProperty;
-
-	function classNames () {
-		var classes = [];
-
-		for (var i = 0; i < arguments.length; i++) {
-			var arg = arguments[i];
-			if (!arg) continue;
-
-			var argType = typeof arg;
-
-			if (argType === 'string' || argType === 'number') {
-				classes.push(arg);
-			} else if (Array.isArray(arg) && arg.length) {
-				var inner = classNames.apply(null, arg);
-				if (inner) {
-					classes.push(inner);
-				}
-			} else if (argType === 'object') {
-				for (var key in arg) {
-					if (hasOwn.call(arg, key) && arg[key]) {
-						classes.push(key);
-					}
-				}
-			}
-		}
-
-		return classes.join(' ');
-	}
-
-	if ( true && module.exports) {
-		classNames.default = classNames;
-		module.exports = classNames;
-	} else if (true) {
-		// register as 'classnames', consistent with npm package name
-		!(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = (function () {
-			return classNames;
-		}).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
-				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	} else {}
-}());
-
-
-/***/ }),
-
-/***/ "./node_modules/custom-event/index.js":
-/*!********************************************!*\
-  !*** ./node_modules/custom-event/index.js ***!
-  \********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function(global) {
-var NativeCustomEvent = global.CustomEvent;
-
-function useNative () {
-  try {
-    var p = new NativeCustomEvent('cat', { detail: { foo: 'bar' } });
-    return  'cat' === p.type && 'bar' === p.detail.foo;
-  } catch (e) {
-  }
-  return false;
+  return unwrap ?
+    unwrapListeners(evlistener) : arrayClone(evlistener, evlistener.length);
 }
 
-/**
- * Cross-browser `CustomEvent` constructor.
- *
- * https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent.CustomEvent
- *
- * @public
- */
+EventEmitter.prototype.listeners = function listeners(type) {
+  return _listeners(this, type, true);
+};
 
-module.exports = useNative() ? NativeCustomEvent :
+EventEmitter.prototype.rawListeners = function rawListeners(type) {
+  return _listeners(this, type, false);
+};
 
-// IE >= 9
-'undefined' !== typeof document && 'function' === typeof document.createEvent ? function CustomEvent (type, params) {
-  var e = document.createEvent('CustomEvent');
-  if (params) {
-    e.initCustomEvent(type, params.bubbles, params.cancelable, params.detail);
+EventEmitter.listenerCount = function(emitter, type) {
+  if (typeof emitter.listenerCount === 'function') {
+    return emitter.listenerCount(type);
   } else {
-    e.initCustomEvent(type, false, false, void 0);
+    return listenerCount.call(emitter, type);
   }
-  return e;
-} :
+};
 
-// IE <= 8
-function CustomEvent (type, params) {
-  var e = document.createEventObject();
-  e.type = type;
-  if (params) {
-    e.bubbles = Boolean(params.bubbles);
-    e.cancelable = Boolean(params.cancelable);
-    e.detail = params.detail;
-  } else {
-    e.bubbles = false;
-    e.cancelable = false;
-    e.detail = void 0;
+EventEmitter.prototype.listenerCount = listenerCount;
+function listenerCount(type) {
+  var events = this._events;
+
+  if (events !== undefined) {
+    var evlistener = events[type];
+
+    if (typeof evlistener === 'function') {
+      return 1;
+    } else if (evlistener !== undefined) {
+      return evlistener.length;
+    }
   }
-  return e;
+
+  return 0;
 }
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
+EventEmitter.prototype.eventNames = function eventNames() {
+  return this._eventsCount > 0 ? ReflectOwnKeys(this._events) : [];
+};
+
+function arrayClone(arr, n) {
+  var copy = new Array(n);
+  for (var i = 0; i < n; ++i)
+    copy[i] = arr[i];
+  return copy;
+}
+
+function spliceOne(list, index) {
+  for (; index + 1 < list.length; index++)
+    list[index] = list[index + 1];
+  list.pop();
+}
+
+function unwrapListeners(arr) {
+  var ret = new Array(arr.length);
+  for (var i = 0; i < ret.length; ++i) {
+    ret[i] = arr[i].listener || arr[i];
+  }
+  return ret;
+}
+
 
 /***/ }),
 
-/***/ "./node_modules/emojilib/emojis.json":
-/*!*******************************************!*\
-  !*** ./node_modules/emojilib/emojis.json ***!
-  \*******************************************/
-/*! exports provided: 100, 1234, grinning, grimacing, grin, joy, rofl, partying, smiley, smile, sweat_smile, laughing, innocent, wink, blush, slightly_smiling_face, upside_down_face, relaxed, yum, relieved, heart_eyes, smiling_face_with_three_hearts, kissing_heart, kissing, kissing_smiling_eyes, kissing_closed_eyes, stuck_out_tongue_winking_eye, zany, raised_eyebrow, monocle, stuck_out_tongue_closed_eyes, stuck_out_tongue, money_mouth_face, nerd_face, sunglasses, star_struck, clown_face, cowboy_hat_face, hugs, smirk, no_mouth, neutral_face, expressionless, unamused, roll_eyes, thinking, lying_face, hand_over_mouth, shushing, symbols_over_mouth, exploding_head, flushed, disappointed, worried, angry, rage, pensive, confused, slightly_frowning_face, frowning_face, persevere, confounded, tired_face, weary, pleading, triumph, open_mouth, scream, fearful, cold_sweat, hushed, frowning, anguished, cry, disappointed_relieved, drooling_face, sleepy, sweat, hot, cold, sob, dizzy_face, astonished, zipper_mouth_face, nauseated_face, sneezing_face, vomiting, mask, face_with_thermometer, face_with_head_bandage, woozy, sleeping, zzz, poop, smiling_imp, imp, japanese_ogre, japanese_goblin, skull, ghost, alien, robot, smiley_cat, smile_cat, joy_cat, heart_eyes_cat, smirk_cat, kissing_cat, scream_cat, crying_cat_face, pouting_cat, palms_up, raised_hands, clap, wave, call_me_hand, +1, -1, facepunch, fist, fist_left, fist_right, v, ok_hand, raised_hand, raised_back_of_hand, open_hands, muscle, pray, foot, leg, handshake, point_up, point_up_2, point_down, point_left, point_right, fu, raised_hand_with_fingers_splayed, love_you, metal, crossed_fingers, vulcan_salute, writing_hand, selfie, nail_care, lips, tooth, tongue, ear, nose, eye, eyes, brain, bust_in_silhouette, busts_in_silhouette, speaking_head, baby, child, boy, girl, adult, man, woman, blonde_woman, blonde_man, bearded_person, older_adult, older_man, older_woman, man_with_gua_pi_mao, woman_with_headscarf, woman_with_turban, man_with_turban, policewoman, policeman, construction_worker_woman, construction_worker_man, guardswoman, guardsman, female_detective, male_detective, woman_health_worker, man_health_worker, woman_farmer, man_farmer, woman_cook, man_cook, woman_student, man_student, woman_singer, man_singer, woman_teacher, man_teacher, woman_factory_worker, man_factory_worker, woman_technologist, man_technologist, woman_office_worker, man_office_worker, woman_mechanic, man_mechanic, woman_scientist, man_scientist, woman_artist, man_artist, woman_firefighter, man_firefighter, woman_pilot, man_pilot, woman_astronaut, man_astronaut, woman_judge, man_judge, woman_superhero, man_superhero, woman_supervillain, man_supervillain, mrs_claus, santa, sorceress, wizard, woman_elf, man_elf, woman_vampire, man_vampire, woman_zombie, man_zombie, woman_genie, man_genie, mermaid, merman, woman_fairy, man_fairy, angel, pregnant_woman, breastfeeding, princess, prince, bride_with_veil, man_in_tuxedo, running_woman, running_man, walking_woman, walking_man, dancer, man_dancing, dancing_women, dancing_men, couple, two_men_holding_hands, two_women_holding_hands, bowing_woman, bowing_man, man_facepalming, woman_facepalming, woman_shrugging, man_shrugging, tipping_hand_woman, tipping_hand_man, no_good_woman, no_good_man, ok_woman, ok_man, raising_hand_woman, raising_hand_man, pouting_woman, pouting_man, frowning_woman, frowning_man, haircut_woman, haircut_man, massage_woman, massage_man, woman_in_steamy_room, man_in_steamy_room, couple_with_heart_woman_man, couple_with_heart_woman_woman, couple_with_heart_man_man, couplekiss_man_woman, couplekiss_woman_woman, couplekiss_man_man, family_man_woman_boy, family_man_woman_girl, family_man_woman_girl_boy, family_man_woman_boy_boy, family_man_woman_girl_girl, family_woman_woman_boy, family_woman_woman_girl, family_woman_woman_girl_boy, family_woman_woman_boy_boy, family_woman_woman_girl_girl, family_man_man_boy, family_man_man_girl, family_man_man_girl_boy, family_man_man_boy_boy, family_man_man_girl_girl, family_woman_boy, family_woman_girl, family_woman_girl_boy, family_woman_boy_boy, family_woman_girl_girl, family_man_boy, family_man_girl, family_man_girl_boy, family_man_boy_boy, family_man_girl_girl, yarn, thread, coat, labcoat, womans_clothes, tshirt, jeans, necktie, dress, bikini, kimono, lipstick, kiss, footprints, flat_shoe, high_heel, sandal, boot, mans_shoe, athletic_shoe, hiking_boot, socks, gloves, scarf, womans_hat, tophat, billed_hat, rescue_worker_helmet, mortar_board, crown, school_satchel, luggage, pouch, purse, handbag, briefcase, eyeglasses, dark_sunglasses, goggles, ring, closed_umbrella, dog, cat, mouse, hamster, rabbit, fox_face, bear, panda_face, koala, tiger, lion, cow, pig, pig_nose, frog, squid, octopus, shrimp, monkey_face, gorilla, see_no_evil, hear_no_evil, speak_no_evil, monkey, chicken, penguin, bird, baby_chick, hatching_chick, hatched_chick, duck, eagle, owl, bat, wolf, boar, horse, unicorn, honeybee, bug, butterfly, snail, beetle, ant, grasshopper, spider, scorpion, crab, snake, lizard, t-rex, sauropod, turtle, tropical_fish, fish, blowfish, dolphin, shark, whale, whale2, crocodile, leopard, zebra, tiger2, water_buffalo, ox, cow2, deer, dromedary_camel, camel, giraffe, elephant, rhinoceros, goat, ram, sheep, racehorse, pig2, rat, mouse2, rooster, turkey, dove, dog2, poodle, cat2, rabbit2, chipmunk, hedgehog, raccoon, llama, hippopotamus, kangaroo, badger, swan, peacock, parrot, lobster, mosquito, paw_prints, dragon, dragon_face, cactus, christmas_tree, evergreen_tree, deciduous_tree, palm_tree, seedling, herb, shamrock, four_leaf_clover, bamboo, tanabata_tree, leaves, fallen_leaf, maple_leaf, ear_of_rice, hibiscus, sunflower, rose, wilted_flower, tulip, blossom, cherry_blossom, bouquet, mushroom, chestnut, jack_o_lantern, shell, spider_web, earth_americas, earth_africa, earth_asia, full_moon, waning_gibbous_moon, last_quarter_moon, waning_crescent_moon, new_moon, waxing_crescent_moon, first_quarter_moon, waxing_gibbous_moon, new_moon_with_face, full_moon_with_face, first_quarter_moon_with_face, last_quarter_moon_with_face, sun_with_face, crescent_moon, star, star2, dizzy, sparkles, comet, sunny, sun_behind_small_cloud, partly_sunny, sun_behind_large_cloud, sun_behind_rain_cloud, cloud, cloud_with_rain, cloud_with_lightning_and_rain, cloud_with_lightning, zap, fire, boom, snowflake, cloud_with_snow, snowman, snowman_with_snow, wind_face, dash, tornado, fog, open_umbrella, umbrella, droplet, sweat_drops, ocean, green_apple, apple, pear, tangerine, lemon, banana, watermelon, grapes, strawberry, melon, cherries, peach, pineapple, coconut, kiwi_fruit, mango, avocado, broccoli, tomato, eggplant, cucumber, carrot, hot_pepper, potato, corn, leafy_greens, sweet_potato, peanuts, honey_pot, croissant, bread, baguette_bread, bagel, pretzel, cheese, egg, bacon, steak, pancakes, poultry_leg, meat_on_bone, bone, fried_shrimp, fried_egg, hamburger, fries, stuffed_flatbread, hotdog, pizza, sandwich, canned_food, spaghetti, taco, burrito, green_salad, shallow_pan_of_food, ramen, stew, fish_cake, fortune_cookie, sushi, bento, curry, rice_ball, rice, rice_cracker, oden, dango, shaved_ice, ice_cream, icecream, pie, cake, cupcake, moon_cake, birthday, custard, candy, lollipop, chocolate_bar, popcorn, dumpling, doughnut, cookie, milk_glass, beer, beers, clinking_glasses, wine_glass, tumbler_glass, cocktail, tropical_drink, champagne, sake, tea, cup_with_straw, coffee, baby_bottle, salt, spoon, fork_and_knife, plate_with_cutlery, bowl_with_spoon, takeout_box, chopsticks, soccer, basketball, football, baseball, softball, tennis, volleyball, rugby_football, flying_disc, 8ball, golf, golfing_woman, golfing_man, ping_pong, badminton, goal_net, ice_hockey, field_hockey, lacrosse, cricket, ski, skier, snowboarder, person_fencing, women_wrestling, men_wrestling, woman_cartwheeling, man_cartwheeling, woman_playing_handball, man_playing_handball, ice_skate, curling_stone, skateboard, sled, bow_and_arrow, fishing_pole_and_fish, boxing_glove, martial_arts_uniform, rowing_woman, rowing_man, climbing_woman, climbing_man, swimming_woman, swimming_man, woman_playing_water_polo, man_playing_water_polo, woman_in_lotus_position, man_in_lotus_position, surfing_woman, surfing_man, bath, basketball_woman, basketball_man, weight_lifting_woman, weight_lifting_man, biking_woman, biking_man, mountain_biking_woman, mountain_biking_man, horse_racing, business_suit_levitating, trophy, running_shirt_with_sash, medal_sports, medal_military, 1st_place_medal, 2nd_place_medal, 3rd_place_medal, reminder_ribbon, rosette, ticket, tickets, performing_arts, art, circus_tent, woman_juggling, man_juggling, microphone, headphones, musical_score, musical_keyboard, drum, saxophone, trumpet, guitar, violin, clapper, video_game, space_invader, dart, game_die, chess_pawn, slot_machine, jigsaw, bowling, red_car, taxi, blue_car, bus, trolleybus, racing_car, police_car, ambulance, fire_engine, minibus, truck, articulated_lorry, tractor, kick_scooter, motorcycle, bike, motor_scooter, rotating_light, oncoming_police_car, oncoming_bus, oncoming_automobile, oncoming_taxi, aerial_tramway, mountain_cableway, suspension_railway, railway_car, train, monorail, bullettrain_side, bullettrain_front, light_rail, mountain_railway, steam_locomotive, train2, metro, tram, station, flying_saucer, helicopter, small_airplane, airplane, flight_departure, flight_arrival, sailboat, motor_boat, speedboat, ferry, passenger_ship, rocket, artificial_satellite, seat, canoe, anchor, construction, fuelpump, busstop, vertical_traffic_light, traffic_light, checkered_flag, ship, ferris_wheel, roller_coaster, carousel_horse, building_construction, foggy, tokyo_tower, factory, fountain, rice_scene, mountain, mountain_snow, mount_fuji, volcano, japan, camping, tent, national_park, motorway, railway_track, sunrise, sunrise_over_mountains, desert, beach_umbrella, desert_island, city_sunrise, city_sunset, cityscape, night_with_stars, bridge_at_night, milky_way, stars, sparkler, fireworks, rainbow, houses, european_castle, japanese_castle, stadium, statue_of_liberty, house, house_with_garden, derelict_house, office, department_store, post_office, european_post_office, hospital, bank, hotel, convenience_store, school, love_hotel, wedding, classical_building, church, mosque, synagogue, kaaba, shinto_shrine, watch, iphone, calling, computer, keyboard, desktop_computer, printer, computer_mouse, trackball, joystick, clamp, minidisc, floppy_disk, cd, dvd, vhs, camera, camera_flash, video_camera, movie_camera, film_projector, film_strip, telephone_receiver, phone, pager, fax, tv, radio, studio_microphone, level_slider, control_knobs, compass, stopwatch, timer_clock, alarm_clock, mantelpiece_clock, hourglass_flowing_sand, hourglass, satellite, battery, electric_plug, bulb, flashlight, candle, fire_extinguisher, wastebasket, oil_drum, money_with_wings, dollar, yen, euro, pound, moneybag, credit_card, gem, balance_scale, toolbox, wrench, hammer, hammer_and_pick, hammer_and_wrench, pick, nut_and_bolt, gear, brick, chains, magnet, gun, bomb, firecracker, hocho, dagger, crossed_swords, shield, smoking, skull_and_crossbones, coffin, funeral_urn, amphora, crystal_ball, prayer_beads, nazar_amulet, barber, alembic, telescope, microscope, hole, pill, syringe, dna, microbe, petri_dish, test_tube, thermometer, broom, basket, toilet_paper, label, bookmark, toilet, shower, bathtub, soap, sponge, lotion_bottle, key, old_key, couch_and_lamp, sleeping_bed, bed, door, bellhop_bell, teddy_bear, framed_picture, world_map, parasol_on_ground, moyai, shopping, shopping_cart, balloon, flags, ribbon, gift, confetti_ball, tada, dolls, wind_chime, crossed_flags, izakaya_lantern, red_envelope, email, envelope_with_arrow, incoming_envelope, e-mail, love_letter, postbox, mailbox_closed, mailbox, mailbox_with_mail, mailbox_with_no_mail, package, postal_horn, inbox_tray, outbox_tray, scroll, page_with_curl, bookmark_tabs, receipt, bar_chart, chart_with_upwards_trend, chart_with_downwards_trend, page_facing_up, date, calendar, spiral_calendar, card_index, card_file_box, ballot_box, file_cabinet, clipboard, spiral_notepad, file_folder, open_file_folder, card_index_dividers, newspaper_roll, newspaper, notebook, closed_book, green_book, blue_book, orange_book, notebook_with_decorative_cover, ledger, books, open_book, safety_pin, link, paperclip, paperclips, scissors, triangular_ruler, straight_ruler, abacus, pushpin, round_pushpin, triangular_flag_on_post, white_flag, black_flag, rainbow_flag, closed_lock_with_key, lock, unlock, lock_with_ink_pen, pen, fountain_pen, black_nib, memo, pencil2, crayon, paintbrush, mag, mag_right, heart, orange_heart, yellow_heart, green_heart, blue_heart, purple_heart, black_heart, broken_heart, heavy_heart_exclamation, two_hearts, revolving_hearts, heartbeat, heartpulse, sparkling_heart, cupid, gift_heart, heart_decoration, peace_symbol, latin_cross, star_and_crescent, om, wheel_of_dharma, star_of_david, six_pointed_star, menorah, yin_yang, orthodox_cross, place_of_worship, ophiuchus, aries, taurus, gemini, cancer, leo, virgo, libra, scorpius, sagittarius, capricorn, aquarius, pisces, id, atom_symbol, u7a7a, u5272, radioactive, biohazard, mobile_phone_off, vibration_mode, u6709, u7121, u7533, u55b6, u6708, eight_pointed_black_star, vs, accept, white_flower, ideograph_advantage, secret, congratulations, u5408, u6e80, u7981, a, b, ab, cl, o2, sos, no_entry, name_badge, no_entry_sign, x, o, stop_sign, anger, hotsprings, no_pedestrians, do_not_litter, no_bicycles, non-potable_water, underage, no_mobile_phones, exclamation, grey_exclamation, question, grey_question, bangbang, interrobang, low_brightness, high_brightness, trident, fleur_de_lis, part_alternation_mark, warning, children_crossing, beginner, recycle, u6307, chart, sparkle, eight_spoked_asterisk, negative_squared_cross_mark, white_check_mark, diamond_shape_with_a_dot_inside, cyclone, loop, globe_with_meridians, m, atm, sa, passport_control, customs, baggage_claim, left_luggage, wheelchair, no_smoking, wc, parking, potable_water, mens, womens, baby_symbol, restroom, put_litter_in_its_place, cinema, signal_strength, koko, ng, ok, up, cool, new, free, zero, one, two, three, four, five, six, seven, eight, nine, keycap_ten, asterisk, eject_button, arrow_forward, pause_button, next_track_button, stop_button, record_button, play_or_pause_button, previous_track_button, fast_forward, rewind, twisted_rightwards_arrows, repeat, repeat_one, arrow_backward, arrow_up_small, arrow_down_small, arrow_double_up, arrow_double_down, arrow_right, arrow_left, arrow_up, arrow_down, arrow_upper_right, arrow_lower_right, arrow_lower_left, arrow_upper_left, arrow_up_down, left_right_arrow, arrows_counterclockwise, arrow_right_hook, leftwards_arrow_with_hook, arrow_heading_up, arrow_heading_down, hash, information_source, abc, abcd, capital_abcd, symbols, musical_note, notes, wavy_dash, curly_loop, heavy_check_mark, arrows_clockwise, heavy_plus_sign, heavy_minus_sign, heavy_division_sign, heavy_multiplication_x, infinity, heavy_dollar_sign, currency_exchange, copyright, registered, tm, end, back, on, top, soon, ballot_box_with_check, radio_button, white_circle, black_circle, red_circle, large_blue_circle, small_orange_diamond, small_blue_diamond, large_orange_diamond, large_blue_diamond, small_red_triangle, black_small_square, white_small_square, black_large_square, white_large_square, small_red_triangle_down, black_medium_square, white_medium_square, black_medium_small_square, white_medium_small_square, black_square_button, white_square_button, speaker, sound, loud_sound, mute, mega, loudspeaker, bell, no_bell, black_joker, mahjong, spades, clubs, hearts, diamonds, flower_playing_cards, thought_balloon, right_anger_bubble, speech_balloon, left_speech_bubble, clock1, clock2, clock3, clock4, clock5, clock6, clock7, clock8, clock9, clock10, clock11, clock12, clock130, clock230, clock330, clock430, clock530, clock630, clock730, clock830, clock930, clock1030, clock1130, clock1230, afghanistan, aland_islands, albania, algeria, american_samoa, andorra, angola, anguilla, antarctica, antigua_barbuda, argentina, armenia, aruba, australia, austria, azerbaijan, bahamas, bahrain, bangladesh, barbados, belarus, belgium, belize, benin, bermuda, bhutan, bolivia, caribbean_netherlands, bosnia_herzegovina, botswana, brazil, british_indian_ocean_territory, british_virgin_islands, brunei, bulgaria, burkina_faso, burundi, cape_verde, cambodia, cameroon, canada, canary_islands, cayman_islands, central_african_republic, chad, chile, cn, christmas_island, cocos_islands, colombia, comoros, congo_brazzaville, congo_kinshasa, cook_islands, costa_rica, croatia, cuba, curacao, cyprus, czech_republic, denmark, djibouti, dominica, dominican_republic, ecuador, egypt, el_salvador, equatorial_guinea, eritrea, estonia, ethiopia, eu, falkland_islands, faroe_islands, fiji, finland, fr, french_guiana, french_polynesia, french_southern_territories, gabon, gambia, georgia, de, ghana, gibraltar, greece, greenland, grenada, guadeloupe, guam, guatemala, guernsey, guinea, guinea_bissau, guyana, haiti, honduras, hong_kong, hungary, iceland, india, indonesia, iran, iraq, ireland, isle_of_man, israel, it, cote_divoire, jamaica, jp, jersey, jordan, kazakhstan, kenya, kiribati, kosovo, kuwait, kyrgyzstan, laos, latvia, lebanon, lesotho, liberia, libya, liechtenstein, lithuania, luxembourg, macau, macedonia, madagascar, malawi, malaysia, maldives, mali, malta, marshall_islands, martinique, mauritania, mauritius, mayotte, mexico, micronesia, moldova, monaco, mongolia, montenegro, montserrat, morocco, mozambique, myanmar, namibia, nauru, nepal, netherlands, new_caledonia, new_zealand, nicaragua, niger, nigeria, niue, norfolk_island, northern_mariana_islands, north_korea, norway, oman, pakistan, palau, palestinian_territories, panama, papua_new_guinea, paraguay, peru, philippines, pitcairn_islands, poland, portugal, puerto_rico, qatar, reunion, romania, ru, rwanda, st_barthelemy, st_helena, st_kitts_nevis, st_lucia, st_pierre_miquelon, st_vincent_grenadines, samoa, san_marino, sao_tome_principe, saudi_arabia, senegal, serbia, seychelles, sierra_leone, singapore, sint_maarten, slovakia, slovenia, solomon_islands, somalia, south_africa, south_georgia_south_sandwich_islands, kr, south_sudan, es, sri_lanka, sudan, suriname, swaziland, sweden, switzerland, syria, taiwan, tajikistan, tanzania, thailand, timor_leste, togo, tokelau, tonga, trinidad_tobago, tunisia, tr, turkmenistan, turks_caicos_islands, tuvalu, uganda, ukraine, united_arab_emirates, uk, england, scotland, wales, us, us_virgin_islands, uruguay, uzbekistan, vanuatu, vatican_city, venezuela, vietnam, wallis_futuna, western_sahara, yemen, zambia, zimbabwe, united_nations, pirate_flag, default */
-/***/ (function(module) {
-
-module.exports = JSON.parse("{\"100\":{\"keywords\":[\"score\",\"perfect\",\"numbers\",\"century\",\"exam\",\"quiz\",\"test\",\"pass\",\"hundred\"],\"char\":\"💯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"1234\":{\"keywords\":[\"numbers\",\"blue-square\"],\"char\":\"🔢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"grinning\":{\"keywords\":[\"face\",\"smile\",\"happy\",\"joy\",\":D\",\"grin\"],\"char\":\"😀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"grimacing\":{\"keywords\":[\"face\",\"grimace\",\"teeth\"],\"char\":\"😬\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"grin\":{\"keywords\":[\"face\",\"happy\",\"smile\",\"joy\",\"kawaii\"],\"char\":\"😁\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"joy\":{\"keywords\":[\"face\",\"cry\",\"tears\",\"weep\",\"happy\",\"happytears\",\"haha\"],\"char\":\"😂\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"rofl\":{\"keywords\":[\"face\",\"rolling\",\"floor\",\"laughing\",\"lol\",\"haha\"],\"char\":\"🤣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"partying\":{\"keywords\":[\"face\",\"celebration\",\"woohoo\"],\"char\":\"🥳\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiley\":{\"keywords\":[\"face\",\"happy\",\"joy\",\"haha\",\":D\",\":)\",\"smile\",\"funny\"],\"char\":\"😃\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smile\":{\"keywords\":[\"face\",\"happy\",\"joy\",\"funny\",\"haha\",\"laugh\",\"like\",\":D\",\":)\"],\"char\":\"😄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sweat_smile\":{\"keywords\":[\"face\",\"hot\",\"happy\",\"laugh\",\"sweat\",\"smile\",\"relief\"],\"char\":\"😅\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"laughing\":{\"keywords\":[\"happy\",\"joy\",\"lol\",\"satisfied\",\"haha\",\"face\",\"glad\",\"XD\",\"laugh\"],\"char\":\"😆\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"innocent\":{\"keywords\":[\"face\",\"angel\",\"heaven\",\"halo\"],\"char\":\"😇\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"wink\":{\"keywords\":[\"face\",\"happy\",\"mischievous\",\"secret\",\";)\",\"smile\",\"eye\"],\"char\":\"😉\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"blush\":{\"keywords\":[\"face\",\"smile\",\"happy\",\"flushed\",\"crush\",\"embarrassed\",\"shy\",\"joy\"],\"char\":\"😊\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"slightly_smiling_face\":{\"keywords\":[\"face\",\"smile\"],\"char\":\"🙂\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"upside_down_face\":{\"keywords\":[\"face\",\"flipped\",\"silly\",\"smile\"],\"char\":\"🙃\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"relaxed\":{\"keywords\":[\"face\",\"blush\",\"massage\",\"happiness\"],\"char\":\"☺️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"yum\":{\"keywords\":[\"happy\",\"joy\",\"tongue\",\"smile\",\"face\",\"silly\",\"yummy\",\"nom\",\"delicious\",\"savouring\"],\"char\":\"😋\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"relieved\":{\"keywords\":[\"face\",\"relaxed\",\"phew\",\"massage\",\"happiness\"],\"char\":\"😌\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"heart_eyes\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"crush\",\"heart\"],\"char\":\"😍\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiling_face_with_three_hearts\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"crush\",\"hearts\",\"adore\"],\"char\":\"🥰\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_heart\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😘\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing\":{\"keywords\":[\"love\",\"like\",\"face\",\"3\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😗\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_smiling_eyes\":{\"keywords\":[\"face\",\"affection\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😙\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_closed_eyes\":{\"keywords\":[\"face\",\"love\",\"like\",\"affection\",\"valentines\",\"infatuation\",\"kiss\"],\"char\":\"😚\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"stuck_out_tongue_winking_eye\":{\"keywords\":[\"face\",\"prank\",\"childish\",\"playful\",\"mischievous\",\"smile\",\"wink\",\"tongue\"],\"char\":\"😜\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"zany\":{\"keywords\":[\"face\",\"goofy\",\"crazy\"],\"char\":\"🤪\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"raised_eyebrow\":{\"keywords\":[\"face\",\"distrust\",\"scepticism\",\"disapproval\",\"disbelief\",\"surprise\"],\"char\":\"🤨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"monocle\":{\"keywords\":[\"face\",\"stuffy\",\"wealthy\"],\"char\":\"🧐\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"stuck_out_tongue_closed_eyes\":{\"keywords\":[\"face\",\"prank\",\"playful\",\"mischievous\",\"smile\",\"tongue\"],\"char\":\"😝\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"stuck_out_tongue\":{\"keywords\":[\"face\",\"prank\",\"childish\",\"playful\",\"mischievous\",\"smile\",\"tongue\"],\"char\":\"😛\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"money_mouth_face\":{\"keywords\":[\"face\",\"rich\",\"dollar\",\"money\"],\"char\":\"🤑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"nerd_face\":{\"keywords\":[\"face\",\"nerdy\",\"geek\",\"dork\"],\"char\":\"🤓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sunglasses\":{\"keywords\":[\"face\",\"cool\",\"smile\",\"summer\",\"beach\",\"sunglass\"],\"char\":\"😎\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"star_struck\":{\"keywords\":[\"face\",\"smile\",\"starry\",\"eyes\",\"grinning\"],\"char\":\"🤩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"clown_face\":{\"keywords\":[\"face\"],\"char\":\"🤡\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cowboy_hat_face\":{\"keywords\":[\"face\",\"cowgirl\",\"hat\"],\"char\":\"🤠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hugs\":{\"keywords\":[\"face\",\"smile\",\"hug\"],\"char\":\"🤗\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smirk\":{\"keywords\":[\"face\",\"smile\",\"mean\",\"prank\",\"smug\",\"sarcasm\"],\"char\":\"😏\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"no_mouth\":{\"keywords\":[\"face\",\"hellokitty\"],\"char\":\"😶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"neutral_face\":{\"keywords\":[\"indifference\",\"meh\",\":|\",\"neutral\"],\"char\":\"😐\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"expressionless\":{\"keywords\":[\"face\",\"indifferent\",\"-_-\",\"meh\",\"deadpan\"],\"char\":\"😑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"unamused\":{\"keywords\":[\"indifference\",\"bored\",\"straight face\",\"serious\",\"sarcasm\",\"unimpressed\",\"skeptical\",\"dubious\",\"side_eye\"],\"char\":\"😒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"roll_eyes\":{\"keywords\":[\"face\",\"eyeroll\",\"frustrated\"],\"char\":\"🙄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"thinking\":{\"keywords\":[\"face\",\"hmmm\",\"think\",\"consider\"],\"char\":\"🤔\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"lying_face\":{\"keywords\":[\"face\",\"lie\",\"pinocchio\"],\"char\":\"🤥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hand_over_mouth\":{\"keywords\":[\"face\",\"whoops\",\"shock\",\"surprise\"],\"char\":\"🤭\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"shushing\":{\"keywords\":[\"face\",\"quiet\",\"shhh\"],\"char\":\"🤫\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"symbols_over_mouth\":{\"keywords\":[\"face\",\"swearing\",\"cursing\",\"cussing\",\"profanity\",\"expletive\"],\"char\":\"🤬\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"exploding_head\":{\"keywords\":[\"face\",\"shocked\",\"mind\",\"blown\"],\"char\":\"🤯\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"flushed\":{\"keywords\":[\"face\",\"blush\",\"shy\",\"flattered\"],\"char\":\"😳\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"disappointed\":{\"keywords\":[\"face\",\"sad\",\"upset\",\"depressed\",\":(\"],\"char\":\"😞\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"worried\":{\"keywords\":[\"face\",\"concern\",\"nervous\",\":(\"],\"char\":\"😟\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"angry\":{\"keywords\":[\"mad\",\"face\",\"annoyed\",\"frustrated\"],\"char\":\"😠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"rage\":{\"keywords\":[\"angry\",\"mad\",\"hate\",\"despise\"],\"char\":\"😡\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pensive\":{\"keywords\":[\"face\",\"sad\",\"depressed\",\"upset\"],\"char\":\"😔\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"confused\":{\"keywords\":[\"face\",\"indifference\",\"huh\",\"weird\",\"hmmm\",\":/\"],\"char\":\"😕\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"slightly_frowning_face\":{\"keywords\":[\"face\",\"frowning\",\"disappointed\",\"sad\",\"upset\"],\"char\":\"🙁\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"frowning_face\":{\"keywords\":[\"face\",\"sad\",\"upset\",\"frown\"],\"char\":\"☹\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"persevere\":{\"keywords\":[\"face\",\"sick\",\"no\",\"upset\",\"oops\"],\"char\":\"😣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"confounded\":{\"keywords\":[\"face\",\"confused\",\"sick\",\"unwell\",\"oops\",\":S\"],\"char\":\"😖\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tired_face\":{\"keywords\":[\"sick\",\"whine\",\"upset\",\"frustrated\"],\"char\":\"😫\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"weary\":{\"keywords\":[\"face\",\"tired\",\"sleepy\",\"sad\",\"frustrated\",\"upset\"],\"char\":\"😩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pleading\":{\"keywords\":[\"face\",\"begging\",\"mercy\"],\"char\":\"🥺\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"triumph\":{\"keywords\":[\"face\",\"gas\",\"phew\",\"proud\",\"pride\"],\"char\":\"😤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"open_mouth\":{\"keywords\":[\"face\",\"surprise\",\"impressed\",\"wow\",\"whoa\",\":O\"],\"char\":\"😮\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"scream\":{\"keywords\":[\"face\",\"munch\",\"scared\",\"omg\"],\"char\":\"😱\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"fearful\":{\"keywords\":[\"face\",\"scared\",\"terrified\",\"nervous\",\"oops\",\"huh\"],\"char\":\"😨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cold_sweat\":{\"keywords\":[\"face\",\"nervous\",\"sweat\"],\"char\":\"😰\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hushed\":{\"keywords\":[\"face\",\"woo\",\"shh\"],\"char\":\"😯\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"frowning\":{\"keywords\":[\"face\",\"aw\",\"what\"],\"char\":\"😦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"anguished\":{\"keywords\":[\"face\",\"stunned\",\"nervous\"],\"char\":\"😧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cry\":{\"keywords\":[\"face\",\"tears\",\"sad\",\"depressed\",\"upset\",\":'(\"],\"char\":\"😢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"disappointed_relieved\":{\"keywords\":[\"face\",\"phew\",\"sweat\",\"nervous\"],\"char\":\"😥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"drooling_face\":{\"keywords\":[\"face\"],\"char\":\"🤤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sleepy\":{\"keywords\":[\"face\",\"tired\",\"rest\",\"nap\"],\"char\":\"😪\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sweat\":{\"keywords\":[\"face\",\"hot\",\"sad\",\"tired\",\"exercise\"],\"char\":\"😓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hot\":{\"keywords\":[\"face\",\"feverish\",\"heat\",\"red\",\"sweating\"],\"char\":\"🥵\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"cold\":{\"keywords\":[\"face\",\"blue\",\"freezing\",\"frozen\",\"frostbite\",\"icicles\"],\"char\":\"🥶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sob\":{\"keywords\":[\"face\",\"cry\",\"tears\",\"sad\",\"upset\",\"depressed\"],\"char\":\"😭\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dizzy_face\":{\"keywords\":[\"spent\",\"unconscious\",\"xox\",\"dizzy\"],\"char\":\"😵\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"astonished\":{\"keywords\":[\"face\",\"xox\",\"surprised\",\"poisoned\"],\"char\":\"😲\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"zipper_mouth_face\":{\"keywords\":[\"face\",\"sealed\",\"zipper\",\"secret\"],\"char\":\"🤐\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"nauseated_face\":{\"keywords\":[\"face\",\"vomit\",\"gross\",\"green\",\"sick\",\"throw up\",\"ill\"],\"char\":\"🤢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sneezing_face\":{\"keywords\":[\"face\",\"gesundheit\",\"sneeze\",\"sick\",\"allergy\"],\"char\":\"🤧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"vomiting\":{\"keywords\":[\"face\",\"sick\"],\"char\":\"🤮\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mask\":{\"keywords\":[\"face\",\"sick\",\"ill\",\"disease\"],\"char\":\"😷\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"face_with_thermometer\":{\"keywords\":[\"sick\",\"temperature\",\"thermometer\",\"cold\",\"fever\"],\"char\":\"🤒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"face_with_head_bandage\":{\"keywords\":[\"injured\",\"clumsy\",\"bandage\",\"hurt\"],\"char\":\"🤕\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"woozy\":{\"keywords\":[\"face\",\"dizzy\",\"intoxicated\",\"tipsy\",\"wavy\"],\"char\":\"🥴\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sleeping\":{\"keywords\":[\"face\",\"tired\",\"sleepy\",\"night\",\"zzz\"],\"char\":\"😴\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"zzz\":{\"keywords\":[\"sleepy\",\"tired\",\"dream\"],\"char\":\"💤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"poop\":{\"keywords\":[\"hankey\",\"shitface\",\"fail\",\"turd\",\"shit\"],\"char\":\"💩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiling_imp\":{\"keywords\":[\"devil\",\"horns\"],\"char\":\"😈\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"imp\":{\"keywords\":[\"devil\",\"angry\",\"horns\"],\"char\":\"👿\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"japanese_ogre\":{\"keywords\":[\"monster\",\"red\",\"mask\",\"halloween\",\"scary\",\"creepy\",\"devil\",\"demon\",\"japanese\",\"ogre\"],\"char\":\"👹\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"japanese_goblin\":{\"keywords\":[\"red\",\"evil\",\"mask\",\"monster\",\"scary\",\"creepy\",\"japanese\",\"goblin\"],\"char\":\"👺\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"skull\":{\"keywords\":[\"dead\",\"skeleton\",\"creepy\",\"death\"],\"char\":\"💀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"ghost\":{\"keywords\":[\"halloween\",\"spooky\",\"scary\"],\"char\":\"👻\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"alien\":{\"keywords\":[\"UFO\",\"paul\",\"weird\",\"outer_space\"],\"char\":\"👽\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"robot\":{\"keywords\":[\"computer\",\"machine\",\"bot\"],\"char\":\"🤖\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smiley_cat\":{\"keywords\":[\"animal\",\"cats\",\"happy\",\"smile\"],\"char\":\"😺\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smile_cat\":{\"keywords\":[\"animal\",\"cats\",\"smile\"],\"char\":\"😸\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"joy_cat\":{\"keywords\":[\"animal\",\"cats\",\"haha\",\"happy\",\"tears\"],\"char\":\"😹\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"heart_eyes_cat\":{\"keywords\":[\"animal\",\"love\",\"like\",\"affection\",\"cats\",\"valentines\",\"heart\"],\"char\":\"😻\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"smirk_cat\":{\"keywords\":[\"animal\",\"cats\",\"smirk\"],\"char\":\"😼\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kissing_cat\":{\"keywords\":[\"animal\",\"cats\",\"kiss\"],\"char\":\"😽\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"scream_cat\":{\"keywords\":[\"animal\",\"cats\",\"munch\",\"scared\",\"scream\"],\"char\":\"🙀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"crying_cat_face\":{\"keywords\":[\"animal\",\"tears\",\"weep\",\"sad\",\"cats\",\"upset\",\"cry\"],\"char\":\"😿\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pouting_cat\":{\"keywords\":[\"animal\",\"cats\"],\"char\":\"😾\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"palms_up\":{\"keywords\":[\"hands\",\"gesture\",\"cupped\",\"prayer\"],\"char\":\"🤲\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_hands\":{\"keywords\":[\"gesture\",\"hooray\",\"yea\",\"celebration\",\"hands\"],\"char\":\"🙌\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"clap\":{\"keywords\":[\"hands\",\"praise\",\"applause\",\"congrats\",\"yay\"],\"char\":\"👏\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"wave\":{\"keywords\":[\"hands\",\"gesture\",\"goodbye\",\"solong\",\"farewell\",\"hello\",\"hi\",\"palm\"],\"char\":\"👋\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"call_me_hand\":{\"keywords\":[\"hands\",\"gesture\"],\"char\":\"🤙\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"+1\":{\"keywords\":[\"thumbsup\",\"yes\",\"awesome\",\"good\",\"agree\",\"accept\",\"cool\",\"hand\",\"like\"],\"char\":\"👍\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"-1\":{\"keywords\":[\"thumbsdown\",\"no\",\"dislike\",\"hand\"],\"char\":\"👎\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"facepunch\":{\"keywords\":[\"angry\",\"violence\",\"fist\",\"hit\",\"attack\",\"hand\"],\"char\":\"👊\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fist\":{\"keywords\":[\"fingers\",\"hand\",\"grasp\"],\"char\":\"✊\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fist_left\":{\"keywords\":[\"hand\",\"fistbump\"],\"char\":\"🤛\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fist_right\":{\"keywords\":[\"hand\",\"fistbump\"],\"char\":\"🤜\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"v\":{\"keywords\":[\"fingers\",\"ohyeah\",\"hand\",\"peace\",\"victory\",\"two\"],\"char\":\"✌\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"ok_hand\":{\"keywords\":[\"fingers\",\"limbs\",\"perfect\",\"ok\",\"okay\"],\"char\":\"👌\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_hand\":{\"keywords\":[\"fingers\",\"stop\",\"highfive\",\"palm\",\"ban\"],\"char\":\"✋\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_back_of_hand\":{\"keywords\":[\"fingers\",\"raised\",\"backhand\"],\"char\":\"🤚\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"open_hands\":{\"keywords\":[\"fingers\",\"butterfly\",\"hands\",\"open\"],\"char\":\"👐\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"muscle\":{\"keywords\":[\"arm\",\"flex\",\"hand\",\"summer\",\"strong\",\"biceps\"],\"char\":\"💪\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pray\":{\"keywords\":[\"please\",\"hope\",\"wish\",\"namaste\",\"highfive\"],\"char\":\"🙏\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"foot\":{\"keywords\":[\"kick\",\"stomp\"],\"char\":\"🦶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"leg\":{\"keywords\":[\"kick\",\"limb\"],\"char\":\"🦵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"handshake\":{\"keywords\":[\"agreement\",\"shake\"],\"char\":\"🤝\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"point_up\":{\"keywords\":[\"hand\",\"fingers\",\"direction\",\"up\"],\"char\":\"☝\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_up_2\":{\"keywords\":[\"fingers\",\"hand\",\"direction\",\"up\"],\"char\":\"👆\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_down\":{\"keywords\":[\"fingers\",\"hand\",\"direction\",\"down\"],\"char\":\"👇\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_left\":{\"keywords\":[\"direction\",\"fingers\",\"hand\",\"left\"],\"char\":\"👈\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"point_right\":{\"keywords\":[\"fingers\",\"hand\",\"direction\",\"right\"],\"char\":\"👉\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"fu\":{\"keywords\":[\"hand\",\"fingers\",\"rude\",\"middle\",\"flipping\"],\"char\":\"🖕\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raised_hand_with_fingers_splayed\":{\"keywords\":[\"hand\",\"fingers\",\"palm\"],\"char\":\"🖐\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"love_you\":{\"keywords\":[\"hand\",\"fingers\",\"gesture\"],\"char\":\"🤟\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"metal\":{\"keywords\":[\"hand\",\"fingers\",\"evil_eye\",\"sign_of_horns\",\"rock_on\"],\"char\":\"🤘\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"crossed_fingers\":{\"keywords\":[\"good\",\"lucky\"],\"char\":\"🤞\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"vulcan_salute\":{\"keywords\":[\"hand\",\"fingers\",\"spock\",\"star trek\"],\"char\":\"🖖\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"writing_hand\":{\"keywords\":[\"lower_left_ballpoint_pen\",\"stationery\",\"write\",\"compose\"],\"char\":\"✍\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"selfie\":{\"keywords\":[\"camera\",\"phone\"],\"char\":\"🤳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"nail_care\":{\"keywords\":[\"beauty\",\"manicure\",\"finger\",\"fashion\",\"nail\"],\"char\":\"💅\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"lips\":{\"keywords\":[\"mouth\",\"kiss\"],\"char\":\"👄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tooth\":{\"keywords\":[\"teeth\",\"dentist\"],\"char\":\"🦷\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tongue\":{\"keywords\":[\"mouth\",\"playful\"],\"char\":\"👅\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"ear\":{\"keywords\":[\"face\",\"hear\",\"sound\",\"listen\"],\"char\":\"👂\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"nose\":{\"keywords\":[\"smell\",\"sniff\"],\"char\":\"👃\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"eye\":{\"keywords\":[\"face\",\"look\",\"see\",\"watch\",\"stare\"],\"char\":\"👁\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"eyes\":{\"keywords\":[\"look\",\"watch\",\"stalk\",\"peek\",\"see\"],\"char\":\"👀\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"brain\":{\"keywords\":[\"smart\",\"intelligent\"],\"char\":\"🧠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"bust_in_silhouette\":{\"keywords\":[\"user\",\"person\",\"human\"],\"char\":\"👤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"busts_in_silhouette\":{\"keywords\":[\"user\",\"person\",\"human\",\"group\",\"team\"],\"char\":\"👥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"speaking_head\":{\"keywords\":[\"user\",\"person\",\"human\",\"sing\",\"say\",\"talk\"],\"char\":\"🗣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"baby\":{\"keywords\":[\"child\",\"boy\",\"girl\",\"toddler\"],\"char\":\"👶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"child\":{\"keywords\":[\"gender-neutral\",\"young\"],\"char\":\"🧒\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"boy\":{\"keywords\":[\"man\",\"male\",\"guy\",\"teenager\"],\"char\":\"👦\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"girl\":{\"keywords\":[\"female\",\"woman\",\"teenager\"],\"char\":\"👧\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"adult\":{\"keywords\":[\"gender-neutral\",\"person\"],\"char\":\"🧑\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man\":{\"keywords\":[\"mustache\",\"father\",\"dad\",\"guy\",\"classy\",\"sir\",\"moustache\"],\"char\":\"👨\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman\":{\"keywords\":[\"female\",\"girls\",\"lady\"],\"char\":\"👩\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"blonde_woman\":{\"keywords\":[\"woman\",\"female\",\"girl\",\"blonde\",\"person\"],\"char\":\"👱‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"blonde_man\":{\"keywords\":[\"man\",\"male\",\"boy\",\"blonde\",\"guy\",\"person\"],\"char\":\"👱\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"bearded_person\":{\"keywords\":[\"person\",\"bewhiskered\"],\"char\":\"🧔\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"older_adult\":{\"keywords\":[\"human\",\"elder\",\"senior\",\"gender-neutral\"],\"char\":\"🧓\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"older_man\":{\"keywords\":[\"human\",\"male\",\"men\",\"old\",\"elder\",\"senior\"],\"char\":\"👴\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"older_woman\":{\"keywords\":[\"human\",\"female\",\"women\",\"lady\",\"old\",\"elder\",\"senior\"],\"char\":\"👵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_with_gua_pi_mao\":{\"keywords\":[\"male\",\"boy\",\"chinese\"],\"char\":\"👲\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_with_headscarf\":{\"keywords\":[\"female\",\"hijab\",\"mantilla\",\"tichel\"],\"char\":\"🧕\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_with_turban\":{\"keywords\":[\"female\",\"indian\",\"hinduism\",\"arabs\",\"woman\"],\"char\":\"👳‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_with_turban\":{\"keywords\":[\"male\",\"indian\",\"hinduism\",\"arabs\"],\"char\":\"👳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"policewoman\":{\"keywords\":[\"woman\",\"police\",\"law\",\"legal\",\"enforcement\",\"arrest\",\"911\",\"female\"],\"char\":\"👮‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"policeman\":{\"keywords\":[\"man\",\"police\",\"law\",\"legal\",\"enforcement\",\"arrest\",\"911\"],\"char\":\"👮\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"construction_worker_woman\":{\"keywords\":[\"female\",\"human\",\"wip\",\"build\",\"construction\",\"worker\",\"labor\",\"woman\"],\"char\":\"👷‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"construction_worker_man\":{\"keywords\":[\"male\",\"human\",\"wip\",\"guy\",\"build\",\"construction\",\"worker\",\"labor\"],\"char\":\"👷\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"guardswoman\":{\"keywords\":[\"uk\",\"gb\",\"british\",\"female\",\"royal\",\"woman\"],\"char\":\"💂‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"guardsman\":{\"keywords\":[\"uk\",\"gb\",\"british\",\"male\",\"guy\",\"royal\"],\"char\":\"💂\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"female_detective\":{\"keywords\":[\"human\",\"spy\",\"detective\",\"female\",\"woman\"],\"char\":\"🕵️‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"male_detective\":{\"keywords\":[\"human\",\"spy\",\"detective\"],\"char\":\"🕵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_health_worker\":{\"keywords\":[\"doctor\",\"nurse\",\"therapist\",\"healthcare\",\"woman\",\"human\"],\"char\":\"👩‍⚕️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_health_worker\":{\"keywords\":[\"doctor\",\"nurse\",\"therapist\",\"healthcare\",\"man\",\"human\"],\"char\":\"👨‍⚕️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_farmer\":{\"keywords\":[\"rancher\",\"gardener\",\"woman\",\"human\"],\"char\":\"👩‍🌾\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_farmer\":{\"keywords\":[\"rancher\",\"gardener\",\"man\",\"human\"],\"char\":\"👨‍🌾\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_cook\":{\"keywords\":[\"chef\",\"woman\",\"human\"],\"char\":\"👩‍🍳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_cook\":{\"keywords\":[\"chef\",\"man\",\"human\"],\"char\":\"👨‍🍳\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_student\":{\"keywords\":[\"graduate\",\"woman\",\"human\"],\"char\":\"👩‍🎓\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_student\":{\"keywords\":[\"graduate\",\"man\",\"human\"],\"char\":\"👨‍🎓\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_singer\":{\"keywords\":[\"rockstar\",\"entertainer\",\"woman\",\"human\"],\"char\":\"👩‍🎤\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_singer\":{\"keywords\":[\"rockstar\",\"entertainer\",\"man\",\"human\"],\"char\":\"👨‍🎤\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_teacher\":{\"keywords\":[\"instructor\",\"professor\",\"woman\",\"human\"],\"char\":\"👩‍🏫\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_teacher\":{\"keywords\":[\"instructor\",\"professor\",\"man\",\"human\"],\"char\":\"👨‍🏫\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_factory_worker\":{\"keywords\":[\"assembly\",\"industrial\",\"woman\",\"human\"],\"char\":\"👩‍🏭\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_factory_worker\":{\"keywords\":[\"assembly\",\"industrial\",\"man\",\"human\"],\"char\":\"👨‍🏭\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_technologist\":{\"keywords\":[\"coder\",\"developer\",\"engineer\",\"programmer\",\"software\",\"woman\",\"human\",\"laptop\",\"computer\"],\"char\":\"👩‍💻\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_technologist\":{\"keywords\":[\"coder\",\"developer\",\"engineer\",\"programmer\",\"software\",\"man\",\"human\",\"laptop\",\"computer\"],\"char\":\"👨‍💻\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_office_worker\":{\"keywords\":[\"business\",\"manager\",\"woman\",\"human\"],\"char\":\"👩‍💼\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_office_worker\":{\"keywords\":[\"business\",\"manager\",\"man\",\"human\"],\"char\":\"👨‍💼\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_mechanic\":{\"keywords\":[\"plumber\",\"woman\",\"human\",\"wrench\"],\"char\":\"👩‍🔧\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_mechanic\":{\"keywords\":[\"plumber\",\"man\",\"human\",\"wrench\"],\"char\":\"👨‍🔧\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_scientist\":{\"keywords\":[\"biologist\",\"chemist\",\"engineer\",\"physicist\",\"woman\",\"human\"],\"char\":\"👩‍🔬\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_scientist\":{\"keywords\":[\"biologist\",\"chemist\",\"engineer\",\"physicist\",\"man\",\"human\"],\"char\":\"👨‍🔬\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_artist\":{\"keywords\":[\"painter\",\"woman\",\"human\"],\"char\":\"👩‍🎨\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_artist\":{\"keywords\":[\"painter\",\"man\",\"human\"],\"char\":\"👨‍🎨\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_firefighter\":{\"keywords\":[\"fireman\",\"woman\",\"human\"],\"char\":\"👩‍🚒\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_firefighter\":{\"keywords\":[\"fireman\",\"man\",\"human\"],\"char\":\"👨‍🚒\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_pilot\":{\"keywords\":[\"aviator\",\"plane\",\"woman\",\"human\"],\"char\":\"👩‍✈️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_pilot\":{\"keywords\":[\"aviator\",\"plane\",\"man\",\"human\"],\"char\":\"👨‍✈️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_astronaut\":{\"keywords\":[\"space\",\"rocket\",\"woman\",\"human\"],\"char\":\"👩‍🚀\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_astronaut\":{\"keywords\":[\"space\",\"rocket\",\"man\",\"human\"],\"char\":\"👨‍🚀\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_judge\":{\"keywords\":[\"justice\",\"court\",\"woman\",\"human\"],\"char\":\"👩‍⚖️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_judge\":{\"keywords\":[\"justice\",\"court\",\"man\",\"human\"],\"char\":\"👨‍⚖️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_superhero\":{\"keywords\":[\"woman\",\"female\",\"good\",\"heroine\",\"superpowers\"],\"char\":\"🦸‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_superhero\":{\"keywords\":[\"man\",\"male\",\"good\",\"hero\",\"superpowers\"],\"char\":\"🦸‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_supervillain\":{\"keywords\":[\"woman\",\"female\",\"evil\",\"bad\",\"criminal\",\"heroine\",\"superpowers\"],\"char\":\"🦹‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_supervillain\":{\"keywords\":[\"man\",\"male\",\"evil\",\"bad\",\"criminal\",\"hero\",\"superpowers\"],\"char\":\"🦹‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"mrs_claus\":{\"keywords\":[\"woman\",\"female\",\"xmas\",\"mother christmas\"],\"char\":\"🤶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"santa\":{\"keywords\":[\"festival\",\"man\",\"male\",\"xmas\",\"father christmas\"],\"char\":\"🎅\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"sorceress\":{\"keywords\":[\"woman\",\"female\",\"mage\",\"witch\"],\"char\":\"🧙‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"wizard\":{\"keywords\":[\"man\",\"male\",\"mage\",\"sorcerer\"],\"char\":\"🧙‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_elf\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧝‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_elf\":{\"keywords\":[\"man\",\"male\"],\"char\":\"🧝‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_vampire\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧛‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_vampire\":{\"keywords\":[\"man\",\"male\",\"dracula\"],\"char\":\"🧛‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_zombie\":{\"keywords\":[\"woman\",\"female\",\"undead\",\"walking dead\"],\"char\":\"🧟‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"man_zombie\":{\"keywords\":[\"man\",\"male\",\"dracula\",\"undead\",\"walking dead\"],\"char\":\"🧟‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"woman_genie\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧞‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"man_genie\":{\"keywords\":[\"man\",\"male\"],\"char\":\"🧞‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mermaid\":{\"keywords\":[\"woman\",\"female\",\"merwoman\",\"ariel\"],\"char\":\"🧜‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"merman\":{\"keywords\":[\"man\",\"male\",\"triton\"],\"char\":\"🧜‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_fairy\":{\"keywords\":[\"woman\",\"female\"],\"char\":\"🧚‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_fairy\":{\"keywords\":[\"man\",\"male\"],\"char\":\"🧚‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"angel\":{\"keywords\":[\"heaven\",\"wings\",\"halo\"],\"char\":\"👼\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pregnant_woman\":{\"keywords\":[\"baby\"],\"char\":\"🤰\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"breastfeeding\":{\"keywords\":[\"nursing\",\"baby\"],\"char\":\"🤱\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"princess\":{\"keywords\":[\"girl\",\"woman\",\"female\",\"blond\",\"crown\",\"royal\",\"queen\"],\"char\":\"👸\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"prince\":{\"keywords\":[\"boy\",\"man\",\"male\",\"crown\",\"royal\",\"king\"],\"char\":\"🤴\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"bride_with_veil\":{\"keywords\":[\"couple\",\"marriage\",\"wedding\",\"woman\",\"bride\"],\"char\":\"👰\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_in_tuxedo\":{\"keywords\":[\"couple\",\"marriage\",\"wedding\",\"groom\"],\"char\":\"🤵\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"running_woman\":{\"keywords\":[\"woman\",\"walking\",\"exercise\",\"race\",\"running\",\"female\"],\"char\":\"🏃‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"running_man\":{\"keywords\":[\"man\",\"walking\",\"exercise\",\"race\",\"running\"],\"char\":\"🏃\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"walking_woman\":{\"keywords\":[\"human\",\"feet\",\"steps\",\"woman\",\"female\"],\"char\":\"🚶‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"walking_man\":{\"keywords\":[\"human\",\"feet\",\"steps\"],\"char\":\"🚶\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"dancer\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"fun\"],\"char\":\"💃\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_dancing\":{\"keywords\":[\"male\",\"boy\",\"fun\",\"dancer\"],\"char\":\"🕺\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"dancing_women\":{\"keywords\":[\"female\",\"bunny\",\"women\",\"girls\"],\"char\":\"👯\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dancing_men\":{\"keywords\":[\"male\",\"bunny\",\"men\",\"boys\"],\"char\":\"👯‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couple\":{\"keywords\":[\"pair\",\"people\",\"human\",\"love\",\"date\",\"dating\",\"like\",\"affection\",\"valentines\",\"marriage\"],\"char\":\"👫\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"two_men_holding_hands\":{\"keywords\":[\"pair\",\"couple\",\"love\",\"like\",\"bromance\",\"friendship\",\"people\",\"human\"],\"char\":\"👬\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"two_women_holding_hands\":{\"keywords\":[\"pair\",\"friendship\",\"couple\",\"love\",\"like\",\"female\",\"people\",\"human\"],\"char\":\"👭\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"bowing_woman\":{\"keywords\":[\"woman\",\"female\",\"girl\"],\"char\":\"🙇‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"bowing_man\":{\"keywords\":[\"man\",\"male\",\"boy\"],\"char\":\"🙇\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_facepalming\":{\"keywords\":[\"man\",\"male\",\"boy\",\"disbelief\"],\"char\":\"🤦‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_facepalming\":{\"keywords\":[\"woman\",\"female\",\"girl\",\"disbelief\"],\"char\":\"🤦‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_shrugging\":{\"keywords\":[\"woman\",\"female\",\"girl\",\"confused\",\"indifferent\",\"doubt\"],\"char\":\"🤷\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_shrugging\":{\"keywords\":[\"man\",\"male\",\"boy\",\"confused\",\"indifferent\",\"doubt\"],\"char\":\"🤷‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"tipping_hand_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"human\",\"information\"],\"char\":\"💁\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"tipping_hand_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"human\",\"information\"],\"char\":\"💁‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"no_good_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"nope\"],\"char\":\"🙅\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"no_good_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"nope\"],\"char\":\"🙅‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"ok_woman\":{\"keywords\":[\"women\",\"girl\",\"female\",\"pink\",\"human\",\"woman\"],\"char\":\"🙆\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"ok_man\":{\"keywords\":[\"men\",\"boy\",\"male\",\"blue\",\"human\",\"man\"],\"char\":\"🙆‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raising_hand_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\"],\"char\":\"🙋\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"raising_hand_man\":{\"keywords\":[\"male\",\"boy\",\"man\"],\"char\":\"🙋‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pouting_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\"],\"char\":\"🙎\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"pouting_man\":{\"keywords\":[\"male\",\"boy\",\"man\"],\"char\":\"🙎‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"frowning_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"sad\",\"depressed\",\"discouraged\",\"unhappy\"],\"char\":\"🙍\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"frowning_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"sad\",\"depressed\",\"discouraged\",\"unhappy\"],\"char\":\"🙍‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"haircut_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\"],\"char\":\"💇\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"haircut_man\":{\"keywords\":[\"male\",\"boy\",\"man\"],\"char\":\"💇‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"massage_woman\":{\"keywords\":[\"female\",\"girl\",\"woman\",\"head\"],\"char\":\"💆\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"massage_man\":{\"keywords\":[\"male\",\"boy\",\"man\",\"head\"],\"char\":\"💆‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"woman_in_steamy_room\":{\"keywords\":[\"female\",\"woman\",\"spa\",\"steamroom\",\"sauna\"],\"char\":\"🧖‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"man_in_steamy_room\":{\"keywords\":[\"male\",\"man\",\"spa\",\"steamroom\",\"sauna\"],\"char\":\"🧖‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"people\"},\"couple_with_heart_woman_man\":{\"keywords\":[\"pair\",\"love\",\"like\",\"affection\",\"human\",\"dating\",\"valentines\",\"marriage\"],\"char\":\"💑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couple_with_heart_woman_woman\":{\"keywords\":[\"pair\",\"love\",\"like\",\"affection\",\"human\",\"dating\",\"valentines\",\"marriage\"],\"char\":\"👩‍❤️‍👩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couple_with_heart_man_man\":{\"keywords\":[\"pair\",\"love\",\"like\",\"affection\",\"human\",\"dating\",\"valentines\",\"marriage\"],\"char\":\"👨‍❤️‍👨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couplekiss_man_woman\":{\"keywords\":[\"pair\",\"valentines\",\"love\",\"like\",\"dating\",\"marriage\"],\"char\":\"💏\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couplekiss_woman_woman\":{\"keywords\":[\"pair\",\"valentines\",\"love\",\"like\",\"dating\",\"marriage\"],\"char\":\"👩‍❤️‍💋‍👩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"couplekiss_man_man\":{\"keywords\":[\"pair\",\"valentines\",\"love\",\"like\",\"dating\",\"marriage\"],\"char\":\"👨‍❤️‍💋‍👨\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_boy\":{\"keywords\":[\"home\",\"parents\",\"child\",\"mom\",\"dad\",\"father\",\"mother\",\"people\",\"human\"],\"char\":\"👪\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"child\"],\"char\":\"👨‍👩‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_girl_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👩‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_boy_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👩‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_woman_girl_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👩‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_girl_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_boy_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_woman_girl_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👩‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_girl_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_boy_boy\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_man_girl_girl\":{\"keywords\":[\"home\",\"parents\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👨‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👩‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👩‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_girl_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_boy_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_woman_girl_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👩‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👨‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"child\"],\"char\":\"👨‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_girl_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👧‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_boy_boy\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👦‍👦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"family_man_girl_girl\":{\"keywords\":[\"home\",\"parent\",\"people\",\"human\",\"children\"],\"char\":\"👨‍👧‍👧\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"yarn\":{\"keywords\":[\"ball\",\"crochet\",\"knit\"],\"char\":\"🧶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"thread\":{\"keywords\":[\"needle\",\"sewing\",\"spool\",\"string\"],\"char\":\"🧵\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"coat\":{\"keywords\":[\"jacket\"],\"char\":\"🧥\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"labcoat\":{\"keywords\":[\"doctor\",\"experiment\",\"scientist\",\"chemist\"],\"char\":\"🥼\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"womans_clothes\":{\"keywords\":[\"fashion\",\"shopping_bags\",\"female\"],\"char\":\"👚\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tshirt\":{\"keywords\":[\"fashion\",\"cloth\",\"casual\",\"shirt\",\"tee\"],\"char\":\"👕\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"jeans\":{\"keywords\":[\"fashion\",\"shopping\"],\"char\":\"👖\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"necktie\":{\"keywords\":[\"shirt\",\"suitup\",\"formal\",\"fashion\",\"cloth\",\"business\"],\"char\":\"👔\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dress\":{\"keywords\":[\"clothes\",\"fashion\",\"shopping\"],\"char\":\"👗\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"bikini\":{\"keywords\":[\"swimming\",\"female\",\"woman\",\"girl\",\"fashion\",\"beach\",\"summer\"],\"char\":\"👙\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kimono\":{\"keywords\":[\"dress\",\"fashion\",\"women\",\"female\",\"japanese\"],\"char\":\"👘\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"lipstick\":{\"keywords\":[\"female\",\"girl\",\"fashion\",\"woman\"],\"char\":\"💄\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"kiss\":{\"keywords\":[\"face\",\"lips\",\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💋\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"footprints\":{\"keywords\":[\"feet\",\"tracking\",\"walking\",\"beach\"],\"char\":\"👣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"flat_shoe\":{\"keywords\":[\"ballet\",\"slip-on\",\"slipper\"],\"char\":\"🥿\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"high_heel\":{\"keywords\":[\"fashion\",\"shoes\",\"female\",\"pumps\",\"stiletto\"],\"char\":\"👠\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"sandal\":{\"keywords\":[\"shoes\",\"fashion\",\"flip flops\"],\"char\":\"👡\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"boot\":{\"keywords\":[\"shoes\",\"fashion\"],\"char\":\"👢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mans_shoe\":{\"keywords\":[\"fashion\",\"male\"],\"char\":\"👞\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"athletic_shoe\":{\"keywords\":[\"shoes\",\"sports\",\"sneakers\"],\"char\":\"👟\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"hiking_boot\":{\"keywords\":[\"backpacking\",\"camping\",\"hiking\"],\"char\":\"🥾\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"socks\":{\"keywords\":[\"stockings\",\"clothes\"],\"char\":\"🧦\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"gloves\":{\"keywords\":[\"hands\",\"winter\",\"clothes\"],\"char\":\"🧤\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"scarf\":{\"keywords\":[\"neck\",\"winter\",\"clothes\"],\"char\":\"🧣\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"womans_hat\":{\"keywords\":[\"fashion\",\"accessories\",\"female\",\"lady\",\"spring\"],\"char\":\"👒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"tophat\":{\"keywords\":[\"magic\",\"gentleman\",\"classy\",\"circus\"],\"char\":\"🎩\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"billed_hat\":{\"keywords\":[\"cap\",\"baseball\"],\"char\":\"🧢\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"rescue_worker_helmet\":{\"keywords\":[\"construction\",\"build\"],\"char\":\"⛑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"mortar_board\":{\"keywords\":[\"school\",\"college\",\"degree\",\"university\",\"graduation\",\"cap\",\"hat\",\"legal\",\"learn\",\"education\"],\"char\":\"🎓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"crown\":{\"keywords\":[\"king\",\"kod\",\"leader\",\"royalty\",\"lord\"],\"char\":\"👑\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"school_satchel\":{\"keywords\":[\"student\",\"education\",\"bag\",\"backpack\"],\"char\":\"🎒\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"luggage\":{\"keywords\":[\"packing\",\"travel\"],\"char\":\"🧳\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"pouch\":{\"keywords\":[\"bag\",\"accessories\",\"shopping\"],\"char\":\"👝\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"purse\":{\"keywords\":[\"fashion\",\"accessories\",\"money\",\"sales\",\"shopping\"],\"char\":\"👛\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"handbag\":{\"keywords\":[\"fashion\",\"accessory\",\"accessories\",\"shopping\"],\"char\":\"👜\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"briefcase\":{\"keywords\":[\"business\",\"documents\",\"work\",\"law\",\"legal\",\"job\",\"career\"],\"char\":\"💼\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"eyeglasses\":{\"keywords\":[\"fashion\",\"accessories\",\"eyesight\",\"nerdy\",\"dork\",\"geek\"],\"char\":\"👓\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dark_sunglasses\":{\"keywords\":[\"face\",\"cool\",\"accessories\"],\"char\":\"🕶\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"goggles\":{\"keywords\":[\"eyes\",\"protection\",\"safety\"],\"char\":\"🥽\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"ring\":{\"keywords\":[\"wedding\",\"propose\",\"marriage\",\"valentines\",\"diamond\",\"fashion\",\"jewelry\",\"gem\",\"engagement\"],\"char\":\"💍\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"closed_umbrella\":{\"keywords\":[\"weather\",\"rain\",\"drizzle\"],\"char\":\"🌂\",\"fitzpatrick_scale\":false,\"category\":\"people\"},\"dog\":{\"keywords\":[\"animal\",\"friend\",\"nature\",\"woof\",\"puppy\",\"pet\",\"faithful\"],\"char\":\"🐶\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cat\":{\"keywords\":[\"animal\",\"meow\",\"nature\",\"pet\",\"kitten\"],\"char\":\"🐱\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mouse\":{\"keywords\":[\"animal\",\"nature\",\"cheese_wedge\",\"rodent\"],\"char\":\"🐭\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hamster\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐹\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rabbit\":{\"keywords\":[\"animal\",\"nature\",\"pet\",\"spring\",\"magic\",\"bunny\"],\"char\":\"🐰\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fox_face\":{\"keywords\":[\"animal\",\"nature\",\"face\"],\"char\":\"🦊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bear\":{\"keywords\":[\"animal\",\"nature\",\"wild\"],\"char\":\"🐻\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"panda_face\":{\"keywords\":[\"animal\",\"nature\",\"panda\"],\"char\":\"🐼\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"koala\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tiger\":{\"keywords\":[\"animal\",\"cat\",\"danger\",\"wild\",\"nature\",\"roar\"],\"char\":\"🐯\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"lion\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🦁\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cow\":{\"keywords\":[\"beef\",\"ox\",\"animal\",\"nature\",\"moo\",\"milk\"],\"char\":\"🐮\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"pig\":{\"keywords\":[\"animal\",\"oink\",\"nature\"],\"char\":\"🐷\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"pig_nose\":{\"keywords\":[\"animal\",\"oink\"],\"char\":\"🐽\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"frog\":{\"keywords\":[\"animal\",\"nature\",\"croak\",\"toad\"],\"char\":\"🐸\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"squid\":{\"keywords\":[\"animal\",\"nature\",\"ocean\",\"sea\"],\"char\":\"🦑\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"octopus\":{\"keywords\":[\"animal\",\"creature\",\"ocean\",\"sea\",\"nature\",\"beach\"],\"char\":\"🐙\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shrimp\":{\"keywords\":[\"animal\",\"ocean\",\"nature\",\"seafood\"],\"char\":\"🦐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"monkey_face\":{\"keywords\":[\"animal\",\"nature\",\"circus\"],\"char\":\"🐵\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"gorilla\":{\"keywords\":[\"animal\",\"nature\",\"circus\"],\"char\":\"🦍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"see_no_evil\":{\"keywords\":[\"monkey\",\"animal\",\"nature\",\"haha\"],\"char\":\"🙈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hear_no_evil\":{\"keywords\":[\"animal\",\"monkey\",\"nature\"],\"char\":\"🙉\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"speak_no_evil\":{\"keywords\":[\"monkey\",\"animal\",\"nature\",\"omg\"],\"char\":\"🙊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"monkey\":{\"keywords\":[\"animal\",\"nature\",\"banana\",\"circus\"],\"char\":\"🐒\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"chicken\":{\"keywords\":[\"animal\",\"cluck\",\"nature\",\"bird\"],\"char\":\"🐔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"penguin\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐧\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bird\":{\"keywords\":[\"animal\",\"nature\",\"fly\",\"tweet\",\"spring\"],\"char\":\"🐦\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"baby_chick\":{\"keywords\":[\"animal\",\"chicken\",\"bird\"],\"char\":\"🐤\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hatching_chick\":{\"keywords\":[\"animal\",\"chicken\",\"egg\",\"born\",\"baby\",\"bird\"],\"char\":\"🐣\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hatched_chick\":{\"keywords\":[\"animal\",\"chicken\",\"baby\",\"bird\"],\"char\":\"🐥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"duck\":{\"keywords\":[\"animal\",\"nature\",\"bird\",\"mallard\"],\"char\":\"🦆\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"eagle\":{\"keywords\":[\"animal\",\"nature\",\"bird\"],\"char\":\"🦅\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"owl\":{\"keywords\":[\"animal\",\"nature\",\"bird\",\"hoot\"],\"char\":\"🦉\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bat\":{\"keywords\":[\"animal\",\"nature\",\"blind\",\"vampire\"],\"char\":\"🦇\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"wolf\":{\"keywords\":[\"animal\",\"nature\",\"wild\"],\"char\":\"🐺\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"boar\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐗\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"horse\":{\"keywords\":[\"animal\",\"brown\",\"nature\"],\"char\":\"🐴\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"unicorn\":{\"keywords\":[\"animal\",\"nature\",\"mystical\"],\"char\":\"🦄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"honeybee\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"bug\",\"spring\",\"honey\"],\"char\":\"🐝\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bug\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"worm\"],\"char\":\"🐛\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"butterfly\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"caterpillar\"],\"char\":\"🦋\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snail\":{\"keywords\":[\"slow\",\"animal\",\"shell\"],\"char\":\"🐌\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"beetle\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"ladybug\"],\"char\":\"🐞\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ant\":{\"keywords\":[\"animal\",\"insect\",\"nature\",\"bug\"],\"char\":\"🐜\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"grasshopper\":{\"keywords\":[\"animal\",\"cricket\",\"chirp\"],\"char\":\"🦗\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"spider\":{\"keywords\":[\"animal\",\"arachnid\"],\"char\":\"🕷\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"scorpion\":{\"keywords\":[\"animal\",\"arachnid\"],\"char\":\"🦂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"crab\":{\"keywords\":[\"animal\",\"crustacean\"],\"char\":\"🦀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snake\":{\"keywords\":[\"animal\",\"evil\",\"nature\",\"hiss\",\"python\"],\"char\":\"🐍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"lizard\":{\"keywords\":[\"animal\",\"nature\",\"reptile\"],\"char\":\"🦎\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"t-rex\":{\"keywords\":[\"animal\",\"nature\",\"dinosaur\",\"tyrannosaurus\",\"extinct\"],\"char\":\"🦖\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sauropod\":{\"keywords\":[\"animal\",\"nature\",\"dinosaur\",\"brachiosaurus\",\"brontosaurus\",\"diplodocus\",\"extinct\"],\"char\":\"🦕\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"turtle\":{\"keywords\":[\"animal\",\"slow\",\"nature\",\"tortoise\"],\"char\":\"🐢\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tropical_fish\":{\"keywords\":[\"animal\",\"swim\",\"ocean\",\"beach\",\"nemo\"],\"char\":\"🐠\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fish\":{\"keywords\":[\"animal\",\"food\",\"nature\"],\"char\":\"🐟\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"blowfish\":{\"keywords\":[\"animal\",\"nature\",\"food\",\"sea\",\"ocean\"],\"char\":\"🐡\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dolphin\":{\"keywords\":[\"animal\",\"nature\",\"fish\",\"sea\",\"ocean\",\"flipper\",\"fins\",\"beach\"],\"char\":\"🐬\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shark\":{\"keywords\":[\"animal\",\"nature\",\"fish\",\"sea\",\"ocean\",\"jaws\",\"fins\",\"beach\"],\"char\":\"🦈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"whale\":{\"keywords\":[\"animal\",\"nature\",\"sea\",\"ocean\"],\"char\":\"🐳\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"whale2\":{\"keywords\":[\"animal\",\"nature\",\"sea\",\"ocean\"],\"char\":\"🐋\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"crocodile\":{\"keywords\":[\"animal\",\"nature\",\"reptile\",\"lizard\",\"alligator\"],\"char\":\"🐊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"leopard\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐆\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"zebra\":{\"keywords\":[\"animal\",\"nature\",\"stripes\",\"safari\"],\"char\":\"🦓\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tiger2\":{\"keywords\":[\"animal\",\"nature\",\"roar\"],\"char\":\"🐅\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"water_buffalo\":{\"keywords\":[\"animal\",\"nature\",\"ox\",\"cow\"],\"char\":\"🐃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ox\":{\"keywords\":[\"animal\",\"cow\",\"beef\"],\"char\":\"🐂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cow2\":{\"keywords\":[\"beef\",\"ox\",\"animal\",\"nature\",\"moo\",\"milk\"],\"char\":\"🐄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"deer\":{\"keywords\":[\"animal\",\"nature\",\"horns\",\"venison\"],\"char\":\"🦌\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dromedary_camel\":{\"keywords\":[\"animal\",\"hot\",\"desert\",\"hump\"],\"char\":\"🐪\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"camel\":{\"keywords\":[\"animal\",\"nature\",\"hot\",\"desert\",\"hump\"],\"char\":\"🐫\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"giraffe\":{\"keywords\":[\"animal\",\"nature\",\"spots\",\"safari\"],\"char\":\"🦒\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"elephant\":{\"keywords\":[\"animal\",\"nature\",\"nose\",\"th\",\"circus\"],\"char\":\"🐘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rhinoceros\":{\"keywords\":[\"animal\",\"nature\",\"horn\"],\"char\":\"🦏\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"goat\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ram\":{\"keywords\":[\"animal\",\"sheep\",\"nature\"],\"char\":\"🐏\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sheep\":{\"keywords\":[\"animal\",\"nature\",\"wool\",\"shipit\"],\"char\":\"🐑\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"racehorse\":{\"keywords\":[\"animal\",\"gamble\",\"luck\"],\"char\":\"🐎\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"pig2\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🐖\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rat\":{\"keywords\":[\"animal\",\"mouse\",\"rodent\"],\"char\":\"🐀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mouse2\":{\"keywords\":[\"animal\",\"nature\",\"rodent\"],\"char\":\"🐁\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rooster\":{\"keywords\":[\"animal\",\"nature\",\"chicken\"],\"char\":\"🐓\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"turkey\":{\"keywords\":[\"animal\",\"bird\"],\"char\":\"🦃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dove\":{\"keywords\":[\"animal\",\"bird\"],\"char\":\"🕊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dog2\":{\"keywords\":[\"animal\",\"nature\",\"friend\",\"doge\",\"pet\",\"faithful\"],\"char\":\"🐕\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"poodle\":{\"keywords\":[\"dog\",\"animal\",\"101\",\"nature\",\"pet\"],\"char\":\"🐩\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cat2\":{\"keywords\":[\"animal\",\"meow\",\"pet\",\"cats\"],\"char\":\"🐈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rabbit2\":{\"keywords\":[\"animal\",\"nature\",\"pet\",\"magic\",\"spring\"],\"char\":\"🐇\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"chipmunk\":{\"keywords\":[\"animal\",\"nature\",\"rodent\",\"squirrel\"],\"char\":\"🐿\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hedgehog\":{\"keywords\":[\"animal\",\"nature\",\"spiny\"],\"char\":\"🦔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"raccoon\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🦝\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"llama\":{\"keywords\":[\"animal\",\"nature\",\"alpaca\"],\"char\":\"🦙\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hippopotamus\":{\"keywords\":[\"animal\",\"nature\"],\"char\":\"🦛\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"kangaroo\":{\"keywords\":[\"animal\",\"nature\",\"australia\",\"joey\",\"hop\",\"marsupial\"],\"char\":\"🦘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"badger\":{\"keywords\":[\"animal\",\"nature\",\"honey\"],\"char\":\"🦡\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"swan\":{\"keywords\":[\"animal\",\"nature\",\"bird\"],\"char\":\"🦢\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"peacock\":{\"keywords\":[\"animal\",\"nature\",\"peahen\",\"bird\"],\"char\":\"🦚\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"parrot\":{\"keywords\":[\"animal\",\"nature\",\"bird\",\"pirate\",\"talk\"],\"char\":\"🦜\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"lobster\":{\"keywords\":[\"animal\",\"nature\",\"bisque\",\"claws\",\"seafood\"],\"char\":\"🦞\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mosquito\":{\"keywords\":[\"animal\",\"nature\",\"insect\",\"malaria\"],\"char\":\"🦟\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"paw_prints\":{\"keywords\":[\"animal\",\"tracking\",\"footprints\",\"dog\",\"cat\",\"pet\",\"feet\"],\"char\":\"🐾\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dragon\":{\"keywords\":[\"animal\",\"myth\",\"nature\",\"chinese\",\"green\"],\"char\":\"🐉\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dragon_face\":{\"keywords\":[\"animal\",\"myth\",\"nature\",\"chinese\",\"green\"],\"char\":\"🐲\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cactus\":{\"keywords\":[\"vegetable\",\"plant\",\"nature\"],\"char\":\"🌵\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"christmas_tree\":{\"keywords\":[\"festival\",\"vacation\",\"december\",\"xmas\",\"celebration\"],\"char\":\"🎄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"evergreen_tree\":{\"keywords\":[\"plant\",\"nature\"],\"char\":\"🌲\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"deciduous_tree\":{\"keywords\":[\"plant\",\"nature\"],\"char\":\"🌳\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"palm_tree\":{\"keywords\":[\"plant\",\"vegetable\",\"nature\",\"summer\",\"beach\",\"mojito\",\"tropical\"],\"char\":\"🌴\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"seedling\":{\"keywords\":[\"plant\",\"nature\",\"grass\",\"lawn\",\"spring\"],\"char\":\"🌱\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"herb\":{\"keywords\":[\"vegetable\",\"plant\",\"medicine\",\"weed\",\"grass\",\"lawn\"],\"char\":\"🌿\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shamrock\":{\"keywords\":[\"vegetable\",\"plant\",\"nature\",\"irish\",\"clover\"],\"char\":\"☘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"four_leaf_clover\":{\"keywords\":[\"vegetable\",\"plant\",\"nature\",\"lucky\",\"irish\"],\"char\":\"🍀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bamboo\":{\"keywords\":[\"plant\",\"nature\",\"vegetable\",\"panda\",\"pine_decoration\"],\"char\":\"🎍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tanabata_tree\":{\"keywords\":[\"plant\",\"nature\",\"branch\",\"summer\"],\"char\":\"🎋\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"leaves\":{\"keywords\":[\"nature\",\"plant\",\"tree\",\"vegetable\",\"grass\",\"lawn\",\"spring\"],\"char\":\"🍃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fallen_leaf\":{\"keywords\":[\"nature\",\"plant\",\"vegetable\",\"leaves\"],\"char\":\"🍂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"maple_leaf\":{\"keywords\":[\"nature\",\"plant\",\"vegetable\",\"ca\",\"fall\"],\"char\":\"🍁\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ear_of_rice\":{\"keywords\":[\"nature\",\"plant\"],\"char\":\"🌾\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"hibiscus\":{\"keywords\":[\"plant\",\"vegetable\",\"flowers\",\"beach\"],\"char\":\"🌺\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sunflower\":{\"keywords\":[\"nature\",\"plant\",\"fall\"],\"char\":\"🌻\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"rose\":{\"keywords\":[\"flowers\",\"valentines\",\"love\",\"spring\"],\"char\":\"🌹\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"wilted_flower\":{\"keywords\":[\"plant\",\"nature\",\"flower\"],\"char\":\"🥀\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tulip\":{\"keywords\":[\"flowers\",\"plant\",\"nature\",\"summer\",\"spring\"],\"char\":\"🌷\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"blossom\":{\"keywords\":[\"nature\",\"flowers\",\"yellow\"],\"char\":\"🌼\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cherry_blossom\":{\"keywords\":[\"nature\",\"plant\",\"spring\",\"flower\"],\"char\":\"🌸\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"bouquet\":{\"keywords\":[\"flowers\",\"nature\",\"spring\"],\"char\":\"💐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"mushroom\":{\"keywords\":[\"plant\",\"vegetable\"],\"char\":\"🍄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"chestnut\":{\"keywords\":[\"food\",\"squirrel\"],\"char\":\"🌰\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"jack_o_lantern\":{\"keywords\":[\"halloween\",\"light\",\"pumpkin\",\"creepy\",\"fall\"],\"char\":\"🎃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"shell\":{\"keywords\":[\"nature\",\"sea\",\"beach\"],\"char\":\"🐚\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"spider_web\":{\"keywords\":[\"animal\",\"insect\",\"arachnid\",\"silk\"],\"char\":\"🕸\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"earth_americas\":{\"keywords\":[\"globe\",\"world\",\"USA\",\"international\"],\"char\":\"🌎\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"earth_africa\":{\"keywords\":[\"globe\",\"world\",\"international\"],\"char\":\"🌍\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"earth_asia\":{\"keywords\":[\"globe\",\"world\",\"east\",\"international\"],\"char\":\"🌏\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"full_moon\":{\"keywords\":[\"nature\",\"yellow\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌕\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waning_gibbous_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\",\"waxing_gibbous_moon\"],\"char\":\"🌖\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"last_quarter_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌗\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waning_crescent_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌘\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"new_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌑\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waxing_crescent_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌒\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"first_quarter_moon\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌓\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"waxing_gibbous_moon\":{\"keywords\":[\"nature\",\"night\",\"sky\",\"gray\",\"twilight\",\"planet\",\"space\",\"evening\",\"sleep\"],\"char\":\"🌔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"new_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌚\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"full_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌝\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"first_quarter_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌛\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"last_quarter_moon_with_face\":{\"keywords\":[\"nature\",\"twilight\",\"planet\",\"space\",\"night\",\"evening\",\"sleep\"],\"char\":\"🌜\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_with_face\":{\"keywords\":[\"nature\",\"morning\",\"sky\"],\"char\":\"🌞\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"crescent_moon\":{\"keywords\":[\"night\",\"sleep\",\"sky\",\"evening\",\"magic\"],\"char\":\"🌙\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"star\":{\"keywords\":[\"night\",\"yellow\"],\"char\":\"⭐\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"star2\":{\"keywords\":[\"night\",\"sparkle\",\"awesome\",\"good\",\"magic\"],\"char\":\"🌟\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dizzy\":{\"keywords\":[\"star\",\"sparkle\",\"shoot\",\"magic\"],\"char\":\"💫\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sparkles\":{\"keywords\":[\"stars\",\"shine\",\"shiny\",\"cool\",\"awesome\",\"good\",\"magic\"],\"char\":\"✨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"comet\":{\"keywords\":[\"space\"],\"char\":\"☄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sunny\":{\"keywords\":[\"weather\",\"nature\",\"brightness\",\"summer\",\"beach\",\"spring\"],\"char\":\"☀️\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_behind_small_cloud\":{\"keywords\":[\"weather\"],\"char\":\"🌤\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"partly_sunny\":{\"keywords\":[\"weather\",\"nature\",\"cloudy\",\"morning\",\"fall\",\"spring\"],\"char\":\"⛅\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_behind_large_cloud\":{\"keywords\":[\"weather\"],\"char\":\"🌥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sun_behind_rain_cloud\":{\"keywords\":[\"weather\"],\"char\":\"🌦\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud\":{\"keywords\":[\"weather\",\"sky\"],\"char\":\"☁️\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_rain\":{\"keywords\":[\"weather\"],\"char\":\"🌧\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_lightning_and_rain\":{\"keywords\":[\"weather\",\"lightning\"],\"char\":\"⛈\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_lightning\":{\"keywords\":[\"weather\",\"thunder\"],\"char\":\"🌩\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"zap\":{\"keywords\":[\"thunder\",\"weather\",\"lightning bolt\",\"fast\"],\"char\":\"⚡\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fire\":{\"keywords\":[\"hot\",\"cook\",\"flame\"],\"char\":\"🔥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"boom\":{\"keywords\":[\"bomb\",\"explode\",\"explosion\",\"collision\",\"blown\"],\"char\":\"💥\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snowflake\":{\"keywords\":[\"winter\",\"season\",\"cold\",\"weather\",\"christmas\",\"xmas\"],\"char\":\"❄️\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"cloud_with_snow\":{\"keywords\":[\"weather\"],\"char\":\"🌨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snowman\":{\"keywords\":[\"winter\",\"season\",\"cold\",\"weather\",\"christmas\",\"xmas\",\"frozen\",\"without_snow\"],\"char\":\"⛄\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"snowman_with_snow\":{\"keywords\":[\"winter\",\"season\",\"cold\",\"weather\",\"christmas\",\"xmas\",\"frozen\"],\"char\":\"☃\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"wind_face\":{\"keywords\":[\"gust\",\"air\"],\"char\":\"🌬\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"dash\":{\"keywords\":[\"wind\",\"air\",\"fast\",\"shoo\",\"fart\",\"smoke\",\"puff\"],\"char\":\"💨\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"tornado\":{\"keywords\":[\"weather\",\"cyclone\",\"twister\"],\"char\":\"🌪\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"fog\":{\"keywords\":[\"weather\"],\"char\":\"🌫\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"open_umbrella\":{\"keywords\":[\"weather\",\"spring\"],\"char\":\"☂\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"umbrella\":{\"keywords\":[\"rainy\",\"weather\",\"spring\"],\"char\":\"☔\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"droplet\":{\"keywords\":[\"water\",\"drip\",\"faucet\",\"spring\"],\"char\":\"💧\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"sweat_drops\":{\"keywords\":[\"water\",\"drip\",\"oops\"],\"char\":\"💦\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"ocean\":{\"keywords\":[\"sea\",\"water\",\"wave\",\"nature\",\"tsunami\",\"disaster\"],\"char\":\"🌊\",\"fitzpatrick_scale\":false,\"category\":\"animals_and_nature\"},\"green_apple\":{\"keywords\":[\"fruit\",\"nature\"],\"char\":\"🍏\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"apple\":{\"keywords\":[\"fruit\",\"mac\",\"school\"],\"char\":\"🍎\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pear\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍐\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tangerine\":{\"keywords\":[\"food\",\"fruit\",\"nature\",\"orange\"],\"char\":\"🍊\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"lemon\":{\"keywords\":[\"fruit\",\"nature\"],\"char\":\"🍋\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"banana\":{\"keywords\":[\"fruit\",\"food\",\"monkey\"],\"char\":\"🍌\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"watermelon\":{\"keywords\":[\"fruit\",\"food\",\"picnic\",\"summer\"],\"char\":\"🍉\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"grapes\":{\"keywords\":[\"fruit\",\"food\",\"wine\"],\"char\":\"🍇\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"strawberry\":{\"keywords\":[\"fruit\",\"food\",\"nature\"],\"char\":\"🍓\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"melon\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍈\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cherries\":{\"keywords\":[\"food\",\"fruit\"],\"char\":\"🍒\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"peach\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍑\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pineapple\":{\"keywords\":[\"fruit\",\"nature\",\"food\"],\"char\":\"🍍\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"coconut\":{\"keywords\":[\"fruit\",\"nature\",\"food\",\"palm\"],\"char\":\"🥥\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"kiwi_fruit\":{\"keywords\":[\"fruit\",\"food\"],\"char\":\"🥝\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"mango\":{\"keywords\":[\"fruit\",\"food\",\"tropical\"],\"char\":\"🥭\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"avocado\":{\"keywords\":[\"fruit\",\"food\"],\"char\":\"🥑\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"broccoli\":{\"keywords\":[\"fruit\",\"food\",\"vegetable\"],\"char\":\"🥦\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tomato\":{\"keywords\":[\"fruit\",\"vegetable\",\"nature\",\"food\"],\"char\":\"🍅\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"eggplant\":{\"keywords\":[\"vegetable\",\"nature\",\"food\",\"aubergine\"],\"char\":\"🍆\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cucumber\":{\"keywords\":[\"fruit\",\"food\",\"pickle\"],\"char\":\"🥒\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"carrot\":{\"keywords\":[\"vegetable\",\"food\",\"orange\"],\"char\":\"🥕\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"hot_pepper\":{\"keywords\":[\"food\",\"spicy\",\"chilli\",\"chili\"],\"char\":\"🌶\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"potato\":{\"keywords\":[\"food\",\"tuber\",\"vegatable\",\"starch\"],\"char\":\"🥔\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"corn\":{\"keywords\":[\"food\",\"vegetable\",\"plant\"],\"char\":\"🌽\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"leafy_greens\":{\"keywords\":[\"food\",\"vegetable\",\"plant\",\"bok choy\",\"cabbage\",\"kale\",\"lettuce\"],\"char\":\"🥬\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sweet_potato\":{\"keywords\":[\"food\",\"nature\"],\"char\":\"🍠\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"peanuts\":{\"keywords\":[\"food\",\"nut\"],\"char\":\"🥜\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"honey_pot\":{\"keywords\":[\"bees\",\"sweet\",\"kitchen\"],\"char\":\"🍯\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"croissant\":{\"keywords\":[\"food\",\"bread\",\"french\"],\"char\":\"🥐\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bread\":{\"keywords\":[\"food\",\"wheat\",\"breakfast\",\"toast\"],\"char\":\"🍞\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"baguette_bread\":{\"keywords\":[\"food\",\"bread\",\"french\"],\"char\":\"🥖\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bagel\":{\"keywords\":[\"food\",\"bread\",\"bakery\",\"schmear\"],\"char\":\"🥯\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pretzel\":{\"keywords\":[\"food\",\"bread\",\"twisted\"],\"char\":\"🥨\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cheese\":{\"keywords\":[\"food\",\"chadder\"],\"char\":\"🧀\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"egg\":{\"keywords\":[\"food\",\"chicken\",\"breakfast\"],\"char\":\"🥚\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bacon\":{\"keywords\":[\"food\",\"breakfast\",\"pork\",\"pig\",\"meat\"],\"char\":\"🥓\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"steak\":{\"keywords\":[\"food\",\"cow\",\"meat\",\"cut\",\"chop\",\"lambchop\",\"porkchop\"],\"char\":\"🥩\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pancakes\":{\"keywords\":[\"food\",\"breakfast\",\"flapjacks\",\"hotcakes\"],\"char\":\"🥞\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"poultry_leg\":{\"keywords\":[\"food\",\"meat\",\"drumstick\",\"bird\",\"chicken\",\"turkey\"],\"char\":\"🍗\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"meat_on_bone\":{\"keywords\":[\"good\",\"food\",\"drumstick\"],\"char\":\"🍖\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bone\":{\"keywords\":[\"skeleton\"],\"char\":\"🦴\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fried_shrimp\":{\"keywords\":[\"food\",\"animal\",\"appetizer\",\"summer\"],\"char\":\"🍤\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fried_egg\":{\"keywords\":[\"food\",\"breakfast\",\"kitchen\",\"egg\"],\"char\":\"🍳\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"hamburger\":{\"keywords\":[\"meat\",\"fast food\",\"beef\",\"cheeseburger\",\"mcdonalds\",\"burger king\"],\"char\":\"🍔\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fries\":{\"keywords\":[\"chips\",\"snack\",\"fast food\"],\"char\":\"🍟\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"stuffed_flatbread\":{\"keywords\":[\"food\",\"flatbread\",\"stuffed\",\"gyro\"],\"char\":\"🥙\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"hotdog\":{\"keywords\":[\"food\",\"frankfurter\"],\"char\":\"🌭\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pizza\":{\"keywords\":[\"food\",\"party\"],\"char\":\"🍕\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sandwich\":{\"keywords\":[\"food\",\"lunch\",\"bread\"],\"char\":\"🥪\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"canned_food\":{\"keywords\":[\"food\",\"soup\"],\"char\":\"🥫\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"spaghetti\":{\"keywords\":[\"food\",\"italian\",\"noodle\"],\"char\":\"🍝\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"taco\":{\"keywords\":[\"food\",\"mexican\"],\"char\":\"🌮\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"burrito\":{\"keywords\":[\"food\",\"mexican\"],\"char\":\"🌯\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"green_salad\":{\"keywords\":[\"food\",\"healthy\",\"lettuce\"],\"char\":\"🥗\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"shallow_pan_of_food\":{\"keywords\":[\"food\",\"cooking\",\"casserole\",\"paella\"],\"char\":\"🥘\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"ramen\":{\"keywords\":[\"food\",\"japanese\",\"noodle\",\"chopsticks\"],\"char\":\"🍜\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"stew\":{\"keywords\":[\"food\",\"meat\",\"soup\"],\"char\":\"🍲\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fish_cake\":{\"keywords\":[\"food\",\"japan\",\"sea\",\"beach\",\"narutomaki\",\"pink\",\"swirl\",\"kamaboko\",\"surimi\",\"ramen\"],\"char\":\"🍥\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fortune_cookie\":{\"keywords\":[\"food\",\"prophecy\"],\"char\":\"🥠\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sushi\":{\"keywords\":[\"food\",\"fish\",\"japanese\",\"rice\"],\"char\":\"🍣\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bento\":{\"keywords\":[\"food\",\"japanese\",\"box\"],\"char\":\"🍱\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"curry\":{\"keywords\":[\"food\",\"spicy\",\"hot\",\"indian\"],\"char\":\"🍛\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"rice_ball\":{\"keywords\":[\"food\",\"japanese\"],\"char\":\"🍙\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"rice\":{\"keywords\":[\"food\",\"china\",\"asian\"],\"char\":\"🍚\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"rice_cracker\":{\"keywords\":[\"food\",\"japanese\"],\"char\":\"🍘\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"oden\":{\"keywords\":[\"food\",\"japanese\"],\"char\":\"🍢\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"dango\":{\"keywords\":[\"food\",\"dessert\",\"sweet\",\"japanese\",\"barbecue\",\"meat\"],\"char\":\"🍡\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"shaved_ice\":{\"keywords\":[\"hot\",\"dessert\",\"summer\"],\"char\":\"🍧\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"ice_cream\":{\"keywords\":[\"food\",\"hot\",\"dessert\"],\"char\":\"🍨\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"icecream\":{\"keywords\":[\"food\",\"hot\",\"dessert\",\"summer\"],\"char\":\"🍦\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"pie\":{\"keywords\":[\"food\",\"dessert\",\"pastry\"],\"char\":\"🥧\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cake\":{\"keywords\":[\"food\",\"dessert\"],\"char\":\"🍰\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cupcake\":{\"keywords\":[\"food\",\"dessert\",\"bakery\",\"sweet\"],\"char\":\"🧁\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"moon_cake\":{\"keywords\":[\"food\",\"autumn\"],\"char\":\"🥮\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"birthday\":{\"keywords\":[\"food\",\"dessert\",\"cake\"],\"char\":\"🎂\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"custard\":{\"keywords\":[\"dessert\",\"food\"],\"char\":\"🍮\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"candy\":{\"keywords\":[\"snack\",\"dessert\",\"sweet\",\"lolly\"],\"char\":\"🍬\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"lollipop\":{\"keywords\":[\"food\",\"snack\",\"candy\",\"sweet\"],\"char\":\"🍭\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"chocolate_bar\":{\"keywords\":[\"food\",\"snack\",\"dessert\",\"sweet\"],\"char\":\"🍫\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"popcorn\":{\"keywords\":[\"food\",\"movie theater\",\"films\",\"snack\"],\"char\":\"🍿\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"dumpling\":{\"keywords\":[\"food\",\"empanada\",\"pierogi\",\"potsticker\"],\"char\":\"🥟\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"doughnut\":{\"keywords\":[\"food\",\"dessert\",\"snack\",\"sweet\",\"donut\"],\"char\":\"🍩\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cookie\":{\"keywords\":[\"food\",\"snack\",\"oreo\",\"chocolate\",\"sweet\",\"dessert\"],\"char\":\"🍪\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"milk_glass\":{\"keywords\":[\"beverage\",\"drink\",\"cow\"],\"char\":\"🥛\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"beer\":{\"keywords\":[\"relax\",\"beverage\",\"drink\",\"drunk\",\"party\",\"pub\",\"summer\",\"alcohol\",\"booze\"],\"char\":\"🍺\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"beers\":{\"keywords\":[\"relax\",\"beverage\",\"drink\",\"drunk\",\"party\",\"pub\",\"summer\",\"alcohol\",\"booze\"],\"char\":\"🍻\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"clinking_glasses\":{\"keywords\":[\"beverage\",\"drink\",\"party\",\"alcohol\",\"celebrate\",\"cheers\",\"wine\",\"champagne\",\"toast\"],\"char\":\"🥂\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"wine_glass\":{\"keywords\":[\"drink\",\"beverage\",\"drunk\",\"alcohol\",\"booze\"],\"char\":\"🍷\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tumbler_glass\":{\"keywords\":[\"drink\",\"beverage\",\"drunk\",\"alcohol\",\"liquor\",\"booze\",\"bourbon\",\"scotch\",\"whisky\",\"glass\",\"shot\"],\"char\":\"🥃\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cocktail\":{\"keywords\":[\"drink\",\"drunk\",\"alcohol\",\"beverage\",\"booze\",\"mojito\"],\"char\":\"🍸\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tropical_drink\":{\"keywords\":[\"beverage\",\"cocktail\",\"summer\",\"beach\",\"alcohol\",\"booze\",\"mojito\"],\"char\":\"🍹\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"champagne\":{\"keywords\":[\"drink\",\"wine\",\"bottle\",\"celebration\"],\"char\":\"🍾\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"sake\":{\"keywords\":[\"wine\",\"drink\",\"drunk\",\"beverage\",\"japanese\",\"alcohol\",\"booze\"],\"char\":\"🍶\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"tea\":{\"keywords\":[\"drink\",\"bowl\",\"breakfast\",\"green\",\"british\"],\"char\":\"🍵\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"cup_with_straw\":{\"keywords\":[\"drink\",\"soda\"],\"char\":\"🥤\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"coffee\":{\"keywords\":[\"beverage\",\"caffeine\",\"latte\",\"espresso\"],\"char\":\"☕\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"baby_bottle\":{\"keywords\":[\"food\",\"container\",\"milk\"],\"char\":\"🍼\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"salt\":{\"keywords\":[\"condiment\",\"shaker\"],\"char\":\"🧂\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"spoon\":{\"keywords\":[\"cutlery\",\"kitchen\",\"tableware\"],\"char\":\"🥄\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"fork_and_knife\":{\"keywords\":[\"cutlery\",\"kitchen\"],\"char\":\"🍴\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"plate_with_cutlery\":{\"keywords\":[\"food\",\"eat\",\"meal\",\"lunch\",\"dinner\",\"restaurant\"],\"char\":\"🍽\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"bowl_with_spoon\":{\"keywords\":[\"food\",\"breakfast\",\"cereal\",\"oatmeal\",\"porridge\"],\"char\":\"🥣\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"takeout_box\":{\"keywords\":[\"food\",\"leftovers\"],\"char\":\"🥡\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"chopsticks\":{\"keywords\":[\"food\"],\"char\":\"🥢\",\"fitzpatrick_scale\":false,\"category\":\"food_and_drink\"},\"soccer\":{\"keywords\":[\"sports\",\"football\"],\"char\":\"⚽\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"basketball\":{\"keywords\":[\"sports\",\"balls\",\"NBA\"],\"char\":\"🏀\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"football\":{\"keywords\":[\"sports\",\"balls\",\"NFL\"],\"char\":\"🏈\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"baseball\":{\"keywords\":[\"sports\",\"balls\"],\"char\":\"⚾\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"softball\":{\"keywords\":[\"sports\",\"balls\"],\"char\":\"🥎\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"tennis\":{\"keywords\":[\"sports\",\"balls\",\"green\"],\"char\":\"🎾\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"volleyball\":{\"keywords\":[\"sports\",\"balls\"],\"char\":\"🏐\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"rugby_football\":{\"keywords\":[\"sports\",\"team\"],\"char\":\"🏉\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"flying_disc\":{\"keywords\":[\"sports\",\"frisbee\",\"ultimate\"],\"char\":\"🥏\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"8ball\":{\"keywords\":[\"pool\",\"hobby\",\"game\",\"luck\",\"magic\"],\"char\":\"🎱\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"golf\":{\"keywords\":[\"sports\",\"business\",\"flag\",\"hole\",\"summer\"],\"char\":\"⛳\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"golfing_woman\":{\"keywords\":[\"sports\",\"business\",\"woman\",\"female\"],\"char\":\"🏌️‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"golfing_man\":{\"keywords\":[\"sports\",\"business\"],\"char\":\"🏌\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"ping_pong\":{\"keywords\":[\"sports\",\"pingpong\"],\"char\":\"🏓\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"badminton\":{\"keywords\":[\"sports\"],\"char\":\"🏸\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"goal_net\":{\"keywords\":[\"sports\"],\"char\":\"🥅\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"ice_hockey\":{\"keywords\":[\"sports\"],\"char\":\"🏒\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"field_hockey\":{\"keywords\":[\"sports\"],\"char\":\"🏑\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"lacrosse\":{\"keywords\":[\"sports\",\"ball\",\"stick\"],\"char\":\"🥍\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"cricket\":{\"keywords\":[\"sports\"],\"char\":\"🏏\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"ski\":{\"keywords\":[\"sports\",\"winter\",\"cold\",\"snow\"],\"char\":\"🎿\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"skier\":{\"keywords\":[\"sports\",\"winter\",\"snow\"],\"char\":\"⛷\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"snowboarder\":{\"keywords\":[\"sports\",\"winter\"],\"char\":\"🏂\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"person_fencing\":{\"keywords\":[\"sports\",\"fencing\",\"sword\"],\"char\":\"🤺\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"women_wrestling\":{\"keywords\":[\"sports\",\"wrestlers\"],\"char\":\"🤼‍♀️\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"men_wrestling\":{\"keywords\":[\"sports\",\"wrestlers\"],\"char\":\"🤼‍♂️\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"woman_cartwheeling\":{\"keywords\":[\"gymnastics\"],\"char\":\"🤸‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_cartwheeling\":{\"keywords\":[\"gymnastics\"],\"char\":\"🤸‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"woman_playing_handball\":{\"keywords\":[\"sports\"],\"char\":\"🤾‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_playing_handball\":{\"keywords\":[\"sports\"],\"char\":\"🤾‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"ice_skate\":{\"keywords\":[\"sports\"],\"char\":\"⛸\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"curling_stone\":{\"keywords\":[\"sports\"],\"char\":\"🥌\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"skateboard\":{\"keywords\":[\"board\"],\"char\":\"🛹\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"sled\":{\"keywords\":[\"sleigh\",\"luge\",\"toboggan\"],\"char\":\"🛷\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"bow_and_arrow\":{\"keywords\":[\"sports\"],\"char\":\"🏹\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"fishing_pole_and_fish\":{\"keywords\":[\"food\",\"hobby\",\"summer\"],\"char\":\"🎣\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"boxing_glove\":{\"keywords\":[\"sports\",\"fighting\"],\"char\":\"🥊\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"martial_arts_uniform\":{\"keywords\":[\"judo\",\"karate\",\"taekwondo\"],\"char\":\"🥋\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"rowing_woman\":{\"keywords\":[\"sports\",\"hobby\",\"water\",\"ship\",\"woman\",\"female\"],\"char\":\"🚣‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"rowing_man\":{\"keywords\":[\"sports\",\"hobby\",\"water\",\"ship\"],\"char\":\"🚣\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"climbing_woman\":{\"keywords\":[\"sports\",\"hobby\",\"woman\",\"female\",\"rock\"],\"char\":\"🧗‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"climbing_man\":{\"keywords\":[\"sports\",\"hobby\",\"man\",\"male\",\"rock\"],\"char\":\"🧗‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"swimming_woman\":{\"keywords\":[\"sports\",\"exercise\",\"human\",\"athlete\",\"water\",\"summer\",\"woman\",\"female\"],\"char\":\"🏊‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"swimming_man\":{\"keywords\":[\"sports\",\"exercise\",\"human\",\"athlete\",\"water\",\"summer\"],\"char\":\"🏊\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"woman_playing_water_polo\":{\"keywords\":[\"sports\",\"pool\"],\"char\":\"🤽‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_playing_water_polo\":{\"keywords\":[\"sports\",\"pool\"],\"char\":\"🤽‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"woman_in_lotus_position\":{\"keywords\":[\"woman\",\"female\",\"meditation\",\"yoga\",\"serenity\",\"zen\",\"mindfulness\"],\"char\":\"🧘‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_in_lotus_position\":{\"keywords\":[\"man\",\"male\",\"meditation\",\"yoga\",\"serenity\",\"zen\",\"mindfulness\"],\"char\":\"🧘‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"surfing_woman\":{\"keywords\":[\"sports\",\"ocean\",\"sea\",\"summer\",\"beach\",\"woman\",\"female\"],\"char\":\"🏄‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"surfing_man\":{\"keywords\":[\"sports\",\"ocean\",\"sea\",\"summer\",\"beach\"],\"char\":\"🏄\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"bath\":{\"keywords\":[\"clean\",\"shower\",\"bathroom\"],\"char\":\"🛀\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"basketball_woman\":{\"keywords\":[\"sports\",\"human\",\"woman\",\"female\"],\"char\":\"⛹️‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"basketball_man\":{\"keywords\":[\"sports\",\"human\"],\"char\":\"⛹\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"weight_lifting_woman\":{\"keywords\":[\"sports\",\"training\",\"exercise\",\"woman\",\"female\"],\"char\":\"🏋️‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"weight_lifting_man\":{\"keywords\":[\"sports\",\"training\",\"exercise\"],\"char\":\"🏋\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"biking_woman\":{\"keywords\":[\"sports\",\"bike\",\"exercise\",\"hipster\",\"woman\",\"female\"],\"char\":\"🚴‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"biking_man\":{\"keywords\":[\"sports\",\"bike\",\"exercise\",\"hipster\"],\"char\":\"🚴\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"mountain_biking_woman\":{\"keywords\":[\"transportation\",\"sports\",\"human\",\"race\",\"bike\",\"woman\",\"female\"],\"char\":\"🚵‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"mountain_biking_man\":{\"keywords\":[\"transportation\",\"sports\",\"human\",\"race\",\"bike\"],\"char\":\"🚵\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"horse_racing\":{\"keywords\":[\"animal\",\"betting\",\"competition\",\"gambling\",\"luck\"],\"char\":\"🏇\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"business_suit_levitating\":{\"keywords\":[\"suit\",\"business\",\"levitate\",\"hover\",\"jump\"],\"char\":\"🕴\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"trophy\":{\"keywords\":[\"win\",\"award\",\"contest\",\"place\",\"ftw\",\"ceremony\"],\"char\":\"🏆\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"running_shirt_with_sash\":{\"keywords\":[\"play\",\"pageant\"],\"char\":\"🎽\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"medal_sports\":{\"keywords\":[\"award\",\"winning\"],\"char\":\"🏅\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"medal_military\":{\"keywords\":[\"award\",\"winning\",\"army\"],\"char\":\"🎖\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"1st_place_medal\":{\"keywords\":[\"award\",\"winning\",\"first\"],\"char\":\"🥇\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"2nd_place_medal\":{\"keywords\":[\"award\",\"second\"],\"char\":\"🥈\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"3rd_place_medal\":{\"keywords\":[\"award\",\"third\"],\"char\":\"🥉\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"reminder_ribbon\":{\"keywords\":[\"sports\",\"cause\",\"support\",\"awareness\"],\"char\":\"🎗\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"rosette\":{\"keywords\":[\"flower\",\"decoration\",\"military\"],\"char\":\"🏵\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"ticket\":{\"keywords\":[\"event\",\"concert\",\"pass\"],\"char\":\"🎫\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"tickets\":{\"keywords\":[\"sports\",\"concert\",\"entrance\"],\"char\":\"🎟\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"performing_arts\":{\"keywords\":[\"acting\",\"theater\",\"drama\"],\"char\":\"🎭\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"art\":{\"keywords\":[\"design\",\"paint\",\"draw\",\"colors\"],\"char\":\"🎨\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"circus_tent\":{\"keywords\":[\"festival\",\"carnival\",\"party\"],\"char\":\"🎪\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"woman_juggling\":{\"keywords\":[\"juggle\",\"balance\",\"skill\",\"multitask\"],\"char\":\"🤹‍♀️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"man_juggling\":{\"keywords\":[\"juggle\",\"balance\",\"skill\",\"multitask\"],\"char\":\"🤹‍♂️\",\"fitzpatrick_scale\":true,\"category\":\"activity\"},\"microphone\":{\"keywords\":[\"sound\",\"music\",\"PA\",\"sing\",\"talkshow\"],\"char\":\"🎤\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"headphones\":{\"keywords\":[\"music\",\"score\",\"gadgets\"],\"char\":\"🎧\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"musical_score\":{\"keywords\":[\"treble\",\"clef\",\"compose\"],\"char\":\"🎼\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"musical_keyboard\":{\"keywords\":[\"piano\",\"instrument\",\"compose\"],\"char\":\"🎹\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"drum\":{\"keywords\":[\"music\",\"instrument\",\"drumsticks\",\"snare\"],\"char\":\"🥁\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"saxophone\":{\"keywords\":[\"music\",\"instrument\",\"jazz\",\"blues\"],\"char\":\"🎷\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"trumpet\":{\"keywords\":[\"music\",\"brass\"],\"char\":\"🎺\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"guitar\":{\"keywords\":[\"music\",\"instrument\"],\"char\":\"🎸\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"violin\":{\"keywords\":[\"music\",\"instrument\",\"orchestra\",\"symphony\"],\"char\":\"🎻\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"clapper\":{\"keywords\":[\"movie\",\"film\",\"record\"],\"char\":\"🎬\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"video_game\":{\"keywords\":[\"play\",\"console\",\"PS4\",\"controller\"],\"char\":\"🎮\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"space_invader\":{\"keywords\":[\"game\",\"arcade\",\"play\"],\"char\":\"👾\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"dart\":{\"keywords\":[\"game\",\"play\",\"bar\",\"target\",\"bullseye\"],\"char\":\"🎯\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"game_die\":{\"keywords\":[\"dice\",\"random\",\"tabletop\",\"play\",\"luck\"],\"char\":\"🎲\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"chess_pawn\":{\"keywords\":[\"expendable\"],\"char\":\"♟\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"slot_machine\":{\"keywords\":[\"bet\",\"gamble\",\"vegas\",\"fruit machine\",\"luck\",\"casino\"],\"char\":\"🎰\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"jigsaw\":{\"keywords\":[\"interlocking\",\"puzzle\",\"piece\"],\"char\":\"🧩\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"bowling\":{\"keywords\":[\"sports\",\"fun\",\"play\"],\"char\":\"🎳\",\"fitzpatrick_scale\":false,\"category\":\"activity\"},\"red_car\":{\"keywords\":[\"red\",\"transportation\",\"vehicle\"],\"char\":\"🚗\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"taxi\":{\"keywords\":[\"uber\",\"vehicle\",\"cars\",\"transportation\"],\"char\":\"🚕\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"blue_car\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚙\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bus\":{\"keywords\":[\"car\",\"vehicle\",\"transportation\"],\"char\":\"🚌\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"trolleybus\":{\"keywords\":[\"bart\",\"transportation\",\"vehicle\"],\"char\":\"🚎\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"racing_car\":{\"keywords\":[\"sports\",\"race\",\"fast\",\"formula\",\"f1\"],\"char\":\"🏎\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"police_car\":{\"keywords\":[\"vehicle\",\"cars\",\"transportation\",\"law\",\"legal\",\"enforcement\"],\"char\":\"🚓\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ambulance\":{\"keywords\":[\"health\",\"911\",\"hospital\"],\"char\":\"🚑\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fire_engine\":{\"keywords\":[\"transportation\",\"cars\",\"vehicle\"],\"char\":\"🚒\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"minibus\":{\"keywords\":[\"vehicle\",\"car\",\"transportation\"],\"char\":\"🚐\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"truck\":{\"keywords\":[\"cars\",\"transportation\"],\"char\":\"🚚\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"articulated_lorry\":{\"keywords\":[\"vehicle\",\"cars\",\"transportation\",\"express\"],\"char\":\"🚛\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tractor\":{\"keywords\":[\"vehicle\",\"car\",\"farming\",\"agriculture\"],\"char\":\"🚜\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"kick_scooter\":{\"keywords\":[\"vehicle\",\"kick\",\"razor\"],\"char\":\"🛴\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motorcycle\":{\"keywords\":[\"race\",\"sports\",\"fast\"],\"char\":\"🏍\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bike\":{\"keywords\":[\"sports\",\"bicycle\",\"exercise\",\"hipster\"],\"char\":\"🚲\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motor_scooter\":{\"keywords\":[\"vehicle\",\"vespa\",\"sasha\"],\"char\":\"🛵\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rotating_light\":{\"keywords\":[\"police\",\"ambulance\",\"911\",\"emergency\",\"alert\",\"error\",\"pinged\",\"law\",\"legal\"],\"char\":\"🚨\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_police_car\":{\"keywords\":[\"vehicle\",\"law\",\"legal\",\"enforcement\",\"911\"],\"char\":\"🚔\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_bus\":{\"keywords\":[\"vehicle\",\"transportation\"],\"char\":\"🚍\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_automobile\":{\"keywords\":[\"car\",\"vehicle\",\"transportation\"],\"char\":\"🚘\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"oncoming_taxi\":{\"keywords\":[\"vehicle\",\"cars\",\"uber\"],\"char\":\"🚖\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"aerial_tramway\":{\"keywords\":[\"transportation\",\"vehicle\",\"ski\"],\"char\":\"🚡\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain_cableway\":{\"keywords\":[\"transportation\",\"vehicle\",\"ski\"],\"char\":\"🚠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"suspension_railway\":{\"keywords\":[\"vehicle\",\"transportation\"],\"char\":\"🚟\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"railway_car\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚃\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"train\":{\"keywords\":[\"transportation\",\"vehicle\",\"carriage\",\"public\",\"travel\"],\"char\":\"🚋\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"monorail\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚝\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bullettrain_side\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚄\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bullettrain_front\":{\"keywords\":[\"transportation\",\"vehicle\",\"speed\",\"fast\",\"public\",\"travel\"],\"char\":\"🚅\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"light_rail\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚈\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain_railway\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚞\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"steam_locomotive\":{\"keywords\":[\"transportation\",\"vehicle\",\"train\"],\"char\":\"🚂\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"train2\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚆\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"metro\":{\"keywords\":[\"transportation\",\"blue-square\",\"mrt\",\"underground\",\"tube\"],\"char\":\"🚇\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tram\":{\"keywords\":[\"transportation\",\"vehicle\"],\"char\":\"🚊\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"station\":{\"keywords\":[\"transportation\",\"vehicle\",\"public\"],\"char\":\"🚉\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"flying_saucer\":{\"keywords\":[\"transportation\",\"vehicle\",\"ufo\"],\"char\":\"🛸\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"helicopter\":{\"keywords\":[\"transportation\",\"vehicle\",\"fly\"],\"char\":\"🚁\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"small_airplane\":{\"keywords\":[\"flight\",\"transportation\",\"fly\",\"vehicle\"],\"char\":\"🛩\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"airplane\":{\"keywords\":[\"vehicle\",\"transportation\",\"flight\",\"fly\"],\"char\":\"✈️\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"flight_departure\":{\"keywords\":[\"airport\",\"flight\",\"landing\"],\"char\":\"🛫\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"flight_arrival\":{\"keywords\":[\"airport\",\"flight\",\"boarding\"],\"char\":\"🛬\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sailboat\":{\"keywords\":[\"ship\",\"summer\",\"transportation\",\"water\",\"sailing\"],\"char\":\"⛵\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motor_boat\":{\"keywords\":[\"ship\"],\"char\":\"🛥\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"speedboat\":{\"keywords\":[\"ship\",\"transportation\",\"vehicle\",\"summer\"],\"char\":\"🚤\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ferry\":{\"keywords\":[\"boat\",\"ship\",\"yacht\"],\"char\":\"⛴\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"passenger_ship\":{\"keywords\":[\"yacht\",\"cruise\",\"ferry\"],\"char\":\"🛳\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rocket\":{\"keywords\":[\"launch\",\"ship\",\"staffmode\",\"NASA\",\"outer space\",\"outer_space\",\"fly\"],\"char\":\"🚀\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"artificial_satellite\":{\"keywords\":[\"communication\",\"gps\",\"orbit\",\"spaceflight\",\"NASA\",\"ISS\"],\"char\":\"🛰\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"seat\":{\"keywords\":[\"sit\",\"airplane\",\"transport\",\"bus\",\"flight\",\"fly\"],\"char\":\"💺\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"canoe\":{\"keywords\":[\"boat\",\"paddle\",\"water\",\"ship\"],\"char\":\"🛶\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"anchor\":{\"keywords\":[\"ship\",\"ferry\",\"sea\",\"boat\"],\"char\":\"⚓\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"construction\":{\"keywords\":[\"wip\",\"progress\",\"caution\",\"warning\"],\"char\":\"🚧\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fuelpump\":{\"keywords\":[\"gas station\",\"petroleum\"],\"char\":\"⛽\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"busstop\":{\"keywords\":[\"transportation\",\"wait\"],\"char\":\"🚏\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"vertical_traffic_light\":{\"keywords\":[\"transportation\",\"driving\"],\"char\":\"🚦\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"traffic_light\":{\"keywords\":[\"transportation\",\"signal\"],\"char\":\"🚥\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"checkered_flag\":{\"keywords\":[\"contest\",\"finishline\",\"race\",\"gokart\"],\"char\":\"🏁\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ship\":{\"keywords\":[\"transportation\",\"titanic\",\"deploy\"],\"char\":\"🚢\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"ferris_wheel\":{\"keywords\":[\"photo\",\"carnival\",\"londoneye\"],\"char\":\"🎡\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"roller_coaster\":{\"keywords\":[\"carnival\",\"playground\",\"photo\",\"fun\"],\"char\":\"🎢\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"carousel_horse\":{\"keywords\":[\"photo\",\"carnival\"],\"char\":\"🎠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"building_construction\":{\"keywords\":[\"wip\",\"working\",\"progress\"],\"char\":\"🏗\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"foggy\":{\"keywords\":[\"photo\",\"mountain\"],\"char\":\"🌁\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tokyo_tower\":{\"keywords\":[\"photo\",\"japanese\"],\"char\":\"🗼\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"factory\":{\"keywords\":[\"building\",\"industry\",\"pollution\",\"smoke\"],\"char\":\"🏭\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fountain\":{\"keywords\":[\"photo\",\"summer\",\"water\",\"fresh\"],\"char\":\"⛲\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rice_scene\":{\"keywords\":[\"photo\",\"japan\",\"asia\",\"tsukimi\"],\"char\":\"🎑\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain\":{\"keywords\":[\"photo\",\"nature\",\"environment\"],\"char\":\"⛰\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mountain_snow\":{\"keywords\":[\"photo\",\"nature\",\"environment\",\"winter\",\"cold\"],\"char\":\"🏔\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mount_fuji\":{\"keywords\":[\"photo\",\"mountain\",\"nature\",\"japanese\"],\"char\":\"🗻\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"volcano\":{\"keywords\":[\"photo\",\"nature\",\"disaster\"],\"char\":\"🌋\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"japan\":{\"keywords\":[\"nation\",\"country\",\"japanese\",\"asia\"],\"char\":\"🗾\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"camping\":{\"keywords\":[\"photo\",\"outdoors\",\"tent\"],\"char\":\"🏕\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"tent\":{\"keywords\":[\"photo\",\"camping\",\"outdoors\"],\"char\":\"⛺\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"national_park\":{\"keywords\":[\"photo\",\"environment\",\"nature\"],\"char\":\"🏞\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"motorway\":{\"keywords\":[\"road\",\"cupertino\",\"interstate\",\"highway\"],\"char\":\"🛣\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"railway_track\":{\"keywords\":[\"train\",\"transportation\"],\"char\":\"🛤\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sunrise\":{\"keywords\":[\"morning\",\"view\",\"vacation\",\"photo\"],\"char\":\"🌅\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sunrise_over_mountains\":{\"keywords\":[\"view\",\"vacation\",\"photo\"],\"char\":\"🌄\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"desert\":{\"keywords\":[\"photo\",\"warm\",\"saharah\"],\"char\":\"🏜\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"beach_umbrella\":{\"keywords\":[\"weather\",\"summer\",\"sunny\",\"sand\",\"mojito\"],\"char\":\"🏖\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"desert_island\":{\"keywords\":[\"photo\",\"tropical\",\"mojito\"],\"char\":\"🏝\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"city_sunrise\":{\"keywords\":[\"photo\",\"good morning\",\"dawn\"],\"char\":\"🌇\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"city_sunset\":{\"keywords\":[\"photo\",\"evening\",\"sky\",\"buildings\"],\"char\":\"🌆\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"cityscape\":{\"keywords\":[\"photo\",\"night life\",\"urban\"],\"char\":\"🏙\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"night_with_stars\":{\"keywords\":[\"evening\",\"city\",\"downtown\"],\"char\":\"🌃\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bridge_at_night\":{\"keywords\":[\"photo\",\"sanfrancisco\"],\"char\":\"🌉\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"milky_way\":{\"keywords\":[\"photo\",\"space\",\"stars\"],\"char\":\"🌌\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"stars\":{\"keywords\":[\"night\",\"photo\"],\"char\":\"🌠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"sparkler\":{\"keywords\":[\"stars\",\"night\",\"shine\"],\"char\":\"🎇\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"fireworks\":{\"keywords\":[\"photo\",\"festival\",\"carnival\",\"congratulations\"],\"char\":\"🎆\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"rainbow\":{\"keywords\":[\"nature\",\"happy\",\"unicorn_face\",\"photo\",\"sky\",\"spring\"],\"char\":\"🌈\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"houses\":{\"keywords\":[\"buildings\",\"photo\"],\"char\":\"🏘\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"european_castle\":{\"keywords\":[\"building\",\"royalty\",\"history\"],\"char\":\"🏰\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"japanese_castle\":{\"keywords\":[\"photo\",\"building\"],\"char\":\"🏯\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"stadium\":{\"keywords\":[\"photo\",\"place\",\"sports\",\"concert\",\"venue\"],\"char\":\"🏟\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"statue_of_liberty\":{\"keywords\":[\"american\",\"newyork\"],\"char\":\"🗽\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"house\":{\"keywords\":[\"building\",\"home\"],\"char\":\"🏠\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"house_with_garden\":{\"keywords\":[\"home\",\"plant\",\"nature\"],\"char\":\"🏡\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"derelict_house\":{\"keywords\":[\"abandon\",\"evict\",\"broken\",\"building\"],\"char\":\"🏚\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"office\":{\"keywords\":[\"building\",\"bureau\",\"work\"],\"char\":\"🏢\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"department_store\":{\"keywords\":[\"building\",\"shopping\",\"mall\"],\"char\":\"🏬\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"post_office\":{\"keywords\":[\"building\",\"envelope\",\"communication\"],\"char\":\"🏣\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"european_post_office\":{\"keywords\":[\"building\",\"email\"],\"char\":\"🏤\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"hospital\":{\"keywords\":[\"building\",\"health\",\"surgery\",\"doctor\"],\"char\":\"🏥\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"bank\":{\"keywords\":[\"building\",\"money\",\"sales\",\"cash\",\"business\",\"enterprise\"],\"char\":\"🏦\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"hotel\":{\"keywords\":[\"building\",\"accomodation\",\"checkin\"],\"char\":\"🏨\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"convenience_store\":{\"keywords\":[\"building\",\"shopping\",\"groceries\"],\"char\":\"🏪\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"school\":{\"keywords\":[\"building\",\"student\",\"education\",\"learn\",\"teach\"],\"char\":\"🏫\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"love_hotel\":{\"keywords\":[\"like\",\"affection\",\"dating\"],\"char\":\"🏩\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"wedding\":{\"keywords\":[\"love\",\"like\",\"affection\",\"couple\",\"marriage\",\"bride\",\"groom\"],\"char\":\"💒\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"classical_building\":{\"keywords\":[\"art\",\"culture\",\"history\"],\"char\":\"🏛\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"church\":{\"keywords\":[\"building\",\"religion\",\"christ\"],\"char\":\"⛪\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"mosque\":{\"keywords\":[\"islam\",\"worship\",\"minaret\"],\"char\":\"🕌\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"synagogue\":{\"keywords\":[\"judaism\",\"worship\",\"temple\",\"jewish\"],\"char\":\"🕍\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"kaaba\":{\"keywords\":[\"mecca\",\"mosque\",\"islam\"],\"char\":\"🕋\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"shinto_shrine\":{\"keywords\":[\"temple\",\"japan\",\"kyoto\"],\"char\":\"⛩\",\"fitzpatrick_scale\":false,\"category\":\"travel_and_places\"},\"watch\":{\"keywords\":[\"time\",\"accessories\"],\"char\":\"⌚\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"iphone\":{\"keywords\":[\"technology\",\"apple\",\"gadgets\",\"dial\"],\"char\":\"📱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"calling\":{\"keywords\":[\"iphone\",\"incoming\"],\"char\":\"📲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"computer\":{\"keywords\":[\"technology\",\"laptop\",\"screen\",\"display\",\"monitor\"],\"char\":\"💻\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"keyboard\":{\"keywords\":[\"technology\",\"computer\",\"type\",\"input\",\"text\"],\"char\":\"⌨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"desktop_computer\":{\"keywords\":[\"technology\",\"computing\",\"screen\"],\"char\":\"🖥\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"printer\":{\"keywords\":[\"paper\",\"ink\"],\"char\":\"🖨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"computer_mouse\":{\"keywords\":[\"click\"],\"char\":\"🖱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"trackball\":{\"keywords\":[\"technology\",\"trackpad\"],\"char\":\"🖲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"joystick\":{\"keywords\":[\"game\",\"play\"],\"char\":\"🕹\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"clamp\":{\"keywords\":[\"tool\"],\"char\":\"🗜\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"minidisc\":{\"keywords\":[\"technology\",\"record\",\"data\",\"disk\",\"90s\"],\"char\":\"💽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"floppy_disk\":{\"keywords\":[\"oldschool\",\"technology\",\"save\",\"90s\",\"80s\"],\"char\":\"💾\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"cd\":{\"keywords\":[\"technology\",\"dvd\",\"disk\",\"disc\",\"90s\"],\"char\":\"💿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dvd\":{\"keywords\":[\"cd\",\"disk\",\"disc\"],\"char\":\"📀\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"vhs\":{\"keywords\":[\"record\",\"video\",\"oldschool\",\"90s\",\"80s\"],\"char\":\"📼\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"camera\":{\"keywords\":[\"gadgets\",\"photography\"],\"char\":\"📷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"camera_flash\":{\"keywords\":[\"photography\",\"gadgets\"],\"char\":\"📸\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"video_camera\":{\"keywords\":[\"film\",\"record\"],\"char\":\"📹\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"movie_camera\":{\"keywords\":[\"film\",\"record\"],\"char\":\"🎥\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"film_projector\":{\"keywords\":[\"video\",\"tape\",\"record\",\"movie\"],\"char\":\"📽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"film_strip\":{\"keywords\":[\"movie\"],\"char\":\"🎞\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"telephone_receiver\":{\"keywords\":[\"technology\",\"communication\",\"dial\"],\"char\":\"📞\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"phone\":{\"keywords\":[\"technology\",\"communication\",\"dial\",\"telephone\"],\"char\":\"☎️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pager\":{\"keywords\":[\"bbcall\",\"oldschool\",\"90s\"],\"char\":\"📟\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"fax\":{\"keywords\":[\"communication\",\"technology\"],\"char\":\"📠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"tv\":{\"keywords\":[\"technology\",\"program\",\"oldschool\",\"show\",\"television\"],\"char\":\"📺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"radio\":{\"keywords\":[\"communication\",\"music\",\"podcast\",\"program\"],\"char\":\"📻\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"studio_microphone\":{\"keywords\":[\"sing\",\"recording\",\"artist\",\"talkshow\"],\"char\":\"🎙\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"level_slider\":{\"keywords\":[\"scale\"],\"char\":\"🎚\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"control_knobs\":{\"keywords\":[\"dial\"],\"char\":\"🎛\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"compass\":{\"keywords\":[\"magnetic\",\"navigation\",\"orienteering\"],\"char\":\"🧭\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"stopwatch\":{\"keywords\":[\"time\",\"deadline\"],\"char\":\"⏱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"timer_clock\":{\"keywords\":[\"alarm\"],\"char\":\"⏲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"alarm_clock\":{\"keywords\":[\"time\",\"wake\"],\"char\":\"⏰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mantelpiece_clock\":{\"keywords\":[\"time\"],\"char\":\"🕰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hourglass_flowing_sand\":{\"keywords\":[\"oldschool\",\"time\",\"countdown\"],\"char\":\"⏳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hourglass\":{\"keywords\":[\"time\",\"clock\",\"oldschool\",\"limit\",\"exam\",\"quiz\",\"test\"],\"char\":\"⌛\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"satellite\":{\"keywords\":[\"communication\",\"future\",\"radio\",\"space\"],\"char\":\"📡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"battery\":{\"keywords\":[\"power\",\"energy\",\"sustain\"],\"char\":\"🔋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"electric_plug\":{\"keywords\":[\"charger\",\"power\"],\"char\":\"🔌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bulb\":{\"keywords\":[\"light\",\"electricity\",\"idea\"],\"char\":\"💡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"flashlight\":{\"keywords\":[\"dark\",\"camping\",\"sight\",\"night\"],\"char\":\"🔦\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"candle\":{\"keywords\":[\"fire\",\"wax\"],\"char\":\"🕯\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"fire_extinguisher\":{\"keywords\":[\"quench\"],\"char\":\"🧯\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"wastebasket\":{\"keywords\":[\"bin\",\"trash\",\"rubbish\",\"garbage\",\"toss\"],\"char\":\"🗑\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"oil_drum\":{\"keywords\":[\"barrell\"],\"char\":\"🛢\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"money_with_wings\":{\"keywords\":[\"dollar\",\"bills\",\"payment\",\"sale\"],\"char\":\"💸\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dollar\":{\"keywords\":[\"money\",\"sales\",\"bill\",\"currency\"],\"char\":\"💵\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"yen\":{\"keywords\":[\"money\",\"sales\",\"japanese\",\"dollar\",\"currency\"],\"char\":\"💴\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"euro\":{\"keywords\":[\"money\",\"sales\",\"dollar\",\"currency\"],\"char\":\"💶\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pound\":{\"keywords\":[\"british\",\"sterling\",\"money\",\"sales\",\"bills\",\"uk\",\"england\",\"currency\"],\"char\":\"💷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"moneybag\":{\"keywords\":[\"dollar\",\"payment\",\"coins\",\"sale\"],\"char\":\"💰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"credit_card\":{\"keywords\":[\"money\",\"sales\",\"dollar\",\"bill\",\"payment\",\"shopping\"],\"char\":\"💳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gem\":{\"keywords\":[\"blue\",\"ruby\",\"diamond\",\"jewelry\"],\"char\":\"💎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"balance_scale\":{\"keywords\":[\"law\",\"fairness\",\"weight\"],\"char\":\"⚖\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"toolbox\":{\"keywords\":[\"tools\",\"diy\",\"fix\",\"maintainer\",\"mechanic\"],\"char\":\"🧰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"wrench\":{\"keywords\":[\"tools\",\"diy\",\"ikea\",\"fix\",\"maintainer\"],\"char\":\"🔧\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hammer\":{\"keywords\":[\"tools\",\"build\",\"create\"],\"char\":\"🔨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hammer_and_pick\":{\"keywords\":[\"tools\",\"build\",\"create\"],\"char\":\"⚒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hammer_and_wrench\":{\"keywords\":[\"tools\",\"build\",\"create\"],\"char\":\"🛠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pick\":{\"keywords\":[\"tools\",\"dig\"],\"char\":\"⛏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"nut_and_bolt\":{\"keywords\":[\"handy\",\"tools\",\"fix\"],\"char\":\"🔩\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gear\":{\"keywords\":[\"cog\"],\"char\":\"⚙\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"brick\":{\"keywords\":[\"bricks\"],\"char\":\"🧱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"chains\":{\"keywords\":[\"lock\",\"arrest\"],\"char\":\"⛓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"magnet\":{\"keywords\":[\"attraction\",\"magnetic\"],\"char\":\"🧲\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gun\":{\"keywords\":[\"violence\",\"weapon\",\"pistol\",\"revolver\"],\"char\":\"🔫\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bomb\":{\"keywords\":[\"boom\",\"explode\",\"explosion\",\"terrorism\"],\"char\":\"💣\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"firecracker\":{\"keywords\":[\"dynamite\",\"boom\",\"explode\",\"explosion\",\"explosive\"],\"char\":\"🧨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hocho\":{\"keywords\":[\"knife\",\"blade\",\"cutlery\",\"kitchen\",\"weapon\"],\"char\":\"🔪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dagger\":{\"keywords\":[\"weapon\"],\"char\":\"🗡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crossed_swords\":{\"keywords\":[\"weapon\"],\"char\":\"⚔\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shield\":{\"keywords\":[\"protection\",\"security\"],\"char\":\"🛡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"smoking\":{\"keywords\":[\"kills\",\"tobacco\",\"cigarette\",\"joint\",\"smoke\"],\"char\":\"🚬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"skull_and_crossbones\":{\"keywords\":[\"poison\",\"danger\",\"deadly\",\"scary\",\"death\",\"pirate\",\"evil\"],\"char\":\"☠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"coffin\":{\"keywords\":[\"vampire\",\"dead\",\"die\",\"death\",\"rip\",\"graveyard\",\"cemetery\",\"casket\",\"funeral\",\"box\"],\"char\":\"⚰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"funeral_urn\":{\"keywords\":[\"dead\",\"die\",\"death\",\"rip\",\"ashes\"],\"char\":\"⚱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"amphora\":{\"keywords\":[\"vase\",\"jar\"],\"char\":\"🏺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crystal_ball\":{\"keywords\":[\"disco\",\"party\",\"magic\",\"circus\",\"fortune_teller\"],\"char\":\"🔮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"prayer_beads\":{\"keywords\":[\"dhikr\",\"religious\"],\"char\":\"📿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"nazar_amulet\":{\"keywords\":[\"bead\",\"charm\"],\"char\":\"🧿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"barber\":{\"keywords\":[\"hair\",\"salon\",\"style\"],\"char\":\"💈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"alembic\":{\"keywords\":[\"distilling\",\"science\",\"experiment\",\"chemistry\"],\"char\":\"⚗\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"telescope\":{\"keywords\":[\"stars\",\"space\",\"zoom\",\"science\",\"astronomy\"],\"char\":\"🔭\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"microscope\":{\"keywords\":[\"laboratory\",\"experiment\",\"zoomin\",\"science\",\"study\"],\"char\":\"🔬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"hole\":{\"keywords\":[\"embarrassing\"],\"char\":\"🕳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pill\":{\"keywords\":[\"health\",\"medicine\",\"doctor\",\"pharmacy\",\"drug\"],\"char\":\"💊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"syringe\":{\"keywords\":[\"health\",\"hospital\",\"drugs\",\"blood\",\"medicine\",\"needle\",\"doctor\",\"nurse\"],\"char\":\"💉\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dna\":{\"keywords\":[\"biologist\",\"genetics\",\"life\"],\"char\":\"🧬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"microbe\":{\"keywords\":[\"amoeba\",\"bacteria\",\"germs\"],\"char\":\"🦠\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"petri_dish\":{\"keywords\":[\"bacteria\",\"biology\",\"culture\",\"lab\"],\"char\":\"🧫\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"test_tube\":{\"keywords\":[\"chemistry\",\"experiment\",\"lab\",\"science\"],\"char\":\"🧪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"thermometer\":{\"keywords\":[\"weather\",\"temperature\",\"hot\",\"cold\"],\"char\":\"🌡\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"broom\":{\"keywords\":[\"cleaning\",\"sweeping\",\"witch\"],\"char\":\"🧹\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"basket\":{\"keywords\":[\"laundry\"],\"char\":\"🧺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"toilet_paper\":{\"keywords\":[\"roll\"],\"char\":\"🧻\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"label\":{\"keywords\":[\"sale\",\"tag\"],\"char\":\"🏷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bookmark\":{\"keywords\":[\"favorite\",\"label\",\"save\"],\"char\":\"🔖\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"toilet\":{\"keywords\":[\"restroom\",\"wc\",\"washroom\",\"bathroom\",\"potty\"],\"char\":\"🚽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shower\":{\"keywords\":[\"clean\",\"water\",\"bathroom\"],\"char\":\"🚿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bathtub\":{\"keywords\":[\"clean\",\"shower\",\"bathroom\"],\"char\":\"🛁\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"soap\":{\"keywords\":[\"bar\",\"bathing\",\"cleaning\",\"lather\"],\"char\":\"🧼\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"sponge\":{\"keywords\":[\"absorbing\",\"cleaning\",\"porous\"],\"char\":\"🧽\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"lotion_bottle\":{\"keywords\":[\"moisturizer\",\"sunscreen\"],\"char\":\"🧴\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"key\":{\"keywords\":[\"lock\",\"door\",\"password\"],\"char\":\"🔑\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"old_key\":{\"keywords\":[\"lock\",\"door\",\"password\"],\"char\":\"🗝\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"couch_and_lamp\":{\"keywords\":[\"read\",\"chill\"],\"char\":\"🛋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"sleeping_bed\":{\"keywords\":[\"bed\",\"rest\"],\"char\":\"🛌\",\"fitzpatrick_scale\":true,\"category\":\"objects\"},\"bed\":{\"keywords\":[\"sleep\",\"rest\"],\"char\":\"🛏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"door\":{\"keywords\":[\"house\",\"entry\",\"exit\"],\"char\":\"🚪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bellhop_bell\":{\"keywords\":[\"service\"],\"char\":\"🛎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"teddy_bear\":{\"keywords\":[\"plush\",\"stuffed\"],\"char\":\"🧸\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"framed_picture\":{\"keywords\":[\"photography\"],\"char\":\"🖼\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"world_map\":{\"keywords\":[\"location\",\"direction\"],\"char\":\"🗺\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"parasol_on_ground\":{\"keywords\":[\"weather\",\"summer\"],\"char\":\"⛱\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"moyai\":{\"keywords\":[\"rock\",\"easter island\",\"moai\"],\"char\":\"🗿\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shopping\":{\"keywords\":[\"mall\",\"buy\",\"purchase\"],\"char\":\"🛍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"shopping_cart\":{\"keywords\":[\"trolley\"],\"char\":\"🛒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"balloon\":{\"keywords\":[\"party\",\"celebration\",\"birthday\",\"circus\"],\"char\":\"🎈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"flags\":{\"keywords\":[\"fish\",\"japanese\",\"koinobori\",\"carp\",\"banner\"],\"char\":\"🎏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"ribbon\":{\"keywords\":[\"decoration\",\"pink\",\"girl\",\"bowtie\"],\"char\":\"🎀\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"gift\":{\"keywords\":[\"present\",\"birthday\",\"christmas\",\"xmas\"],\"char\":\"🎁\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"confetti_ball\":{\"keywords\":[\"festival\",\"party\",\"birthday\",\"circus\"],\"char\":\"🎊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"tada\":{\"keywords\":[\"party\",\"congratulations\",\"birthday\",\"magic\",\"circus\",\"celebration\"],\"char\":\"🎉\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"dolls\":{\"keywords\":[\"japanese\",\"toy\",\"kimono\"],\"char\":\"🎎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"wind_chime\":{\"keywords\":[\"nature\",\"ding\",\"spring\",\"bell\"],\"char\":\"🎐\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crossed_flags\":{\"keywords\":[\"japanese\",\"nation\",\"country\",\"border\"],\"char\":\"🎌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"izakaya_lantern\":{\"keywords\":[\"light\",\"paper\",\"halloween\",\"spooky\"],\"char\":\"🏮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"red_envelope\":{\"keywords\":[\"gift\"],\"char\":\"🧧\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"email\":{\"keywords\":[\"letter\",\"postal\",\"inbox\",\"communication\"],\"char\":\"✉️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"envelope_with_arrow\":{\"keywords\":[\"email\",\"communication\"],\"char\":\"📩\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"incoming_envelope\":{\"keywords\":[\"email\",\"inbox\"],\"char\":\"📨\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"e-mail\":{\"keywords\":[\"communication\",\"inbox\"],\"char\":\"📧\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"love_letter\":{\"keywords\":[\"email\",\"like\",\"affection\",\"envelope\",\"valentines\"],\"char\":\"💌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"postbox\":{\"keywords\":[\"email\",\"letter\",\"envelope\"],\"char\":\"📮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox_closed\":{\"keywords\":[\"email\",\"communication\",\"inbox\"],\"char\":\"📪\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox\":{\"keywords\":[\"email\",\"inbox\",\"communication\"],\"char\":\"📫\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox_with_mail\":{\"keywords\":[\"email\",\"inbox\",\"communication\"],\"char\":\"📬\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mailbox_with_no_mail\":{\"keywords\":[\"email\",\"inbox\"],\"char\":\"📭\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"package\":{\"keywords\":[\"mail\",\"gift\",\"cardboard\",\"box\",\"moving\"],\"char\":\"📦\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"postal_horn\":{\"keywords\":[\"instrument\",\"music\"],\"char\":\"📯\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"inbox_tray\":{\"keywords\":[\"email\",\"documents\"],\"char\":\"📥\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"outbox_tray\":{\"keywords\":[\"inbox\",\"email\"],\"char\":\"📤\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"scroll\":{\"keywords\":[\"documents\",\"ancient\",\"history\",\"paper\"],\"char\":\"📜\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"page_with_curl\":{\"keywords\":[\"documents\",\"office\",\"paper\"],\"char\":\"📃\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bookmark_tabs\":{\"keywords\":[\"favorite\",\"save\",\"order\",\"tidy\"],\"char\":\"📑\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"receipt\":{\"keywords\":[\"accounting\",\"expenses\"],\"char\":\"🧾\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"bar_chart\":{\"keywords\":[\"graph\",\"presentation\",\"stats\"],\"char\":\"📊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"chart_with_upwards_trend\":{\"keywords\":[\"graph\",\"presentation\",\"stats\",\"recovery\",\"business\",\"economics\",\"money\",\"sales\",\"good\",\"success\"],\"char\":\"📈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"chart_with_downwards_trend\":{\"keywords\":[\"graph\",\"presentation\",\"stats\",\"recession\",\"business\",\"economics\",\"money\",\"sales\",\"bad\",\"failure\"],\"char\":\"📉\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"page_facing_up\":{\"keywords\":[\"documents\",\"office\",\"paper\",\"information\"],\"char\":\"📄\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"date\":{\"keywords\":[\"calendar\",\"schedule\"],\"char\":\"📅\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"calendar\":{\"keywords\":[\"schedule\",\"date\",\"planning\"],\"char\":\"📆\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"spiral_calendar\":{\"keywords\":[\"date\",\"schedule\",\"planning\"],\"char\":\"🗓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"card_index\":{\"keywords\":[\"business\",\"stationery\"],\"char\":\"📇\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"card_file_box\":{\"keywords\":[\"business\",\"stationery\"],\"char\":\"🗃\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"ballot_box\":{\"keywords\":[\"election\",\"vote\"],\"char\":\"🗳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"file_cabinet\":{\"keywords\":[\"filing\",\"organizing\"],\"char\":\"🗄\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"clipboard\":{\"keywords\":[\"stationery\",\"documents\"],\"char\":\"📋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"spiral_notepad\":{\"keywords\":[\"memo\",\"stationery\"],\"char\":\"🗒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"file_folder\":{\"keywords\":[\"documents\",\"business\",\"office\"],\"char\":\"📁\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"open_file_folder\":{\"keywords\":[\"documents\",\"load\"],\"char\":\"📂\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"card_index_dividers\":{\"keywords\":[\"organizing\",\"business\",\"stationery\"],\"char\":\"🗂\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"newspaper_roll\":{\"keywords\":[\"press\",\"headline\"],\"char\":\"🗞\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"newspaper\":{\"keywords\":[\"press\",\"headline\"],\"char\":\"📰\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"notebook\":{\"keywords\":[\"stationery\",\"record\",\"notes\",\"paper\",\"study\"],\"char\":\"📓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"closed_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"textbook\",\"learn\"],\"char\":\"📕\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"green_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"study\"],\"char\":\"📗\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"blue_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"learn\",\"study\"],\"char\":\"📘\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"orange_book\":{\"keywords\":[\"read\",\"library\",\"knowledge\",\"textbook\",\"study\"],\"char\":\"📙\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"notebook_with_decorative_cover\":{\"keywords\":[\"classroom\",\"notes\",\"record\",\"paper\",\"study\"],\"char\":\"📔\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"ledger\":{\"keywords\":[\"notes\",\"paper\"],\"char\":\"📒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"books\":{\"keywords\":[\"literature\",\"library\",\"study\"],\"char\":\"📚\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"open_book\":{\"keywords\":[\"book\",\"read\",\"library\",\"knowledge\",\"literature\",\"learn\",\"study\"],\"char\":\"📖\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"safety_pin\":{\"keywords\":[\"diaper\"],\"char\":\"🧷\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"link\":{\"keywords\":[\"rings\",\"url\"],\"char\":\"🔗\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"paperclip\":{\"keywords\":[\"documents\",\"stationery\"],\"char\":\"📎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"paperclips\":{\"keywords\":[\"documents\",\"stationery\"],\"char\":\"🖇\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"scissors\":{\"keywords\":[\"stationery\",\"cut\"],\"char\":\"✂️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"triangular_ruler\":{\"keywords\":[\"stationery\",\"math\",\"architect\",\"sketch\"],\"char\":\"📐\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"straight_ruler\":{\"keywords\":[\"stationery\",\"calculate\",\"length\",\"math\",\"school\",\"drawing\",\"architect\",\"sketch\"],\"char\":\"📏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"abacus\":{\"keywords\":[\"calculation\"],\"char\":\"🧮\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pushpin\":{\"keywords\":[\"stationery\",\"mark\",\"here\"],\"char\":\"📌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"round_pushpin\":{\"keywords\":[\"stationery\",\"location\",\"map\",\"here\"],\"char\":\"📍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"triangular_flag_on_post\":{\"keywords\":[\"mark\",\"milestone\",\"place\"],\"char\":\"🚩\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"white_flag\":{\"keywords\":[\"losing\",\"loser\",\"lost\",\"surrender\",\"give up\",\"fail\"],\"char\":\"🏳\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"black_flag\":{\"keywords\":[\"pirate\"],\"char\":\"🏴\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"rainbow_flag\":{\"keywords\":[\"flag\",\"rainbow\",\"pride\",\"gay\",\"lgbt\",\"glbt\",\"queer\",\"homosexual\",\"lesbian\",\"bisexual\",\"transgender\"],\"char\":\"🏳️‍🌈\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"closed_lock_with_key\":{\"keywords\":[\"security\",\"privacy\"],\"char\":\"🔐\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"lock\":{\"keywords\":[\"security\",\"password\",\"padlock\"],\"char\":\"🔒\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"unlock\":{\"keywords\":[\"privacy\",\"security\"],\"char\":\"🔓\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"lock_with_ink_pen\":{\"keywords\":[\"security\",\"secret\"],\"char\":\"🔏\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pen\":{\"keywords\":[\"stationery\",\"writing\",\"write\"],\"char\":\"🖊\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"fountain_pen\":{\"keywords\":[\"stationery\",\"writing\",\"write\"],\"char\":\"🖋\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"black_nib\":{\"keywords\":[\"pen\",\"stationery\",\"writing\",\"write\"],\"char\":\"✒️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"memo\":{\"keywords\":[\"write\",\"documents\",\"stationery\",\"pencil\",\"paper\",\"writing\",\"legal\",\"exam\",\"quiz\",\"test\",\"study\",\"compose\"],\"char\":\"📝\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"pencil2\":{\"keywords\":[\"stationery\",\"write\",\"paper\",\"writing\",\"school\",\"study\"],\"char\":\"✏️\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"crayon\":{\"keywords\":[\"drawing\",\"creativity\"],\"char\":\"🖍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"paintbrush\":{\"keywords\":[\"drawing\",\"creativity\",\"art\"],\"char\":\"🖌\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mag\":{\"keywords\":[\"search\",\"zoom\",\"find\",\"detective\"],\"char\":\"🔍\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"mag_right\":{\"keywords\":[\"search\",\"zoom\",\"find\",\"detective\"],\"char\":\"🔎\",\"fitzpatrick_scale\":false,\"category\":\"objects\"},\"heart\":{\"keywords\":[\"love\",\"like\",\"valentines\"],\"char\":\"❤️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"orange_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"🧡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"yellow_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"green_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"blue_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"purple_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_heart\":{\"keywords\":[\"evil\"],\"char\":\"🖤\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"broken_heart\":{\"keywords\":[\"sad\",\"sorry\",\"break\",\"heart\",\"heartbreak\"],\"char\":\"💔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_heart_exclamation\":{\"keywords\":[\"decoration\",\"love\"],\"char\":\"❣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"two_hearts\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\",\"heart\"],\"char\":\"💕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"revolving_hearts\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💞\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heartbeat\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\",\"pink\",\"heart\"],\"char\":\"💓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heartpulse\":{\"keywords\":[\"like\",\"love\",\"affection\",\"valentines\",\"pink\"],\"char\":\"💗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sparkling_heart\":{\"keywords\":[\"love\",\"like\",\"affection\",\"valentines\"],\"char\":\"💖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cupid\":{\"keywords\":[\"love\",\"like\",\"heart\",\"affection\",\"valentines\"],\"char\":\"💘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"gift_heart\":{\"keywords\":[\"love\",\"valentines\"],\"char\":\"💝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heart_decoration\":{\"keywords\":[\"purple-square\",\"love\",\"like\"],\"char\":\"💟\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"peace_symbol\":{\"keywords\":[\"hippie\"],\"char\":\"☮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"latin_cross\":{\"keywords\":[\"christianity\"],\"char\":\"✝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"star_and_crescent\":{\"keywords\":[\"islam\"],\"char\":\"☪\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"om\":{\"keywords\":[\"hinduism\",\"buddhism\",\"sikhism\",\"jainism\"],\"char\":\"🕉\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wheel_of_dharma\":{\"keywords\":[\"hinduism\",\"buddhism\",\"sikhism\",\"jainism\"],\"char\":\"☸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"star_of_david\":{\"keywords\":[\"judaism\"],\"char\":\"✡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"six_pointed_star\":{\"keywords\":[\"purple-square\",\"religion\",\"jewish\",\"hexagram\"],\"char\":\"🔯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"menorah\":{\"keywords\":[\"hanukkah\",\"candles\",\"jewish\"],\"char\":\"🕎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"yin_yang\":{\"keywords\":[\"balance\"],\"char\":\"☯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"orthodox_cross\":{\"keywords\":[\"suppedaneum\",\"religion\"],\"char\":\"☦\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"place_of_worship\":{\"keywords\":[\"religion\",\"church\",\"temple\",\"prayer\"],\"char\":\"🛐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ophiuchus\":{\"keywords\":[\"sign\",\"purple-square\",\"constellation\",\"astrology\"],\"char\":\"⛎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"aries\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♈\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"taurus\":{\"keywords\":[\"purple-square\",\"sign\",\"zodiac\",\"astrology\"],\"char\":\"♉\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"gemini\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♊\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cancer\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♋\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"leo\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♌\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"virgo\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♍\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"libra\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"scorpius\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\",\"scorpio\"],\"char\":\"♏\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sagittarius\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"capricorn\":{\"keywords\":[\"sign\",\"zodiac\",\"purple-square\",\"astrology\"],\"char\":\"♑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"aquarius\":{\"keywords\":[\"sign\",\"purple-square\",\"zodiac\",\"astrology\"],\"char\":\"♒\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"pisces\":{\"keywords\":[\"purple-square\",\"sign\",\"zodiac\",\"astrology\"],\"char\":\"♓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"id\":{\"keywords\":[\"purple-square\",\"words\"],\"char\":\"🆔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"atom_symbol\":{\"keywords\":[\"science\",\"physics\",\"chemistry\"],\"char\":\"⚛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7a7a\":{\"keywords\":[\"kanji\",\"japanese\",\"chinese\",\"empty\",\"sky\",\"blue-square\"],\"char\":\"🈳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u5272\":{\"keywords\":[\"cut\",\"divide\",\"chinese\",\"kanji\",\"pink-square\"],\"char\":\"🈹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"radioactive\":{\"keywords\":[\"nuclear\",\"danger\"],\"char\":\"☢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"biohazard\":{\"keywords\":[\"danger\"],\"char\":\"☣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mobile_phone_off\":{\"keywords\":[\"mute\",\"orange-square\",\"silence\",\"quiet\"],\"char\":\"📴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"vibration_mode\":{\"keywords\":[\"orange-square\",\"phone\"],\"char\":\"📳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6709\":{\"keywords\":[\"orange-square\",\"chinese\",\"have\",\"kanji\"],\"char\":\"🈶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7121\":{\"keywords\":[\"nothing\",\"chinese\",\"kanji\",\"japanese\",\"orange-square\"],\"char\":\"🈚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7533\":{\"keywords\":[\"chinese\",\"japanese\",\"kanji\",\"orange-square\"],\"char\":\"🈸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u55b6\":{\"keywords\":[\"japanese\",\"opening hours\",\"orange-square\"],\"char\":\"🈺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6708\":{\"keywords\":[\"chinese\",\"month\",\"moon\",\"japanese\",\"orange-square\",\"kanji\"],\"char\":\"🈷️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eight_pointed_black_star\":{\"keywords\":[\"orange-square\",\"shape\",\"polygon\"],\"char\":\"✴️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"vs\":{\"keywords\":[\"words\",\"orange-square\"],\"char\":\"🆚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"accept\":{\"keywords\":[\"ok\",\"good\",\"chinese\",\"kanji\",\"agree\",\"yes\",\"orange-circle\"],\"char\":\"🉑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_flower\":{\"keywords\":[\"japanese\",\"spring\"],\"char\":\"💮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ideograph_advantage\":{\"keywords\":[\"chinese\",\"kanji\",\"obtain\",\"get\",\"circle\"],\"char\":\"🉐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"secret\":{\"keywords\":[\"privacy\",\"chinese\",\"sshh\",\"kanji\",\"red-circle\"],\"char\":\"㊙️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"congratulations\":{\"keywords\":[\"chinese\",\"kanji\",\"japanese\",\"red-circle\"],\"char\":\"㊗️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u5408\":{\"keywords\":[\"japanese\",\"chinese\",\"join\",\"kanji\",\"red-square\"],\"char\":\"🈴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6e80\":{\"keywords\":[\"full\",\"chinese\",\"japanese\",\"red-square\",\"kanji\"],\"char\":\"🈵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u7981\":{\"keywords\":[\"kanji\",\"japanese\",\"chinese\",\"forbidden\",\"limit\",\"restricted\",\"red-square\"],\"char\":\"🈲\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"a\":{\"keywords\":[\"red-square\",\"alphabet\",\"letter\"],\"char\":\"🅰️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"b\":{\"keywords\":[\"red-square\",\"alphabet\",\"letter\"],\"char\":\"🅱️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ab\":{\"keywords\":[\"red-square\",\"alphabet\"],\"char\":\"🆎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cl\":{\"keywords\":[\"alphabet\",\"words\",\"red-square\"],\"char\":\"🆑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"o2\":{\"keywords\":[\"alphabet\",\"red-square\",\"letter\"],\"char\":\"🅾️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sos\":{\"keywords\":[\"help\",\"red-square\",\"words\",\"emergency\",\"911\"],\"char\":\"🆘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_entry\":{\"keywords\":[\"limit\",\"security\",\"privacy\",\"bad\",\"denied\",\"stop\",\"circle\"],\"char\":\"⛔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"name_badge\":{\"keywords\":[\"fire\",\"forbid\"],\"char\":\"📛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_entry_sign\":{\"keywords\":[\"forbid\",\"stop\",\"limit\",\"denied\",\"disallow\",\"circle\"],\"char\":\"🚫\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"x\":{\"keywords\":[\"no\",\"delete\",\"remove\",\"cancel\",\"red\"],\"char\":\"❌\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"o\":{\"keywords\":[\"circle\",\"round\"],\"char\":\"⭕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"stop_sign\":{\"keywords\":[\"stop\"],\"char\":\"🛑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"anger\":{\"keywords\":[\"angry\",\"mad\"],\"char\":\"💢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"hotsprings\":{\"keywords\":[\"bath\",\"warm\",\"relax\"],\"char\":\"♨️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_pedestrians\":{\"keywords\":[\"rules\",\"crossing\",\"walking\",\"circle\"],\"char\":\"🚷\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"do_not_litter\":{\"keywords\":[\"trash\",\"bin\",\"garbage\",\"circle\"],\"char\":\"🚯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_bicycles\":{\"keywords\":[\"cyclist\",\"prohibited\",\"circle\"],\"char\":\"🚳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"non-potable_water\":{\"keywords\":[\"drink\",\"faucet\",\"tap\",\"circle\"],\"char\":\"🚱\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"underage\":{\"keywords\":[\"18\",\"drink\",\"pub\",\"night\",\"minor\",\"circle\"],\"char\":\"🔞\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_mobile_phones\":{\"keywords\":[\"iphone\",\"mute\",\"circle\"],\"char\":\"📵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"exclamation\":{\"keywords\":[\"heavy_exclamation_mark\",\"danger\",\"surprise\",\"punctuation\",\"wow\",\"warning\"],\"char\":\"❗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"grey_exclamation\":{\"keywords\":[\"surprise\",\"punctuation\",\"gray\",\"wow\",\"warning\"],\"char\":\"❕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"question\":{\"keywords\":[\"doubt\",\"confused\"],\"char\":\"❓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"grey_question\":{\"keywords\":[\"doubts\",\"gray\",\"huh\",\"confused\"],\"char\":\"❔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"bangbang\":{\"keywords\":[\"exclamation\",\"surprise\"],\"char\":\"‼️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"interrobang\":{\"keywords\":[\"wat\",\"punctuation\",\"surprise\"],\"char\":\"⁉️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"low_brightness\":{\"keywords\":[\"sun\",\"afternoon\",\"warm\",\"summer\"],\"char\":\"🔅\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"high_brightness\":{\"keywords\":[\"sun\",\"light\"],\"char\":\"🔆\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"trident\":{\"keywords\":[\"weapon\",\"spear\"],\"char\":\"🔱\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"fleur_de_lis\":{\"keywords\":[\"decorative\",\"scout\"],\"char\":\"⚜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"part_alternation_mark\":{\"keywords\":[\"graph\",\"presentation\",\"stats\",\"business\",\"economics\",\"bad\"],\"char\":\"〽️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"warning\":{\"keywords\":[\"exclamation\",\"wip\",\"alert\",\"error\",\"problem\",\"issue\"],\"char\":\"⚠️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"children_crossing\":{\"keywords\":[\"school\",\"warning\",\"danger\",\"sign\",\"driving\",\"yellow-diamond\"],\"char\":\"🚸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"beginner\":{\"keywords\":[\"badge\",\"shield\"],\"char\":\"🔰\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"recycle\":{\"keywords\":[\"arrow\",\"environment\",\"garbage\",\"trash\"],\"char\":\"♻️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"u6307\":{\"keywords\":[\"chinese\",\"point\",\"green-square\",\"kanji\"],\"char\":\"🈯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"chart\":{\"keywords\":[\"green-square\",\"graph\",\"presentation\",\"stats\"],\"char\":\"💹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sparkle\":{\"keywords\":[\"stars\",\"green-square\",\"awesome\",\"good\",\"fireworks\"],\"char\":\"❇️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eight_spoked_asterisk\":{\"keywords\":[\"star\",\"sparkle\",\"green-square\"],\"char\":\"✳️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"negative_squared_cross_mark\":{\"keywords\":[\"x\",\"green-square\",\"no\",\"deny\"],\"char\":\"❎\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_check_mark\":{\"keywords\":[\"green-square\",\"ok\",\"agree\",\"vote\",\"election\",\"answer\",\"tick\"],\"char\":\"✅\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"diamond_shape_with_a_dot_inside\":{\"keywords\":[\"jewel\",\"blue\",\"gem\",\"crystal\",\"fancy\"],\"char\":\"💠\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cyclone\":{\"keywords\":[\"weather\",\"swirl\",\"blue\",\"cloud\",\"vortex\",\"spiral\",\"whirlpool\",\"spin\",\"tornado\",\"hurricane\",\"typhoon\"],\"char\":\"🌀\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"loop\":{\"keywords\":[\"tape\",\"cassette\"],\"char\":\"➿\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"globe_with_meridians\":{\"keywords\":[\"earth\",\"international\",\"world\",\"internet\",\"interweb\",\"i18n\"],\"char\":\"🌐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"m\":{\"keywords\":[\"alphabet\",\"blue-circle\",\"letter\"],\"char\":\"Ⓜ️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"atm\":{\"keywords\":[\"money\",\"sales\",\"cash\",\"blue-square\",\"payment\",\"bank\"],\"char\":\"🏧\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sa\":{\"keywords\":[\"japanese\",\"blue-square\",\"katakana\"],\"char\":\"🈂️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"passport_control\":{\"keywords\":[\"custom\",\"blue-square\"],\"char\":\"🛂\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"customs\":{\"keywords\":[\"passport\",\"border\",\"blue-square\"],\"char\":\"🛃\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"baggage_claim\":{\"keywords\":[\"blue-square\",\"airport\",\"transport\"],\"char\":\"🛄\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"left_luggage\":{\"keywords\":[\"blue-square\",\"travel\"],\"char\":\"🛅\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wheelchair\":{\"keywords\":[\"blue-square\",\"disabled\",\"a11y\",\"accessibility\"],\"char\":\"♿\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_smoking\":{\"keywords\":[\"cigarette\",\"blue-square\",\"smell\",\"smoke\"],\"char\":\"🚭\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wc\":{\"keywords\":[\"toilet\",\"restroom\",\"blue-square\"],\"char\":\"🚾\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"parking\":{\"keywords\":[\"cars\",\"blue-square\",\"alphabet\",\"letter\"],\"char\":\"🅿️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"potable_water\":{\"keywords\":[\"blue-square\",\"liquid\",\"restroom\",\"cleaning\",\"faucet\"],\"char\":\"🚰\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mens\":{\"keywords\":[\"toilet\",\"restroom\",\"wc\",\"blue-square\",\"gender\",\"male\"],\"char\":\"🚹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"womens\":{\"keywords\":[\"purple-square\",\"woman\",\"female\",\"toilet\",\"loo\",\"restroom\",\"gender\"],\"char\":\"🚺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"baby_symbol\":{\"keywords\":[\"orange-square\",\"child\"],\"char\":\"🚼\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"restroom\":{\"keywords\":[\"blue-square\",\"toilet\",\"refresh\",\"wc\",\"gender\"],\"char\":\"🚻\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"put_litter_in_its_place\":{\"keywords\":[\"blue-square\",\"sign\",\"human\",\"info\"],\"char\":\"🚮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cinema\":{\"keywords\":[\"blue-square\",\"record\",\"film\",\"movie\",\"curtain\",\"stage\",\"theater\"],\"char\":\"🎦\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"signal_strength\":{\"keywords\":[\"blue-square\",\"reception\",\"phone\",\"internet\",\"connection\",\"wifi\",\"bluetooth\",\"bars\"],\"char\":\"📶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"koko\":{\"keywords\":[\"blue-square\",\"here\",\"katakana\",\"japanese\",\"destination\"],\"char\":\"🈁\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ng\":{\"keywords\":[\"blue-square\",\"words\",\"shape\",\"icon\"],\"char\":\"🆖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ok\":{\"keywords\":[\"good\",\"agree\",\"yes\",\"blue-square\"],\"char\":\"🆗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"up\":{\"keywords\":[\"blue-square\",\"above\",\"high\"],\"char\":\"🆙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"cool\":{\"keywords\":[\"words\",\"blue-square\"],\"char\":\"🆒\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"new\":{\"keywords\":[\"blue-square\",\"words\",\"start\"],\"char\":\"🆕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"free\":{\"keywords\":[\"blue-square\",\"words\"],\"char\":\"🆓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"zero\":{\"keywords\":[\"0\",\"numbers\",\"blue-square\",\"null\"],\"char\":\"0️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"one\":{\"keywords\":[\"blue-square\",\"numbers\",\"1\"],\"char\":\"1️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"two\":{\"keywords\":[\"numbers\",\"2\",\"prime\",\"blue-square\"],\"char\":\"2️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"three\":{\"keywords\":[\"3\",\"numbers\",\"prime\",\"blue-square\"],\"char\":\"3️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"four\":{\"keywords\":[\"4\",\"numbers\",\"blue-square\"],\"char\":\"4️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"five\":{\"keywords\":[\"5\",\"numbers\",\"blue-square\",\"prime\"],\"char\":\"5️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"six\":{\"keywords\":[\"6\",\"numbers\",\"blue-square\"],\"char\":\"6️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"seven\":{\"keywords\":[\"7\",\"numbers\",\"blue-square\",\"prime\"],\"char\":\"7️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eight\":{\"keywords\":[\"8\",\"blue-square\",\"numbers\"],\"char\":\"8️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"nine\":{\"keywords\":[\"blue-square\",\"numbers\",\"9\"],\"char\":\"9️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"keycap_ten\":{\"keywords\":[\"numbers\",\"10\",\"blue-square\"],\"char\":\"🔟\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"asterisk\":{\"keywords\":[\"star\",\"keycap\"],\"char\":\"*⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"eject_button\":{\"keywords\":[\"blue-square\"],\"char\":\"⏏️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_forward\":{\"keywords\":[\"blue-square\",\"right\",\"direction\",\"play\"],\"char\":\"▶️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"pause_button\":{\"keywords\":[\"pause\",\"blue-square\"],\"char\":\"⏸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"next_track_button\":{\"keywords\":[\"forward\",\"next\",\"blue-square\"],\"char\":\"⏭\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"stop_button\":{\"keywords\":[\"blue-square\"],\"char\":\"⏹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"record_button\":{\"keywords\":[\"blue-square\"],\"char\":\"⏺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"play_or_pause_button\":{\"keywords\":[\"blue-square\",\"play\",\"pause\"],\"char\":\"⏯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"previous_track_button\":{\"keywords\":[\"backward\"],\"char\":\"⏮\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"fast_forward\":{\"keywords\":[\"blue-square\",\"play\",\"speed\",\"continue\"],\"char\":\"⏩\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"rewind\":{\"keywords\":[\"play\",\"blue-square\"],\"char\":\"⏪\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"twisted_rightwards_arrows\":{\"keywords\":[\"blue-square\",\"shuffle\",\"music\",\"random\"],\"char\":\"🔀\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"repeat\":{\"keywords\":[\"loop\",\"record\"],\"char\":\"🔁\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"repeat_one\":{\"keywords\":[\"blue-square\",\"loop\"],\"char\":\"🔂\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_backward\":{\"keywords\":[\"blue-square\",\"left\",\"direction\"],\"char\":\"◀️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_up_small\":{\"keywords\":[\"blue-square\",\"triangle\",\"direction\",\"point\",\"forward\",\"top\"],\"char\":\"🔼\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_down_small\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"🔽\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_double_up\":{\"keywords\":[\"blue-square\",\"direction\",\"top\"],\"char\":\"⏫\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_double_down\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"⏬\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_right\":{\"keywords\":[\"blue-square\",\"next\"],\"char\":\"➡️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_left\":{\"keywords\":[\"blue-square\",\"previous\",\"back\"],\"char\":\"⬅️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_up\":{\"keywords\":[\"blue-square\",\"continue\",\"top\",\"direction\"],\"char\":\"⬆️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_down\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"⬇️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_upper_right\":{\"keywords\":[\"blue-square\",\"point\",\"direction\",\"diagonal\",\"northeast\"],\"char\":\"↗️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_lower_right\":{\"keywords\":[\"blue-square\",\"direction\",\"diagonal\",\"southeast\"],\"char\":\"↘️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_lower_left\":{\"keywords\":[\"blue-square\",\"direction\",\"diagonal\",\"southwest\"],\"char\":\"↙️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_upper_left\":{\"keywords\":[\"blue-square\",\"point\",\"direction\",\"diagonal\",\"northwest\"],\"char\":\"↖️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_up_down\":{\"keywords\":[\"blue-square\",\"direction\",\"way\",\"vertical\"],\"char\":\"↕️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"left_right_arrow\":{\"keywords\":[\"shape\",\"direction\",\"horizontal\",\"sideways\"],\"char\":\"↔️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrows_counterclockwise\":{\"keywords\":[\"blue-square\",\"sync\",\"cycle\"],\"char\":\"🔄\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_right_hook\":{\"keywords\":[\"blue-square\",\"return\",\"rotate\",\"direction\"],\"char\":\"↪️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"leftwards_arrow_with_hook\":{\"keywords\":[\"back\",\"return\",\"blue-square\",\"undo\",\"enter\"],\"char\":\"↩️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_heading_up\":{\"keywords\":[\"blue-square\",\"direction\",\"top\"],\"char\":\"⤴️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrow_heading_down\":{\"keywords\":[\"blue-square\",\"direction\",\"bottom\"],\"char\":\"⤵️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"hash\":{\"keywords\":[\"symbol\",\"blue-square\",\"twitter\"],\"char\":\"#️⃣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"information_source\":{\"keywords\":[\"blue-square\",\"alphabet\",\"letter\"],\"char\":\"ℹ️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"abc\":{\"keywords\":[\"blue-square\",\"alphabet\"],\"char\":\"🔤\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"abcd\":{\"keywords\":[\"blue-square\",\"alphabet\"],\"char\":\"🔡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"capital_abcd\":{\"keywords\":[\"alphabet\",\"words\",\"blue-square\"],\"char\":\"🔠\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"symbols\":{\"keywords\":[\"blue-square\",\"music\",\"note\",\"ampersand\",\"percent\",\"glyphs\",\"characters\"],\"char\":\"🔣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"musical_note\":{\"keywords\":[\"score\",\"tone\",\"sound\"],\"char\":\"🎵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"notes\":{\"keywords\":[\"music\",\"score\"],\"char\":\"🎶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"wavy_dash\":{\"keywords\":[\"draw\",\"line\",\"moustache\",\"mustache\",\"squiggle\",\"scribble\"],\"char\":\"〰️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"curly_loop\":{\"keywords\":[\"scribble\",\"draw\",\"shape\",\"squiggle\"],\"char\":\"➰\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_check_mark\":{\"keywords\":[\"ok\",\"nike\",\"answer\",\"yes\",\"tick\"],\"char\":\"✔️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"arrows_clockwise\":{\"keywords\":[\"sync\",\"cycle\",\"round\",\"repeat\"],\"char\":\"🔃\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_plus_sign\":{\"keywords\":[\"math\",\"calculation\",\"addition\",\"more\",\"increase\"],\"char\":\"➕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_minus_sign\":{\"keywords\":[\"math\",\"calculation\",\"subtract\",\"less\"],\"char\":\"➖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_division_sign\":{\"keywords\":[\"divide\",\"math\",\"calculation\"],\"char\":\"➗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_multiplication_x\":{\"keywords\":[\"math\",\"calculation\"],\"char\":\"✖️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"infinity\":{\"keywords\":[\"forever\"],\"char\":\"♾\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"heavy_dollar_sign\":{\"keywords\":[\"money\",\"sales\",\"payment\",\"currency\",\"buck\"],\"char\":\"💲\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"currency_exchange\":{\"keywords\":[\"money\",\"sales\",\"dollar\",\"travel\"],\"char\":\"💱\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"copyright\":{\"keywords\":[\"ip\",\"license\",\"circle\",\"law\",\"legal\"],\"char\":\"©️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"registered\":{\"keywords\":[\"alphabet\",\"circle\"],\"char\":\"®️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"tm\":{\"keywords\":[\"trademark\",\"brand\",\"law\",\"legal\"],\"char\":\"™️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"end\":{\"keywords\":[\"words\",\"arrow\"],\"char\":\"🔚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"back\":{\"keywords\":[\"arrow\",\"words\",\"return\"],\"char\":\"🔙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"on\":{\"keywords\":[\"arrow\",\"words\"],\"char\":\"🔛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"top\":{\"keywords\":[\"words\",\"blue-square\"],\"char\":\"🔝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"soon\":{\"keywords\":[\"arrow\",\"words\"],\"char\":\"🔜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"ballot_box_with_check\":{\"keywords\":[\"ok\",\"agree\",\"confirm\",\"black-square\",\"vote\",\"election\",\"yes\",\"tick\"],\"char\":\"☑️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"radio_button\":{\"keywords\":[\"input\",\"old\",\"music\",\"circle\"],\"char\":\"🔘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_circle\":{\"keywords\":[\"shape\",\"round\"],\"char\":\"⚪\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_circle\":{\"keywords\":[\"shape\",\"button\",\"round\"],\"char\":\"⚫\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"red_circle\":{\"keywords\":[\"shape\",\"error\",\"danger\"],\"char\":\"🔴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"large_blue_circle\":{\"keywords\":[\"shape\",\"icon\",\"button\"],\"char\":\"🔵\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_orange_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔸\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_blue_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔹\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"large_orange_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔶\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"large_blue_diamond\":{\"keywords\":[\"shape\",\"jewel\",\"gem\"],\"char\":\"🔷\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_red_triangle\":{\"keywords\":[\"shape\",\"direction\",\"up\",\"top\"],\"char\":\"🔺\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_small_square\":{\"keywords\":[\"shape\",\"icon\"],\"char\":\"▪️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_small_square\":{\"keywords\":[\"shape\",\"icon\"],\"char\":\"▫️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_large_square\":{\"keywords\":[\"shape\",\"icon\",\"button\"],\"char\":\"⬛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_large_square\":{\"keywords\":[\"shape\",\"icon\",\"stone\",\"button\"],\"char\":\"⬜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"small_red_triangle_down\":{\"keywords\":[\"shape\",\"direction\",\"bottom\"],\"char\":\"🔻\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_medium_square\":{\"keywords\":[\"shape\",\"button\",\"icon\"],\"char\":\"◼️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_medium_square\":{\"keywords\":[\"shape\",\"stone\",\"icon\"],\"char\":\"◻️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_medium_small_square\":{\"keywords\":[\"icon\",\"shape\",\"button\"],\"char\":\"◾\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_medium_small_square\":{\"keywords\":[\"shape\",\"stone\",\"icon\",\"button\"],\"char\":\"◽\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_square_button\":{\"keywords\":[\"shape\",\"input\",\"frame\"],\"char\":\"🔲\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"white_square_button\":{\"keywords\":[\"shape\",\"input\"],\"char\":\"🔳\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"speaker\":{\"keywords\":[\"sound\",\"volume\",\"silence\",\"broadcast\"],\"char\":\"🔈\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"sound\":{\"keywords\":[\"volume\",\"speaker\",\"broadcast\"],\"char\":\"🔉\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"loud_sound\":{\"keywords\":[\"volume\",\"noise\",\"noisy\",\"speaker\",\"broadcast\"],\"char\":\"🔊\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mute\":{\"keywords\":[\"sound\",\"volume\",\"silence\",\"quiet\"],\"char\":\"🔇\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mega\":{\"keywords\":[\"sound\",\"speaker\",\"volume\"],\"char\":\"📣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"loudspeaker\":{\"keywords\":[\"volume\",\"sound\"],\"char\":\"📢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"bell\":{\"keywords\":[\"sound\",\"notification\",\"christmas\",\"xmas\",\"chime\"],\"char\":\"🔔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"no_bell\":{\"keywords\":[\"sound\",\"volume\",\"mute\",\"quiet\",\"silent\"],\"char\":\"🔕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"black_joker\":{\"keywords\":[\"poker\",\"cards\",\"game\",\"play\",\"magic\"],\"char\":\"🃏\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"mahjong\":{\"keywords\":[\"game\",\"play\",\"chinese\",\"kanji\"],\"char\":\"🀄\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"spades\":{\"keywords\":[\"poker\",\"cards\",\"suits\",\"magic\"],\"char\":\"♠️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clubs\":{\"keywords\":[\"poker\",\"cards\",\"magic\",\"suits\"],\"char\":\"♣️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"hearts\":{\"keywords\":[\"poker\",\"cards\",\"magic\",\"suits\"],\"char\":\"♥️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"diamonds\":{\"keywords\":[\"poker\",\"cards\",\"magic\",\"suits\"],\"char\":\"♦️\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"flower_playing_cards\":{\"keywords\":[\"game\",\"sunset\",\"red\"],\"char\":\"🎴\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"thought_balloon\":{\"keywords\":[\"bubble\",\"cloud\",\"speech\",\"thinking\",\"dream\"],\"char\":\"💭\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"right_anger_bubble\":{\"keywords\":[\"caption\",\"speech\",\"thinking\",\"mad\"],\"char\":\"🗯\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"speech_balloon\":{\"keywords\":[\"bubble\",\"words\",\"message\",\"talk\",\"chatting\"],\"char\":\"💬\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"left_speech_bubble\":{\"keywords\":[\"words\",\"message\",\"talk\",\"chatting\"],\"char\":\"🗨\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕐\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock2\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕑\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock3\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕒\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock4\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕓\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock5\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕔\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock6\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\",\"dawn\",\"dusk\"],\"char\":\"🕕\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock7\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕖\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock8\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕗\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock9\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕘\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock10\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕙\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock11\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕚\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock12\":{\"keywords\":[\"time\",\"noon\",\"midnight\",\"midday\",\"late\",\"early\",\"schedule\"],\"char\":\"🕛\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock130\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕜\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock230\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕝\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock330\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕞\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock430\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕟\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock530\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕠\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock630\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕡\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock730\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕢\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock830\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕣\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock930\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕤\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1030\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕥\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1130\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕦\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"clock1230\":{\"keywords\":[\"time\",\"late\",\"early\",\"schedule\"],\"char\":\"🕧\",\"fitzpatrick_scale\":false,\"category\":\"symbols\"},\"afghanistan\":{\"keywords\":[\"af\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"aland_islands\":{\"keywords\":[\"Åland\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"albania\":{\"keywords\":[\"al\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"algeria\":{\"keywords\":[\"dz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"american_samoa\":{\"keywords\":[\"american\",\"ws\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"andorra\":{\"keywords\":[\"ad\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"angola\":{\"keywords\":[\"ao\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"anguilla\":{\"keywords\":[\"ai\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"antarctica\":{\"keywords\":[\"aq\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"antigua_barbuda\":{\"keywords\":[\"antigua\",\"barbuda\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"argentina\":{\"keywords\":[\"ar\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"armenia\":{\"keywords\":[\"am\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"aruba\":{\"keywords\":[\"aw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"australia\":{\"keywords\":[\"au\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"austria\":{\"keywords\":[\"at\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"azerbaijan\":{\"keywords\":[\"az\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bahamas\":{\"keywords\":[\"bs\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bahrain\":{\"keywords\":[\"bh\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bangladesh\":{\"keywords\":[\"bd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"barbados\":{\"keywords\":[\"bb\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"belarus\":{\"keywords\":[\"by\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"belgium\":{\"keywords\":[\"be\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"belize\":{\"keywords\":[\"bz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"benin\":{\"keywords\":[\"bj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bermuda\":{\"keywords\":[\"bm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bhutan\":{\"keywords\":[\"bt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bolivia\":{\"keywords\":[\"bo\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"caribbean_netherlands\":{\"keywords\":[\"bonaire\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bosnia_herzegovina\":{\"keywords\":[\"bosnia\",\"herzegovina\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"botswana\":{\"keywords\":[\"bw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"brazil\":{\"keywords\":[\"br\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"british_indian_ocean_territory\":{\"keywords\":[\"british\",\"indian\",\"ocean\",\"territory\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"british_virgin_islands\":{\"keywords\":[\"british\",\"virgin\",\"islands\",\"bvi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"brunei\":{\"keywords\":[\"bn\",\"darussalam\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"bulgaria\":{\"keywords\":[\"bg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"burkina_faso\":{\"keywords\":[\"burkina\",\"faso\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"burundi\":{\"keywords\":[\"bi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cape_verde\":{\"keywords\":[\"cabo\",\"verde\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cambodia\":{\"keywords\":[\"kh\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cameroon\":{\"keywords\":[\"cm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"canada\":{\"keywords\":[\"ca\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"canary_islands\":{\"keywords\":[\"canary\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cayman_islands\":{\"keywords\":[\"cayman\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"central_african_republic\":{\"keywords\":[\"central\",\"african\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"chad\":{\"keywords\":[\"td\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"chile\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cn\":{\"keywords\":[\"china\",\"chinese\",\"prc\",\"flag\",\"country\",\"nation\",\"banner\"],\"char\":\"🇨🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"christmas_island\":{\"keywords\":[\"christmas\",\"island\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cocos_islands\":{\"keywords\":[\"cocos\",\"keeling\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"colombia\":{\"keywords\":[\"co\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"comoros\":{\"keywords\":[\"km\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"congo_brazzaville\":{\"keywords\":[\"congo\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"congo_kinshasa\":{\"keywords\":[\"congo\",\"democratic\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cook_islands\":{\"keywords\":[\"cook\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"costa_rica\":{\"keywords\":[\"costa\",\"rica\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"croatia\":{\"keywords\":[\"hr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cuba\":{\"keywords\":[\"cu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"curacao\":{\"keywords\":[\"curaçao\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cyprus\":{\"keywords\":[\"cy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"czech_republic\":{\"keywords\":[\"cz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"denmark\":{\"keywords\":[\"dk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"djibouti\":{\"keywords\":[\"dj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"dominica\":{\"keywords\":[\"dm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"dominican_republic\":{\"keywords\":[\"dominican\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇩🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ecuador\":{\"keywords\":[\"ec\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"egypt\":{\"keywords\":[\"eg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"el_salvador\":{\"keywords\":[\"el\",\"salvador\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"equatorial_guinea\":{\"keywords\":[\"equatorial\",\"gn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"eritrea\":{\"keywords\":[\"er\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"estonia\":{\"keywords\":[\"ee\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ethiopia\":{\"keywords\":[\"et\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"eu\":{\"keywords\":[\"european\",\"union\",\"flag\",\"banner\"],\"char\":\"🇪🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"falkland_islands\":{\"keywords\":[\"falkland\",\"islands\",\"malvinas\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"faroe_islands\":{\"keywords\":[\"faroe\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"fiji\":{\"keywords\":[\"fj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"finland\":{\"keywords\":[\"fi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"fr\":{\"keywords\":[\"banner\",\"flag\",\"nation\",\"france\",\"french\",\"country\"],\"char\":\"🇫🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"french_guiana\":{\"keywords\":[\"french\",\"guiana\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"french_polynesia\":{\"keywords\":[\"french\",\"polynesia\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"french_southern_territories\":{\"keywords\":[\"french\",\"southern\",\"territories\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"gabon\":{\"keywords\":[\"ga\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"gambia\":{\"keywords\":[\"gm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"georgia\":{\"keywords\":[\"ge\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"de\":{\"keywords\":[\"german\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇩🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ghana\":{\"keywords\":[\"gh\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"gibraltar\":{\"keywords\":[\"gi\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"greece\":{\"keywords\":[\"gr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"greenland\":{\"keywords\":[\"gl\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"grenada\":{\"keywords\":[\"gd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guadeloupe\":{\"keywords\":[\"gp\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guam\":{\"keywords\":[\"gu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guatemala\":{\"keywords\":[\"gt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guernsey\":{\"keywords\":[\"gg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guinea\":{\"keywords\":[\"gn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guinea_bissau\":{\"keywords\":[\"gw\",\"bissau\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"guyana\":{\"keywords\":[\"gy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"haiti\":{\"keywords\":[\"ht\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"honduras\":{\"keywords\":[\"hn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"hong_kong\":{\"keywords\":[\"hong\",\"kong\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"hungary\":{\"keywords\":[\"hu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇭🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"iceland\":{\"keywords\":[\"is\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"india\":{\"keywords\":[\"in\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"indonesia\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"iran\":{\"keywords\":[\"iran,\",\"islamic\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"iraq\":{\"keywords\":[\"iq\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ireland\":{\"keywords\":[\"ie\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"isle_of_man\":{\"keywords\":[\"isle\",\"man\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"israel\":{\"keywords\":[\"il\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"it\":{\"keywords\":[\"italy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇮🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"cote_divoire\":{\"keywords\":[\"ivory\",\"coast\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jamaica\":{\"keywords\":[\"jm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇯🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jp\":{\"keywords\":[\"japanese\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇯🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jersey\":{\"keywords\":[\"je\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇯🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"jordan\":{\"keywords\":[\"jo\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇯🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kazakhstan\":{\"keywords\":[\"kz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kenya\":{\"keywords\":[\"ke\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kiribati\":{\"keywords\":[\"ki\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kosovo\":{\"keywords\":[\"xk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇽🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kuwait\":{\"keywords\":[\"kw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kyrgyzstan\":{\"keywords\":[\"kg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"laos\":{\"keywords\":[\"lao\",\"democratic\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"latvia\":{\"keywords\":[\"lv\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"lebanon\":{\"keywords\":[\"lb\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"lesotho\":{\"keywords\":[\"ls\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"liberia\":{\"keywords\":[\"lr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"libya\":{\"keywords\":[\"ly\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"liechtenstein\":{\"keywords\":[\"li\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"lithuania\":{\"keywords\":[\"lt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"luxembourg\":{\"keywords\":[\"lu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"macau\":{\"keywords\":[\"macao\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"macedonia\":{\"keywords\":[\"macedonia,\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"madagascar\":{\"keywords\":[\"mg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"malawi\":{\"keywords\":[\"mw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"malaysia\":{\"keywords\":[\"my\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"maldives\":{\"keywords\":[\"mv\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mali\":{\"keywords\":[\"ml\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"malta\":{\"keywords\":[\"mt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"marshall_islands\":{\"keywords\":[\"marshall\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"martinique\":{\"keywords\":[\"mq\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇶\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mauritania\":{\"keywords\":[\"mr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mauritius\":{\"keywords\":[\"mu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mayotte\":{\"keywords\":[\"yt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇾🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mexico\":{\"keywords\":[\"mx\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"micronesia\":{\"keywords\":[\"micronesia,\",\"federated\",\"states\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇫🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"moldova\":{\"keywords\":[\"moldova,\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"monaco\":{\"keywords\":[\"mc\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mongolia\":{\"keywords\":[\"mn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"montenegro\":{\"keywords\":[\"me\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"montserrat\":{\"keywords\":[\"ms\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"morocco\":{\"keywords\":[\"ma\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"mozambique\":{\"keywords\":[\"mz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"myanmar\":{\"keywords\":[\"mm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"namibia\":{\"keywords\":[\"na\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nauru\":{\"keywords\":[\"nr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nepal\":{\"keywords\":[\"np\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"netherlands\":{\"keywords\":[\"nl\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"new_caledonia\":{\"keywords\":[\"new\",\"caledonia\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"new_zealand\":{\"keywords\":[\"new\",\"zealand\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nicaragua\":{\"keywords\":[\"ni\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"niger\":{\"keywords\":[\"ne\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"nigeria\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"niue\":{\"keywords\":[\"nu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"norfolk_island\":{\"keywords\":[\"norfolk\",\"island\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"northern_mariana_islands\":{\"keywords\":[\"northern\",\"mariana\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇲🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"north_korea\":{\"keywords\":[\"north\",\"korea\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇰🇵\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"norway\":{\"keywords\":[\"no\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇳🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"oman\":{\"keywords\":[\"om_symbol\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇴🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"pakistan\":{\"keywords\":[\"pk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"palau\":{\"keywords\":[\"pw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"palestinian_territories\":{\"keywords\":[\"palestine\",\"palestinian\",\"territories\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"panama\":{\"keywords\":[\"pa\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"papua_new_guinea\":{\"keywords\":[\"papua\",\"new\",\"guinea\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"paraguay\":{\"keywords\":[\"py\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"peru\":{\"keywords\":[\"pe\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"philippines\":{\"keywords\":[\"ph\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"pitcairn_islands\":{\"keywords\":[\"pitcairn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"poland\":{\"keywords\":[\"pl\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"portugal\":{\"keywords\":[\"pt\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"puerto_rico\":{\"keywords\":[\"puerto\",\"rico\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"qatar\":{\"keywords\":[\"qa\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇶🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"reunion\":{\"keywords\":[\"réunion\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"romania\":{\"keywords\":[\"ro\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ru\":{\"keywords\":[\"russian\",\"federation\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"rwanda\":{\"keywords\":[\"rw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_barthelemy\":{\"keywords\":[\"saint\",\"barthélemy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇧🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_helena\":{\"keywords\":[\"saint\",\"helena\",\"ascension\",\"tristan\",\"cunha\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_kitts_nevis\":{\"keywords\":[\"saint\",\"kitts\",\"nevis\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇰🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_lucia\":{\"keywords\":[\"saint\",\"lucia\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_pierre_miquelon\":{\"keywords\":[\"saint\",\"pierre\",\"miquelon\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇵🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"st_vincent_grenadines\":{\"keywords\":[\"saint\",\"vincent\",\"grenadines\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"samoa\":{\"keywords\":[\"ws\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇼🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"san_marino\":{\"keywords\":[\"san\",\"marino\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sao_tome_principe\":{\"keywords\":[\"sao\",\"tome\",\"principe\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"saudi_arabia\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"senegal\":{\"keywords\":[\"sn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"serbia\":{\"keywords\":[\"rs\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇷🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"seychelles\":{\"keywords\":[\"sc\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sierra_leone\":{\"keywords\":[\"sierra\",\"leone\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"singapore\":{\"keywords\":[\"sg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sint_maarten\":{\"keywords\":[\"sint\",\"maarten\",\"dutch\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇽\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"slovakia\":{\"keywords\":[\"sk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"slovenia\":{\"keywords\":[\"si\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"solomon_islands\":{\"keywords\":[\"solomon\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"somalia\":{\"keywords\":[\"so\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"south_africa\":{\"keywords\":[\"south\",\"africa\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇿🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"south_georgia_south_sandwich_islands\":{\"keywords\":[\"south\",\"georgia\",\"sandwich\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇬🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"kr\":{\"keywords\":[\"south\",\"korea\",\"nation\",\"flag\",\"country\",\"banner\"],\"char\":\"🇰🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"south_sudan\":{\"keywords\":[\"south\",\"sd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"es\":{\"keywords\":[\"spain\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sri_lanka\":{\"keywords\":[\"sri\",\"lanka\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇱🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sudan\":{\"keywords\":[\"sd\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇩\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"suriname\":{\"keywords\":[\"sr\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"swaziland\":{\"keywords\":[\"sz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"sweden\":{\"keywords\":[\"se\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"switzerland\":{\"keywords\":[\"ch\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇨🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"syria\":{\"keywords\":[\"syrian\",\"arab\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇸🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"taiwan\":{\"keywords\":[\"tw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tajikistan\":{\"keywords\":[\"tj\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇯\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tanzania\":{\"keywords\":[\"tanzania,\",\"united\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"thailand\":{\"keywords\":[\"th\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"timor_leste\":{\"keywords\":[\"timor\",\"leste\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇱\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"togo\":{\"keywords\":[\"tg\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tokelau\":{\"keywords\":[\"tk\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇰\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tonga\":{\"keywords\":[\"to\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇴\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"trinidad_tobago\":{\"keywords\":[\"trinidad\",\"tobago\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇹\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tunisia\":{\"keywords\":[\"tn\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tr\":{\"keywords\":[\"turkey\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇷\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"turkmenistan\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"turks_caicos_islands\":{\"keywords\":[\"turks\",\"caicos\",\"islands\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇨\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"tuvalu\":{\"keywords\":[\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇹🇻\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uganda\":{\"keywords\":[\"ug\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇬\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"ukraine\":{\"keywords\":[\"ua\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"united_arab_emirates\":{\"keywords\":[\"united\",\"arab\",\"emirates\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇦🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uk\":{\"keywords\":[\"united\",\"kingdom\",\"great\",\"britain\",\"northern\",\"ireland\",\"flag\",\"nation\",\"country\",\"banner\",\"british\",\"UK\",\"english\",\"england\",\"union jack\"],\"char\":\"🇬🇧\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"england\":{\"keywords\":[\"flag\",\"english\"],\"char\":\"🏴󠁧󠁢󠁥󠁮󠁧󠁿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"scotland\":{\"keywords\":[\"flag\",\"scottish\"],\"char\":\"🏴󠁧󠁢󠁳󠁣󠁴󠁿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"wales\":{\"keywords\":[\"flag\",\"welsh\"],\"char\":\"🏴󠁧󠁢󠁷󠁬󠁳󠁿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"us\":{\"keywords\":[\"united\",\"states\",\"america\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇸\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"us_virgin_islands\":{\"keywords\":[\"virgin\",\"islands\",\"us\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇮\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uruguay\":{\"keywords\":[\"uy\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇾\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"uzbekistan\":{\"keywords\":[\"uz\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇺🇿\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"vanuatu\":{\"keywords\":[\"vu\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇺\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"vatican_city\":{\"keywords\":[\"vatican\",\"city\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇦\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"venezuela\":{\"keywords\":[\"ve\",\"bolivarian\",\"republic\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"vietnam\":{\"keywords\":[\"viet\",\"nam\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇻🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"wallis_futuna\":{\"keywords\":[\"wallis\",\"futuna\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇼🇫\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"western_sahara\":{\"keywords\":[\"western\",\"sahara\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇪🇭\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"yemen\":{\"keywords\":[\"ye\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇾🇪\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"zambia\":{\"keywords\":[\"zm\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇿🇲\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"zimbabwe\":{\"keywords\":[\"zw\",\"flag\",\"nation\",\"country\",\"banner\"],\"char\":\"🇿🇼\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"united_nations\":{\"keywords\":[\"un\",\"flag\",\"banner\"],\"char\":\"🇺🇳\",\"fitzpatrick_scale\":false,\"category\":\"flags\"},\"pirate_flag\":{\"keywords\":[\"skull\",\"crossbones\",\"flag\",\"banner\"],\"char\":\"🏴‍☠️\",\"fitzpatrick_scale\":false,\"category\":\"flags\"}}");
-
-/***/ }),
-
-/***/ "./node_modules/emojilib/index.js":
-/*!****************************************!*\
-  !*** ./node_modules/emojilib/index.js ***!
-  \****************************************/
+/***/ "./node_modules/get-browser-rtc/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/get-browser-rtc/index.js ***!
+  \***********************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = {
-  lib: __webpack_require__(/*! ./emojis */ "./node_modules/emojilib/emojis.json"),
-  ordered: __webpack_require__(/*! ./ordered */ "./node_modules/emojilib/ordered.json"),
-  fitzpatrick_scale_modifiers: ["🏻", "🏼", "🏽", "🏾", "🏿"]
+// originally pulled out of simple-peer
+
+module.exports = function getBrowserRTC () {
+  if (typeof window === 'undefined') return null
+  var wrtc = {
+    RTCPeerConnection: window.RTCPeerConnection || window.mozRTCPeerConnection ||
+      window.webkitRTCPeerConnection,
+    RTCSessionDescription: window.RTCSessionDescription ||
+      window.mozRTCSessionDescription || window.webkitRTCSessionDescription,
+    RTCIceCandidate: window.RTCIceCandidate || window.mozRTCIceCandidate ||
+      window.webkitRTCIceCandidate
+  }
+  if (!wrtc.RTCPeerConnection) return null
+  return wrtc
 }
 
 
 /***/ }),
 
-/***/ "./node_modules/emojilib/ordered.json":
-/*!********************************************!*\
-  !*** ./node_modules/emojilib/ordered.json ***!
-  \********************************************/
-/*! exports provided: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625, 626, 627, 628, 629, 630, 631, 632, 633, 634, 635, 636, 637, 638, 639, 640, 641, 642, 643, 644, 645, 646, 647, 648, 649, 650, 651, 652, 653, 654, 655, 656, 657, 658, 659, 660, 661, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671, 672, 673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 687, 688, 689, 690, 691, 692, 693, 694, 695, 696, 697, 698, 699, 700, 701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713, 714, 715, 716, 717, 718, 719, 720, 721, 722, 723, 724, 725, 726, 727, 728, 729, 730, 731, 732, 733, 734, 735, 736, 737, 738, 739, 740, 741, 742, 743, 744, 745, 746, 747, 748, 749, 750, 751, 752, 753, 754, 755, 756, 757, 758, 759, 760, 761, 762, 763, 764, 765, 766, 767, 768, 769, 770, 771, 772, 773, 774, 775, 776, 777, 778, 779, 780, 781, 782, 783, 784, 785, 786, 787, 788, 789, 790, 791, 792, 793, 794, 795, 796, 797, 798, 799, 800, 801, 802, 803, 804, 805, 806, 807, 808, 809, 810, 811, 812, 813, 814, 815, 816, 817, 818, 819, 820, 821, 822, 823, 824, 825, 826, 827, 828, 829, 830, 831, 832, 833, 834, 835, 836, 837, 838, 839, 840, 841, 842, 843, 844, 845, 846, 847, 848, 849, 850, 851, 852, 853, 854, 855, 856, 857, 858, 859, 860, 861, 862, 863, 864, 865, 866, 867, 868, 869, 870, 871, 872, 873, 874, 875, 876, 877, 878, 879, 880, 881, 882, 883, 884, 885, 886, 887, 888, 889, 890, 891, 892, 893, 894, 895, 896, 897, 898, 899, 900, 901, 902, 903, 904, 905, 906, 907, 908, 909, 910, 911, 912, 913, 914, 915, 916, 917, 918, 919, 920, 921, 922, 923, 924, 925, 926, 927, 928, 929, 930, 931, 932, 933, 934, 935, 936, 937, 938, 939, 940, 941, 942, 943, 944, 945, 946, 947, 948, 949, 950, 951, 952, 953, 954, 955, 956, 957, 958, 959, 960, 961, 962, 963, 964, 965, 966, 967, 968, 969, 970, 971, 972, 973, 974, 975, 976, 977, 978, 979, 980, 981, 982, 983, 984, 985, 986, 987, 988, 989, 990, 991, 992, 993, 994, 995, 996, 997, 998, 999, 1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1036, 1037, 1038, 1039, 1040, 1041, 1042, 1043, 1044, 1045, 1046, 1047, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1058, 1059, 1060, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118, 1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1128, 1129, 1130, 1131, 1132, 1133, 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154, 1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163, 1164, 1165, 1166, 1167, 1168, 1169, 1170, 1171, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1179, 1180, 1181, 1182, 1183, 1184, 1185, 1186, 1187, 1188, 1189, 1190, 1191, 1192, 1193, 1194, 1195, 1196, 1197, 1198, 1199, 1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1234, 1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243, 1244, 1245, 1246, 1247, 1248, 1249, 1250, 1251, 1252, 1253, 1254, 1255, 1256, 1257, 1258, 1259, 1260, 1261, 1262, 1263, 1264, 1265, 1266, 1267, 1268, 1269, 1270, 1271, 1272, 1273, 1274, 1275, 1276, 1277, 1278, 1279, 1280, 1281, 1282, 1283, 1284, 1285, 1286, 1287, 1288, 1289, 1290, 1291, 1292, 1293, 1294, 1295, 1296, 1297, 1298, 1299, 1300, 1301, 1302, 1303, 1304, 1305, 1306, 1307, 1308, 1309, 1310, 1311, 1312, 1313, 1314, 1315, 1316, 1317, 1318, 1319, 1320, 1321, 1322, 1323, 1324, 1325, 1326, 1327, 1328, 1329, 1330, 1331, 1332, 1333, 1334, 1335, 1336, 1337, 1338, 1339, 1340, 1341, 1342, 1343, 1344, 1345, 1346, 1347, 1348, 1349, 1350, 1351, 1352, 1353, 1354, 1355, 1356, 1357, 1358, 1359, 1360, 1361, 1362, 1363, 1364, 1365, 1366, 1367, 1368, 1369, 1370, 1371, 1372, 1373, 1374, 1375, 1376, 1377, 1378, 1379, 1380, 1381, 1382, 1383, 1384, 1385, 1386, 1387, 1388, 1389, 1390, 1391, 1392, 1393, 1394, 1395, 1396, 1397, 1398, 1399, 1400, 1401, 1402, 1403, 1404, 1405, 1406, 1407, 1408, 1409, 1410, 1411, 1412, 1413, 1414, 1415, 1416, 1417, 1418, 1419, 1420, 1421, 1422, 1423, 1424, 1425, 1426, 1427, 1428, 1429, 1430, 1431, 1432, 1433, 1434, 1435, 1436, 1437, 1438, 1439, 1440, 1441, 1442, 1443, 1444, 1445, 1446, 1447, 1448, 1449, 1450, 1451, 1452, 1453, 1454, 1455, 1456, 1457, 1458, 1459, 1460, 1461, 1462, 1463, 1464, 1465, 1466, 1467, 1468, 1469, 1470, 1471, 1472, 1473, 1474, 1475, 1476, 1477, 1478, 1479, 1480, 1481, 1482, 1483, 1484, 1485, 1486, 1487, 1488, 1489, 1490, 1491, 1492, 1493, 1494, 1495, 1496, 1497, 1498, 1499, 1500, 1501, 1502, 1503, 1504, 1505, 1506, 1507, 1508, 1509, 1510, 1511, 1512, 1513, 1514, 1515, 1516, 1517, 1518, 1519, 1520, 1521, 1522, 1523, 1524, 1525, 1526, 1527, 1528, 1529, 1530, 1531, 1532, 1533, 1534, 1535, 1536, 1537, 1538, 1539, 1540, 1541, 1542, 1543, 1544, 1545, 1546, 1547, 1548, 1549, 1550, 1551, 1552, 1553, 1554, 1555, 1556, 1557, 1558, 1559, 1560, 1561, 1562, 1563, 1564, 1565, 1566, 1567, 1568, 1569, default */
-/***/ (function(module) {
-
-module.exports = JSON.parse("[\"grinning\",\"smiley\",\"smile\",\"grin\",\"laughing\",\"sweat_smile\",\"joy\",\"rofl\",\"relaxed\",\"blush\",\"innocent\",\"slightly_smiling_face\",\"upside_down_face\",\"wink\",\"relieved\",\"heart_eyes\",\"smiling_face_with_three_hearts\",\"kissing_heart\",\"kissing\",\"kissing_smiling_eyes\",\"kissing_closed_eyes\",\"yum\",\"stuck_out_tongue\",\"stuck_out_tongue_closed_eyes\",\"stuck_out_tongue_winking_eye\",\"zany\",\"raised_eyebrow\",\"monocle\",\"nerd_face\",\"sunglasses\",\"star_struck\",\"partying\",\"smirk\",\"unamused\",\"disappointed\",\"pensive\",\"worried\",\"confused\",\"slightly_frowning_face\",\"frowning_face\",\"persevere\",\"confounded\",\"tired_face\",\"weary\",\"pleading\",\"cry\",\"sob\",\"triumph\",\"angry\",\"rage\",\"symbols_over_mouth\",\"exploding_head\",\"flushed\",\"hot\",\"cold\",\"scream\",\"fearful\",\"cold_sweat\",\"disappointed_relieved\",\"sweat\",\"hugs\",\"thinking\",\"hand_over_mouth\",\"shushing\",\"lying_face\",\"no_mouth\",\"neutral_face\",\"expressionless\",\"grimacing\",\"roll_eyes\",\"hushed\",\"frowning\",\"anguished\",\"open_mouth\",\"astonished\",\"sleeping\",\"drooling_face\",\"sleepy\",\"dizzy_face\",\"zipper_mouth_face\",\"woozy\",\"nauseated_face\",\"vomiting\",\"sneezing_face\",\"mask\",\"face_with_thermometer\",\"face_with_head_bandage\",\"money_mouth_face\",\"cowboy_hat_face\",\"smiling_imp\",\"imp\",\"japanese_ogre\",\"japanese_goblin\",\"clown_face\",\"poop\",\"ghost\",\"skull\",\"skull_and_crossbones\",\"alien\",\"space_invader\",\"robot\",\"jack_o_lantern\",\"smiley_cat\",\"smile_cat\",\"joy_cat\",\"heart_eyes_cat\",\"smirk_cat\",\"kissing_cat\",\"scream_cat\",\"crying_cat_face\",\"pouting_cat\",\"palms_up\",\"open_hands\",\"raised_hands\",\"clap\",\"handshake\",\"+1\",\"-1\",\"facepunch\",\"fist\",\"fist_left\",\"fist_right\",\"crossed_fingers\",\"v\",\"love_you\",\"metal\",\"ok_hand\",\"point_left\",\"point_right\",\"point_up\",\"point_down\",\"point_up_2\",\"raised_hand\",\"raised_back_of_hand\",\"raised_hand_with_fingers_splayed\",\"vulcan_salute\",\"wave\",\"call_me_hand\",\"muscle\",\"fu\",\"writing_hand\",\"pray\",\"foot\",\"leg\",\"ring\",\"lipstick\",\"kiss\",\"lips\",\"tooth\",\"tongue\",\"ear\",\"nose\",\"footprints\",\"eye\",\"eyes\",\"brain\",\"speaking_head\",\"bust_in_silhouette\",\"busts_in_silhouette\",\"baby\",\"girl\",\"child\",\"boy\",\"woman\",\"adult\",\"man\",\"blonde_woman\",\"blonde_man\",\"bearded_person\",\"older_woman\",\"older_adult\",\"older_man\",\"man_with_gua_pi_mao\",\"woman_with_headscarf\",\"woman_with_turban\",\"man_with_turban\",\"policewoman\",\"policeman\",\"construction_worker_woman\",\"construction_worker_man\",\"guardswoman\",\"guardsman\",\"female_detective\",\"male_detective\",\"woman_health_worker\",\"man_health_worker\",\"woman_farmer\",\"man_farmer\",\"woman_cook\",\"man_cook\",\"woman_student\",\"man_student\",\"woman_singer\",\"man_singer\",\"woman_teacher\",\"man_teacher\",\"woman_factory_worker\",\"man_factory_worker\",\"woman_technologist\",\"man_technologist\",\"woman_office_worker\",\"man_office_worker\",\"woman_mechanic\",\"man_mechanic\",\"woman_scientist\",\"man_scientist\",\"woman_artist\",\"man_artist\",\"woman_firefighter\",\"man_firefighter\",\"woman_pilot\",\"man_pilot\",\"woman_astronaut\",\"man_astronaut\",\"woman_judge\",\"man_judge\",\"bride_with_veil\",\"man_in_tuxedo\",\"princess\",\"prince\",\"woman_superhero\",\"man_superhero\",\"woman_supervillain\",\"man_supervillain\",\"mrs_claus\",\"santa\",\"sorceress\",\"wizard\",\"woman_elf\",\"man_elf\",\"woman_vampire\",\"man_vampire\",\"woman_zombie\",\"man_zombie\",\"woman_genie\",\"man_genie\",\"mermaid\",\"merman\",\"woman_fairy\",\"man_fairy\",\"angel\",\"pregnant_woman\",\"breastfeeding\",\"bowing_woman\",\"bowing_man\",\"tipping_hand_woman\",\"tipping_hand_man\",\"no_good_woman\",\"no_good_man\",\"ok_woman\",\"ok_man\",\"raising_hand_woman\",\"raising_hand_man\",\"woman_facepalming\",\"man_facepalming\",\"woman_shrugging\",\"man_shrugging\",\"pouting_woman\",\"pouting_man\",\"frowning_woman\",\"frowning_man\",\"haircut_woman\",\"haircut_man\",\"massage_woman\",\"massage_man\",\"woman_in_steamy_room\",\"man_in_steamy_room\",\"nail_care\",\"selfie\",\"dancer\",\"man_dancing\",\"dancing_women\",\"dancing_men\",\"business_suit_levitating\",\"walking_woman\",\"walking_man\",\"running_woman\",\"running_man\",\"couple\",\"two_women_holding_hands\",\"two_men_holding_hands\",\"couple_with_heart_woman_man\",\"couple_with_heart_woman_woman\",\"couple_with_heart_man_man\",\"couplekiss_man_woman\",\"couplekiss_woman_woman\",\"couplekiss_man_man\",\"family_man_woman_boy\",\"family_man_woman_girl\",\"family_man_woman_girl_boy\",\"family_man_woman_boy_boy\",\"family_man_woman_girl_girl\",\"family_woman_woman_boy\",\"family_woman_woman_girl\",\"family_woman_woman_girl_boy\",\"family_woman_woman_boy_boy\",\"family_woman_woman_girl_girl\",\"family_man_man_boy\",\"family_man_man_girl\",\"family_man_man_girl_boy\",\"family_man_man_boy_boy\",\"family_man_man_girl_girl\",\"family_woman_boy\",\"family_woman_girl\",\"family_woman_girl_boy\",\"family_woman_boy_boy\",\"family_woman_girl_girl\",\"family_man_boy\",\"family_man_girl\",\"family_man_girl_boy\",\"family_man_boy_boy\",\"family_man_girl_girl\",\"yarn\",\"thread\",\"coat\",\"labcoat\",\"womans_clothes\",\"tshirt\",\"jeans\",\"necktie\",\"dress\",\"bikini\",\"kimono\",\"flat_shoe\",\"high_heel\",\"sandal\",\"boot\",\"mans_shoe\",\"athletic_shoe\",\"hiking_boot\",\"socks\",\"gloves\",\"scarf\",\"tophat\",\"billed_hat\",\"womans_hat\",\"mortar_board\",\"rescue_worker_helmet\",\"crown\",\"pouch\",\"purse\",\"handbag\",\"briefcase\",\"school_satchel\",\"luggage\",\"eyeglasses\",\"dark_sunglasses\",\"goggles\",\"closed_umbrella\",\"dog\",\"cat\",\"mouse\",\"hamster\",\"rabbit\",\"fox_face\",\"bear\",\"panda_face\",\"koala\",\"tiger\",\"lion\",\"cow\",\"pig\",\"pig_nose\",\"frog\",\"monkey_face\",\"see_no_evil\",\"hear_no_evil\",\"speak_no_evil\",\"monkey\",\"chicken\",\"penguin\",\"bird\",\"baby_chick\",\"hatching_chick\",\"hatched_chick\",\"duck\",\"eagle\",\"owl\",\"bat\",\"wolf\",\"boar\",\"horse\",\"unicorn\",\"honeybee\",\"bug\",\"butterfly\",\"snail\",\"shell\",\"beetle\",\"ant\",\"mosquito\",\"grasshopper\",\"spider\",\"spider_web\",\"scorpion\",\"turtle\",\"snake\",\"lizard\",\"t-rex\",\"sauropod\",\"octopus\",\"squid\",\"shrimp\",\"lobster\",\"crab\",\"blowfish\",\"tropical_fish\",\"fish\",\"dolphin\",\"whale\",\"whale2\",\"shark\",\"crocodile\",\"tiger2\",\"leopard\",\"zebra\",\"gorilla\",\"elephant\",\"hippopotamus\",\"rhinoceros\",\"dromedary_camel\",\"giraffe\",\"kangaroo\",\"camel\",\"water_buffalo\",\"ox\",\"cow2\",\"racehorse\",\"pig2\",\"ram\",\"sheep\",\"llama\",\"goat\",\"deer\",\"dog2\",\"poodle\",\"cat2\",\"rooster\",\"turkey\",\"peacock\",\"parrot\",\"swan\",\"dove\",\"rabbit2\",\"raccoon\",\"badger\",\"rat\",\"mouse2\",\"chipmunk\",\"hedgehog\",\"paw_prints\",\"dragon\",\"dragon_face\",\"cactus\",\"christmas_tree\",\"evergreen_tree\",\"deciduous_tree\",\"palm_tree\",\"seedling\",\"herb\",\"shamrock\",\"four_leaf_clover\",\"bamboo\",\"tanabata_tree\",\"leaves\",\"fallen_leaf\",\"maple_leaf\",\"ear_of_rice\",\"hibiscus\",\"sunflower\",\"rose\",\"wilted_flower\",\"tulip\",\"blossom\",\"cherry_blossom\",\"bouquet\",\"mushroom\",\"earth_americas\",\"earth_africa\",\"earth_asia\",\"full_moon\",\"waning_gibbous_moon\",\"last_quarter_moon\",\"waning_crescent_moon\",\"new_moon\",\"waxing_crescent_moon\",\"first_quarter_moon\",\"waxing_gibbous_moon\",\"new_moon_with_face\",\"full_moon_with_face\",\"first_quarter_moon_with_face\",\"last_quarter_moon_with_face\",\"sun_with_face\",\"crescent_moon\",\"star\",\"star2\",\"dizzy\",\"sparkles\",\"comet\",\"sunny\",\"sun_behind_small_cloud\",\"partly_sunny\",\"sun_behind_large_cloud\",\"sun_behind_rain_cloud\",\"cloud\",\"cloud_with_rain\",\"cloud_with_lightning_and_rain\",\"cloud_with_lightning\",\"zap\",\"fire\",\"boom\",\"snowflake\",\"cloud_with_snow\",\"snowman\",\"snowman_with_snow\",\"wind_face\",\"dash\",\"tornado\",\"fog\",\"open_umbrella\",\"umbrella\",\"droplet\",\"sweat_drops\",\"ocean\",\"green_apple\",\"apple\",\"pear\",\"tangerine\",\"lemon\",\"banana\",\"watermelon\",\"grapes\",\"strawberry\",\"melon\",\"cherries\",\"peach\",\"mango\",\"pineapple\",\"coconut\",\"kiwi_fruit\",\"tomato\",\"eggplant\",\"avocado\",\"broccoli\",\"leafy_greens\",\"cucumber\",\"hot_pepper\",\"corn\",\"carrot\",\"potato\",\"sweet_potato\",\"croissant\",\"bagel\",\"bread\",\"baguette_bread\",\"pretzel\",\"cheese\",\"egg\",\"fried_egg\",\"pancakes\",\"bacon\",\"steak\",\"poultry_leg\",\"meat_on_bone\",\"bone\",\"hotdog\",\"hamburger\",\"fries\",\"pizza\",\"sandwich\",\"stuffed_flatbread\",\"taco\",\"burrito\",\"green_salad\",\"shallow_pan_of_food\",\"canned_food\",\"spaghetti\",\"ramen\",\"stew\",\"curry\",\"sushi\",\"bento\",\"fried_shrimp\",\"rice_ball\",\"rice\",\"rice_cracker\",\"fish_cake\",\"fortune_cookie\",\"moon_cake\",\"oden\",\"dango\",\"shaved_ice\",\"ice_cream\",\"icecream\",\"pie\",\"cupcake\",\"cake\",\"birthday\",\"custard\",\"lollipop\",\"candy\",\"chocolate_bar\",\"popcorn\",\"doughnut\",\"dumpling\",\"cookie\",\"chestnut\",\"peanuts\",\"honey_pot\",\"milk_glass\",\"baby_bottle\",\"coffee\",\"tea\",\"cup_with_straw\",\"sake\",\"beer\",\"beers\",\"clinking_glasses\",\"wine_glass\",\"tumbler_glass\",\"cocktail\",\"tropical_drink\",\"champagne\",\"spoon\",\"fork_and_knife\",\"plate_with_cutlery\",\"bowl_with_spoon\",\"takeout_box\",\"chopsticks\",\"salt\",\"soccer\",\"basketball\",\"football\",\"baseball\",\"softball\",\"tennis\",\"volleyball\",\"rugby_football\",\"flying_disc\",\"8ball\",\"golf\",\"golfing_woman\",\"golfing_man\",\"ping_pong\",\"badminton\",\"goal_net\",\"ice_hockey\",\"field_hockey\",\"lacrosse\",\"cricket\",\"ski\",\"skier\",\"snowboarder\",\"person_fencing\",\"women_wrestling\",\"men_wrestling\",\"woman_cartwheeling\",\"man_cartwheeling\",\"woman_playing_handball\",\"man_playing_handball\",\"ice_skate\",\"curling_stone\",\"skateboard\",\"sled\",\"bow_and_arrow\",\"fishing_pole_and_fish\",\"boxing_glove\",\"martial_arts_uniform\",\"rowing_woman\",\"rowing_man\",\"climbing_woman\",\"climbing_man\",\"swimming_woman\",\"swimming_man\",\"woman_playing_water_polo\",\"man_playing_water_polo\",\"woman_in_lotus_position\",\"man_in_lotus_position\",\"surfing_woman\",\"surfing_man\",\"basketball_woman\",\"basketball_man\",\"weight_lifting_woman\",\"weight_lifting_man\",\"biking_woman\",\"biking_man\",\"mountain_biking_woman\",\"mountain_biking_man\",\"horse_racing\",\"trophy\",\"running_shirt_with_sash\",\"medal_sports\",\"medal_military\",\"1st_place_medal\",\"2nd_place_medal\",\"3rd_place_medal\",\"reminder_ribbon\",\"rosette\",\"ticket\",\"tickets\",\"performing_arts\",\"art\",\"circus_tent\",\"woman_juggling\",\"man_juggling\",\"microphone\",\"headphones\",\"musical_score\",\"musical_keyboard\",\"drum\",\"saxophone\",\"trumpet\",\"guitar\",\"violin\",\"clapper\",\"video_game\",\"dart\",\"game_die\",\"chess_pawn\",\"slot_machine\",\"jigsaw\",\"bowling\",\"red_car\",\"taxi\",\"blue_car\",\"bus\",\"trolleybus\",\"racing_car\",\"police_car\",\"ambulance\",\"fire_engine\",\"minibus\",\"truck\",\"articulated_lorry\",\"tractor\",\"kick_scooter\",\"motorcycle\",\"bike\",\"motor_scooter\",\"rotating_light\",\"oncoming_police_car\",\"oncoming_bus\",\"oncoming_automobile\",\"oncoming_taxi\",\"aerial_tramway\",\"mountain_cableway\",\"suspension_railway\",\"railway_car\",\"train\",\"monorail\",\"bullettrain_side\",\"bullettrain_front\",\"light_rail\",\"mountain_railway\",\"steam_locomotive\",\"train2\",\"metro\",\"tram\",\"station\",\"flying_saucer\",\"helicopter\",\"small_airplane\",\"airplane\",\"flight_departure\",\"flight_arrival\",\"sailboat\",\"motor_boat\",\"speedboat\",\"ferry\",\"passenger_ship\",\"rocket\",\"artificial_satellite\",\"seat\",\"canoe\",\"anchor\",\"construction\",\"fuelpump\",\"busstop\",\"vertical_traffic_light\",\"traffic_light\",\"ship\",\"ferris_wheel\",\"roller_coaster\",\"carousel_horse\",\"building_construction\",\"foggy\",\"tokyo_tower\",\"factory\",\"fountain\",\"rice_scene\",\"mountain\",\"mountain_snow\",\"mount_fuji\",\"volcano\",\"japan\",\"camping\",\"tent\",\"national_park\",\"motorway\",\"railway_track\",\"sunrise\",\"sunrise_over_mountains\",\"desert\",\"beach_umbrella\",\"desert_island\",\"city_sunrise\",\"city_sunset\",\"cityscape\",\"night_with_stars\",\"bridge_at_night\",\"milky_way\",\"stars\",\"sparkler\",\"fireworks\",\"rainbow\",\"houses\",\"european_castle\",\"japanese_castle\",\"stadium\",\"statue_of_liberty\",\"house\",\"house_with_garden\",\"derelict_house\",\"office\",\"department_store\",\"post_office\",\"european_post_office\",\"hospital\",\"bank\",\"hotel\",\"convenience_store\",\"school\",\"love_hotel\",\"wedding\",\"classical_building\",\"church\",\"mosque\",\"synagogue\",\"kaaba\",\"shinto_shrine\",\"watch\",\"iphone\",\"calling\",\"computer\",\"keyboard\",\"desktop_computer\",\"printer\",\"computer_mouse\",\"trackball\",\"joystick\",\"clamp\",\"minidisc\",\"floppy_disk\",\"cd\",\"dvd\",\"vhs\",\"camera\",\"camera_flash\",\"video_camera\",\"movie_camera\",\"film_projector\",\"film_strip\",\"telephone_receiver\",\"phone\",\"pager\",\"fax\",\"tv\",\"radio\",\"studio_microphone\",\"level_slider\",\"control_knobs\",\"compass\",\"stopwatch\",\"timer_clock\",\"alarm_clock\",\"mantelpiece_clock\",\"hourglass_flowing_sand\",\"hourglass\",\"satellite\",\"battery\",\"electric_plug\",\"bulb\",\"flashlight\",\"candle\",\"fire_extinguisher\",\"wastebasket\",\"oil_drum\",\"money_with_wings\",\"dollar\",\"yen\",\"euro\",\"pound\",\"moneybag\",\"credit_card\",\"gem\",\"balance_scale\",\"toolbox\",\"wrench\",\"hammer\",\"hammer_and_pick\",\"hammer_and_wrench\",\"pick\",\"nut_and_bolt\",\"gear\",\"brick\",\"chains\",\"magnet\",\"gun\",\"bomb\",\"firecracker\",\"hocho\",\"dagger\",\"crossed_swords\",\"shield\",\"smoking\",\"coffin\",\"funeral_urn\",\"amphora\",\"crystal_ball\",\"prayer_beads\",\"nazar_amulet\",\"barber\",\"alembic\",\"telescope\",\"microscope\",\"hole\",\"pill\",\"syringe\",\"dna\",\"microbe\",\"petri_dish\",\"test_tube\",\"thermometer\",\"broom\",\"basket\",\"toilet_paper\",\"label\",\"bookmark\",\"toilet\",\"shower\",\"bathtub\",\"bath\",\"soap\",\"sponge\",\"lotion_bottle\",\"key\",\"old_key\",\"couch_and_lamp\",\"sleeping_bed\",\"bed\",\"door\",\"bellhop_bell\",\"teddy_bear\",\"framed_picture\",\"world_map\",\"parasol_on_ground\",\"moyai\",\"shopping\",\"shopping_cart\",\"balloon\",\"flags\",\"ribbon\",\"gift\",\"confetti_ball\",\"tada\",\"dolls\",\"wind_chime\",\"crossed_flags\",\"izakaya_lantern\",\"red_envelope\",\"email\",\"envelope_with_arrow\",\"incoming_envelope\",\"e-mail\",\"love_letter\",\"postbox\",\"mailbox_closed\",\"mailbox\",\"mailbox_with_mail\",\"mailbox_with_no_mail\",\"package\",\"postal_horn\",\"inbox_tray\",\"outbox_tray\",\"scroll\",\"page_with_curl\",\"bookmark_tabs\",\"receipt\",\"bar_chart\",\"chart_with_upwards_trend\",\"chart_with_downwards_trend\",\"page_facing_up\",\"date\",\"calendar\",\"spiral_calendar\",\"card_index\",\"card_file_box\",\"ballot_box\",\"file_cabinet\",\"clipboard\",\"spiral_notepad\",\"file_folder\",\"open_file_folder\",\"card_index_dividers\",\"newspaper_roll\",\"newspaper\",\"notebook\",\"closed_book\",\"green_book\",\"blue_book\",\"orange_book\",\"notebook_with_decorative_cover\",\"ledger\",\"books\",\"open_book\",\"safety_pin\",\"link\",\"paperclip\",\"paperclips\",\"scissors\",\"triangular_ruler\",\"straight_ruler\",\"abacus\",\"pushpin\",\"round_pushpin\",\"closed_lock_with_key\",\"lock\",\"unlock\",\"lock_with_ink_pen\",\"pen\",\"fountain_pen\",\"black_nib\",\"memo\",\"pencil2\",\"crayon\",\"paintbrush\",\"mag\",\"mag_right\",\"heart\",\"orange_heart\",\"yellow_heart\",\"green_heart\",\"blue_heart\",\"purple_heart\",\"black_heart\",\"broken_heart\",\"heavy_heart_exclamation\",\"two_hearts\",\"revolving_hearts\",\"heartbeat\",\"heartpulse\",\"sparkling_heart\",\"cupid\",\"gift_heart\",\"heart_decoration\",\"peace_symbol\",\"latin_cross\",\"star_and_crescent\",\"om\",\"wheel_of_dharma\",\"star_of_david\",\"six_pointed_star\",\"menorah\",\"yin_yang\",\"orthodox_cross\",\"place_of_worship\",\"ophiuchus\",\"aries\",\"taurus\",\"gemini\",\"cancer\",\"leo\",\"virgo\",\"libra\",\"scorpius\",\"sagittarius\",\"capricorn\",\"aquarius\",\"pisces\",\"id\",\"atom_symbol\",\"u7a7a\",\"u5272\",\"radioactive\",\"biohazard\",\"mobile_phone_off\",\"vibration_mode\",\"u6709\",\"u7121\",\"u7533\",\"u55b6\",\"u6708\",\"eight_pointed_black_star\",\"vs\",\"accept\",\"white_flower\",\"ideograph_advantage\",\"secret\",\"congratulations\",\"u5408\",\"u6e80\",\"u7981\",\"a\",\"b\",\"ab\",\"cl\",\"o2\",\"sos\",\"no_entry\",\"name_badge\",\"no_entry_sign\",\"x\",\"o\",\"stop_sign\",\"anger\",\"hotsprings\",\"no_pedestrians\",\"do_not_litter\",\"no_bicycles\",\"non-potable_water\",\"underage\",\"no_mobile_phones\",\"exclamation\",\"grey_exclamation\",\"question\",\"grey_question\",\"bangbang\",\"interrobang\",\"100\",\"low_brightness\",\"high_brightness\",\"trident\",\"fleur_de_lis\",\"part_alternation_mark\",\"warning\",\"children_crossing\",\"beginner\",\"recycle\",\"u6307\",\"chart\",\"sparkle\",\"eight_spoked_asterisk\",\"negative_squared_cross_mark\",\"white_check_mark\",\"diamond_shape_with_a_dot_inside\",\"cyclone\",\"loop\",\"globe_with_meridians\",\"m\",\"atm\",\"zzz\",\"sa\",\"passport_control\",\"customs\",\"baggage_claim\",\"left_luggage\",\"wheelchair\",\"no_smoking\",\"wc\",\"parking\",\"potable_water\",\"mens\",\"womens\",\"baby_symbol\",\"restroom\",\"put_litter_in_its_place\",\"cinema\",\"signal_strength\",\"koko\",\"ng\",\"ok\",\"up\",\"cool\",\"new\",\"free\",\"zero\",\"one\",\"two\",\"three\",\"four\",\"five\",\"six\",\"seven\",\"eight\",\"nine\",\"keycap_ten\",\"asterisk\",\"1234\",\"eject_button\",\"arrow_forward\",\"pause_button\",\"next_track_button\",\"stop_button\",\"record_button\",\"play_or_pause_button\",\"previous_track_button\",\"fast_forward\",\"rewind\",\"twisted_rightwards_arrows\",\"repeat\",\"repeat_one\",\"arrow_backward\",\"arrow_up_small\",\"arrow_down_small\",\"arrow_double_up\",\"arrow_double_down\",\"arrow_right\",\"arrow_left\",\"arrow_up\",\"arrow_down\",\"arrow_upper_right\",\"arrow_lower_right\",\"arrow_lower_left\",\"arrow_upper_left\",\"arrow_up_down\",\"left_right_arrow\",\"arrows_counterclockwise\",\"arrow_right_hook\",\"leftwards_arrow_with_hook\",\"arrow_heading_up\",\"arrow_heading_down\",\"hash\",\"information_source\",\"abc\",\"abcd\",\"capital_abcd\",\"symbols\",\"musical_note\",\"notes\",\"wavy_dash\",\"curly_loop\",\"heavy_check_mark\",\"arrows_clockwise\",\"heavy_plus_sign\",\"heavy_minus_sign\",\"heavy_division_sign\",\"heavy_multiplication_x\",\"infinity\",\"heavy_dollar_sign\",\"currency_exchange\",\"copyright\",\"registered\",\"tm\",\"end\",\"back\",\"on\",\"top\",\"soon\",\"ballot_box_with_check\",\"radio_button\",\"white_circle\",\"black_circle\",\"red_circle\",\"large_blue_circle\",\"small_orange_diamond\",\"small_blue_diamond\",\"large_orange_diamond\",\"large_blue_diamond\",\"small_red_triangle\",\"black_small_square\",\"white_small_square\",\"black_large_square\",\"white_large_square\",\"small_red_triangle_down\",\"black_medium_square\",\"white_medium_square\",\"black_medium_small_square\",\"white_medium_small_square\",\"black_square_button\",\"white_square_button\",\"speaker\",\"sound\",\"loud_sound\",\"mute\",\"mega\",\"loudspeaker\",\"bell\",\"no_bell\",\"black_joker\",\"mahjong\",\"spades\",\"clubs\",\"hearts\",\"diamonds\",\"flower_playing_cards\",\"thought_balloon\",\"right_anger_bubble\",\"speech_balloon\",\"left_speech_bubble\",\"clock1\",\"clock2\",\"clock3\",\"clock4\",\"clock5\",\"clock6\",\"clock7\",\"clock8\",\"clock9\",\"clock10\",\"clock11\",\"clock12\",\"clock130\",\"clock230\",\"clock330\",\"clock430\",\"clock530\",\"clock630\",\"clock730\",\"clock830\",\"clock930\",\"clock1030\",\"clock1130\",\"clock1230\",\"white_flag\",\"black_flag\",\"pirate_flag\",\"checkered_flag\",\"triangular_flag_on_post\",\"rainbow_flag\",\"united_nations\",\"afghanistan\",\"aland_islands\",\"albania\",\"algeria\",\"american_samoa\",\"andorra\",\"angola\",\"anguilla\",\"antarctica\",\"antigua_barbuda\",\"argentina\",\"armenia\",\"aruba\",\"australia\",\"austria\",\"azerbaijan\",\"bahamas\",\"bahrain\",\"bangladesh\",\"barbados\",\"belarus\",\"belgium\",\"belize\",\"benin\",\"bermuda\",\"bhutan\",\"bolivia\",\"caribbean_netherlands\",\"bosnia_herzegovina\",\"botswana\",\"brazil\",\"british_indian_ocean_territory\",\"british_virgin_islands\",\"brunei\",\"bulgaria\",\"burkina_faso\",\"burundi\",\"cape_verde\",\"cambodia\",\"cameroon\",\"canada\",\"canary_islands\",\"cayman_islands\",\"central_african_republic\",\"chad\",\"chile\",\"cn\",\"christmas_island\",\"cocos_islands\",\"colombia\",\"comoros\",\"congo_brazzaville\",\"congo_kinshasa\",\"cook_islands\",\"costa_rica\",\"croatia\",\"cuba\",\"curacao\",\"cyprus\",\"czech_republic\",\"denmark\",\"djibouti\",\"dominica\",\"dominican_republic\",\"ecuador\",\"egypt\",\"el_salvador\",\"equatorial_guinea\",\"eritrea\",\"estonia\",\"ethiopia\",\"eu\",\"falkland_islands\",\"faroe_islands\",\"fiji\",\"finland\",\"fr\",\"french_guiana\",\"french_polynesia\",\"french_southern_territories\",\"gabon\",\"gambia\",\"georgia\",\"de\",\"ghana\",\"gibraltar\",\"greece\",\"greenland\",\"grenada\",\"guadeloupe\",\"guam\",\"guatemala\",\"guernsey\",\"guinea\",\"guinea_bissau\",\"guyana\",\"haiti\",\"honduras\",\"hong_kong\",\"hungary\",\"iceland\",\"india\",\"indonesia\",\"iran\",\"iraq\",\"ireland\",\"isle_of_man\",\"israel\",\"it\",\"cote_divoire\",\"jamaica\",\"jp\",\"jersey\",\"jordan\",\"kazakhstan\",\"kenya\",\"kiribati\",\"kosovo\",\"kuwait\",\"kyrgyzstan\",\"laos\",\"latvia\",\"lebanon\",\"lesotho\",\"liberia\",\"libya\",\"liechtenstein\",\"lithuania\",\"luxembourg\",\"macau\",\"macedonia\",\"madagascar\",\"malawi\",\"malaysia\",\"maldives\",\"mali\",\"malta\",\"marshall_islands\",\"martinique\",\"mauritania\",\"mauritius\",\"mayotte\",\"mexico\",\"micronesia\",\"moldova\",\"monaco\",\"mongolia\",\"montenegro\",\"montserrat\",\"morocco\",\"mozambique\",\"myanmar\",\"namibia\",\"nauru\",\"nepal\",\"netherlands\",\"new_caledonia\",\"new_zealand\",\"nicaragua\",\"niger\",\"nigeria\",\"niue\",\"norfolk_island\",\"northern_mariana_islands\",\"north_korea\",\"norway\",\"oman\",\"pakistan\",\"palau\",\"palestinian_territories\",\"panama\",\"papua_new_guinea\",\"paraguay\",\"peru\",\"philippines\",\"pitcairn_islands\",\"poland\",\"portugal\",\"puerto_rico\",\"qatar\",\"reunion\",\"romania\",\"ru\",\"rwanda\",\"st_barthelemy\",\"st_helena\",\"st_kitts_nevis\",\"st_lucia\",\"st_pierre_miquelon\",\"st_vincent_grenadines\",\"samoa\",\"san_marino\",\"sao_tome_principe\",\"saudi_arabia\",\"senegal\",\"serbia\",\"seychelles\",\"sierra_leone\",\"singapore\",\"sint_maarten\",\"slovakia\",\"slovenia\",\"solomon_islands\",\"somalia\",\"south_africa\",\"south_georgia_south_sandwich_islands\",\"kr\",\"south_sudan\",\"es\",\"sri_lanka\",\"sudan\",\"suriname\",\"swaziland\",\"sweden\",\"switzerland\",\"syria\",\"taiwan\",\"tajikistan\",\"tanzania\",\"thailand\",\"timor_leste\",\"togo\",\"tokelau\",\"tonga\",\"trinidad_tobago\",\"tunisia\",\"tr\",\"turkmenistan\",\"turks_caicos_islands\",\"tuvalu\",\"uganda\",\"ukraine\",\"united_arab_emirates\",\"uk\",\"england\",\"scotland\",\"wales\",\"us\",\"us_virgin_islands\",\"uruguay\",\"uzbekistan\",\"vanuatu\",\"vatican_city\",\"venezuela\",\"vietnam\",\"wallis_futuna\",\"western_sahara\",\"yemen\",\"zambia\",\"zimbabwe\"]");
-
-/***/ }),
-
-/***/ "./node_modules/linkify-it/index.js":
-/*!******************************************!*\
-  !*** ./node_modules/linkify-it/index.js ***!
-  \******************************************/
+/***/ "./node_modules/inherits/inherits_browser.js":
+/*!***************************************************!*\
+  !*** ./node_modules/inherits/inherits_browser.js ***!
+  \***************************************************/
 /*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-
-////////////////////////////////////////////////////////////////////////////////
-// Helpers
-
-// Merge objects
-//
-function assign(obj /*from1, from2, from3, ...*/) {
-  var sources = Array.prototype.slice.call(arguments, 1);
-
-  sources.forEach(function (source) {
-    if (!source) { return; }
-
-    Object.keys(source).forEach(function (key) {
-      obj[key] = source[key];
-    });
-  });
-
-  return obj;
-}
-
-function _class(obj) { return Object.prototype.toString.call(obj); }
-function isString(obj) { return _class(obj) === '[object String]'; }
-function isObject(obj) { return _class(obj) === '[object Object]'; }
-function isRegExp(obj) { return _class(obj) === '[object RegExp]'; }
-function isFunction(obj) { return _class(obj) === '[object Function]'; }
-
-
-function escapeRE(str) { return str.replace(/[.?*+^$[\]\\(){}|-]/g, '\\$&'); }
-
-////////////////////////////////////////////////////////////////////////////////
-
-
-var defaultOptions = {
-  fuzzyLink: true,
-  fuzzyEmail: true,
-  fuzzyIP: false
-};
-
-
-function isOptionsObj(obj) {
-  return Object.keys(obj || {}).reduce(function (acc, k) {
-    return acc || defaultOptions.hasOwnProperty(k);
-  }, false);
-}
-
-
-var defaultSchemas = {
-  'http:': {
-    validate: function (text, pos, self) {
-      var tail = text.slice(pos);
-
-      if (!self.re.http) {
-        // compile lazily, because "host"-containing variables can change on tlds update.
-        self.re.http =  new RegExp(
-          '^\\/\\/' + self.re.src_auth + self.re.src_host_port_strict + self.re.src_path, 'i'
-        );
-      }
-      if (self.re.http.test(tail)) {
-        return tail.match(self.re.http)[0].length;
-      }
-      return 0;
-    }
-  },
-  'https:':  'http:',
-  'ftp:':    'http:',
-  '//':      {
-    validate: function (text, pos, self) {
-      var tail = text.slice(pos);
-
-      if (!self.re.no_http) {
-      // compile lazily, because "host"-containing variables can change on tlds update.
-        self.re.no_http =  new RegExp(
-          '^' +
-          self.re.src_auth +
-          // Don't allow single-level domains, because of false positives like '//test'
-          // with code comments
-          '(?:localhost|(?:(?:' + self.re.src_domain + ')\\.)+' + self.re.src_domain_root + ')' +
-          self.re.src_port +
-          self.re.src_host_terminator +
-          self.re.src_path,
-
-          'i'
-        );
-      }
-
-      if (self.re.no_http.test(tail)) {
-        // should not be `://` & `///`, that protects from errors in protocol name
-        if (pos >= 3 && text[pos - 3] === ':') { return 0; }
-        if (pos >= 3 && text[pos - 3] === '/') { return 0; }
-        return tail.match(self.re.no_http)[0].length;
-      }
-      return 0;
-    }
-  },
-  'mailto:': {
-    validate: function (text, pos, self) {
-      var tail = text.slice(pos);
-
-      if (!self.re.mailto) {
-        self.re.mailto =  new RegExp(
-          '^' + self.re.src_email_name + '@' + self.re.src_host_strict, 'i'
-        );
-      }
-      if (self.re.mailto.test(tail)) {
-        return tail.match(self.re.mailto)[0].length;
-      }
-      return 0;
-    }
-  }
-};
-
-/*eslint-disable max-len*/
-
-// RE pattern for 2-character tlds (autogenerated by ./support/tlds_2char_gen.js)
-var tlds_2ch_src_re = 'a[cdefgilmnoqrstuwxz]|b[abdefghijmnorstvwyz]|c[acdfghiklmnoruvwxyz]|d[ejkmoz]|e[cegrstu]|f[ijkmor]|g[abdefghilmnpqrstuwy]|h[kmnrtu]|i[delmnoqrst]|j[emop]|k[eghimnprwyz]|l[abcikrstuvy]|m[acdeghklmnopqrstuvwxyz]|n[acefgilopruz]|om|p[aefghklmnrstwy]|qa|r[eosuw]|s[abcdeghijklmnortuvxyz]|t[cdfghjklmnortvwz]|u[agksyz]|v[aceginu]|w[fs]|y[et]|z[amw]';
-
-// DON'T try to make PRs with changes. Extend TLDs with LinkifyIt.tlds() instead
-var tlds_default = 'biz|com|edu|gov|net|org|pro|web|xxx|aero|asia|coop|info|museum|name|shop|рф'.split('|');
-
-/*eslint-enable max-len*/
-
-////////////////////////////////////////////////////////////////////////////////
-
-function resetScanCache(self) {
-  self.__index__ = -1;
-  self.__text_cache__   = '';
-}
-
-function createValidator(re) {
-  return function (text, pos) {
-    var tail = text.slice(pos);
-
-    if (re.test(tail)) {
-      return tail.match(re)[0].length;
-    }
-    return 0;
-  };
-}
-
-function createNormalizer() {
-  return function (match, self) {
-    self.normalize(match);
-  };
-}
-
-// Schemas compiler. Build regexps.
-//
-function compile(self) {
-
-  // Load & clone RE patterns.
-  var re = self.re = __webpack_require__(/*! ./lib/re */ "./node_modules/linkify-it/lib/re.js")(self.__opts__);
-
-  // Define dynamic patterns
-  var tlds = self.__tlds__.slice();
-
-  self.onCompile();
-
-  if (!self.__tlds_replaced__) {
-    tlds.push(tlds_2ch_src_re);
-  }
-  tlds.push(re.src_xn);
-
-  re.src_tlds = tlds.join('|');
-
-  function untpl(tpl) { return tpl.replace('%TLDS%', re.src_tlds); }
-
-  re.email_fuzzy      = RegExp(untpl(re.tpl_email_fuzzy), 'i');
-  re.link_fuzzy       = RegExp(untpl(re.tpl_link_fuzzy), 'i');
-  re.link_no_ip_fuzzy = RegExp(untpl(re.tpl_link_no_ip_fuzzy), 'i');
-  re.host_fuzzy_test  = RegExp(untpl(re.tpl_host_fuzzy_test), 'i');
-
-  //
-  // Compile each schema
-  //
-
-  var aliases = [];
-
-  self.__compiled__ = {}; // Reset compiled data
-
-  function schemaError(name, val) {
-    throw new Error('(LinkifyIt) Invalid schema "' + name + '": ' + val);
-  }
-
-  Object.keys(self.__schemas__).forEach(function (name) {
-    var val = self.__schemas__[name];
-
-    // skip disabled methods
-    if (val === null) { return; }
-
-    var compiled = { validate: null, link: null };
-
-    self.__compiled__[name] = compiled;
-
-    if (isObject(val)) {
-      if (isRegExp(val.validate)) {
-        compiled.validate = createValidator(val.validate);
-      } else if (isFunction(val.validate)) {
-        compiled.validate = val.validate;
-      } else {
-        schemaError(name, val);
-      }
-
-      if (isFunction(val.normalize)) {
-        compiled.normalize = val.normalize;
-      } else if (!val.normalize) {
-        compiled.normalize = createNormalizer();
-      } else {
-        schemaError(name, val);
-      }
-
-      return;
-    }
-
-    if (isString(val)) {
-      aliases.push(name);
-      return;
-    }
-
-    schemaError(name, val);
-  });
-
-  //
-  // Compile postponed aliases
-  //
-
-  aliases.forEach(function (alias) {
-    if (!self.__compiled__[self.__schemas__[alias]]) {
-      // Silently fail on missed schemas to avoid errons on disable.
-      // schemaError(alias, self.__schemas__[alias]);
-      return;
-    }
-
-    self.__compiled__[alias].validate =
-      self.__compiled__[self.__schemas__[alias]].validate;
-    self.__compiled__[alias].normalize =
-      self.__compiled__[self.__schemas__[alias]].normalize;
-  });
-
-  //
-  // Fake record for guessed links
-  //
-  self.__compiled__[''] = { validate: null, normalize: createNormalizer() };
-
-  //
-  // Build schema condition
-  //
-  var slist = Object.keys(self.__compiled__)
-                      .filter(function (name) {
-                        // Filter disabled & fake schemas
-                        return name.length > 0 && self.__compiled__[name];
-                      })
-                      .map(escapeRE)
-                      .join('|');
-  // (?!_) cause 1.5x slowdown
-  self.re.schema_test   = RegExp('(^|(?!_)(?:[><\uff5c]|' + re.src_ZPCc + '))(' + slist + ')', 'i');
-  self.re.schema_search = RegExp('(^|(?!_)(?:[><\uff5c]|' + re.src_ZPCc + '))(' + slist + ')', 'ig');
-
-  self.re.pretest = RegExp(
-    '(' + self.re.schema_test.source + ')|(' + self.re.host_fuzzy_test.source + ')|@',
-    'i'
-  );
-
-  //
-  // Cleanup
-  //
-
-  resetScanCache(self);
-}
-
-/**
- * class Match
- *
- * Match result. Single element of array, returned by [[LinkifyIt#match]]
- **/
-function Match(self, shift) {
-  var start = self.__index__,
-      end   = self.__last_index__,
-      text  = self.__text_cache__.slice(start, end);
-
-  /**
-   * Match#schema -> String
-   *
-   * Prefix (protocol) for matched string.
-   **/
-  this.schema    = self.__schema__.toLowerCase();
-  /**
-   * Match#index -> Number
-   *
-   * First position of matched string.
-   **/
-  this.index     = start + shift;
-  /**
-   * Match#lastIndex -> Number
-   *
-   * Next position after matched string.
-   **/
-  this.lastIndex = end + shift;
-  /**
-   * Match#raw -> String
-   *
-   * Matched string.
-   **/
-  this.raw       = text;
-  /**
-   * Match#text -> String
-   *
-   * Notmalized text of matched string.
-   **/
-  this.text      = text;
-  /**
-   * Match#url -> String
-   *
-   * Normalized url of matched string.
-   **/
-  this.url       = text;
-}
-
-function createMatch(self, shift) {
-  var match = new Match(self, shift);
-
-  self.__compiled__[match.schema].normalize(match, self);
-
-  return match;
-}
-
-
-/**
- * class LinkifyIt
- **/
-
-/**
- * new LinkifyIt(schemas, options)
- * - schemas (Object): Optional. Additional schemas to validate (prefix/validator)
- * - options (Object): { fuzzyLink|fuzzyEmail|fuzzyIP: true|false }
- *
- * Creates new linkifier instance with optional additional schemas.
- * Can be called without `new` keyword for convenience.
- *
- * By default understands:
- *
- * - `http(s)://...` , `ftp://...`, `mailto:...` & `//...` links
- * - "fuzzy" links and emails (example.com, foo@bar.com).
- *
- * `schemas` is an object, where each key/value describes protocol/rule:
- *
- * - __key__ - link prefix (usually, protocol name with `:` at the end, `skype:`
- *   for example). `linkify-it` makes shure that prefix is not preceeded with
- *   alphanumeric char and symbols. Only whitespaces and punctuation allowed.
- * - __value__ - rule to check tail after link prefix
- *   - _String_ - just alias to existing rule
- *   - _Object_
- *     - _validate_ - validator function (should return matched length on success),
- *       or `RegExp`.
- *     - _normalize_ - optional function to normalize text & url of matched result
- *       (for example, for @twitter mentions).
- *
- * `options`:
- *
- * - __fuzzyLink__ - recognige URL-s without `http(s):` prefix. Default `true`.
- * - __fuzzyIP__ - allow IPs in fuzzy links above. Can conflict with some texts
- *   like version numbers. Default `false`.
- * - __fuzzyEmail__ - recognize emails without `mailto:` prefix.
- *
- **/
-function LinkifyIt(schemas, options) {
-  if (!(this instanceof LinkifyIt)) {
-    return new LinkifyIt(schemas, options);
-  }
-
-  if (!options) {
-    if (isOptionsObj(schemas)) {
-      options = schemas;
-      schemas = {};
-    }
-  }
-
-  this.__opts__           = assign({}, defaultOptions, options);
-
-  // Cache last tested result. Used to skip repeating steps on next `match` call.
-  this.__index__          = -1;
-  this.__last_index__     = -1; // Next scan position
-  this.__schema__         = '';
-  this.__text_cache__     = '';
-
-  this.__schemas__        = assign({}, defaultSchemas, schemas);
-  this.__compiled__       = {};
-
-  this.__tlds__           = tlds_default;
-  this.__tlds_replaced__  = false;
-
-  this.re = {};
-
-  compile(this);
-}
-
-
-/** chainable
- * LinkifyIt#add(schema, definition)
- * - schema (String): rule name (fixed pattern prefix)
- * - definition (String|RegExp|Object): schema definition
- *
- * Add new rule definition. See constructor description for details.
- **/
-LinkifyIt.prototype.add = function add(schema, definition) {
-  this.__schemas__[schema] = definition;
-  compile(this);
-  return this;
-};
-
-
-/** chainable
- * LinkifyIt#set(options)
- * - options (Object): { fuzzyLink|fuzzyEmail|fuzzyIP: true|false }
- *
- * Set recognition options for links without schema.
- **/
-LinkifyIt.prototype.set = function set(options) {
-  this.__opts__ = assign(this.__opts__, options);
-  return this;
-};
-
-
-/**
- * LinkifyIt#test(text) -> Boolean
- *
- * Searches linkifiable pattern and returns `true` on success or `false` on fail.
- **/
-LinkifyIt.prototype.test = function test(text) {
-  // Reset scan cache
-  this.__text_cache__ = text;
-  this.__index__      = -1;
-
-  if (!text.length) { return false; }
-
-  var m, ml, me, len, shift, next, re, tld_pos, at_pos;
-
-  // try to scan for link with schema - that's the most simple rule
-  if (this.re.schema_test.test(text)) {
-    re = this.re.schema_search;
-    re.lastIndex = 0;
-    while ((m = re.exec(text)) !== null) {
-      len = this.testSchemaAt(text, m[2], re.lastIndex);
-      if (len) {
-        this.__schema__     = m[2];
-        this.__index__      = m.index + m[1].length;
-        this.__last_index__ = m.index + m[0].length + len;
-        break;
-      }
-    }
-  }
-
-  if (this.__opts__.fuzzyLink && this.__compiled__['http:']) {
-    // guess schemaless links
-    tld_pos = text.search(this.re.host_fuzzy_test);
-    if (tld_pos >= 0) {
-      // if tld is located after found link - no need to check fuzzy pattern
-      if (this.__index__ < 0 || tld_pos < this.__index__) {
-        if ((ml = text.match(this.__opts__.fuzzyIP ? this.re.link_fuzzy : this.re.link_no_ip_fuzzy)) !== null) {
-
-          shift = ml.index + ml[1].length;
-
-          if (this.__index__ < 0 || shift < this.__index__) {
-            this.__schema__     = '';
-            this.__index__      = shift;
-            this.__last_index__ = ml.index + ml[0].length;
-          }
+/***/ (function(module, exports) {
+
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    if (superCtor) {
+      ctor.super_ = superCtor
+      ctor.prototype = Object.create(superCtor.prototype, {
+        constructor: {
+          value: ctor,
+          enumerable: false,
+          writable: true,
+          configurable: true
         }
-      }
+      })
+    }
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    if (superCtor) {
+      ctor.super_ = superCtor
+      var TempCtor = function () {}
+      TempCtor.prototype = superCtor.prototype
+      ctor.prototype = new TempCtor()
+      ctor.prototype.constructor = ctor
     }
   }
-
-  if (this.__opts__.fuzzyEmail && this.__compiled__['mailto:']) {
-    // guess schemaless emails
-    at_pos = text.indexOf('@');
-    if (at_pos >= 0) {
-      // We can't skip this check, because this cases are possible:
-      // 192.168.1.1@gmail.com, my.in@example.com
-      if ((me = text.match(this.re.email_fuzzy)) !== null) {
-
-        shift = me.index + me[1].length;
-        next  = me.index + me[0].length;
-
-        if (this.__index__ < 0 || shift < this.__index__ ||
-            (shift === this.__index__ && next > this.__last_index__)) {
-          this.__schema__     = 'mailto:';
-          this.__index__      = shift;
-          this.__last_index__ = next;
-        }
-      }
-    }
-  }
-
-  return this.__index__ >= 0;
-};
-
-
-/**
- * LinkifyIt#pretest(text) -> Boolean
- *
- * Very quick check, that can give false positives. Returns true if link MAY BE
- * can exists. Can be used for speed optimization, when you need to check that
- * link NOT exists.
- **/
-LinkifyIt.prototype.pretest = function pretest(text) {
-  return this.re.pretest.test(text);
-};
-
-
-/**
- * LinkifyIt#testSchemaAt(text, name, position) -> Number
- * - text (String): text to scan
- * - name (String): rule (schema) name
- * - position (Number): text offset to check from
- *
- * Similar to [[LinkifyIt#test]] but checks only specific protocol tail exactly
- * at given position. Returns length of found pattern (0 on fail).
- **/
-LinkifyIt.prototype.testSchemaAt = function testSchemaAt(text, schema, pos) {
-  // If not supported schema check requested - terminate
-  if (!this.__compiled__[schema.toLowerCase()]) {
-    return 0;
-  }
-  return this.__compiled__[schema.toLowerCase()].validate(text, pos, this);
-};
-
-
-/**
- * LinkifyIt#match(text) -> Array|null
- *
- * Returns array of found link descriptions or `null` on fail. We strongly
- * recommend to use [[LinkifyIt#test]] first, for best speed.
- *
- * ##### Result match description
- *
- * - __schema__ - link schema, can be empty for fuzzy links, or `//` for
- *   protocol-neutral  links.
- * - __index__ - offset of matched text
- * - __lastIndex__ - index of next char after mathch end
- * - __raw__ - matched text
- * - __text__ - normalized text
- * - __url__ - link, generated from matched text
- **/
-LinkifyIt.prototype.match = function match(text) {
-  var shift = 0, result = [];
-
-  // Try to take previous element from cache, if .test() called before
-  if (this.__index__ >= 0 && this.__text_cache__ === text) {
-    result.push(createMatch(this, shift));
-    shift = this.__last_index__;
-  }
-
-  // Cut head if cache was used
-  var tail = shift ? text.slice(shift) : text;
-
-  // Scan string until end reached
-  while (this.test(tail)) {
-    result.push(createMatch(this, shift));
-
-    tail = tail.slice(this.__last_index__);
-    shift += this.__last_index__;
-  }
-
-  if (result.length) {
-    return result;
-  }
-
-  return null;
-};
-
-
-/** chainable
- * LinkifyIt#tlds(list [, keepOld]) -> this
- * - list (Array): list of tlds
- * - keepOld (Boolean): merge with current list if `true` (`false` by default)
- *
- * Load (or merge) new tlds list. Those are user for fuzzy links (without prefix)
- * to avoid false positives. By default this algorythm used:
- *
- * - hostname with any 2-letter root zones are ok.
- * - biz|com|edu|gov|net|org|pro|web|xxx|aero|asia|coop|info|museum|name|shop|рф
- *   are ok.
- * - encoded (`xn--...`) root zones are ok.
- *
- * If list is replaced, then exact match for 2-chars root zones will be checked.
- **/
-LinkifyIt.prototype.tlds = function tlds(list, keepOld) {
-  list = Array.isArray(list) ? list : [ list ];
-
-  if (!keepOld) {
-    this.__tlds__ = list.slice();
-    this.__tlds_replaced__ = true;
-    compile(this);
-    return this;
-  }
-
-  this.__tlds__ = this.__tlds__.concat(list)
-                                  .sort()
-                                  .filter(function (el, idx, arr) {
-                                    return el !== arr[idx - 1];
-                                  })
-                                  .reverse();
-
-  compile(this);
-  return this;
-};
-
-/**
- * LinkifyIt#normalize(match)
- *
- * Default normalizer (if schema does not define it's own).
- **/
-LinkifyIt.prototype.normalize = function normalize(match) {
-
-  // Do minimal possible changes by default. Need to collect feedback prior
-  // to move forward https://github.com/markdown-it/linkify-it/issues/1
-
-  if (!match.schema) { match.url = 'http://' + match.url; }
-
-  if (match.schema === 'mailto:' && !/^mailto:/i.test(match.url)) {
-    match.url = 'mailto:' + match.url;
-  }
-};
-
-
-/**
- * LinkifyIt#onCompile()
- *
- * Override to modify basic RegExp-s.
- **/
-LinkifyIt.prototype.onCompile = function onCompile() {
-};
-
-
-module.exports = LinkifyIt;
+}
 
 
 /***/ }),
 
-/***/ "./node_modules/linkify-it/lib/re.js":
-/*!*******************************************!*\
-  !*** ./node_modules/linkify-it/lib/re.js ***!
-  \*******************************************/
+/***/ "./node_modules/nipplejs/dist/nipplejs.js":
+/*!************************************************!*\
+  !*** ./node_modules/nipplejs/dist/nipplejs.js ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(t,i){ true?module.exports=i():undefined}(window,function(){return function(t){var i={};function e(o){if(i[o])return i[o].exports;var n=i[o]={i:o,l:!1,exports:{}};return t[o].call(n.exports,n,n.exports,e),n.l=!0,n.exports}return e.m=t,e.c=i,e.d=function(t,i,o){e.o(t,i)||Object.defineProperty(t,i,{enumerable:!0,get:o})},e.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},e.t=function(t,i){if(1&i&&(t=e(t)),8&i)return t;if(4&i&&"object"==typeof t&&t&&t.__esModule)return t;var o=Object.create(null);if(e.r(o),Object.defineProperty(o,"default",{enumerable:!0,value:t}),2&i&&"string"!=typeof t)for(var n in t)e.d(o,n,function(i){return t[i]}.bind(null,n));return o},e.n=function(t){var i=t&&t.__esModule?function(){return t.default}:function(){return t};return e.d(i,"a",i),i},e.o=function(t,i){return Object.prototype.hasOwnProperty.call(t,i)},e.p="",e(e.s=0)}([function(t,i,e){"use strict";e.r(i);var o,n=function(t,i){var e=i.x-t.x,o=i.y-t.y;return Math.sqrt(e*e+o*o)},s=function(t){return t*(Math.PI/180)},r=function(t){return t*(180/Math.PI)},d=function(t,i,e){for(var o,n=i.split(/[ ,]+/g),s=0;s<n.length;s+=1)o=n[s],t.addEventListener?t.addEventListener(o,e,!1):t.attachEvent&&t.attachEvent(o,e)},a=function(t,i,e){for(var o,n=i.split(/[ ,]+/g),s=0;s<n.length;s+=1)o=n[s],t.removeEventListener?t.removeEventListener(o,e):t.detachEvent&&t.detachEvent(o,e)},p=function(t){return t.preventDefault(),t.type.match(/^touch/)?t.changedTouches:t},c=function(){return{x:void 0!==window.pageXOffset?window.pageXOffset:(document.documentElement||document.body.parentNode||document.body).scrollLeft,y:void 0!==window.pageYOffset?window.pageYOffset:(document.documentElement||document.body.parentNode||document.body).scrollTop}},h=function(t,i){i.top||i.right||i.bottom||i.left?(t.style.top=i.top,t.style.right=i.right,t.style.bottom=i.bottom,t.style.left=i.left):(t.style.left=i.x+"px",t.style.top=i.y+"px")},l=function(t,i,e){var o=u(t);for(var n in o)if(o.hasOwnProperty(n))if("string"==typeof i)o[n]=i+" "+e;else{for(var s="",r=0,d=i.length;r<d;r+=1)s+=i[r]+" "+e+", ";o[n]=s.slice(0,-2)}return o},u=function(t){var i={};i[t]="";return["webkit","Moz","o"].forEach(function(e){i[e+t.charAt(0).toUpperCase()+t.slice(1)]=""}),i},f=function(t,i){for(var e in i)i.hasOwnProperty(e)&&(t[e]=i[e]);return t},y=function(t,i){if(t.length)for(var e=0,o=t.length;e<o;e+=1)i(t[e]);else i(t)},m=!!("ontouchstart"in window),v=!!window.PointerEvent,g=!!window.MSPointerEvent,b={start:"mousedown",move:"mousemove",end:"mouseup"},x={};function O(){}v?o={start:"pointerdown",move:"pointermove",end:"pointerup, pointercancel"}:g?o={start:"MSPointerDown",move:"MSPointerMove",end:"MSPointerUp"}:m?(o={start:"touchstart",move:"touchmove",end:"touchend, touchcancel"},x=b):o=b,O.prototype.on=function(t,i){var e,o=t.split(/[ ,]+/g);this._handlers_=this._handlers_||{};for(var n=0;n<o.length;n+=1)e=o[n],this._handlers_[e]=this._handlers_[e]||[],this._handlers_[e].push(i);return this},O.prototype.off=function(t,i){return this._handlers_=this._handlers_||{},void 0===t?this._handlers_={}:void 0===i?this._handlers_[t]=null:this._handlers_[t]&&this._handlers_[t].indexOf(i)>=0&&this._handlers_[t].splice(this._handlers_[t].indexOf(i),1),this},O.prototype.trigger=function(t,i){var e,o=this,n=t.split(/[ ,]+/g);o._handlers_=o._handlers_||{};for(var s=0;s<n.length;s+=1)e=n[s],o._handlers_[e]&&o._handlers_[e].length&&o._handlers_[e].forEach(function(t){t.call(o,{type:e,target:o},i)})},O.prototype.config=function(t){this.options=this.defaults||{},t&&(this.options=function(t,i){var e={};for(var o in t)t.hasOwnProperty(o)&&i.hasOwnProperty(o)?e[o]=i[o]:t.hasOwnProperty(o)&&(e[o]=t[o]);return e}(this.options,t))},O.prototype.bindEvt=function(t,i){var e=this;return e._domHandlers_=e._domHandlers_||{},e._domHandlers_[i]=function(){"function"==typeof e["on"+i]?e["on"+i].apply(e,arguments):console.warn('[WARNING] : Missing "on'+i+'" handler.')},d(t,o[i],e._domHandlers_[i]),x[i]&&d(t,x[i],e._domHandlers_[i]),e},O.prototype.unbindEvt=function(t,i){return this._domHandlers_=this._domHandlers_||{},a(t,o[i],this._domHandlers_[i]),x[i]&&a(t,x[i],this._domHandlers_[i]),delete this._domHandlers_[i],this};var _=O;function w(t,i){return this.identifier=i.identifier,this.position=i.position,this.frontPosition=i.frontPosition,this.collection=t,this.defaults={size:100,threshold:.1,color:"white",fadeTime:250,dataOnly:!1,restJoystick:!0,restOpacity:.5,mode:"dynamic",zone:document.body,lockX:!1,lockY:!1},this.config(i),"dynamic"===this.options.mode&&(this.options.restOpacity=0),this.id=w.id,w.id+=1,this.buildEl().stylize(),this.instance={el:this.ui.el,on:this.on.bind(this),off:this.off.bind(this),show:this.show.bind(this),hide:this.hide.bind(this),add:this.addToDom.bind(this),remove:this.removeFromDom.bind(this),destroy:this.destroy.bind(this),resetDirection:this.resetDirection.bind(this),computeDirection:this.computeDirection.bind(this),trigger:this.trigger.bind(this),position:this.position,frontPosition:this.frontPosition,ui:this.ui,identifier:this.identifier,id:this.id,options:this.options},this.instance}w.prototype=new _,w.constructor=w,w.id=0,w.prototype.buildEl=function(t){return this.ui={},this.options.dataOnly?this:(this.ui.el=document.createElement("div"),this.ui.back=document.createElement("div"),this.ui.front=document.createElement("div"),this.ui.el.className="nipple collection_"+this.collection.id,this.ui.back.className="back",this.ui.front.className="front",this.ui.el.setAttribute("id","nipple_"+this.collection.id+"_"+this.id),this.ui.el.appendChild(this.ui.back),this.ui.el.appendChild(this.ui.front),this)},w.prototype.stylize=function(){if(this.options.dataOnly)return this;var t=this.options.fadeTime+"ms",i=function(t,i){var e=u(t);for(var o in e)e.hasOwnProperty(o)&&(e[o]=i);return e}("borderRadius","50%"),e=l("transition","opacity",t),o={};return o.el={position:"absolute",opacity:this.options.restOpacity,display:"block",zIndex:999},o.back={position:"absolute",display:"block",width:this.options.size+"px",height:this.options.size+"px",marginLeft:-this.options.size/2+"px",marginTop:-this.options.size/2+"px",background:this.options.color,opacity:".5"},o.front={width:this.options.size/2+"px",height:this.options.size/2+"px",position:"absolute",display:"block",marginLeft:-this.options.size/4+"px",marginTop:-this.options.size/4+"px",background:this.options.color,opacity:".5"},f(o.el,e),f(o.back,i),f(o.front,i),this.applyStyles(o),this},w.prototype.applyStyles=function(t){for(var i in this.ui)if(this.ui.hasOwnProperty(i))for(var e in t[i])this.ui[i].style[e]=t[i][e];return this},w.prototype.addToDom=function(){return this.options.dataOnly||document.body.contains(this.ui.el)?this:(this.options.zone.appendChild(this.ui.el),this)},w.prototype.removeFromDom=function(){return this.options.dataOnly||!document.body.contains(this.ui.el)?this:(this.options.zone.removeChild(this.ui.el),this)},w.prototype.destroy=function(){clearTimeout(this.removeTimeout),clearTimeout(this.showTimeout),clearTimeout(this.restTimeout),this.trigger("destroyed",this.instance),this.removeFromDom(),this.off()},w.prototype.show=function(t){var i=this;return i.options.dataOnly?i:(clearTimeout(i.removeTimeout),clearTimeout(i.showTimeout),clearTimeout(i.restTimeout),i.addToDom(),i.restCallback(),setTimeout(function(){i.ui.el.style.opacity=1},0),i.showTimeout=setTimeout(function(){i.trigger("shown",i.instance),"function"==typeof t&&t.call(this)},i.options.fadeTime),i)},w.prototype.hide=function(t){var i=this;return i.options.dataOnly?i:(i.ui.el.style.opacity=i.options.restOpacity,clearTimeout(i.removeTimeout),clearTimeout(i.showTimeout),clearTimeout(i.restTimeout),i.removeTimeout=setTimeout(function(){var e="dynamic"===i.options.mode?"none":"block";i.ui.el.style.display=e,"function"==typeof t&&t.call(i),i.trigger("hidden",i.instance)},i.options.fadeTime),i.options.restJoystick&&i.restPosition(),i)},w.prototype.restPosition=function(t){var i=this;i.frontPosition={x:0,y:0};var e=i.options.fadeTime+"ms",o={};o.front=l("transition",["top","left"],e);var n={front:{}};n.front={left:i.frontPosition.x+"px",top:i.frontPosition.y+"px"},i.applyStyles(o),i.applyStyles(n),i.restTimeout=setTimeout(function(){"function"==typeof t&&t.call(i),i.restCallback()},i.options.fadeTime)},w.prototype.restCallback=function(){var t={};t.front=l("transition","none",""),this.applyStyles(t),this.trigger("rested",this.instance)},w.prototype.resetDirection=function(){this.direction={x:!1,y:!1,angle:!1}},w.prototype.computeDirection=function(t){var i,e,o,n=t.angle.radian,s=Math.PI/4,r=Math.PI/2;if(n>s&&n<3*s&&!t.lockX?i="up":n>-s&&n<=s&&!t.lockY?i="left":n>3*-s&&n<=-s&&!t.lockX?i="down":t.lockY||(i="right"),t.lockY||(e=n>-r&&n<r?"left":"right"),t.lockX||(o=n>0?"up":"down"),t.force>this.options.threshold){var d,a={};for(d in this.direction)this.direction.hasOwnProperty(d)&&(a[d]=this.direction[d]);var p={};for(d in this.direction={x:e,y:o,angle:i},t.direction=this.direction,a)a[d]===this.direction[d]&&(p[d]=!0);if(p.x&&p.y&&p.angle)return t;p.x&&p.y||this.trigger("plain",t),p.x||this.trigger("plain:"+e,t),p.y||this.trigger("plain:"+o,t),p.angle||this.trigger("dir dir:"+i,t)}else this.resetDirection();return t};var T=w;function k(t,i){return this.nipples=[],this.idles=[],this.actives=[],this.ids=[],this.pressureIntervals={},this.manager=t,this.id=k.id,k.id+=1,this.defaults={zone:document.body,multitouch:!1,maxNumberOfNipples:10,mode:"dynamic",position:{top:0,left:0},catchDistance:200,size:100,threshold:.1,color:"white",fadeTime:250,dataOnly:!1,restJoystick:!0,restOpacity:.5,lockX:!1,lockY:!1,dynamicPage:!1},this.config(i),"static"!==this.options.mode&&"semi"!==this.options.mode||(this.options.multitouch=!1),this.options.multitouch||(this.options.maxNumberOfNipples=1),this.updateBox(),this.prepareNipples(),this.bindings(),this.begin(),this.nipples}k.prototype=new _,k.constructor=k,k.id=0,k.prototype.prepareNipples=function(){var t=this.nipples;t.on=this.on.bind(this),t.off=this.off.bind(this),t.options=this.options,t.destroy=this.destroy.bind(this),t.ids=this.ids,t.id=this.id,t.processOnMove=this.processOnMove.bind(this),t.processOnEnd=this.processOnEnd.bind(this),t.get=function(i){if(void 0===i)return t[0];for(var e=0,o=t.length;e<o;e+=1)if(t[e].identifier===i)return t[e];return!1}},k.prototype.bindings=function(){this.bindEvt(this.options.zone,"start"),this.options.zone.style.touchAction="none",this.options.zone.style.msTouchAction="none"},k.prototype.begin=function(){var t=this.options;if("static"===t.mode){var i=this.createNipple(t.position,this.manager.getIdentifier());i.add(),this.idles.push(i)}},k.prototype.createNipple=function(t,i){var e=c(),o={},n=this.options;if(t.x&&t.y)o={x:t.x-(e.x+this.box.left),y:t.y-(e.y+this.box.top)};else if(t.top||t.right||t.bottom||t.left){var s=document.createElement("DIV");s.style.display="hidden",s.style.top=t.top,s.style.right=t.right,s.style.bottom=t.bottom,s.style.left=t.left,s.style.position="absolute",n.zone.appendChild(s);var r=s.getBoundingClientRect();n.zone.removeChild(s),o=t,t={x:r.left+e.x,y:r.top+e.y}}var d=new T(this,{color:n.color,size:n.size,threshold:n.threshold,fadeTime:n.fadeTime,dataOnly:n.dataOnly,restJoystick:n.restJoystick,restOpacity:n.restOpacity,mode:n.mode,identifier:i,position:t,zone:n.zone,frontPosition:{x:0,y:0}});return n.dataOnly||(h(d.ui.el,o),h(d.ui.front,d.frontPosition)),this.nipples.push(d),this.trigger("added "+d.identifier+":added",d),this.manager.trigger("added "+d.identifier+":added",d),this.bindNipple(d),d},k.prototype.updateBox=function(){this.box=this.options.zone.getBoundingClientRect()},k.prototype.bindNipple=function(t){var i,e=this,o=function(t,o){i=t.type+" "+o.id+":"+t.type,e.trigger(i,o)};t.on("destroyed",e.onDestroyed.bind(e)),t.on("shown hidden rested dir plain",o),t.on("dir:up dir:right dir:down dir:left",o),t.on("plain:up plain:right plain:down plain:left",o)},k.prototype.pressureFn=function(t,i,e){var o=this,n=0;clearInterval(o.pressureIntervals[e]),o.pressureIntervals[e]=setInterval(function(){var e=t.force||t.pressure||t.webkitForce||0;e!==n&&(i.trigger("pressure",e),o.trigger("pressure "+i.identifier+":pressure",e),n=e)}.bind(o),100)},k.prototype.onstart=function(t){var i=this,e=i.options,o=t;t=p(t),i.updateBox();return y(t,function(n){i.actives.length<e.maxNumberOfNipples?i.processOnStart(n):o.type.match(/^touch/)&&(Object.keys(i.manager.ids).forEach(function(e){if(Object.values(o.touches).findIndex(function(t){return t.identifier===e})<0){var n=[t[0]];n.identifier=e,i.processOnEnd(n)}}),i.actives.length<e.maxNumberOfNipples&&i.processOnStart(n))}),i.manager.bindDocument(),!1},k.prototype.processOnStart=function(t){var i,e=this,o=e.options,s=e.manager.getIdentifier(t),r=t.force||t.pressure||t.webkitForce||0,d={x:t.pageX,y:t.pageY},a=e.getOrCreate(s,d);a.identifier!==s&&e.manager.removeIdentifier(a.identifier),a.identifier=s;var p=function(i){i.trigger("start",i),e.trigger("start "+i.id+":start",i),i.show(),r>0&&e.pressureFn(t,i,i.identifier),e.processOnMove(t)};if((i=e.idles.indexOf(a))>=0&&e.idles.splice(i,1),e.actives.push(a),e.ids.push(a.identifier),"semi"!==o.mode)p(a);else{if(!(n(d,a.position)<=o.catchDistance))return a.destroy(),void e.processOnStart(t);p(a)}return a},k.prototype.getOrCreate=function(t,i){var e,o=this.options;return/(semi|static)/.test(o.mode)?(e=this.idles[0])?(this.idles.splice(0,1),e):"semi"===o.mode?this.createNipple(i,t):(console.warn("Coudln't find the needed nipple."),!1):e=this.createNipple(i,t)},k.prototype.processOnMove=function(t){var i=this.options,e=this.manager.getIdentifier(t),o=this.nipples.get(e);if(function(t){return isNaN(t.buttons)?0!==t.pressure:0!==t.buttons}(t)){if(!o)return console.error("Found zombie joystick with ID "+e),void this.manager.removeIdentifier(e);if(i.dynamicPage){var d=c();p=o.el.getBoundingClientRect(),o.position={x:d.x+p.left,y:d.y+p.top}}o.identifier=e;var a=o.options.size/2,p={x:t.pageX,y:t.pageY};i.lockX&&(p.y=o.position.y),i.lockY&&(p.x=o.position.x);var l,u,f,y,m,v,g,b,x=n(p,o.position),O=(l=p,u=o.position,f=u.x-l.x,y=u.y-l.y,r(Math.atan2(y,f))),_=s(O),w=x/a,T={distance:x,position:p};x>a&&(x=a,m=o.position,v=x,b={x:0,y:0},g=s(g=O),b.x=m.x-v*Math.cos(g),b.y=m.y-v*Math.sin(g),p=b);var k=p.x-o.position.x,E=p.y-o.position.y;o.frontPosition={x:k,y:E},i.dataOnly||h(o.ui.front,o.frontPosition);var P={identifier:o.identifier,position:p,force:w,pressure:t.force||t.pressure||t.webkitForce||0,distance:x,angle:{radian:_,degree:O},vector:{x:k/a,y:-E/a},raw:T,instance:o,lockX:i.lockX,lockY:i.lockY};(P=o.computeDirection(P)).angle={radian:s(180-O),degree:180-O},o.trigger("move",P),this.trigger("move "+o.id+":move",P)}else this.processOnEnd(t)},k.prototype.processOnEnd=function(t){var i=this,e=i.options,o=i.manager.getIdentifier(t),n=i.nipples.get(o),s=i.manager.removeIdentifier(n.identifier);n&&(e.dataOnly||n.hide(function(){"dynamic"===e.mode&&(n.trigger("removed",n),i.trigger("removed "+n.id+":removed",n),i.manager.trigger("removed "+n.id+":removed",n),n.destroy())}),clearInterval(i.pressureIntervals[n.identifier]),n.resetDirection(),n.trigger("end",n),i.trigger("end "+n.id+":end",n),i.ids.indexOf(n.identifier)>=0&&i.ids.splice(i.ids.indexOf(n.identifier),1),i.actives.indexOf(n)>=0&&i.actives.splice(i.actives.indexOf(n),1),/(semi|static)/.test(e.mode)?i.idles.push(n):i.nipples.indexOf(n)>=0&&i.nipples.splice(i.nipples.indexOf(n),1),i.manager.unbindDocument(),/(semi|static)/.test(e.mode)&&(i.manager.ids[s.id]=s.identifier))},k.prototype.onDestroyed=function(t,i){this.nipples.indexOf(i)>=0&&this.nipples.splice(this.nipples.indexOf(i),1),this.actives.indexOf(i)>=0&&this.actives.splice(this.actives.indexOf(i),1),this.idles.indexOf(i)>=0&&this.idles.splice(this.idles.indexOf(i),1),this.ids.indexOf(i.identifier)>=0&&this.ids.splice(this.ids.indexOf(i.identifier),1),this.manager.removeIdentifier(i.identifier),this.manager.unbindDocument()},k.prototype.destroy=function(){for(var t in this.unbindEvt(this.options.zone,"start"),this.nipples.forEach(function(t){t.destroy()}),this.pressureIntervals)this.pressureIntervals.hasOwnProperty(t)&&clearInterval(this.pressureIntervals[t]);this.trigger("destroyed",this.nipples),this.manager.unbindDocument(),this.off()};var E=k;function P(t){var i,e=this;return e.ids={},e.index=0,e.collections=[],e.config(t),e.prepareCollections(),d(window,"resize",function(t){clearTimeout(i),i=setTimeout(function(){var t,i=c();e.collections.forEach(function(e){e.forEach(function(e){t=e.el.getBoundingClientRect(),e.position={x:i.x+t.left,y:i.y+t.top}})})},100)}),e.collections}P.prototype=new _,P.constructor=P,P.prototype.prepareCollections=function(){var t=this;t.collections.create=t.create.bind(t),t.collections.on=t.on.bind(t),t.collections.off=t.off.bind(t),t.collections.destroy=t.destroy.bind(t),t.collections.get=function(i){var e;return t.collections.every(function(t){return!(e=t.get(i))}),e}},P.prototype.create=function(t){return this.createCollection(t)},P.prototype.createCollection=function(t){var i=new E(this,t);return this.bindCollection(i),this.collections.push(i),i},P.prototype.bindCollection=function(t){var i,e=this,o=function(t,o){i=t.type+" "+o.id+":"+t.type,e.trigger(i,o)};t.on("destroyed",e.onDestroyed.bind(e)),t.on("shown hidden rested dir plain",o),t.on("dir:up dir:right dir:down dir:left",o),t.on("plain:up plain:right plain:down plain:left",o)},P.prototype.bindDocument=function(){this.binded||(this.bindEvt(document,"move").bindEvt(document,"end"),this.binded=!0)},P.prototype.unbindDocument=function(t){Object.keys(this.ids).length&&!0!==t||(this.unbindEvt(document,"move").unbindEvt(document,"end"),this.binded=!1)},P.prototype.getIdentifier=function(t){var i;return t?void 0===(i=void 0===t.identifier?t.pointerId:t.identifier)&&(i=this.latest||0):i=this.index,void 0===this.ids[i]&&(this.ids[i]=this.index,this.index+=1),this.latest=i,this.ids[i]},P.prototype.removeIdentifier=function(t){var i={};for(var e in this.ids)if(this.ids[e]===t){i.id=e,i.identifier=this.ids[e],delete this.ids[e];break}return i},P.prototype.onmove=function(t){return this.onAny("move",t),!1},P.prototype.onend=function(t){return this.onAny("end",t),!1},P.prototype.oncancel=function(t){return this.onAny("end",t),!1},P.prototype.onAny=function(t,i){var e,o=this,n="processOn"+t.charAt(0).toUpperCase()+t.slice(1);i=p(i);return y(i,function(t){e=o.getIdentifier(t),y(o.collections,function(t,i,e){e.ids.indexOf(i)>=0&&(e[n](t),t._found_=!0)}.bind(null,t,e)),t._found_||o.removeIdentifier(e)}),!1},P.prototype.destroy=function(){this.unbindDocument(!0),this.ids={},this.index=0,this.collections.forEach(function(t){t.destroy()}),this.off()},P.prototype.onDestroyed=function(t,i){if(this.collections.indexOf(i)<0)return!1;this.collections.splice(this.collections.indexOf(i),1)};var I=new P;i.default={create:function(t){return I.create(t)},factory:I}}]).default});
+
+/***/ }),
+
+/***/ "./node_modules/queue-microtask/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/queue-microtask/index.js ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+let promise
+
+module.exports = typeof queueMicrotask === 'function'
+  ? queueMicrotask
+  // reuse resolved promise, and allocate it lazily
+  : cb => (promise || (promise = Promise.resolve()))
+    .then(cb)
+    .catch(err => setTimeout(() => { throw err }, 0))
+
+
+/***/ }),
+
+/***/ "./node_modules/randombytes/browser.js":
+/*!*********************************************!*\
+  !*** ./node_modules/randombytes/browser.js ***!
+  \*********************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(global, process) {
 
+// limit of Crypto.getRandomValues()
+// https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues
+var MAX_BYTES = 65536
 
+// Node supports requesting up to this number of bytes
+// https://github.com/nodejs/node/blob/master/lib/internal/crypto/random.js#L48
+var MAX_UINT32 = 4294967295
 
-module.exports = function (opts) {
-  var re = {};
-
-  // Use direct extract instead of `regenerate` to reduse browserified size
-  re.src_Any = __webpack_require__(/*! uc.micro/properties/Any/regex */ "./node_modules/uc.micro/properties/Any/regex.js").source;
-  re.src_Cc  = __webpack_require__(/*! uc.micro/categories/Cc/regex */ "./node_modules/uc.micro/categories/Cc/regex.js").source;
-  re.src_Z   = __webpack_require__(/*! uc.micro/categories/Z/regex */ "./node_modules/uc.micro/categories/Z/regex.js").source;
-  re.src_P   = __webpack_require__(/*! uc.micro/categories/P/regex */ "./node_modules/uc.micro/categories/P/regex.js").source;
-
-  // \p{\Z\P\Cc\CF} (white spaces + control + format + punctuation)
-  re.src_ZPCc = [ re.src_Z, re.src_P, re.src_Cc ].join('|');
-
-  // \p{\Z\Cc} (white spaces + control)
-  re.src_ZCc = [ re.src_Z, re.src_Cc ].join('|');
-
-  // Experimental. List of chars, completely prohibited in links
-  // because can separate it from other part of text
-  var text_separators = '[><\uff5c]';
-
-  // All possible word characters (everything without punctuation, spaces & controls)
-  // Defined via punctuation & spaces to save space
-  // Should be something like \p{\L\N\S\M} (\w but without `_`)
-  re.src_pseudo_letter       = '(?:(?!' + text_separators + '|' + re.src_ZPCc + ')' + re.src_Any + ')';
-  // The same as abothe but without [0-9]
-  // var src_pseudo_letter_non_d = '(?:(?![0-9]|' + src_ZPCc + ')' + src_Any + ')';
-
-  ////////////////////////////////////////////////////////////////////////////////
-
-  re.src_ip4 =
-
-    '(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
-
-  // Prohibit any of "@/[]()" in user/pass to avoid wrong domain fetch.
-  re.src_auth    = '(?:(?:(?!' + re.src_ZCc + '|[@/\\[\\]()]).)+@)?';
-
-  re.src_port =
-
-    '(?::(?:6(?:[0-4]\\d{3}|5(?:[0-4]\\d{2}|5(?:[0-2]\\d|3[0-5])))|[1-5]?\\d{1,4}))?';
-
-  re.src_host_terminator =
-
-    '(?=$|' + text_separators + '|' + re.src_ZPCc + ')(?!-|_|:\\d|\\.-|\\.(?!$|' + re.src_ZPCc + '))';
-
-  re.src_path =
-
-    '(?:' +
-      '[/?#]' +
-        '(?:' +
-          '(?!' + re.src_ZCc + '|' + text_separators + '|[()[\\]{}.,"\'?!\\-]).|' +
-          '\\[(?:(?!' + re.src_ZCc + '|\\]).)*\\]|' +
-          '\\((?:(?!' + re.src_ZCc + '|[)]).)*\\)|' +
-          '\\{(?:(?!' + re.src_ZCc + '|[}]).)*\\}|' +
-          '\\"(?:(?!' + re.src_ZCc + '|["]).)+\\"|' +
-          "\\'(?:(?!" + re.src_ZCc + "|[']).)+\\'|" +
-          "\\'(?=" + re.src_pseudo_letter + '|[-]).|' +  // allow `I'm_king` if no pair found
-          '\\.{2,4}[a-zA-Z0-9%/]|' + // github has ... in commit range links,
-                                     // google has .... in links (issue #66)
-                                     // Restrict to
-                                     // - english
-                                     // - percent-encoded
-                                     // - parts of file path
-                                     // until more examples found.
-          '\\.(?!' + re.src_ZCc + '|[.]).|' +
-          (opts && opts['---'] ?
-            '\\-(?!--(?:[^-]|$))(?:-*)|' // `---` => long dash, terminate
-            :
-            '\\-+|'
-          ) +
-          '\\,(?!' + re.src_ZCc + ').|' +      // allow `,,,` in paths
-          '\\!(?!' + re.src_ZCc + '|[!]).|' +
-          '\\?(?!' + re.src_ZCc + '|[?]).' +
-        ')+' +
-      '|\\/' +
-    ')?';
-
-  // Allow anything in markdown spec, forbid quote (") at the first position
-  // because emails enclosed in quotes are far more common
-  re.src_email_name =
-
-    '[\\-;:&=\\+\\$,\\.a-zA-Z0-9_][\\-;:&=\\+\\$,\\"\\.a-zA-Z0-9_]*';
-
-  re.src_xn =
-
-    'xn--[a-z0-9\\-]{1,59}';
-
-  // More to read about domain names
-  // http://serverfault.com/questions/638260/
-
-  re.src_domain_root =
-
-    // Allow letters & digits (http://test1)
-    '(?:' +
-      re.src_xn +
-      '|' +
-      re.src_pseudo_letter + '{1,63}' +
-    ')';
-
-  re.src_domain =
-
-    '(?:' +
-      re.src_xn +
-      '|' +
-      '(?:' + re.src_pseudo_letter + ')' +
-      '|' +
-      '(?:' + re.src_pseudo_letter + '(?:-|' + re.src_pseudo_letter + '){0,61}' + re.src_pseudo_letter + ')' +
-    ')';
-
-  re.src_host =
-
-    '(?:' +
-    // Don't need IP check, because digits are already allowed in normal domain names
-    //   src_ip4 +
-    // '|' +
-      '(?:(?:(?:' + re.src_domain + ')\\.)*' + re.src_domain/*_root*/ + ')' +
-    ')';
-
-  re.tpl_host_fuzzy =
-
-    '(?:' +
-      re.src_ip4 +
-    '|' +
-      '(?:(?:(?:' + re.src_domain + ')\\.)+(?:%TLDS%))' +
-    ')';
-
-  re.tpl_host_no_ip_fuzzy =
-
-    '(?:(?:(?:' + re.src_domain + ')\\.)+(?:%TLDS%))';
-
-  re.src_host_strict =
-
-    re.src_host + re.src_host_terminator;
-
-  re.tpl_host_fuzzy_strict =
-
-    re.tpl_host_fuzzy + re.src_host_terminator;
-
-  re.src_host_port_strict =
-
-    re.src_host + re.src_port + re.src_host_terminator;
-
-  re.tpl_host_port_fuzzy_strict =
-
-    re.tpl_host_fuzzy + re.src_port + re.src_host_terminator;
-
-  re.tpl_host_port_no_ip_fuzzy_strict =
-
-    re.tpl_host_no_ip_fuzzy + re.src_port + re.src_host_terminator;
-
-
-  ////////////////////////////////////////////////////////////////////////////////
-  // Main rules
-
-  // Rude test fuzzy links by host, for quick deny
-  re.tpl_host_fuzzy_test =
-
-    'localhost|www\\.|\\.\\d{1,3}\\.|(?:\\.(?:%TLDS%)(?:' + re.src_ZPCc + '|>|$))';
-
-  re.tpl_email_fuzzy =
-
-      '(^|' + text_separators + '|"|\\(|' + re.src_ZCc + ')' +
-      '(' + re.src_email_name + '@' + re.tpl_host_fuzzy_strict + ')';
-
-  re.tpl_link_fuzzy =
-      // Fuzzy link can't be prepended with .:/\- and non punctuation.
-      // but can start with > (markdown blockquote)
-      '(^|(?![.:/\\-_@])(?:[$+<=>^`|\uff5c]|' + re.src_ZPCc + '))' +
-      '((?![$+<=>^`|\uff5c])' + re.tpl_host_port_fuzzy_strict + re.src_path + ')';
-
-  re.tpl_link_no_ip_fuzzy =
-      // Fuzzy link can't be prepended with .:/\- and non punctuation.
-      // but can start with > (markdown blockquote)
-      '(^|(?![.:/\\-_@])(?:[$+<=>^`|\uff5c]|' + re.src_ZPCc + '))' +
-      '((?![$+<=>^`|\uff5c])' + re.tpl_host_port_no_ip_fuzzy_strict + re.src_path + ')';
-
-  return re;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/match-sorter/dist/match-sorter.esm.js":
-/*!************************************************************!*\
-  !*** ./node_modules/match-sorter/dist/match-sorter.esm.js ***!
-  \************************************************************/
-/*! exports provided: default, rankings */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "rankings", function() { return rankings; });
-/* harmony import */ var _babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/extends */ "./node_modules/@babel/runtime/helpers/esm/extends.js");
-/* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! remove-accents */ "./node_modules/remove-accents/index.js");
-/* harmony import */ var remove_accents__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(remove_accents__WEBPACK_IMPORTED_MODULE_1__);
-
-
-
-var rankings = {
-  CASE_SENSITIVE_EQUAL: 9,
-  EQUAL: 8,
-  STARTS_WITH: 7,
-  WORD_STARTS_WITH: 6,
-  STRING_CASE: 5,
-  STRING_CASE_ACRONYM: 4,
-  CONTAINS: 3,
-  ACRONYM: 2,
-  MATCHES: 1,
-  NO_MATCH: 0
-};
-var caseRankings = {
-  CAMEL: 0.8,
-  PASCAL: 0.6,
-  KEBAB: 0.4,
-  SNAKE: 0.2,
-  NO_CASE: 0
-};
-matchSorter.rankings = rankings;
-matchSorter.caseRankings = caseRankings;
-/**
- * Takes an array of items and a value and returns a new array with the items that match the given value
- * @param {Array} items - the items to sort
- * @param {String} value - the value to use for ranking
- * @param {Object} options - Some options to configure the sorter
- * @return {Array} - the new sorted array
- */
-
-function matchSorter(items, value, options) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  // not performing any search/sort if value(search term) is empty
-  if (!value) return items;
-  var _options = options,
-      keys = _options.keys,
-      _options$threshold = _options.threshold,
-      threshold = _options$threshold === void 0 ? rankings.MATCHES : _options$threshold;
-  var matchedItems = items.reduce(reduceItemsToRanked, []);
-  return matchedItems.sort(sortRankedItems).map(function (_ref) {
-    var item = _ref.item;
-    return item;
-  });
-
-  function reduceItemsToRanked(matches, item, index) {
-    var _getHighestRanking = getHighestRanking(item, keys, value, options),
-        rankedItem = _getHighestRanking.rankedItem,
-        rank = _getHighestRanking.rank,
-        keyIndex = _getHighestRanking.keyIndex,
-        _getHighestRanking$ke = _getHighestRanking.keyThreshold,
-        keyThreshold = _getHighestRanking$ke === void 0 ? threshold : _getHighestRanking$ke;
-
-    if (rank >= keyThreshold) {
-      matches.push({
-        rankedItem: rankedItem,
-        item: item,
-        rank: rank,
-        index: index,
-        keyIndex: keyIndex
-      });
-    }
-
-    return matches;
-  }
+function oldBrowser () {
+  throw new Error('Secure random number generation is not supported by this browser.\nUse Chrome, Firefox or Internet Explorer 11')
 }
-/**
- * Gets the highest ranking for value for the given item based on its values for the given keys
- * @param {*} item - the item to rank
- * @param {Array} keys - the keys to get values from the item for the ranking
- * @param {String} value - the value to rank against
- * @param {Object} options - options to control the ranking
- * @return {{rank: Number, keyIndex: Number, keyThreshold: Number}} - the highest ranking
- */
 
+var Buffer = __webpack_require__(/*! safe-buffer */ "./node_modules/safe-buffer/index.js").Buffer
+var crypto = global.crypto || global.msCrypto
 
-function getHighestRanking(item, keys, value, options) {
-  if (!keys) {
-    return {
-      // ends up being duplicate of 'item' in matches but consistent
-      rankedItem: item,
-      rank: getMatchRanking(item, value, options),
-      keyIndex: -1,
-      keyThreshold: options.threshold
-    };
-  }
-
-  var valuesToRank = getAllValuesToRank(item, keys);
-  return valuesToRank.reduce(function (_ref2, _ref3, i) {
-    var rank = _ref2.rank,
-        keyIndex = _ref2.keyIndex,
-        keyThreshold = _ref2.keyThreshold;
-    var itemValue = _ref3.itemValue,
-        attributes = _ref3.attributes;
-    var newRank = getMatchRanking(itemValue, value, options);
-    var minRanking = attributes.minRanking,
-        maxRanking = attributes.maxRanking,
-        threshold = attributes.threshold;
-
-    if (newRank < minRanking && newRank >= rankings.MATCHES) {
-      newRank = minRanking;
-    } else if (newRank > maxRanking) {
-      newRank = maxRanking;
-    }
-
-    if (newRank > rank) {
-      rank = newRank;
-      keyIndex = i;
-      keyThreshold = threshold;
-    }
-
-    return {
-      rankedItem: itemValue,
-      rank: rank,
-      keyIndex: keyIndex,
-      keyThreshold: keyThreshold
-    };
-  }, {
-    rank: rankings.NO_MATCH,
-    keyIndex: -1,
-    keyThreshold: options.threshold
-  });
+if (crypto && crypto.getRandomValues) {
+  module.exports = randomBytes
+} else {
+  module.exports = oldBrowser
 }
-/**
- * Gives a rankings score based on how well the two strings match.
- * @param {String} testString - the string to test against
- * @param {String} stringToRank - the string to rank
- * @param {Object} options - options for the match (like keepDiacritics for comparison)
- * @returns {Number} the ranking for how well stringToRank matches testString
- */
 
+function randomBytes (size, cb) {
+  // phantomjs needs to throw
+  if (size > MAX_UINT32) throw new RangeError('requested too many random bytes')
 
-function getMatchRanking(testString, stringToRank, options) {
-  /* eslint complexity:[2, 12] */
-  testString = prepareValueForComparison(testString, options);
-  stringToRank = prepareValueForComparison(stringToRank, options); // too long
+  var bytes = Buffer.allocUnsafe(size)
 
-  if (stringToRank.length > testString.length) {
-    return rankings.NO_MATCH;
-  } // case sensitive equals
-
-
-  if (testString === stringToRank) {
-    return rankings.CASE_SENSITIVE_EQUAL;
-  }
-
-  var caseRank = getCaseRanking(testString);
-  var isPartial = isPartialOfCase(testString, stringToRank, caseRank);
-  var isCasedAcronym = isCaseAcronym(testString, stringToRank, caseRank); // Lower casing before further comparison
-
-  testString = testString.toLowerCase();
-  stringToRank = stringToRank.toLowerCase(); // case insensitive equals
-
-  if (testString === stringToRank) {
-    return rankings.EQUAL + caseRank;
-  } // starts with
-
-
-  if (testString.indexOf(stringToRank) === 0) {
-    return rankings.STARTS_WITH + caseRank;
-  } // word starts with
-
-
-  if (testString.indexOf(" " + stringToRank) !== -1) {
-    return rankings.WORD_STARTS_WITH + caseRank;
-  } // is a part inside a cased string
-
-
-  if (isPartial) {
-    return rankings.STRING_CASE + caseRank;
-  } // is acronym for a cased string
-
-
-  if (caseRank > 0 && isCasedAcronym) {
-    return rankings.STRING_CASE_ACRONYM + caseRank;
-  } // contains
-
-
-  if (testString.indexOf(stringToRank) !== -1) {
-    return rankings.CONTAINS + caseRank;
-  } else if (stringToRank.length === 1) {
-    // If the only character in the given stringToRank
-    //   isn't even contained in the testString, then
-    //   it's definitely not a match.
-    return rankings.NO_MATCH;
-  } // acronym
-
-
-  if (getAcronym(testString).indexOf(stringToRank) !== -1) {
-    return rankings.ACRONYM + caseRank;
-  } // will return a number between rankings.MATCHES and
-  // rankings.MATCHES + 1 depending  on how close of a match it is.
-
-
-  return getClosenessRanking(testString, stringToRank);
-}
-/**
- * Generates an acronym for a string.
- *
- * @param {String} string the string for which to produce the acronym
- * @returns {String} the acronym
- */
-
-
-function getAcronym(string) {
-  var acronym = '';
-  var wordsInString = string.split(' ');
-  wordsInString.forEach(function (wordInString) {
-    var splitByHyphenWords = wordInString.split('-');
-    splitByHyphenWords.forEach(function (splitByHyphenWord) {
-      acronym += splitByHyphenWord.substr(0, 1);
-    });
-  });
-  return acronym;
-}
-/**
- * Returns a score base on the case of the testString
- * @param {String} testString - the string to test against
- * @returns {Number} the number of the ranking,
- * based on the case between 0 and 1 for how the testString matches the case
- */
-
-
-function getCaseRanking(testString) {
-  var containsUpperCase = testString.toLowerCase() !== testString;
-  var containsDash = testString.indexOf('-') >= 0;
-  var containsUnderscore = testString.indexOf('_') >= 0;
-
-  if (!containsUpperCase && !containsUnderscore && containsDash) {
-    return caseRankings.KEBAB;
-  }
-
-  if (!containsUpperCase && containsUnderscore && !containsDash) {
-    return caseRankings.SNAKE;
-  }
-
-  if (containsUpperCase && !containsDash && !containsUnderscore) {
-    var startsWithUpperCase = testString[0].toUpperCase() === testString[0];
-
-    if (startsWithUpperCase) {
-      return caseRankings.PASCAL;
-    }
-
-    return caseRankings.CAMEL;
-  }
-
-  return caseRankings.NO_CASE;
-}
-/**
- * Returns whether the stringToRank is one of the case parts in the testString (works with any string case)
- * @example
- * // returns true
- * isPartialOfCase('helloWorld', 'world', caseRankings.CAMEL)
- * @example
- * // returns false
- * isPartialOfCase('helloWorld', 'oworl', caseRankings.CAMEL)
- * @param {String} testString - the string to test against
- * @param {String} stringToRank - the string to rank
- * @param {Number} caseRanking - the ranking score based on case of testString
- * @returns {Boolean} whether the stringToRank is one of the case parts in the testString
- */
-
-
-function isPartialOfCase(testString, stringToRank, caseRanking) {
-  var testIndex = testString.toLowerCase().indexOf(stringToRank.toLowerCase());
-
-  switch (caseRanking) {
-    case caseRankings.SNAKE:
-      return testString[testIndex - 1] === '_';
-
-    case caseRankings.KEBAB:
-      return testString[testIndex - 1] === '-';
-
-    case caseRankings.PASCAL:
-    case caseRankings.CAMEL:
-      return testIndex !== -1 && testString[testIndex] === testString[testIndex].toUpperCase();
-
-    default:
-      return false;
-  }
-}
-/**
- * Check if stringToRank is an acronym for a partial case
- * @example
- * // returns true
- * isCaseAcronym('super_duper_file', 'sdf', caseRankings.SNAKE)
- * @param {String} testString - the string to test against
- * @param {String} stringToRank - the acronym to test
- * @param {Number} caseRank - the ranking of the case
- * @returns {Boolean} whether the stringToRank is an acronym for the testString
- */
-
-
-function isCaseAcronym(testString, stringToRank, caseRank) {
-  var splitValue = null;
-
-  switch (caseRank) {
-    case caseRankings.SNAKE:
-      splitValue = '_';
-      break;
-
-    case caseRankings.KEBAB:
-      splitValue = '-';
-      break;
-
-    case caseRankings.PASCAL:
-    case caseRankings.CAMEL:
-      splitValue = /(?=[A-Z])/;
-      break;
-
-    default:
-      splitValue = null;
-  }
-
-  var splitTestString = testString.split(splitValue);
-  return stringToRank.toLowerCase().split('').reduce(function (correct, char, charIndex) {
-    var splitItem = splitTestString[charIndex];
-    return correct && splitItem && splitItem[0].toLowerCase() === char;
-  }, true);
-}
-/**
- * Returns a score based on how spread apart the
- * characters from the stringToRank are within the testString.
- * A number close to rankings.MATCHES represents a loose match. A number close
- * to rankings.MATCHES + 1 represents a tighter match.
- * @param {String} testString - the string to test against
- * @param {String} stringToRank - the string to rank
- * @returns {Number} the number between rankings.MATCHES and
- * rankings.MATCHES + 1 for how well stringToRank matches testString
- */
-
-
-function getClosenessRanking(testString, stringToRank) {
-  var matchingInOrderCharCount = 0;
-  var charNumber = 0;
-
-  function findMatchingCharacter(matchChar, string, index) {
-    for (var j = index; j < string.length; j++) {
-      var stringChar = string[j];
-
-      if (stringChar === matchChar) {
-        matchingInOrderCharCount += 1;
-        return j + 1;
+  if (size > 0) {  // getRandomValues fails on IE if size == 0
+    if (size > MAX_BYTES) { // this is the max bytes crypto.getRandomValues
+      // can do at once see https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues
+      for (var generated = 0; generated < size; generated += MAX_BYTES) {
+        // buffer.slice automatically checks if the end is past the end of
+        // the buffer so we don't have to here
+        crypto.getRandomValues(bytes.slice(generated, generated + MAX_BYTES))
       }
-    }
-
-    return -1;
-  }
-
-  function getRanking(spread) {
-    var inOrderPercentage = matchingInOrderCharCount / stringToRank.length;
-    var ranking = rankings.MATCHES + inOrderPercentage * (1 / spread);
-    return ranking;
-  }
-
-  var firstIndex = findMatchingCharacter(stringToRank[0], testString, 0);
-
-  if (firstIndex < 0) {
-    return rankings.NO_MATCH;
-  }
-
-  charNumber = firstIndex;
-
-  for (var i = 1; i < stringToRank.length; i++) {
-    var matchChar = stringToRank[i];
-    charNumber = findMatchingCharacter(matchChar, testString, charNumber);
-    var found = charNumber > -1;
-
-    if (!found) {
-      return rankings.NO_MATCH;
-    }
-  }
-
-  var spread = charNumber - firstIndex;
-  return getRanking(spread);
-}
-/**
- * Sorts items that have a rank, index, and keyIndex
- * @param {Object} a - the first item to sort
- * @param {Object} b - the second item to sort
- * @return {Number} -1 if a should come first, 1 if b should come first
- * Note: will never return 0
- */
-
-
-function sortRankedItems(a, b) {
-  var aFirst = -1;
-  var bFirst = 1;
-  var aRankedItem = a.rankedItem,
-      aRank = a.rank,
-      aKeyIndex = a.keyIndex;
-  var bRankedItem = b.rankedItem,
-      bRank = b.rank,
-      bKeyIndex = b.keyIndex;
-
-  if (aRank === bRank) {
-    if (aKeyIndex === bKeyIndex) {
-      return String(aRankedItem).localeCompare(bRankedItem);
     } else {
-      return aKeyIndex < bKeyIndex ? aFirst : bFirst;
+      crypto.getRandomValues(bytes)
     }
-  } else {
-    return aRank > bRank ? aFirst : bFirst;
-  }
-}
-/**
- * Prepares value for comparison by stringifying it, removing diacritics (if specified)
- * @param {String} value - the value to clean
- * @param {Object} options - {keepDiacritics: whether to remove diacritics}
- * @return {String} the prepared value
- */
-
-
-function prepareValueForComparison(value, _ref4) {
-  var keepDiacritics = _ref4.keepDiacritics;
-  value = "" + value; // toString
-
-  if (!keepDiacritics) {
-    value = remove_accents__WEBPACK_IMPORTED_MODULE_1___default()(value);
   }
 
-  return value;
-}
-/**
- * Gets value for key in item at arbitrarily nested keypath
- * @param {Object} item - the item
- * @param {Object|Function} key - the potentially nested keypath or property callback
- * @return {Array} - an array containing the value(s) at the nested keypath
- */
-
-
-function getItemValues(item, key) {
-  if (typeof key === 'object') {
-    key = key.key;
+  if (typeof cb === 'function') {
+    return process.nextTick(function () {
+      cb(null, bytes)
+    })
   }
 
-  var value;
-
-  if (typeof key === 'function') {
-    value = key(item); // eslint-disable-next-line no-negated-condition
-  } else if (key.indexOf('.') !== -1) {
-    // handle nested keys
-    value = key.split('.').reduce(function (itemObj, nestedKey) {
-      return itemObj ? itemObj[nestedKey] : null;
-    }, item);
-  } else {
-    value = item[key];
-  } // concat because `value` can be a string or an array
-  // eslint-disable-next-line
-
-
-  return value != null ? [].concat(value) : null;
-}
-/**
- * Gets all the values for the given keys in the given item and returns an array of those values
- * @param {Object} item - the item from which the values will be retrieved
- * @param {Array} keys - the keys to use to retrieve the values
- * @return {Array} objects with {itemValue, attributes}
- */
-
-
-function getAllValuesToRank(item, keys) {
-  return keys.reduce(function (allVals, key) {
-    var values = getItemValues(item, key);
-
-    if (values) {
-      values.forEach(function (itemValue) {
-        allVals.push({
-          itemValue: itemValue,
-          attributes: getKeyAttributes(key)
-        });
-      });
-    }
-
-    return allVals;
-  }, []);
-}
-/**
- * Gets all the attributes for the given key
- * @param {Object|String} key - the key from which the attributes will be retrieved
- * @return {Object} object containing the key's attributes
- */
-
-
-function getKeyAttributes(key) {
-  if (typeof key === 'string') {
-    key = {
-      key: key
-    };
-  }
-
-  return Object(_babel_runtime_helpers_esm_extends__WEBPACK_IMPORTED_MODULE_0__["default"])({
-    maxRanking: Infinity,
-    minRanking: -Infinity
-  }, key);
+  return bytes
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (matchSorter);
-
-
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
-/***/ "./node_modules/react-linkify/dist/components/Linkify.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/react-linkify/dist/components/Linkify.js ***!
-  \***************************************************************/
+/***/ "./node_modules/safe-buffer/index.js":
+/*!*******************************************!*\
+  !*** ./node_modules/safe-buffer/index.js ***!
+  \*******************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
+/* eslint-disable node/no-deprecated-api */
+var buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js")
+var Buffer = buffer.Buffer
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var React = _interopRequireWildcard(_react);
-
-var _defaultComponentDecorator = __webpack_require__(/*! ../decorators/defaultComponentDecorator */ "./node_modules/react-linkify/dist/decorators/defaultComponentDecorator.js");
-
-var _defaultComponentDecorator2 = _interopRequireDefault(_defaultComponentDecorator);
-
-var _defaultHrefDecorator = __webpack_require__(/*! ../decorators/defaultHrefDecorator */ "./node_modules/react-linkify/dist/decorators/defaultHrefDecorator.js");
-
-var _defaultHrefDecorator2 = _interopRequireDefault(_defaultHrefDecorator);
-
-var _defaultMatchDecorator = __webpack_require__(/*! ../decorators/defaultMatchDecorator */ "./node_modules/react-linkify/dist/decorators/defaultMatchDecorator.js");
-
-var _defaultMatchDecorator2 = _interopRequireDefault(_defaultMatchDecorator);
-
-var _defaultTextDecorator = __webpack_require__(/*! ../decorators/defaultTextDecorator */ "./node_modules/react-linkify/dist/decorators/defaultTextDecorator.js");
-
-var _defaultTextDecorator2 = _interopRequireDefault(_defaultTextDecorator);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var Linkify = function (_React$Component) {
-  _inherits(Linkify, _React$Component);
-
-  function Linkify() {
-    _classCallCheck(this, Linkify);
-
-    return _possibleConstructorReturn(this, (Linkify.__proto__ || Object.getPrototypeOf(Linkify)).apply(this, arguments));
+// alternative to using Object.keys for old browsers
+function copyProps (src, dst) {
+  for (var key in src) {
+    dst[key] = src[key]
   }
+}
+if (Buffer.from && Buffer.alloc && Buffer.allocUnsafe && Buffer.allocUnsafeSlow) {
+  module.exports = buffer
+} else {
+  // Copy properties from require('buffer')
+  copyProps(buffer, exports)
+  exports.Buffer = SafeBuffer
+}
 
-  _createClass(Linkify, [{
-    key: 'parseString',
-    value: function parseString(string) {
-      var _this2 = this;
+function SafeBuffer (arg, encodingOrOffset, length) {
+  return Buffer(arg, encodingOrOffset, length)
+}
 
-      if (string === '') {
-        return string;
-      }
+// Copy static methods from Buffer
+copyProps(Buffer, SafeBuffer)
 
-      var matches = this.props.matchDecorator(string);
-      if (!matches) {
-        return string;
-      }
+SafeBuffer.from = function (arg, encodingOrOffset, length) {
+  if (typeof arg === 'number') {
+    throw new TypeError('Argument must not be a number')
+  }
+  return Buffer(arg, encodingOrOffset, length)
+}
 
-      var elements = [];
-      var lastIndex = 0;
-      matches.forEach(function (match, i) {
-        // Push preceding text if there is any
-        if (match.index > lastIndex) {
-          elements.push(string.substring(lastIndex, match.index));
-        }
-
-        var decoratedHref = _this2.props.hrefDecorator(match.url);
-        var decoratedText = _this2.props.textDecorator(match.text);
-        var decoratedComponent = _this2.props.componentDecorator(decoratedHref, decoratedText, i);
-        elements.push(decoratedComponent);
-
-        lastIndex = match.lastIndex;
-      });
-
-      // Push remaining text if there is any
-      if (string.length > lastIndex) {
-        elements.push(string.substring(lastIndex));
-      }
-
-      return elements.length === 1 ? elements[0] : elements;
+SafeBuffer.alloc = function (size, fill, encoding) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  var buf = Buffer(size)
+  if (fill !== undefined) {
+    if (typeof encoding === 'string') {
+      buf.fill(fill, encoding)
+    } else {
+      buf.fill(fill)
     }
-  }, {
-    key: 'parse',
-    value: function parse(children) {
-      var _this3 = this;
+  } else {
+    buf.fill(0)
+  }
+  return buf
+}
 
-      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+SafeBuffer.allocUnsafe = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return Buffer(size)
+}
 
-      if (typeof children === 'string') {
-        return this.parseString(children);
-      } else if (React.isValidElement(children) && children.type !== 'a' && children.type !== 'button') {
-        return React.cloneElement(children, { key: key }, this.parse(children.props.children));
-      } else if (Array.isArray(children)) {
-        return children.map(function (child, i) {
-          return _this3.parse(child, i);
-        });
-      }
+SafeBuffer.allocUnsafeSlow = function (size) {
+  if (typeof size !== 'number') {
+    throw new TypeError('Argument must be a number')
+  }
+  return buffer.SlowBuffer(size)
+}
 
-      return children;
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return React.createElement(
-        React.Fragment,
-        null,
-        this.parse(this.props.children)
-      );
-    }
-  }]);
-
-  return Linkify;
-}(React.Component);
-
-Linkify.defaultProps = {
-  componentDecorator: _defaultComponentDecorator2.default,
-  hrefDecorator: _defaultHrefDecorator2.default,
-  matchDecorator: _defaultMatchDecorator2.default,
-  textDecorator: _defaultTextDecorator2.default
-};
-exports.default = Linkify;
 
 /***/ }),
 
-/***/ "./node_modules/react-linkify/dist/decorators/defaultComponentDecorator.js":
+/***/ "./node_modules/simple-peer/index.js":
+/*!*******************************************!*\
+  !*** ./node_modules/simple-peer/index.js ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(Buffer) {var debug = __webpack_require__(/*! debug */ "./node_modules/debug/src/browser.js")('simple-peer')
+var getBrowserRTC = __webpack_require__(/*! get-browser-rtc */ "./node_modules/get-browser-rtc/index.js")
+var randombytes = __webpack_require__(/*! randombytes */ "./node_modules/randombytes/browser.js")
+var stream = __webpack_require__(/*! readable-stream */ "./node_modules/simple-peer/node_modules/readable-stream/readable-browser.js")
+var queueMicrotask = __webpack_require__(/*! queue-microtask */ "./node_modules/queue-microtask/index.js") // TODO: remove when Node 10 is not supported
+
+var MAX_BUFFERED_AMOUNT = 64 * 1024
+var ICECOMPLETE_TIMEOUT = 5 * 1000
+var CHANNEL_CLOSING_TIMEOUT = 5 * 1000
+
+// HACK: Filter trickle lines when trickle is disabled #354
+function filterTrickle (sdp) {
+  return sdp.replace(/a=ice-options:trickle\s\n/g, '')
+}
+
+function makeError (message, code) {
+  var err = new Error(message)
+  err.code = code
+  return err
+}
+
+function warn (message) {
+  console.warn(message)
+}
+
+/**
+ * WebRTC peer connection. Same API as node core `net.Socket`, plus a few extra methods.
+ * Duplex stream.
+ * @param {Object} opts
+ */
+class Peer extends stream.Duplex {
+  constructor (opts) {
+    opts = Object.assign({
+      allowHalfOpen: false
+    }, opts)
+
+    super(opts)
+
+    this._id = randombytes(4).toString('hex').slice(0, 7)
+    this._debug('new peer %o', opts)
+
+    this.channelName = opts.initiator
+      ? opts.channelName || randombytes(20).toString('hex')
+      : null
+
+    this.initiator = opts.initiator || false
+    this.channelConfig = opts.channelConfig || Peer.channelConfig
+    this.config = Object.assign({}, Peer.config, opts.config)
+    this.offerOptions = opts.offerOptions || {}
+    this.answerOptions = opts.answerOptions || {}
+    this.sdpTransform = opts.sdpTransform || (sdp => sdp)
+    this.streams = opts.streams || (opts.stream ? [opts.stream] : []) // support old "stream" option
+    this.trickle = opts.trickle !== undefined ? opts.trickle : true
+    this.allowHalfTrickle = opts.allowHalfTrickle !== undefined ? opts.allowHalfTrickle : false
+    this.iceCompleteTimeout = opts.iceCompleteTimeout || ICECOMPLETE_TIMEOUT
+
+    this.destroyed = false
+    this._connected = false
+
+    this.remoteAddress = undefined
+    this.remoteFamily = undefined
+    this.remotePort = undefined
+    this.localAddress = undefined
+    this.localFamily = undefined
+    this.localPort = undefined
+
+    this._wrtc = (opts.wrtc && typeof opts.wrtc === 'object')
+      ? opts.wrtc
+      : getBrowserRTC()
+
+    if (!this._wrtc) {
+      if (typeof window === 'undefined') {
+        throw makeError('No WebRTC support: Specify `opts.wrtc` option in this environment', 'ERR_WEBRTC_SUPPORT')
+      } else {
+        throw makeError('No WebRTC support: Not a supported browser', 'ERR_WEBRTC_SUPPORT')
+      }
+    }
+
+    this._pcReady = false
+    this._channelReady = false
+    this._iceComplete = false // ice candidate trickle done (got null candidate)
+    this._iceCompleteTimer = null // send an offer/answer anyway after some timeout
+    this._channel = null
+    this._pendingCandidates = []
+
+    this._isNegotiating = !this.initiator // is this peer waiting for negotiation to complete?
+    this._batchedNegotiation = false // batch synchronous negotiations
+    this._queuedNegotiation = false // is there a queued negotiation request?
+    this._sendersAwaitingStable = []
+    this._senderMap = new Map()
+    this._firstStable = true
+    this._closingInterval = null
+
+    this._remoteTracks = []
+    this._remoteStreams = []
+
+    this._chunk = null
+    this._cb = null
+    this._interval = null
+
+    try {
+      this._pc = new (this._wrtc.RTCPeerConnection)(this.config)
+    } catch (err) {
+      queueMicrotask(() => this.destroy(makeError(err, 'ERR_PC_CONSTRUCTOR')))
+      return
+    }
+
+    // We prefer feature detection whenever possible, but sometimes that's not
+    // possible for certain implementations.
+    this._isReactNativeWebrtc = typeof this._pc._peerConnectionId === 'number'
+
+    this._pc.oniceconnectionstatechange = () => {
+      this._onIceStateChange()
+    }
+    this._pc.onicegatheringstatechange = () => {
+      this._onIceStateChange()
+    }
+    this._pc.onconnectionstatechange = () => {
+      this._onConnectionStateChange()
+    }
+    this._pc.onsignalingstatechange = () => {
+      this._onSignalingStateChange()
+    }
+    this._pc.onicecandidate = event => {
+      this._onIceCandidate(event)
+    }
+
+    // Other spec events, unused by this implementation:
+    // - onconnectionstatechange
+    // - onicecandidateerror
+    // - onfingerprintfailure
+    // - onnegotiationneeded
+
+    if (this.initiator) {
+      this._setupData({
+        channel: this._pc.createDataChannel(this.channelName, this.channelConfig)
+      })
+    } else {
+      this._pc.ondatachannel = event => {
+        this._setupData(event)
+      }
+    }
+
+    if (this.streams) {
+      this.streams.forEach(stream => {
+        this.addStream(stream)
+      })
+    }
+    this._pc.ontrack = event => {
+      this._onTrack(event)
+    }
+
+    if (this.initiator) {
+      this._needsNegotiation()
+    }
+
+    this._onFinishBound = () => {
+      this._onFinish()
+    }
+    this.once('finish', this._onFinishBound)
+  }
+
+  get bufferSize () {
+    return (this._channel && this._channel.bufferedAmount) || 0
+  }
+
+  // HACK: it's possible channel.readyState is "closing" before peer.destroy() fires
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=882743
+  get connected () {
+    return (this._connected && this._channel.readyState === 'open')
+  }
+
+  address () {
+    return { port: this.localPort, family: this.localFamily, address: this.localAddress }
+  }
+
+  signal (data) {
+    if (this.destroyed) throw makeError('cannot signal after peer is destroyed', 'ERR_SIGNALING')
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data)
+      } catch (err) {
+        data = {}
+      }
+    }
+    this._debug('signal()')
+
+    if (data.renegotiate && this.initiator) {
+      this._debug('got request to renegotiate')
+      this._needsNegotiation()
+    }
+    if (data.transceiverRequest && this.initiator) {
+      this._debug('got request for transceiver')
+      this.addTransceiver(data.transceiverRequest.kind, data.transceiverRequest.init)
+    }
+    if (data.candidate) {
+      if (this._pc.remoteDescription && this._pc.remoteDescription.type) {
+        this._addIceCandidate(data.candidate)
+      } else {
+        this._pendingCandidates.push(data.candidate)
+      }
+    }
+    if (data.sdp) {
+      this._pc.setRemoteDescription(new (this._wrtc.RTCSessionDescription)(data))
+        .then(() => {
+          if (this.destroyed) return
+
+          this._pendingCandidates.forEach(candidate => {
+            this._addIceCandidate(candidate)
+          })
+          this._pendingCandidates = []
+
+          if (this._pc.remoteDescription.type === 'offer') this._createAnswer()
+        })
+        .catch(err => {
+          this.destroy(makeError(err, 'ERR_SET_REMOTE_DESCRIPTION'))
+        })
+    }
+    if (!data.sdp && !data.candidate && !data.renegotiate && !data.transceiverRequest) {
+      this.destroy(makeError('signal() called with invalid signal data', 'ERR_SIGNALING'))
+    }
+  }
+
+  _addIceCandidate (candidate) {
+    var iceCandidateObj = new this._wrtc.RTCIceCandidate(candidate)
+    this._pc.addIceCandidate(iceCandidateObj)
+      .catch(err => {
+        if (!iceCandidateObj.address || iceCandidateObj.address.endsWith('.local')) {
+          warn('Ignoring unsupported ICE candidate.')
+        } else {
+          this.destroy(makeError(err, 'ERR_ADD_ICE_CANDIDATE'))
+        }
+      })
+  }
+
+  /**
+   * Send text/binary data to the remote peer.
+   * @param {ArrayBufferView|ArrayBuffer|Buffer|string|Blob} chunk
+   */
+  send (chunk) {
+    this._channel.send(chunk)
+  }
+
+  /**
+   * Add a Transceiver to the connection.
+   * @param {String} kind
+   * @param {Object} init
+   */
+  addTransceiver (kind, init) {
+    this._debug('addTransceiver()')
+
+    if (this.initiator) {
+      try {
+        this._pc.addTransceiver(kind, init)
+        this._needsNegotiation()
+      } catch (err) {
+        this.destroy(makeError(err, 'ERR_ADD_TRANSCEIVER'))
+      }
+    } else {
+      this.emit('signal', { // request initiator to renegotiate
+        transceiverRequest: { kind, init }
+      })
+    }
+  }
+
+  /**
+   * Add a MediaStream to the connection.
+   * @param {MediaStream} stream
+   */
+  addStream (stream) {
+    this._debug('addStream()')
+
+    stream.getTracks().forEach(track => {
+      this.addTrack(track, stream)
+    })
+  }
+
+  /**
+   * Add a MediaStreamTrack to the connection.
+   * @param {MediaStreamTrack} track
+   * @param {MediaStream} stream
+   */
+  addTrack (track, stream) {
+    this._debug('addTrack()')
+
+    var submap = this._senderMap.get(track) || new Map() // nested Maps map [track, stream] to sender
+    var sender = submap.get(stream)
+    if (!sender) {
+      sender = this._pc.addTrack(track, stream)
+      submap.set(stream, sender)
+      this._senderMap.set(track, submap)
+      this._needsNegotiation()
+    } else if (sender.removed) {
+      throw makeError('Track has been removed. You should enable/disable tracks that you want to re-add.', 'ERR_SENDER_REMOVED')
+    } else {
+      throw makeError('Track has already been added to that stream.', 'ERR_SENDER_ALREADY_ADDED')
+    }
+  }
+
+  /**
+   * Replace a MediaStreamTrack by another in the connection.
+   * @param {MediaStreamTrack} oldTrack
+   * @param {MediaStreamTrack} newTrack
+   * @param {MediaStream} stream
+   */
+  replaceTrack (oldTrack, newTrack, stream) {
+    this._debug('replaceTrack()')
+
+    var submap = this._senderMap.get(oldTrack)
+    var sender = submap ? submap.get(stream) : null
+    if (!sender) {
+      throw makeError('Cannot replace track that was never added.', 'ERR_TRACK_NOT_ADDED')
+    }
+    if (newTrack) this._senderMap.set(newTrack, submap)
+
+    if (sender.replaceTrack != null) {
+      sender.replaceTrack(newTrack)
+    } else {
+      this.destroy(makeError('replaceTrack is not supported in this browser', 'ERR_UNSUPPORTED_REPLACETRACK'))
+    }
+  }
+
+  /**
+   * Remove a MediaStreamTrack from the connection.
+   * @param {MediaStreamTrack} track
+   * @param {MediaStream} stream
+   */
+  removeTrack (track, stream) {
+    this._debug('removeSender()')
+
+    var submap = this._senderMap.get(track)
+    var sender = submap ? submap.get(stream) : null
+    if (!sender) {
+      throw makeError('Cannot remove track that was never added.', 'ERR_TRACK_NOT_ADDED')
+    }
+    try {
+      sender.removed = true
+      this._pc.removeTrack(sender)
+    } catch (err) {
+      if (err.name === 'NS_ERROR_UNEXPECTED') {
+        this._sendersAwaitingStable.push(sender) // HACK: Firefox must wait until (signalingState === stable) https://bugzilla.mozilla.org/show_bug.cgi?id=1133874
+      } else {
+        this.destroy(makeError(err, 'ERR_REMOVE_TRACK'))
+      }
+    }
+    this._needsNegotiation()
+  }
+
+  /**
+   * Remove a MediaStream from the connection.
+   * @param {MediaStream} stream
+   */
+  removeStream (stream) {
+    this._debug('removeSenders()')
+
+    stream.getTracks().forEach(track => {
+      this.removeTrack(track, stream)
+    })
+  }
+
+  _needsNegotiation () {
+    this._debug('_needsNegotiation')
+    if (this._batchedNegotiation) return // batch synchronous renegotiations
+    this._batchedNegotiation = true
+    queueMicrotask(() => {
+      this._batchedNegotiation = false
+      this._debug('starting batched negotiation')
+      this.negotiate()
+    })
+  }
+
+  negotiate () {
+    if (this.initiator) {
+      if (this._isNegotiating) {
+        this._queuedNegotiation = true
+        this._debug('already negotiating, queueing')
+      } else {
+        this._debug('start negotiation')
+        setTimeout(() => { // HACK: Chrome crashes if we immediately call createOffer
+          this._createOffer()
+        }, 0)
+      }
+    } else {
+      if (!this._isNegotiating) {
+        this._debug('requesting negotiation from initiator')
+        this.emit('signal', { // request initiator to renegotiate
+          renegotiate: true
+        })
+      }
+    }
+    this._isNegotiating = true
+  }
+
+  // TODO: Delete this method once readable-stream is updated to contain a default
+  // implementation of destroy() that automatically calls _destroy()
+  // See: https://github.com/nodejs/readable-stream/issues/283
+  destroy (err) {
+    this._destroy(err, () => {})
+  }
+
+  _destroy (err, cb) {
+    if (this.destroyed) return
+
+    this._debug('destroy (error: %s)', err && (err.message || err))
+
+    this.readable = this.writable = false
+
+    if (!this._readableState.ended) this.push(null)
+    if (!this._writableState.finished) this.end()
+
+    this.destroyed = true
+    this._connected = false
+    this._pcReady = false
+    this._channelReady = false
+    this._remoteTracks = null
+    this._remoteStreams = null
+    this._senderMap = null
+
+    clearInterval(this._closingInterval)
+    this._closingInterval = null
+
+    clearInterval(this._interval)
+    this._interval = null
+    this._chunk = null
+    this._cb = null
+
+    if (this._onFinishBound) this.removeListener('finish', this._onFinishBound)
+    this._onFinishBound = null
+
+    if (this._channel) {
+      try {
+        this._channel.close()
+      } catch (err) {}
+
+      this._channel.onmessage = null
+      this._channel.onopen = null
+      this._channel.onclose = null
+      this._channel.onerror = null
+    }
+    if (this._pc) {
+      try {
+        this._pc.close()
+      } catch (err) {}
+
+      this._pc.oniceconnectionstatechange = null
+      this._pc.onicegatheringstatechange = null
+      this._pc.onsignalingstatechange = null
+      this._pc.onicecandidate = null
+      this._pc.ontrack = null
+      this._pc.ondatachannel = null
+    }
+    this._pc = null
+    this._channel = null
+
+    if (err) this.emit('error', err)
+    this.emit('close')
+    cb()
+  }
+
+  _setupData (event) {
+    if (!event.channel) {
+      // In some situations `pc.createDataChannel()` returns `undefined` (in wrtc),
+      // which is invalid behavior. Handle it gracefully.
+      // See: https://github.com/feross/simple-peer/issues/163
+      return this.destroy(makeError('Data channel event is missing `channel` property', 'ERR_DATA_CHANNEL'))
+    }
+
+    this._channel = event.channel
+    this._channel.binaryType = 'arraybuffer'
+
+    if (typeof this._channel.bufferedAmountLowThreshold === 'number') {
+      this._channel.bufferedAmountLowThreshold = MAX_BUFFERED_AMOUNT
+    }
+
+    this.channelName = this._channel.label
+
+    this._channel.onmessage = event => {
+      this._onChannelMessage(event)
+    }
+    this._channel.onbufferedamountlow = () => {
+      this._onChannelBufferedAmountLow()
+    }
+    this._channel.onopen = () => {
+      this._onChannelOpen()
+    }
+    this._channel.onclose = () => {
+      this._onChannelClose()
+    }
+    this._channel.onerror = err => {
+      this.destroy(makeError(err, 'ERR_DATA_CHANNEL'))
+    }
+
+    // HACK: Chrome will sometimes get stuck in readyState "closing", let's check for this condition
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=882743
+    var isClosing = false
+    this._closingInterval = setInterval(() => { // No "onclosing" event
+      if (this._channel && this._channel.readyState === 'closing') {
+        if (isClosing) this._onChannelClose() // closing timed out: equivalent to onclose firing
+        isClosing = true
+      } else {
+        isClosing = false
+      }
+    }, CHANNEL_CLOSING_TIMEOUT)
+  }
+
+  _read () {}
+
+  _write (chunk, encoding, cb) {
+    if (this.destroyed) return cb(makeError('cannot write after peer is destroyed', 'ERR_DATA_CHANNEL'))
+
+    if (this._connected) {
+      try {
+        this.send(chunk)
+      } catch (err) {
+        return this.destroy(makeError(err, 'ERR_DATA_CHANNEL'))
+      }
+      if (this._channel.bufferedAmount > MAX_BUFFERED_AMOUNT) {
+        this._debug('start backpressure: bufferedAmount %d', this._channel.bufferedAmount)
+        this._cb = cb
+      } else {
+        cb(null)
+      }
+    } else {
+      this._debug('write before connect')
+      this._chunk = chunk
+      this._cb = cb
+    }
+  }
+
+  // When stream finishes writing, close socket. Half open connections are not
+  // supported.
+  _onFinish () {
+    if (this.destroyed) return
+
+    // Wait a bit before destroying so the socket flushes.
+    // TODO: is there a more reliable way to accomplish this?
+    const destroySoon = () => {
+      setTimeout(() => this.destroy(), 1000)
+    }
+
+    if (this._connected) {
+      destroySoon()
+    } else {
+      this.once('connect', destroySoon)
+    }
+  }
+
+  _startIceCompleteTimeout () {
+    if (this.destroyed) return
+    if (this._iceCompleteTimer) return
+    this._debug('started iceComplete timeout')
+    this._iceCompleteTimer = setTimeout(() => {
+      if (!this._iceComplete) {
+        this._iceComplete = true
+        this._debug('iceComplete timeout completed')
+        this.emit('iceTimeout')
+        this.emit('_iceComplete')
+      }
+    }, this.iceCompleteTimeout)
+  }
+
+  _createOffer () {
+    if (this.destroyed) return
+
+    this._pc.createOffer(this.offerOptions)
+      .then(offer => {
+        if (this.destroyed) return
+        if (!this.trickle && !this.allowHalfTrickle) offer.sdp = filterTrickle(offer.sdp)
+        offer.sdp = this.sdpTransform(offer.sdp)
+
+        const sendOffer = () => {
+          if (this.destroyed) return
+          var signal = this._pc.localDescription || offer
+          this._debug('signal')
+          this.emit('signal', {
+            type: signal.type,
+            sdp: signal.sdp
+          })
+        }
+
+        const onSuccess = () => {
+          this._debug('createOffer success')
+          if (this.destroyed) return
+          if (this.trickle || this._iceComplete) sendOffer()
+          else this.once('_iceComplete', sendOffer) // wait for candidates
+        }
+
+        const onError = err => {
+          this.destroy(makeError(err, 'ERR_SET_LOCAL_DESCRIPTION'))
+        }
+
+        this._pc.setLocalDescription(offer)
+          .then(onSuccess)
+          .catch(onError)
+      })
+      .catch(err => {
+        this.destroy(makeError(err, 'ERR_CREATE_OFFER'))
+      })
+  }
+
+  _requestMissingTransceivers () {
+    if (this._pc.getTransceivers) {
+      this._pc.getTransceivers().forEach(transceiver => {
+        if (!transceiver.mid && transceiver.sender.track && !transceiver.requested) {
+          transceiver.requested = true // HACK: Safari returns negotiated transceivers with a null mid
+          this.addTransceiver(transceiver.sender.track.kind)
+        }
+      })
+    }
+  }
+
+  _createAnswer () {
+    if (this.destroyed) return
+
+    this._pc.createAnswer(this.answerOptions)
+      .then(answer => {
+        if (this.destroyed) return
+        if (!this.trickle && !this.allowHalfTrickle) answer.sdp = filterTrickle(answer.sdp)
+        answer.sdp = this.sdpTransform(answer.sdp)
+
+        const sendAnswer = () => {
+          if (this.destroyed) return
+          var signal = this._pc.localDescription || answer
+          this._debug('signal')
+          this.emit('signal', {
+            type: signal.type,
+            sdp: signal.sdp
+          })
+          if (!this.initiator) this._requestMissingTransceivers()
+        }
+
+        const onSuccess = () => {
+          if (this.destroyed) return
+          if (this.trickle || this._iceComplete) sendAnswer()
+          else this.once('_iceComplete', sendAnswer)
+        }
+
+        const onError = err => {
+          this.destroy(makeError(err, 'ERR_SET_LOCAL_DESCRIPTION'))
+        }
+
+        this._pc.setLocalDescription(answer)
+          .then(onSuccess)
+          .catch(onError)
+      })
+      .catch(err => {
+        this.destroy(makeError(err, 'ERR_CREATE_ANSWER'))
+      })
+  }
+
+  _onConnectionStateChange () {
+    if (this.destroyed) return
+    if (this._pc.connectionState === 'failed') {
+      this.destroy(makeError('Connection failed.', 'ERR_CONNECTION_FAILURE'))
+    }
+  }
+
+  _onIceStateChange () {
+    if (this.destroyed) return
+    var iceConnectionState = this._pc.iceConnectionState
+    var iceGatheringState = this._pc.iceGatheringState
+
+    this._debug(
+      'iceStateChange (connection: %s) (gathering: %s)',
+      iceConnectionState,
+      iceGatheringState
+    )
+    this.emit('iceStateChange', iceConnectionState, iceGatheringState)
+
+    if (iceConnectionState === 'connected' || iceConnectionState === 'completed') {
+      this._pcReady = true
+      this._maybeReady()
+    }
+    if (iceConnectionState === 'failed') {
+      this.destroy(makeError('Ice connection failed.', 'ERR_ICE_CONNECTION_FAILURE'))
+    }
+    if (iceConnectionState === 'closed') {
+      this.destroy(makeError('Ice connection closed.', 'ERR_ICE_CONNECTION_CLOSED'))
+    }
+  }
+
+  getStats (cb) {
+    // statreports can come with a value array instead of properties
+    const flattenValues = report => {
+      if (Object.prototype.toString.call(report.values) === '[object Array]') {
+        report.values.forEach(value => {
+          Object.assign(report, value)
+        })
+      }
+      return report
+    }
+
+    // Promise-based getStats() (standard)
+    if (this._pc.getStats.length === 0 || this._isReactNativeWebrtc) {
+      this._pc.getStats()
+        .then(res => {
+          var reports = []
+          res.forEach(report => {
+            reports.push(flattenValues(report))
+          })
+          cb(null, reports)
+        }, err => cb(err))
+
+    // Single-parameter callback-based getStats() (non-standard)
+    } else if (this._pc.getStats.length > 0) {
+      this._pc.getStats(res => {
+        // If we destroy connection in `connect` callback this code might happen to run when actual connection is already closed
+        if (this.destroyed) return
+
+        var reports = []
+        res.result().forEach(result => {
+          var report = {}
+          result.names().forEach(name => {
+            report[name] = result.stat(name)
+          })
+          report.id = result.id
+          report.type = result.type
+          report.timestamp = result.timestamp
+          reports.push(flattenValues(report))
+        })
+        cb(null, reports)
+      }, err => cb(err))
+
+    // Unknown browser, skip getStats() since it's anyone's guess which style of
+    // getStats() they implement.
+    } else {
+      cb(null, [])
+    }
+  }
+
+  _maybeReady () {
+    this._debug('maybeReady pc %s channel %s', this._pcReady, this._channelReady)
+    if (this._connected || this._connecting || !this._pcReady || !this._channelReady) return
+
+    this._connecting = true
+
+    // HACK: We can't rely on order here, for details see https://github.com/js-platform/node-webrtc/issues/339
+    const findCandidatePair = () => {
+      if (this.destroyed) return
+
+      this.getStats((err, items) => {
+        if (this.destroyed) return
+
+        // Treat getStats error as non-fatal. It's not essential.
+        if (err) items = []
+
+        var remoteCandidates = {}
+        var localCandidates = {}
+        var candidatePairs = {}
+        var foundSelectedCandidatePair = false
+
+        items.forEach(item => {
+          // TODO: Once all browsers support the hyphenated stats report types, remove
+          // the non-hypenated ones
+          if (item.type === 'remotecandidate' || item.type === 'remote-candidate') {
+            remoteCandidates[item.id] = item
+          }
+          if (item.type === 'localcandidate' || item.type === 'local-candidate') {
+            localCandidates[item.id] = item
+          }
+          if (item.type === 'candidatepair' || item.type === 'candidate-pair') {
+            candidatePairs[item.id] = item
+          }
+        })
+
+        const setSelectedCandidatePair = selectedCandidatePair => {
+          foundSelectedCandidatePair = true
+
+          var local = localCandidates[selectedCandidatePair.localCandidateId]
+
+          if (local && (local.ip || local.address)) {
+            // Spec
+            this.localAddress = local.ip || local.address
+            this.localPort = Number(local.port)
+          } else if (local && local.ipAddress) {
+            // Firefox
+            this.localAddress = local.ipAddress
+            this.localPort = Number(local.portNumber)
+          } else if (typeof selectedCandidatePair.googLocalAddress === 'string') {
+            // TODO: remove this once Chrome 58 is released
+            local = selectedCandidatePair.googLocalAddress.split(':')
+            this.localAddress = local[0]
+            this.localPort = Number(local[1])
+          }
+          if (this.localAddress) {
+            this.localFamily = this.localAddress.includes(':') ? 'IPv6' : 'IPv4'
+          }
+
+          var remote = remoteCandidates[selectedCandidatePair.remoteCandidateId]
+
+          if (remote && (remote.ip || remote.address)) {
+            // Spec
+            this.remoteAddress = remote.ip || remote.address
+            this.remotePort = Number(remote.port)
+          } else if (remote && remote.ipAddress) {
+            // Firefox
+            this.remoteAddress = remote.ipAddress
+            this.remotePort = Number(remote.portNumber)
+          } else if (typeof selectedCandidatePair.googRemoteAddress === 'string') {
+            // TODO: remove this once Chrome 58 is released
+            remote = selectedCandidatePair.googRemoteAddress.split(':')
+            this.remoteAddress = remote[0]
+            this.remotePort = Number(remote[1])
+          }
+          if (this.remoteAddress) {
+            this.remoteFamily = this.remoteAddress.includes(':') ? 'IPv6' : 'IPv4'
+          }
+
+          this._debug(
+            'connect local: %s:%s remote: %s:%s',
+            this.localAddress, this.localPort, this.remoteAddress, this.remotePort
+          )
+        }
+
+        items.forEach(item => {
+          // Spec-compliant
+          if (item.type === 'transport' && item.selectedCandidatePairId) {
+            setSelectedCandidatePair(candidatePairs[item.selectedCandidatePairId])
+          }
+
+          // Old implementations
+          if (
+            (item.type === 'googCandidatePair' && item.googActiveConnection === 'true') ||
+            ((item.type === 'candidatepair' || item.type === 'candidate-pair') && item.selected)
+          ) {
+            setSelectedCandidatePair(item)
+          }
+        })
+
+        // Ignore candidate pair selection in browsers like Safari 11 that do not have any local or remote candidates
+        // But wait until at least 1 candidate pair is available
+        if (!foundSelectedCandidatePair && (!Object.keys(candidatePairs).length || Object.keys(localCandidates).length)) {
+          setTimeout(findCandidatePair, 100)
+          return
+        } else {
+          this._connecting = false
+          this._connected = true
+        }
+
+        if (this._chunk) {
+          try {
+            this.send(this._chunk)
+          } catch (err) {
+            return this.destroy(makeError(err, 'ERR_DATA_CHANNEL'))
+          }
+          this._chunk = null
+          this._debug('sent chunk from "write before connect"')
+
+          var cb = this._cb
+          this._cb = null
+          cb(null)
+        }
+
+        // If `bufferedAmountLowThreshold` and 'onbufferedamountlow' are unsupported,
+        // fallback to using setInterval to implement backpressure.
+        if (typeof this._channel.bufferedAmountLowThreshold !== 'number') {
+          this._interval = setInterval(() => this._onInterval(), 150)
+          if (this._interval.unref) this._interval.unref()
+        }
+
+        this._debug('connect')
+        this.emit('connect')
+      })
+    }
+    findCandidatePair()
+  }
+
+  _onInterval () {
+    if (!this._cb || !this._channel || this._channel.bufferedAmount > MAX_BUFFERED_AMOUNT) {
+      return
+    }
+    this._onChannelBufferedAmountLow()
+  }
+
+  _onSignalingStateChange () {
+    if (this.destroyed) return
+
+    if (this._pc.signalingState === 'stable' && !this._firstStable) {
+      this._isNegotiating = false
+
+      // HACK: Firefox doesn't yet support removing tracks when signalingState !== 'stable'
+      this._debug('flushing sender queue', this._sendersAwaitingStable)
+      this._sendersAwaitingStable.forEach(sender => {
+        this._pc.removeTrack(sender)
+        this._queuedNegotiation = true
+      })
+      this._sendersAwaitingStable = []
+
+      if (this._queuedNegotiation) {
+        this._debug('flushing negotiation queue')
+        this._queuedNegotiation = false
+        this._needsNegotiation() // negotiate again
+      }
+
+      this._debug('negotiate')
+      this.emit('negotiate')
+    }
+    this._firstStable = false
+
+    this._debug('signalingStateChange %s', this._pc.signalingState)
+    this.emit('signalingStateChange', this._pc.signalingState)
+  }
+
+  _onIceCandidate (event) {
+    if (this.destroyed) return
+    if (event.candidate && this.trickle) {
+      this.emit('signal', {
+        candidate: {
+          candidate: event.candidate.candidate,
+          sdpMLineIndex: event.candidate.sdpMLineIndex,
+          sdpMid: event.candidate.sdpMid
+        }
+      })
+    } else if (!event.candidate && !this._iceComplete) {
+      this._iceComplete = true
+      this.emit('_iceComplete')
+    }
+    // as soon as we've received one valid candidate start timeout
+    if (event.candidate) {
+      this._startIceCompleteTimeout()
+    }
+  }
+
+  _onChannelMessage (event) {
+    if (this.destroyed) return
+    var data = event.data
+    if (data instanceof ArrayBuffer) data = Buffer.from(data)
+    this.push(data)
+  }
+
+  _onChannelBufferedAmountLow () {
+    if (this.destroyed || !this._cb) return
+    this._debug('ending backpressure: bufferedAmount %d', this._channel.bufferedAmount)
+    var cb = this._cb
+    this._cb = null
+    cb(null)
+  }
+
+  _onChannelOpen () {
+    if (this._connected || this.destroyed) return
+    this._debug('on channel open')
+    this._channelReady = true
+    this._maybeReady()
+  }
+
+  _onChannelClose () {
+    if (this.destroyed) return
+    this._debug('on channel close')
+    this.destroy()
+  }
+
+  _onTrack (event) {
+    if (this.destroyed) return
+
+    event.streams.forEach(eventStream => {
+      this._debug('on track')
+      this.emit('track', event.track, eventStream)
+
+      this._remoteTracks.push({
+        track: event.track,
+        stream: eventStream
+      })
+
+      if (this._remoteStreams.some(remoteStream => {
+        return remoteStream.id === eventStream.id
+      })) return // Only fire one 'stream' event, even though there may be multiple tracks per stream
+
+      this._remoteStreams.push(eventStream)
+      queueMicrotask(() => {
+        this.emit('stream', eventStream) // ensure all tracks have been added
+      })
+    })
+  }
+
+  _debug () {
+    var args = [].slice.call(arguments)
+    args[0] = '[' + this._id + '] ' + args[0]
+    debug.apply(null, args)
+  }
+}
+
+Peer.WEBRTC_SUPPORT = !!getBrowserRTC()
+
+/**
+ * Expose peer and data channel config for overriding all Peer
+ * instances. Otherwise, just set opts.config or opts.channelConfig
+ * when constructing a Peer.
+ */
+Peer.config = {
+  iceServers: [
+    {
+      urls: 'stun:stun.l.google.com:19302'
+    },
+    {
+      urls: 'stun:global.stun.twilio.com:3478?transport=udp'
+    }
+  ],
+  sdpSemantics: 'unified-plan'
+}
+
+Peer.channelConfig = {}
+
+module.exports = Peer
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../buffer/index.js */ "./node_modules/buffer/index.js").Buffer))
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js":
 /*!*********************************************************************************!*\
-  !*** ./node_modules/react-linkify/dist/decorators/defaultComponentDecorator.js ***!
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js ***!
   \*********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -3252,2291 +1715,3564 @@ exports.default = Linkify;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+function _inheritsLoose(subClass, superClass) { subClass.prototype = Object.create(superClass.prototype); subClass.prototype.constructor = subClass; subClass.__proto__ = superClass; }
 
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+var codes = {};
 
-var React = _interopRequireWildcard(_react);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-exports.default = function (decoratedHref, decoratedText, key) {
-  return React.createElement(
-    'a',
-    { href: decoratedHref, key: key },
-    decoratedText
-  );
-};
-
-/***/ }),
-
-/***/ "./node_modules/react-linkify/dist/decorators/defaultHrefDecorator.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/react-linkify/dist/decorators/defaultHrefDecorator.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (href) {
-  return href;
-};
-
-/***/ }),
-
-/***/ "./node_modules/react-linkify/dist/decorators/defaultMatchDecorator.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/react-linkify/dist/decorators/defaultMatchDecorator.js ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _linkifyIt = __webpack_require__(/*! linkify-it */ "./node_modules/linkify-it/index.js");
-
-var _linkifyIt2 = _interopRequireDefault(_linkifyIt);
-
-var _tlds = __webpack_require__(/*! tlds */ "./node_modules/tlds/index.js");
-
-var _tlds2 = _interopRequireDefault(_tlds);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var linkify = new _linkifyIt2.default();
-linkify.tlds(_tlds2.default);
-
-exports.default = function (text) {
-  return linkify.match(text);
-};
-
-/***/ }),
-
-/***/ "./node_modules/react-linkify/dist/decorators/defaultTextDecorator.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/react-linkify/dist/decorators/defaultTextDecorator.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-exports.default = function (text) {
-  return text;
-};
-
-/***/ }),
-
-/***/ "./node_modules/react-linkify/dist/index.js":
-/*!**************************************************!*\
-  !*** ./node_modules/react-linkify/dist/index.js ***!
-  \**************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _Linkify = __webpack_require__(/*! ./components/Linkify */ "./node_modules/react-linkify/dist/components/Linkify.js");
-
-var _Linkify2 = _interopRequireDefault(_Linkify);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _Linkify2.default;
-
-/***/ }),
-
-/***/ "./node_modules/remove-accents/index.js":
-/*!**********************************************!*\
-  !*** ./node_modules/remove-accents/index.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var characterMap = {
-	"À": "A",
-	"Á": "A",
-	"Â": "A",
-	"Ã": "A",
-	"Ä": "A",
-	"Å": "A",
-	"Ấ": "A",
-	"Ắ": "A",
-	"Ẳ": "A",
-	"Ẵ": "A",
-	"Ặ": "A",
-	"Æ": "AE",
-	"Ầ": "A",
-	"Ằ": "A",
-	"Ȃ": "A",
-	"Ç": "C",
-	"Ḉ": "C",
-	"È": "E",
-	"É": "E",
-	"Ê": "E",
-	"Ë": "E",
-	"Ế": "E",
-	"Ḗ": "E",
-	"Ề": "E",
-	"Ḕ": "E",
-	"Ḝ": "E",
-	"Ȇ": "E",
-	"Ì": "I",
-	"Í": "I",
-	"Î": "I",
-	"Ï": "I",
-	"Ḯ": "I",
-	"Ȋ": "I",
-	"Ð": "D",
-	"Ñ": "N",
-	"Ò": "O",
-	"Ó": "O",
-	"Ô": "O",
-	"Õ": "O",
-	"Ö": "O",
-	"Ø": "O",
-	"Ố": "O",
-	"Ṍ": "O",
-	"Ṓ": "O",
-	"Ȏ": "O",
-	"Ù": "U",
-	"Ú": "U",
-	"Û": "U",
-	"Ü": "U",
-	"Ý": "Y",
-	"à": "a",
-	"á": "a",
-	"â": "a",
-	"ã": "a",
-	"ä": "a",
-	"å": "a",
-	"ấ": "a",
-	"ắ": "a",
-	"ẳ": "a",
-	"ẵ": "a",
-	"ặ": "a",
-	"æ": "ae",
-	"ầ": "a",
-	"ằ": "a",
-	"ȃ": "a",
-	"ç": "c",
-	"ḉ": "c",
-	"è": "e",
-	"é": "e",
-	"ê": "e",
-	"ë": "e",
-	"ế": "e",
-	"ḗ": "e",
-	"ề": "e",
-	"ḕ": "e",
-	"ḝ": "e",
-	"ȇ": "e",
-	"ì": "i",
-	"í": "i",
-	"î": "i",
-	"ï": "i",
-	"ḯ": "i",
-	"ȋ": "i",
-	"ð": "d",
-	"ñ": "n",
-	"ò": "o",
-	"ó": "o",
-	"ô": "o",
-	"õ": "o",
-	"ö": "o",
-	"ø": "o",
-	"ố": "o",
-	"ṍ": "o",
-	"ṓ": "o",
-	"ȏ": "o",
-	"ù": "u",
-	"ú": "u",
-	"û": "u",
-	"ü": "u",
-	"ý": "y",
-	"ÿ": "y",
-	"Ā": "A",
-	"ā": "a",
-	"Ă": "A",
-	"ă": "a",
-	"Ą": "A",
-	"ą": "a",
-	"Ć": "C",
-	"ć": "c",
-	"Ĉ": "C",
-	"ĉ": "c",
-	"Ċ": "C",
-	"ċ": "c",
-	"Č": "C",
-	"č": "c",
-	"C̆": "C",
-	"c̆": "c",
-	"Ď": "D",
-	"ď": "d",
-	"Đ": "D",
-	"đ": "d",
-	"Ē": "E",
-	"ē": "e",
-	"Ĕ": "E",
-	"ĕ": "e",
-	"Ė": "E",
-	"ė": "e",
-	"Ę": "E",
-	"ę": "e",
-	"Ě": "E",
-	"ě": "e",
-	"Ĝ": "G",
-	"Ǵ": "G",
-	"ĝ": "g",
-	"ǵ": "g",
-	"Ğ": "G",
-	"ğ": "g",
-	"Ġ": "G",
-	"ġ": "g",
-	"Ģ": "G",
-	"ģ": "g",
-	"Ĥ": "H",
-	"ĥ": "h",
-	"Ħ": "H",
-	"ħ": "h",
-	"Ḫ": "H",
-	"ḫ": "h",
-	"Ĩ": "I",
-	"ĩ": "i",
-	"Ī": "I",
-	"ī": "i",
-	"Ĭ": "I",
-	"ĭ": "i",
-	"Į": "I",
-	"į": "i",
-	"İ": "I",
-	"ı": "i",
-	"Ĳ": "IJ",
-	"ĳ": "ij",
-	"Ĵ": "J",
-	"ĵ": "j",
-	"Ķ": "K",
-	"ķ": "k",
-	"Ḱ": "K",
-	"ḱ": "k",
-	"K̆": "K",
-	"k̆": "k",
-	"Ĺ": "L",
-	"ĺ": "l",
-	"Ļ": "L",
-	"ļ": "l",
-	"Ľ": "L",
-	"ľ": "l",
-	"Ŀ": "L",
-	"ŀ": "l",
-	"Ł": "l",
-	"ł": "l",
-	"Ḿ": "M",
-	"ḿ": "m",
-	"M̆": "M",
-	"m̆": "m",
-	"Ń": "N",
-	"ń": "n",
-	"Ņ": "N",
-	"ņ": "n",
-	"Ň": "N",
-	"ň": "n",
-	"ŉ": "n",
-	"N̆": "N",
-	"n̆": "n",
-	"Ō": "O",
-	"ō": "o",
-	"Ŏ": "O",
-	"ŏ": "o",
-	"Ő": "O",
-	"ő": "o",
-	"Œ": "OE",
-	"œ": "oe",
-	"P̆": "P",
-	"p̆": "p",
-	"Ŕ": "R",
-	"ŕ": "r",
-	"Ŗ": "R",
-	"ŗ": "r",
-	"Ř": "R",
-	"ř": "r",
-	"R̆": "R",
-	"r̆": "r",
-	"Ȓ": "R",
-	"ȓ": "r",
-	"Ś": "S",
-	"ś": "s",
-	"Ŝ": "S",
-	"ŝ": "s",
-	"Ş": "S",
-	"Ș": "S",
-	"ș": "s",
-	"ş": "s",
-	"Š": "S",
-	"š": "s",
-	"Ţ": "T",
-	"ţ": "t",
-	"ț": "t",
-	"Ț": "T",
-	"Ť": "T",
-	"ť": "t",
-	"Ŧ": "T",
-	"ŧ": "t",
-	"T̆": "T",
-	"t̆": "t",
-	"Ũ": "U",
-	"ũ": "u",
-	"Ū": "U",
-	"ū": "u",
-	"Ŭ": "U",
-	"ŭ": "u",
-	"Ů": "U",
-	"ů": "u",
-	"Ű": "U",
-	"ű": "u",
-	"Ų": "U",
-	"ų": "u",
-	"Ȗ": "U",
-	"ȗ": "u",
-	"V̆": "V",
-	"v̆": "v",
-	"Ŵ": "W",
-	"ŵ": "w",
-	"Ẃ": "W",
-	"ẃ": "w",
-	"X̆": "X",
-	"x̆": "x",
-	"Ŷ": "Y",
-	"ŷ": "y",
-	"Ÿ": "Y",
-	"Y̆": "Y",
-	"y̆": "y",
-	"Ź": "Z",
-	"ź": "z",
-	"Ż": "Z",
-	"ż": "z",
-	"Ž": "Z",
-	"ž": "z",
-	"ſ": "s",
-	"ƒ": "f",
-	"Ơ": "O",
-	"ơ": "o",
-	"Ư": "U",
-	"ư": "u",
-	"Ǎ": "A",
-	"ǎ": "a",
-	"Ǐ": "I",
-	"ǐ": "i",
-	"Ǒ": "O",
-	"ǒ": "o",
-	"Ǔ": "U",
-	"ǔ": "u",
-	"Ǖ": "U",
-	"ǖ": "u",
-	"Ǘ": "U",
-	"ǘ": "u",
-	"Ǚ": "U",
-	"ǚ": "u",
-	"Ǜ": "U",
-	"ǜ": "u",
-	"Ứ": "U",
-	"ứ": "u",
-	"Ṹ": "U",
-	"ṹ": "u",
-	"Ǻ": "A",
-	"ǻ": "a",
-	"Ǽ": "AE",
-	"ǽ": "ae",
-	"Ǿ": "O",
-	"ǿ": "o",
-	"Þ": "TH",
-	"þ": "th",
-	"Ṕ": "P",
-	"ṕ": "p",
-	"Ṥ": "S",
-	"ṥ": "s",
-	"X́": "X",
-	"x́": "x",
-	"Ѓ": "Г",
-	"ѓ": "г",
-	"Ќ": "К",
-	"ќ": "к",
-	"A̋": "A",
-	"a̋": "a",
-	"E̋": "E",
-	"e̋": "e",
-	"I̋": "I",
-	"i̋": "i",
-	"Ǹ": "N",
-	"ǹ": "n",
-	"Ồ": "O",
-	"ồ": "o",
-	"Ṑ": "O",
-	"ṑ": "o",
-	"Ừ": "U",
-	"ừ": "u",
-	"Ẁ": "W",
-	"ẁ": "w",
-	"Ỳ": "Y",
-	"ỳ": "y",
-	"Ȁ": "A",
-	"ȁ": "a",
-	"Ȅ": "E",
-	"ȅ": "e",
-	"Ȉ": "I",
-	"ȉ": "i",
-	"Ȍ": "O",
-	"ȍ": "o",
-	"Ȑ": "R",
-	"ȑ": "r",
-	"Ȕ": "U",
-	"ȕ": "u",
-	"B̌": "B",
-	"b̌": "b",
-	"Č̣": "C",
-	"č̣": "c",
-	"Ê̌": "E",
-	"ê̌": "e",
-	"F̌": "F",
-	"f̌": "f",
-	"Ǧ": "G",
-	"ǧ": "g",
-	"Ȟ": "H",
-	"ȟ": "h",
-	"J̌": "J",
-	"ǰ": "j",
-	"Ǩ": "K",
-	"ǩ": "k",
-	"M̌": "M",
-	"m̌": "m",
-	"P̌": "P",
-	"p̌": "p",
-	"Q̌": "Q",
-	"q̌": "q",
-	"Ř̩": "R",
-	"ř̩": "r",
-	"Ṧ": "S",
-	"ṧ": "s",
-	"V̌": "V",
-	"v̌": "v",
-	"W̌": "W",
-	"w̌": "w",
-	"X̌": "X",
-	"x̌": "x",
-	"Y̌": "Y",
-	"y̌": "y",
-	"A̧": "A",
-	"a̧": "a",
-	"B̧": "B",
-	"b̧": "b",
-	"Ḑ": "D",
-	"ḑ": "d",
-	"Ȩ": "E",
-	"ȩ": "e",
-	"Ɛ̧": "E",
-	"ɛ̧": "e",
-	"Ḩ": "H",
-	"ḩ": "h",
-	"I̧": "I",
-	"i̧": "i",
-	"Ɨ̧": "I",
-	"ɨ̧": "i",
-	"M̧": "M",
-	"m̧": "m",
-	"O̧": "O",
-	"o̧": "o",
-	"Q̧": "Q",
-	"q̧": "q",
-	"U̧": "U",
-	"u̧": "u",
-	"X̧": "X",
-	"x̧": "x",
-	"Z̧": "Z",
-	"z̧": "z",
-};
-
-var chars = Object.keys(characterMap).join('|');
-var allAccents = new RegExp(chars, 'g');
-var firstAccent = new RegExp(chars, '');
-
-var removeAccents = function(string) {	
-	return string.replace(allAccents, function(match) {
-		return characterMap[match];
-	});
-};
-
-var hasAccents = function(string) {
-	return !!string.match(firstAccent);
-};
-
-module.exports = removeAccents;
-module.exports.has = hasAccents;
-module.exports.remove = removeAccents;
-
-
-/***/ }),
-
-/***/ "./node_modules/textarea-caret/index.js":
-/*!**********************************************!*\
-  !*** ./node_modules/textarea-caret/index.js ***!
-  \**********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* jshint browser: true */
-
-(function () {
-
-// The properties that we copy into a mirrored div.
-// Note that some browsers, such as Firefox,
-// do not concatenate properties, i.e. padding-top, bottom etc. -> padding,
-// so we have to do every single property specifically.
-var properties = [
-  'direction',  // RTL support
-  'boxSizing',
-  'width',  // on Chrome and IE, exclude the scrollbar, so the mirror div wraps exactly as the textarea does
-  'height',
-  'overflowX',
-  'overflowY',  // copy the scrollbar for IE
-
-  'borderTopWidth',
-  'borderRightWidth',
-  'borderBottomWidth',
-  'borderLeftWidth',
-  'borderStyle',
-
-  'paddingTop',
-  'paddingRight',
-  'paddingBottom',
-  'paddingLeft',
-
-  // https://developer.mozilla.org/en-US/docs/Web/CSS/font
-  'fontStyle',
-  'fontVariant',
-  'fontWeight',
-  'fontStretch',
-  'fontSize',
-  'fontSizeAdjust',
-  'lineHeight',
-  'fontFamily',
-
-  'textAlign',
-  'textTransform',
-  'textIndent',
-  'textDecoration',  // might not make a difference, but better be safe
-
-  'letterSpacing',
-  'wordSpacing',
-
-  'tabSize',
-  'MozTabSize'
-
-];
-
-var isBrowser = (typeof window !== 'undefined');
-var isFirefox = (isBrowser && window.mozInnerScreenX != null);
-
-function getCaretCoordinates(element, position, options) {
-  if(!isBrowser) {
-    throw new Error('textarea-caret-position#getCaretCoordinates should only be called in a browser');
+function createErrorType(code, message, Base) {
+  if (!Base) {
+    Base = Error;
   }
 
-  var debug = options && options.debug || false;
-  if (debug) {
-    var el = document.querySelector('#input-textarea-caret-position-mirror-div');
-    if ( el ) { el.parentNode.removeChild(el); }
+  function getMessage(arg1, arg2, arg3) {
+    if (typeof message === 'string') {
+      return message;
+    } else {
+      return message(arg1, arg2, arg3);
+    }
   }
 
-  // mirrored div
-  var div = document.createElement('div');
-  div.id = 'input-textarea-caret-position-mirror-div';
-  document.body.appendChild(div);
+  var NodeError =
+  /*#__PURE__*/
+  function (_Base) {
+    _inheritsLoose(NodeError, _Base);
 
-  var style = div.style;
-  var computed = window.getComputedStyle? getComputedStyle(element) : element.currentStyle;  // currentStyle for IE < 9
+    function NodeError(arg1, arg2, arg3) {
+      return _Base.call(this, getMessage(arg1, arg2, arg3)) || this;
+    }
 
-  // default textarea styles
-  style.whiteSpace = 'pre-wrap';
-  if (element.nodeName !== 'INPUT')
-    style.wordWrap = 'break-word';  // only for textarea-s
+    return NodeError;
+  }(Base);
 
-  // position off-screen
-  style.position = 'absolute';  // required to return coordinates properly
-  if (!debug)
-    style.visibility = 'hidden';  // not 'display: none' because we want rendering
+  NodeError.prototype.name = Base.name;
+  NodeError.prototype.code = code;
+  codes[code] = NodeError;
+} // https://github.com/nodejs/node/blob/v10.8.0/lib/internal/errors.js
 
-  // transfer the element's properties to the div
-  properties.forEach(function (prop) {
-    style[prop] = computed[prop];
-  });
 
-  if (isFirefox) {
-    // Firefox lies about the overflow property for textareas: https://bugzilla.mozilla.org/show_bug.cgi?id=984275
-    if (element.scrollHeight > parseInt(computed.height))
-      style.overflowY = 'scroll';
+function oneOf(expected, thing) {
+  if (Array.isArray(expected)) {
+    var len = expected.length;
+    expected = expected.map(function (i) {
+      return String(i);
+    });
+
+    if (len > 2) {
+      return "one of ".concat(thing, " ").concat(expected.slice(0, len - 1).join(', '), ", or ") + expected[len - 1];
+    } else if (len === 2) {
+      return "one of ".concat(thing, " ").concat(expected[0], " or ").concat(expected[1]);
+    } else {
+      return "of ".concat(thing, " ").concat(expected[0]);
+    }
   } else {
-    style.overflow = 'hidden';  // for Chrome to not render a scrollbar; IE keeps overflowY = 'scroll'
+    return "of ".concat(thing, " ").concat(String(expected));
+  }
+} // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith
+
+
+function startsWith(str, search, pos) {
+  return str.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+} // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/endsWith
+
+
+function endsWith(str, search, this_len) {
+  if (this_len === undefined || this_len > str.length) {
+    this_len = str.length;
   }
 
-  div.textContent = element.value.substring(0, position);
-  // the second special handling for input type="text" vs textarea: spaces need to be replaced with non-breaking spaces - http://stackoverflow.com/a/13402035/1269037
-  if (element.nodeName === 'INPUT')
-    div.textContent = div.textContent.replace(/\s/g, '\u00a0');
+  return str.substring(this_len - search.length, this_len) === search;
+} // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/includes
 
-  var span = document.createElement('span');
-  // Wrapping must be replicated *exactly*, including when a long word gets
-  // onto the next line, with whitespace at the end of the line before (#7).
-  // The  *only* reliable way to do that is to copy the *entire* rest of the
-  // textarea's content into the <span> created at the caret position.
-  // for inputs, just '.' would be enough, but why bother?
-  span.textContent = element.value.substring(position) || '.';  // || because a completely empty faux span doesn't render at all
-  div.appendChild(span);
 
-  var coordinates = {
-    top: span.offsetTop + parseInt(computed['borderTopWidth']),
-    left: span.offsetLeft + parseInt(computed['borderLeftWidth'])
+function includes(str, search, start) {
+  if (typeof start !== 'number') {
+    start = 0;
+  }
+
+  if (start + search.length > str.length) {
+    return false;
+  } else {
+    return str.indexOf(search, start) !== -1;
+  }
+}
+
+createErrorType('ERR_INVALID_OPT_VALUE', function (name, value) {
+  return 'The value "' + value + '" is invalid for option "' + name + '"';
+}, TypeError);
+createErrorType('ERR_INVALID_ARG_TYPE', function (name, expected, actual) {
+  // determiner: 'must be' or 'must not be'
+  var determiner;
+
+  if (typeof expected === 'string' && startsWith(expected, 'not ')) {
+    determiner = 'must not be';
+    expected = expected.replace(/^not /, '');
+  } else {
+    determiner = 'must be';
+  }
+
+  var msg;
+
+  if (endsWith(name, ' argument')) {
+    // For cases like 'first argument'
+    msg = "The ".concat(name, " ").concat(determiner, " ").concat(oneOf(expected, 'type'));
+  } else {
+    var type = includes(name, '.') ? 'property' : 'argument';
+    msg = "The \"".concat(name, "\" ").concat(type, " ").concat(determiner, " ").concat(oneOf(expected, 'type'));
+  }
+
+  msg += ". Received type ".concat(typeof actual);
+  return msg;
+}, TypeError);
+createErrorType('ERR_STREAM_PUSH_AFTER_EOF', 'stream.push() after EOF');
+createErrorType('ERR_METHOD_NOT_IMPLEMENTED', function (name) {
+  return 'The ' + name + ' method is not implemented';
+});
+createErrorType('ERR_STREAM_PREMATURE_CLOSE', 'Premature close');
+createErrorType('ERR_STREAM_DESTROYED', function (name) {
+  return 'Cannot call ' + name + ' after a stream was destroyed';
+});
+createErrorType('ERR_MULTIPLE_CALLBACK', 'Callback called multiple times');
+createErrorType('ERR_STREAM_CANNOT_PIPE', 'Cannot pipe, not readable');
+createErrorType('ERR_STREAM_WRITE_AFTER_END', 'write after end');
+createErrorType('ERR_STREAM_NULL_VALUES', 'May not write null values to stream', TypeError);
+createErrorType('ERR_UNKNOWN_ENCODING', function (arg) {
+  return 'Unknown encoding: ' + arg;
+}, TypeError);
+createErrorType('ERR_STREAM_UNSHIFT_AFTER_END_EVENT', 'stream.unshift() after end event');
+module.exports.codes = codes;
+
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/experimentalWarning.js":
+/*!**************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/experimentalWarning.js ***!
+  \**************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var experimentalWarnings = new Set();
+
+function emitExperimentalWarning(feature) {
+  if (experimentalWarnings.has(feature)) return;
+  var msg = feature + ' is an experimental feature. This feature could ' +
+       'change at any time';
+  experimentalWarnings.add(feature);
+  process.emitWarning(msg, 'ExperimentalWarning');
+}
+
+function noop() {}
+
+module.exports.emitExperimentalWarning = process.emitWarning
+  ? emitExperimentalWarning
+  : noop;
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js":
+/*!*************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js ***!
+  \*************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+// a duplex stream is just a stream that is both readable and writable.
+// Since JS doesn't have multiple prototypal inheritance, this class
+// prototypally inherits from Readable, and then parasitically from
+// Writable.
+
+/*<replacement>*/
+
+var objectKeys = Object.keys || function (obj) {
+  var keys = [];
+
+  for (var key in obj) {
+    keys.push(key);
+  }
+
+  return keys;
+};
+/*</replacement>*/
+
+
+module.exports = Duplex;
+
+var Readable = __webpack_require__(/*! ./_stream_readable */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_readable.js");
+
+var Writable = __webpack_require__(/*! ./_stream_writable */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_writable.js");
+
+__webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js")(Duplex, Readable);
+
+{
+  // Allow the keys array to be GC'ed.
+  var keys = objectKeys(Writable.prototype);
+
+  for (var v = 0; v < keys.length; v++) {
+    var method = keys[v];
+    if (!Duplex.prototype[method]) Duplex.prototype[method] = Writable.prototype[method];
+  }
+}
+
+function Duplex(options) {
+  if (!(this instanceof Duplex)) return new Duplex(options);
+  Readable.call(this, options);
+  Writable.call(this, options);
+  this.allowHalfOpen = true;
+
+  if (options) {
+    if (options.readable === false) this.readable = false;
+    if (options.writable === false) this.writable = false;
+
+    if (options.allowHalfOpen === false) {
+      this.allowHalfOpen = false;
+      this.once('end', onend);
+    }
+  }
+}
+
+Object.defineProperty(Duplex.prototype, 'writableHighWaterMark', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._writableState.highWaterMark;
+  }
+});
+Object.defineProperty(Duplex.prototype, 'writableBuffer', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._writableState && this._writableState.getBuffer();
+  }
+});
+Object.defineProperty(Duplex.prototype, 'writableLength', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._writableState.length;
+  }
+}); // the no-half-open enforcer
+
+function onend() {
+  // If the writable side ended, then we're ok.
+  if (this._writableState.ended) return; // no more data can be written.
+  // But allow more writes to happen in this tick.
+
+  process.nextTick(onEndNT, this);
+}
+
+function onEndNT(self) {
+  self.end();
+}
+
+Object.defineProperty(Duplex.prototype, 'destroyed', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    if (this._readableState === undefined || this._writableState === undefined) {
+      return false;
+    }
+
+    return this._readableState.destroyed && this._writableState.destroyed;
+  },
+  set: function set(value) {
+    // we ignore the value if the stream
+    // has not been initialized yet
+    if (this._readableState === undefined || this._writableState === undefined) {
+      return;
+    } // backward compatibility, the user is explicitly
+    // managing destroyed
+
+
+    this._readableState.destroyed = value;
+    this._writableState.destroyed = value;
+  }
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_passthrough.js":
+/*!******************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_passthrough.js ***!
+  \******************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+// a passthrough stream.
+// basically just the most minimal sort of Transform stream.
+// Every written chunk gets output as-is.
+
+
+module.exports = PassThrough;
+
+var Transform = __webpack_require__(/*! ./_stream_transform */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_transform.js");
+
+__webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js")(PassThrough, Transform);
+
+function PassThrough(options) {
+  if (!(this instanceof PassThrough)) return new PassThrough(options);
+  Transform.call(this, options);
+}
+
+PassThrough.prototype._transform = function (chunk, encoding, cb) {
+  cb(null, chunk);
+};
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_readable.js":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_readable.js ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+module.exports = Readable;
+/*<replacement>*/
+
+var Duplex;
+/*</replacement>*/
+
+Readable.ReadableState = ReadableState;
+/*<replacement>*/
+
+var EE = __webpack_require__(/*! events */ "./node_modules/events/events.js").EventEmitter;
+
+var EElistenerCount = function EElistenerCount(emitter, type) {
+  return emitter.listeners(type).length;
+};
+/*</replacement>*/
+
+/*<replacement>*/
+
+
+var Stream = __webpack_require__(/*! ./internal/streams/stream */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/stream-browser.js");
+/*</replacement>*/
+
+
+var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js").Buffer;
+
+var OurUint8Array = global.Uint8Array || function () {};
+
+function _uint8ArrayToBuffer(chunk) {
+  return Buffer.from(chunk);
+}
+
+function _isUint8Array(obj) {
+  return Buffer.isBuffer(obj) || obj instanceof OurUint8Array;
+}
+/*<replacement>*/
+
+
+var debugUtil = __webpack_require__(/*! util */ 1);
+
+var debug;
+
+if (debugUtil && debugUtil.debuglog) {
+  debug = debugUtil.debuglog('stream');
+} else {
+  debug = function debug() {};
+}
+/*</replacement>*/
+
+
+var BufferList = __webpack_require__(/*! ./internal/streams/buffer_list */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/buffer_list.js");
+
+var destroyImpl = __webpack_require__(/*! ./internal/streams/destroy */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/destroy.js");
+
+var _require = __webpack_require__(/*! ./internal/streams/state */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/state.js"),
+    getHighWaterMark = _require.getHighWaterMark;
+
+var _require$codes = __webpack_require__(/*! ../errors */ "./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js").codes,
+    ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
+    ERR_STREAM_PUSH_AFTER_EOF = _require$codes.ERR_STREAM_PUSH_AFTER_EOF,
+    ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
+    ERR_STREAM_UNSHIFT_AFTER_END_EVENT = _require$codes.ERR_STREAM_UNSHIFT_AFTER_END_EVENT;
+
+var _require2 = __webpack_require__(/*! ../experimentalWarning */ "./node_modules/simple-peer/node_modules/readable-stream/experimentalWarning.js"),
+    emitExperimentalWarning = _require2.emitExperimentalWarning; // Lazy loaded to improve the startup performance.
+
+
+var StringDecoder;
+var createReadableStreamAsyncIterator;
+
+__webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js")(Readable, Stream);
+
+var kProxyEvents = ['error', 'close', 'destroy', 'pause', 'resume'];
+
+function prependListener(emitter, event, fn) {
+  // Sadly this is not cacheable as some libraries bundle their own
+  // event emitter implementation with them.
+  if (typeof emitter.prependListener === 'function') return emitter.prependListener(event, fn); // This is a hack to make sure that our error handler is attached before any
+  // userland ones.  NEVER DO THIS. This is here only because this code needs
+  // to continue to work with older versions of Node.js that do not include
+  // the prependListener() method. The goal is to eventually remove this hack.
+
+  if (!emitter._events || !emitter._events[event]) emitter.on(event, fn);else if (Array.isArray(emitter._events[event])) emitter._events[event].unshift(fn);else emitter._events[event] = [fn, emitter._events[event]];
+}
+
+function ReadableState(options, stream, isDuplex) {
+  Duplex = Duplex || __webpack_require__(/*! ./_stream_duplex */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js");
+  options = options || {}; // Duplex streams are both readable and writable, but share
+  // the same options object.
+  // However, some cases require setting options to different
+  // values for the readable and the writable sides of the duplex stream.
+  // These options can be provided separately as readableXXX and writableXXX.
+
+  if (typeof isDuplex !== 'boolean') isDuplex = stream instanceof Duplex; // object stream flag. Used to make read(n) ignore n and to
+  // make all the buffer merging and length checks go away
+
+  this.objectMode = !!options.objectMode;
+  if (isDuplex) this.objectMode = this.objectMode || !!options.readableObjectMode; // the point at which it stops calling _read() to fill the buffer
+  // Note: 0 is a valid value, means "don't call _read preemptively ever"
+
+  this.highWaterMark = getHighWaterMark(this, options, 'readableHighWaterMark', isDuplex); // A linked list is used to store data chunks instead of an array because the
+  // linked list can remove elements from the beginning faster than
+  // array.shift()
+
+  this.buffer = new BufferList();
+  this.length = 0;
+  this.pipes = null;
+  this.pipesCount = 0;
+  this.flowing = null;
+  this.ended = false;
+  this.endEmitted = false;
+  this.reading = false; // a flag to be able to tell if the event 'readable'/'data' is emitted
+  // immediately, or on a later tick.  We set this to true at first, because
+  // any actions that shouldn't happen until "later" should generally also
+  // not happen before the first read call.
+
+  this.sync = true; // whenever we return null, then we set a flag to say
+  // that we're awaiting a 'readable' event emission.
+
+  this.needReadable = false;
+  this.emittedReadable = false;
+  this.readableListening = false;
+  this.resumeScheduled = false;
+  this.paused = true; // Should close be emitted on destroy. Defaults to true.
+
+  this.emitClose = options.emitClose !== false; // has it been destroyed
+
+  this.destroyed = false; // Crypto is kind of old and crusty.  Historically, its default string
+  // encoding is 'binary' so we have to make this configurable.
+  // Everything else in the universe uses 'utf8', though.
+
+  this.defaultEncoding = options.defaultEncoding || 'utf8'; // the number of writers that are awaiting a drain event in .pipe()s
+
+  this.awaitDrain = 0; // if true, a maybeReadMore has been scheduled
+
+  this.readingMore = false;
+  this.decoder = null;
+  this.encoding = null;
+
+  if (options.encoding) {
+    if (!StringDecoder) StringDecoder = __webpack_require__(/*! string_decoder/ */ "./node_modules/string_decoder/lib/string_decoder.js").StringDecoder;
+    this.decoder = new StringDecoder(options.encoding);
+    this.encoding = options.encoding;
+  }
+}
+
+function Readable(options) {
+  Duplex = Duplex || __webpack_require__(/*! ./_stream_duplex */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js");
+  if (!(this instanceof Readable)) return new Readable(options); // Checking for a Stream.Duplex instance is faster here instead of inside
+  // the ReadableState constructor, at least with V8 6.5
+
+  var isDuplex = this instanceof Duplex;
+  this._readableState = new ReadableState(options, this, isDuplex); // legacy
+
+  this.readable = true;
+
+  if (options) {
+    if (typeof options.read === 'function') this._read = options.read;
+    if (typeof options.destroy === 'function') this._destroy = options.destroy;
+  }
+
+  Stream.call(this);
+}
+
+Object.defineProperty(Readable.prototype, 'destroyed', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    if (this._readableState === undefined) {
+      return false;
+    }
+
+    return this._readableState.destroyed;
+  },
+  set: function set(value) {
+    // we ignore the value if the stream
+    // has not been initialized yet
+    if (!this._readableState) {
+      return;
+    } // backward compatibility, the user is explicitly
+    // managing destroyed
+
+
+    this._readableState.destroyed = value;
+  }
+});
+Readable.prototype.destroy = destroyImpl.destroy;
+Readable.prototype._undestroy = destroyImpl.undestroy;
+
+Readable.prototype._destroy = function (err, cb) {
+  cb(err);
+}; // Manually shove something into the read() buffer.
+// This returns true if the highWaterMark has not been hit yet,
+// similar to how Writable.write() returns true if you should
+// write() some more.
+
+
+Readable.prototype.push = function (chunk, encoding) {
+  var state = this._readableState;
+  var skipChunkCheck;
+
+  if (!state.objectMode) {
+    if (typeof chunk === 'string') {
+      encoding = encoding || state.defaultEncoding;
+
+      if (encoding !== state.encoding) {
+        chunk = Buffer.from(chunk, encoding);
+        encoding = '';
+      }
+
+      skipChunkCheck = true;
+    }
+  } else {
+    skipChunkCheck = true;
+  }
+
+  return readableAddChunk(this, chunk, encoding, false, skipChunkCheck);
+}; // Unshift should *always* be something directly out of read()
+
+
+Readable.prototype.unshift = function (chunk) {
+  return readableAddChunk(this, chunk, null, true, false);
+};
+
+function readableAddChunk(stream, chunk, encoding, addToFront, skipChunkCheck) {
+  debug('readableAddChunk', chunk);
+  var state = stream._readableState;
+
+  if (chunk === null) {
+    state.reading = false;
+    onEofChunk(stream, state);
+  } else {
+    var er;
+    if (!skipChunkCheck) er = chunkInvalid(state, chunk);
+
+    if (er) {
+      stream.emit('error', er);
+    } else if (state.objectMode || chunk && chunk.length > 0) {
+      if (typeof chunk !== 'string' && !state.objectMode && Object.getPrototypeOf(chunk) !== Buffer.prototype) {
+        chunk = _uint8ArrayToBuffer(chunk);
+      }
+
+      if (addToFront) {
+        if (state.endEmitted) stream.emit('error', new ERR_STREAM_UNSHIFT_AFTER_END_EVENT());else addChunk(stream, state, chunk, true);
+      } else if (state.ended) {
+        stream.emit('error', new ERR_STREAM_PUSH_AFTER_EOF());
+      } else if (state.destroyed) {
+        return false;
+      } else {
+        state.reading = false;
+
+        if (state.decoder && !encoding) {
+          chunk = state.decoder.write(chunk);
+          if (state.objectMode || chunk.length !== 0) addChunk(stream, state, chunk, false);else maybeReadMore(stream, state);
+        } else {
+          addChunk(stream, state, chunk, false);
+        }
+      }
+    } else if (!addToFront) {
+      state.reading = false;
+      maybeReadMore(stream, state);
+    }
+  } // We can push more data if we are below the highWaterMark.
+  // Also, if we have no data yet, we can stand some more bytes.
+  // This is to work around cases where hwm=0, such as the repl.
+
+
+  return !state.ended && (state.length < state.highWaterMark || state.length === 0);
+}
+
+function addChunk(stream, state, chunk, addToFront) {
+  if (state.flowing && state.length === 0 && !state.sync) {
+    state.awaitDrain = 0;
+    stream.emit('data', chunk);
+  } else {
+    // update the buffer info.
+    state.length += state.objectMode ? 1 : chunk.length;
+    if (addToFront) state.buffer.unshift(chunk);else state.buffer.push(chunk);
+    if (state.needReadable) emitReadable(stream);
+  }
+
+  maybeReadMore(stream, state);
+}
+
+function chunkInvalid(state, chunk) {
+  var er;
+
+  if (!_isUint8Array(chunk) && typeof chunk !== 'string' && chunk !== undefined && !state.objectMode) {
+    er = new ERR_INVALID_ARG_TYPE('chunk', ['string', 'Buffer', 'Uint8Array'], chunk);
+  }
+
+  return er;
+}
+
+Readable.prototype.isPaused = function () {
+  return this._readableState.flowing === false;
+}; // backwards compatibility.
+
+
+Readable.prototype.setEncoding = function (enc) {
+  if (!StringDecoder) StringDecoder = __webpack_require__(/*! string_decoder/ */ "./node_modules/string_decoder/lib/string_decoder.js").StringDecoder;
+  this._readableState.decoder = new StringDecoder(enc); // if setEncoding(null), decoder.encoding equals utf8
+
+  this._readableState.encoding = this._readableState.decoder.encoding;
+  return this;
+}; // Don't raise the hwm > 8MB
+
+
+var MAX_HWM = 0x800000;
+
+function computeNewHighWaterMark(n) {
+  if (n >= MAX_HWM) {
+    n = MAX_HWM;
+  } else {
+    // Get the next highest power of 2 to prevent increasing hwm excessively in
+    // tiny amounts
+    n--;
+    n |= n >>> 1;
+    n |= n >>> 2;
+    n |= n >>> 4;
+    n |= n >>> 8;
+    n |= n >>> 16;
+    n++;
+  }
+
+  return n;
+} // This function is designed to be inlinable, so please take care when making
+// changes to the function body.
+
+
+function howMuchToRead(n, state) {
+  if (n <= 0 || state.length === 0 && state.ended) return 0;
+  if (state.objectMode) return 1;
+
+  if (n !== n) {
+    // Only flow one buffer at a time
+    if (state.flowing && state.length) return state.buffer.head.data.length;else return state.length;
+  } // If we're asking for more than the current hwm, then raise the hwm.
+
+
+  if (n > state.highWaterMark) state.highWaterMark = computeNewHighWaterMark(n);
+  if (n <= state.length) return n; // Don't have enough
+
+  if (!state.ended) {
+    state.needReadable = true;
+    return 0;
+  }
+
+  return state.length;
+} // you can override either this method, or the async _read(n) below.
+
+
+Readable.prototype.read = function (n) {
+  debug('read', n);
+  n = parseInt(n, 10);
+  var state = this._readableState;
+  var nOrig = n;
+  if (n !== 0) state.emittedReadable = false; // if we're doing read(0) to trigger a readable event, but we
+  // already have a bunch of data in the buffer, then just trigger
+  // the 'readable' event and move on.
+
+  if (n === 0 && state.needReadable && ((state.highWaterMark !== 0 ? state.length >= state.highWaterMark : state.length > 0) || state.ended)) {
+    debug('read: emitReadable', state.length, state.ended);
+    if (state.length === 0 && state.ended) endReadable(this);else emitReadable(this);
+    return null;
+  }
+
+  n = howMuchToRead(n, state); // if we've ended, and we're now clear, then finish it up.
+
+  if (n === 0 && state.ended) {
+    if (state.length === 0) endReadable(this);
+    return null;
+  } // All the actual chunk generation logic needs to be
+  // *below* the call to _read.  The reason is that in certain
+  // synthetic stream cases, such as passthrough streams, _read
+  // may be a completely synchronous operation which may change
+  // the state of the read buffer, providing enough data when
+  // before there was *not* enough.
+  //
+  // So, the steps are:
+  // 1. Figure out what the state of things will be after we do
+  // a read from the buffer.
+  //
+  // 2. If that resulting state will trigger a _read, then call _read.
+  // Note that this may be asynchronous, or synchronous.  Yes, it is
+  // deeply ugly to write APIs this way, but that still doesn't mean
+  // that the Readable class should behave improperly, as streams are
+  // designed to be sync/async agnostic.
+  // Take note if the _read call is sync or async (ie, if the read call
+  // has returned yet), so that we know whether or not it's safe to emit
+  // 'readable' etc.
+  //
+  // 3. Actually pull the requested chunks out of the buffer and return.
+  // if we need a readable event, then we need to do some reading.
+
+
+  var doRead = state.needReadable;
+  debug('need readable', doRead); // if we currently have less than the highWaterMark, then also read some
+
+  if (state.length === 0 || state.length - n < state.highWaterMark) {
+    doRead = true;
+    debug('length less than watermark', doRead);
+  } // however, if we've ended, then there's no point, and if we're already
+  // reading, then it's unnecessary.
+
+
+  if (state.ended || state.reading) {
+    doRead = false;
+    debug('reading or ended', doRead);
+  } else if (doRead) {
+    debug('do read');
+    state.reading = true;
+    state.sync = true; // if the length is currently zero, then we *need* a readable event.
+
+    if (state.length === 0) state.needReadable = true; // call internal read method
+
+    this._read(state.highWaterMark);
+
+    state.sync = false; // If _read pushed data synchronously, then `reading` will be false,
+    // and we need to re-evaluate how much data we can return to the user.
+
+    if (!state.reading) n = howMuchToRead(nOrig, state);
+  }
+
+  var ret;
+  if (n > 0) ret = fromList(n, state);else ret = null;
+
+  if (ret === null) {
+    state.needReadable = true;
+    n = 0;
+  } else {
+    state.length -= n;
+    state.awaitDrain = 0;
+  }
+
+  if (state.length === 0) {
+    // If we have nothing in the buffer, then we want to know
+    // as soon as we *do* get something into the buffer.
+    if (!state.ended) state.needReadable = true; // If we tried to read() past the EOF, then emit end on the next tick.
+
+    if (nOrig !== n && state.ended) endReadable(this);
+  }
+
+  if (ret !== null) this.emit('data', ret);
+  return ret;
+};
+
+function onEofChunk(stream, state) {
+  if (state.ended) return;
+
+  if (state.decoder) {
+    var chunk = state.decoder.end();
+
+    if (chunk && chunk.length) {
+      state.buffer.push(chunk);
+      state.length += state.objectMode ? 1 : chunk.length;
+    }
+  }
+
+  state.ended = true;
+
+  if (state.sync) {
+    // if we are sync, wait until next tick to emit the data.
+    // Otherwise we risk emitting data in the flow()
+    // the readable code triggers during a read() call
+    emitReadable(stream);
+  } else {
+    // emit 'readable' now to make sure it gets picked up.
+    state.needReadable = false;
+
+    if (!state.emittedReadable) {
+      state.emittedReadable = true;
+      emitReadable_(stream);
+    }
+  }
+} // Don't emit readable right away in sync mode, because this can trigger
+// another read() call => stack overflow.  This way, it might trigger
+// a nextTick recursion warning, but that's not so bad.
+
+
+function emitReadable(stream) {
+  var state = stream._readableState;
+  state.needReadable = false;
+
+  if (!state.emittedReadable) {
+    debug('emitReadable', state.flowing);
+    state.emittedReadable = true;
+    process.nextTick(emitReadable_, stream);
+  }
+}
+
+function emitReadable_(stream) {
+  var state = stream._readableState;
+  debug('emitReadable_', state.destroyed, state.length, state.ended);
+
+  if (!state.destroyed && (state.length || state.ended)) {
+    stream.emit('readable');
+  } // The stream needs another readable event if
+  // 1. It is not flowing, as the flow mechanism will take
+  //    care of it.
+  // 2. It is not ended.
+  // 3. It is below the highWaterMark, so we can schedule
+  //    another readable later.
+
+
+  state.needReadable = !state.flowing && !state.ended && state.length <= state.highWaterMark;
+  flow(stream);
+} // at this point, the user has presumably seen the 'readable' event,
+// and called read() to consume some data.  that may have triggered
+// in turn another _read(n) call, in which case reading = true if
+// it's in progress.
+// However, if we're not ended, or reading, and the length < hwm,
+// then go ahead and try to read some more preemptively.
+
+
+function maybeReadMore(stream, state) {
+  if (!state.readingMore) {
+    state.readingMore = true;
+    process.nextTick(maybeReadMore_, stream, state);
+  }
+}
+
+function maybeReadMore_(stream, state) {
+  // Attempt to read more data if we should.
+  //
+  // The conditions for reading more data are (one of):
+  // - Not enough data buffered (state.length < state.highWaterMark). The loop
+  //   is responsible for filling the buffer with enough data if such data
+  //   is available. If highWaterMark is 0 and we are not in the flowing mode
+  //   we should _not_ attempt to buffer any extra data. We'll get more data
+  //   when the stream consumer calls read() instead.
+  // - No data in the buffer, and the stream is in flowing mode. In this mode
+  //   the loop below is responsible for ensuring read() is called. Failing to
+  //   call read here would abort the flow and there's no other mechanism for
+  //   continuing the flow if the stream consumer has just subscribed to the
+  //   'data' event.
+  //
+  // In addition to the above conditions to keep reading data, the following
+  // conditions prevent the data from being read:
+  // - The stream has ended (state.ended).
+  // - There is already a pending 'read' operation (state.reading). This is a
+  //   case where the the stream has called the implementation defined _read()
+  //   method, but they are processing the call asynchronously and have _not_
+  //   called push() with new data. In this case we skip performing more
+  //   read()s. The execution ends in this method again after the _read() ends
+  //   up calling push() with more data.
+  while (!state.reading && !state.ended && (state.length < state.highWaterMark || state.flowing && state.length === 0)) {
+    var len = state.length;
+    debug('maybeReadMore read 0');
+    stream.read(0);
+    if (len === state.length) // didn't get any data, stop spinning.
+      break;
+  }
+
+  state.readingMore = false;
+} // abstract method.  to be overridden in specific implementation classes.
+// call cb(er, data) where data is <= n in length.
+// for virtual (non-string, non-buffer) streams, "length" is somewhat
+// arbitrary, and perhaps not very meaningful.
+
+
+Readable.prototype._read = function (n) {
+  this.emit('error', new ERR_METHOD_NOT_IMPLEMENTED('_read()'));
+};
+
+Readable.prototype.pipe = function (dest, pipeOpts) {
+  var src = this;
+  var state = this._readableState;
+
+  switch (state.pipesCount) {
+    case 0:
+      state.pipes = dest;
+      break;
+
+    case 1:
+      state.pipes = [state.pipes, dest];
+      break;
+
+    default:
+      state.pipes.push(dest);
+      break;
+  }
+
+  state.pipesCount += 1;
+  debug('pipe count=%d opts=%j', state.pipesCount, pipeOpts);
+  var doEnd = (!pipeOpts || pipeOpts.end !== false) && dest !== process.stdout && dest !== process.stderr;
+  var endFn = doEnd ? onend : unpipe;
+  if (state.endEmitted) process.nextTick(endFn);else src.once('end', endFn);
+  dest.on('unpipe', onunpipe);
+
+  function onunpipe(readable, unpipeInfo) {
+    debug('onunpipe');
+
+    if (readable === src) {
+      if (unpipeInfo && unpipeInfo.hasUnpiped === false) {
+        unpipeInfo.hasUnpiped = true;
+        cleanup();
+      }
+    }
+  }
+
+  function onend() {
+    debug('onend');
+    dest.end();
+  } // when the dest drains, it reduces the awaitDrain counter
+  // on the source.  This would be more elegant with a .once()
+  // handler in flow(), but adding and removing repeatedly is
+  // too slow.
+
+
+  var ondrain = pipeOnDrain(src);
+  dest.on('drain', ondrain);
+  var cleanedUp = false;
+
+  function cleanup() {
+    debug('cleanup'); // cleanup event handlers once the pipe is broken
+
+    dest.removeListener('close', onclose);
+    dest.removeListener('finish', onfinish);
+    dest.removeListener('drain', ondrain);
+    dest.removeListener('error', onerror);
+    dest.removeListener('unpipe', onunpipe);
+    src.removeListener('end', onend);
+    src.removeListener('end', unpipe);
+    src.removeListener('data', ondata);
+    cleanedUp = true; // if the reader is waiting for a drain event from this
+    // specific writer, then it would cause it to never start
+    // flowing again.
+    // So, if this is awaiting a drain, then we just call it now.
+    // If we don't know, then assume that we are waiting for one.
+
+    if (state.awaitDrain && (!dest._writableState || dest._writableState.needDrain)) ondrain();
+  }
+
+  src.on('data', ondata);
+
+  function ondata(chunk) {
+    debug('ondata');
+    var ret = dest.write(chunk);
+    debug('dest.write', ret);
+
+    if (ret === false) {
+      // If the user unpiped during `dest.write()`, it is possible
+      // to get stuck in a permanently paused state if that write
+      // also returned false.
+      // => Check whether `dest` is still a piping destination.
+      if ((state.pipesCount === 1 && state.pipes === dest || state.pipesCount > 1 && indexOf(state.pipes, dest) !== -1) && !cleanedUp) {
+        debug('false write response, pause', state.awaitDrain);
+        state.awaitDrain++;
+      }
+
+      src.pause();
+    }
+  } // if the dest has an error, then stop piping into it.
+  // however, don't suppress the throwing behavior for this.
+
+
+  function onerror(er) {
+    debug('onerror', er);
+    unpipe();
+    dest.removeListener('error', onerror);
+    if (EElistenerCount(dest, 'error') === 0) dest.emit('error', er);
+  } // Make sure our error handler is attached before userland ones.
+
+
+  prependListener(dest, 'error', onerror); // Both close and finish should trigger unpipe, but only once.
+
+  function onclose() {
+    dest.removeListener('finish', onfinish);
+    unpipe();
+  }
+
+  dest.once('close', onclose);
+
+  function onfinish() {
+    debug('onfinish');
+    dest.removeListener('close', onclose);
+    unpipe();
+  }
+
+  dest.once('finish', onfinish);
+
+  function unpipe() {
+    debug('unpipe');
+    src.unpipe(dest);
+  } // tell the dest that it's being piped to
+
+
+  dest.emit('pipe', src); // start the flow if it hasn't been started already.
+
+  if (!state.flowing) {
+    debug('pipe resume');
+    src.resume();
+  }
+
+  return dest;
+};
+
+function pipeOnDrain(src) {
+  return function pipeOnDrainFunctionResult() {
+    var state = src._readableState;
+    debug('pipeOnDrain', state.awaitDrain);
+    if (state.awaitDrain) state.awaitDrain--;
+
+    if (state.awaitDrain === 0 && EElistenerCount(src, 'data')) {
+      state.flowing = true;
+      flow(src);
+    }
+  };
+}
+
+Readable.prototype.unpipe = function (dest) {
+  var state = this._readableState;
+  var unpipeInfo = {
+    hasUnpiped: false
+  }; // if we're not piping anywhere, then do nothing.
+
+  if (state.pipesCount === 0) return this; // just one destination.  most common case.
+
+  if (state.pipesCount === 1) {
+    // passed in one, but it's not the right one.
+    if (dest && dest !== state.pipes) return this;
+    if (!dest) dest = state.pipes; // got a match.
+
+    state.pipes = null;
+    state.pipesCount = 0;
+    state.flowing = false;
+    if (dest) dest.emit('unpipe', this, unpipeInfo);
+    return this;
+  } // slow case. multiple pipe destinations.
+
+
+  if (!dest) {
+    // remove all.
+    var dests = state.pipes;
+    var len = state.pipesCount;
+    state.pipes = null;
+    state.pipesCount = 0;
+    state.flowing = false;
+
+    for (var i = 0; i < len; i++) {
+      dests[i].emit('unpipe', this, {
+        hasUnpiped: false
+      });
+    }
+
+    return this;
+  } // try to find the right one.
+
+
+  var index = indexOf(state.pipes, dest);
+  if (index === -1) return this;
+  state.pipes.splice(index, 1);
+  state.pipesCount -= 1;
+  if (state.pipesCount === 1) state.pipes = state.pipes[0];
+  dest.emit('unpipe', this, unpipeInfo);
+  return this;
+}; // set up data events if they are asked for
+// Ensure readable listeners eventually get something
+
+
+Readable.prototype.on = function (ev, fn) {
+  var res = Stream.prototype.on.call(this, ev, fn);
+  var state = this._readableState;
+
+  if (ev === 'data') {
+    // update readableListening so that resume() may be a no-op
+    // a few lines down. This is needed to support once('readable').
+    state.readableListening = this.listenerCount('readable') > 0; // Try start flowing on next tick if stream isn't explicitly paused
+
+    if (state.flowing !== false) this.resume();
+  } else if (ev === 'readable') {
+    if (!state.endEmitted && !state.readableListening) {
+      state.readableListening = state.needReadable = true;
+      state.flowing = false;
+      state.emittedReadable = false;
+      debug('on readable', state.length, state.reading);
+
+      if (state.length) {
+        emitReadable(this);
+      } else if (!state.reading) {
+        process.nextTick(nReadingNextTick, this);
+      }
+    }
+  }
+
+  return res;
+};
+
+Readable.prototype.addListener = Readable.prototype.on;
+
+Readable.prototype.removeListener = function (ev, fn) {
+  var res = Stream.prototype.removeListener.call(this, ev, fn);
+
+  if (ev === 'readable') {
+    // We need to check if there is someone still listening to
+    // readable and reset the state. However this needs to happen
+    // after readable has been emitted but before I/O (nextTick) to
+    // support once('readable', fn) cycles. This means that calling
+    // resume within the same tick will have no
+    // effect.
+    process.nextTick(updateReadableListening, this);
+  }
+
+  return res;
+};
+
+Readable.prototype.removeAllListeners = function (ev) {
+  var res = Stream.prototype.removeAllListeners.apply(this, arguments);
+
+  if (ev === 'readable' || ev === undefined) {
+    // We need to check if there is someone still listening to
+    // readable and reset the state. However this needs to happen
+    // after readable has been emitted but before I/O (nextTick) to
+    // support once('readable', fn) cycles. This means that calling
+    // resume within the same tick will have no
+    // effect.
+    process.nextTick(updateReadableListening, this);
+  }
+
+  return res;
+};
+
+function updateReadableListening(self) {
+  var state = self._readableState;
+  state.readableListening = self.listenerCount('readable') > 0;
+
+  if (state.resumeScheduled && !state.paused) {
+    // flowing needs to be set to true now, otherwise
+    // the upcoming resume will not flow.
+    state.flowing = true; // crude way to check if we should resume
+  } else if (self.listenerCount('data') > 0) {
+    self.resume();
+  }
+}
+
+function nReadingNextTick(self) {
+  debug('readable nexttick read 0');
+  self.read(0);
+} // pause() and resume() are remnants of the legacy readable stream API
+// If the user uses them, then switch into old mode.
+
+
+Readable.prototype.resume = function () {
+  var state = this._readableState;
+
+  if (!state.flowing) {
+    debug('resume'); // we flow only if there is no one listening
+    // for readable, but we still have to call
+    // resume()
+
+    state.flowing = !state.readableListening;
+    resume(this, state);
+  }
+
+  state.paused = false;
+  return this;
+};
+
+function resume(stream, state) {
+  if (!state.resumeScheduled) {
+    state.resumeScheduled = true;
+    process.nextTick(resume_, stream, state);
+  }
+}
+
+function resume_(stream, state) {
+  debug('resume', state.reading);
+
+  if (!state.reading) {
+    stream.read(0);
+  }
+
+  state.resumeScheduled = false;
+  stream.emit('resume');
+  flow(stream);
+  if (state.flowing && !state.reading) stream.read(0);
+}
+
+Readable.prototype.pause = function () {
+  debug('call pause flowing=%j', this._readableState.flowing);
+
+  if (this._readableState.flowing !== false) {
+    debug('pause');
+    this._readableState.flowing = false;
+    this.emit('pause');
+  }
+
+  this._readableState.paused = true;
+  return this;
+};
+
+function flow(stream) {
+  var state = stream._readableState;
+  debug('flow', state.flowing);
+
+  while (state.flowing && stream.read() !== null) {
+    ;
+  }
+} // wrap an old-style stream as the async data source.
+// This is *not* part of the readable stream interface.
+// It is an ugly unfortunate mess of history.
+
+
+Readable.prototype.wrap = function (stream) {
+  var _this = this;
+
+  var state = this._readableState;
+  var paused = false;
+  stream.on('end', function () {
+    debug('wrapped end');
+
+    if (state.decoder && !state.ended) {
+      var chunk = state.decoder.end();
+      if (chunk && chunk.length) _this.push(chunk);
+    }
+
+    _this.push(null);
+  });
+  stream.on('data', function (chunk) {
+    debug('wrapped data');
+    if (state.decoder) chunk = state.decoder.write(chunk); // don't skip over falsy values in objectMode
+
+    if (state.objectMode && (chunk === null || chunk === undefined)) return;else if (!state.objectMode && (!chunk || !chunk.length)) return;
+
+    var ret = _this.push(chunk);
+
+    if (!ret) {
+      paused = true;
+      stream.pause();
+    }
+  }); // proxy all the other methods.
+  // important when wrapping filters and duplexes.
+
+  for (var i in stream) {
+    if (this[i] === undefined && typeof stream[i] === 'function') {
+      this[i] = function methodWrap(method) {
+        return function methodWrapReturnFunction() {
+          return stream[method].apply(stream, arguments);
+        };
+      }(i);
+    }
+  } // proxy certain important events.
+
+
+  for (var n = 0; n < kProxyEvents.length; n++) {
+    stream.on(kProxyEvents[n], this.emit.bind(this, kProxyEvents[n]));
+  } // when we try to consume some more bytes, simply unpause the
+  // underlying stream.
+
+
+  this._read = function (n) {
+    debug('wrapped _read', n);
+
+    if (paused) {
+      paused = false;
+      stream.resume();
+    }
   };
 
-  if (debug) {
-    span.style.backgroundColor = '#aaa';
+  return this;
+};
+
+if (typeof Symbol === 'function') {
+  Readable.prototype[Symbol.asyncIterator] = function () {
+    emitExperimentalWarning('Readable[Symbol.asyncIterator]');
+
+    if (createReadableStreamAsyncIterator === undefined) {
+      createReadableStreamAsyncIterator = __webpack_require__(/*! ./internal/streams/async_iterator */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/async_iterator.js");
+    }
+
+    return createReadableStreamAsyncIterator(this);
+  };
+}
+
+Object.defineProperty(Readable.prototype, 'readableHighWaterMark', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._readableState.highWaterMark;
+  }
+});
+Object.defineProperty(Readable.prototype, 'readableBuffer', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._readableState && this._readableState.buffer;
+  }
+});
+Object.defineProperty(Readable.prototype, 'readableFlowing', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._readableState.flowing;
+  },
+  set: function set(state) {
+    if (this._readableState) {
+      this._readableState.flowing = state;
+    }
+  }
+}); // exposed for testing purposes only.
+
+Readable._fromList = fromList;
+Object.defineProperty(Readable.prototype, 'readableLength', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._readableState.length;
+  }
+}); // Pluck off n bytes from an array of buffers.
+// Length is the combined lengths of all the buffers in the list.
+// This function is designed to be inlinable, so please take care when making
+// changes to the function body.
+
+function fromList(n, state) {
+  // nothing buffered
+  if (state.length === 0) return null;
+  var ret;
+  if (state.objectMode) ret = state.buffer.shift();else if (!n || n >= state.length) {
+    // read it all, truncate the list
+    if (state.decoder) ret = state.buffer.join('');else if (state.buffer.length === 1) ret = state.buffer.first();else ret = state.buffer.concat(state.length);
+    state.buffer.clear();
   } else {
-    document.body.removeChild(div);
+    // read part of list
+    ret = state.buffer.consume(n, state.decoder);
+  }
+  return ret;
+}
+
+function endReadable(stream) {
+  var state = stream._readableState;
+  debug('endReadable', state.endEmitted);
+
+  if (!state.endEmitted) {
+    state.ended = true;
+    process.nextTick(endReadableNT, state, stream);
+  }
+}
+
+function endReadableNT(state, stream) {
+  debug('endReadableNT', state.endEmitted, state.length); // Check that we didn't get one last unshift.
+
+  if (!state.endEmitted && state.length === 0) {
+    state.endEmitted = true;
+    stream.readable = false;
+    stream.emit('end');
+  }
+}
+
+function indexOf(xs, x) {
+  for (var i = 0, l = xs.length; i < l; i++) {
+    if (xs[i] === x) return i;
   }
 
-  return coordinates;
+  return -1;
+}
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_transform.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_transform.js ***!
+  \****************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+// a transform stream is a readable/writable stream where you do
+// something with the data.  Sometimes it's called a "filter",
+// but that's not a great name for it, since that implies a thing where
+// some bits pass through, and others are simply ignored.  (That would
+// be a valid example of a transform, of course.)
+//
+// While the output is causally related to the input, it's not a
+// necessarily symmetric or synchronous transformation.  For example,
+// a zlib stream might take multiple plain-text writes(), and then
+// emit a single compressed chunk some time in the future.
+//
+// Here's how this works:
+//
+// The Transform stream has all the aspects of the readable and writable
+// stream classes.  When you write(chunk), that calls _write(chunk,cb)
+// internally, and returns false if there's a lot of pending writes
+// buffered up.  When you call read(), that calls _read(n) until
+// there's enough pending readable data buffered up.
+//
+// In a transform stream, the written data is placed in a buffer.  When
+// _read(n) is called, it transforms the queued up data, calling the
+// buffered _write cb's as it consumes chunks.  If consuming a single
+// written chunk would result in multiple output chunks, then the first
+// outputted bit calls the readcb, and subsequent chunks just go into
+// the read buffer, and will cause it to emit 'readable' if necessary.
+//
+// This way, back-pressure is actually determined by the reading side,
+// since _read has to be called to start processing a new chunk.  However,
+// a pathological inflate type of transform can cause excessive buffering
+// here.  For example, imagine a stream where every byte of input is
+// interpreted as an integer from 0-255, and then results in that many
+// bytes of output.  Writing the 4 bytes {ff,ff,ff,ff} would result in
+// 1kb of data being output.  In this case, you could write a very small
+// amount of input, and end up with a very large amount of output.  In
+// such a pathological inflating mechanism, there'd be no way to tell
+// the system to stop doing the transform.  A single 4MB write could
+// cause the system to run out of memory.
+//
+// However, even in such a pathological case, only a single written chunk
+// would be consumed, and then the rest would wait (un-transformed) until
+// the results of the previous transformed chunk were consumed.
+
+
+module.exports = Transform;
+
+var _require$codes = __webpack_require__(/*! ../errors */ "./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js").codes,
+    ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
+    ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
+    ERR_TRANSFORM_ALREADY_TRANSFORMING = _require$codes.ERR_TRANSFORM_ALREADY_TRANSFORMING,
+    ERR_TRANSFORM_WITH_LENGTH_0 = _require$codes.ERR_TRANSFORM_WITH_LENGTH_0;
+
+var Duplex = __webpack_require__(/*! ./_stream_duplex */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js");
+
+__webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js")(Transform, Duplex);
+
+function afterTransform(er, data) {
+  var ts = this._transformState;
+  ts.transforming = false;
+  var cb = ts.writecb;
+
+  if (cb === null) {
+    return this.emit('error', new ERR_MULTIPLE_CALLBACK());
+  }
+
+  ts.writechunk = null;
+  ts.writecb = null;
+  if (data != null) // single equals check for both `null` and `undefined`
+    this.push(data);
+  cb(er);
+  var rs = this._readableState;
+  rs.reading = false;
+
+  if (rs.needReadable || rs.length < rs.highWaterMark) {
+    this._read(rs.highWaterMark);
+  }
 }
 
-if ( true && typeof module.exports != 'undefined') {
-  module.exports = getCaretCoordinates;
-} else if(isBrowser){
-  window.getCaretCoordinates = getCaretCoordinates;
+function Transform(options) {
+  if (!(this instanceof Transform)) return new Transform(options);
+  Duplex.call(this, options);
+  this._transformState = {
+    afterTransform: afterTransform.bind(this),
+    needTransform: false,
+    transforming: false,
+    writecb: null,
+    writechunk: null,
+    writeencoding: null
+  }; // start out asking for a readable event once data is transformed.
+
+  this._readableState.needReadable = true; // we have implemented the _read method, and done the other things
+  // that Readable wants before the first _read call, so unset the
+  // sync guard flag.
+
+  this._readableState.sync = false;
+
+  if (options) {
+    if (typeof options.transform === 'function') this._transform = options.transform;
+    if (typeof options.flush === 'function') this._flush = options.flush;
+  } // When the writable side finishes, then flush out anything remaining.
+
+
+  this.on('prefinish', prefinish);
 }
 
-}());
+function prefinish() {
+  var _this = this;
+
+  if (typeof this._flush === 'function' && !this._readableState.destroyed) {
+    this._flush(function (er, data) {
+      done(_this, er, data);
+    });
+  } else {
+    done(this, null, null);
+  }
+}
+
+Transform.prototype.push = function (chunk, encoding) {
+  this._transformState.needTransform = false;
+  return Duplex.prototype.push.call(this, chunk, encoding);
+}; // This is the part where you do stuff!
+// override this function in implementation classes.
+// 'chunk' is an input chunk.
+//
+// Call `push(newChunk)` to pass along transformed output
+// to the readable side.  You may call 'push' zero or more times.
+//
+// Call `cb(err)` when you are done with this chunk.  If you pass
+// an error, then that'll put the hurt on the whole operation.  If you
+// never call cb(), then you'll never get another chunk.
+
+
+Transform.prototype._transform = function (chunk, encoding, cb) {
+  cb(new ERR_METHOD_NOT_IMPLEMENTED('_transform()'));
+};
+
+Transform.prototype._write = function (chunk, encoding, cb) {
+  var ts = this._transformState;
+  ts.writecb = cb;
+  ts.writechunk = chunk;
+  ts.writeencoding = encoding;
+
+  if (!ts.transforming) {
+    var rs = this._readableState;
+    if (ts.needTransform || rs.needReadable || rs.length < rs.highWaterMark) this._read(rs.highWaterMark);
+  }
+}; // Doesn't matter what the args are here.
+// _transform does all the work.
+// That we got here means that the readable side wants more data.
+
+
+Transform.prototype._read = function (n) {
+  var ts = this._transformState;
+
+  if (ts.writechunk !== null && !ts.transforming) {
+    ts.transforming = true;
+
+    this._transform(ts.writechunk, ts.writeencoding, ts.afterTransform);
+  } else {
+    // mark that we need a transform, so that any data that comes in
+    // will get processed, now that we've asked for it.
+    ts.needTransform = true;
+  }
+};
+
+Transform.prototype._destroy = function (err, cb) {
+  Duplex.prototype._destroy.call(this, err, function (err2) {
+    cb(err2);
+  });
+};
+
+function done(stream, er, data) {
+  if (er) return stream.emit('error', er);
+  if (data != null) // single equals check for both `null` and `undefined`
+    stream.push(data); // TODO(BridgeAR): Write a test for these two error cases
+  // if there's nothing in the write buffer, then that means
+  // that nothing more will ever be provided
+
+  if (stream._writableState.length) throw new ERR_TRANSFORM_WITH_LENGTH_0();
+  if (stream._transformState.transforming) throw new ERR_TRANSFORM_ALREADY_TRANSFORMING();
+  return stream.push(null);
+}
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_writable.js":
+/*!***************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_writable.js ***!
+  \***************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+// A bit simpler than readable streams.
+// Implement an async ._write(chunk, encoding, cb), and it'll handle all
+// the drain event emission and buffering.
+
+
+module.exports = Writable;
+/* <replacement> */
+
+function WriteReq(chunk, encoding, cb) {
+  this.chunk = chunk;
+  this.encoding = encoding;
+  this.callback = cb;
+  this.next = null;
+} // It seems a linked list but it is not
+// there will be only 2 of these for each stream
+
+
+function CorkedRequest(state) {
+  var _this = this;
+
+  this.next = null;
+  this.entry = null;
+
+  this.finish = function () {
+    onCorkedFinish(_this, state);
+  };
+}
+/* </replacement> */
+
+/*<replacement>*/
+
+
+var Duplex;
+/*</replacement>*/
+
+Writable.WritableState = WritableState;
+/*<replacement>*/
+
+var internalUtil = {
+  deprecate: __webpack_require__(/*! util-deprecate */ "./node_modules/util-deprecate/browser.js")
+};
+/*</replacement>*/
+
+/*<replacement>*/
+
+var Stream = __webpack_require__(/*! ./internal/streams/stream */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/stream-browser.js");
+/*</replacement>*/
+
+
+var Buffer = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js").Buffer;
+
+var OurUint8Array = global.Uint8Array || function () {};
+
+function _uint8ArrayToBuffer(chunk) {
+  return Buffer.from(chunk);
+}
+
+function _isUint8Array(obj) {
+  return Buffer.isBuffer(obj) || obj instanceof OurUint8Array;
+}
+
+var destroyImpl = __webpack_require__(/*! ./internal/streams/destroy */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/destroy.js");
+
+var _require = __webpack_require__(/*! ./internal/streams/state */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/state.js"),
+    getHighWaterMark = _require.getHighWaterMark;
+
+var _require$codes = __webpack_require__(/*! ../errors */ "./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js").codes,
+    ERR_INVALID_ARG_TYPE = _require$codes.ERR_INVALID_ARG_TYPE,
+    ERR_METHOD_NOT_IMPLEMENTED = _require$codes.ERR_METHOD_NOT_IMPLEMENTED,
+    ERR_MULTIPLE_CALLBACK = _require$codes.ERR_MULTIPLE_CALLBACK,
+    ERR_STREAM_CANNOT_PIPE = _require$codes.ERR_STREAM_CANNOT_PIPE,
+    ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED,
+    ERR_STREAM_NULL_VALUES = _require$codes.ERR_STREAM_NULL_VALUES,
+    ERR_STREAM_WRITE_AFTER_END = _require$codes.ERR_STREAM_WRITE_AFTER_END,
+    ERR_UNKNOWN_ENCODING = _require$codes.ERR_UNKNOWN_ENCODING;
+
+__webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js")(Writable, Stream);
+
+function nop() {}
+
+function WritableState(options, stream, isDuplex) {
+  Duplex = Duplex || __webpack_require__(/*! ./_stream_duplex */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js");
+  options = options || {}; // Duplex streams are both readable and writable, but share
+  // the same options object.
+  // However, some cases require setting options to different
+  // values for the readable and the writable sides of the duplex stream,
+  // e.g. options.readableObjectMode vs. options.writableObjectMode, etc.
+
+  if (typeof isDuplex !== 'boolean') isDuplex = stream instanceof Duplex; // object stream flag to indicate whether or not this stream
+  // contains buffers or objects.
+
+  this.objectMode = !!options.objectMode;
+  if (isDuplex) this.objectMode = this.objectMode || !!options.writableObjectMode; // the point at which write() starts returning false
+  // Note: 0 is a valid value, means that we always return false if
+  // the entire buffer is not flushed immediately on write()
+
+  this.highWaterMark = getHighWaterMark(this, options, 'writableHighWaterMark', isDuplex); // if _final has been called
+
+  this.finalCalled = false; // drain event flag.
+
+  this.needDrain = false; // at the start of calling end()
+
+  this.ending = false; // when end() has been called, and returned
+
+  this.ended = false; // when 'finish' is emitted
+
+  this.finished = false; // has it been destroyed
+
+  this.destroyed = false; // should we decode strings into buffers before passing to _write?
+  // this is here so that some node-core streams can optimize string
+  // handling at a lower level.
+
+  var noDecode = options.decodeStrings === false;
+  this.decodeStrings = !noDecode; // Crypto is kind of old and crusty.  Historically, its default string
+  // encoding is 'binary' so we have to make this configurable.
+  // Everything else in the universe uses 'utf8', though.
+
+  this.defaultEncoding = options.defaultEncoding || 'utf8'; // not an actual buffer we keep track of, but a measurement
+  // of how much we're waiting to get pushed to some underlying
+  // socket or file.
+
+  this.length = 0; // a flag to see when we're in the middle of a write.
+
+  this.writing = false; // when true all writes will be buffered until .uncork() call
+
+  this.corked = 0; // a flag to be able to tell if the onwrite cb is called immediately,
+  // or on a later tick.  We set this to true at first, because any
+  // actions that shouldn't happen until "later" should generally also
+  // not happen before the first write call.
+
+  this.sync = true; // a flag to know if we're processing previously buffered items, which
+  // may call the _write() callback in the same tick, so that we don't
+  // end up in an overlapped onwrite situation.
+
+  this.bufferProcessing = false; // the callback that's passed to _write(chunk,cb)
+
+  this.onwrite = function (er) {
+    onwrite(stream, er);
+  }; // the callback that the user supplies to write(chunk,encoding,cb)
+
+
+  this.writecb = null; // the amount that is being written when _write is called.
+
+  this.writelen = 0;
+  this.bufferedRequest = null;
+  this.lastBufferedRequest = null; // number of pending user-supplied write callbacks
+  // this must be 0 before 'finish' can be emitted
+
+  this.pendingcb = 0; // emit prefinish if the only thing we're waiting for is _write cbs
+  // This is relevant for synchronous Transform streams
+
+  this.prefinished = false; // True if the error was already emitted and should not be thrown again
+
+  this.errorEmitted = false; // Should close be emitted on destroy. Defaults to true.
+
+  this.emitClose = options.emitClose !== false; // count buffered requests
+
+  this.bufferedRequestCount = 0; // allocate the first CorkedRequest, there is always
+  // one allocated and free to use, and we maintain at most two
+
+  this.corkedRequestsFree = new CorkedRequest(this);
+}
+
+WritableState.prototype.getBuffer = function getBuffer() {
+  var current = this.bufferedRequest;
+  var out = [];
+
+  while (current) {
+    out.push(current);
+    current = current.next;
+  }
+
+  return out;
+};
+
+(function () {
+  try {
+    Object.defineProperty(WritableState.prototype, 'buffer', {
+      get: internalUtil.deprecate(function writableStateBufferGetter() {
+        return this.getBuffer();
+      }, '_writableState.buffer is deprecated. Use _writableState.getBuffer ' + 'instead.', 'DEP0003')
+    });
+  } catch (_) {}
+})(); // Test _writableState for inheritance to account for Duplex streams,
+// whose prototype chain only points to Readable.
+
+
+var realHasInstance;
+
+if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.prototype[Symbol.hasInstance] === 'function') {
+  realHasInstance = Function.prototype[Symbol.hasInstance];
+  Object.defineProperty(Writable, Symbol.hasInstance, {
+    value: function value(object) {
+      if (realHasInstance.call(this, object)) return true;
+      if (this !== Writable) return false;
+      return object && object._writableState instanceof WritableState;
+    }
+  });
+} else {
+  realHasInstance = function realHasInstance(object) {
+    return object instanceof this;
+  };
+}
+
+function Writable(options) {
+  Duplex = Duplex || __webpack_require__(/*! ./_stream_duplex */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js"); // Writable ctor is applied to Duplexes, too.
+  // `realHasInstance` is necessary because using plain `instanceof`
+  // would return false, as no `_writableState` property is attached.
+  // Trying to use the custom `instanceof` for Writable here will also break the
+  // Node.js LazyTransform implementation, which has a non-trivial getter for
+  // `_writableState` that would lead to infinite recursion.
+  // Checking for a Stream.Duplex instance is faster here instead of inside
+  // the WritableState constructor, at least with V8 6.5
+
+  var isDuplex = this instanceof Duplex;
+  if (!isDuplex && !realHasInstance.call(Writable, this)) return new Writable(options);
+  this._writableState = new WritableState(options, this, isDuplex); // legacy.
+
+  this.writable = true;
+
+  if (options) {
+    if (typeof options.write === 'function') this._write = options.write;
+    if (typeof options.writev === 'function') this._writev = options.writev;
+    if (typeof options.destroy === 'function') this._destroy = options.destroy;
+    if (typeof options.final === 'function') this._final = options.final;
+  }
+
+  Stream.call(this);
+} // Otherwise people can pipe Writable streams, which is just wrong.
+
+
+Writable.prototype.pipe = function () {
+  this.emit('error', new ERR_STREAM_CANNOT_PIPE());
+};
+
+function writeAfterEnd(stream, cb) {
+  var er = new ERR_STREAM_WRITE_AFTER_END(); // TODO: defer error events consistently everywhere, not just the cb
+
+  stream.emit('error', er);
+  process.nextTick(cb, er);
+} // Checks that a user-supplied chunk is valid, especially for the particular
+// mode the stream is in. Currently this means that `null` is never accepted
+// and undefined/non-string values are only allowed in object mode.
+
+
+function validChunk(stream, state, chunk, cb) {
+  var er;
+
+  if (chunk === null) {
+    er = new ERR_STREAM_NULL_VALUES();
+  } else if (typeof chunk !== 'string' && !state.objectMode) {
+    er = new ERR_INVALID_ARG_TYPE('chunk', ['string', 'Buffer'], chunk);
+  }
+
+  if (er) {
+    stream.emit('error', er);
+    process.nextTick(cb, er);
+    return false;
+  }
+
+  return true;
+}
+
+Writable.prototype.write = function (chunk, encoding, cb) {
+  var state = this._writableState;
+  var ret = false;
+
+  var isBuf = !state.objectMode && _isUint8Array(chunk);
+
+  if (isBuf && !Buffer.isBuffer(chunk)) {
+    chunk = _uint8ArrayToBuffer(chunk);
+  }
+
+  if (typeof encoding === 'function') {
+    cb = encoding;
+    encoding = null;
+  }
+
+  if (isBuf) encoding = 'buffer';else if (!encoding) encoding = state.defaultEncoding;
+  if (typeof cb !== 'function') cb = nop;
+  if (state.ending) writeAfterEnd(this, cb);else if (isBuf || validChunk(this, state, chunk, cb)) {
+    state.pendingcb++;
+    ret = writeOrBuffer(this, state, isBuf, chunk, encoding, cb);
+  }
+  return ret;
+};
+
+Writable.prototype.cork = function () {
+  this._writableState.corked++;
+};
+
+Writable.prototype.uncork = function () {
+  var state = this._writableState;
+
+  if (state.corked) {
+    state.corked--;
+    if (!state.writing && !state.corked && !state.bufferProcessing && state.bufferedRequest) clearBuffer(this, state);
+  }
+};
+
+Writable.prototype.setDefaultEncoding = function setDefaultEncoding(encoding) {
+  // node::ParseEncoding() requires lower case.
+  if (typeof encoding === 'string') encoding = encoding.toLowerCase();
+  if (!(['hex', 'utf8', 'utf-8', 'ascii', 'binary', 'base64', 'ucs2', 'ucs-2', 'utf16le', 'utf-16le', 'raw'].indexOf((encoding + '').toLowerCase()) > -1)) throw new ERR_UNKNOWN_ENCODING(encoding);
+  this._writableState.defaultEncoding = encoding;
+  return this;
+};
+
+Object.defineProperty(Writable.prototype, 'writableBuffer', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._writableState && this._writableState.getBuffer();
+  }
+});
+
+function decodeChunk(state, chunk, encoding) {
+  if (!state.objectMode && state.decodeStrings !== false && typeof chunk === 'string') {
+    chunk = Buffer.from(chunk, encoding);
+  }
+
+  return chunk;
+}
+
+Object.defineProperty(Writable.prototype, 'writableHighWaterMark', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._writableState.highWaterMark;
+  }
+}); // if we're already writing something, then just put this
+// in the queue, and wait our turn.  Otherwise, call _write
+// If we return false, then we need a drain event, so set that flag.
+
+function writeOrBuffer(stream, state, isBuf, chunk, encoding, cb) {
+  if (!isBuf) {
+    var newChunk = decodeChunk(state, chunk, encoding);
+
+    if (chunk !== newChunk) {
+      isBuf = true;
+      encoding = 'buffer';
+      chunk = newChunk;
+    }
+  }
+
+  var len = state.objectMode ? 1 : chunk.length;
+  state.length += len;
+  var ret = state.length < state.highWaterMark; // we must ensure that previous needDrain will not be reset to false.
+
+  if (!ret) state.needDrain = true;
+
+  if (state.writing || state.corked) {
+    var last = state.lastBufferedRequest;
+    state.lastBufferedRequest = {
+      chunk: chunk,
+      encoding: encoding,
+      isBuf: isBuf,
+      callback: cb,
+      next: null
+    };
+
+    if (last) {
+      last.next = state.lastBufferedRequest;
+    } else {
+      state.bufferedRequest = state.lastBufferedRequest;
+    }
+
+    state.bufferedRequestCount += 1;
+  } else {
+    doWrite(stream, state, false, len, chunk, encoding, cb);
+  }
+
+  return ret;
+}
+
+function doWrite(stream, state, writev, len, chunk, encoding, cb) {
+  state.writelen = len;
+  state.writecb = cb;
+  state.writing = true;
+  state.sync = true;
+  if (state.destroyed) state.onwrite(new ERR_STREAM_DESTROYED('write'));else if (writev) stream._writev(chunk, state.onwrite);else stream._write(chunk, encoding, state.onwrite);
+  state.sync = false;
+}
+
+function onwriteError(stream, state, sync, er, cb) {
+  --state.pendingcb;
+
+  if (sync) {
+    // defer the callback if we are being called synchronously
+    // to avoid piling up things on the stack
+    process.nextTick(cb, er); // this can emit finish, and it will always happen
+    // after error
+
+    process.nextTick(finishMaybe, stream, state);
+    stream._writableState.errorEmitted = true;
+    stream.emit('error', er);
+  } else {
+    // the caller expect this to happen before if
+    // it is async
+    cb(er);
+    stream._writableState.errorEmitted = true;
+    stream.emit('error', er); // this can emit finish, but finish must
+    // always follow error
+
+    finishMaybe(stream, state);
+  }
+}
+
+function onwriteStateUpdate(state) {
+  state.writing = false;
+  state.writecb = null;
+  state.length -= state.writelen;
+  state.writelen = 0;
+}
+
+function onwrite(stream, er) {
+  var state = stream._writableState;
+  var sync = state.sync;
+  var cb = state.writecb;
+  if (typeof cb !== 'function') throw new ERR_MULTIPLE_CALLBACK();
+  onwriteStateUpdate(state);
+  if (er) onwriteError(stream, state, sync, er, cb);else {
+    // Check if we're actually ready to finish, but don't emit yet
+    var finished = needFinish(state) || stream.destroyed;
+
+    if (!finished && !state.corked && !state.bufferProcessing && state.bufferedRequest) {
+      clearBuffer(stream, state);
+    }
+
+    if (sync) {
+      process.nextTick(afterWrite, stream, state, finished, cb);
+    } else {
+      afterWrite(stream, state, finished, cb);
+    }
+  }
+}
+
+function afterWrite(stream, state, finished, cb) {
+  if (!finished) onwriteDrain(stream, state);
+  state.pendingcb--;
+  cb();
+  finishMaybe(stream, state);
+} // Must force callback to be called on nextTick, so that we don't
+// emit 'drain' before the write() consumer gets the 'false' return
+// value, and has a chance to attach a 'drain' listener.
+
+
+function onwriteDrain(stream, state) {
+  if (state.length === 0 && state.needDrain) {
+    state.needDrain = false;
+    stream.emit('drain');
+  }
+} // if there's something in the buffer waiting, then process it
+
+
+function clearBuffer(stream, state) {
+  state.bufferProcessing = true;
+  var entry = state.bufferedRequest;
+
+  if (stream._writev && entry && entry.next) {
+    // Fast case, write everything using _writev()
+    var l = state.bufferedRequestCount;
+    var buffer = new Array(l);
+    var holder = state.corkedRequestsFree;
+    holder.entry = entry;
+    var count = 0;
+    var allBuffers = true;
+
+    while (entry) {
+      buffer[count] = entry;
+      if (!entry.isBuf) allBuffers = false;
+      entry = entry.next;
+      count += 1;
+    }
+
+    buffer.allBuffers = allBuffers;
+    doWrite(stream, state, true, state.length, buffer, '', holder.finish); // doWrite is almost always async, defer these to save a bit of time
+    // as the hot path ends with doWrite
+
+    state.pendingcb++;
+    state.lastBufferedRequest = null;
+
+    if (holder.next) {
+      state.corkedRequestsFree = holder.next;
+      holder.next = null;
+    } else {
+      state.corkedRequestsFree = new CorkedRequest(state);
+    }
+
+    state.bufferedRequestCount = 0;
+  } else {
+    // Slow case, write chunks one-by-one
+    while (entry) {
+      var chunk = entry.chunk;
+      var encoding = entry.encoding;
+      var cb = entry.callback;
+      var len = state.objectMode ? 1 : chunk.length;
+      doWrite(stream, state, false, len, chunk, encoding, cb);
+      entry = entry.next;
+      state.bufferedRequestCount--; // if we didn't call the onwrite immediately, then
+      // it means that we need to wait until it does.
+      // also, that means that the chunk and cb are currently
+      // being processed, so move the buffer counter past them.
+
+      if (state.writing) {
+        break;
+      }
+    }
+
+    if (entry === null) state.lastBufferedRequest = null;
+  }
+
+  state.bufferedRequest = entry;
+  state.bufferProcessing = false;
+}
+
+Writable.prototype._write = function (chunk, encoding, cb) {
+  cb(new ERR_METHOD_NOT_IMPLEMENTED('_write()'));
+};
+
+Writable.prototype._writev = null;
+
+Writable.prototype.end = function (chunk, encoding, cb) {
+  var state = this._writableState;
+
+  if (typeof chunk === 'function') {
+    cb = chunk;
+    chunk = null;
+    encoding = null;
+  } else if (typeof encoding === 'function') {
+    cb = encoding;
+    encoding = null;
+  }
+
+  if (chunk !== null && chunk !== undefined) this.write(chunk, encoding); // .end() fully uncorks
+
+  if (state.corked) {
+    state.corked = 1;
+    this.uncork();
+  } // ignore unnecessary end() calls.
+
+
+  if (!state.ending) endWritable(this, state, cb);
+  return this;
+};
+
+Object.defineProperty(Writable.prototype, 'writableLength', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    return this._writableState.length;
+  }
+});
+
+function needFinish(state) {
+  return state.ending && state.length === 0 && state.bufferedRequest === null && !state.finished && !state.writing;
+}
+
+function callFinal(stream, state) {
+  stream._final(function (err) {
+    state.pendingcb--;
+
+    if (err) {
+      stream.emit('error', err);
+    }
+
+    state.prefinished = true;
+    stream.emit('prefinish');
+    finishMaybe(stream, state);
+  });
+}
+
+function prefinish(stream, state) {
+  if (!state.prefinished && !state.finalCalled) {
+    if (typeof stream._final === 'function' && !state.destroyed) {
+      state.pendingcb++;
+      state.finalCalled = true;
+      process.nextTick(callFinal, stream, state);
+    } else {
+      state.prefinished = true;
+      stream.emit('prefinish');
+    }
+  }
+}
+
+function finishMaybe(stream, state) {
+  var need = needFinish(state);
+
+  if (need) {
+    prefinish(stream, state);
+
+    if (state.pendingcb === 0) {
+      state.finished = true;
+      stream.emit('finish');
+    }
+  }
+
+  return need;
+}
+
+function endWritable(stream, state, cb) {
+  state.ending = true;
+  finishMaybe(stream, state);
+
+  if (cb) {
+    if (state.finished) process.nextTick(cb);else stream.once('finish', cb);
+  }
+
+  state.ended = true;
+  stream.writable = false;
+}
+
+function onCorkedFinish(corkReq, state, err) {
+  var entry = corkReq.entry;
+  corkReq.entry = null;
+
+  while (entry) {
+    var cb = entry.callback;
+    state.pendingcb--;
+    cb(err);
+    entry = entry.next;
+  } // reuse the free corkReq.
+
+
+  state.corkedRequestsFree.next = corkReq;
+}
+
+Object.defineProperty(Writable.prototype, 'destroyed', {
+  // making it explicit this property is not enumerable
+  // because otherwise some prototype manipulation in
+  // userland will fail
+  enumerable: false,
+  get: function get() {
+    if (this._writableState === undefined) {
+      return false;
+    }
+
+    return this._writableState.destroyed;
+  },
+  set: function set(value) {
+    // we ignore the value if the stream
+    // has not been initialized yet
+    if (!this._writableState) {
+      return;
+    } // backward compatibility, the user is explicitly
+    // managing destroyed
+
+
+    this._writableState.destroyed = value;
+  }
+});
+Writable.prototype.destroy = destroyImpl.destroy;
+Writable.prototype._undestroy = destroyImpl.undestroy;
+
+Writable.prototype._destroy = function (err, cb) {
+  cb(err);
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/async_iterator.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/async_iterator.js ***!
+  \******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+var _Object$setPrototypeO;
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var finished = __webpack_require__(/*! ./end-of-stream */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/end-of-stream.js");
+
+var kLastResolve = Symbol('lastResolve');
+var kLastReject = Symbol('lastReject');
+var kError = Symbol('error');
+var kEnded = Symbol('ended');
+var kLastPromise = Symbol('lastPromise');
+var kHandlePromise = Symbol('handlePromise');
+var kStream = Symbol('stream');
+
+function createIterResult(value, done) {
+  return {
+    value: value,
+    done: done
+  };
+}
+
+function readAndResolve(iter) {
+  var resolve = iter[kLastResolve];
+
+  if (resolve !== null) {
+    var data = iter[kStream].read(); // we defer if data is null
+    // we can be expecting either 'end' or
+    // 'error'
+
+    if (data !== null) {
+      iter[kLastPromise] = null;
+      iter[kLastResolve] = null;
+      iter[kLastReject] = null;
+      resolve(createIterResult(data, false));
+    }
+  }
+}
+
+function onReadable(iter) {
+  // we wait for the next tick, because it might
+  // emit an error with process.nextTick
+  process.nextTick(readAndResolve, iter);
+}
+
+function wrapForNext(lastPromise, iter) {
+  return function (resolve, reject) {
+    lastPromise.then(function () {
+      if (iter[kEnded]) {
+        resolve(createIterResult(undefined, true));
+        return;
+      }
+
+      iter[kHandlePromise](resolve, reject);
+    }, reject);
+  };
+}
+
+var AsyncIteratorPrototype = Object.getPrototypeOf(function () {});
+var ReadableStreamAsyncIteratorPrototype = Object.setPrototypeOf((_Object$setPrototypeO = {
+  get stream() {
+    return this[kStream];
+  },
+
+  next: function next() {
+    var _this = this;
+
+    // if we have detected an error in the meanwhile
+    // reject straight away
+    var error = this[kError];
+
+    if (error !== null) {
+      return Promise.reject(error);
+    }
+
+    if (this[kEnded]) {
+      return Promise.resolve(createIterResult(undefined, true));
+    }
+
+    if (this[kStream].destroyed) {
+      // We need to defer via nextTick because if .destroy(err) is
+      // called, the error will be emitted via nextTick, and
+      // we cannot guarantee that there is no error lingering around
+      // waiting to be emitted.
+      return new Promise(function (resolve, reject) {
+        process.nextTick(function () {
+          if (_this[kError]) {
+            reject(_this[kError]);
+          } else {
+            resolve(createIterResult(undefined, true));
+          }
+        });
+      });
+    } // if we have multiple next() calls
+    // we will wait for the previous Promise to finish
+    // this logic is optimized to support for await loops,
+    // where next() is only called once at a time
+
+
+    var lastPromise = this[kLastPromise];
+    var promise;
+
+    if (lastPromise) {
+      promise = new Promise(wrapForNext(lastPromise, this));
+    } else {
+      // fast path needed to support multiple this.push()
+      // without triggering the next() queue
+      var data = this[kStream].read();
+
+      if (data !== null) {
+        return Promise.resolve(createIterResult(data, false));
+      }
+
+      promise = new Promise(this[kHandlePromise]);
+    }
+
+    this[kLastPromise] = promise;
+    return promise;
+  }
+}, _defineProperty(_Object$setPrototypeO, Symbol.asyncIterator, function () {
+  return this;
+}), _defineProperty(_Object$setPrototypeO, "return", function _return() {
+  var _this2 = this;
+
+  // destroy(err, cb) is a private API
+  // we can guarantee we have that here, because we control the
+  // Readable class this is attached to
+  return new Promise(function (resolve, reject) {
+    _this2[kStream].destroy(null, function (err) {
+      if (err) {
+        reject(err);
+        return;
+      }
+
+      resolve(createIterResult(undefined, true));
+    });
+  });
+}), _Object$setPrototypeO), AsyncIteratorPrototype);
+
+var createReadableStreamAsyncIterator = function createReadableStreamAsyncIterator(stream) {
+  var _Object$create;
+
+  var iterator = Object.create(ReadableStreamAsyncIteratorPrototype, (_Object$create = {}, _defineProperty(_Object$create, kStream, {
+    value: stream,
+    writable: true
+  }), _defineProperty(_Object$create, kLastResolve, {
+    value: null,
+    writable: true
+  }), _defineProperty(_Object$create, kLastReject, {
+    value: null,
+    writable: true
+  }), _defineProperty(_Object$create, kError, {
+    value: null,
+    writable: true
+  }), _defineProperty(_Object$create, kEnded, {
+    value: stream._readableState.endEmitted,
+    writable: true
+  }), _defineProperty(_Object$create, kHandlePromise, {
+    value: function value(resolve, reject) {
+      var data = iterator[kStream].read();
+
+      if (data) {
+        iterator[kLastPromise] = null;
+        iterator[kLastResolve] = null;
+        iterator[kLastReject] = null;
+        resolve(createIterResult(data, false));
+      } else {
+        iterator[kLastResolve] = resolve;
+        iterator[kLastReject] = reject;
+      }
+    },
+    writable: true
+  }), _Object$create));
+  iterator[kLastPromise] = null;
+  finished(stream, function (err) {
+    if (err && err.code !== 'ERR_STREAM_PREMATURE_CLOSE') {
+      var reject = iterator[kLastReject]; // reject if we are waiting for data in the Promise
+      // returned by next() and store the error
+
+      if (reject !== null) {
+        iterator[kLastPromise] = null;
+        iterator[kLastResolve] = null;
+        iterator[kLastReject] = null;
+        reject(err);
+      }
+
+      iterator[kError] = err;
+      return;
+    }
+
+    var resolve = iterator[kLastResolve];
+
+    if (resolve !== null) {
+      iterator[kLastPromise] = null;
+      iterator[kLastResolve] = null;
+      iterator[kLastReject] = null;
+      resolve(createIterResult(undefined, true));
+    }
+
+    iterator[kEnded] = true;
+  });
+  stream.on('readable', onReadable.bind(null, iterator));
+  return iterator;
+};
+
+module.exports = createReadableStreamAsyncIterator;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/buffer_list.js":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/buffer_list.js ***!
+  \***************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var _require = __webpack_require__(/*! buffer */ "./node_modules/buffer/index.js"),
+    Buffer = _require.Buffer;
+
+var _require2 = __webpack_require__(/*! util */ 2),
+    inspect = _require2.inspect;
+
+var custom = inspect && inspect.custom || 'inspect';
+
+function copyBuffer(src, target, offset) {
+  Buffer.prototype.copy.call(src, target, offset);
+}
+
+module.exports =
+/*#__PURE__*/
+function () {
+  function BufferList() {
+    this.head = null;
+    this.tail = null;
+    this.length = 0;
+  }
+
+  var _proto = BufferList.prototype;
+
+  _proto.push = function push(v) {
+    var entry = {
+      data: v,
+      next: null
+    };
+    if (this.length > 0) this.tail.next = entry;else this.head = entry;
+    this.tail = entry;
+    ++this.length;
+  };
+
+  _proto.unshift = function unshift(v) {
+    var entry = {
+      data: v,
+      next: this.head
+    };
+    if (this.length === 0) this.tail = entry;
+    this.head = entry;
+    ++this.length;
+  };
+
+  _proto.shift = function shift() {
+    if (this.length === 0) return;
+    var ret = this.head.data;
+    if (this.length === 1) this.head = this.tail = null;else this.head = this.head.next;
+    --this.length;
+    return ret;
+  };
+
+  _proto.clear = function clear() {
+    this.head = this.tail = null;
+    this.length = 0;
+  };
+
+  _proto.join = function join(s) {
+    if (this.length === 0) return '';
+    var p = this.head;
+    var ret = '' + p.data;
+
+    while (p = p.next) {
+      ret += s + p.data;
+    }
+
+    return ret;
+  };
+
+  _proto.concat = function concat(n) {
+    if (this.length === 0) return Buffer.alloc(0);
+    var ret = Buffer.allocUnsafe(n >>> 0);
+    var p = this.head;
+    var i = 0;
+
+    while (p) {
+      copyBuffer(p.data, ret, i);
+      i += p.data.length;
+      p = p.next;
+    }
+
+    return ret;
+  } // Consumes a specified amount of bytes or characters from the buffered data.
+  ;
+
+  _proto.consume = function consume(n, hasStrings) {
+    var ret;
+
+    if (n < this.head.data.length) {
+      // `slice` is the same for buffers and strings.
+      ret = this.head.data.slice(0, n);
+      this.head.data = this.head.data.slice(n);
+    } else if (n === this.head.data.length) {
+      // First chunk is a perfect match.
+      ret = this.shift();
+    } else {
+      // Result spans more than one buffer.
+      ret = hasStrings ? this._getString(n) : this._getBuffer(n);
+    }
+
+    return ret;
+  };
+
+  _proto.first = function first() {
+    return this.head.data;
+  } // Consumes a specified amount of characters from the buffered data.
+  ;
+
+  _proto._getString = function _getString(n) {
+    var p = this.head;
+    var c = 1;
+    var ret = p.data;
+    n -= ret.length;
+
+    while (p = p.next) {
+      var str = p.data;
+      var nb = n > str.length ? str.length : n;
+      if (nb === str.length) ret += str;else ret += str.slice(0, n);
+      n -= nb;
+
+      if (n === 0) {
+        if (nb === str.length) {
+          ++c;
+          if (p.next) this.head = p.next;else this.head = this.tail = null;
+        } else {
+          this.head = p;
+          p.data = str.slice(nb);
+        }
+
+        break;
+      }
+
+      ++c;
+    }
+
+    this.length -= c;
+    return ret;
+  } // Consumes a specified amount of bytes from the buffered data.
+  ;
+
+  _proto._getBuffer = function _getBuffer(n) {
+    var ret = Buffer.allocUnsafe(n);
+    var p = this.head;
+    var c = 1;
+    p.data.copy(ret);
+    n -= p.data.length;
+
+    while (p = p.next) {
+      var buf = p.data;
+      var nb = n > buf.length ? buf.length : n;
+      buf.copy(ret, ret.length - n, 0, nb);
+      n -= nb;
+
+      if (n === 0) {
+        if (nb === buf.length) {
+          ++c;
+          if (p.next) this.head = p.next;else this.head = this.tail = null;
+        } else {
+          this.head = p;
+          p.data = buf.slice(nb);
+        }
+
+        break;
+      }
+
+      ++c;
+    }
+
+    this.length -= c;
+    return ret;
+  } // Make sure the linked list only shows the minimal necessary information.
+  ;
+
+  _proto[custom] = function (_, options) {
+    return inspect(this, _objectSpread({}, options, {
+      // Only inspect one level.
+      depth: 0,
+      // It should not recurse.
+      customInspect: false
+    }));
+  };
+
+  return BufferList;
+}();
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/destroy.js":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/destroy.js ***!
+  \***********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(process) { // undocumented cb() API, needed for core, not for public API
+
+function destroy(err, cb) {
+  var _this = this;
+
+  var readableDestroyed = this._readableState && this._readableState.destroyed;
+  var writableDestroyed = this._writableState && this._writableState.destroyed;
+
+  if (readableDestroyed || writableDestroyed) {
+    if (cb) {
+      cb(err);
+    } else if (err && (!this._writableState || !this._writableState.errorEmitted)) {
+      process.nextTick(emitErrorNT, this, err);
+    }
+
+    return this;
+  } // we set destroyed to true before firing error callbacks in order
+  // to make it re-entrance safe in case destroy() is called within callbacks
+
+
+  if (this._readableState) {
+    this._readableState.destroyed = true;
+  } // if this is a duplex stream mark the writable part as destroyed as well
+
+
+  if (this._writableState) {
+    this._writableState.destroyed = true;
+  }
+
+  this._destroy(err || null, function (err) {
+    if (!cb && err) {
+      process.nextTick(emitErrorAndCloseNT, _this, err);
+
+      if (_this._writableState) {
+        _this._writableState.errorEmitted = true;
+      }
+    } else if (cb) {
+      process.nextTick(emitCloseNT, _this);
+      cb(err);
+    } else {
+      process.nextTick(emitCloseNT, _this);
+    }
+  });
+
+  return this;
+}
+
+function emitErrorAndCloseNT(self, err) {
+  emitErrorNT(self, err);
+  emitCloseNT(self);
+}
+
+function emitCloseNT(self) {
+  if (self._writableState && !self._writableState.emitClose) return;
+  if (self._readableState && !self._readableState.emitClose) return;
+  self.emit('close');
+}
+
+function undestroy() {
+  if (this._readableState) {
+    this._readableState.destroyed = false;
+    this._readableState.reading = false;
+    this._readableState.ended = false;
+    this._readableState.endEmitted = false;
+  }
+
+  if (this._writableState) {
+    this._writableState.destroyed = false;
+    this._writableState.ended = false;
+    this._writableState.ending = false;
+    this._writableState.finalCalled = false;
+    this._writableState.prefinished = false;
+    this._writableState.finished = false;
+    this._writableState.errorEmitted = false;
+  }
+}
+
+function emitErrorNT(self, err) {
+  self.emit('error', err);
+}
+
+module.exports = {
+  destroy: destroy,
+  undestroy: undestroy
+};
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../../../../process/browser.js */ "./node_modules/process/browser.js")))
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/end-of-stream.js":
+/*!*****************************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/end-of-stream.js ***!
+  \*****************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Ported from https://github.com/mafintosh/end-of-stream with
+// permission from the author, Mathias Buus (@mafintosh).
+
+
+var ERR_STREAM_PREMATURE_CLOSE = __webpack_require__(/*! ../../../errors */ "./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js").codes.ERR_STREAM_PREMATURE_CLOSE;
+
+function once(callback) {
+  var called = false;
+  return function () {
+    if (called) return;
+    called = true;
+
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    callback.apply(this, args);
+  };
+}
+
+function noop() {}
+
+function isRequest(stream) {
+  return stream.setHeader && typeof stream.abort === 'function';
+}
+
+function eos(stream, opts, callback) {
+  if (typeof opts === 'function') return eos(stream, null, opts);
+  if (!opts) opts = {};
+  callback = once(callback || noop);
+  var readable = opts.readable || opts.readable !== false && stream.readable;
+  var writable = opts.writable || opts.writable !== false && stream.writable;
+
+  var onlegacyfinish = function onlegacyfinish() {
+    if (!stream.writable) onfinish();
+  };
+
+  var writableEnded = stream._writableState && stream._writableState.finished;
+
+  var onfinish = function onfinish() {
+    writable = false;
+    writableEnded = true;
+    if (!readable) callback.call(stream);
+  };
+
+  var readableEnded = stream._readableState && stream._readableState.endEmitted;
+
+  var onend = function onend() {
+    readable = false;
+    readableEnded = true;
+    if (!writable) callback.call(stream);
+  };
+
+  var onerror = function onerror(err) {
+    callback.call(stream, err);
+  };
+
+  var onclose = function onclose() {
+    var err;
+
+    if (readable && !readableEnded) {
+      if (!stream._readableState || !stream._readableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
+      return callback.call(stream, err);
+    }
+
+    if (writable && !writableEnded) {
+      if (!stream._writableState || !stream._writableState.ended) err = new ERR_STREAM_PREMATURE_CLOSE();
+      return callback.call(stream, err);
+    }
+  };
+
+  var onrequest = function onrequest() {
+    stream.req.on('finish', onfinish);
+  };
+
+  if (isRequest(stream)) {
+    stream.on('complete', onfinish);
+    stream.on('abort', onclose);
+    if (stream.req) onrequest();else stream.on('request', onrequest);
+  } else if (writable && !stream._writableState) {
+    // legacy streams
+    stream.on('end', onlegacyfinish);
+    stream.on('close', onlegacyfinish);
+  }
+
+  stream.on('end', onend);
+  stream.on('finish', onfinish);
+  if (opts.error !== false) stream.on('error', onerror);
+  stream.on('close', onclose);
+  return function () {
+    stream.removeListener('complete', onfinish);
+    stream.removeListener('abort', onclose);
+    stream.removeListener('request', onrequest);
+    if (stream.req) stream.req.removeListener('finish', onfinish);
+    stream.removeListener('end', onlegacyfinish);
+    stream.removeListener('close', onlegacyfinish);
+    stream.removeListener('finish', onfinish);
+    stream.removeListener('end', onend);
+    stream.removeListener('error', onerror);
+    stream.removeListener('close', onclose);
+  };
+}
+
+module.exports = eos;
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/pipeline.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/pipeline.js ***!
+  \************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+// Ported from https://github.com/mafintosh/pump with
+// permission from the author, Mathias Buus (@mafintosh).
+
+
+var eos;
+
+function once(callback) {
+  var called = false;
+  return function () {
+    if (called) return;
+    called = true;
+    callback.apply(void 0, arguments);
+  };
+}
+
+var _require$codes = __webpack_require__(/*! ../../../errors */ "./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js").codes,
+    ERR_MISSING_ARGS = _require$codes.ERR_MISSING_ARGS,
+    ERR_STREAM_DESTROYED = _require$codes.ERR_STREAM_DESTROYED;
+
+function noop(err) {
+  // Rethrow the error if it exists to avoid swallowing it
+  if (err) throw err;
+}
+
+function isRequest(stream) {
+  return stream.setHeader && typeof stream.abort === 'function';
+}
+
+function destroyer(stream, reading, writing, callback) {
+  callback = once(callback);
+  var closed = false;
+  stream.on('close', function () {
+    closed = true;
+  });
+  if (eos === undefined) eos = __webpack_require__(/*! ./end-of-stream */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/end-of-stream.js");
+  eos(stream, {
+    readable: reading,
+    writable: writing
+  }, function (err) {
+    if (err) return callback(err);
+    closed = true;
+    callback();
+  });
+  var destroyed = false;
+  return function (err) {
+    if (closed) return;
+    if (destroyed) return;
+    destroyed = true; // request.destroy just do .end - .abort is what we want
+
+    if (isRequest(stream)) return stream.abort();
+    if (typeof stream.destroy === 'function') return stream.destroy();
+    callback(err || new ERR_STREAM_DESTROYED('pipe'));
+  };
+}
+
+function call(fn) {
+  fn();
+}
+
+function pipe(from, to) {
+  return from.pipe(to);
+}
+
+function popCallback(streams) {
+  if (!streams.length) return noop;
+  if (typeof streams[streams.length - 1] !== 'function') return noop;
+  return streams.pop();
+}
+
+function pipeline() {
+  for (var _len = arguments.length, streams = new Array(_len), _key = 0; _key < _len; _key++) {
+    streams[_key] = arguments[_key];
+  }
+
+  var callback = popCallback(streams);
+  if (Array.isArray(streams[0])) streams = streams[0];
+
+  if (streams.length < 2) {
+    throw new ERR_MISSING_ARGS('streams');
+  }
+
+  var error;
+  var destroys = streams.map(function (stream, i) {
+    var reading = i < streams.length - 1;
+    var writing = i > 0;
+    return destroyer(stream, reading, writing, function (err) {
+      if (!error) error = err;
+      if (err) destroys.forEach(call);
+      if (reading) return;
+      destroys.forEach(call);
+      callback(error);
+    });
+  });
+  return streams.reduce(pipe);
+}
+
+module.exports = pipeline;
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/state.js":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/state.js ***!
+  \*********************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var ERR_INVALID_OPT_VALUE = __webpack_require__(/*! ../../../errors */ "./node_modules/simple-peer/node_modules/readable-stream/errors-browser.js").codes.ERR_INVALID_OPT_VALUE;
+
+function highWaterMarkFrom(options, isDuplex, duplexKey) {
+  return options.highWaterMark != null ? options.highWaterMark : isDuplex ? options[duplexKey] : null;
+}
+
+function getHighWaterMark(state, options, duplexKey, isDuplex) {
+  var hwm = highWaterMarkFrom(options, isDuplex, duplexKey);
+
+  if (hwm != null) {
+    if (!(isFinite(hwm) && Math.floor(hwm) === hwm) || hwm < 0) {
+      var name = isDuplex ? duplexKey : 'highWaterMark';
+      throw new ERR_INVALID_OPT_VALUE(name, hwm);
+    }
+
+    return Math.floor(hwm);
+  } // Default value
+
+
+  return state.objectMode ? 16 : 16 * 1024;
+}
+
+module.exports = {
+  getHighWaterMark: getHighWaterMark
+};
+
+/***/ }),
+
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/stream-browser.js":
+/*!******************************************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/stream-browser.js ***!
+  \******************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! events */ "./node_modules/events/events.js").EventEmitter;
 
 
 /***/ }),
 
-/***/ "./node_modules/tlds/index.js":
-/*!************************************!*\
-  !*** ./node_modules/tlds/index.js ***!
-  \************************************/
+/***/ "./node_modules/simple-peer/node_modules/readable-stream/readable-browser.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/simple-peer/node_modules/readable-stream/readable-browser.js ***!
+  \***********************************************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = [
-  "aaa",
-  "aarp",
-  "abarth",
-  "abb",
-  "abbott",
-  "abbvie",
-  "abc",
-  "able",
-  "abogado",
-  "abudhabi",
-  "ac",
-  "academy",
-  "accenture",
-  "accountant",
-  "accountants",
-  "aco",
-  "active",
-  "actor",
-  "ad",
-  "adac",
-  "ads",
-  "adult",
-  "ae",
-  "aeg",
-  "aero",
-  "aetna",
-  "af",
-  "afamilycompany",
-  "afl",
-  "africa",
-  "ag",
-  "agakhan",
-  "agency",
-  "ai",
-  "aig",
-  "aigo",
-  "airbus",
-  "airforce",
-  "airtel",
-  "akdn",
-  "al",
-  "alfaromeo",
-  "alibaba",
-  "alipay",
-  "allfinanz",
-  "allstate",
-  "ally",
-  "alsace",
-  "alstom",
-  "am",
-  "americanexpress",
-  "americanfamily",
-  "amex",
-  "amfam",
-  "amica",
-  "amsterdam",
-  "analytics",
-  "android",
-  "anquan",
-  "anz",
-  "ao",
-  "aol",
-  "apartments",
-  "app",
-  "apple",
-  "aq",
-  "aquarelle",
-  "ar",
-  "arab",
-  "aramco",
-  "archi",
-  "army",
-  "arpa",
-  "art",
-  "arte",
-  "as",
-  "asda",
-  "asia",
-  "associates",
-  "at",
-  "athleta",
-  "attorney",
-  "au",
-  "auction",
-  "audi",
-  "audible",
-  "audio",
-  "auspost",
-  "author",
-  "auto",
-  "autos",
-  "avianca",
-  "aw",
-  "aws",
-  "ax",
-  "axa",
-  "az",
-  "azure",
-  "ba",
-  "baby",
-  "baidu",
-  "banamex",
-  "bananarepublic",
-  "band",
-  "bank",
-  "bar",
-  "barcelona",
-  "barclaycard",
-  "barclays",
-  "barefoot",
-  "bargains",
-  "baseball",
-  "basketball",
-  "bauhaus",
-  "bayern",
-  "bb",
-  "bbc",
-  "bbt",
-  "bbva",
-  "bcg",
-  "bcn",
-  "bd",
-  "be",
-  "beats",
-  "beauty",
-  "beer",
-  "bentley",
-  "berlin",
-  "best",
-  "bestbuy",
-  "bet",
-  "bf",
-  "bg",
-  "bh",
-  "bharti",
-  "bi",
-  "bible",
-  "bid",
-  "bike",
-  "bing",
-  "bingo",
-  "bio",
-  "biz",
-  "bj",
-  "black",
-  "blackfriday",
-  "blanco",
-  "blockbuster",
-  "blog",
-  "bloomberg",
-  "blue",
-  "bm",
-  "bms",
-  "bmw",
-  "bn",
-  "bnl",
-  "bnpparibas",
-  "bo",
-  "boats",
-  "boehringer",
-  "bofa",
-  "bom",
-  "bond",
-  "boo",
-  "book",
-  "booking",
-  "bosch",
-  "bostik",
-  "boston",
-  "bot",
-  "boutique",
-  "box",
-  "br",
-  "bradesco",
-  "bridgestone",
-  "broadway",
-  "broker",
-  "brother",
-  "brussels",
-  "bs",
-  "bt",
-  "budapest",
-  "bugatti",
-  "build",
-  "builders",
-  "business",
-  "buy",
-  "buzz",
-  "bv",
-  "bw",
-  "by",
-  "bz",
-  "bzh",
-  "ca",
-  "cab",
-  "cafe",
-  "cal",
-  "call",
-  "calvinklein",
-  "cam",
-  "camera",
-  "camp",
-  "cancerresearch",
-  "canon",
-  "capetown",
-  "capital",
-  "capitalone",
-  "car",
-  "caravan",
-  "cards",
-  "care",
-  "career",
-  "careers",
-  "cars",
-  "cartier",
-  "casa",
-  "case",
-  "caseih",
-  "cash",
-  "casino",
-  "cat",
-  "catering",
-  "catholic",
-  "cba",
-  "cbn",
-  "cbre",
-  "cbs",
-  "cc",
-  "cd",
-  "ceb",
-  "center",
-  "ceo",
-  "cern",
-  "cf",
-  "cfa",
-  "cfd",
-  "cg",
-  "ch",
-  "chanel",
-  "channel",
-  "chase",
-  "chat",
-  "cheap",
-  "chintai",
-  "christmas",
-  "chrome",
-  "chrysler",
-  "church",
-  "ci",
-  "cipriani",
-  "circle",
-  "cisco",
-  "citadel",
-  "citi",
-  "citic",
-  "city",
-  "cityeats",
-  "ck",
-  "cl",
-  "claims",
-  "cleaning",
-  "click",
-  "clinic",
-  "clinique",
-  "clothing",
-  "cloud",
-  "club",
-  "clubmed",
-  "cm",
-  "cn",
-  "co",
-  "coach",
-  "codes",
-  "coffee",
-  "college",
-  "cologne",
-  "com",
-  "comcast",
-  "commbank",
-  "community",
-  "company",
-  "compare",
-  "computer",
-  "comsec",
-  "condos",
-  "construction",
-  "consulting",
-  "contact",
-  "contractors",
-  "cooking",
-  "cookingchannel",
-  "cool",
-  "coop",
-  "corsica",
-  "country",
-  "coupon",
-  "coupons",
-  "courses",
-  "cr",
-  "credit",
-  "creditcard",
-  "creditunion",
-  "cricket",
-  "crown",
-  "crs",
-  "cruise",
-  "cruises",
-  "csc",
-  "cu",
-  "cuisinella",
-  "cv",
-  "cw",
-  "cx",
-  "cy",
-  "cymru",
-  "cyou",
-  "cz",
-  "dabur",
-  "dad",
-  "dance",
-  "data",
-  "date",
-  "dating",
-  "datsun",
-  "day",
-  "dclk",
-  "dds",
-  "de",
-  "deal",
-  "dealer",
-  "deals",
-  "degree",
-  "delivery",
-  "dell",
-  "deloitte",
-  "delta",
-  "democrat",
-  "dental",
-  "dentist",
-  "desi",
-  "design",
-  "dev",
-  "dhl",
-  "diamonds",
-  "diet",
-  "digital",
-  "direct",
-  "directory",
-  "discount",
-  "discover",
-  "dish",
-  "diy",
-  "dj",
-  "dk",
-  "dm",
-  "dnp",
-  "do",
-  "docs",
-  "doctor",
-  "dodge",
-  "dog",
-  "doha",
-  "domains",
-  "dot",
-  "download",
-  "drive",
-  "dtv",
-  "dubai",
-  "duck",
-  "dunlop",
-  "duns",
-  "dupont",
-  "durban",
-  "dvag",
-  "dvr",
-  "dz",
-  "earth",
-  "eat",
-  "ec",
-  "eco",
-  "edeka",
-  "edu",
-  "education",
-  "ee",
-  "eg",
-  "email",
-  "emerck",
-  "energy",
-  "engineer",
-  "engineering",
-  "enterprises",
-  "epost",
-  "epson",
-  "equipment",
-  "er",
-  "ericsson",
-  "erni",
-  "es",
-  "esq",
-  "estate",
-  "esurance",
-  "et",
-  "etisalat",
-  "eu",
-  "eurovision",
-  "eus",
-  "events",
-  "everbank",
-  "exchange",
-  "expert",
-  "exposed",
-  "express",
-  "extraspace",
-  "fage",
-  "fail",
-  "fairwinds",
-  "faith",
-  "family",
-  "fan",
-  "fans",
-  "farm",
-  "farmers",
-  "fashion",
-  "fast",
-  "fedex",
-  "feedback",
-  "ferrari",
-  "ferrero",
-  "fi",
-  "fiat",
-  "fidelity",
-  "fido",
-  "film",
-  "final",
-  "finance",
-  "financial",
-  "fire",
-  "firestone",
-  "firmdale",
-  "fish",
-  "fishing",
-  "fit",
-  "fitness",
-  "fj",
-  "fk",
-  "flickr",
-  "flights",
-  "flir",
-  "florist",
-  "flowers",
-  "fly",
-  "fm",
-  "fo",
-  "foo",
-  "food",
-  "foodnetwork",
-  "football",
-  "ford",
-  "forex",
-  "forsale",
-  "forum",
-  "foundation",
-  "fox",
-  "fr",
-  "free",
-  "fresenius",
-  "frl",
-  "frogans",
-  "frontdoor",
-  "frontier",
-  "ftr",
-  "fujitsu",
-  "fujixerox",
-  "fun",
-  "fund",
-  "furniture",
-  "futbol",
-  "fyi",
-  "ga",
-  "gal",
-  "gallery",
-  "gallo",
-  "gallup",
-  "game",
-  "games",
-  "gap",
-  "garden",
-  "gb",
-  "gbiz",
-  "gd",
-  "gdn",
-  "ge",
-  "gea",
-  "gent",
-  "genting",
-  "george",
-  "gf",
-  "gg",
-  "ggee",
-  "gh",
-  "gi",
-  "gift",
-  "gifts",
-  "gives",
-  "giving",
-  "gl",
-  "glade",
-  "glass",
-  "gle",
-  "global",
-  "globo",
-  "gm",
-  "gmail",
-  "gmbh",
-  "gmo",
-  "gmx",
-  "gn",
-  "godaddy",
-  "gold",
-  "goldpoint",
-  "golf",
-  "goo",
-  "goodhands",
-  "goodyear",
-  "goog",
-  "google",
-  "gop",
-  "got",
-  "gov",
-  "gp",
-  "gq",
-  "gr",
-  "grainger",
-  "graphics",
-  "gratis",
-  "green",
-  "gripe",
-  "grocery",
-  "group",
-  "gs",
-  "gt",
-  "gu",
-  "guardian",
-  "gucci",
-  "guge",
-  "guide",
-  "guitars",
-  "guru",
-  "gw",
-  "gy",
-  "hair",
-  "hamburg",
-  "hangout",
-  "haus",
-  "hbo",
-  "hdfc",
-  "hdfcbank",
-  "health",
-  "healthcare",
-  "help",
-  "helsinki",
-  "here",
-  "hermes",
-  "hgtv",
-  "hiphop",
-  "hisamitsu",
-  "hitachi",
-  "hiv",
-  "hk",
-  "hkt",
-  "hm",
-  "hn",
-  "hockey",
-  "holdings",
-  "holiday",
-  "homedepot",
-  "homegoods",
-  "homes",
-  "homesense",
-  "honda",
-  "honeywell",
-  "horse",
-  "hospital",
-  "host",
-  "hosting",
-  "hot",
-  "hoteles",
-  "hotels",
-  "hotmail",
-  "house",
-  "how",
-  "hr",
-  "hsbc",
-  "ht",
-  "hu",
-  "hughes",
-  "hyatt",
-  "hyundai",
-  "ibm",
-  "icbc",
-  "ice",
-  "icu",
-  "id",
-  "ie",
-  "ieee",
-  "ifm",
-  "ikano",
-  "il",
-  "im",
-  "imamat",
-  "imdb",
-  "immo",
-  "immobilien",
-  "in",
-  "industries",
-  "infiniti",
-  "info",
-  "ing",
-  "ink",
-  "institute",
-  "insurance",
-  "insure",
-  "int",
-  "intel",
-  "international",
-  "intuit",
-  "investments",
-  "io",
-  "ipiranga",
-  "iq",
-  "ir",
-  "irish",
-  "is",
-  "iselect",
-  "ismaili",
-  "ist",
-  "istanbul",
-  "it",
-  "itau",
-  "itv",
-  "iveco",
-  "iwc",
-  "jaguar",
-  "java",
-  "jcb",
-  "jcp",
-  "je",
-  "jeep",
-  "jetzt",
-  "jewelry",
-  "jio",
-  "jlc",
-  "jll",
-  "jm",
-  "jmp",
-  "jnj",
-  "jo",
-  "jobs",
-  "joburg",
-  "jot",
-  "joy",
-  "jp",
-  "jpmorgan",
-  "jprs",
-  "juegos",
-  "juniper",
-  "kaufen",
-  "kddi",
-  "ke",
-  "kerryhotels",
-  "kerrylogistics",
-  "kerryproperties",
-  "kfh",
-  "kg",
-  "kh",
-  "ki",
-  "kia",
-  "kim",
-  "kinder",
-  "kindle",
-  "kitchen",
-  "kiwi",
-  "km",
-  "kn",
-  "koeln",
-  "komatsu",
-  "kosher",
-  "kp",
-  "kpmg",
-  "kpn",
-  "kr",
-  "krd",
-  "kred",
-  "kuokgroup",
-  "kw",
-  "ky",
-  "kyoto",
-  "kz",
-  "la",
-  "lacaixa",
-  "ladbrokes",
-  "lamborghini",
-  "lamer",
-  "lancaster",
-  "lancia",
-  "lancome",
-  "land",
-  "landrover",
-  "lanxess",
-  "lasalle",
-  "lat",
-  "latino",
-  "latrobe",
-  "law",
-  "lawyer",
-  "lb",
-  "lc",
-  "lds",
-  "lease",
-  "leclerc",
-  "lefrak",
-  "legal",
-  "lego",
-  "lexus",
-  "lgbt",
-  "li",
-  "liaison",
-  "lidl",
-  "life",
-  "lifeinsurance",
-  "lifestyle",
-  "lighting",
-  "like",
-  "lilly",
-  "limited",
-  "limo",
-  "lincoln",
-  "linde",
-  "link",
-  "lipsy",
-  "live",
-  "living",
-  "lixil",
-  "lk",
-  "llc",
-  "loan",
-  "loans",
-  "locker",
-  "locus",
-  "loft",
-  "lol",
-  "london",
-  "lotte",
-  "lotto",
-  "love",
-  "lpl",
-  "lplfinancial",
-  "lr",
-  "ls",
-  "lt",
-  "ltd",
-  "ltda",
-  "lu",
-  "lundbeck",
-  "lupin",
-  "luxe",
-  "luxury",
-  "lv",
-  "ly",
-  "ma",
-  "macys",
-  "madrid",
-  "maif",
-  "maison",
-  "makeup",
-  "man",
-  "management",
-  "mango",
-  "map",
-  "market",
-  "marketing",
-  "markets",
-  "marriott",
-  "marshalls",
-  "maserati",
-  "mattel",
-  "mba",
-  "mc",
-  "mckinsey",
-  "md",
-  "me",
-  "med",
-  "media",
-  "meet",
-  "melbourne",
-  "meme",
-  "memorial",
-  "men",
-  "menu",
-  "meo",
-  "merckmsd",
-  "metlife",
-  "mg",
-  "mh",
-  "miami",
-  "microsoft",
-  "mil",
-  "mini",
-  "mint",
-  "mit",
-  "mitsubishi",
-  "mk",
-  "ml",
-  "mlb",
-  "mls",
-  "mm",
-  "mma",
-  "mn",
-  "mo",
-  "mobi",
-  "mobile",
-  "mobily",
-  "moda",
-  "moe",
-  "moi",
-  "mom",
-  "monash",
-  "money",
-  "monster",
-  "mopar",
-  "mormon",
-  "mortgage",
-  "moscow",
-  "moto",
-  "motorcycles",
-  "mov",
-  "movie",
-  "movistar",
-  "mp",
-  "mq",
-  "mr",
-  "ms",
-  "msd",
-  "mt",
-  "mtn",
-  "mtr",
-  "mu",
-  "museum",
-  "mutual",
-  "mv",
-  "mw",
-  "mx",
-  "my",
-  "mz",
-  "na",
-  "nab",
-  "nadex",
-  "nagoya",
-  "name",
-  "nationwide",
-  "natura",
-  "navy",
-  "nba",
-  "nc",
-  "ne",
-  "nec",
-  "net",
-  "netbank",
-  "netflix",
-  "network",
-  "neustar",
-  "new",
-  "newholland",
-  "news",
-  "next",
-  "nextdirect",
-  "nexus",
-  "nf",
-  "nfl",
-  "ng",
-  "ngo",
-  "nhk",
-  "ni",
-  "nico",
-  "nike",
-  "nikon",
-  "ninja",
-  "nissan",
-  "nissay",
-  "nl",
-  "no",
-  "nokia",
-  "northwesternmutual",
-  "norton",
-  "now",
-  "nowruz",
-  "nowtv",
-  "np",
-  "nr",
-  "nra",
-  "nrw",
-  "ntt",
-  "nu",
-  "nyc",
-  "nz",
-  "obi",
-  "observer",
-  "off",
-  "office",
-  "okinawa",
-  "olayan",
-  "olayangroup",
-  "oldnavy",
-  "ollo",
-  "om",
-  "omega",
-  "one",
-  "ong",
-  "onl",
-  "online",
-  "onyourside",
-  "ooo",
-  "open",
-  "oracle",
-  "orange",
-  "org",
-  "organic",
-  "origins",
-  "osaka",
-  "otsuka",
-  "ott",
-  "ovh",
-  "pa",
-  "page",
-  "panasonic",
-  "panerai",
-  "paris",
-  "pars",
-  "partners",
-  "parts",
-  "party",
-  "passagens",
-  "pay",
-  "pccw",
-  "pe",
-  "pet",
-  "pf",
-  "pfizer",
-  "pg",
-  "ph",
-  "pharmacy",
-  "phd",
-  "philips",
-  "phone",
-  "photo",
-  "photography",
-  "photos",
-  "physio",
-  "piaget",
-  "pics",
-  "pictet",
-  "pictures",
-  "pid",
-  "pin",
-  "ping",
-  "pink",
-  "pioneer",
-  "pizza",
-  "pk",
-  "pl",
-  "place",
-  "play",
-  "playstation",
-  "plumbing",
-  "plus",
-  "pm",
-  "pn",
-  "pnc",
-  "pohl",
-  "poker",
-  "politie",
-  "porn",
-  "post",
-  "pr",
-  "pramerica",
-  "praxi",
-  "press",
-  "prime",
-  "pro",
-  "prod",
-  "productions",
-  "prof",
-  "progressive",
-  "promo",
-  "properties",
-  "property",
-  "protection",
-  "pru",
-  "prudential",
-  "ps",
-  "pt",
-  "pub",
-  "pw",
-  "pwc",
-  "py",
-  "qa",
-  "qpon",
-  "quebec",
-  "quest",
-  "qvc",
-  "racing",
-  "radio",
-  "raid",
-  "re",
-  "read",
-  "realestate",
-  "realtor",
-  "realty",
-  "recipes",
-  "red",
-  "redstone",
-  "redumbrella",
-  "rehab",
-  "reise",
-  "reisen",
-  "reit",
-  "reliance",
-  "ren",
-  "rent",
-  "rentals",
-  "repair",
-  "report",
-  "republican",
-  "rest",
-  "restaurant",
-  "review",
-  "reviews",
-  "rexroth",
-  "rich",
-  "richardli",
-  "ricoh",
-  "rightathome",
-  "ril",
-  "rio",
-  "rip",
-  "rmit",
-  "ro",
-  "rocher",
-  "rocks",
-  "rodeo",
-  "rogers",
-  "room",
-  "rs",
-  "rsvp",
-  "ru",
-  "rugby",
-  "ruhr",
-  "run",
-  "rw",
-  "rwe",
-  "ryukyu",
-  "sa",
-  "saarland",
-  "safe",
-  "safety",
-  "sakura",
-  "sale",
-  "salon",
-  "samsclub",
-  "samsung",
-  "sandvik",
-  "sandvikcoromant",
-  "sanofi",
-  "sap",
-  "sapo",
-  "sarl",
-  "sas",
-  "save",
-  "saxo",
-  "sb",
-  "sbi",
-  "sbs",
-  "sc",
-  "sca",
-  "scb",
-  "schaeffler",
-  "schmidt",
-  "scholarships",
-  "school",
-  "schule",
-  "schwarz",
-  "science",
-  "scjohnson",
-  "scor",
-  "scot",
-  "sd",
-  "se",
-  "search",
-  "seat",
-  "secure",
-  "security",
-  "seek",
-  "select",
-  "sener",
-  "services",
-  "ses",
-  "seven",
-  "sew",
-  "sex",
-  "sexy",
-  "sfr",
-  "sg",
-  "sh",
-  "shangrila",
-  "sharp",
-  "shaw",
-  "shell",
-  "shia",
-  "shiksha",
-  "shoes",
-  "shop",
-  "shopping",
-  "shouji",
-  "show",
-  "showtime",
-  "shriram",
-  "si",
-  "silk",
-  "sina",
-  "singles",
-  "site",
-  "sj",
-  "sk",
-  "ski",
-  "skin",
-  "sky",
-  "skype",
-  "sl",
-  "sling",
-  "sm",
-  "smart",
-  "smile",
-  "sn",
-  "sncf",
-  "so",
-  "soccer",
-  "social",
-  "softbank",
-  "software",
-  "sohu",
-  "solar",
-  "solutions",
-  "song",
-  "sony",
-  "soy",
-  "space",
-  "spiegel",
-  "sport",
-  "spot",
-  "spreadbetting",
-  "sr",
-  "srl",
-  "srt",
-  "st",
-  "stada",
-  "staples",
-  "star",
-  "starhub",
-  "statebank",
-  "statefarm",
-  "statoil",
-  "stc",
-  "stcgroup",
-  "stockholm",
-  "storage",
-  "store",
-  "stream",
-  "studio",
-  "study",
-  "style",
-  "su",
-  "sucks",
-  "supplies",
-  "supply",
-  "support",
-  "surf",
-  "surgery",
-  "suzuki",
-  "sv",
-  "swatch",
-  "swiftcover",
-  "swiss",
-  "sx",
-  "sy",
-  "sydney",
-  "symantec",
-  "systems",
-  "sz",
-  "tab",
-  "taipei",
-  "talk",
-  "taobao",
-  "target",
-  "tatamotors",
-  "tatar",
-  "tattoo",
-  "tax",
-  "taxi",
-  "tc",
-  "tci",
-  "td",
-  "tdk",
-  "team",
-  "tech",
-  "technology",
-  "tel",
-  "telecity",
-  "telefonica",
-  "temasek",
-  "tennis",
-  "teva",
-  "tf",
-  "tg",
-  "th",
-  "thd",
-  "theater",
-  "theatre",
-  "tiaa",
-  "tickets",
-  "tienda",
-  "tiffany",
-  "tips",
-  "tires",
-  "tirol",
-  "tj",
-  "tjmaxx",
-  "tjx",
-  "tk",
-  "tkmaxx",
-  "tl",
-  "tm",
-  "tmall",
-  "tn",
-  "to",
-  "today",
-  "tokyo",
-  "tools",
-  "top",
-  "toray",
-  "toshiba",
-  "total",
-  "tours",
-  "town",
-  "toyota",
-  "toys",
-  "tr",
-  "trade",
-  "trading",
-  "training",
-  "travel",
-  "travelchannel",
-  "travelers",
-  "travelersinsurance",
-  "trust",
-  "trv",
-  "tt",
-  "tube",
-  "tui",
-  "tunes",
-  "tushu",
-  "tv",
-  "tvs",
-  "tw",
-  "tz",
-  "ua",
-  "ubank",
-  "ubs",
-  "uconnect",
-  "ug",
-  "uk",
-  "unicom",
-  "university",
-  "uno",
-  "uol",
-  "ups",
-  "us",
-  "uy",
-  "uz",
-  "va",
-  "vacations",
-  "vana",
-  "vanguard",
-  "vc",
-  "ve",
-  "vegas",
-  "ventures",
-  "verisign",
-  "versicherung",
-  "vet",
-  "vg",
-  "vi",
-  "viajes",
-  "video",
-  "vig",
-  "viking",
-  "villas",
-  "vin",
-  "vip",
-  "virgin",
-  "visa",
-  "vision",
-  "vista",
-  "vistaprint",
-  "viva",
-  "vivo",
-  "vlaanderen",
-  "vn",
-  "vodka",
-  "volkswagen",
-  "volvo",
-  "vote",
-  "voting",
-  "voto",
-  "voyage",
-  "vu",
-  "vuelos",
-  "wales",
-  "walmart",
-  "walter",
-  "wang",
-  "wanggou",
-  "warman",
-  "watch",
-  "watches",
-  "weather",
-  "weatherchannel",
-  "webcam",
-  "weber",
-  "website",
-  "wed",
-  "wedding",
-  "weibo",
-  "weir",
-  "wf",
-  "whoswho",
-  "wien",
-  "wiki",
-  "williamhill",
-  "win",
-  "windows",
-  "wine",
-  "winners",
-  "wme",
-  "wolterskluwer",
-  "woodside",
-  "work",
-  "works",
-  "world",
-  "wow",
-  "ws",
-  "wtc",
-  "wtf",
-  "xbox",
-  "xerox",
-  "xfinity",
-  "xihuan",
-  "xin",
-  "कॉम", // xn--11b4c3d
-  "セール", // xn--1ck2e1b
-  "佛山", // xn--1qqw23a
-  "ಭಾರತ", // xn--2scrj9c
-  "慈善", // xn--30rr7y
-  "集团", // xn--3bst00m
-  "在线", // xn--3ds443g
-  "한국", // xn--3e0b707e
-  "ଭାରତ", // xn--3hcrj9c
-  "大众汽车", // xn--3oq18vl8pn36a
-  "点看", // xn--3pxu8k
-  "คอม", // xn--42c2d9a
-  "ভাৰত", // xn--45br5cyl
-  "ভারত", // xn--45brj9c
-  "八卦", // xn--45q11c
-  "موقع", // xn--4gbrim
-  "বাংলা", // xn--54b7fta0cc
-  "公益", // xn--55qw42g
-  "公司", // xn--55qx5d
-  "香格里拉", // xn--5su34j936bgsg
-  "网站", // xn--5tzm5g
-  "移动", // xn--6frz82g
-  "我爱你", // xn--6qq986b3xl
-  "москва", // xn--80adxhks
-  "қаз", // xn--80ao21a
-  "католик", // xn--80aqecdr1a
-  "онлайн", // xn--80asehdb
-  "сайт", // xn--80aswg
-  "联通", // xn--8y0a063a
-  "срб", // xn--90a3ac
-  "бг", // xn--90ae
-  "бел", // xn--90ais
-  "קום", // xn--9dbq2a
-  "时尚", // xn--9et52u
-  "微博", // xn--9krt00a
-  "淡马锡", // xn--b4w605ferd
-  "ファッション", // xn--bck1b9a5dre4c
-  "орг", // xn--c1avg
-  "नेट", // xn--c2br7g
-  "ストア", // xn--cck2b3b
-  "삼성", // xn--cg4bki
-  "சிங்கப்பூர்", // xn--clchc0ea0b2g2a9gcd
-  "商标", // xn--czr694b
-  "商店", // xn--czrs0t
-  "商城", // xn--czru2d
-  "дети", // xn--d1acj3b
-  "мкд", // xn--d1alf
-  "ею", // xn--e1a4c
-  "ポイント", // xn--eckvdtc9d
-  "新闻", // xn--efvy88h
-  "工行", // xn--estv75g
-  "家電", // xn--fct429k
-  "كوم", // xn--fhbei
-  "中文网", // xn--fiq228c5hs
-  "中信", // xn--fiq64b
-  "中国", // xn--fiqs8s
-  "中國", // xn--fiqz9s
-  "娱乐", // xn--fjq720a
-  "谷歌", // xn--flw351e
-  "భారత్", // xn--fpcrj9c3d
-  "ලංකා", // xn--fzc2c9e2c
-  "電訊盈科", // xn--fzys8d69uvgm
-  "购物", // xn--g2xx48c
-  "クラウド", // xn--gckr3f0f
-  "ભારત", // xn--gecrj9c
-  "通販", // xn--gk3at1e
-  "भारतम्", // xn--h2breg3eve
-  "भारत", // xn--h2brj9c
-  "भारोत", // xn--h2brj9c8c
-  "网店", // xn--hxt814e
-  "संगठन", // xn--i1b6b1a6a2e
-  "餐厅", // xn--imr513n
-  "网络", // xn--io0a7i
-  "ком", // xn--j1aef
-  "укр", // xn--j1amh
-  "香港", // xn--j6w193g
-  "诺基亚", // xn--jlq61u9w7b
-  "食品", // xn--jvr189m
-  "飞利浦", // xn--kcrx77d1x4a
-  "台湾", // xn--kprw13d
-  "台灣", // xn--kpry57d
-  "手表", // xn--kpu716f
-  "手机", // xn--kput3i
-  "мон", // xn--l1acc
-  "الجزائر", // xn--lgbbat1ad8j
-  "عمان", // xn--mgb9awbf
-  "ارامكو", // xn--mgba3a3ejt
-  "ایران", // xn--mgba3a4f16a
-  "العليان", // xn--mgba7c0bbn0a
-  "اتصالات", // xn--mgbaakc7dvf
-  "امارات", // xn--mgbaam7a8h
-  "بازار", // xn--mgbab2bd
-  "پاکستان", // xn--mgbai9azgqp6j
-  "الاردن", // xn--mgbayh7gpa
-  "موبايلي", // xn--mgbb9fbpob
-  "بارت", // xn--mgbbh1a
-  "بھارت", // xn--mgbbh1a71e
-  "المغرب", // xn--mgbc0a9azcg
-  "ابوظبي", // xn--mgbca7dzdo
-  "السعودية", // xn--mgberp4a5d4ar
-  "ڀارت", // xn--mgbgu82a
-  "كاثوليك", // xn--mgbi4ecexp
-  "سودان", // xn--mgbpl2fh
-  "همراه", // xn--mgbt3dhd
-  "عراق", // xn--mgbtx2b
-  "مليسيا", // xn--mgbx4cd0ab
-  "澳門", // xn--mix891f
-  "닷컴", // xn--mk1bu44c
-  "政府", // xn--mxtq1m
-  "شبكة", // xn--ngbc5azd
-  "بيتك", // xn--ngbe9e0a
-  "عرب", // xn--ngbrx
-  "გე", // xn--node
-  "机构", // xn--nqv7f
-  "组织机构", // xn--nqv7fs00ema
-  "健康", // xn--nyqy26a
-  "ไทย", // xn--o3cw4h
-  "سورية", // xn--ogbpf8fl
-  "招聘", // xn--otu796d
-  "рус", // xn--p1acf
-  "рф", // xn--p1ai
-  "珠宝", // xn--pbt977c
-  "تونس", // xn--pgbs0dh
-  "大拿", // xn--pssy2u
-  "みんな", // xn--q9jyb4c
-  "グーグル", // xn--qcka1pmc
-  "ελ", // xn--qxam
-  "世界", // xn--rhqv96g
-  "書籍", // xn--rovu88b
-  "ഭാരതം", // xn--rvc1e0am3e
-  "ਭਾਰਤ", // xn--s9brj9c
-  "网址", // xn--ses554g
-  "닷넷", // xn--t60b56a
-  "コム", // xn--tckwe
-  "天主教", // xn--tiq49xqyj
-  "游戏", // xn--unup4y
-  "vermögensberater", // xn--vermgensberater-ctb
-  "vermögensberatung", // xn--vermgensberatung-pwb
-  "企业", // xn--vhquv
-  "信息", // xn--vuq861b
-  "嘉里大酒店", // xn--w4r85el8fhu5dnra
-  "嘉里", // xn--w4rs40l
-  "مصر", // xn--wgbh1c
-  "قطر", // xn--wgbl6a
-  "广东", // xn--xhq521b
-  "இலங்கை", // xn--xkc2al3hye2a
-  "இந்தியா", // xn--xkc2dl3a5ee0h
-  "հայ", // xn--y9a3aq
-  "新加坡", // xn--yfro4i67o
-  "فلسطين", // xn--ygbi2ammx
-  "政务", // xn--zfr164b
-  "xperia",
-  "xxx",
-  "xyz",
-  "yachts",
-  "yahoo",
-  "yamaxun",
-  "yandex",
-  "ye",
-  "yodobashi",
-  "yoga",
-  "yokohama",
-  "you",
-  "youtube",
-  "yt",
-  "yun",
-  "za",
-  "zappos",
-  "zara",
-  "zero",
-  "zip",
-  "zippo",
-  "zm",
-  "zone",
-  "zuerich",
-  "zw"
-];
+exports = module.exports = __webpack_require__(/*! ./lib/_stream_readable.js */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_readable.js");
+exports.Stream = exports;
+exports.Readable = exports;
+exports.Writable = __webpack_require__(/*! ./lib/_stream_writable.js */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_writable.js");
+exports.Duplex = __webpack_require__(/*! ./lib/_stream_duplex.js */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_duplex.js");
+exports.Transform = __webpack_require__(/*! ./lib/_stream_transform.js */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_transform.js");
+exports.PassThrough = __webpack_require__(/*! ./lib/_stream_passthrough.js */ "./node_modules/simple-peer/node_modules/readable-stream/lib/_stream_passthrough.js");
+exports.finished = __webpack_require__(/*! ./lib/internal/streams/end-of-stream.js */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/end-of-stream.js");
+exports.pipeline = __webpack_require__(/*! ./lib/internal/streams/pipeline.js */ "./node_modules/simple-peer/node_modules/readable-stream/lib/internal/streams/pipeline.js");
 
 
 /***/ }),
 
-/***/ "./node_modules/uc.micro/categories/Cc/regex.js":
-/*!******************************************************!*\
-  !*** ./node_modules/uc.micro/categories/Cc/regex.js ***!
-  \******************************************************/
+/***/ "./node_modules/string_decoder/lib/string_decoder.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/string_decoder/lib/string_decoder.js ***!
+  \***********************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports=/[\0-\x1F\x7F-\x9F]/
+"use strict";
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+
+
+/*<replacement>*/
+
+var Buffer = __webpack_require__(/*! safe-buffer */ "./node_modules/safe-buffer/index.js").Buffer;
+/*</replacement>*/
+
+var isEncoding = Buffer.isEncoding || function (encoding) {
+  encoding = '' + encoding;
+  switch (encoding && encoding.toLowerCase()) {
+    case 'hex':case 'utf8':case 'utf-8':case 'ascii':case 'binary':case 'base64':case 'ucs2':case 'ucs-2':case 'utf16le':case 'utf-16le':case 'raw':
+      return true;
+    default:
+      return false;
+  }
+};
+
+function _normalizeEncoding(enc) {
+  if (!enc) return 'utf8';
+  var retried;
+  while (true) {
+    switch (enc) {
+      case 'utf8':
+      case 'utf-8':
+        return 'utf8';
+      case 'ucs2':
+      case 'ucs-2':
+      case 'utf16le':
+      case 'utf-16le':
+        return 'utf16le';
+      case 'latin1':
+      case 'binary':
+        return 'latin1';
+      case 'base64':
+      case 'ascii':
+      case 'hex':
+        return enc;
+      default:
+        if (retried) return; // undefined
+        enc = ('' + enc).toLowerCase();
+        retried = true;
+    }
+  }
+};
+
+// Do not cache `Buffer.isEncoding` when checking encoding names as some
+// modules monkey-patch it to support additional encodings
+function normalizeEncoding(enc) {
+  var nenc = _normalizeEncoding(enc);
+  if (typeof nenc !== 'string' && (Buffer.isEncoding === isEncoding || !isEncoding(enc))) throw new Error('Unknown encoding: ' + enc);
+  return nenc || enc;
+}
+
+// StringDecoder provides an interface for efficiently splitting a series of
+// buffers into a series of JS strings without breaking apart multi-byte
+// characters.
+exports.StringDecoder = StringDecoder;
+function StringDecoder(encoding) {
+  this.encoding = normalizeEncoding(encoding);
+  var nb;
+  switch (this.encoding) {
+    case 'utf16le':
+      this.text = utf16Text;
+      this.end = utf16End;
+      nb = 4;
+      break;
+    case 'utf8':
+      this.fillLast = utf8FillLast;
+      nb = 4;
+      break;
+    case 'base64':
+      this.text = base64Text;
+      this.end = base64End;
+      nb = 3;
+      break;
+    default:
+      this.write = simpleWrite;
+      this.end = simpleEnd;
+      return;
+  }
+  this.lastNeed = 0;
+  this.lastTotal = 0;
+  this.lastChar = Buffer.allocUnsafe(nb);
+}
+
+StringDecoder.prototype.write = function (buf) {
+  if (buf.length === 0) return '';
+  var r;
+  var i;
+  if (this.lastNeed) {
+    r = this.fillLast(buf);
+    if (r === undefined) return '';
+    i = this.lastNeed;
+    this.lastNeed = 0;
+  } else {
+    i = 0;
+  }
+  if (i < buf.length) return r ? r + this.text(buf, i) : this.text(buf, i);
+  return r || '';
+};
+
+StringDecoder.prototype.end = utf8End;
+
+// Returns only complete characters in a Buffer
+StringDecoder.prototype.text = utf8Text;
+
+// Attempts to complete a partial non-UTF-8 character using bytes from a Buffer
+StringDecoder.prototype.fillLast = function (buf) {
+  if (this.lastNeed <= buf.length) {
+    buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, this.lastNeed);
+    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
+  }
+  buf.copy(this.lastChar, this.lastTotal - this.lastNeed, 0, buf.length);
+  this.lastNeed -= buf.length;
+};
+
+// Checks the type of a UTF-8 byte, whether it's ASCII, a leading byte, or a
+// continuation byte. If an invalid byte is detected, -2 is returned.
+function utf8CheckByte(byte) {
+  if (byte <= 0x7F) return 0;else if (byte >> 5 === 0x06) return 2;else if (byte >> 4 === 0x0E) return 3;else if (byte >> 3 === 0x1E) return 4;
+  return byte >> 6 === 0x02 ? -1 : -2;
+}
+
+// Checks at most 3 bytes at the end of a Buffer in order to detect an
+// incomplete multi-byte UTF-8 character. The total number of bytes (2, 3, or 4)
+// needed to complete the UTF-8 character (if applicable) are returned.
+function utf8CheckIncomplete(self, buf, i) {
+  var j = buf.length - 1;
+  if (j < i) return 0;
+  var nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) self.lastNeed = nb - 1;
+    return nb;
+  }
+  if (--j < i || nb === -2) return 0;
+  nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) self.lastNeed = nb - 2;
+    return nb;
+  }
+  if (--j < i || nb === -2) return 0;
+  nb = utf8CheckByte(buf[j]);
+  if (nb >= 0) {
+    if (nb > 0) {
+      if (nb === 2) nb = 0;else self.lastNeed = nb - 3;
+    }
+    return nb;
+  }
+  return 0;
+}
+
+// Validates as many continuation bytes for a multi-byte UTF-8 character as
+// needed or are available. If we see a non-continuation byte where we expect
+// one, we "replace" the validated continuation bytes we've seen so far with
+// a single UTF-8 replacement character ('\ufffd'), to match v8's UTF-8 decoding
+// behavior. The continuation byte check is included three times in the case
+// where all of the continuation bytes for a character exist in the same buffer.
+// It is also done this way as a slight performance increase instead of using a
+// loop.
+function utf8CheckExtraBytes(self, buf, p) {
+  if ((buf[0] & 0xC0) !== 0x80) {
+    self.lastNeed = 0;
+    return '\ufffd';
+  }
+  if (self.lastNeed > 1 && buf.length > 1) {
+    if ((buf[1] & 0xC0) !== 0x80) {
+      self.lastNeed = 1;
+      return '\ufffd';
+    }
+    if (self.lastNeed > 2 && buf.length > 2) {
+      if ((buf[2] & 0xC0) !== 0x80) {
+        self.lastNeed = 2;
+        return '\ufffd';
+      }
+    }
+  }
+}
+
+// Attempts to complete a multi-byte UTF-8 character using bytes from a Buffer.
+function utf8FillLast(buf) {
+  var p = this.lastTotal - this.lastNeed;
+  var r = utf8CheckExtraBytes(this, buf, p);
+  if (r !== undefined) return r;
+  if (this.lastNeed <= buf.length) {
+    buf.copy(this.lastChar, p, 0, this.lastNeed);
+    return this.lastChar.toString(this.encoding, 0, this.lastTotal);
+  }
+  buf.copy(this.lastChar, p, 0, buf.length);
+  this.lastNeed -= buf.length;
+}
+
+// Returns all complete UTF-8 characters in a Buffer. If the Buffer ended on a
+// partial character, the character's bytes are buffered until the required
+// number of bytes are available.
+function utf8Text(buf, i) {
+  var total = utf8CheckIncomplete(this, buf, i);
+  if (!this.lastNeed) return buf.toString('utf8', i);
+  this.lastTotal = total;
+  var end = buf.length - (total - this.lastNeed);
+  buf.copy(this.lastChar, 0, end);
+  return buf.toString('utf8', i, end);
+}
+
+// For UTF-8, a replacement character is added when ending on a partial
+// character.
+function utf8End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) return r + '\ufffd';
+  return r;
+}
+
+// UTF-16LE typically needs two bytes per character, but even if we have an even
+// number of bytes available, we need to check if we end on a leading/high
+// surrogate. In that case, we need to wait for the next two bytes in order to
+// decode the last character properly.
+function utf16Text(buf, i) {
+  if ((buf.length - i) % 2 === 0) {
+    var r = buf.toString('utf16le', i);
+    if (r) {
+      var c = r.charCodeAt(r.length - 1);
+      if (c >= 0xD800 && c <= 0xDBFF) {
+        this.lastNeed = 2;
+        this.lastTotal = 4;
+        this.lastChar[0] = buf[buf.length - 2];
+        this.lastChar[1] = buf[buf.length - 1];
+        return r.slice(0, -1);
+      }
+    }
+    return r;
+  }
+  this.lastNeed = 1;
+  this.lastTotal = 2;
+  this.lastChar[0] = buf[buf.length - 1];
+  return buf.toString('utf16le', i, buf.length - 1);
+}
+
+// For UTF-16LE we do not explicitly append special replacement characters if we
+// end on a partial character, we simply let v8 handle that.
+function utf16End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) {
+    var end = this.lastTotal - this.lastNeed;
+    return r + this.lastChar.toString('utf16le', 0, end);
+  }
+  return r;
+}
+
+function base64Text(buf, i) {
+  var n = (buf.length - i) % 3;
+  if (n === 0) return buf.toString('base64', i);
+  this.lastNeed = 3 - n;
+  this.lastTotal = 3;
+  if (n === 1) {
+    this.lastChar[0] = buf[buf.length - 1];
+  } else {
+    this.lastChar[0] = buf[buf.length - 2];
+    this.lastChar[1] = buf[buf.length - 1];
+  }
+  return buf.toString('base64', i, buf.length - n);
+}
+
+function base64End(buf) {
+  var r = buf && buf.length ? this.write(buf) : '';
+  if (this.lastNeed) return r + this.lastChar.toString('base64', 0, 3 - this.lastNeed);
+  return r;
+}
+
+// Pass bytes on through for single-byte encodings (e.g. ascii, latin1, hex)
+function simpleWrite(buf) {
+  return buf.toString(this.encoding);
+}
+
+function simpleEnd(buf) {
+  return buf && buf.length ? this.write(buf) : '';
+}
 
 /***/ }),
 
-/***/ "./node_modules/uc.micro/categories/P/regex.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/uc.micro/categories/P/regex.js ***!
-  \*****************************************************/
+/***/ "./node_modules/util-deprecate/browser.js":
+/*!************************************************!*\
+  !*** ./node_modules/util-deprecate/browser.js ***!
+  \************************************************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports=/[!-#%-\*,-\/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061E\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u09FD\u0A76\u0AF0\u0C84\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166D\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E4E\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD803[\uDF55-\uDF59]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC8\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDF3C-\uDF3E]|\uD806[\uDC3B\uDE3F-\uDE46\uDE9A-\uDE9C\uDE9E-\uDEA2]|\uD807[\uDC41-\uDC45\uDC70\uDC71\uDEF7\uDEF8]|\uD809[\uDC70-\uDC74]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD81B[\uDE97-\uDE9A]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F]/
+/* WEBPACK VAR INJECTION */(function(global) {
+/**
+ * Module exports.
+ */
 
-/***/ }),
+module.exports = deprecate;
 
-/***/ "./node_modules/uc.micro/categories/Z/regex.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/uc.micro/categories/Z/regex.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/**
+ * Mark that a method should not be used.
+ * Returns a modified function which warns once by default.
+ *
+ * If `localStorage.noDeprecation = true` is set, then it is a no-op.
+ *
+ * If `localStorage.throwDeprecation = true` is set, then deprecated functions
+ * will throw an Error when invoked.
+ *
+ * If `localStorage.traceDeprecation = true` is set, then deprecated functions
+ * will invoke `console.trace()` instead of `console.error()`.
+ *
+ * @param {Function} fn - the function to deprecate
+ * @param {String} msg - the string to print to the console when `fn` is invoked
+ * @returns {Function} a new "deprecated" version of `fn`
+ * @api public
+ */
 
-module.exports=/[ \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000]/
+function deprecate (fn, msg) {
+  if (config('noDeprecation')) {
+    return fn;
+  }
 
-/***/ }),
+  var warned = false;
+  function deprecated() {
+    if (!warned) {
+      if (config('throwDeprecation')) {
+        throw new Error(msg);
+      } else if (config('traceDeprecation')) {
+        console.trace(msg);
+      } else {
+        console.warn(msg);
+      }
+      warned = true;
+    }
+    return fn.apply(this, arguments);
+  }
 
-/***/ "./node_modules/uc.micro/properties/Any/regex.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/uc.micro/properties/Any/regex.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+  return deprecated;
+}
 
-module.exports=/[\0-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]/
+/**
+ * Checks `localStorage` for boolean values for the given `name`.
+ *
+ * @param {String} name
+ * @returns {Boolean}
+ * @api private
+ */
+
+function config (name) {
+  // accessing global.localStorage can trigger a DOMException in sandboxed iframes
+  try {
+    if (!global.localStorage) return false;
+  } catch (_) {
+    return false;
+  }
+  var val = global.localStorage[name];
+  if (null == val) return false;
+  return String(val).toLowerCase() === 'true';
+}
+
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ })
 

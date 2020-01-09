@@ -82,6 +82,7 @@ export class VirtualController {
 
 		this.settings = {
 			controllerIndex: null,
+			detectedType: null,
 
 			axes: [
 				new AxisSettings(1, 0, 0.1),
@@ -168,11 +169,52 @@ export class VirtualController {
 		};
 	}
 
+	detectControllerType = (id) => {
+		// let reg = /^!(un)?ban ([a-zA-Z0-9]+)$/;
+		let reg = /^.+ Vendor: (.+) Product: (.+)\)$/i;
+		let res = reg.exec(id);
+
+		if (/xbox/i.test(id)) {
+			return "xbox";
+		}
+
+		if (res) {
+			// DS4:
+			if (res[1] === "054c" && res[2] === "09cc") {
+				return "DS4";
+			}
+
+			// ?? probably DS4:
+			if (res[1] === "054c" && res[2] === "05c4") {
+				alert(
+					"if you see this, tell the dev what controller you're using on the discord server",
+				);
+				return "DS4";
+			}
+
+			// PS3 controller:
+			if (res[1] === "054c" && res[2] === "0268") {
+				return "DS4";
+			}
+		}
+
+		// PS2 controller:
+		if (/twin/i.test(id)) {
+			return "DS4";
+		}
+
+		if (/Pro Controller/i.test(id)) {
+			return "proController";
+		}
+
+		return null;
+	};
+
 	autoSelectGamepad() {
 		// only auto select if one hasn't already been selected:
 		if (this.settings.controllerIndex != null) {
 			clearInterval(this.autoSelectInterval);
-			return;
+			// return;// removed because we may have changed controllers
 		}
 
 		// auto select an xbox / playstation controller:
@@ -180,17 +222,11 @@ export class VirtualController {
 		for (let key in this.gamepadWrapper.controllers) {
 			let controller = this.gamepadWrapper.controllers[key];
 			key = parseInt(key);
-			if (controller.id.indexOf("Xbox") > -1) {
+
+			let detectedType = this.detectControllerType(controller.id);
+			if (detectedType) {
 				this.settings.controllerIndex = key;
-				console.log("Xbox controller found!");
-			}
-			if (controller.id.indexOf("Twin") > -1) {
-				this.settings.controllerIndex = key;
-				console.log("Playstation controller found!");
-			}
-			if (controller.id.indexOf("Pro Controller") > -1) {
-				this.settings.controllerIndex = key;
-				console.log("Pro controller found!");
+				this.settings.detectedType = detectedType;
 			}
 			keys.push(key);
 		}

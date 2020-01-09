@@ -40,23 +40,21 @@ export class ControllerState {
 			y: 0,
 			z: 0,
 		};
-
-		this.setState = this.setState.bind(this);
 	}
 
-	reset() {
+	reset = () => {
 		this.btns = 0;
 		for (let prop in this.buttons) {
 			this.buttons[prop] = 0;
 		}
 		this.axes = [0, 0, 0, 0, 0, 0];
-	}
+	};
 
-	isPressed(n) {
+	isPressed = (n) => {
 		return (this.btns & (1 << n)) != 0;
-	}
+	};
 
-	getState() {
+	getState = () => {
 		this.axes[0] = clamp(this.axes[0], -1, 1);
 		this.axes[1] = clamp(this.axes[1], -1, 1);
 		this.axes[2] = clamp(this.axes[2], -1, 1);
@@ -99,9 +97,9 @@ export class ControllerState {
 		}
 
 		return state;
-	}
+	};
 
-	setState(state) {
+	setState = (state) => {
 		if (state.btns == null) {
 			console.log(state);
 			throw error;
@@ -128,7 +126,7 @@ export class ControllerState {
 		this.buttons.rstick = this.isPressed(15);
 		this.buttons.plus = this.isPressed(16);
 		this.buttons.home = this.isPressed(17);
-	}
+	};
 }
 
 export class MouseState {
@@ -144,23 +142,30 @@ export class MouseState {
 			right: 0,
 			middle: 0,
 		};
-
-		this.getState = this.getState.bind(this);
 	}
 
-	getState() {
+	getState = () => {
 		return this;
-	}
+	};
 }
 
 export class KeyboardState {
 	constructor() {
 		this.keys = [];
-
-		this.getState = this.getState.bind(this);
 	}
 
-	getState() {
+	getState = () => {
 		return this;
+	};
+}
+
+export class TouchState {
+	constructor() {
+		// this.previousTouches = [];
+		this.touches = [];
 	}
+
+	getState = () => {
+		return this;
+	};
 }

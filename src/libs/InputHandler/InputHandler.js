@@ -97,6 +97,7 @@ export default class InputHandler {
 		// initialize gamepad wrapper:
 		this.gamepadWrapper = new GamepadWrapper();
 		this.keyboardWrapper = new KeyboardWrapper();
+		this.touchWrapper = new TouchWrapper();
 
 		// for debugging:
 		// window.gamepadWrapper = this.gamepadWrapper;
@@ -115,7 +116,7 @@ export default class InputHandler {
 		// the current state of the mouse:
 		this.mouse = new VirtualMouse();
 		// the touch controls state:
-		this.touchpad = new VirtualTouchpad();
+		this.touchpad = new VirtualTouchpad(this.touchWrapper);
 
 		// real mode:
 		this.realMode = false;
@@ -131,7 +132,7 @@ export default class InputHandler {
 		}
 	}
 
-	pollDevices() {
+	pollDevices(touchControls) {
 		let updatedState = new InputState();
 
 		updatedState = this.oldInputState;
@@ -175,7 +176,8 @@ export default class InputHandler {
 					updatedState.setMouseState(this.mouse.getState());
 				}
 			}
-		} else {
+		}
+		if (touchControls) {
 			// touchpad:
 			this.touchpad.poll();
 			if (this.touchpad.changed) {

@@ -64,6 +64,7 @@
 		"lodash": "^4.17.11",
 		"mongodb": "^3.4.1",
 		"mongoose": "^5.8.3",
+		"nipplejs": "^0.8.4",
 		"nodemailer": "^6.4.2",
 		"passport": "^0.4.1",
 		"passport-discord": "^0.1.3",

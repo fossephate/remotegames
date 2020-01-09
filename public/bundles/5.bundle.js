@@ -59,7 +59,7 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 // import StreamInfo from "src/components/Stream/StreamInfo.jsx";
 
 const Picture = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! src/components/Stream/Picture.jsx */ "./src/components/Stream/Picture.jsx")));
-const Chat = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => Promise.all(/*! import() */[__webpack_require__.e(6), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! src/components/Stream/Chat/Chat.jsx */ "./src/components/Stream/Chat/Chat.jsx")));
+const Chat = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => Promise.all(/*! import() */[__webpack_require__.e(7), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! src/components/Stream/Chat/Chat.jsx */ "./src/components/Stream/Chat/Chat.jsx")));
 const StreamInfo = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! src/components/Stream/StreamInfo.jsx */ "./src/components/Stream/StreamInfo.jsx"))); // components:
 // secondary components:
 // material ui:
@@ -125,9 +125,10 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     this.sendControllerState = this.sendControllerState.bind(this);
     this.afk = this.afk.bind(this);
     this.recieveStream = this.recieveStream.bind(this);
-    this.state = {};
-    let isMobile = window.innerWidth < 400;
-    this.inputHandler = new libs_InputHandler_InputHandler_js__WEBPACK_IMPORTED_MODULE_16__["default"](isMobile); // todo:
+    this.state = {}; // let isMobile = window.innerWidth < 400;
+    // let isMobile = window.innerWidth < 800;
+
+    this.inputHandler = new libs_InputHandler_InputHandler_js__WEBPACK_IMPORTED_MODULE_16__["default"](); // todo:
 
     window.inputHandler = this.inputHandler; // for lagless canvas
   }
@@ -143,8 +144,7 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     if (this.hostConnection) {
       this.hostConnection.removeAllListeners();
       this.hostConnection.destroy();
-    } // setTimeout(() => {
-
+    }
 
     if (!this.props.client.loggedIn) {
       if (tryCount < 3) {
@@ -205,11 +205,21 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       this.stream.resume(document.getElementById("videoCanvas"), document.getElementById("graphicsCanvas"));
     } else if (this.props.streamType === "webRTC") {
       this.stream.resume(document.getElementById("videoCanvas"));
-    } // }, 3000);
-
+    }
   }
 
   componentDidMount() {
+    // todo: something like this for "getStreamInfo":
+    // if (!this.props.client.loggedIn) {
+    // 	if (tryCount < 3) {
+    // 		setTimeout(() => {
+    // 			this.recieveStream(data, tryCount + 1);
+    // 		}, 1000);
+    // 	} else {
+    // 		alert("You need to login to see the stream!");
+    // 		return;
+    // 	}
+    // }
     this.props.accountConnection.emit("getStreamInfo", {
       username: this.props.match.params.username
     }, data => {
@@ -232,7 +242,7 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
         return;
       }
 
-      this.inputHandler.pollDevices();
+      this.inputHandler.pollDevices(this.props.settings.touchControls);
       this.sendControllerState();
     }, 1000 / 120); // todo: remove this when component unmounts:
 
@@ -268,7 +278,7 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     clearInterval(this.sendInputTimer);
 
     if (this.stream) {
-      this.stream.pause();
+      this.stream.destroy();
       this.stream = null;
     } // else {
     // 	setTimeout(() => {
@@ -321,8 +331,8 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       // this.toggleFullscreen(false);
       // from checkbox settings:
       // todo: not this:
-      console.log("exiting fullscreen");
-      $("body").removeClass("hideScrollbar");
+      console.log("exiting fullscreen"); // $("body").removeClass("hideScrollbar");
+
       this.props.updateSettings({
         fullscreen: false,
         largescreen: false,
@@ -765,10 +775,183 @@ const updatePing = time => {
 
 /***/ }),
 
-/***/ "./src/components/Modals/Settings/InputMapper.jsx":
-/*!********************************************************!*\
-  !*** ./src/components/Modals/Settings/InputMapper.jsx ***!
-  \********************************************************/
+/***/ "./src/components/General/MyCheckbox.jsx":
+/*!***********************************************!*\
+  !*** ./src/components/General/MyCheckbox.jsx ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return MyCheckbox; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_Checkbox__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/Checkbox */ "./node_modules/@material-ui/core/esm/Checkbox/index.js");
+/* harmony import */ var _material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/FormControlLabel */ "./node_modules/@material-ui/core/esm/FormControlLabel/index.js");
+
+
+
+class MyCheckbox extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return (// <label className="checkbox-inline checkbox-bootstrap checkbox-lg">
+      // 	<input onChange={(event) => {this.props.handleChange(event.target.checked)}} type="checkbox" checked={this.props.checked}/>
+      // 	<span className="checkbox-placeholder"></span>
+      // 	{this.props.text}
+      // </label>
+      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_2__["default"], {
+        control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Checkbox__WEBPACK_IMPORTED_MODULE_1__["default"], {
+          onChange: event => {
+            this.props.handleChange(event.target.checked);
+          },
+          type: "checkbox",
+          checked: this.props.checked || false,
+          color: "primary"
+        }),
+        label: this.props.text
+      })
+    );
+  }
+
+}
+
+/***/ }),
+
+/***/ "./src/components/General/ThemeSelector.jsx":
+/*!**************************************************!*\
+  !*** ./src/components/General/ThemeSelector.jsx ***!
+  \**************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Menu */ "./node_modules/@material-ui/core/esm/Menu/index.js");
+/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/MenuItem */ "./node_modules/@material-ui/core/esm/MenuItem/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var src_actions_settings_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/actions/settings.js */ "./src/actions/settings.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+// react:
+ // material ui:
+
+
+
+
+ // import Fade from "@material-ui/core/Fade";
+// redux:
+
+ // actions:
+
+ // recompose:
+
+
+
+let classNames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"); // jss:
+
+
+const styles = theme => ({
+  root: {}
+});
+
+const options = ["Light", "Dark", "Spooky"];
+const options2 = ["light", "dark", "spooky"];
+
+class ThemeSelector extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleMenuItemClick = this.handleMenuItemClick.bind(this);
+    this.handleClose = this.handleClose.bind(this);
+    this.state = {
+      anchorEl: null // selectedIndex: 1,
+
+    };
+  }
+
+  handleClick(event) {
+    this.setState({
+      anchorEl: event.currentTarget
+    });
+  }
+
+  handleMenuItemClick(event, index) {
+    // this.setState({ selectedIndex: index, anchorEl: null });
+    this.setState({
+      anchorEl: null
+    });
+    this.props.switchTheme(options2[index]);
+  }
+
+  handleClose() {
+    this.setState({
+      anchorEl: null
+    });
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    const open = Boolean(this.state.anchorEl);
+    let themeIndex = options2.indexOf(this.props.theme);
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      variant: "contained",
+      onClick: this.handleClick
+    }, "Select Theme"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      id: "themeSelector",
+      anchorEl: this.state.anchorEl,
+      open: open,
+      onClose: this.handleClose // TransitionComponent={Fade}
+      ,
+      PaperProps: {
+        style: {
+          maxHeight: 48 * 4.5,
+          width: 200
+        }
+      }
+    }, options.map((option, index) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      key: option,
+      disabled: index === themeIndex,
+      selected: index === themeIndex,
+      onClick: event => this.handleMenuItemClick(event, index)
+    }, option))));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    theme: state.settings.theme
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    switchTheme: index => {
+      dispatch(Object(src_actions_settings_js__WEBPACK_IMPORTED_MODULE_6__["updateSettings"])({
+        theme: index
+      }));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_7__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(mapStateToProps, mapDispatchToProps))(ThemeSelector));
+
+/***/ }),
+
+/***/ "./src/components/Modals/Settings/AudioVideo.jsx":
+/*!*******************************************************!*\
+  !*** ./src/components/Modals/Settings/AudioVideo.jsx ***!
+  \*******************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -813,10 +996,76 @@ __webpack_require__.r(__webpack_exports__);
  // components:
 // recompose:
 
+ // jss:
 
-const BUTTON_NAMES = ["b", "a", "y", "x", "l", "r", "zl", "zr", "minus", "plus", "lstick", "rstick", "up", "down", "left", "right", "home"];
-const AXIS_NAMES = ["LX", "LY", "RX", "RY"];
-const KEYBOARD_MAP = ["LU", "LD", "LL", "LR", "RU", "RD", "RL", "RR", "a", "b", "x", "y", "up", "down", "left", "right", "lstick", "rstick", "l", "zl", "r", "zr", "minus", "plus", "capture", "home"];
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    // padding: "0px 0px 25px 0px !important",
+    padding: "0 !important"
+  }
+});
+
+class AudioVideo extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "test"));
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_16__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(AudioVideo));
+
+/***/ }),
+
+/***/ "./src/components/Modals/Settings/InputMapper.jsx":
+/*!********************************************************!*\
+  !*** ./src/components/Modals/Settings/InputMapper.jsx ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// react:
+ // react-router:
+
+ // material ui:
+
+
+ // components:
+// recompose:
+
+
+const MAP_BUTTON_NAMES = ["b", "a", "y", "x", "l", "r", "zl", "zr", "minus", "plus", "lstick", "rstick", "up", "down", "left", "right", "home"];
+const DISPLAY_BUTTON_NAMES = ["B", "A", "Y", "X", "L", "R", "ZL", "ZR", "Minus", "Plus", "LStick", "RStick", "Up", "Down", "Left", "Right", "Home"];
+const BUTTON_LAYOUTS = {
+  xbox: ["A", "B", "X", "Y", "LB", "RB", "LT", "RT", "Select", "Start", "LStick", "RStick", "Up", "Down", "Left", "Right", "Xbox"],
+  DS4: ["❌", "⭕", "🟥", "🔺", "L1", "R1", "L2", "R2", "Share", "Options", "L3", "R3", "Up", "Down", "Left", "Right", "PS", "Touchpad"],
+  proController: []
+};
+const DISPLAY_AXIS_NAMES = ["LX", "LY", "RX", "RY"];
+const MAP_AXIS_NAMES = ["LX", "LY", "RX", "RY"];
+const DISPLAY_KEYBOARD_NAMES = ["LU", "LD", "LL", "LR", "RU", "RD", "RL", "RR", "A", "B", "X", "Y", "Up", "Down", "Left", "Right", "LStick", "RStick", "L", "ZL", "R", "ZR", "Minus", "Plus", "Capture", "Home"];
+const MAP_KEYBOARD_NAMES = ["LU", "LD", "LL", "LR", "RU", "RD", "RL", "RR", "a", "b", "x", "y", "up", "down", "left", "right", "lstick", "rstick", "l", "zl", "r", "zr", "minus", "plus", "capture", "home"];
 
 class ControllerMapper extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   constructor(props) {
@@ -854,12 +1103,12 @@ class ControllerMapper extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
           }
 
           inputHandler.controller.settings.map.buttons[lastChangedIndex].type = "button";
-          inputHandler.controller.settings.map.buttons[lastChangedIndex].which = BUTTON_NAMES[which];
+          inputHandler.controller.settings.map.buttons[lastChangedIndex].which = MAP_BUTTON_NAMES[which];
         }
 
         if (this.props.type == "axis") {// todo: finish
           // inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].type = "axis";
-          // inputHandler.controller.settings.map.axes[parseInt(this.props.which)] = BUTTON_NAMES[inputHandler.controller.lastChangedButton];
+          // inputHandler.controller.settings.map.axes[parseInt(this.props.which)] = MAP_BUTTON_NAMES[inputHandler.controller.lastChangedButton];
         }
 
         inputHandler.controller.lastChangedButton = null;
@@ -878,60 +1127,53 @@ class ControllerMapper extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     const {
       classes
     } = this.props;
-    let NAMES = this.props.type == "button" ? BUTTON_NAMES : AXIS_NAMES;
+    let DISPLAY_NAMES = this.props.type == "button" ? DISPLAY_BUTTON_NAMES : DISPLAY_AXIS_NAMES;
+    let MAP_NAMES = this.props.type == "button" ? MAP_BUTTON_NAMES : MAP_AXIS_NAMES;
     let inputHandler = window.inputHandler;
 
     if (this.state.waiting) {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_12__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__["default"], null, `${NAMES[this.props.which]}`, " waiting for axis / button input..."));
-    } // this.currentMapping = this.props.type + " ";
-
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItemText"], null, `${DISPLAY_NAMES[this.props.which]}`, " waiting for axis / button input..."));
+    }
 
     this.currentMapping = "unset";
 
     if (this.props.type == "button") {
-      // this.currentMapping += inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].which;
       for (let i = 0; i < inputHandler.controller.settings.map.buttons.length; i++) {
         let btn = inputHandler.controller.settings.map.buttons[i];
 
-        if (btn.which === NAMES[this.props.which]) {
-          // this.currentMapping.push(i);
+        if (btn.which === MAP_NAMES[this.props.which]) {
           this.currentMapping = i;
           break;
         }
       }
     } else if (this.props.type == "axis") {
-      // this.currentMapping += inputHandler.controller.settings.map.axes[parseInt(this.props.which)].which;
       for (let i = 0; i < inputHandler.controller.settings.map.axes.length; i++) {
         let axis = inputHandler.controller.settings.map.axes[i];
 
-        if (axis.which === NAMES[this.props.which]) {
-          // this.currentMapping.push(i);
+        if (axis.which === MAP_NAMES[this.props.which]) {
           this.currentMapping = i;
           break;
         }
       }
     }
 
-    return (// <ListItem>
-      // 	<ListItemText>{`${NAMES[this.props.which]}`}</ListItemText>
-      // 	<ListItemText>{this.currentMapping}</ListItemText>
-      // 	<Button variant="contained" onClick={this.mapButton}>
-      // 		Map To Button
-      // 	</Button>
-      // 	<Button variant="contained" onClick={this.mapAxis}>
-      // 		Map To Axis
-      // 	</Button>
-      // </ListItem>
-      react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_12__["default"], {
-        className: classes.listItem
-      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__["default"], null, `${NAMES[this.props.which]}`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__["default"], null, this.currentMapping), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        variant: "contained",
-        onClick: this.mapButton
-      }, "Map To Button"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
-        variant: "contained",
-        onClick: this.mapAxis
-      }, "Map To Axis"))
-    );
+    let currentMappingNamed;
+
+    if (inputHandler.controller.settings.detectedType !== null) {
+      currentMappingNamed = BUTTON_LAYOUTS[inputHandler.controller.settings.detectedType][this.currentMapping];
+    } else {
+      currentMappingNamed = this.currentMapping;
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItem"], {
+      className: classes.listItem
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItemText"], null, `${DISPLAY_NAMES[this.props.which]}`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItemText"], null, currentMappingNamed), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      variant: "contained",
+      onClick: this.mapButton
+    }, "Map To Button"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      variant: "contained",
+      onClick: this.mapAxis
+    }, "Map To Axis"));
   }
 
 }
@@ -960,7 +1202,7 @@ class KeyboardMapper extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     this.mapKeyTimer = setInterval(() => {
       if (inputHandler.keyboard.lastPressedKey != null) {
         clearInterval(this.mapKeyTimer);
-        inputHandler.keyboard.map[KEYBOARD_MAP[parseInt(this.props.which)]] = inputHandler.keyboard.lastPressedKey;
+        inputHandler.keyboard.map[MAP_KEYBOARD_NAMES[parseInt(this.props.which)]] = inputHandler.keyboard.lastPressedKey;
         inputHandler.keyboard.lastPressedKey = null;
         this.setState({
           waiting: false
@@ -977,14 +1219,14 @@ class KeyboardMapper extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     let inputHandler = window.inputHandler;
 
     if (this.state.waiting) {
-      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_12__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__["default"], null, `${KEYBOARD_MAP[this.props.which]}`, " waiting for keypress..."));
+      return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItemText"], null, `${DISPLAY_KEYBOARD_NAMES[this.props.which]}`, " waiting for keypress..."));
     } // let currentMapping = inputHandler.keyboard.map2[parseInt(this.props.which)];
 
 
-    let currentMapping = inputHandler.keyboard.map[KEYBOARD_MAP[parseInt(this.props.which)]];
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    let currentMapping = inputHandler.keyboard.map[MAP_KEYBOARD_NAMES[parseInt(this.props.which)]];
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItem"], {
       className: classes.listItem
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__["default"], null, `${KEYBOARD_MAP[this.props.which]}`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__["default"], null, currentMapping), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItemText"], null, `${DISPLAY_KEYBOARD_NAMES[this.props.which]}`), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItemText"], null, currentMapping), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Button"], {
       variant: "contained",
       onClick: this.mapKey
     }, "Map To Key"));
@@ -1025,33 +1267,30 @@ const styles = theme => ({
 class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.update = this.update.bind(this);
-    this.rescanGamepads = this.rescanGamepads.bind(this);
-    this.handleClose = this.handleClose.bind(this);
+
+    _defineProperty(this, "handleClose", () => {
+      // this.props.history.push("/");
+      this.props.history.goBack();
+    });
+
+    _defineProperty(this, "handleChange", event => {
+      let inputHandler = window.inputHandler;
+      inputHandler.controller.settings.controllerIndex = "" + event.target.value;
+      this.setState({});
+    });
+
+    _defineProperty(this, "rescanGamepads", () => {
+      window.inputHandler.controller.autoSelectGamepad();
+      this.update();
+    });
+
+    _defineProperty(this, "update", () => {
+      this.setState({});
+    });
+
     this.state = {
       whichTab: 0
     };
-  }
-
-  handleClose() {
-    // this.props.history.push("/");
-    this.props.history.goBack();
-  }
-
-  handleChange(event) {
-    let inputHandler = window.inputHandler;
-    inputHandler.controller.settings.controllerIndex = "" + event.target.value;
-    this.setState({});
-  }
-
-  rescanGamepads() {
-    window.inputHandler.controller.autoSelectGamepad();
-    this.update();
-  }
-
-  update() {
-    this.setState({});
   }
 
   shouldComponentUpdate() {
@@ -1071,7 +1310,7 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     let gamepads = [];
 
     for (let gamepadIndex in gamepadWrapper.controllers) {
-      gamepads.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      gamepads.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["MenuItem"], {
         key: gamepadIndex,
         value: gamepadIndex
       }, gamepadWrapper.controllers[gamepadIndex].id));
@@ -1082,7 +1321,7 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       // set to 0 so we render this:
       activeGamepadIndex = 0; // prepend so it's first:
 
-      gamepads.unshift(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      gamepads.unshift(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["MenuItem"], {
         key: 0,
         value: 0
       }, "No gamepad selected"));
@@ -1090,7 +1329,7 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
     if (gamepads.length == 0 || activeGamepadIndex == null) {
       activeGamepadIndex = 0;
-      gamepads.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      gamepads.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["MenuItem"], {
         key: 0,
         value: 0
       }, "No gamepads detected"));
@@ -1098,7 +1337,7 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.root
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Tabs__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Tabs"], {
       centered: true,
       value: this.state.whichTab,
       classes: {
@@ -1120,36 +1359,36 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
           whichTab: value
         });
       }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Tab__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Tab"], {
       label: "Controller"
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Tab__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Tab"], {
       label: "Keyboard"
-    })), this.state.whichTab === 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    })), this.state.whichTab === 0 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Paper"], {
       className: classes.controllerRemapper,
       elevation: 4
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__["default"], null, "Active Gamepad:"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["ListItemText"], null, "Active Gamepad Type:", " " + (inputHandler.controller.settings.detectedType || "Unknown")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       style: {
         display: "flex",
         justifyContent: "space-between"
       }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Select__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Select"], {
       value: activeGamepadIndex,
       onChange: this.handleChange,
-      input: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_OutlinedInput__WEBPACK_IMPORTED_MODULE_10__["default"], {
+      input: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["OutlinedInput"], {
         labelWidth: 0
       }),
       style: {
         width: "80%"
       }
-    }, gamepads), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }, gamepads), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Button"], {
       variant: "contained",
       onClick: this.rescanGamepads
-    }, "Rescan")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }, "Rescan")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Paper"], {
       elevation: 2,
       style: {
         marginTop: 15
       }
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["List"], {
       className: classes.list
     }, [...Array(17)].map((e, i) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(ControllerMapper, {
       key: i,
@@ -1163,12 +1402,12 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       type: "axis",
       which: i,
       classes: this.props.classes
-    }))))), this.state.whichTab === 1 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }))))), this.state.whichTab === 1 && react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Paper"], {
       className: classes.keyboardRemapper,
       elevation: 4
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Paper"], {
       elevation: 2
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_List__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["List"], {
       className: classes.list
     }, [...Array(26)].map((e, i) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(KeyboardMapper, {
       key: i,
@@ -1182,7 +1421,63 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_16__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(InputMapperModal));
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_4__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(InputMapperModal));
+
+/***/ }),
+
+/***/ "./src/components/Modals/Settings/Site.jsx":
+/*!*************************************************!*\
+  !*** ./src/components/Modals/Settings/Site.jsx ***!
+  \*************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var components_Stream_StreamInfo_CheckboxSettings_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! components/Stream/StreamInfo/CheckboxSettings.jsx */ "./src/components/Stream/StreamInfo/CheckboxSettings.jsx");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+// react:
+ // react-router:
+
+ // material ui:
+
+ // components:
+
+ // recompose:
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    // padding: "0px 0px 25px 0px !important",
+    padding: "0 !important"
+  }
+});
+
+class Site extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(components_Stream_StreamInfo_CheckboxSettings_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null));
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_4__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(Site));
 
 /***/ }),
 
@@ -1213,7 +1508,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/core/Dialog */ "./node_modules/@material-ui/core/esm/Dialog/index.js");
 /* harmony import */ var _material_ui_core_DialogContent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/core/DialogContent */ "./node_modules/@material-ui/core/esm/DialogContent/index.js");
 /* harmony import */ var _Settings_InputMapper_jsx__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./Settings/InputMapper.jsx */ "./src/components/Modals/Settings/InputMapper.jsx");
-/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var _Settings_Site_jsx__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./Settings/Site.jsx */ "./src/components/Modals/Settings/Site.jsx");
+/* harmony import */ var _Settings_AudioVideo_jsx__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Settings/AudioVideo.jsx */ "./src/components/Modals/Settings/AudioVideo.jsx");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
 // react:
  // react-router:
 
@@ -1233,6 +1530,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
  // components:
+
+
 
  // recompose:
 
@@ -1358,12 +1657,247 @@ class SettingsModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
           elevation: 4
         }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Settings_InputMapper_jsx__WEBPACK_IMPORTED_MODULE_16__["default"], null));
       }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+      path: "/settings/site",
+      render: props => {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          className: classes.controls,
+          elevation: 4
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Settings_Site_jsx__WEBPACK_IMPORTED_MODULE_17__["default"], null));
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+      path: "/settings/av",
+      render: props => {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__["default"], {
+          className: classes.controls,
+          elevation: 4
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Settings_AudioVideo_jsx__WEBPACK_IMPORTED_MODULE_18__["default"], null));
+      }
     })));
   }
 
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_17__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(SettingsModal));
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_19__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(SettingsModal));
+
+/***/ }),
+
+/***/ "./src/components/Stream/StreamInfo/CheckboxSettings.jsx":
+/*!***************************************************************!*\
+  !*** ./src/components/Stream/StreamInfo/CheckboxSettings.jsx ***!
+  \***************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/components/General/MyCheckbox.jsx */ "./src/components/General/MyCheckbox.jsx");
+/* harmony import */ var src_components_General_ThemeSelector_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/components/General/ThemeSelector.jsx */ "./src/components/General/ThemeSelector.jsx");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var src_actions_settings_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! src/actions/settings.js */ "./src/actions/settings.js");
+/* harmony import */ var libs_tools_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! libs/tools.js */ "./src/libs/tools.js");
+// react:
+ // material ui:
+
+ // components:
+
+
+ // redux:
+
+ // actions:
+
+ // libs:
+
+
+
+class CheckboxSettings extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+
+  render() {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Paper"], {
+      elevation: 5
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["List"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Enable Keyboard Controls",
+      handleChange: state => {
+        this.props.updateSettings({
+          keyboardControls: state
+        });
+      },
+      checked: this.props.settings.keyboardControls
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Enable Controller Controls",
+      handleChange: state => {
+        this.props.updateSettings({
+          controllerControls: state
+        });
+      },
+      checked: this.props.settings.controllerControls
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Enable Touch Controls",
+      handleChange: state => {
+        this.props.updateSettings({
+          touchControls: state
+        });
+      },
+      checked: this.props.settings.touchControls
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Real keyboard / mouse",
+      handleChange: state => {
+        this.props.updateSettings({
+          realKeyboardMouse: state
+        });
+      },
+      checked: this.props.settings.realKeyboardMouse
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Enable Largescreen Mode",
+      handleChange: state => {
+        this.props.updateSettings({
+          largescreen: state
+        });
+
+        if (state && this.props.settings.controllerView) {
+          this.props.updateSettings({
+            controllerView: false
+          });
+        } else if (!state && !this.props.settings.controllerView) {
+          this.props.updateSettings({
+            controllerView: true
+          });
+        }
+
+        setTimeout(() => {
+          window.dispatchEvent(new Event("resize"));
+        }, 200);
+      },
+      checked: this.props.settings.largescreen
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Mobile Mode",
+      handleChange: state => {
+        this.props.updateSettings({
+          mobileMode: state,
+          touchControls: state
+        }); // if (state && this.props.settings.controllerView) {
+        // 	this.props.updateSettings({ controllerView: false });
+        // } else if (!state && !this.props.settings.controllerView) {
+        // 	this.props.updateSettings({ controllerView: true });
+        // }
+        // if (state && !this.props.settings.hideChat) {
+        // 	this.props.updateSettings({ hideChat: false });
+        // } else if (!state && this.props.settings.hideChat) {
+        // 	this.props.updateSettings({ hideChat: true });
+        // }
+        // if (state && !this.props.settings.hideNav) {
+        // 	this.props.updateSettings({ hideNav: false });
+        // } else if (!state && this.props.settings.hideNav) {
+        // 	this.props.updateSettings({ hideNav: true });
+        // }
+
+        if (state) {
+          this.props.updateSettings({
+            hideChat: true,
+            hideNav: true,
+            controllerView: true,
+            largescreen: true
+          });
+          Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_6__["toggleFullscreen"])(document.getElementsByTagName("html")[0]);
+        } else {
+          this.props.updateSettings({
+            hideChat: false,
+            hideNav: false,
+            controllerView: true,
+            largescreen: false
+          });
+        }
+
+        setTimeout(() => {
+          window.dispatchEvent(new Event("resize"));
+        }, 200);
+      },
+      checked: this.props.settings.mobileMode
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Audio 3.0",
+      handleChange: this.props.toggleAudioThree,
+      checked: this.props.settings.audioThree
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_ThemeSelector_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Enable Fullscreen Mode",
+      handleChange: state => {
+        if (state) {
+          // $(document).scrollTop(0);
+          document.body.scrollTop = document.documentElement.scrollTop = 0; // $("body").addClass("hideScrollbar");
+          // $("#root").children()[0].style.padding = "0";
+
+          this.props.updateSettings({
+            fullscreen: state,
+            controllerView: false,
+            hideChat: true,
+            hideNav: true
+          });
+          Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_6__["toggleFullscreen"])(document.getElementsByTagName("html")[0]);
+        } else {
+          // console.log("exiting fullscreen");
+          // $("body").removeClass("hideScrollbar");
+          // $("#root").children()[0].style.padding = "";
+          this.props.updateSettings({
+            fullscreen: state,
+            largescreen: false,
+            controllerView: true,
+            hideChat: false,
+            hideNav: false
+          });
+        }
+      },
+      checked: this.props.settings.fullscreen
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Analog Stick Mode",
+      handleChange: state => {
+        this.props.updateSettings({
+          analogStickMode: state
+        });
+      },
+      checked: this.props.settings.analogStickMode
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Hide Chat",
+      handleChange: state => {
+        this.props.updateSettings({
+          hideChat: state
+        });
+      },
+      checked: this.props.settings.hideChat
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MyCheckbox_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      text: "Hide Nav Bar",
+      handleChange: state => {
+        this.props.updateSettings({
+          hideNav: state
+        });
+      },
+      checked: this.props.settings.hideNav
+    }))));
+  }
+
+} // export default JoinLeaveQueueButton;
+
+
+const mapStateToProps = state => {
+  return {
+    settings: state.settings
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateSettings: settings => {
+      dispatch(Object(src_actions_settings_js__WEBPACK_IMPORTED_MODULE_5__["updateSettings"])(settings));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(react_redux__WEBPACK_IMPORTED_MODULE_4__["connect"])(mapStateToProps, mapDispatchToProps)(CheckboxSettings));
 
 /***/ }),
 
@@ -1378,40 +1912,33 @@ class SettingsModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/AppBar */ "./node_modules/@material-ui/core/esm/AppBar/index.js");
-/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
-/* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
-/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/MenuItem */ "./node_modules/@material-ui/core/esm/MenuItem/index.js");
-/* harmony import */ var _material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/Menu */ "./node_modules/@material-ui/core/esm/Menu/index.js");
-/* harmony import */ var _material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/styles/colorManipulator */ "./node_modules/@material-ui/core/styles/colorManipulator.js");
-/* harmony import */ var _material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/icons/Menu */ "./node_modules/@material-ui/icons/Menu.js");
-/* harmony import */ var _material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_12__);
-/* harmony import */ var _material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/icons/Search */ "./node_modules/@material-ui/icons/Search.js");
-/* harmony import */ var _material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_13__);
-/* harmony import */ var _material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/icons/AccountCircle */ "./node_modules/@material-ui/icons/AccountCircle.js");
-/* harmony import */ var _material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_14___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_14__);
-/* harmony import */ var _material_ui_icons_Mail__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/icons/Mail */ "./node_modules/@material-ui/icons/Mail.js");
-/* harmony import */ var _material_ui_icons_Mail__WEBPACK_IMPORTED_MODULE_15___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Mail__WEBPACK_IMPORTED_MODULE_15__);
-/* harmony import */ var _material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @material-ui/icons/MoreVert */ "./node_modules/@material-ui/icons/MoreVert.js");
-/* harmony import */ var _material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_16___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_16__);
-/* harmony import */ var _material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @material-ui/core/Toolbar */ "./node_modules/@material-ui/core/esm/Toolbar/index.js");
-/* harmony import */ var _material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! @material-ui/core/IconButton */ "./node_modules/@material-ui/core/esm/IconButton/index.js");
-/* harmony import */ var _material_ui_core_Badge__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! @material-ui/core/Badge */ "./node_modules/@material-ui/core/esm/Badge/index.js");
-/* harmony import */ var _material_ui_core_InputBase__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! @material-ui/core/InputBase */ "./node_modules/@material-ui/core/esm/InputBase/index.js");
-/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
-/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
-/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_23__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/AppBar */ "./node_modules/@material-ui/core/esm/AppBar/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/MenuItem */ "./node_modules/@material-ui/core/esm/MenuItem/index.js");
+/* harmony import */ var _material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Menu */ "./node_modules/@material-ui/core/esm/Menu/index.js");
+/* harmony import */ var _material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/styles/colorManipulator */ "./node_modules/@material-ui/core/styles/colorManipulator.js");
+/* harmony import */ var _material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var _material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/icons/Menu */ "./node_modules/@material-ui/icons/Menu.js");
+/* harmony import */ var _material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/icons/Search */ "./node_modules/@material-ui/icons/Search.js");
+/* harmony import */ var _material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_10__);
+/* harmony import */ var _material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/icons/AccountCircle */ "./node_modules/@material-ui/icons/AccountCircle.js");
+/* harmony import */ var _material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/icons/MoreVert */ "./node_modules/@material-ui/icons/MoreVert.js");
+/* harmony import */ var _material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var _material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/Toolbar */ "./node_modules/@material-ui/core/esm/Toolbar/index.js");
+/* harmony import */ var _material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/core/IconButton */ "./node_modules/@material-ui/core/esm/IconButton/index.js");
+/* harmony import */ var _material_ui_core_Badge__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/core/Badge */ "./node_modules/@material-ui/core/esm/Badge/index.js");
+/* harmony import */ var _material_ui_core_InputBase__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! @material-ui/core/InputBase */ "./node_modules/@material-ui/core/esm/InputBase/index.js");
+/* harmony import */ var _material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // react:
-
  // react-router:
 
  // redux:
@@ -1421,17 +1948,17 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
  // components:
 
+ // import ListItemText from "@material-ui/core/ListItemText";
+
+ // import Paper from "@material-ui/core/Paper";
 
 
 
 
 
 
-
-
-
-
- // import NotificationsIcon from "@material-ui/icons/Notifications";
+ // import MailIcon from "@material-ui/icons/Mail";
+// import NotificationsIcon from "@material-ui/icons/Notifications";
 
 
 
@@ -1452,15 +1979,15 @@ const styles = theme => ({
     height: "48px",
     zIndex: 1300
   },
-  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_23__["device"].mobile]: {
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_19__["device"].mobile]: {
     root: {
       height: "64px"
     }
   },
-  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_23__["device"].tablet]: {
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_19__["device"].tablet]: {
     root: {}
   },
-  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_23__["device"].laptop]: {
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_19__["device"].laptop]: {
     root: {}
   },
   grow: {
@@ -1480,9 +2007,9 @@ const styles = theme => ({
   search: {
     position: "relative",
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: Object(_material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_11__["fade"])(theme.palette.common.white, 0.15),
+    backgroundColor: Object(_material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_8__["fade"])(theme.palette.common.white, 0.15),
     "&:hover": {
-      backgroundColor: Object(_material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_11__["fade"])(theme.palette.common.white, 0.25)
+      backgroundColor: Object(_material_ui_core_styles_colorManipulator__WEBPACK_IMPORTED_MODULE_8__["fade"])(theme.palette.common.white, 0.25)
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
@@ -1563,6 +2090,14 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
       });
     });
 
+    _defineProperty(this, "handleDownloadHostFiles", () => {
+      window.location.href = "https://remotegames.io/8099/download/";
+    });
+
+    _defineProperty(this, "handleDiscord", () => {
+      window.location.href = "https://discord.io/rgio/";
+    });
+
     this.state = {
       anchorEl: null,
       mobileMoreAnchorEl: null
@@ -1587,7 +2122,7 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
     } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-    const renderMenu = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    const renderMenu = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_7__["default"], {
       anchorEl: anchorEl,
       anchorOrigin: {
         vertical: "top",
@@ -1599,13 +2134,13 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
       },
       open: isMenuOpen,
       onClose: this.handleMenuClose
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
       onClick: () => {
         this.handleMenuClose();
         this.props.history.push("/account");
       }
     }, "My account"));
-    const renderMobileMenu = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_10__["default"], {
+    const renderMobileMenu = react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Menu__WEBPACK_IMPORTED_MODULE_7__["default"], {
       anchorEl: mobileMoreAnchorEl,
       anchorOrigin: {
         vertical: "top",
@@ -1617,28 +2152,25 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
       },
       open: isMobileMenuOpen,
       onClose: this.handleMenuClose
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_9__["default"], {
-      onClick: this.handleMobileMenuClose
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_18__["default"], {
-      color: "inherit"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Badge__WEBPACK_IMPORTED_MODULE_19__["default"], {
-      badgeContent: 0,
-      color: "secondary"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Mail__WEBPACK_IMPORTED_MODULE_15___default.a, null))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Messages")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_9__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
       onClick: this.handleProfileMenuOpen
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_14__["default"], {
       color: "inherit"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_14___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Profile")));
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_11___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Profile")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      onClick: this.handleDownloadHostFiles
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Download Host Files")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      onClick: this.handleDiscord
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Discord Server")));
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.root
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_5__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_4__["default"], {
       position: "fixed"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_17__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Toolbar__WEBPACK_IMPORTED_MODULE_13__["default"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_14__["default"], {
       className: classes.menuButton,
       color: "inherit",
       "aria-label": "Open drawer",
       onClick: this.props.handleToggleDrawer
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_12___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_21__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Menu__WEBPACK_IMPORTED_MODULE_9___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Typography__WEBPACK_IMPORTED_MODULE_17__["default"], {
       className: classes.title,
       variant: "h6",
       color: "inherit",
@@ -1650,7 +2182,7 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
       className: classes.search
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.searchIcon
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_13___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_InputBase__WEBPACK_IMPORTED_MODULE_20__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Search__WEBPACK_IMPORTED_MODULE_10___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_InputBase__WEBPACK_IMPORTED_MODULE_16__["default"], {
       placeholder: "Search\u2026",
       classes: {
         root: classes.inputRoot,
@@ -1658,45 +2190,36 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
       }
     })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.grow
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), this.props.loggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.sectionDesktop
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
       color: "default",
       variant: "contained",
-      onClick: () => {
-        window.location.href = "https://remotegames.io/8099/download/";
-      }
+      onClick: this.handleDownloadHostFiles
     }, "Download Host Files"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       style: {
         width: "10px"
       }
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
       color: "default",
       variant: "contained",
-      onClick: () => {
-        window.location.href = "https://discord.io/rgio/";
-      }
-    }, "Discord Server"), this.props.loggedIn ? react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: classes.sectionDesktop
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_18__["default"], {
-      color: "inherit"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Badge__WEBPACK_IMPORTED_MODULE_19__["default"], {
-      badgeContent: 0,
-      color: "secondary"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Mail__WEBPACK_IMPORTED_MODULE_15___default.a, null))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      onClick: this.handleDiscord
+    }, "Discord Server"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_14__["default"], {
       "aria-owns": isMenuOpen ? "material-appbar" : undefined,
       "aria-haspopup": "true",
       onClick: this.handleProfileMenuOpen,
       color: "inherit"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_14___default.a, null))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_11___default.a, null))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.sectionMobile
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_14__["default"], {
       "aria-haspopup": "true",
       onClick: this.handleMobileMenuOpen,
       color: "inherit"
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_16___default.a, null)))) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_MoreVert__WEBPACK_IMPORTED_MODULE_12___default.a, null)))) : react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       style: {
         width: "10px"
       }
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__["default"], {
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
       color: "default",
       variant: "contained",
       onClick: this.handleLoginRegister
@@ -1715,7 +2238,7 @@ const mapDispatchToProps = dispatch => {
   return {};
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_22__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_2__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps, mapDispatchToProps))(StreamsAppBar));
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_18__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_3__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps))(StreamsAppBar));
 
 /***/ }),
 
@@ -1748,7 +2271,7 @@ const device = {
 /*!***********************************************!*\
   !*** ./src/libs/InputHandler/DeviceStates.js ***!
   \***********************************************/
-/*! exports provided: ControllerState, MouseState, KeyboardState */
+/*! exports provided: ControllerState, MouseState, KeyboardState, TouchState */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1756,10 +2279,96 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ControllerState", function() { return ControllerState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MouseState", function() { return MouseState; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeyboardState", function() { return KeyboardState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TouchState", function() { return TouchState; });
 /* harmony import */ var libs_tools_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! libs/tools.js */ "./src/libs/tools.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 class ControllerState {
   constructor() {
+    _defineProperty(this, "reset", () => {
+      this.btns = 0;
+
+      for (let prop in this.buttons) {
+        this.buttons[prop] = 0;
+      }
+
+      this.axes = [0, 0, 0, 0, 0, 0];
+    });
+
+    _defineProperty(this, "isPressed", n => {
+      return (this.btns & 1 << n) != 0;
+    });
+
+    _defineProperty(this, "getState", () => {
+      this.axes[0] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[0], -1, 1);
+      this.axes[1] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[1], -1, 1);
+      this.axes[2] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[2], -1, 1);
+      this.axes[3] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[3], -1, 1); // this.axes[4] = this.axes[4];
+      // this.axes[5] = this.axes[5];
+
+      let state = {
+        btns: 0,
+        axes: [0, 0, 0, 0, 0, 0],
+        gyro: { ...this.gyro
+        },
+        accel: { ...this.accel
+        }
+      };
+      state.btns |= this.buttons.up << 0;
+      state.btns |= this.buttons.down << 1;
+      state.btns |= this.buttons.left << 2;
+      state.btns |= this.buttons.right << 3;
+      state.btns |= this.buttons.l << 4;
+      state.btns |= this.buttons.zl << 5;
+      state.btns |= this.buttons.lstick << 6;
+      state.btns |= this.buttons.minus << 7;
+      state.btns |= this.buttons.capture << 8;
+      state.btns |= this.buttons.a << 9;
+      state.btns |= this.buttons.b << 10;
+      state.btns |= this.buttons.x << 11;
+      state.btns |= this.buttons.y << 12;
+      state.btns |= this.buttons.r << 13;
+      state.btns |= this.buttons.zr << 14;
+      state.btns |= this.buttons.rstick << 15;
+      state.btns |= this.buttons.plus << 16;
+      state.btns |= this.buttons.home << 17; // state.axes = this.axes;
+
+      for (let i = 0; i < this.axes.length; i++) {
+        state.axes[i] = this.axes[i];
+      }
+
+      return state;
+    });
+
+    _defineProperty(this, "setState", state => {
+      if (state.btns == null) {
+        console.log(state);
+        throw error;
+      }
+
+      this.btns = state.btns;
+      this.axes = state.axes;
+      this.buttons.up = this.isPressed(0);
+      this.buttons.down = this.isPressed(1);
+      this.buttons.left = this.isPressed(2);
+      this.buttons.right = this.isPressed(3);
+      this.buttons.l = this.isPressed(4);
+      this.buttons.zl = this.isPressed(5);
+      this.buttons.lstick = this.isPressed(6);
+      this.buttons.minus = this.isPressed(7);
+      this.buttons.capture = this.isPressed(8);
+      this.buttons.a = this.isPressed(9);
+      this.buttons.b = this.isPressed(10);
+      this.buttons.x = this.isPressed(11);
+      this.buttons.y = this.isPressed(12);
+      this.buttons.r = this.isPressed(13);
+      this.buttons.zr = this.isPressed(14);
+      this.buttons.rstick = this.isPressed(15);
+      this.buttons.plus = this.isPressed(16);
+      this.buttons.home = this.isPressed(17);
+    });
+
     this.buttons = {
       unset: 0,
       up: 0,
@@ -1793,95 +2402,15 @@ class ControllerState {
       y: 0,
       z: 0
     };
-    this.setState = this.setState.bind(this);
-  }
-
-  reset() {
-    this.btns = 0;
-
-    for (let prop in this.buttons) {
-      this.buttons[prop] = 0;
-    }
-
-    this.axes = [0, 0, 0, 0, 0, 0];
-  }
-
-  isPressed(n) {
-    return (this.btns & 1 << n) != 0;
-  }
-
-  getState() {
-    this.axes[0] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[0], -1, 1);
-    this.axes[1] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[1], -1, 1);
-    this.axes[2] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[2], -1, 1);
-    this.axes[3] = Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["clamp"])(this.axes[3], -1, 1); // this.axes[4] = this.axes[4];
-    // this.axes[5] = this.axes[5];
-
-    let state = {
-      btns: 0,
-      axes: [0, 0, 0, 0, 0, 0],
-      gyro: { ...this.gyro
-      },
-      accel: { ...this.accel
-      }
-    };
-    state.btns |= this.buttons.up << 0;
-    state.btns |= this.buttons.down << 1;
-    state.btns |= this.buttons.left << 2;
-    state.btns |= this.buttons.right << 3;
-    state.btns |= this.buttons.l << 4;
-    state.btns |= this.buttons.zl << 5;
-    state.btns |= this.buttons.lstick << 6;
-    state.btns |= this.buttons.minus << 7;
-    state.btns |= this.buttons.capture << 8;
-    state.btns |= this.buttons.a << 9;
-    state.btns |= this.buttons.b << 10;
-    state.btns |= this.buttons.x << 11;
-    state.btns |= this.buttons.y << 12;
-    state.btns |= this.buttons.r << 13;
-    state.btns |= this.buttons.zr << 14;
-    state.btns |= this.buttons.rstick << 15;
-    state.btns |= this.buttons.plus << 16;
-    state.btns |= this.buttons.home << 17; // state.axes = this.axes;
-
-    for (let i = 0; i < this.axes.length; i++) {
-      state.axes[i] = this.axes[i];
-    }
-
-    return state;
-  }
-
-  setState(state) {
-    if (state.btns == null) {
-      console.log(state);
-      throw error;
-    }
-
-    this.btns = state.btns;
-    this.axes = state.axes;
-    this.buttons.up = this.isPressed(0);
-    this.buttons.down = this.isPressed(1);
-    this.buttons.left = this.isPressed(2);
-    this.buttons.right = this.isPressed(3);
-    this.buttons.l = this.isPressed(4);
-    this.buttons.zl = this.isPressed(5);
-    this.buttons.lstick = this.isPressed(6);
-    this.buttons.minus = this.isPressed(7);
-    this.buttons.capture = this.isPressed(8);
-    this.buttons.a = this.isPressed(9);
-    this.buttons.b = this.isPressed(10);
-    this.buttons.x = this.isPressed(11);
-    this.buttons.y = this.isPressed(12);
-    this.buttons.r = this.isPressed(13);
-    this.buttons.zr = this.isPressed(14);
-    this.buttons.rstick = this.isPressed(15);
-    this.buttons.plus = this.isPressed(16);
-    this.buttons.home = this.isPressed(17);
   }
 
 }
 class MouseState {
   constructor() {
+    _defineProperty(this, "getState", () => {
+      return this;
+    });
+
     this.x = 0;
     this.y = 0;
     this.dx = 0;
@@ -1891,22 +2420,27 @@ class MouseState {
       right: 0,
       middle: 0
     };
-    this.getState = this.getState.bind(this);
-  }
-
-  getState() {
-    return this;
   }
 
 }
 class KeyboardState {
   constructor() {
+    _defineProperty(this, "getState", () => {
+      return this;
+    });
+
     this.keys = [];
-    this.getState = this.getState.bind(this);
   }
 
-  getState() {
-    return this;
+}
+class TouchState {
+  constructor() {
+    _defineProperty(this, "getState", () => {
+      return this;
+    });
+
+    // this.previousTouches = [];
+    this.touches = [];
   }
 
 }
@@ -2105,7 +2639,8 @@ class InputHandler {
   constructor(isMobile) {
     // initialize gamepad wrapper:
     this.gamepadWrapper = new _GamepadWrapper_js__WEBPACK_IMPORTED_MODULE_0__["GamepadWrapper"]();
-    this.keyboardWrapper = new _KeyboardWrapper_js__WEBPACK_IMPORTED_MODULE_1__["KeyboardWrapper"](); // for debugging:
+    this.keyboardWrapper = new _KeyboardWrapper_js__WEBPACK_IMPORTED_MODULE_1__["KeyboardWrapper"]();
+    this.touchWrapper = new _TouchWrapper_js__WEBPACK_IMPORTED_MODULE_2__["TouchWrapper"](); // for debugging:
     // window.gamepadWrapper = this.gamepadWrapper;
     // window.keyboardWrapper = this.keyboardWrapper;
 
@@ -2120,7 +2655,7 @@ class InputHandler {
 
     this.mouse = new _VirtualMouse_js__WEBPACK_IMPORTED_MODULE_5__["VirtualMouse"](); // the touch controls state:
 
-    this.touchpad = new _VirtualTouchpad_js__WEBPACK_IMPORTED_MODULE_6__["VirtualTouchpad"](); // real mode:
+    this.touchpad = new _VirtualTouchpad_js__WEBPACK_IMPORTED_MODULE_6__["VirtualTouchpad"](this.touchWrapper); // real mode:
 
     this.realMode = false; // output to be read:
 
@@ -2133,7 +2668,7 @@ class InputHandler {
     }
   }
 
-  pollDevices() {
+  pollDevices(touchControls) {
     let updatedState = new InputState();
     updatedState = this.oldInputState;
 
@@ -2176,7 +2711,9 @@ class InputHandler {
           updatedState.setMouseState(this.mouse.getState());
         }
       }
-    } else {
+    }
+
+    if (touchControls) {
       // touchpad:
       this.touchpad.poll();
 
@@ -2356,10 +2893,281 @@ class KeyboardWrapper {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TouchWrapper", function() { return TouchWrapper; });
+/* harmony import */ var src_libs_tools_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! src/libs/tools.js */ "./src/libs/tools.js");
+/* harmony import */ var nipplejs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! nipplejs */ "./node_modules/nipplejs/dist/nipplejs.js");
+/* harmony import */ var nipplejs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(nipplejs__WEBPACK_IMPORTED_MODULE_1__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+
+
+let btnList = {
+  a: 1,
+  b: 1,
+  x: 1,
+  y: 1,
+  up: 1,
+  down: 1,
+  left: 1,
+  right: 1,
+  l: 1,
+  zl: 1,
+  r: 1,
+  zr: 1,
+  minus: 1,
+  plus: 1,
+  capture: 1,
+  home: 1
+};
+const leftButtons = {
+  up: 1,
+  down: 1,
+  left: 1,
+  right: 1,
+  l: 1,
+  zl: 1,
+  minus: 1,
+  capture: 1
+};
 class TouchWrapper {
-  constructor() {// document.addEventListener("keydown", this.handleKeydown, false);
-    // document.addEventListener("keyup", this.handleKeyup, false);
-    // window.addEventListener("focus", this.resetModifiers, false);
+  constructor() {
+    _defineProperty(this, "init", () => {
+      let leftJoyStick = {
+        zone: document.querySelector("#leftStick"),
+        mode: "static",
+        catchDistance: 10,
+        color: "#FF3C28",
+        position: {
+          left: "50%",
+          top: "50%"
+        },
+        size: 60,
+        restOpacity: 0,
+        fadeTime: 1e99
+      };
+      let rightJoyStick = {
+        zone: document.querySelector("#rightStick"),
+        mode: "static",
+        catchDistance: 10,
+        color: "#0AB9E6",
+        position: {
+          left: "50%",
+          top: "50%"
+        },
+        size: 60,
+        restOpacity: 0,
+        fadeTime: 1e99
+      };
+      leftJoyStick.zone = document.querySelector("#leftStick");
+      rightJoyStick.zone = document.querySelector("#rightStick");
+      this.leftStick = nipplejs__WEBPACK_IMPORTED_MODULE_1___default.a.create(leftJoyStick);
+      this.rightStick = nipplejs__WEBPACK_IMPORTED_MODULE_1___default.a.create(rightJoyStick);
+      this.bindJoysticks();
+    });
+
+    _defineProperty(this, "bindJoysticks", () => {
+      let stickSize = 60;
+      let s1 = stickSize;
+      let s2 = stickSize / 2;
+      this.leftStick.on("start", (evt, data) => {
+        let pos = data.frontPosition;
+        pos.x = (pos.x + s2) / s1 * 2 - 1;
+        pos.y = -((pos.y + s2) / s1 * 2 - 1);
+        this.sticks.lx = pos.x;
+        this.sticks.ly = pos.y;
+        this.leftActive = true;
+      }).on("end", (evt, data) => {
+        this.sticks.lx = 0;
+        this.sticks.ly = 0;
+        this.leftActive = false;
+      }).on("move", (evt, data) => {
+        let pos = data.instance.frontPosition;
+        pos.x = (pos.x + s2) / s1 * 2 - 1;
+        pos.y = -((pos.y + s2) / s1 * 2 - 1);
+        this.sticks.lx = pos.x;
+        this.sticks.ly = pos.y;
+      });
+      this.rightStick.on("start", (evt, data) => {
+        let pos = data.frontPosition;
+        pos.x = (pos.x + s2) / s1 * 2 - 1;
+        pos.y = -((pos.y + s2) / s1 * 2 - 1);
+        this.sticks.rx = pos.x;
+        this.sticks.ry = pos.y;
+        this.rightActive = true;
+      }).on("end", (evt, data) => {
+        this.sticks.rx = 0;
+        this.sticks.ry = 0;
+        this.rightActive = false;
+      }).on("move", (evt, data) => {
+        let pos = data.instance.frontPosition;
+        pos.x = (pos.x + s2) / s1 * 2 - 1;
+        pos.y = -((pos.y + s2) / s1 * 2 - 1);
+        this.sticks.rx = pos.x;
+        this.sticks.ry = pos.y;
+      });
+    });
+
+    _defineProperty(this, "getName", str => {
+      if (!str.split) {
+        return "other";
+      }
+
+      let names = str.split(" ");
+
+      for (let i = 0; i < names.length; i++) {
+        if (btnList[names[i]]) {
+          let isLeftButton = !!leftButtons[names[i]];
+
+          if (isLeftButton && this.leftActive || !isLeftButton && this.rightActive) {
+            return "other";
+          }
+
+          return names[i];
+        }
+      }
+
+      return "other";
+    });
+
+    _defineProperty(this, "ongoingTouchIndexById", idToFind => {
+      for (let i = 0; i < this.ongoingTouches.length; i++) {
+        let id = this.ongoingTouches[i].identifier;
+
+        if (id == idToFind) {
+          return i;
+        }
+      }
+
+      return -1; // not found
+    });
+
+    _defineProperty(this, "handleTouchStart", event => {
+      let touches = event.changedTouches;
+
+      if (!touches) {
+        touches = [{
+          clientX: event.clientX,
+          clientY: event.clientY,
+          identifier: 0
+        }];
+      }
+
+      for (let i = 0; i < touches.length; i++) {
+        this.ongoingTouches.push(Object(src_libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["pick"])("identifier", "clientX", "clientY")(touches[i]));
+        this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className)] = true;
+      }
+    });
+
+    _defineProperty(this, "handleTouchEnd", event => {
+      // event.preventDefault();
+      let touches = event.changedTouches;
+
+      if (!touches) {
+        touches = [{
+          clientX: event.clientX,
+          clientY: event.clientY,
+          identifier: 0
+        }];
+      }
+
+      for (let i = 0; i < touches.length; i++) {
+        let idx = this.ongoingTouchIndexById(touches[i].identifier);
+
+        if (idx >= 0) {
+          this.ongoingTouches.splice(idx, 1); // remove it; we're done
+
+          this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className)] = false;
+        } else {
+          // console.log("can't figure out which touch to end");
+          alert("can't figure out which touch to end");
+        }
+      }
+    });
+
+    _defineProperty(this, "handleTouchCancel", event => {
+      // console.log("touchcancel.");
+      // event.preventDefault();
+      let touches = event.changedTouches;
+
+      if (!touches) {
+        touches = [{
+          clientX: event.clientX,
+          clientY: event.clientY,
+          identifier: 0
+        }];
+      }
+
+      for (let i = 0; i < touches.length; i++) {
+        let idx = this.ongoingTouchIndexById(touches[i].identifier);
+
+        if (idx < 0) {
+          alert("can't figure out which touch to cancel");
+        }
+
+        this.ongoingTouches.splice(idx, 1); // remove it; we're done
+
+        this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className)] = false;
+      }
+    });
+
+    _defineProperty(this, "handleTouchMove", event => {
+      event.preventDefault();
+      let touches = event.changedTouches;
+
+      if (!touches) {
+        if (this.ongoingTouches.length === 0) {
+          return;
+        }
+
+        touches = [{
+          clientX: event.clientX,
+          clientY: event.clientY,
+          identifier: 0
+        }];
+      }
+
+      for (let i = 0; i < touches.length; i++) {
+        let idx = this.ongoingTouchIndexById(touches[i].identifier);
+
+        if (idx >= 0) {
+          let oldTarget = this.getName(document.elementFromPoint(this.ongoingTouches[idx].clientX, this.ongoingTouches[idx].clientY).className);
+          let newTarget = this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className);
+
+          if (oldTarget != newTarget) {
+            this.activeTargets[oldTarget] = false;
+          }
+
+          this.ongoingTouches.splice(idx, 1, Object(src_libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["pick"])("identifier", "clientX", "clientY")(touches[i])); // swap in the new touch record
+
+          this.activeTargets[newTarget] = true;
+        } else {
+          console.log("can't figure out which touch to continue");
+        }
+      }
+    });
+
+    this.ongoingTouches = [];
+    this.activeTargets = {};
+    document.addEventListener("touchstart", this.handleTouchStart, false);
+    document.addEventListener("touchend", this.handleTouchEnd, false);
+    document.addEventListener("touchcancel", this.handleTouchCancel, false);
+    document.addEventListener("touchmove", this.handleTouchMove, false);
+    document.addEventListener("mousedown", this.handleTouchStart, false);
+    document.addEventListener("mouseup", this.handleTouchEnd, false);
+    document.addEventListener("mousemove", this.handleTouchMove, false);
+    /* JOYSTICKS @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
+
+    this.leftStick = null;
+    this.rightStick = null;
+    this.leftJoyStick = null;
+    this.rightJoyStick = null;
+    this.leftActive = false;
+    this.rightActive = false;
+    this.sticks = {
+      lx: 0,
+      ly: 0,
+      rx: 0,
+      ry: 0
+    };
   }
 
 }
@@ -2378,6 +3186,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AxisSettings", function() { return AxisSettings; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VirtualController", function() { return VirtualController; });
 /* harmony import */ var _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DeviceStates.js */ "./src/libs/InputHandler/DeviceStates.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 const restPos = 0;
 const AxisSettings = class AxisSettings {
@@ -2434,6 +3244,45 @@ class ButtonState {
 
 class VirtualController {
   constructor(gamepadWrapper) {
+    _defineProperty(this, "detectControllerType", id => {
+      // let reg = /^!(un)?ban ([a-zA-Z0-9]+)$/;
+      let reg = /^.+ Vendor: (.+) Product: (.+)\)$/i;
+      let res = reg.exec(id);
+
+      if (/xbox/i.test(id)) {
+        return "xbox";
+      }
+
+      if (res) {
+        // DS4:
+        if (res[1] === "054c" && res[2] === "09cc") {
+          return "DS4";
+        } // ?? probably DS4:
+
+
+        if (res[1] === "054c" && res[2] === "05c4") {
+          alert("if you see this, tell the dev what controller you're using on the discord server");
+          return "DS4";
+        } // PS3 controller:
+
+
+        if (res[1] === "054c" && res[2] === "0268") {
+          return "DS4";
+        }
+      } // PS2 controller:
+
+
+      if (/twin/i.test(id)) {
+        return "DS4";
+      }
+
+      if (/Pro Controller/i.test(id)) {
+        return "proController";
+      }
+
+      return null;
+    });
+
     this.gamepadWrapper = gamepadWrapper;
     this.cstate = new _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__["ControllerState"]();
     this.getState = this.getState.bind(this);
@@ -2457,6 +3306,7 @@ class VirtualController {
     this.autoSelectInterval = null;
     this.settings = {
       controllerIndex: null,
+      detectedType: null,
       axes: [new AxisSettings(1, 0, 0.1), new AxisSettings(-1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(-1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1), new AxisSettings(1, 0, 0.1)],
       map: {
         buttons: [new ButtonMapping("b"), new ButtonMapping("a"), new ButtonMapping("y"), new ButtonMapping("x"), new ButtonMapping("l"), new ButtonMapping("r"), new ButtonMapping("zl"), new ButtonMapping("zr"), new ButtonMapping("minus"), new ButtonMapping("plus"), new ButtonMapping("lstick"), new ButtonMapping("rstick"), new ButtonMapping("up"), new ButtonMapping("down"), new ButtonMapping("left"), new ButtonMapping("right"), new ButtonMapping("home"), new ButtonMapping("capture"), // extra:
@@ -2469,8 +3319,7 @@ class VirtualController {
   autoSelectGamepad() {
     // only auto select if one hasn't already been selected:
     if (this.settings.controllerIndex != null) {
-      clearInterval(this.autoSelectInterval);
-      return;
+      clearInterval(this.autoSelectInterval); // return;// removed because we may have changed controllers
     } // auto select an xbox / playstation controller:
 
 
@@ -2479,20 +3328,11 @@ class VirtualController {
     for (let key in this.gamepadWrapper.controllers) {
       let controller = this.gamepadWrapper.controllers[key];
       key = parseInt(key);
+      let detectedType = this.detectControllerType(controller.id);
 
-      if (controller.id.indexOf("Xbox") > -1) {
+      if (detectedType) {
         this.settings.controllerIndex = key;
-        console.log("Xbox controller found!");
-      }
-
-      if (controller.id.indexOf("Twin") > -1) {
-        this.settings.controllerIndex = key;
-        console.log("Playstation controller found!");
-      }
-
-      if (controller.id.indexOf("Pro Controller") > -1) {
-        this.settings.controllerIndex = key;
-        console.log("Pro controller found!");
+        this.settings.detectedType = detectedType;
       }
 
       keys.push(key);
@@ -3088,27 +3928,58 @@ class VirtualMouse {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "VirtualTouchpad", function() { return VirtualTouchpad; });
 /* harmony import */ var _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./DeviceStates.js */ "./src/libs/InputHandler/DeviceStates.js");
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 class VirtualTouchpad {
-  constructor(touchpadWrapper) {
-    this.touchpadWrapper = touchpadWrapper;
-    this.changed = false;
-    this.cstate = new _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__["ControllerState"](); // this.tstate = new TouchpadState();
+  constructor(touchWrapper) {
+    _defineProperty(this, "poll", () => {
+      let oldControllerState = this.cstate.getState();
+      this.cstate.buttons.a = this.touchWrapper.activeTargets.a ? 1 : 0;
+      this.cstate.buttons.b = this.touchWrapper.activeTargets.b ? 1 : 0;
+      this.cstate.buttons.x = this.touchWrapper.activeTargets.x ? 1 : 0;
+      this.cstate.buttons.y = this.touchWrapper.activeTargets.y ? 1 : 0;
+      this.cstate.buttons.up = this.touchWrapper.activeTargets.up ? 1 : 0;
+      this.cstate.buttons.down = this.touchWrapper.activeTargets.down ? 1 : 0;
+      this.cstate.buttons.left = this.touchWrapper.activeTargets.left ? 1 : 0;
+      this.cstate.buttons.right = this.touchWrapper.activeTargets.right ? 1 : 0;
+      this.cstate.buttons.l = this.touchWrapper.activeTargets.l ? 1 : 0;
+      this.cstate.buttons.zl = this.touchWrapper.activeTargets.zl ? 1 : 0;
+      this.cstate.buttons.r = this.touchWrapper.activeTargets.r ? 1 : 0;
+      this.cstate.buttons.zr = this.touchWrapper.activeTargets.zr ? 1 : 0;
+      this.cstate.buttons.capture = this.touchWrapper.activeTargets.capture ? 1 : 0;
+      this.cstate.buttons.home = this.touchWrapper.activeTargets.home ? 1 : 0;
+      this.cstate.buttons.minus = this.touchWrapper.activeTargets.minus ? 1 : 0;
+      this.cstate.buttons.plus = this.touchWrapper.activeTargets.plus ? 1 : 0;
+      this.cstate.axes[0] = this.touchWrapper.sticks.lx;
+      this.cstate.axes[1] = this.touchWrapper.sticks.ly;
+      this.cstate.axes[2] = this.touchWrapper.sticks.rx;
+      this.cstate.axes[3] = this.touchWrapper.sticks.ry;
+      let newControllerState = this.cstate.getState(); // reset if nothing changed:
 
-    this.getControllerState = this.getControllerState.bind(this);
-    this.getState = this.getState.bind(this);
+      if (JSON.stringify(newControllerState) == JSON.stringify(oldControllerState)) {
+        this.cstate.setState(oldControllerState);
+      } else {
+        this.changed = true;
+      }
+    });
+
+    _defineProperty(this, "getControllerState", () => {
+      return this.cstate.getState();
+    });
+
+    _defineProperty(this, "getState", () => {// return this.tstate;
+    });
+
+    this.touchWrapper = touchWrapper;
+    this.changed = false;
+    this.cstate = new _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__["ControllerState"]();
+    this.tstate = new _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__["TouchState"]();
+    setTimeout(() => {
+      this.touchWrapper.init();
+    }, 2000);
   } // get controller state:
 
-
-  poll() {// let oldControllerState = this.cstate.getState();
-  }
-
-  getControllerState() {
-    return this.cstate.getState();
-  }
-
-  getState() {// return this.tstate;
-  }
 
 }
 
@@ -3404,7 +4275,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CanvasRenderer", function() { return CanvasRenderer; });
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-// JSMpeg.Renderer.Canvas2D = (function(){ "use strict";
 class CanvasRenderer {
   constructor(options) {
     _defineProperty(this, "destroy", function () {// Nothing to do here
@@ -6663,7 +7533,7 @@ class Player {
     this.autoplay = !!options.autoplay || options.streaming;
     this.demuxer = new _ts_js__WEBPACK_IMPORTED_MODULE_8__["TS"](options); // this.demuxer = new TS2(options);
 
-    this.source.connect(this.demuxer); // options.disableWebAssembly = true;
+    this.source.connect(this.demuxer);
 
     if (!options.disableWebAssembly && _wasm_module_js__WEBPACK_IMPORTED_MODULE_9__["WASM"].IsSupported()) {
       this.wasmModule = _wasm_module_js__WEBPACK_IMPORTED_MODULE_9__["WASM"].GetModule();
@@ -7163,136 +8033,7 @@ class WASM {
     this.ready = false;
   }
 
-} // var WASM = function() {
-// 	this.stackSize = 5 * 1024 * 1024; // emscripten default
-// 	this.pageSize = 64 * 1024; // wasm page size
-// 	this.onInitCallback = null;
-// 	this.ready = false;
-// };
-// WASM.prototype.write = function(buffer) {
-// 	this.loadFromBuffer(buffer, this.onInitCallback);
-// };
-// WASM.prototype.loadFromFile = function(url, callback) {
-// 	this.onInitCallback = callback;
-// 	var ajax = new Ajax(url, {});
-// 	ajax.connect(this);
-// 	ajax.start();
-// };
-// WASM.prototype.loadFromBuffer = function(buffer, callback) {
-// 	this.moduleInfo = this.readDylinkSection(buffer);
-// 	if (!this.moduleInfo) {
-// 		this.callback && this.callback(null);
-// 		return;
-// 	}
-// 	this.memory = new WebAssembly.Memory({ initial: 256 });
-// 	var env = {
-// 		memory: this.memory,
-// 		// memoryBase: 0,
-// 		__memory_base: 0,
-// 		table: new WebAssembly.Table({
-// 			initial: this.moduleInfo.tableSize,
-// 			element: "anyfunc",
-// 		}),
-// 		// tableBase: 0,
-// 		__table_base: 0,
-// 		abort: this.c_abort.bind(this),
-// 		___assert_fail: this.c_assertFail.bind(this),
-// 		_sbrk: this.c_sbrk.bind(this),
-// 	};
-// 	this.brk = this.align(this.moduleInfo.memorySize + this.stackSize);
-// 	WebAssembly.instantiate(buffer, { env: env }).then(
-// 		function(results) {
-// 			this.instance = results.instance;
-// 			if (this.instance.exports.__post_instantiate) {
-// 				this.instance.exports.__post_instantiate();
-// 			}
-// 			this.createHeapViews();
-// 			this.ready = true;
-// 			callback && callback(this);
-// 		}.bind(this),
-// 	);
-// };
-// WASM.prototype.createHeapViews = function() {
-// 	this.instance.heapU8 = new Uint8Array(this.memory.buffer);
-// 	this.instance.heapU32 = new Uint32Array(this.memory.buffer);
-// 	this.instance.heapF32 = new Float32Array(this.memory.buffer);
-// };
-// WASM.prototype.align = function(addr) {
-// 	var a = Math.pow(2, this.moduleInfo.memoryAlignment);
-// 	return Math.ceil(addr / a) * a;
-// };
-// WASM.prototype.c_sbrk = function(size) {
-// 	var previousBrk = this.brk;
-// 	this.brk += size;
-// 	if (this.brk > this.memory.buffer.byteLength) {
-// 		var bytesNeeded = this.brk - this.memory.buffer.byteLength;
-// 		var pagesNeeded = Math.ceil(bytesNeeded / this.pageSize);
-// 		this.memory.grow(pagesNeeded);
-// 		this.createHeapViews();
-// 	}
-// 	return previousBrk;
-// };
-// WASM.prototype.c_abort = function(size) {
-// 	console.warn("JSMPeg: WASM abort", arguments);
-// };
-// WASM.prototype.c_assertFail = function(size) {
-// 	console.warn("JSMPeg: WASM ___assert_fail", arguments);
-// };
-// WASM.prototype.readDylinkSection = function(buffer) {
-// 	// Read the WASM header and dylink section of the .wasm binary data
-// 	// to get the needed table size and static data size.
-// 	// https://github.com/WebAssembly/tool-conventions/blob/master/DynamicLinking.md
-// 	// https://github.com/kripken/emscripten/blob/20602efb955a7c6c20865a495932427e205651d2/src/support.js
-// 	var bytes = new Uint8Array(buffer);
-// 	var next = 0;
-// 	var readVarUint = function() {
-// 		var ret = 0;
-// 		var mul = 1;
-// 		while (1) {
-// 			var byte = bytes[next++];
-// 			ret += (byte & 0x7f) * mul;
-// 			mul *= 0x80;
-// 			if (!(byte & 0x80)) {
-// 				return ret;
-// 			}
-// 		}
-// 	};
-// 	var matchNextBytes = function(expected) {
-// 		for (var i = 0; i < expected.length; i++) {
-// 			var b = typeof expected[i] === "string" ? expected[i].charCodeAt(0) : expected[i];
-// 			if (bytes[next++] !== b) {
-// 				return false;
-// 			}
-// 		}
-// 		return true;
-// 	};
-// 	// Make sure we have a wasm header
-// 	if (!matchNextBytes([0, "a", "s", "m"])) {
-// 		console.warn("JSMpeg: WASM header not found");
-// 		return null;
-// 	}
-// 	// Make sure we have a dylink section
-// 	var next = 9;
-// 	var sectionSize = readVarUint();
-// 	if (!matchNextBytes([6, "d", "y", "l", "i", "n", "k"])) {
-// 		console.warn("JSMpeg: No dylink section found in WASM");
-// 		return null;
-// 	}
-// 	return {
-// 		memorySize: readVarUint(),
-// 		memoryAlignment: readVarUint(),
-// 		tableSize: readVarUint(),
-// 		tableAlignment: readVarUint(),
-// 	};
-// };
-// WASM.IsSupported = function() {
-// 	return !!window.WebAssembly;
-// };
-// WASM.GetModule = function() {
-// 	WASM.CACHED_MODULE = WASM.CACHED_MODULE || new WASM();
-// 	return WASM.CACHED_MODULE;
-// };
-// export var WASM;
+}
 
 _defineProperty(WASM, "IsSupported", function () {
   return !!window.WebAssembly;
@@ -7855,98 +8596,96 @@ class SIOSource {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Lagless2; });
 /* harmony import */ var libs_jsmpeg_src_jsmpeg_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! libs/jsmpeg/src/jsmpeg.js */ "./src/libs/jsmpeg/src/jsmpeg.js");
- // import JSMpeg from "libs/jsmpeg/jsmpeg.min.js";
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 class Lagless2 {
   constructor(options) {
-    this.options = options;
+    _defineProperty(this, "pause", () => {
+      try {
+        this.player.pause();
+      } catch (error) {}
+    });
+
+    _defineProperty(this, "play", () => {
+      try {
+        this.player.play();
+      } catch (error) {}
+    });
+
+    _defineProperty(this, "destroy", () => {
+      try {
+        this.player.destroy();
+      } catch (error) {}
+    });
+
+    _defineProperty(this, "onVideoDecode", () => {
+      // copy from internal canvas to external canvas:
+      // this.context.drawImage(this.player.renderer.canvas, 0, 0, this.player.renderer.canvas.width, this.player.renderer.canvas.height);
+      // calulate fps:
+      let now = performance.now();
+
+      while (this.times.length > 0 && this.times[0] <= now - 1000) {
+        this.times.shift();
+      }
+
+      this.times.push(now);
+
+      if (this.fps != this.times.length) {
+        this.fps = this.times.length; // this.context.font = "25px sans-serif";
+        // this.context.lineWidth = 1;
+        // this.context.clearRect(0, 0, 1000, 500);
+        // this.context.fillStyle = "#FFF";
+        // this.context.fillText(`FPS: ${this.fps}`, 5, 50);
+        // // this.context.fillStyle = "#000";
+        // // this.context.strokeText(`FPS: ${this.fps}`, 5, 50);
+      }
+    });
+
+    _defineProperty(this, "resume", (videoCanvas, graphicsCanvas) => {
+      this.videoCanvas = videoCanvas || this.videoCanvas;
+      this.graphicsCanvas = graphicsCanvas || this.graphicsCanvas || null;
+      let onVideoDecode = null;
+
+      if (this.graphicsCanvas) {
+        // if (!this.context) {
+        this.context = this.graphicsCanvas.getContext("2d"); // }
+
+        onVideoDecode = this.onVideoDecode;
+      } // destroy audio instance if it exists:
+
+
+      try {
+        this.player.destroy();
+      } catch (error) {}
+
+      this.player = new libs_jsmpeg_src_jsmpeg_js__WEBPACK_IMPORTED_MODULE_0__["JSMpeg"].Player(this.options.url, {
+        canvas: this.videoCanvas,
+        videoBufferSize: this.options.videoBufferSize,
+        audioBufferSize: this.options.audioBufferSize,
+        maxAudioLag: 0.25,
+        onVideoDecode: onVideoDecode,
+        audio: !!this.options.audio,
+        video: !!this.options.video,
+        path: this.options.path
+      }); // this.videoCanvas.width = this.player.renderer.canvas.width;
+      // this.videoCanvas.height = this.player.renderer.canvas.height;
+    });
+
     this.videoCanvas = null;
     this.graphicsCanvas = null;
     this.context = null; // graphics context2d
 
     this.player = {};
-    this.pause = this.pause.bind(this);
-    this.resume = this.resume.bind(this);
-    this.onVideoDecode = this.onVideoDecode.bind(this);
+    this.options = {
+      videoBufferSize: 256 * 1024,
+      // 256kb (256 * 1024)
+      audioBufferSize: 128 * 1024,
+      // 128kb (128 * 1024)
+      ...options
+    };
     this.times = [];
     this.fps = 0;
-  }
-
-  pause() {
-    try {
-      this.player.destroy(); // if (this.hasAudio) {
-      // 	let audioBufferSize = 128 * 1024;
-      // 	this.player = new JSMpeg.Player(this.url, {
-      // 		video: false,
-      // 		audio: true,
-      // 		audioBufferSize: audioBufferSize,
-      // 		maxAudioLag: 0.5,
-      // 	});
-      // }
-    } catch (error) {}
-  }
-
-  stop() {
-    try {
-      this.player.destroy();
-    } catch (error) {}
-  } // calculate fps:
-  // https://www.growingwiththeweb.com/2017/12/fast-simple-js-fps-counter.html
-
-
-  onVideoDecode() {
-    // copy from internal canvas to external canvas:
-    // this.context.drawImage(this.player.renderer.canvas, 0, 0, this.player.renderer.canvas.width, this.player.renderer.canvas.height);
-    // calulate fps:
-    let now = performance.now();
-
-    while (this.times.length > 0 && this.times[0] <= now - 1000) {
-      this.times.shift();
-    }
-
-    this.times.push(now);
-
-    if (this.fps != this.times.length) {
-      this.fps = this.times.length; // this.context.font = "25px sans-serif";
-      // this.context.lineWidth = 1;
-      // this.context.clearRect(0, 0, 1000, 500);
-      // this.context.fillStyle = "#FFF";
-      // this.context.fillText(`FPS: ${this.fps}`, 5, 50);
-      // // this.context.fillStyle = "#000";
-      // // this.context.strokeText(`FPS: ${this.fps}`, 5, 50);
-    }
-  }
-
-  resume(videoCanvas, graphicsCanvas) {
-    this.videoCanvas = videoCanvas;
-    this.graphicsCanvas = graphicsCanvas || null;
-    let onDecode = null;
-
-    if (this.graphicsCanvas) {
-      this.context = this.graphicsCanvas.getContext("2d");
-      onDecode = this.onVideoDecode;
-    } // destroy audio instance if it exists:
-
-
-    try {
-      this.player.destroy();
-    } catch (error) {}
-
-    let videoBufferSize = 256 * 1024; // 256kb (256 * 1024)
-
-    let audioBufferSize = 128 * 1024; // 128kb (128 * 1024)
-
-    this.player = new libs_jsmpeg_src_jsmpeg_js__WEBPACK_IMPORTED_MODULE_0__["JSMpeg"].Player(this.options.url, {
-      canvas: this.videoCanvas,
-      videoBufferSize: videoBufferSize,
-      audioBufferSize: audioBufferSize,
-      maxAudioLag: 0.25,
-      onVideoDecode: onDecode,
-      audio: !!this.options.audio,
-      video: !!this.options.video,
-      path: this.options.path
-    }); // this.videoCanvas.width = this.player.renderer.canvas.width;
-    // this.videoCanvas.height = this.player.renderer.canvas.height;
   }
 
 }
@@ -7967,79 +8706,84 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var simple_peer__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(simple_peer__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
 /* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_1__);
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 class Lagless4 {
   constructor(options) {
+    _defineProperty(this, "run", () => {
+      this.videoConnection = socket_io_client__WEBPACK_IMPORTED_MODULE_1___default()(this.options.url, {
+        path: this.options.path,
+        transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"]
+      });
+      this.peer = new simple_peer__WEBPACK_IMPORTED_MODULE_0___default.a({
+        initiator: false,
+        trickle: true
+      });
+      this.peer.on("error", error => {
+        console.log("error", error);
+      });
+      this.peer.on("signal", data => {
+        console.log("SIGNAL", JSON.stringify(data));
+        this.videoConnection.emit("clientPeerSignal", JSON.stringify(data));
+      });
+      this.peer.on("connect", () => {
+        console.log("CONNECT");
+        this.peer.send(Math.random());
+      });
+      this.peer.on("data", data => {
+        console.log("data: " + data);
+      });
+      this.videoConnection.on("hostPeerSignal", data => {
+        this.peer.signal(JSON.parse(data));
+      });
+      this.peer.on("stream", stream => {
+        // if (canvas == null) {
+        // 	return;
+        // }
+        // got remote video stream, then show it in a video tag
+        try {
+          this.canvas.src = window.URL.createObjectURL(stream); // deprecated
+
+          this.canvas.play();
+        } catch (error) {
+          this.canvas.srcObject = stream;
+          this.canvas.play();
+        }
+      });
+    });
+
+    _defineProperty(this, "destroy", () => {
+      try {
+        this.canvas.pause();
+      } catch (error) {}
+    });
+
+    _defineProperty(this, "pause", () => {
+      try {
+        this.canvas.pause();
+      } catch (error) {}
+    });
+
+    _defineProperty(this, "resume", canvas => {
+      this.canvas = canvas;
+
+      if (!this.connected) {
+        this.connected = true;
+        this.videoConnection.emit("requestVideo");
+      } else {
+        try {
+          this.canvas.play();
+        } catch (error) {}
+      }
+    });
+
     this.options = options;
     this.canvas = null;
     this.player = null;
     this.connected = false;
     this.videoConnection = null;
-    this.run = this.run.bind(this);
-    this.pause = this.pause.bind(this);
-    this.resume = this.resume.bind(this);
-  }
-
-  run() {
-    this.videoConnection = socket_io_client__WEBPACK_IMPORTED_MODULE_1___default()(this.options.url, {
-      path: this.options.path,
-      transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"]
-    });
-    this.peer = new simple_peer__WEBPACK_IMPORTED_MODULE_0___default.a({
-      initiator: false,
-      trickle: true
-    });
-    this.peer.on("error", error => {
-      console.log("error", error);
-    });
-    this.peer.on("signal", data => {
-      console.log("SIGNAL", JSON.stringify(data));
-      this.videoConnection.emit("clientPeerSignal", JSON.stringify(data));
-    });
-    this.peer.on("connect", () => {
-      console.log("CONNECT");
-      this.peer.send(Math.random());
-    });
-    this.peer.on("data", data => {
-      console.log("data: " + data);
-    });
-    this.videoConnection.on("hostPeerSignal", data => {
-      this.peer.signal(JSON.parse(data));
-    });
-    this.peer.on("stream", stream => {
-      // if (canvas == null) {
-      // 	return;
-      // }
-      // got remote video stream, then show it in a video tag
-      try {
-        this.canvas.src = window.URL.createObjectURL(stream); // deprecated
-
-        this.canvas.play();
-      } catch (error) {
-        this.canvas.srcObject = stream;
-        this.canvas.play();
-      }
-    });
-  }
-
-  pause() {
-    try {
-      this.canvas.pause();
-    } catch (error) {}
-  }
-
-  resume(canvas) {
-    this.canvas = canvas;
-
-    if (!this.connected) {
-      this.connected = true;
-      this.videoConnection.emit("requestVideo");
-    } else {
-      try {
-        this.canvas.play();
-      } catch (error) {}
-    }
   }
 
 }

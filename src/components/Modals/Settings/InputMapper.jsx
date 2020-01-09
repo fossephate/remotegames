@@ -2,30 +2,29 @@
 import React, { Component } from "react";
 
 // react-router:
-import { Route, withRouter } from "react-router";
+import { withRouter } from "react-router";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import { AppBar, Toolbar, Typography } from "@material-ui/core";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Dialog from "@material-ui/core/Dialog";
-import DialogContent from "@material-ui/core/DialogContent";
+import {
+	ListItemText,
+	ListItem,
+	List,
+	OutlinedInput,
+	Select,
+	MenuItem,
+	Button,
+	Paper,
+	Tabs,
+	Tab,
+} from "@material-ui/core";
 
 // components:
 
 // recompose:
 import { compose } from "recompose";
 
-const BUTTON_NAMES = [
+const MAP_BUTTON_NAMES = [
 	"b",
 	"a",
 	"y",
@@ -45,9 +44,102 @@ const BUTTON_NAMES = [
 	"home",
 ];
 
-const AXIS_NAMES = ["LX", "LY", "RX", "RY"];
+const DISPLAY_BUTTON_NAMES = [
+	"B",
+	"A",
+	"Y",
+	"X",
+	"L",
+	"R",
+	"ZL",
+	"ZR",
+	"Minus",
+	"Plus",
+	"LStick",
+	"RStick",
+	"Up",
+	"Down",
+	"Left",
+	"Right",
+	"Home",
+];
 
-const KEYBOARD_MAP = [
+const BUTTON_LAYOUTS = {
+	xbox: [
+		"A",
+		"B",
+		"X",
+		"Y",
+		"LB",
+		"RB",
+		"LT",
+		"RT",
+		"Select",
+		"Start",
+		"LStick",
+		"RStick",
+		"Up",
+		"Down",
+		"Left",
+		"Right",
+		"Xbox",
+	],
+	DS4: [
+		"❌",
+		"⭕",
+		"🟥",
+		"🔺",
+		"L1",
+		"R1",
+		"L2",
+		"R2",
+		"Share",
+		"Options",
+		"L3",
+		"R3",
+		"Up",
+		"Down",
+		"Left",
+		"Right",
+		"PS",
+		"Touchpad",
+	],
+	proController: [],
+};
+
+const DISPLAY_AXIS_NAMES = ["LX", "LY", "RX", "RY"];
+const MAP_AXIS_NAMES = ["LX", "LY", "RX", "RY"];
+
+const DISPLAY_KEYBOARD_NAMES = [
+	"LU",
+	"LD",
+	"LL",
+	"LR",
+	"RU",
+	"RD",
+	"RL",
+	"RR",
+	"A",
+	"B",
+	"X",
+	"Y",
+	"Up",
+	"Down",
+	"Left",
+	"Right",
+	"LStick",
+	"RStick",
+	"L",
+	"ZL",
+	"R",
+	"ZR",
+	"Minus",
+	"Plus",
+	"Capture",
+	"Home",
+];
+
+const MAP_KEYBOARD_NAMES = [
 	"LU",
 	"LD",
 	"LL",
@@ -119,12 +211,12 @@ class ControllerMapper extends Component {
 
 					inputHandler.controller.settings.map.buttons[lastChangedIndex].type = "button";
 					inputHandler.controller.settings.map.buttons[lastChangedIndex].which =
-						BUTTON_NAMES[which];
+						MAP_BUTTON_NAMES[which];
 				}
 				if (this.props.type == "axis") {
 					// todo: finish
 					// inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].type = "axis";
-					// inputHandler.controller.settings.map.axes[parseInt(this.props.which)] = BUTTON_NAMES[inputHandler.controller.lastChangedButton];
+					// inputHandler.controller.settings.map.axes[parseInt(this.props.which)] = MAP_BUTTON_NAMES[inputHandler.controller.lastChangedButton];
 				}
 				inputHandler.controller.lastChangedButton = null;
 				this.setState({ waiting: false });
@@ -140,7 +232,8 @@ class ControllerMapper extends Component {
 	render() {
 		const { classes } = this.props;
 
-		let NAMES = this.props.type == "button" ? BUTTON_NAMES : AXIS_NAMES;
+		let DISPLAY_NAMES = this.props.type == "button" ? DISPLAY_BUTTON_NAMES : DISPLAY_AXIS_NAMES;
+		let MAP_NAMES = this.props.type == "button" ? MAP_BUTTON_NAMES : MAP_AXIS_NAMES;
 
 		let inputHandler = window.inputHandler;
 
@@ -148,49 +241,45 @@ class ControllerMapper extends Component {
 			return (
 				<ListItem>
 					<ListItemText>
-						{`${NAMES[this.props.which]}`} waiting for axis / button input...
+						{`${DISPLAY_NAMES[this.props.which]}`} waiting for axis / button input...
 					</ListItemText>
 				</ListItem>
 			);
 		}
-		// this.currentMapping = this.props.type + " ";
 		this.currentMapping = "unset";
 		if (this.props.type == "button") {
-			// this.currentMapping += inputHandler.controller.settings.map.buttons[parseInt(this.props.which)].which;
 			for (let i = 0; i < inputHandler.controller.settings.map.buttons.length; i++) {
 				let btn = inputHandler.controller.settings.map.buttons[i];
-				if (btn.which === NAMES[this.props.which]) {
-					// this.currentMapping.push(i);
+				if (btn.which === MAP_NAMES[this.props.which]) {
 					this.currentMapping = i;
 					break;
 				}
 			}
 		} else if (this.props.type == "axis") {
-			// this.currentMapping += inputHandler.controller.settings.map.axes[parseInt(this.props.which)].which;
 			for (let i = 0; i < inputHandler.controller.settings.map.axes.length; i++) {
 				let axis = inputHandler.controller.settings.map.axes[i];
-				if (axis.which === NAMES[this.props.which]) {
-					// this.currentMapping.push(i);
+				if (axis.which === MAP_NAMES[this.props.which]) {
 					this.currentMapping = i;
 					break;
 				}
 			}
 		}
 
+		let currentMappingNamed;
+
+		if (inputHandler.controller.settings.detectedType !== null) {
+			currentMappingNamed =
+				BUTTON_LAYOUTS[inputHandler.controller.settings.detectedType][
+					this.currentMapping
+				];
+		} else {
+			currentMappingNamed = this.currentMapping;
+		}
+
 		return (
-			// <ListItem>
-			// 	<ListItemText>{`${NAMES[this.props.which]}`}</ListItemText>
-			// 	<ListItemText>{this.currentMapping}</ListItemText>
-			// 	<Button variant="contained" onClick={this.mapButton}>
-			// 		Map To Button
-			// 	</Button>
-			// 	<Button variant="contained" onClick={this.mapAxis}>
-			// 		Map To Axis
-			// 	</Button>
-			// </ListItem>
 			<ListItem className={classes.listItem}>
-				<ListItemText>{`${NAMES[this.props.which]}`}</ListItemText>
-				<ListItemText>{this.currentMapping}</ListItemText>
+				<ListItemText>{`${DISPLAY_NAMES[this.props.which]}`}</ListItemText>
+				<ListItemText>{currentMappingNamed}</ListItemText>
 				<Button variant="contained" onClick={this.mapButton}>
 					Map To Button
 				</Button>
@@ -231,7 +320,7 @@ class KeyboardMapper extends Component {
 			if (inputHandler.keyboard.lastPressedKey != null) {
 				clearInterval(this.mapKeyTimer);
 
-				inputHandler.keyboard.map[KEYBOARD_MAP[parseInt(this.props.which)]] =
+				inputHandler.keyboard.map[MAP_KEYBOARD_NAMES[parseInt(this.props.which)]] =
 					inputHandler.keyboard.lastPressedKey;
 				inputHandler.keyboard.lastPressedKey = null;
 
@@ -250,7 +339,7 @@ class KeyboardMapper extends Component {
 			return (
 				<ListItem>
 					<ListItemText>
-						{`${KEYBOARD_MAP[this.props.which]}`} waiting for keypress...
+						{`${DISPLAY_KEYBOARD_NAMES[this.props.which]}`} waiting for keypress...
 					</ListItemText>
 				</ListItem>
 			);
@@ -258,11 +347,11 @@ class KeyboardMapper extends Component {
 
 		// let currentMapping = inputHandler.keyboard.map2[parseInt(this.props.which)];
 		let currentMapping =
-			inputHandler.keyboard.map[KEYBOARD_MAP[parseInt(this.props.which)]];
+			inputHandler.keyboard.map[MAP_KEYBOARD_NAMES[parseInt(this.props.which)]];
 
 		return (
 			<ListItem className={classes.listItem}>
-				<ListItemText>{`${KEYBOARD_MAP[this.props.which]}`}</ListItemText>
+				<ListItemText>{`${DISPLAY_KEYBOARD_NAMES[this.props.which]}`}</ListItemText>
 				<ListItemText>{currentMapping}</ListItemText>
 				<Button variant="contained" onClick={this.mapKey}>
 					Map To Key
@@ -306,35 +395,30 @@ class InputMapperModal extends Component {
 	constructor(props) {
 		super(props);
 
-		this.handleChange = this.handleChange.bind(this);
-		this.update = this.update.bind(this);
-		this.rescanGamepads = this.rescanGamepads.bind(this);
-		this.handleClose = this.handleClose.bind(this);
-
 		this.state = {
 			whichTab: 0,
 		};
 	}
 
-	handleClose() {
+	handleClose = () => {
 		// this.props.history.push("/");
 		this.props.history.goBack();
-	}
+	};
 
-	handleChange(event) {
+	handleChange = (event) => {
 		let inputHandler = window.inputHandler;
 		inputHandler.controller.settings.controllerIndex = "" + event.target.value;
 		this.setState({});
-	}
+	};
 
-	rescanGamepads() {
+	rescanGamepads = () => {
 		window.inputHandler.controller.autoSelectGamepad();
 		this.update();
-	}
+	};
 
-	update() {
+	update = () => {
 		this.setState({});
-	}
+	};
 
 	shouldComponentUpdate() {
 		return true;
@@ -417,7 +501,10 @@ class InputMapperModal extends Component {
 				</Tabs>
 				{this.state.whichTab === 0 && (
 					<Paper className={classes.controllerRemapper} elevation={4}>
-						<ListItemText>Active Gamepad:</ListItemText>
+						<ListItemText>
+							Active Gamepad Type:
+							{" " + (inputHandler.controller.settings.detectedType || "Unknown")}
+						</ListItemText>
 
 						<div style={{ display: "flex", justifyContent: "space-between" }}>
 							<Select

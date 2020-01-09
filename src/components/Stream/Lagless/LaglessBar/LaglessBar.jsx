@@ -65,7 +65,7 @@ class LaglessBar extends PureComponent {
 	render() {
 		const { classes } = this.props;
 		return (
-			<Paper className={classes.root} elevation={3}>
+			<Paper id="laglessBar" className={classes.root} elevation={3}>
 				<ViewerDropdown accountMap={this.props.accountMap} />
 				<VolumeSlider
 					value={this.props.volume}
@@ -91,7 +91,7 @@ class LaglessBar extends PureComponent {
 					variant="contained"
 					color="primary"
 					onClick={() => {
-						this.props.history.push("/settings/av");
+						this.props.history.push("/settings/site");
 					}}
 				>
 					{"Settings "}

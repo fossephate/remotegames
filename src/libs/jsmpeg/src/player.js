@@ -1,7 +1,7 @@
 // import { AjaxSource } from "./ajax.js";
 // import { AjaxProgressiveSource } from "./ajax-progressive.js";
 // import { FetchSource } from "./fetch.js";
-import { SIOSource/*, WSSource*/ } from "./websocket.js";
+import { SIOSource /*, WSSource*/ } from "./websocket.js";
 
 import { MPEG1 } from "./mpeg1.js";
 import { MPEG1WASM } from "./mpeg1-wasm.js";
@@ -53,8 +53,6 @@ export class Player {
 		this.demuxer = new TS(options);
 		// this.demuxer = new TS2(options);
 		this.source.connect(this.demuxer);
-
-		// options.disableWebAssembly = true;
 
 		if (!options.disableWebAssembly && WASM.IsSupported()) {
 			this.wasmModule = WASM.GetModule();

@@ -21,14 +21,6 @@ import { createMuiTheme } from "@material-ui/core/styles";
 
 // components:
 import Loading from "components/General/Loading.jsx";
-// import About from "src/About.jsx";
-// import FAQ from "src/FAQ.jsx";
-// import ToS from "src/ToS.jsx";
-// import Privacy from "src/Privacy.jsx";
-
-// import CurrentPlayers from "src/CurrentPlayers.jsx";
-// import Streams from "src/Streams.jsx";
-// import Stream from "src/Stream.jsx";
 
 const About = lazy(() => import("src/About.jsx"));
 const FAQ = lazy(() => import("src/FAQ.jsx"));
@@ -152,6 +144,11 @@ function loadState() {
 		if (value) {
 			settings = Object.assign({}, JSON.parse(value));
 			settings.currentPlayer = 0; // same as above
+			settings.largescreen = false;
+			settings.fullscreen = false;
+			settings.mobileMode = false;
+			settings.hideChat = false;
+			settings.hideNav = false;
 		}
 
 		store.dispatch(updateSettings({ ...settings }));

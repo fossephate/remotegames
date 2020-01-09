@@ -9,13 +9,9 @@ export default class Lagless4 {
 		this.connected = false;
 
 		this.videoConnection = null;
-
-		this.run = this.run.bind(this);
-		this.pause = this.pause.bind(this);
-		this.resume = this.resume.bind(this);
 	}
 
-	run() {
+	run = () => {
 		this.videoConnection = socketio(this.options.url, {
 			path: this.options.path,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
@@ -55,15 +51,21 @@ export default class Lagless4 {
 				this.canvas.play();
 			}
 		});
-	}
+	};
 
-	pause() {
+	destroy = () => {
 		try {
 			this.canvas.pause();
 		} catch (error) {}
-	}
+	};
 
-	resume(canvas) {
+	pause = () => {
+		try {
+			this.canvas.pause();
+		} catch (error) {}
+	};
+
+	resume = (canvas) => {
 		this.canvas = canvas;
 
 		if (!this.connected) {
@@ -74,5 +76,5 @@ export default class Lagless4 {
 				this.canvas.play();
 			} catch (error) {}
 		}
-	}
+	};
 }

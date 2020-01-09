@@ -48,6 +48,15 @@ class CheckboxSettings extends PureComponent {
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
+							text={"Enable Touch Controls"}
+							handleChange={(state) => {
+								this.props.updateSettings({ touchControls: state });
+							}}
+							checked={this.props.settings.touchControls}
+						/>
+					</ListItem>
+					<ListItem>
+						<MyCheckbox
 							text={"Real keyboard / mouse"}
 							handleChange={(state) => {
 								this.props.updateSettings({ realKeyboardMouse: state });
@@ -100,6 +109,7 @@ class CheckboxSettings extends PureComponent {
 										controllerView: true,
 										largescreen: true,
 									});
+									toggleFullscreen(document.getElementsByTagName("html")[0]);
 								} else {
 									this.props.updateSettings({
 										hideChat: false,

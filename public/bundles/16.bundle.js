@@ -1,1 +1,152 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[16],{250:function(e,t,n){"use strict";n.d(t,"a",(function(){return o}));const o={mobile:`@media (min-width: ${"600px"})`,tablet:`@media (min-width: ${"768px"})`,laptop:`@media (min-width: ${"1024px"})`,desktop:`@media (min-width: ${"1440px"})`}},268:function(e,t,n){"use strict";function o(e,t,n){return Math.min(Math.max(e,t),n)}function a(e){void 0!==document.fullScreenElement&&null===document.fullScreenElement||void 0!==document.msFullscreenElement&&null===document.msFullscreenElement||void 0!==document.mozFullScreen&&!document.mozFullScreen||void 0!==document.webkitIsFullScreen&&!document.webkitIsFullScreen?e.requestFullScreen?e.requestFullScreen():e.mozRequestFullScreen?e.mozRequestFullScreen():e.webkitRequestFullScreen?e.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT):e.msRequestFullscreen&&e.msRequestFullscreen():document.cancelFullScreen?document.cancelFullScreen():document.mozCancelFullScreen?document.mozCancelFullScreen():document.webkitCancelFullScreen?document.webkitCancelFullScreen():document.msExitFullscreen&&document.msExitFullscreen()}function c(){let e=document.cookie.split(";");for(let t=0;t<e.length;t++){let n=e[t],o=n.indexOf("="),a=o>-1?n.substr(0,o):n;document.cookie=a+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"}}function l(e){let t=10*(e=(Math.round(10*(e+1))/10).toFixed(2));return 0==t?"900":10==t?"090":20==t?"009":(t<10?(t=10-t,t=90+90*t):t=9*(20-t),String(t).padStart(3,"0"))}n.d(t,"a",(function(){return o})),n.d(t,"d",(function(){return a})),n.d(t,"b",(function(){return c})),n.d(t,"c",(function(){return l}))},301:function(e,t,n){"use strict";var o=n(0),a=n.n(o),c=n(111),l=n(494),i=n(350),s=n(414),r=n(509),u=n(70),d=n(246);class m extends o.PureComponent{constructor(e){super(e),this.state={TOSAgreed:!1},this.agreeTOS=this.agreeTOS.bind(this)}agreeTOS(e){this.setState({TOSAgreed:e.target.checked})}connectAccountOrLogin(e){if(window.banned)return;let t=window.location.origin+"/8099/auth/"+e+"/";null!=this.props.authToken&&(t+="?authToken="+this.props.authToken),window.location.href=t}render(){const{classes:e,showTOS:t}=this.props;let n=this.props.connectedAccounts.length>1||this.props.validUsernames.length>1;return a.a.createElement(l.a,{className:e.root,elevation:0},t&&a.a.createElement("div",null,a.a.createElement(i.a,{onChange:this.agreeTOS}),a.a.createElement("span",null,"I have read and agree to the "),a.a.createElement(s.a,{href:"/tos"},"Terms and Conditions")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(r.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("twitch")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",null,"Connect with"),a.a.createElement("img",{className:e.twitchLogo,src:"/images/Twitch_Purple_RGB.png"})),this.props.connectedAccounts.includes("twitch")&&n&&a.a.createElement(r.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("twitch")}},"X")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(r.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("youtube")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",null,"Connect with"),a.a.createElement("img",{className:e.youtubeLogo,src:"/images/yt_logo_rgb_light.png"})),this.props.connectedAccounts.includes("youtube")&&n&&a.a.createElement(r.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("youtube")}},"X")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(r.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("google")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",{id:"connectWithGoogleText"},"Connect with Google")),this.props.connectedAccounts.includes("google")&&n&&a.a.createElement(r.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("google")}},"X")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(r.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("discord")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",null,"Connect with"),a.a.createElement("img",{className:e.discordLogo,src:"/images/discord_logo.png"})),this.props.connectedAccounts.includes("discord")&&n&&a.a.createElement(r.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("discord")}},"X")))}}t.a=Object(d.a)(Object(c.a)(e=>({root:{width:"100%",minHeight:"220px",textAlign:"center",display:"flex",flexDirection:"column",justifyContent:"space-evenly",flexWrap:"wrap",paddingLeft:"25px",paddingRight:"25px"},connectWithButton:{display:"flex"},twitchLogo:{width:"60px",marginLeft:"10px",marginRight:"10px"},googleLogo:{width:"80px"},youtubeLogo:{width:"80px",marginLeft:"10px"},discordLogo:{width:"80px",marginLeft:"4px"}})),Object(u.b)(e=>({authToken:e.client.authToken,connectedAccounts:e.client.connectedAccounts,validUsernames:e.client.validUsernames})))(m)},533:function(e,t,n){"use strict";n.r(t);var o=n(0),a=n.n(o),c=n(6),l=n(301),i=n(111),s=n(416),r=n(528),u=n(535),d=n(70),m=n(246);class h extends o.PureComponent{constructor(e){super(e),this.handleChange=this.handleChange.bind(this)}handleChange(e){}getUsernameList(){let e=[];for(let t=0;t<this.props.validUsernames.length;t++)e.push(a.a.createElement(s.a,{key:t,value:t},this.props.validUsernames[t],"  "));return 0==this.props.validUsernames.length?a.a.createElement(s.a,{key:0,value:0},"Not signed in."):e}render(){let e=this.props.validUsernames.indexOf(this.props.username);return-1==e&&(e=0),a.a.createElement(r.a,{value:e,onChange:this.props.handleChange,input:a.a.createElement(u.a,{labelWidth:0})},this.getUsernameList())}}var p=Object(m.a)(Object(i.a)(e=>({root:{alignSelf:"center",background:"transparent"}})),Object(d.b)(e=>({username:e.client.username,validUsernames:e.client.validUsernames}),e=>({})))(h),g=n(499),f=n(500),x=n(320),v=n(494),E=n(509),b=n(415),w=n(493),C=n(498),k=(n(248),n(268)),S=n(250);class y extends o.PureComponent{constructor(e){super(e),this.accountConnection=this.props.accountConnection,this.handleClose=this.handleClose.bind(this),this.handleRemoveAccount=this.handleRemoveAccount.bind(this)}handleClose(){this.props.history.goBack()}handleLogout(){Object(k.b)(),location.reload(!0)}handleRemoveAccount(e){this.accountConnection.emit("removeConnectedAccount",{authToken:this.props.authToken,type:e},e=>{e.success?(alert("success"),location.reload(!0)):alert(e.reason)})}getTime(e){return e<60?e.toFixed(1)+" seconds.":e<3600?(e/60).toFixed(1)+" minutes":(e/60/60).toFixed(1)+" hours"}render(){const{classes:e}=this.props;return a.a.createElement(w.a,{open:!0,scroll:"body",maxWidth:"sm",fullWidth:!0,onClose:this.handleClose},a.a.createElement(C.a,{className:e.root},a.a.createElement(g.a,{position:"static"},a.a.createElement(f.a,null,a.a.createElement(x.a,{variant:"h6",color:"inherit"},"Account"))),a.a.createElement(v.a,{className:e.topBar,elevation:2},a.a.createElement(p,null),a.a.createElement(E.a,{className:e.logout,variant:"contained",color:"secondary",onClick:this.handleLogout},"Logout")),a.a.createElement(l.a,{onRemoveAccount:this.handleRemoveAccount,showTOS:!1}),a.a.createElement(b.a,{style:{margin:"0 auto"}},"You've played for ",this.getTime(this.props.timePlayed))))}}t.default=Object(m.a)(c.f,Object(i.a)(e=>({root:{display:"flex",flexDirection:"column",justifyContent:"space-evenly",padding:"0px 0px 25px 0px !important"},[S.a.tablet]:{root:{flexDirection:"column"}},center:{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%, -50%)"},list:{maxHeight:"400px",overflowY:"auto"},logout:{width:"30%"},main:{width:"80%",display:"flex",flexDirection:"column"},topBar:{display:"flex",justifyContent:"space-evenly",margin:"20px 25px 10px",padding:"5px",lineHeight:"60px"}})),Object(d.b)(e=>({timePlayed:e.client.timePlayed,emailVerified:e.client.emailVerified,authToken:e.client.authToken})))(y)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[16],{
+
+/***/ "./src/Privacy.jsx":
+/*!*************************!*\
+  !*** ./src/Privacy.jsx ***!
+  \*************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/List */ "./node_modules/@material-ui/core/esm/List/index.js");
+/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/ListItem */ "./node_modules/@material-ui/core/esm/ListItem/index.js");
+/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
+// react:
+ // material ui:
+
+
+
+
+
+
+ // redux:
+
+ // recompose:
+
+ // device sizes:
+
+
+
+let classNames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js"); // jss:
+
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    justifyContent: "center",
+    padding: "3%",
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.background.default
+  },
+  main: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    width: "98%",
+    height: "100%",
+    padding: "2%"
+  },
+  image: {
+    cursor: "pointer",
+    marginLeft: "auto",
+    marginRight: "auto"
+  },
+  back: {
+    marginBottom: "10px",
+    width: "30%",
+    marginLeft: "auto" // marginRight: "auto",
+
+  },
+  iframe: {
+    marginLeft: "auto",
+    marginRight: "auto",
+    width: "100%",
+    height: "6090px",
+    backgroundColor: "#FFF",
+    borderRadius: "5px"
+  },
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_9__["device"].laptop]: {}
+});
+
+class Privacy extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 0,
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      elevation: 3,
+      className: classes.main
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      variant: "contained",
+      className: classes.back,
+      onClick: () => {
+        this.props.history.push("/");
+      }
+    }, "Back"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("iframe", {
+      className: classes.iframe,
+      src: "https://remotegames.io/privacy.html",
+      frameBorder: "0"
+    })));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateSettings: settings => {
+      dispatch(updateSettings(settings));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_8__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_7__["connect"])(mapStateToProps, mapDispatchToProps))(Privacy));
+
+/***/ }),
+
+/***/ "./src/constants/DeviceSizes.js":
+/*!**************************************!*\
+  !*** ./src/constants/DeviceSizes.js ***!
+  \**************************************/
+/*! exports provided: device */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "device", function() { return device; });
+const size = {
+  mobile: "600px",
+  tablet: "768px",
+  laptop: "1024px",
+  desktop: "1440px"
+};
+const device = {
+  mobile: `@media (min-width: ${size.mobile})`,
+  tablet: `@media (min-width: ${size.tablet})`,
+  laptop: `@media (min-width: ${size.laptop})`,
+  desktop: `@media (min-width: ${size.desktop})`
+};
+
+/***/ })
+
+}]);
+//# sourceMappingURL=16.bundle.js.map
