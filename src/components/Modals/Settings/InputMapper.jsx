@@ -20,6 +20,7 @@ import {
 } from "@material-ui/core";
 
 // components:
+import MySlider from "src/components/General/MySlider.jsx";
 
 // recompose:
 import { compose } from "recompose";
@@ -232,7 +233,8 @@ class ControllerMapper extends Component {
 	render() {
 		const { classes } = this.props;
 
-		let DISPLAY_NAMES = this.props.type == "button" ? DISPLAY_BUTTON_NAMES : DISPLAY_AXIS_NAMES;
+		let DISPLAY_NAMES =
+			this.props.type == "button" ? DISPLAY_BUTTON_NAMES : DISPLAY_AXIS_NAMES;
 		let MAP_NAMES = this.props.type == "button" ? MAP_BUTTON_NAMES : MAP_AXIS_NAMES;
 
 		let inputHandler = window.inputHandler;
@@ -389,6 +391,45 @@ const styles = (theme) => ({
 			width: "10%",
 		},
 	},
+
+	// slider:
+	rootClass: {
+		width: "50%",
+	},
+	rail: {
+		backgroundColor: "#FFF",
+	},
+	track: {
+		backgroundColor: "#FFF",
+	},
+	thumb: {
+		backgroundColor: "#FFF",
+		"&:hover": {
+			boxShadow: "0px 0px 0px 9px rgba(255, 255, 255, 0.16)",
+		},
+		"&:active": {
+			boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)",
+		},
+	},
+	active: {
+		"span&": {
+			boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16) !important",
+		},
+	},
+
+	// slider settings:
+	sliderSettings: {
+		display: "flex",
+		flexDirection: "column",
+		margin: "15px 0px",
+
+		"& > div": {
+			display: "flex",
+			lineHeight: "28px",
+			justifyContent: "space-between",
+			padding: "10px",
+		},
+	},
 });
 
 class InputMapperModal extends Component {
@@ -427,10 +468,7 @@ class InputMapperModal extends Component {
 	render() {
 		const { classes } = this.props;
 
-		console.log("re-rendering InputMapperModal.");
-
-		// let which = this.props.history.location.pathname.indexOf("/controller") > -1 ? 0 : 1;
-		// let which = this.props.history.location.pathname.indexOf("/controller") > -1 ? 0 : 1;
+		console.log("re-rendering InputMapper.");
 
 		let inputHandler = window.inputHandler;
 		let gamepadWrapper = inputHandler.gamepadWrapper;
@@ -469,13 +507,6 @@ class InputMapperModal extends Component {
 
 		return (
 			<div className={classes.root}>
-				{/* <AppBar position="static">
-					<Toolbar>
-						<Typography variant="h6" color="inherit">
-							Controls
-						</Typography>
-					</Toolbar>
-				</AppBar> */}
 				<Tabs
 					centered
 					value={this.state.whichTab}
@@ -486,12 +517,6 @@ class InputMapperModal extends Component {
 					// scrollable
 					// scrollButtons="auto"
 					onChange={(event, value) => {
-						// if (value === 0) {
-						// 	this.props.history.replace("/settings/controls/controller");
-						// }
-						// if (value === 1) {
-						// 	this.props.history.replace("/settings/controls/keyboard");
-						// }
 						this.setState({ whichTab: value });
 					}}
 				>
@@ -521,6 +546,61 @@ class InputMapperModal extends Component {
 								Rescan
 							</Button>
 						</div>
+
+						<Paper elevation={4} className={classes.sliderSettings}>
+							<div>
+								Stick Deadzone: {inputHandler.controller.settings.axes[0].deadzone}
+								<MySlider
+									rootClass={classes.rootClass}
+									thumbClass={classes.thumb}
+									activeClass={classes.active}
+									railClass={classes.rail}
+									trackClass={classes.track}
+									min={0}
+									max={1}
+									step={0.01}
+									handleChange={(value) => {
+										for (
+											let i = 0;
+											i < inputHandler.controller.settings.axes.length;
+											i++
+										) {
+											inputHandler.controller.settings.axes[i].deadzone = value;
+										}
+										this.setState({});
+									}}
+									value={inputHandler.controller.settings.axes[0].deadzone}
+									bounceInterval={100}
+									delay={500}
+								/>
+							</div>
+							<div>
+								Stick Sensitivity: {inputHandler.controller.settings.axes[0].sensitivity}
+								<MySlider
+									rootClass={classes.rootClass}
+									thumbClass={classes.thumb}
+									activeClass={classes.active}
+									railClass={classes.rail}
+									trackClass={classes.track}
+									min={0}
+									max={3}
+									step={0.01}
+									handleChange={(value) => {
+										for (
+											let i = 0;
+											i < inputHandler.controller.settings.axes.length;
+											i++
+										) {
+											inputHandler.controller.settings.axes[i].sensitivity = value;
+										}
+										this.setState({});
+									}}
+									value={inputHandler.controller.settings.axes[0].sensitivity}
+									bounceInterval={100}
+									delay={500}
+								/>
+							</div>
+						</Paper>
 
 						<Paper elevation={2} style={{ marginTop: 15 }}>
 							<List className={classes.list}>

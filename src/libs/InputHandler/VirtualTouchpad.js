@@ -7,10 +7,6 @@ export class VirtualTouchpad {
 		this.changed = false;
 		this.cstate = new ControllerState();
 		this.tstate = new TouchState();
-
-		setTimeout(() => {
-			this.touchWrapper.init();
-		}, 2000);
 	}
 
 	// get controller state:

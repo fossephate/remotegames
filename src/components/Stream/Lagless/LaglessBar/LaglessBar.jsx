@@ -12,8 +12,8 @@ import Ping from "./Ping.jsx";
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 // icons:
-import KeyboardIcon from "@material-ui/icons/Keyboard";
-import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
+// import KeyboardIcon from "@material-ui/icons/Keyboard";
+// import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
 import SettingsIcon from "@material-ui/icons/Settings";
 // import { KeyboardIcon, VideogameAssetIcon} from "@material-ui/icons";
 import { Paper, Button } from "@material-ui/core";
@@ -53,14 +53,12 @@ class LaglessBar extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.handleChange = this.handleChange.bind(this);
-
 		this.state = {};
 	}
 
-	handleChange(value) {
+	handleChange = (value) => {
 		this.props.setVolume(parseInt(value));
-	}
+	};
 
 	render() {
 		const { classes } = this.props;

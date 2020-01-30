@@ -6,7 +6,12 @@ import { BaseDecoder } from "./decoder.js";
 import { Now, Fill } from "./utils.js";
 
 
-window.doneDecoding = false;
+// window.doneDecoding = false;
+
+// function skipCount(b) {
+// 	b.skipCount = 1;
+// 	setTimeout(skipCount, window.interval, b);
+// }
 
 export class MPEG1 extends BaseDecoder {
 	constructor(options) {
@@ -15,8 +20,8 @@ export class MPEG1 extends BaseDecoder {
 
 		this.onDecodeCallback = options.onVideoDecode;
 
-		var bufferSize = options.videoBufferSize || 512 * 1024;
-		var bufferMode = options.streaming
+		let bufferSize = options.videoBufferSize || 512 * 1024;
+		let bufferMode = options.streaming
 			? BitBuffer.MODE.EVICT
 			: BitBuffer.MODE.EXPAND;
 
@@ -30,6 +35,10 @@ export class MPEG1 extends BaseDecoder {
 		this.decodeFirstFrame = options.decodeFirstFrame !== false;
 
 		this.frameRate = 30;
+
+		// skip rendering x times:
+		// 1/28/20
+		// this.skipCount = 0;
 
 		// Picture Layer
 
@@ -80,18 +89,9 @@ export class MPEG1 extends BaseDecoder {
 
 	}
 
-	write = function(pts, buffers) {
-		// BaseDecoder.write(this, pts, buffers);
+	write = (pts, buffers) => {
 
-		if (this.collectTimestamps) {
-			if (this.timestamps.length === 0) {
-				this.startTime = pts;
-				this.decodedTime = pts;
-			}
-			this.timestamps.push({ index: this.bytesWritten << 3, time: pts });
-		}
-		this.bytesWritten += this.bufferWrite(buffers);
-		this.canPlay = true;
+		this.baseWrite(pts, buffers);
 
 		if (!this.hasSequenceHeader) {
 			if (this.bits.findStartCode(MPEG1.START.SEQUENCE) === -1) {
@@ -117,23 +117,23 @@ export class MPEG1 extends BaseDecoder {
 		// }
 	};
 
-	decode = function() {
+	decode = () => {
 
-		var startTime = Now();
+		let startTime = Now();
 		
 		if (!this.hasSequenceHeader) {
 			return false;
 		}
 
 		if (this.bits.findStartCode(MPEG1.START.PICTURE) === -1) {
-			var bufferedBytes = this.bits.byteLength - (this.bits.index >> 3);
+			// let bufferedBytes = this.bits.byteLength - (this.bits.index >> 3);
 			return false;
 		}
 
 		this.decodePicture();
 		this.advanceDecodedTime(1 / this.frameRate);
 
-		var elapsedTime = Now() - startTime;
+		let elapsedTime = Now() - startTime;
 		if (this.onDecodeCallback) {
 			this.onDecodeCallback(this, elapsedTime);
 		}
@@ -141,8 +141,8 @@ export class MPEG1 extends BaseDecoder {
 		return true;
 	};
 
-	readHuffman = function(codeTable) {
-		var state = 0;
+	readHuffman = (codeTable) => {
+		let state = 0;
 		do {
 			state = codeTable[state + this.bits.read(1)];
 		} while (state >= 0 && codeTable[state] !== 0);
@@ -177,15 +177,15 @@ export class MPEG1 extends BaseDecoder {
 		}
 
 		if (this.bits.read(1)) { // load custom intra quant matrix?
-			for (var i = 0; i < 64; i++) {
+			for (let i = 0; i < 64; i++) {
 				this.customIntraQuantMatrix[MPEG1.ZIG_ZAG[i]] = this.bits.read(8);
 			}
 			this.intraQuantMatrix = this.customIntraQuantMatrix;
 		}
 
 		if (this.bits.read(1)) { // load custom non intra quant matrix?
-			for (var i = 0; i < 64; i++) {
-				var idx = MPEG1.ZIG_ZAG[i];
+			for (let i = 0; i < 64; i++) {
+				let idx = MPEG1.ZIG_ZAG[i];
 				this.customNonIntraQuantMatrix[idx] = this.bits.read(8);
 			}
 			this.nonIntraQuantMatrix = this.customNonIntraQuantMatrix;
@@ -194,7 +194,7 @@ export class MPEG1 extends BaseDecoder {
 		this.hasSequenceHeader = true;
 	};
 
-	initBuffers = function() {
+	initBuffers = () => {
 		this.intraQuantMatrix = MPEG1.DEFAULT_INTRA_QUANT_MATRIX;
 		this.nonIntraQuantMatrix = MPEG1.DEFAULT_NON_INTRA_QUANT_MATRIX;
 
@@ -233,7 +233,7 @@ export class MPEG1 extends BaseDecoder {
 
 	// Picture Layer
 
-	decodePicture = function(skipOutput) {
+	decodePicture = (skipOutput) => {
 		this.currentFrame++;
 
 		this.bits.skip(10); // skip temporalReference
@@ -257,7 +257,7 @@ export class MPEG1 extends BaseDecoder {
 			this.forwardF = 1 << this.forwardRSize;
 		}
 
-		var code = 0;
+		let code = 0;
 		do {
 			code = this.bits.findNextStartCode();
 		} while (code === MPEG1.START.EXTENSION || code === MPEG1.START.USER_DATA );
@@ -275,16 +275,19 @@ export class MPEG1 extends BaseDecoder {
 		}
 
 		// Invoke decode callbacks
-		if (this.destination) {
+		if (this.destination/* && this.skipCount === 0*/) {
 			this.destination.render(this.currentY, this.currentCr, this.currentCb, true);
 		}
+		// if (this.skipCount > 0) {
+		// 	this.skipCount -= 1;
+		// }
 
 		// If this is a reference picture then rotate the prediction pointers
 		if (
 			this.pictureType === MPEG1.PICTURE_TYPE.INTRA ||
 			this.pictureType === MPEG1.PICTURE_TYPE.PREDICTIVE
 		) {
-			var
+			let
 				tmpY = this.forwardY,
 				tmpY32 = this.forwardY32,
 				tmpCr = this.forwardCr,
@@ -311,7 +314,7 @@ export class MPEG1 extends BaseDecoder {
 
 	// Slice Layer
 
-	decodeSlice = function(slice) {
+	decodeSlice = (slice) => {
 		this.sliceBegin = true;
 		this.macroblockAddress = (slice - 1) * this.mbWidth - 1;
 
@@ -337,9 +340,9 @@ export class MPEG1 extends BaseDecoder {
 
 	// Macroblock Layer
 
-	decodeMacroblock = function() {
+	decodeMacroblock = () => {
 		// Decode macroblock_address_increment
-		var
+		let
 			increment = 0,
 			t = this.readHuffman(MPEG1.MACROBLOCK_ADDRESS_INCREMENT);
 
@@ -425,11 +428,11 @@ export class MPEG1 extends BaseDecoder {
 		}
 
 		// Decode blocks
-		var cbp = ((this.macroblockType & 0x02) !== 0)
+		let cbp = ((this.macroblockType & 0x02) !== 0)
 			? this.readHuffman(MPEG1.CODE_BLOCK_PATTERN)
 			: (this.macroblockIntra ? 0x3f : 0);
 
-		for (var block = 0, mask = 0x20; block < 6; block++) {
+		for (let block = 0, mask = 0x20; block < 6; block++) {
 			if ((cbp & mask) !== 0) {
 				this.decodeBlock(block);
 			}

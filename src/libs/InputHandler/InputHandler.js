@@ -99,10 +99,6 @@ export default class InputHandler {
 		this.keyboardWrapper = new KeyboardWrapper();
 		this.touchWrapper = new TouchWrapper();
 
-		// for debugging:
-		// window.gamepadWrapper = this.gamepadWrapper;
-		// window.keyboardWrapper = this.keyboardWrapper;
-
 		this.isMobile = isMobile;
 
 		// current device being used:

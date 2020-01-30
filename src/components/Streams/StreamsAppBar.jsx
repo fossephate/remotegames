@@ -160,11 +160,15 @@ class StreamsAppBar extends PureComponent {
 	};
 
 	handleDownloadHostFiles = () => {
-		window.location.href = "https://remotegames.io/8099/download/";
+		window.open("https://remotegames.io/8099/download/", "_blank");
 	};
 
-	handleDiscord = () => {
-		window.location.href = "https://discord.io/rgio/";
+	handleProjectDiscord = () => {
+		window.open("https://discord.io/rgio/", "_blank");
+	};
+
+	handleDevDiscord = () => {
+		window.open("https://discord.io/fosse/", "_blank");
 	};
 
 	render() {
@@ -230,8 +234,11 @@ class StreamsAppBar extends PureComponent {
 				<MenuItem onClick={this.handleDownloadHostFiles}>
 					<p>Download Host Files</p>
 				</MenuItem>
-				<MenuItem onClick={this.handleDiscord}>
-					<p>Discord Server</p>
+				<MenuItem onClick={this.handleProjectDiscord}>
+					<p>Project Discord Server</p>
+				</MenuItem>
+				<MenuItem onClick={this.handleDevDiscord}>
+					<p>Dev's Discord Server</p>
 				</MenuItem>
 			</Menu>
 		);
@@ -289,9 +296,17 @@ class StreamsAppBar extends PureComponent {
 									<Button
 										color="default"
 										variant="contained"
-										onClick={this.handleDiscord}
+										onClick={this.handleProjectDiscord}
 									>
-										Discord Server
+										Project Discord
+									</Button>
+									<div style={{ width: "10px" }} />
+									<Button
+										color="default"
+										variant="contained"
+										onClick={this.handleDevDiscord}
+									>
+										Dev's Discord
 									</Button>
 									{/* <IconButton color="inherit">
 										<Badge badgeContent={0} color="secondary">

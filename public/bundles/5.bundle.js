@@ -20,21 +20,25 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var src_actions_info_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/actions/info.js */ "./src/actions/info.js");
 /* harmony import */ var src_sagas_stream__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! src/sagas/stream */ "./src/sagas/stream/index.js");
 /* harmony import */ var src_sockets_stream__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/sockets/stream */ "./src/sockets/stream/index.js");
-/* harmony import */ var components_General_Loading_jsx__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! components/General/Loading.jsx */ "./src/components/General/Loading.jsx");
-/* harmony import */ var src_components_Streams_StreamsAppBar_jsx__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! src/components/Streams/StreamsAppBar.jsx */ "./src/components/Streams/StreamsAppBar.jsx");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var src_components_Modals_SettingsModal_jsx__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! src/components/Modals/SettingsModal.jsx */ "./src/components/Modals/SettingsModal.jsx");
-/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
-/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
-/* harmony import */ var libs_InputHandler_InputHandler_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! libs/InputHandler/InputHandler.js */ "./src/libs/InputHandler/InputHandler.js");
-/* harmony import */ var libs_tools_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! libs/tools.js */ "./src/libs/tools.js");
-/* harmony import */ var localforage__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! localforage */ "./node_modules/localforage/dist/localforage.js");
-/* harmony import */ var localforage__WEBPACK_IMPORTED_MODULE_18___default = /*#__PURE__*/__webpack_require__.n(localforage__WEBPACK_IMPORTED_MODULE_18__);
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
-/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_19__);
-/* harmony import */ var libs_lagless_lagless2_js__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! libs/lagless/lagless2.js */ "./src/libs/lagless/lagless2.js");
-/* harmony import */ var libs_lagless_lagless4_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! libs/lagless/lagless4.js */ "./src/libs/lagless/lagless4.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var src_components_Modals_SettingsModal_jsx__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! src/components/Modals/SettingsModal.jsx */ "./src/components/Modals/SettingsModal.jsx");
+/* harmony import */ var notistack__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! notistack */ "./node_modules/notistack/build/index.js");
+/* harmony import */ var notistack__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(notistack__WEBPACK_IMPORTED_MODULE_12__);
+/* harmony import */ var components_General_Loading_jsx__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! components/General/Loading.jsx */ "./src/components/General/Loading.jsx");
+/* harmony import */ var src_components_Streams_StreamsAppBar_jsx__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! src/components/Streams/StreamsAppBar.jsx */ "./src/components/Streams/StreamsAppBar.jsx");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! src/constants/DeviceSizes.js */ "./src/constants/DeviceSizes.js");
+/* harmony import */ var libs_InputHandler_InputHandler_js__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! libs/InputHandler/InputHandler.js */ "./src/libs/InputHandler/InputHandler.js");
+/* harmony import */ var libs_tools_js__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! libs/tools.js */ "./src/libs/tools.js");
+/* harmony import */ var localforage__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! localforage */ "./node_modules/localforage/dist/localforage.js");
+/* harmony import */ var localforage__WEBPACK_IMPORTED_MODULE_19___default = /*#__PURE__*/__webpack_require__.n(localforage__WEBPACK_IMPORTED_MODULE_19__);
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! socket.io-client */ "./node_modules/socket.io-client/lib/index.js");
+/* harmony import */ var socket_io_client__WEBPACK_IMPORTED_MODULE_20___default = /*#__PURE__*/__webpack_require__.n(socket_io_client__WEBPACK_IMPORTED_MODULE_20__);
+/* harmony import */ var libs_lagless_lagless2_js__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! libs/lagless/lagless2.js */ "./src/libs/lagless/lagless2.js");
+/* harmony import */ var libs_lagless_lagless4_js__WEBPACK_IMPORTED_MODULE_22__ = __webpack_require__(/*! libs/lagless/lagless4.js */ "./src/libs/lagless/lagless4.js");
 function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // react:
 // import React, { Component } from "react";
@@ -51,6 +55,12 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 // import spawn from "redux-saga";
 
 
+ // material ui:
+
+ // import { Snackbar } from "@material-ui/core";
+
+ // notistack:
+
  // main components:
 
 
@@ -60,14 +70,8 @@ function _extends() { _extends = Object.assign || function (target) { for (var i
 
 const Picture = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __webpack_require__.e(/*! import() */ 8).then(__webpack_require__.bind(null, /*! src/components/Stream/Picture.jsx */ "./src/components/Stream/Picture.jsx")));
 const Chat = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => Promise.all(/*! import() */[__webpack_require__.e(7), __webpack_require__.e(12)]).then(__webpack_require__.bind(null, /*! src/components/Stream/Chat/Chat.jsx */ "./src/components/Stream/Chat/Chat.jsx")));
-const StreamInfo = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! src/components/Stream/StreamInfo.jsx */ "./src/components/Stream/StreamInfo.jsx"))); // components:
+const StreamInfo = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __webpack_require__.e(/*! import() */ 9).then(__webpack_require__.bind(null, /*! src/components/Stream/StreamInfo/StreamInfo.jsx */ "./src/components/Stream/StreamInfo/StreamInfo.jsx"))); // components:
 // secondary components:
-// material ui:
-
- // import { Snackbar } from "@material-ui/core";
-
- // import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
-// import { Client } from "./parsec/src/client.js";
 // recompose:
 
  // device sizes:
@@ -77,7 +81,6 @@ const StreamInfo = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __we
 
 
 
-window.localforage = localforage__WEBPACK_IMPORTED_MODULE_18___default.a;
  // rr:
 
 
@@ -97,7 +100,7 @@ const styles = {
     // accomodate for grid gap:
     padding: "0px 5px 5px 5px"
   },
-  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_15__["device"].tablet]: {
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_16__["device"].tablet]: {
     root: {
       gridTemplateColumns: "minmax(50%, 75%) minmax(300px, 25%)",
       gridTemplateAreas: `
@@ -106,106 +109,259 @@ const styles = {
 				"info info"`
     }
   },
-  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_15__["device"].laptop]: {
+  [src_constants_DeviceSizes_js__WEBPACK_IMPORTED_MODULE_16__["device"].laptop]: {
     root: {}
   }
 };
 
 class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
-  constructor(props) {
-    super(props);
+  constructor(_props) {
+    super(_props);
+
+    _defineProperty(this, "recieveStream", (data, tryCount) => {
+      this.props.updateStreamInfo({ ...data
+      });
+
+      if (this.stream) {
+        this.stream.pause();
+      }
+
+      if (this.hostConnection) {
+        this.hostConnection.removeAllListeners();
+        this.hostConnection.destroy();
+      } // if (!this.props.client.loggedIn) {
+      // 	if (tryCount < 3) {
+      // 		setTimeout(() => {
+      // 			this.recieveStream(data, tryCount + 1);
+      // 		}, 1000);
+      // 		return;
+      // 	} else {
+      // 		alert("You need to login to see the stream!");
+      // 		return;
+      // 	}
+      // }
+
+
+      this.hostConnection = socket_io_client__WEBPACK_IMPORTED_MODULE_20___default()(`https://${data.hostServerIP}`, {
+        path: `/${data.hostServerPort}/socket.io`,
+        transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"]
+      });
+      window.hostConnection = this.hostConnection; // listen to events and dispatch actions:
+
+      Object(src_sockets_stream__WEBPACK_IMPORTED_MODULE_9__["default"])(this.hostConnection, this.props.store.dispatch); // handle outgoing events & listen to actions:
+      // and maybe dispatch more actions:
+
+      this.props.sagaMiddleware.run(src_sagas_stream__WEBPACK_IMPORTED_MODULE_8__["default"], {
+        socket: this.hostConnection,
+        dispatch: this.props.store.dispatch
+      });
+      window.sagaMiddleware = this.props.sagaMiddleware;
+
+      if (!data.videoServerIP) {
+        console.log("something went wrong, (video server IP missing)");
+        return;
+      } // lagless setup:
+
+
+      if (this.props.streamType === "mpeg2") {
+        this.stream = new libs_lagless_lagless2_js__WEBPACK_IMPORTED_MODULE_21__["default"]({
+          url: `https://${data.videoServerIP}`,
+          path: `/${data.videoServerPort}/socket.io`,
+          audio: true,
+          video: true
+        });
+      } else if (this.props.streamType === "webRTC") {
+        this.stream = new libs_lagless_lagless4_js__WEBPACK_IMPORTED_MODULE_22__["default"]({
+          url: `https://${data.videoServerIP}`,
+          path: `/${data.videoServerPort}/socket.io`
+        });
+        this.stream.run();
+      } else {
+        alert("stream type error: " + this.props.streamType);
+      }
+
+      setTimeout(() => {
+        if (this.props.streamType === "mpeg2") {
+          this.stream.resume(document.getElementById("videoCanvas"), document.getElementById("graphicsCanvas"));
+        } else if (this.props.streamType === "webRTC") {
+          this.stream.resume(document.getElementById("videoCanvas"));
+        }
+      }, 500);
+      window.stream = this.stream;
+      setTimeout(() => {
+        this.setStreamVolume(this.props);
+      }, 500);
+      setTimeout(() => {
+        this.setStreamVolume(this.props);
+      }, 5000);
+    });
+
+    _defineProperty(this, "afk", () => {
+      if (window.disableAFK) {
+        return;
+      }
+
+      if (this.stream) {
+        this.stream.pause();
+      }
+
+      if (this.hostConnection) {
+        this.hostConnection.removeAllListeners();
+        this.hostConnection.destroy();
+      }
+
+      alert("Are you still there?");
+      window.location.reload();
+    });
+
+    _defineProperty(this, "exitFullscreen", () => {
+      if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+        // this.toggleFullscreen(false);
+        // from checkbox settings:
+        // todo: not this:
+        console.log("exiting fullscreen"); // $("body").removeClass("hideScrollbar");
+
+        this.props.updateSettings({
+          fullscreen: false,
+          largescreen: false,
+          controllerView: true,
+          hideChat: false,
+          hideNav: false
+        }); // turn off mouse controls:
+
+        this.inputHandler.mouse.toggle(false);
+      }
+
+      window.dispatchEvent(new Event("resize"));
+    });
+
+    _defineProperty(this, "sendControllerState", () => {
+      if (!this.inputHandler.changed) {
+        return;
+      } else {
+        this.inputHandler.changed = false;
+      }
+
+      if (window.banned) {
+        return;
+      }
+
+      clearTimeout(this.afkTimer);
+      this.afkTimer = setTimeout(this.afk, this.afkTime);
+
+      if (this.inputHandler.currentInputMode == "keyboard" && !this.props.settings.keyboardControls) {
+        return;
+      }
+
+      if (this.inputHandler.currentInputMode == "controller" && !this.props.settings.controllerControls) {
+        return;
+      }
+
+      if (this.inputHandler.currentInputMode == "touchpad" && !this.props.settings.touchControls) {
+        return;
+      } // return if chat is focused:
+      // if (document.activeElement === document.getElementById("messageBox")) {
+
+
+      if (document.activeElement.type === "text" || document.activeElement.type === "textarea" || document.activeElement === document.getElementById("messageBox")) {
+        return;
+      } // return if trying to re-map inputs:
+
+
+      if (window.location.pathname.indexOf("/controls") > -1) {
+        return;
+      }
+
+      if (window.location.pathname.indexOf("/settings") > -1) {
+        return;
+      } // if not in the queue, attempt to join it:
+
+
+      if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.client.userid) == -1) {
+        this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
+      } // if (!this.props.loggedIn) {
+      // 	this.props.enqueueSnackbar("You need to login first!", {
+      // 		variant: "warning",
+      // 		preventDuplicate: true,
+      // 		anchorOrigin: {
+      // 			vertical: "top",
+      // 			horizontal: "left",
+      // 		},
+      // 		autoHideDuration: 1000,
+      // 	});
+      // }
+
+
+      if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.client.userid) > 0 && this.props.controlQueues[this.props.settings.currentPlayer].length > 0) {
+        this.props.enqueueSnackbar("It's not your turn yet!", {
+          variant: "warning",
+          preventDuplicate: true,
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "left"
+          },
+          autoHideDuration: 1000
+        });
+        return;
+      }
+
+      let obj = { ...this.inputHandler.getState(),
+        cNum: -1
+      };
+      obj.btns = obj.controller.btns;
+      obj.axes = obj.controller.axes;
+      obj.keys = obj.keyboard.keys; // for (let i = 0; i < this.props.controlQueues.length; i++) {
+      // 	if (this.props.controlQueues[i][0] == this.props.client.userid) {
+      // 		obj.cNum = i;
+      // 	}
+      // }
+
+      if (obj.cNum == -1) {
+        obj.cNum = this.props.settings.currentPlayer;
+      }
+
+      let buttons = obj.controller.btns.toString(2);
+      buttons = "0".repeat(18).substr(buttons.length) + buttons;
+
+      if (!this.props.settings.realKeyboardMouse) {
+        console.log(obj.cNum, buttons, Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_18__["getStickString"])(obj.axes[0]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_18__["getStickString"])(obj.axes[1]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_18__["getStickString"])(obj.axes[2]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_18__["getStickString"])(obj.axes[3]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_18__["getStickString"])(obj.axes[4]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_18__["getStickString"])(obj.axes[5]), Math.random().toFixed(3) // fixedLengthString(obj.axes[0], "0", 3),
+        // fixedLengthString(obj.axes[1], "0", 3),
+        // fixedLengthString(obj.axes[2], "0", 3),
+        // fixedLengthString(obj.axes[3], "0", 3),
+        // fixedLengthString(obj.axes[4], "0", 3),
+        // fixedLengthString(obj.axes[5], "0", 3),
+        );
+      } else {} // console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
+      // let s1x = getStickString(obj.axes[0]);
+      // let s1y = getStickString(obj.axes[1]);
+      // console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
+
+
+      if (this.hostConnection) {
+        // todo: rename to sendInputState
+        this.hostConnection.emit("sendControllerState", obj);
+      } else {
+        console.log("the socket is null!");
+      }
+    });
+
+    _defineProperty(this, "setStreamVolume", props => {
+      if (this.stream) {
+        if (this.props.streamType === "mpeg2") {
+          this.stream.player.volume = props.settings.volume / 100;
+        } else if (this.props.streamType === "webRTC") {}
+      }
+    });
+
     this.afkTime = 1000 * 60 * 60; // 1 hour
 
     this.afkTimer = null;
-    this.stream = null; // window.stream = this.stream;
-
+    this.stream = null;
     this.hostConnection = null;
-    this.setStreamVolume = this.setStreamVolume.bind(this);
-    this.exitFullscreen = this.exitFullscreen.bind(this);
-    this.sendControllerState = this.sendControllerState.bind(this);
-    this.afk = this.afk.bind(this);
-    this.recieveStream = this.recieveStream.bind(this);
-    this.state = {}; // let isMobile = window.innerWidth < 400;
-    // let isMobile = window.innerWidth < 800;
-
-    this.inputHandler = new libs_InputHandler_InputHandler_js__WEBPACK_IMPORTED_MODULE_16__["default"](); // todo:
+    this.state = {};
+    this.inputHandler = new libs_InputHandler_InputHandler_js__WEBPACK_IMPORTED_MODULE_17__["default"](); // todo:
 
     window.inputHandler = this.inputHandler; // for lagless canvas
-  }
-
-  recieveStream(data, tryCount) {
-    this.props.updateStreamInfo({ ...data
-    });
-
-    if (this.stream) {
-      this.stream.pause();
-    }
-
-    if (this.hostConnection) {
-      this.hostConnection.removeAllListeners();
-      this.hostConnection.destroy();
-    }
-
-    if (!this.props.client.loggedIn) {
-      if (tryCount < 3) {
-        setTimeout(() => {
-          this.recieveStream(data, tryCount + 1);
-        }, 1000);
-      } else {
-        alert("You need to login to see the stream!");
-        return;
-      }
-    }
-
-    this.hostConnection = socket_io_client__WEBPACK_IMPORTED_MODULE_19___default()(`https://${data.hostServerIP}`, {
-      path: `/${data.hostServerPort}/socket.io`,
-      transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"]
-    });
-    window.hostConnection = this.hostConnection; // listen to events and dispatch actions:
-
-    Object(src_sockets_stream__WEBPACK_IMPORTED_MODULE_9__["default"])(this.hostConnection, this.props.store.dispatch); // handle outgoing events & listen to actions:
-    // and maybe dispatch more actions:
-
-    this.props.sagaMiddleware.run(src_sagas_stream__WEBPACK_IMPORTED_MODULE_8__["default"], {
-      socket: this.hostConnection,
-      dispatch: this.props.store.dispatch
-    });
-    window.sagaMiddleware = this.props.sagaMiddleware;
-
-    if (!data.videoServerIP) {
-      console.log("something went wrong, (video server IP missing)");
-      return;
-    } // lagless setup:
-
-
-    if (this.props.streamType === "mpeg2") {
-      this.stream = new libs_lagless_lagless2_js__WEBPACK_IMPORTED_MODULE_20__["default"]({
-        url: `https://${data.videoServerIP}`,
-        path: `/${data.videoServerPort}/socket.io`,
-        audio: true,
-        video: true
-      });
-    } else if (this.props.streamType === "webRTC") {
-      this.stream = new libs_lagless_lagless4_js__WEBPACK_IMPORTED_MODULE_21__["default"]({
-        url: `https://${data.videoServerIP}`,
-        path: `/${data.videoServerPort}/socket.io`
-      });
-      this.stream.run();
-    } else {
-      alert("stream type error: " + this.props.streamType);
-    }
-
-    window.stream = this.stream;
-    this.setStreamVolume(this.props);
-    setTimeout(() => {
-      this.setStreamVolume(this.props);
-    }, 5000);
-
-    if (this.props.streamType === "mpeg2") {
-      this.stream.resume(document.getElementById("videoCanvas"), document.getElementById("graphicsCanvas"));
-    } else if (this.props.streamType === "webRTC") {
-      this.stream.resume(document.getElementById("videoCanvas"));
-    }
   }
 
   componentDidMount() {
@@ -296,6 +452,10 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     // }
 
 
+    for (let i = 0; i < this.props.playerCount; i++) {
+      this.props.leavePlayerControlQueue(i);
+    }
+
     if (this.hostConnection) {
       this.hostConnection.removeAllListeners();
       this.hostConnection.destroy();
@@ -304,156 +464,13 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     this.props.updateMessages([]); // save settings on close:
 
     console.log("saving settings");
-    localforage__WEBPACK_IMPORTED_MODULE_18___default.a.setItem("settings", JSON.stringify(this.props.settings));
-  }
-
-  afk() {
-    if (window.disableAFK) {
-      return;
-    }
-
-    if (this.stream) {
-      this.stream.pause();
-    }
-
-    if (this.hostConnection) {
-      this.hostConnection.removeAllListeners();
-      this.hostConnection.destroy();
-    }
-
-    alert("Are you still there?");
-    window.location.reload();
-  } // https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
-
-
-  exitFullscreen() {
-    if (!document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-      // this.toggleFullscreen(false);
-      // from checkbox settings:
-      // todo: not this:
-      console.log("exiting fullscreen"); // $("body").removeClass("hideScrollbar");
-
-      this.props.updateSettings({
-        fullscreen: false,
-        largescreen: false,
-        controllerView: true,
-        hideChat: false,
-        hideNav: false
-      }); // turn off mouse controls:
-
-      this.inputHandler.mouse.toggle(false);
-    }
-
-    window.dispatchEvent(new Event("resize"));
+    localforage__WEBPACK_IMPORTED_MODULE_19___default.a.setItem("settings", JSON.stringify(this.props.settings));
   }
 
   resetSettings() {
-    Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_17__["deleteAllCookies"])(); // localforage.clear().then(() => {
+    Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_18__["deleteAllCookies"])(); // localforage.clear().then(() => {
     // 	window.location.href = "https://remotegames.io";
     // });
-  }
-
-  sendControllerState() {
-    if (!this.init) {
-      this.init = true;
-      this.oldInputState = JSON.stringify(this.inputHandler.getState());
-    }
-
-    if (!this.inputHandler.changed) {
-      return;
-    } else {
-      this.inputHandler.changed = false;
-    }
-
-    if (window.banned) {
-      return;
-    }
-
-    clearTimeout(this.afkTimer);
-    this.afkTimer = setTimeout(this.afk, this.afkTime);
-
-    if (this.inputHandler.currentInputMode == "keyboard" && !this.props.settings.keyboardControls) {
-      return;
-    }
-
-    if (this.inputHandler.currentInputMode == "controller" && !this.props.settings.controllerControls) {
-      return;
-    }
-
-    if (this.inputHandler.currentInputMode == "touchpad" && !this.props.settings.touchControls) {
-      return;
-    } // return if chat is focused:
-    // if (document.activeElement === document.getElementById("messageBox")) {
-
-
-    if (document.activeElement.type === "text" || document.activeElement.type === "textarea" || document.activeElement === document.getElementById("messageBox")) {
-      return;
-    } // return if trying to re-map inputs:
-
-
-    if (window.location.pathname.indexOf("/controls") > -1) {
-      return;
-    }
-
-    if (window.location.pathname.indexOf("/settings") > -1) {
-      return;
-    } // if not in the queue, attempt to join it:
-
-
-    if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.client.userid) == -1) {
-      this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
-    }
-
-    if (this.props.controlQueues[this.props.settings.currentPlayer].indexOf(this.props.client.userid) > 0 && this.props.controlQueues[this.props.settings.currentPlayer].length > 0) {
-      return;
-    }
-
-    let obj = { ...this.inputHandler.getState(),
-      cNum: -1
-    };
-    obj.btns = obj.controller.btns;
-    obj.axes = obj.controller.axes;
-    obj.keys = obj.keyboard.keys; // for (let i = 0; i < this.props.controlQueues.length; i++) {
-    // 	if (this.props.controlQueues[i][0] == this.props.client.userid) {
-    // 		obj.cNum = i;
-    // 	}
-    // }
-
-    if (obj.cNum == -1) {
-      obj.cNum = this.props.settings.currentPlayer;
-    }
-
-    let buttons = obj.controller.btns.toString(2);
-    buttons = "0".repeat(18).substr(buttons.length) + buttons;
-
-    if (!this.props.settings.realKeyboardMouse) {
-      console.log(obj.cNum, buttons, Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_17__["getStickString"])(obj.axes[0]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_17__["getStickString"])(obj.axes[1]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_17__["getStickString"])(obj.axes[2]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_17__["getStickString"])(obj.axes[3]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_17__["getStickString"])(obj.axes[4]), Object(libs_tools_js__WEBPACK_IMPORTED_MODULE_17__["getStickString"])(obj.axes[5]), Math.random().toFixed(3) // fixedLengthString(obj.axes[0], "0", 3),
-      // fixedLengthString(obj.axes[1], "0", 3),
-      // fixedLengthString(obj.axes[2], "0", 3),
-      // fixedLengthString(obj.axes[3], "0", 3),
-      // fixedLengthString(obj.axes[4], "0", 3),
-      // fixedLengthString(obj.axes[5], "0", 3),
-      );
-    } else {} // console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
-    // let s1x = getStickString(obj.axes[0]);
-    // let s1y = getStickString(obj.axes[1]);
-    // console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
-
-
-    if (this.hostConnection) {
-      // todo: rename to sendInputState
-      this.hostConnection.emit("sendControllerState", obj);
-    } else {
-      console.log("the socket is null!");
-    }
-  }
-
-  setStreamVolume(props) {
-    if (this.stream) {
-      if (this.props.streamType === "mpeg2") {
-        this.stream.player.volume = props.settings.volume / 100;
-      } else if (this.props.streamType === "webRTC") {}
-    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -514,17 +531,17 @@ class Stream extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.root
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_Streams_StreamsAppBar_jsx__WEBPACK_IMPORTED_MODULE_11__["default"], {
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_Streams_StreamsAppBar_jsx__WEBPACK_IMPORTED_MODULE_14__["default"], {
       history: this.props.history,
       hide: this.props.settings.fullscreen || this.props.settings.hideNav
     }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Suspense"], {
-      fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(components_General_Loading_jsx__WEBPACK_IMPORTED_MODULE_10__["default"], null)
+      fallback: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(components_General_Loading_jsx__WEBPACK_IMPORTED_MODULE_13__["default"], null)
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Picture, null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(Chat, {
       hide: this.props.settings.hideChat
     }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(StreamInfo, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Switch"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
       path: "/settings",
       render: props => {
-        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_Modals_SettingsModal_jsx__WEBPACK_IMPORTED_MODULE_13__["default"], _extends({}, props, {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_Modals_SettingsModal_jsx__WEBPACK_IMPORTED_MODULE_11__["default"], _extends({}, props, {
           inputHandler: this.inputHandler
         }));
       }
@@ -566,7 +583,7 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_14__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_12__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps))(Stream));
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_15__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_10__["withStyles"])(styles), notistack__WEBPACK_IMPORTED_MODULE_12__["withSnackbar"], Object(react_redux__WEBPACK_IMPORTED_MODULE_2__["connect"])(mapStateToProps, mapDispatchToProps))(Stream));
 
 /***/ }),
 
@@ -822,6 +839,113 @@ class MyCheckbox extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
 
 /***/ }),
 
+/***/ "./src/components/General/MySlider.jsx":
+/*!*********************************************!*\
+  !*** ./src/components/General/MySlider.jsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+// react:
+ // material ui:
+
+
+ // jss:
+
+const styles = theme => ({
+  slider: {
+    width: "70%"
+  }
+});
+
+class MySlider extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.handleLocalChange = this.handleLocalChange.bind(this);
+    this.bounce = this.bounce.bind(this);
+    this.state = {
+      value: 0
+    };
+    this.active = false;
+    this.bounceTimer = null;
+    this.countDown = 0;
+    this.countUp = 0;
+  }
+
+  bounce() {
+    this.countDown -= 100;
+    this.countUp += 50;
+
+    if (this.countUp >= 100) {
+      this.countUp = 0;
+      this.props.handleChange(this.state.value);
+    }
+
+    if (this.countDown <= 0) {
+      this.active = false;
+      this.countDown = 0;
+      clearInterval(this.bounceTimer);
+
+      if (typeof this.props.handleAfterChange != "undefined") {
+        this.props.handleAfterChange(this.state.value); // trigger a re-render after the handleAfterChange:
+
+        setTimeout(() => {
+          this.setState({
+            value: Math.random()
+          });
+        }, 200);
+      }
+    }
+  }
+
+  handleLocalChange(event, value) {
+    this.setState({
+      value: value
+    });
+
+    if (typeof this.props.handleChange != "undefined") {
+      this.countDown = 1000;
+
+      if (!this.active) {
+        this.active = true;
+        this.props.handleChange(value);
+        this.bounceTimer = setInterval(this.bounce, this.props.bounceInterval || 100);
+      }
+    }
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Slider"], {
+      classes: {
+        root: this.props.rootClass || classes.slider,
+        thumb: this.props.thumbClass,
+        active: this.props.activeClass,
+        rail: this.props.railClass,
+        track: this.props.trackClass
+      },
+      min: this.props.min,
+      max: this.props.max,
+      step: this.props.step,
+      onChange: this.handleLocalChange,
+      value: (this.active ? this.state.value : this.props.value) || 0
+    });
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles)(MySlider));
+
+/***/ }),
+
 /***/ "./src/components/General/ThemeSelector.jsx":
 /*!**************************************************!*\
   !*** ./src/components/General/ThemeSelector.jsx ***!
@@ -961,37 +1085,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
-/* harmony import */ var _material_ui_core_Tabs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Tabs */ "./node_modules/@material-ui/core/esm/Tabs/index.js");
-/* harmony import */ var _material_ui_core_Tab__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/Tab */ "./node_modules/@material-ui/core/esm/Tab/index.js");
-/* harmony import */ var _material_ui_core_Paper__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js");
-/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
-/* harmony import */ var _material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/MenuItem */ "./node_modules/@material-ui/core/esm/MenuItem/index.js");
-/* harmony import */ var _material_ui_core_Select__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/Select */ "./node_modules/@material-ui/core/esm/Select/index.js");
-/* harmony import */ var _material_ui_core_OutlinedInput__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/OutlinedInput */ "./node_modules/@material-ui/core/esm/OutlinedInput/index.js");
-/* harmony import */ var _material_ui_core_List__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/List */ "./node_modules/@material-ui/core/esm/List/index.js");
-/* harmony import */ var _material_ui_core_ListItem__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/ListItem */ "./node_modules/@material-ui/core/esm/ListItem/index.js");
-/* harmony import */ var _material_ui_core_ListItemText__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @material-ui/core/ListItemText */ "./node_modules/@material-ui/core/esm/ListItemText/index.js");
-/* harmony import */ var _material_ui_core_Dialog__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! @material-ui/core/Dialog */ "./node_modules/@material-ui/core/esm/Dialog/index.js");
-/* harmony import */ var _material_ui_core_DialogContent__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! @material-ui/core/DialogContent */ "./node_modules/@material-ui/core/esm/DialogContent/index.js");
-/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
 // react:
  // react-router:
 
  // material ui:
-
-
-
-
-
-
-
-
-
-
-
-
-
 
  // components:
 // recompose:
@@ -1024,7 +1122,7 @@ class AudioVideo extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
 
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_16__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(AudioVideo));
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_3__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(AudioVideo));
 
 /***/ }),
 
@@ -1042,7 +1140,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
 /* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
 /* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
-/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var src_components_General_MySlider_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! src/components/General/MySlider.jsx */ "./src/components/General/MySlider.jsx");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 // react:
@@ -1052,7 +1151,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
  // components:
-// recompose:
+
+ // recompose:
 
 
 const MAP_BUTTON_NAMES = ["b", "a", "y", "x", "l", "r", "zl", "zr", "minus", "plus", "lstick", "rstick", "up", "down", "left", "right", "home"];
@@ -1261,6 +1361,42 @@ const styles = theme => ({
     "& > div": {
       width: "10%"
     }
+  },
+  // slider:
+  rootClass: {
+    width: "50%"
+  },
+  rail: {
+    backgroundColor: "#FFF"
+  },
+  track: {
+    backgroundColor: "#FFF"
+  },
+  thumb: {
+    backgroundColor: "#FFF",
+    "&:hover": {
+      boxShadow: "0px 0px 0px 9px rgba(255, 255, 255, 0.16)"
+    },
+    "&:active": {
+      boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)"
+    }
+  },
+  active: {
+    "span&": {
+      boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16) !important"
+    }
+  },
+  // slider settings:
+  sliderSettings: {
+    display: "flex",
+    flexDirection: "column",
+    margin: "15px 0px",
+    "& > div": {
+      display: "flex",
+      lineHeight: "28px",
+      justifyContent: "space-between",
+      padding: "10px"
+    }
   }
 });
 
@@ -1301,9 +1437,7 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
     const {
       classes
     } = this.props;
-    console.log("re-rendering InputMapperModal."); // let which = this.props.history.location.pathname.indexOf("/controller") > -1 ? 0 : 1;
-    // let which = this.props.history.location.pathname.indexOf("/controller") > -1 ? 0 : 1;
-
+    console.log("re-rendering InputMapper.");
     let inputHandler = window.inputHandler;
     let gamepadWrapper = inputHandler.gamepadWrapper;
     let activeGamepadIndex = inputHandler.controller.settings.controllerIndex;
@@ -1349,12 +1483,6 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       // scrollButtons="auto"
       ,
       onChange: (event, value) => {
-        // if (value === 0) {
-        // 	this.props.history.replace("/settings/controls/controller");
-        // }
-        // if (value === 1) {
-        // 	this.props.history.replace("/settings/controls/keyboard");
-        // }
         this.setState({
           whichTab: value
         });
@@ -1384,6 +1512,47 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
       variant: "contained",
       onClick: this.rescanGamepads
     }, "Rescan")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Paper"], {
+      elevation: 4,
+      className: classes.sliderSettings
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Stick Deadzone: ", inputHandler.controller.settings.axes[0].deadzone, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MySlider_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      rootClass: classes.rootClass,
+      thumbClass: classes.thumb,
+      activeClass: classes.active,
+      railClass: classes.rail,
+      trackClass: classes.track,
+      min: 0,
+      max: 1,
+      step: 0.01,
+      handleChange: value => {
+        for (let i = 0; i < inputHandler.controller.settings.axes.length; i++) {
+          inputHandler.controller.settings.axes[i].deadzone = value;
+        }
+
+        this.setState({});
+      },
+      value: inputHandler.controller.settings.axes[0].deadzone,
+      bounceInterval: 100,
+      delay: 500
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Stick Sensitivity: ", inputHandler.controller.settings.axes[0].sensitivity, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_General_MySlider_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      rootClass: classes.rootClass,
+      thumbClass: classes.thumb,
+      activeClass: classes.active,
+      railClass: classes.rail,
+      trackClass: classes.track,
+      min: 0,
+      max: 3,
+      step: 0.01,
+      handleChange: value => {
+        for (let i = 0; i < inputHandler.controller.settings.axes.length; i++) {
+          inputHandler.controller.settings.axes[i].sensitivity = value;
+        }
+
+        this.setState({});
+      },
+      value: inputHandler.controller.settings.axes[0].sensitivity,
+      bounceInterval: 100,
+      delay: 500
+    }))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Paper"], {
       elevation: 2,
       style: {
         marginTop: 15
@@ -1421,7 +1590,7 @@ class InputMapperModal extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
 
 }
 
-/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_4__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(InputMapperModal));
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_5__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles))(InputMapperModal));
 
 /***/ }),
 
@@ -2091,11 +2260,15 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
     });
 
     _defineProperty(this, "handleDownloadHostFiles", () => {
-      window.location.href = "https://remotegames.io/8099/download/";
+      window.open("https://remotegames.io/8099/download/", "_blank");
     });
 
-    _defineProperty(this, "handleDiscord", () => {
-      window.location.href = "https://discord.io/rgio/";
+    _defineProperty(this, "handleProjectDiscord", () => {
+      window.open("https://discord.io/rgio/", "_blank");
+    });
+
+    _defineProperty(this, "handleDevDiscord", () => {
+      window.open("https://discord.io/fosse/", "_blank");
     });
 
     this.state = {
@@ -2159,8 +2332,10 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_AccountCircle__WEBPACK_IMPORTED_MODULE_11___default.a, null)), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Profile")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
       onClick: this.handleDownloadHostFiles
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Download Host Files")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
-      onClick: this.handleDiscord
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Discord Server")));
+      onClick: this.handleProjectDiscord
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Project Discord Server")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_MenuItem__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      onClick: this.handleDevDiscord
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "Dev's Discord Server")));
     return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: classes.root
     }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_AppBar__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -2203,8 +2378,16 @@ class StreamsAppBar extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] 
     }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
       color: "default",
       variant: "contained",
-      onClick: this.handleDiscord
-    }, "Discord Server"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_14__["default"], {
+      onClick: this.handleProjectDiscord
+    }, "Project Discord"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      style: {
+        width: "10px"
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      color: "default",
+      variant: "contained",
+      onClick: this.handleDevDiscord
+    }, "Dev's Discord"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_IconButton__WEBPACK_IMPORTED_MODULE_14__["default"], {
       "aria-owns": isMenuOpen ? "material-appbar" : undefined,
       "aria-haspopup": "true",
       onClick: this.handleProfileMenuOpen,
@@ -2246,11 +2429,12 @@ const mapDispatchToProps = dispatch => {
 /*!**************************************!*\
   !*** ./src/constants/DeviceSizes.js ***!
   \**************************************/
-/*! exports provided: device */
+/*! exports provided: size, device */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "size", function() { return size; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "device", function() { return device; });
 const size = {
   mobile: "600px",
@@ -2640,10 +2824,7 @@ class InputHandler {
     // initialize gamepad wrapper:
     this.gamepadWrapper = new _GamepadWrapper_js__WEBPACK_IMPORTED_MODULE_0__["GamepadWrapper"]();
     this.keyboardWrapper = new _KeyboardWrapper_js__WEBPACK_IMPORTED_MODULE_1__["KeyboardWrapper"]();
-    this.touchWrapper = new _TouchWrapper_js__WEBPACK_IMPORTED_MODULE_2__["TouchWrapper"](); // for debugging:
-    // window.gamepadWrapper = this.gamepadWrapper;
-    // window.keyboardWrapper = this.keyboardWrapper;
-
+    this.touchWrapper = new _TouchWrapper_js__WEBPACK_IMPORTED_MODULE_2__["TouchWrapper"]();
     this.isMobile = isMobile; // current device being used:
 
     this.currentInputMode = "keyboard"; // represents a controller's current state:
@@ -2899,6 +3080,7 @@ __webpack_require__.r(__webpack_exports__);
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
+ // window.nipplejs = nipplejs;
 
 let btnList = {
   a: 1,
@@ -2930,9 +3112,9 @@ const leftButtons = {
 };
 class TouchWrapper {
   constructor() {
-    _defineProperty(this, "init", () => {
+    _defineProperty(this, "init", (leftZone, rightZone) => {
       let leftJoyStick = {
-        zone: document.querySelector("#leftStick"),
+        zone: leftZone,
         mode: "static",
         catchDistance: 10,
         color: "#FF3C28",
@@ -2945,7 +3127,7 @@ class TouchWrapper {
         fadeTime: 1e99
       };
       let rightJoyStick = {
-        zone: document.querySelector("#rightStick"),
+        zone: rightZone,
         mode: "static",
         catchDistance: 10,
         color: "#0AB9E6",
@@ -2957,8 +3139,6 @@ class TouchWrapper {
         restOpacity: 0,
         fadeTime: 1e99
       };
-      leftJoyStick.zone = document.querySelector("#leftStick");
-      rightJoyStick.zone = document.querySelector("#rightStick");
       this.leftStick = nipplejs__WEBPACK_IMPORTED_MODULE_1___default.a.create(leftJoyStick);
       this.rightStick = nipplejs__WEBPACK_IMPORTED_MODULE_1___default.a.create(rightJoyStick);
       this.bindJoysticks();
@@ -3006,13 +3186,7 @@ class TouchWrapper {
       });
     });
 
-    _defineProperty(this, "getName", str => {
-      if (!str.split) {
-        return "other";
-      }
-
-      let names = str.split(" ");
-
+    _defineProperty(this, "getName", names => {
       for (let i = 0; i < names.length; i++) {
         if (btnList[names[i]]) {
           let isLeftButton = !!leftButtons[names[i]];
@@ -3053,7 +3227,7 @@ class TouchWrapper {
 
       for (let i = 0; i < touches.length; i++) {
         this.ongoingTouches.push(Object(src_libs_tools_js__WEBPACK_IMPORTED_MODULE_0__["pick"])("identifier", "clientX", "clientY")(touches[i]));
-        this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className)] = true;
+        this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList)] = true;
       }
     });
 
@@ -3075,7 +3249,7 @@ class TouchWrapper {
         if (idx >= 0) {
           this.ongoingTouches.splice(idx, 1); // remove it; we're done
 
-          this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className)] = false;
+          this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList)] = false;
         } else {
           // console.log("can't figure out which touch to end");
           alert("can't figure out which touch to end");
@@ -3105,7 +3279,7 @@ class TouchWrapper {
 
         this.ongoingTouches.splice(idx, 1); // remove it; we're done
 
-        this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className)] = false;
+        this.activeTargets[this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList)] = false;
       }
     });
 
@@ -3129,8 +3303,8 @@ class TouchWrapper {
         let idx = this.ongoingTouchIndexById(touches[i].identifier);
 
         if (idx >= 0) {
-          let oldTarget = this.getName(document.elementFromPoint(this.ongoingTouches[idx].clientX, this.ongoingTouches[idx].clientY).className);
-          let newTarget = this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).className);
+          let oldTarget = this.getName(document.elementFromPoint(this.ongoingTouches[idx].clientX, this.ongoingTouches[idx].clientY).classList);
+          let newTarget = this.getName(document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList);
 
           if (oldTarget != newTarget) {
             this.activeTargets[oldTarget] = false;
@@ -3975,9 +4149,6 @@ class VirtualTouchpad {
     this.changed = false;
     this.cstate = new _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__["ControllerState"]();
     this.tstate = new _DeviceStates_js__WEBPACK_IMPORTED_MODULE_0__["TouchState"]();
-    setTimeout(() => {
-      this.touchWrapper.init();
-    }, 2000);
   } // get controller state:
 
 
@@ -4273,7 +4444,9 @@ _defineProperty(BitBuffer, "MODE", {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CanvasRenderer", function() { return CanvasRenderer; });
+/* harmony import */ var _utils_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./utils.js */ "./src/libs/jsmpeg/src/utils.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 class CanvasRenderer {
   constructor(options) {
@@ -4286,7 +4459,7 @@ class CanvasRenderer {
       this.canvas.width = this.width;
       this.canvas.height = this.height;
       this.imageData = this.context.getImageData(0, 0, this.width, this.height);
-      JSMpeg.Fill(this.imageData.data, 255);
+      Object(_utils_js__WEBPACK_IMPORTED_MODULE_0__["Fill"])(this.imageData.data, 255);
     });
 
     _defineProperty(this, "renderProgress", function (progress) {
@@ -4391,25 +4564,29 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 class BaseDecoder {
   constructor(options) {
-    _defineProperty(this, "destroy", function () {});
+    _defineProperty(this, "destroy", () => {});
 
-    _defineProperty(this, "connect", function (destination) {
+    _defineProperty(this, "connect", destination => {
       this.destination = destination;
     });
 
-    _defineProperty(this, "bufferGetIndex", function () {
+    _defineProperty(this, "bufferGetIndex", () => {
       return this.bits.index;
     });
 
-    _defineProperty(this, "bufferSetIndex", function (index) {
+    _defineProperty(this, "bufferSetIndex", index => {
       this.bits.index = index;
     });
 
-    _defineProperty(this, "bufferWrite", function (buffers) {
+    _defineProperty(this, "bufferWrite", buffers => {
       return this.bits.write(buffers);
     });
 
-    _defineProperty(this, "write", function (pts, buffers) {
+    _defineProperty(this, "write", (pts, buffers) => {
+      this.baseWrite(pts, buffers);
+    });
+
+    _defineProperty(this, "baseWrite", (pts, buffers) => {
       if (this.collectTimestamps) {
         if (this.timestamps.length === 0) {
           this.startTime = pts;
@@ -4441,7 +4618,7 @@ class BaseDecoder {
         this.timestampIndex = i;
       }
 
-      var ts = this.timestamps[this.timestampIndex];
+      let ts = this.timestamps[this.timestampIndex];
 
       if (ts) {
         this.bufferSetIndex(ts.index);
@@ -4456,12 +4633,12 @@ class BaseDecoder {
       this.advanceDecodedTime(0);
     });
 
-    _defineProperty(this, "advanceDecodedTime", function (seconds) {
+    _defineProperty(this, "advanceDecodedTime", seconds => {
       if (this.collectTimestamps) {
-        var newTimestampIndex = -1;
-        var currentIndex = this.bufferGetIndex();
+        let newTimestampIndex = -1;
+        let currentIndex = this.bufferGetIndex();
 
-        for (var i = this.timestampIndex; i < this.timestamps.length; i++) {
+        for (let i = this.timestampIndex; i < this.timestamps.length; i++) {
           if (this.timestamps[i].index > currentIndex) {
             break;
           }
@@ -4503,102 +4680,6 @@ class BaseDecoder {
 
 /***/ }),
 
-/***/ "./src/libs/jsmpeg/src/jsmpeg.js":
-/*!***************************************!*\
-  !*** ./src/libs/jsmpeg/src/jsmpeg.js ***!
-  \***************************************/
-/*! exports provided: JSMpeg */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "JSMpeg", function() { return JSMpeg; });
-/* harmony import */ var _player_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./player.js */ "./src/libs/jsmpeg/src/player.js");
-/* harmony import */ var _buffer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./buffer.js */ "./src/libs/jsmpeg/src/buffer.js");
-/* harmony import */ var _decoder_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./decoder.js */ "./src/libs/jsmpeg/src/decoder.js");
-/* harmony import */ var _websocket_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./websocket.js */ "./src/libs/jsmpeg/src/websocket.js");
-/* harmony import */ var _webaudio_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./webaudio.js */ "./src/libs/jsmpeg/src/webaudio.js");
-/* harmony import */ var _webgl_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./webgl.js */ "./src/libs/jsmpeg/src/webgl.js");
-/* harmony import */ var _canvas2d_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./canvas2d.js */ "./src/libs/jsmpeg/src/canvas2d.js");
-/* harmony import */ var _mpeg1_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./mpeg1.js */ "./src/libs/jsmpeg/src/mpeg1.js");
-/* harmony import */ var _mpeg1_wasm_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./mpeg1-wasm.js */ "./src/libs/jsmpeg/src/mpeg1-wasm.js");
-/* harmony import */ var _mp2_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./mp2.js */ "./src/libs/jsmpeg/src/mp2.js");
-/* harmony import */ var _mp2_wasm_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./mp2-wasm.js */ "./src/libs/jsmpeg/src/mp2-wasm.js");
-/* harmony import */ var _wasm_module_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./wasm-module.js */ "./src/libs/jsmpeg/src/wasm-module.js");
-/* harmony import */ var _ts_js__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./ts.js */ "./src/libs/jsmpeg/src/ts.js");
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-/*! jsmpeg v1.0 | (c) Dominic Szablewski | MIT license */
-
-
- // import { AjaxSource } from "./ajax.js";
-// import { AjaxProgressiveSource } from "./ajax-progressive.js";
-// import { FetchSource } from "./fetch.js";
-
- // import { VideoElement } from "./video-element.js";
-
-
-
-
-
-
-
- // import { MPEG2 } from "./mpeg2.js";
-
-
- // import { TS2 } from "./ts2.js";
-// import { WASM_BINARY_INLINED } from "../jsmpeg.wasm.js";
-// This sets up the JSMpeg "Namespace". The object is empty apart from the Now()
-// utility function and the automatic CreateVideoElements() after DOMReady.
-
-class JSMpeg {
-  constructor() {} // The Player sets up the connections between source, demuxer, decoders,
-  // renderer and audio output. It ties everything together, is responsible
-  // of scheduling decoding and provides some convenience methods for
-  // external users.
-
-
-}
-
-_defineProperty(JSMpeg, "Player", _player_js__WEBPACK_IMPORTED_MODULE_0__["Player"]);
-
-_defineProperty(JSMpeg, "BitBuffer", _buffer_js__WEBPACK_IMPORTED_MODULE_1__["BitBuffer"]);
-
-_defineProperty(JSMpeg, "Source", {
-  // Ajax: AjaxSource,
-  // AjaxProgressive: AjaxProgressiveSource,
-  // Fetch: FetchSource,
-  // WebSocket: WSSource,
-  SocketIO: _websocket_js__WEBPACK_IMPORTED_MODULE_3__["SIOSource"]
-});
-
-_defineProperty(JSMpeg, "Demuxer", {
-  TS: _ts_js__WEBPACK_IMPORTED_MODULE_12__["TS"] // TS2: TS2,
-
-});
-
-_defineProperty(JSMpeg, "Decoder", {
-  Base: _decoder_js__WEBPACK_IMPORTED_MODULE_2__["BaseDecoder"],
-  MP2Audio: _mp2_js__WEBPACK_IMPORTED_MODULE_9__["MP2"],
-  MP2AudioWASM: _mp2_wasm_js__WEBPACK_IMPORTED_MODULE_10__["MP2WASM"],
-  MPEG1Video: _mpeg1_js__WEBPACK_IMPORTED_MODULE_7__["MPEG1"],
-  MPEG1VideoWASM: _mpeg1_wasm_js__WEBPACK_IMPORTED_MODULE_8__["MPEG1WASM"] // MPEG2Video: MPEG2,
-
-});
-
-_defineProperty(JSMpeg, "Renderer", {
-  WebGL: _webgl_js__WEBPACK_IMPORTED_MODULE_5__["WebGLRenderer"],
-  Canvas2D: _canvas2d_js__WEBPACK_IMPORTED_MODULE_6__["CanvasRenderer"]
-});
-
-_defineProperty(JSMpeg, "AudioOutput", {
-  WebAudio: _webaudio_js__WEBPACK_IMPORTED_MODULE_4__["WebAudioOut"]
-});
-
-_defineProperty(JSMpeg, "WASMModule", _wasm_module_js__WEBPACK_IMPORTED_MODULE_11__["WASM"]);
-
-/***/ }),
-
 /***/ "./src/libs/jsmpeg/src/mp2-wasm.js":
 /*!*****************************************!*\
   !*** ./src/libs/jsmpeg/src/mp2-wasm.js ***!
@@ -4623,7 +4704,7 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
   constructor(options) {
     super(options);
 
-    _defineProperty(this, "initializeWasmDecoder", function () {
+    _defineProperty(this, "initializeWasmDecoder", () => {
       if (!this.module.instance) {
         console.warn("JSMpeg: WASM module not compiled yet");
         return;
@@ -4634,7 +4715,7 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       this.decoder = this.functions.mp2_decoder_create(this.bufferSize, this.bufferMode);
     });
 
-    _defineProperty(this, "destroy", function () {
+    _defineProperty(this, "destroy", () => {
       if (!this.decoder) {
         return;
       }
@@ -4644,7 +4725,7 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       this.functions.mp2_decoder_destroy(this.decoder);
     });
 
-    _defineProperty(this, "bufferGetIndex", function () {
+    _defineProperty(this, "bufferGetIndex", () => {
       if (!this.decoder) {
         return;
       }
@@ -4652,7 +4733,7 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       return this.functions.mp2_decoder_get_index(this.decoder);
     });
 
-    _defineProperty(this, "bufferSetIndex", function (index) {
+    _defineProperty(this, "bufferSetIndex", index => {
       if (!this.decoder) {
         return;
       }
@@ -4660,20 +4741,27 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       this.functions.mp2_decoder_set_index(this.decoder, index);
     });
 
-    _defineProperty(this, "bufferWrite", function (buffers) {
+    _defineProperty(this, "bufferWrite", buffers => {
+      // 1/28/20
+      // https://github.com/SuperAwesomeLTD/jsmpeg/pull/1/commits/e2728ba23086fec6aea62f4f2810c5c755199a40
+      if (!this.module.instance) {
+        console.warn("JSMpeg: WASM module not compiled yet");
+        return;
+      }
+
       if (!this.decoder) {
         this.initializeWasmDecoder();
       }
 
-      var totalLength = 0;
+      let totalLength = 0;
 
-      for (var i = 0; i < buffers.length; i++) {
+      for (let i = 0; i < buffers.length; i++) {
         totalLength += buffers[i].length;
       }
 
-      var ptr = this.functions.mp2_decoder_get_write_ptr(this.decoder, totalLength);
+      let ptr = this.functions.mp2_decoder_get_write_ptr(this.decoder, totalLength);
 
-      for (var i = 0; i < buffers.length; i++) {
+      for (let i = 0; i < buffers.length; i++) {
         this.instance.heapU8.set(buffers[i], ptr);
         ptr += buffers[i].length;
       }
@@ -4682,14 +4770,18 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       return totalLength;
     });
 
-    _defineProperty(this, "decode", function () {
-      var startTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])();
+    _defineProperty(this, "write", (pts, buffers) => {
+      this.baseWrite(pts, buffers);
+    });
+
+    _defineProperty(this, "decode", () => {
+      let startTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])();
 
       if (!this.decoder) {
         return false;
       }
 
-      var decodedBytes = this.functions.mp2_decoder_decode(this.decoder);
+      let decodedBytes = this.functions.mp2_decoder_decode(this.decoder);
 
       if (decodedBytes === 0) {
         return false;
@@ -4701,17 +4793,17 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
 
       if (this.destination) {
         // Create a Float32 View into the modules output channel data
-        var leftPtr = this.functions.mp2_decoder_get_left_channel_ptr(this.decoder),
+        let leftPtr = this.functions.mp2_decoder_get_left_channel_ptr(this.decoder),
             rightPtr = this.functions.mp2_decoder_get_right_channel_ptr(this.decoder);
-        var leftOffset = leftPtr / Float32Array.BYTES_PER_ELEMENT,
+        let leftOffset = leftPtr / Float32Array.BYTES_PER_ELEMENT,
             rightOffset = rightPtr / Float32Array.BYTES_PER_ELEMENT;
-        var left = this.instance.heapF32.subarray(leftOffset, leftOffset + MP2WASM.SAMPLES_PER_FRAME),
+        let left = this.instance.heapF32.subarray(leftOffset, leftOffset + MP2WASM.SAMPLES_PER_FRAME),
             right = this.instance.heapF32.subarray(rightOffset, rightOffset + MP2WASM.SAMPLES_PER_FRAME);
         this.destination.play(this.sampleRate, left, right);
       }
 
       this.advanceDecodedTime(MP2WASM.SAMPLES_PER_FRAME / this.sampleRate);
-      var elapsedTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])() - startTime;
+      let elapsedTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])() - startTime;
 
       if (this.onDecodeCallback) {
         this.onDecodeCallback(this, elapsedTime);
@@ -4720,8 +4812,8 @@ class MP2WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       return true;
     });
 
-    _defineProperty(this, "getCurrentTime", function () {
-      var enqueuedTime = this.destination ? this.destination.enqueuedTime : 0;
+    _defineProperty(this, "getCurrentTime", () => {
+      let enqueuedTime = this.destination ? this.destination.enqueuedTime : 0;
       return this.decodedTime - enqueuedTime;
     });
 
@@ -5529,30 +5621,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 class MPEG1WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
   constructor(options) {
-    super(options); // JSMpeg.Decoder.Base.call(this, options);
+    super(options);
 
-    _defineProperty(this, "initializeWasmDecoder", function () {
-      if (!this.module.instance) {
-        console.warn("JSMpeg: WASM module not compiled yet");
-        return;
-      }
-
+    _defineProperty(this, "initializeWasmDecoder", () => {
       this.instance = this.module.instance;
       this.functions = this.module.instance.exports;
       this.decoder = this.functions.mpeg1_decoder_create(this.bufferSize, this.bufferMode);
     });
 
-    _defineProperty(this, "destroy", function () {
+    _defineProperty(this, "destroy", () => {
       if (!this.decoder) {
         return;
       }
-      /*this.functions && */
-
 
       this.functions.mpeg1_decoder_destroy(this.decoder);
     });
 
-    _defineProperty(this, "bufferGetIndex", function () {
+    _defineProperty(this, "bufferGetIndex", () => {
       if (!this.decoder) {
         return;
       }
@@ -5560,7 +5645,7 @@ class MPEG1WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] 
       return this.functions.mpeg1_decoder_get_index(this.decoder);
     });
 
-    _defineProperty(this, "bufferSetIndex", function (index) {
+    _defineProperty(this, "bufferSetIndex", index => {
       if (!this.decoder) {
         return;
       }
@@ -5568,20 +5653,27 @@ class MPEG1WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] 
       this.functions.mpeg1_decoder_set_index(this.decoder, index);
     });
 
-    _defineProperty(this, "bufferWrite", function (buffers) {
+    _defineProperty(this, "bufferWrite", buffers => {
+      // 1/28/20
+      // https://github.com/SuperAwesomeLTD/jsmpeg/pull/1/commits/e2728ba23086fec6aea62f4f2810c5c755199a40
+      if (!this.module.instance) {
+        console.warn("JSMpeg: WASM module not compiled yet");
+        return;
+      }
+
       if (!this.decoder) {
         this.initializeWasmDecoder();
       }
 
-      var totalLength = 0;
+      let totalLength = 0;
 
-      for (var i = 0; i < buffers.length; i++) {
+      for (let i = 0; i < buffers.length; i++) {
         totalLength += buffers[i].length;
       }
 
-      var ptr = this.functions.mpeg1_decoder_get_write_ptr(this.decoder, totalLength);
+      let ptr = this.functions.mpeg1_decoder_get_write_ptr(this.decoder, totalLength);
 
-      for (var i = 0; i < buffers.length; i++) {
+      for (let i = 0; i < buffers.length; i++) {
         this.instance.heapU8.set(buffers[i], ptr);
         ptr += buffers[i].length;
       }
@@ -5590,29 +5682,15 @@ class MPEG1WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] 
       return totalLength;
     });
 
-    _defineProperty(this, "write", function (pts, buffers) {
-      // JSMpeg.Decoder.Base.prototype.write.call(this, pts, buffers);
-      if (this.collectTimestamps) {
-        if (this.timestamps.length === 0) {
-          this.startTime = pts;
-          this.decodedTime = pts;
-        }
+    _defineProperty(this, "write", (pts, buffers) => {
+      this.baseWrite(pts, buffers); // 1/28/20
 
-        this.timestamps.push({
-          index: this.bytesWritten << 3,
-          time: pts
-        });
-      }
-
-      this.bytesWritten += this.bufferWrite(buffers);
-      this.canPlay = true;
-
-      if (!this.hasSequenceHeader && this.functions.mpeg1_decoder_has_sequence_header(this.decoder)) {
+      if (!this.hasSequenceHeader && this.functions && this.functions.mpeg1_decoder_has_sequence_header(this.decoder)) {
         this.loadSequnceHeader();
       }
     });
 
-    _defineProperty(this, "loadSequnceHeader", function () {
+    _defineProperty(this, "loadSequnceHeader", () => {
       this.hasSequenceHeader = true;
       this.frameRate = this.functions.mpeg1_decoder_get_frame_rate(this.decoder);
       this.codedSize = this.functions.mpeg1_decoder_get_coded_size(this.decoder);
@@ -5628,14 +5706,14 @@ class MPEG1WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] 
       }
     });
 
-    _defineProperty(this, "decode", function () {
-      var startTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])();
+    _defineProperty(this, "decode", () => {
+      let startTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])();
 
       if (!this.decoder) {
         return false;
       }
 
-      var didDecode = this.functions.mpeg1_decoder_decode(this.decoder);
+      let didDecode = this.functions.mpeg1_decoder_decode(this.decoder);
 
       if (!didDecode) {
         return false;
@@ -5643,17 +5721,17 @@ class MPEG1WASM extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] 
 
 
       if (this.destination) {
-        var ptrY = this.functions.mpeg1_decoder_get_y_ptr(this.decoder),
+        let ptrY = this.functions.mpeg1_decoder_get_y_ptr(this.decoder),
             ptrCr = this.functions.mpeg1_decoder_get_cr_ptr(this.decoder),
             ptrCb = this.functions.mpeg1_decoder_get_cb_ptr(this.decoder);
-        var dy = this.instance.heapU8.subarray(ptrY, ptrY + this.codedSize);
-        var dcr = this.instance.heapU8.subarray(ptrCr, ptrCr + (this.codedSize >> 2));
-        var dcb = this.instance.heapU8.subarray(ptrCb, ptrCb + (this.codedSize >> 2));
+        let dy = this.instance.heapU8.subarray(ptrY, ptrY + this.codedSize);
+        let dcr = this.instance.heapU8.subarray(ptrCr, ptrCr + (this.codedSize >> 2));
+        let dcb = this.instance.heapU8.subarray(ptrCb, ptrCb + (this.codedSize >> 2));
         this.destination.render(dy, dcr, dcb, false);
       }
 
       this.advanceDecodedTime(1 / this.frameRate);
-      var elapsedTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])() - startTime;
+      let elapsedTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])() - startTime;
 
       if (this.onDecodeCallback) {
         this.onDecodeCallback(this, elapsedTime);
@@ -5695,28 +5773,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // https://sourceforge.net/projects/javampeg1video/
 
 
+ // window.doneDecoding = false;
+// function skipCount(b) {
+// 	b.skipCount = 1;
+// 	setTimeout(skipCount, window.interval, b);
+// }
 
-window.doneDecoding = false;
 class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
   constructor(options) {
     super(options);
 
-    _defineProperty(this, "write", function (pts, buffers) {
-      // BaseDecoder.write(this, pts, buffers);
-      if (this.collectTimestamps) {
-        if (this.timestamps.length === 0) {
-          this.startTime = pts;
-          this.decodedTime = pts;
-        }
-
-        this.timestamps.push({
-          index: this.bytesWritten << 3,
-          time: pts
-        });
-      }
-
-      this.bytesWritten += this.bufferWrite(buffers);
-      this.canPlay = true;
+    _defineProperty(this, "write", (pts, buffers) => {
+      this.baseWrite(pts, buffers);
 
       if (!this.hasSequenceHeader) {
         if (this.bits.findStartCode(MPEG1.START.SEQUENCE) === -1) {
@@ -5742,21 +5810,21 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
 
     });
 
-    _defineProperty(this, "decode", function () {
-      var startTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])();
+    _defineProperty(this, "decode", () => {
+      let startTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])();
 
       if (!this.hasSequenceHeader) {
         return false;
       }
 
       if (this.bits.findStartCode(MPEG1.START.PICTURE) === -1) {
-        var bufferedBytes = this.bits.byteLength - (this.bits.index >> 3);
+        // let bufferedBytes = this.bits.byteLength - (this.bits.index >> 3);
         return false;
       }
 
       this.decodePicture();
       this.advanceDecodedTime(1 / this.frameRate);
-      var elapsedTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])() - startTime;
+      let elapsedTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_2__["Now"])() - startTime;
 
       if (this.onDecodeCallback) {
         this.onDecodeCallback(this, elapsedTime);
@@ -5765,8 +5833,8 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       return true;
     });
 
-    _defineProperty(this, "readHuffman", function (codeTable) {
-      var state = 0;
+    _defineProperty(this, "readHuffman", codeTable => {
+      let state = 0;
 
       do {
         state = codeTable[state + this.bits.read(1)];
@@ -5796,7 +5864,7 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
 
       if (this.bits.read(1)) {
         // load custom intra quant matrix?
-        for (var i = 0; i < 64; i++) {
+        for (let i = 0; i < 64; i++) {
           this.customIntraQuantMatrix[MPEG1.ZIG_ZAG[i]] = this.bits.read(8);
         }
 
@@ -5805,8 +5873,8 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
 
       if (this.bits.read(1)) {
         // load custom non intra quant matrix?
-        for (var i = 0; i < 64; i++) {
-          var idx = MPEG1.ZIG_ZAG[i];
+        for (let i = 0; i < 64; i++) {
+          let idx = MPEG1.ZIG_ZAG[i];
           this.customNonIntraQuantMatrix[idx] = this.bits.read(8);
         }
 
@@ -5816,7 +5884,7 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       this.hasSequenceHeader = true;
     });
 
-    _defineProperty(this, "initBuffers", function () {
+    _defineProperty(this, "initBuffers", () => {
       this.intraQuantMatrix = MPEG1.DEFAULT_INTRA_QUANT_MATRIX;
       this.nonIntraQuantMatrix = MPEG1.DEFAULT_NON_INTRA_QUANT_MATRIX;
       this.mbWidth = this.width + 15 >> 4;
@@ -5842,7 +5910,7 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       this.forwardCb32 = new Uint32Array(this.forwardCb.buffer);
     });
 
-    _defineProperty(this, "decodePicture", function (skipOutput) {
+    _defineProperty(this, "decodePicture", skipOutput => {
       this.currentFrame++;
       this.bits.skip(10); // skip temporalReference
 
@@ -5868,7 +5936,7 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
         this.forwardF = 1 << this.forwardRSize;
       }
 
-      var code = 0;
+      let code = 0;
 
       do {
         code = this.bits.findNextStartCode();
@@ -5886,13 +5954,18 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       } // Invoke decode callbacks
 
 
-      if (this.destination) {
-        this.destination.render(this.currentY, this.currentCr, this.currentCb, true);
-      } // If this is a reference picture then rotate the prediction pointers
+      if (this.destination
+      /* && this.skipCount === 0*/
+      ) {
+          this.destination.render(this.currentY, this.currentCr, this.currentCb, true);
+        } // if (this.skipCount > 0) {
+      // 	this.skipCount -= 1;
+      // }
+      // If this is a reference picture then rotate the prediction pointers
 
 
       if (this.pictureType === MPEG1.PICTURE_TYPE.INTRA || this.pictureType === MPEG1.PICTURE_TYPE.PREDICTIVE) {
-        var tmpY = this.forwardY,
+        let tmpY = this.forwardY,
             tmpY32 = this.forwardY32,
             tmpCr = this.forwardCr,
             tmpCr32 = this.forwardCr32,
@@ -5913,7 +5986,7 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       }
     });
 
-    _defineProperty(this, "decodeSlice", function (slice) {
+    _defineProperty(this, "decodeSlice", slice => {
       this.sliceBegin = true;
       this.macroblockAddress = (slice - 1) * this.mbWidth - 1; // Reset motion vectors and DC predictors
 
@@ -5933,9 +6006,9 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       } while (!this.bits.nextBytesAreStartCode());
     });
 
-    _defineProperty(this, "decodeMacroblock", function () {
+    _defineProperty(this, "decodeMacroblock", () => {
       // Decode macroblock_address_increment
-      var increment = 0,
+      let increment = 0,
           t = this.readHuffman(MPEG1.MACROBLOCK_ADDRESS_INCREMENT);
 
       while (t === 34) {
@@ -6012,9 +6085,9 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
       } // Decode blocks
 
 
-      var cbp = (this.macroblockType & 0x02) !== 0 ? this.readHuffman(MPEG1.CODE_BLOCK_PATTERN) : this.macroblockIntra ? 0x3f : 0;
+      let cbp = (this.macroblockType & 0x02) !== 0 ? this.readHuffman(MPEG1.CODE_BLOCK_PATTERN) : this.macroblockIntra ? 0x3f : 0;
 
-      for (var block = 0, mask = 0x20; block < 6; block++) {
+      for (let block = 0, mask = 0x20; block < 6; block++) {
         if ((cbp & mask) !== 0) {
           this.decodeBlock(block);
         }
@@ -6592,15 +6665,18 @@ class MPEG1 extends _decoder_js__WEBPACK_IMPORTED_MODULE_1__["BaseDecoder"] {
     });
 
     this.onDecodeCallback = options.onVideoDecode;
-    var bufferSize = options.videoBufferSize || 512 * 1024;
-    var bufferMode = options.streaming ? _buffer_js__WEBPACK_IMPORTED_MODULE_0__["BitBuffer"].MODE.EVICT : _buffer_js__WEBPACK_IMPORTED_MODULE_0__["BitBuffer"].MODE.EXPAND;
+    let bufferSize = options.videoBufferSize || 512 * 1024;
+    let bufferMode = options.streaming ? _buffer_js__WEBPACK_IMPORTED_MODULE_0__["BitBuffer"].MODE.EVICT : _buffer_js__WEBPACK_IMPORTED_MODULE_0__["BitBuffer"].MODE.EXPAND;
     this.bits = new _buffer_js__WEBPACK_IMPORTED_MODULE_0__["BitBuffer"](bufferSize, bufferMode);
     this.customIntraQuantMatrix = new Uint8Array(64);
     this.customNonIntraQuantMatrix = new Uint8Array(64);
     this.blockData = new Int32Array(64);
     this.currentFrame = 0;
     this.decodeFirstFrame = options.decodeFirstFrame !== false;
-    this.frameRate = 30; // Picture Layer
+    this.frameRate = 30; // skip rendering x times:
+    // 1/28/20
+    // this.skipCount = 0;
+    // Picture Layer
 
     this.currentY = null;
     this.currentCr = null;
@@ -7294,7 +7370,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 class Player {
   constructor(url, options) {
-    _defineProperty(this, "startLoading", function () {
+    _defineProperty(this, "startLoading", () => {
       this.source.start();
 
       if (this.autoplay) {
@@ -7302,7 +7378,7 @@ class Player {
       }
     });
 
-    _defineProperty(this, "showHide", function (ev) {
+    _defineProperty(this, "showHide", () => {
       if (document.visibilityState === "hidden") {
         this.unpauseOnShow = this.wantsToPlay;
         this.pause();
@@ -7311,7 +7387,7 @@ class Player {
       }
     });
 
-    _defineProperty(this, "play", function (ev) {
+    _defineProperty(this, "play", () => {
       if (this.animationId) {
         return;
       }
@@ -7321,7 +7397,7 @@ class Player {
       this.paused = false;
     });
 
-    _defineProperty(this, "pause", function (ev) {
+    _defineProperty(this, "pause", () => {
       if (this.paused) {
         return;
       }
@@ -7344,7 +7420,7 @@ class Player {
       }
     });
 
-    _defineProperty(this, "getVolume", function () {
+    _defineProperty(this, "getVolume", () => {
       return this.audioOut ? this.audioOut.volume : 0;
     });
 
@@ -7354,7 +7430,7 @@ class Player {
       }
     });
 
-    _defineProperty(this, "stop", function (ev) {
+    _defineProperty(this, "stop", () => {
       this.pause();
       this.seek(0);
 
@@ -7363,7 +7439,7 @@ class Player {
       }
     });
 
-    _defineProperty(this, "destroy", function () {
+    _defineProperty(this, "destroy", () => {
       this.pause();
       this.source.destroy();
       this.video && this.video.destroy();
@@ -7372,8 +7448,8 @@ class Player {
       this.audioOut && this.audioOut.destroy();
     });
 
-    _defineProperty(this, "seek", function (time) {
-      var startOffset = this.audio && this.audio.canPlay ? this.audio.startTime : this.video.startTime;
+    _defineProperty(this, "seek", time => {
+      let startOffset = this.audio && this.audio.canPlay ? this.audio.startTime : this.video.startTime;
 
       if (this.video) {
         this.video.seek(time + startOffset);
@@ -7386,7 +7462,7 @@ class Player {
       this.startTime = Object(_utils_js__WEBPACK_IMPORTED_MODULE_11__["Now"])() - time;
     });
 
-    _defineProperty(this, "getCurrentTime", function () {
+    _defineProperty(this, "getCurrentTime", () => {
       return this.audio && this.audio.canPlay ? this.audio.currentTime - this.audio.startTime : this.video ? this.video.currentTime - this.video.startTime : null;
     });
 
@@ -7394,7 +7470,7 @@ class Player {
       this.seek(time);
     });
 
-    _defineProperty(this, "update", function () {
+    _defineProperty(this, "update", () => {
       this.animationId = requestAnimationFrame(this.update.bind(this));
 
       if (!this.source.established) {
@@ -7421,7 +7497,7 @@ class Player {
       }
     });
 
-    _defineProperty(this, "updateForStreaming", function () {
+    _defineProperty(this, "updateForStreaming", () => {
       // When streaming, immediately decode everything we have buffered up until
       // now to minimize playback latency.
       if (this.video) {
@@ -7429,7 +7505,7 @@ class Player {
       }
 
       if (this.audio) {
-        var decoded = false;
+        let decoded = false;
 
         do {
           // If there's a lot of audio enqueued already, disable output and
@@ -7446,7 +7522,7 @@ class Player {
       }
     });
 
-    _defineProperty(this, "nextFrame", function () {
+    _defineProperty(this, "nextFrame", () => {
       if (this.source.established && this.video) {
         return this.video.decode();
       }
@@ -7454,7 +7530,7 @@ class Player {
       return false;
     });
 
-    _defineProperty(this, "updateForStaticFile", function () {
+    _defineProperty(this, "updateForStaticFile", () => {
       let notEnoughData = false;
       let headroom = 0; // If we have an audio track, we always try to sync the video to the audio.
       // Gaps and discontinuities are far more percetable in audio than in video.
@@ -7577,7 +7653,7 @@ class Player {
       } else if (
       /*JSMpeg.WASM_BINARY_INLINED*/
       true) {
-        var wasm = Object(_utils_js__WEBPACK_IMPORTED_MODULE_11__["Base64ToArrayBuffer"])(_jsmpeg_wasm_js__WEBPACK_IMPORTED_MODULE_10__["WASM_BINARY_INLINED"]);
+        let wasm = Object(_utils_js__WEBPACK_IMPORTED_MODULE_11__["Base64ToArrayBuffer"])(_jsmpeg_wasm_js__WEBPACK_IMPORTED_MODULE_10__["WASM_BINARY_INLINED"]);
         this.wasmModule.loadFromBuffer(wasm, this.startLoading.bind(this));
       } else {}
     } else {
@@ -7738,20 +7814,20 @@ class TS {
       return true;
     });
 
-    _defineProperty(this, "resync", function () {
+    _defineProperty(this, "resync", () => {
       // Check if we have enough data to attempt a resync. We need 5 full packets.
       if (!this.bits.has(188 * 6 << 3)) {
         return false;
       }
 
-      var byteIndex = this.bits.index >> 3; // Look for the first sync token in the first 187 bytes
+      let byteIndex = this.bits.index >> 3; // Look for the first sync token in the first 187 bytes
 
-      for (var i = 0; i < 187; i++) {
+      for (let i = 0; i < 187; i++) {
         if (this.bits.bytes[byteIndex + i] === 0x47) {
           // Look for 4 more sync tokens, each 188 bytes appart
-          var foundSync = true;
+          let foundSync = true;
 
-          for (var j = 1; j < 5; j++) {
+          for (let j = 1; j < 5; j++) {
             if (this.bits.bytes[byteIndex + i + 188 * j] !== 0x47) {
               foundSync = false;
               break;
@@ -7782,11 +7858,11 @@ class TS {
     _defineProperty(this, "packetAddData", function (pi, start, end) {
       pi.buffers.push(this.bits.bytes.subarray(start, end));
       pi.currentLength += end - start;
-      var complete = pi.totalLength !== 0 && pi.currentLength >= pi.totalLength;
+      let complete = pi.totalLength !== 0 && pi.currentLength >= pi.totalLength;
       return complete;
     });
 
-    _defineProperty(this, "packetComplete", function (pi) {
+    _defineProperty(this, "packetComplete", pi => {
       pi.destination.write(pi.pts, pi.buffers);
       pi.totalLength = 0;
       pi.currentLength = 0;
@@ -8209,8 +8285,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 class WebGLRenderer {
   constructor(options) {
-    _defineProperty(this, "destroy", function () {
-      var gl = this.gl;
+    _defineProperty(this, "destroy", () => {
+      let gl = this.gl;
       this.deleteTexture(gl.TEXTURE0, this.textureY);
       this.deleteTexture(gl.TEXTURE1, this.textureCb);
       this.deleteTexture(gl.TEXTURE2, this.textureCr);
@@ -8218,23 +8294,37 @@ class WebGLRenderer {
       gl.deleteProgram(this.program);
       gl.deleteProgram(this.loadingProgram);
       gl.bindBuffer(gl.ARRAY_BUFFER, null);
-      gl.deleteBuffer(this.vertexBuffer);
-      gl.getExtension("WEBGL_lose_context").loseContext(); // this.canvas.remove();// don't do this because I need it // fosse
+      gl.deleteBuffer(this.vertexBuffer); // breaks:
+      // gl.getExtension("WEBGL_lose_context").loseContext();
+      // window.lose_context = gl.getExtension("WEBGL_lose_context");
+      // window.lose_context.loseContext();
+      // console.log(lose_context.restoreContext);
+      // lose_context.restoreContext();
+      // this.canvas.remove(); // don't do this because I need it // fosse
+      // let newEl = document.createElement("canvas");
+      // newEl.id = this.canvas.id;
+      // newEl.classList = this.canvas.classList;
+      // newEl.width = this.canvas.width;
+      // newEl.height = this.canvas.height;
+      // newEl.style = this.canvas.style;
+      // this.canvas.parentNode.replaceChild(newEl, this.canvas);
+      // // window.newEl = newEl;
+      // this.canvas.remove();
     });
 
-    _defineProperty(this, "resize", function (width, height) {
+    _defineProperty(this, "resize", (width, height) => {
       this.width = width | 0;
       this.height = height | 0;
       this.canvas.width = this.width;
       this.canvas.height = this.height;
       this.gl.useProgram(this.program);
-      var codedWidth = this.width + 15 >> 4 << 4;
+      let codedWidth = this.width + 15 >> 4 << 4;
       this.gl.viewport(0, 0, codedWidth, this.height);
     });
 
-    _defineProperty(this, "createTexture", function (index, name) {
-      var gl = this.gl;
-      var texture = gl.createTexture();
+    _defineProperty(this, "createTexture", (index, name) => {
+      let gl = this.gl;
+      let texture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
@@ -8244,9 +8334,9 @@ class WebGLRenderer {
       return texture;
     });
 
-    _defineProperty(this, "createProgram", function (vsh, fsh) {
-      var gl = this.gl;
-      var program = gl.createProgram();
+    _defineProperty(this, "createProgram", (vsh, fsh) => {
+      let gl = this.gl;
+      let program = gl.createProgram();
       gl.attachShader(program, this.compileShader(gl.VERTEX_SHADER, vsh));
       gl.attachShader(program, this.compileShader(gl.FRAGMENT_SHADER, fsh));
       gl.linkProgram(program);
@@ -8254,9 +8344,9 @@ class WebGLRenderer {
       return program;
     });
 
-    _defineProperty(this, "compileShader", function (type, source) {
-      var gl = this.gl;
-      var shader = gl.createShader(type);
+    _defineProperty(this, "compileShader", (type, source) => {
+      let gl = this.gl;
+      let shader = gl.createShader(type);
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
 
@@ -8267,29 +8357,29 @@ class WebGLRenderer {
       return shader;
     });
 
-    _defineProperty(this, "allowsClampedTextureData", function () {
-      var gl = this.gl;
-      var texture = gl.createTexture();
+    _defineProperty(this, "allowsClampedTextureData", () => {
+      let gl = this.gl;
+      let texture = gl.createTexture();
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.LUMINANCE, 1, 1, 0, gl.LUMINANCE, gl.UNSIGNED_BYTE, new Uint8ClampedArray([0]));
       return gl.getError() === 0;
     });
 
-    _defineProperty(this, "renderProgress", function (progress) {
-      var gl = this.gl;
+    _defineProperty(this, "renderProgress", progress => {
+      let gl = this.gl;
       gl.useProgram(this.loadingProgram);
-      var loc = gl.getUniformLocation(this.loadingProgram, "progress");
+      let loc = gl.getUniformLocation(this.loadingProgram, "progress");
       gl.uniform1f(loc, progress);
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     });
 
-    _defineProperty(this, "render", function (y, cb, cr, isClampedArray) {
+    _defineProperty(this, "render", (y, cb, cr, isClampedArray) => {
       if (!this.enabled) {
         return;
       }
 
-      var gl = this.gl;
-      var w = this.width + 15 >> 4 << 4,
+      let gl = this.gl;
+      let w = this.width + 15 >> 4 << 4,
           h = this.height,
           w2 = w >> 1,
           h2 = h >> 1; // In some browsers WebGL doesn't like Uint8ClampedArrays (this is a bug
@@ -8307,8 +8397,8 @@ class WebGLRenderer {
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     });
 
-    _defineProperty(this, "updateTexture", function (unit, texture, w, h, data) {
-      var gl = this.gl;
+    _defineProperty(this, "updateTexture", (unit, texture, w, h, data) => {
+      let gl = this.gl;
       gl.activeTexture(unit);
       gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -8320,8 +8410,8 @@ class WebGLRenderer {
       }
     });
 
-    _defineProperty(this, "deleteTexture", function (unit, texture) {
-      var gl = this.gl;
+    _defineProperty(this, "deleteTexture", (unit, texture) => {
+      let gl = this.gl;
       gl.activeTexture(unit);
       gl.bindTexture(gl.TEXTURE_2D, null);
       gl.deleteTexture(texture);
@@ -8332,7 +8422,7 @@ class WebGLRenderer {
     this.height = this.canvas.height;
     this.enabled = true;
     this.hasTextureData = {};
-    var contextCreateOptions = {
+    this.contextCreateOptions = {
       preserveDrawingBuffer: !!options.preserveDrawingBuffer,
       alpha: false,
       depth: false,
@@ -8340,10 +8430,14 @@ class WebGLRenderer {
       antialias: false,
       premultipliedAlpha: false
     };
-    this.gl = this.canvas.getContext("webgl", contextCreateOptions) || this.canvas.getContext("experimental-webgl", contextCreateOptions);
+    this.gl = this.canvas.getContext("webgl", this.contextCreateOptions) || this.canvas.getContext("experimental-webgl", this.contextCreateOptions);
 
     if (!this.gl) {
       throw new Error("Failed to get WebGL Context");
+    }
+
+    if (this.gl.isContextLost()) {
+      throw new Error("WebGL Context is lost!");
     }
 
     this.SHADER = {
@@ -8351,14 +8445,14 @@ class WebGLRenderer {
       FRAGMENT_LOADING: ["precision mediump float;", "uniform float progress;", "varying vec2 texCoord;", "void main() {", "float c = ceil(progress-(1.0-texCoord.y));", "gl_FragColor = vec4(c,c,c,1);", "}"].join("\n"),
       VERTEX_IDENTITY: ["attribute vec2 vertex;", "varying vec2 texCoord;", "void main() {", "texCoord = vertex;", "gl_Position = vec4((vertex * 2.0 - 1.0) * vec2(1, -1), 0.0, 1.0);", "}"].join("\n")
     };
-    var _gl = this.gl;
-    var vertexAttr = null;
+    let _gl = this.gl;
+    let vertexAttr = null;
 
     _gl.pixelStorei(_gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false); // Init buffers
 
 
     this.vertexBuffer = _gl.createBuffer();
-    var vertexCoords = new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]);
+    let vertexCoords = new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]);
 
     _gl.bindBuffer(_gl.ARRAY_BUFFER, this.vertexBuffer);
 
@@ -8388,13 +8482,13 @@ class WebGLRenderer {
 
 }
 
-_defineProperty(WebGLRenderer, "IsSupported", function () {
+_defineProperty(WebGLRenderer, "IsSupported", () => {
   try {
     if (!window.WebGLRenderingContext) {
       return false;
     }
 
-    var canvas = document.createElement("canvas");
+    let canvas = document.createElement("canvas");
     return !!(canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
   } catch (err) {
     return false;
@@ -8421,11 +8515,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 class WSSource {
   constructor(url, options) {
-    _defineProperty(this, "connect", function (destination) {
+    _defineProperty(this, "connect", destination => {
       this.destination = destination;
     });
 
-    _defineProperty(this, "destroy", function () {
+    _defineProperty(this, "destroy", () => {
       clearTimeout(this.reconnectTimeoutId);
       this.shouldAttemptReconnect = false;
 
@@ -8434,7 +8528,7 @@ class WSSource {
       }
     });
 
-    _defineProperty(this, "start", function () {
+    _defineProperty(this, "start", () => {
       this.shouldAttemptReconnect = !!this.reconnectInterval;
       this.progress = 0;
       this.established = false;
@@ -8452,24 +8546,24 @@ class WSSource {
       this.socket.onclose = this.onClose.bind(this);
     });
 
-    _defineProperty(this, "resume", function (secondsHeadroom) {// Nothing to do here
+    _defineProperty(this, "resume", secondsHeadroom => {// Nothing to do here
     });
 
-    _defineProperty(this, "onOpen", function () {
+    _defineProperty(this, "onOpen", () => {
       this.progress = 1;
     });
 
-    _defineProperty(this, "onClose", function () {
+    _defineProperty(this, "onClose", () => {
       if (this.shouldAttemptReconnect) {
         clearTimeout(this.reconnectTimeoutId);
-        this.reconnectTimeoutId = setTimeout(function () {
+        this.reconnectTimeoutId = setTimeout(() => {
           this.start();
-        }.bind(this), this.reconnectInterval * 1000);
+        }, this.reconnectInterval * 1000);
       }
     });
 
-    _defineProperty(this, "onMessage", function (ev) {
-      var isFirstChunk = !this.established;
+    _defineProperty(this, "onMessage", ev => {
+      let isFirstChunk = !this.established;
       this.established = true;
 
       if (isFirstChunk && this.onEstablishedCallback) {
@@ -8503,11 +8597,11 @@ class WSSource {
 }
 class SIOSource {
   constructor(url, options) {
-    _defineProperty(this, "connect", function (destination) {
+    _defineProperty(this, "connect", destination => {
       this.destination = destination;
     });
 
-    _defineProperty(this, "destroy", function () {
+    _defineProperty(this, "destroy", () => {
       clearTimeout(this.reconnectTimeoutId);
       this.shouldAttemptReconnect = false;
 
@@ -8516,7 +8610,7 @@ class SIOSource {
       }
     });
 
-    _defineProperty(this, "start", function () {
+    _defineProperty(this, "start", () => {
       this.shouldAttemptReconnect = !!this.reconnectInterval;
       this.progress = 0;
       this.established = false;
@@ -8532,24 +8626,24 @@ class SIOSource {
       }
     });
 
-    _defineProperty(this, "resume", function (secondsHeadroom) {// Nothing to do here
+    _defineProperty(this, "resume", secondsHeadroom => {// Nothing to do here
     });
 
-    _defineProperty(this, "onOpen", function () {
+    _defineProperty(this, "onOpen", () => {
       this.progress = 1;
     });
 
-    _defineProperty(this, "onClose", function () {
+    _defineProperty(this, "onClose", () => {
       if (this.shouldAttemptReconnect) {
         clearTimeout(this.reconnectTimeoutId);
-        this.reconnectTimeoutId = setTimeout(function () {
+        this.reconnectTimeoutId = setTimeout(() => {
           this.start();
-        }.bind(this), this.reconnectInterval * 1000);
+        }, this.reconnectInterval * 1000);
       }
     });
 
-    _defineProperty(this, "onMessage", function (ev) {
-      var isFirstChunk = !this.established;
+    _defineProperty(this, "onMessage", ev => {
+      let isFirstChunk = !this.established;
       this.established = true;
 
       if (isFirstChunk && this.onEstablishedCallback) {
@@ -8595,9 +8689,13 @@ class SIOSource {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Lagless2; });
-/* harmony import */ var libs_jsmpeg_src_jsmpeg_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! libs/jsmpeg/src/jsmpeg.js */ "./src/libs/jsmpeg/src/jsmpeg.js");
+/* harmony import */ var libs_jsmpeg_src_player_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! libs/jsmpeg/src/player.js */ "./src/libs/jsmpeg/src/player.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+ // import socketio from "socket.io-client";
+// window.io = socketio;
+// import JSMpeg from "libs/jsmpeg/jsmpeg-old.min.js";
+// window.JSMpeg = JSMpeg;
 
 class Lagless2 {
   constructor(options) {
@@ -8652,24 +8750,18 @@ class Lagless2 {
         this.context = this.graphicsCanvas.getContext("2d"); // }
 
         onVideoDecode = this.onVideoDecode;
-      } // destroy audio instance if it exists:
+      }
 
-
-      try {
-        this.player.destroy();
-      } catch (error) {}
-
-      this.player = new libs_jsmpeg_src_jsmpeg_js__WEBPACK_IMPORTED_MODULE_0__["JSMpeg"].Player(this.options.url, {
+      this.player = new libs_jsmpeg_src_player_js__WEBPACK_IMPORTED_MODULE_0__["Player"](this.options.url, {
         canvas: this.videoCanvas,
         videoBufferSize: this.options.videoBufferSize,
         audioBufferSize: this.options.audioBufferSize,
-        maxAudioLag: 0.25,
+        maxAudioLag: this.options.maxAudioLag || 0.25,
         onVideoDecode: onVideoDecode,
         audio: !!this.options.audio,
         video: !!this.options.video,
         path: this.options.path
-      }); // this.videoCanvas.width = this.player.renderer.canvas.width;
-      // this.videoCanvas.height = this.player.renderer.canvas.height;
+      });
     });
 
     this.videoCanvas = null;
@@ -8678,7 +8770,7 @@ class Lagless2 {
 
     this.player = {};
     this.options = {
-      videoBufferSize: 256 * 1024,
+      videoBufferSize: 512 * 1024,
       // 256kb (256 * 1024)
       audioBufferSize: 128 * 1024,
       // 128kb (128 * 1024)

@@ -8,6 +8,25 @@
 
 	<body>
 		<script>
+			function getDisplayMedia(options, cb) {
+				if (navigator.getDisplayMedia) {
+					navigator
+						.getDisplayMedia({
+							...options,
+						})
+						.then((stream) => {
+							cb(stream);
+						});
+				} else if (navigator.mediaDevices.getDisplayMedia) {
+					navigator.mediaDevices
+						.getDisplayMedia({
+							...options,
+						})
+						.then((stream) => {
+							cb(stream);
+						});
+				}
+			}
 			function mySDPTransform(sdp) {
 				let bandwidth = {
 					screen: 300, // 300kbits minimum
@@ -70,18 +89,23 @@
 			}
 
 			// get video/voice stream
-			navigator.getUserMedia(
-				{
-					video: true,
-					audio: true,
-				},
-				gotMedia,
-				() => {},
-			);
+			// navigator.getUserMedia(
+			// 	{
+			// 		video: true,
+			// 		audio: true,
+			// 	},
+			// 	(stream) => {
+			// 		localStream = stream;
+			// 	},
+			// 	() => {},
+			// );
 
-			function gotMedia(stream) {
-				localStream = stream;
-			}
+			getDisplayMedia(
+				{ video: true, audio: true, canRequestAudioTrack: true },
+				(stream) => {
+					localStream = stream;
+				},
+			);
 
 			socket.on("createNewPeer", (data) => {
 				let id = data.id;

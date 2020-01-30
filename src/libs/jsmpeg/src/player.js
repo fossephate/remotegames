@@ -101,7 +101,7 @@ export class Player {
 
 				// todo:
 			} else if (/*JSMpeg.WASM_BINARY_INLINED*/ true) {
-				var wasm = Base64ToArrayBuffer(WASM_BINARY_INLINED);
+				let wasm = Base64ToArrayBuffer(WASM_BINARY_INLINED);
 				this.wasmModule.loadFromBuffer(wasm, this.startLoading.bind(this));
 			} else {
 				this.wasmModule.loadFromFile("jsmpeg.wasm", this.startLoading.bind(this));
@@ -111,14 +111,14 @@ export class Player {
 		}
 	}
 
-	startLoading = function() {
+	startLoading = () => {
 		this.source.start();
 		if (this.autoplay) {
 			this.play();
 		}
 	};
 
-	showHide = function(ev) {
+	showHide = () => {
 		if (document.visibilityState === "hidden") {
 			this.unpauseOnShow = this.wantsToPlay;
 			this.pause();
@@ -127,7 +127,7 @@ export class Player {
 		}
 	};
 
-	play = function(ev) {
+	play = () => {
 		if (this.animationId) {
 			return;
 		}
@@ -136,7 +136,7 @@ export class Player {
 		this.paused = false;
 	};
 
-	pause = function(ev) {
+	pause = () => {
 		if (this.paused) {
 			return;
 		}
@@ -158,7 +158,7 @@ export class Player {
 		}
 	};
 
-	getVolume = function() {
+	getVolume = () => {
 		return this.audioOut ? this.audioOut.volume : 0;
 	};
 
@@ -168,7 +168,7 @@ export class Player {
 		}
 	};
 
-	stop = function(ev) {
+	stop = () => {
 		this.pause();
 		this.seek(0);
 		if (this.video && this.options.decodeFirstFrame !== false) {
@@ -176,7 +176,7 @@ export class Player {
 		}
 	};
 
-	destroy = function() {
+	destroy = () => {
 		this.pause();
 		this.source.destroy();
 		this.video && this.video.destroy();
@@ -185,8 +185,8 @@ export class Player {
 		this.audioOut && this.audioOut.destroy();
 	};
 
-	seek = function(time) {
-		var startOffset =
+	seek = (time) => {
+		let startOffset =
 			this.audio && this.audio.canPlay ? this.audio.startTime : this.video.startTime;
 
 		if (this.video) {
@@ -199,7 +199,7 @@ export class Player {
 		this.startTime = Now() - time;
 	};
 
-	getCurrentTime = function() {
+	getCurrentTime = () => {
 		return this.audio && this.audio.canPlay
 			? this.audio.currentTime - this.audio.startTime
 			: this.video
@@ -211,7 +211,7 @@ export class Player {
 		this.seek(time);
 	};
 
-	update = function() {
+	update = () => {
 		this.animationId = requestAnimationFrame(this.update.bind(this));
 
 		if (!this.source.established) {
@@ -237,16 +237,15 @@ export class Player {
 		}
 	};
 
-	updateForStreaming = function() {
+	updateForStreaming = () => {
 		// When streaming, immediately decode everything we have buffered up until
 		// now to minimize playback latency.
-
 		if (this.video) {
 			this.video.decode();
 		}
 
 		if (this.audio) {
-			var decoded = false;
+			let decoded = false;
 			do {
 				// If there's a lot of audio enqueued already, disable output and
 				// catch up with the encoding.
@@ -260,14 +259,14 @@ export class Player {
 		}
 	};
 
-	nextFrame = function() {
+	nextFrame = () => {
 		if (this.source.established && this.video) {
 			return this.video.decode();
 		}
 		return false;
 	};
 
-	updateForStaticFile = function() {
+	updateForStaticFile = () => {
 		let notEnoughData = false;
 		let headroom = 0;
 

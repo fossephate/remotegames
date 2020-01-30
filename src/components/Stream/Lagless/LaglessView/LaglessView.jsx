@@ -57,7 +57,8 @@ class LaglessView extends PureComponent {
 			[classes.fullscreen]: this.props.largescreen || this.props.fullscreen,
 		});
 
-		let displayLagless = this.props.loggedIn && !this.props.waitlisted;
+		// let displayLagless = this.props.loggedIn && !this.props.waitlisted;
+		let displayLagless = true;
 		let twitchStyle = {
 			display: displayLagless ? "none" : null,
 		};

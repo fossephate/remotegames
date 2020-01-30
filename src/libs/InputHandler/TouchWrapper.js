@@ -1,6 +1,8 @@
 import { pick } from "src/libs/tools.js";
 import nipplejs from "nipplejs";
 
+// window.nipplejs = nipplejs;
+
 let btnList = {
 	a: 1,
 	b: 1,
@@ -63,9 +65,9 @@ export class TouchWrapper {
 		};
 	}
 
-	init = () => {
+	init = (leftZone, rightZone) => {
 		let leftJoyStick = {
-			zone: document.querySelector("#leftStick"),
+			zone: leftZone,
 			mode: "static",
 			catchDistance: 10,
 			color: "#FF3C28",
@@ -76,7 +78,7 @@ export class TouchWrapper {
 		};
 
 		let rightJoyStick = {
-			zone: document.querySelector("#rightStick"),
+			zone: rightZone,
 			mode: "static",
 			catchDistance: 10,
 			color: "#0AB9E6",
@@ -85,9 +87,6 @@ export class TouchWrapper {
 			restOpacity: 0,
 			fadeTime: 1e99,
 		};
-
-		leftJoyStick.zone = document.querySelector("#leftStick");
-		rightJoyStick.zone = document.querySelector("#rightStick");
 
 		this.leftStick = nipplejs.create(leftJoyStick);
 		this.rightStick = nipplejs.create(rightJoyStick);
@@ -144,11 +143,7 @@ export class TouchWrapper {
 			});
 	};
 
-	getName = (str) => {
-		if (!str.split) {
-			return "other";
-		}
-		let names = str.split(" ");
+	getName = (names) => {
 		for (let i = 0; i < names.length; i++) {
 			if (btnList[names[i]]) {
 				let isLeftButton = !!leftButtons[names[i]];
@@ -184,7 +179,7 @@ export class TouchWrapper {
 			this.ongoingTouches.push(pick("identifier", "clientX", "clientY")(touches[i]));
 			this.activeTargets[
 				this.getName(
-					document.elementFromPoint(touches[i].clientX, touches[i].clientY).className,
+					document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList,
 				)
 			] = true;
 		}
@@ -206,7 +201,7 @@ export class TouchWrapper {
 				this.ongoingTouches.splice(idx, 1); // remove it; we're done
 				this.activeTargets[
 					this.getName(
-						document.elementFromPoint(touches[i].clientX, touches[i].clientY).className,
+						document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList,
 					)
 				] = false;
 			} else {
@@ -234,7 +229,7 @@ export class TouchWrapper {
 			this.ongoingTouches.splice(idx, 1); // remove it; we're done
 			this.activeTargets[
 				this.getName(
-					document.elementFromPoint(touches[i].clientX, touches[i].clientY).className,
+					document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList,
 				)
 			] = false;
 		}
@@ -258,10 +253,10 @@ export class TouchWrapper {
 					document.elementFromPoint(
 						this.ongoingTouches[idx].clientX,
 						this.ongoingTouches[idx].clientY,
-					).className,
+					).classList,
 				);
 				let newTarget = this.getName(
-					document.elementFromPoint(touches[i].clientX, touches[i].clientY).className,
+					document.elementFromPoint(touches[i].clientX, touches[i].clientY).classList,
 				);
 				if (oldTarget != newTarget) {
 					this.activeTargets[oldTarget] = false;

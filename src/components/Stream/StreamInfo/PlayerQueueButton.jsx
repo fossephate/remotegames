@@ -39,7 +39,7 @@ class PlayerQueueButton extends PureComponent {
 			this.props.leavePlayerControlQueue(this.props.num);
 		} else {
 			for (let i = 0; i < this.props.playerCount; i++) {
-				if (i == this.props.num) {
+				if (i === this.props.num) {
 					continue;
 				}
 				this.props.leavePlayerControlQueue(i);
@@ -62,7 +62,8 @@ class PlayerQueueButton extends PureComponent {
 		}
 
 		return (
-			<Button className={classes.root} variant="contained" onClick={this.joinLeaveQueue}>
+			<Button className={classes.root} variant="contained" onClick={this.joinLeaveQueue}
+			disabled={!this.props.loggedIn}>
 				{buttonText}
 			</Button>
 		);
@@ -71,6 +72,7 @@ class PlayerQueueButton extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
+		loggedIn: state.client.loggedIn,
 		playerCount: state.stream.players.count,
 	};
 };

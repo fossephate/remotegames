@@ -5,7 +5,6 @@ class Client {
 		this.socket = socket;
 		this.id = socket.id;
 		this.userid = null;
-		this.name = "none";
 		this.username = null;
 		this.validUsernames = [];
 		this.rooms = [];

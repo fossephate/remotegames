@@ -2,22 +2,17 @@
 import React, { PureComponent } from "react";
 
 // components:
-import PlayerInfo from "./StreamInfo/PlayerInfo.jsx";
-import CheckboxSettings from "./StreamInfo/CheckboxSettings.jsx";
+import PlayerInfo from "./PlayerInfo.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import ListItemText from "@material-ui/core/ListItemText";
-import Button from "@material-ui/core/Button";
+import { Paper } from "@material-ui/core";
 
 // redux:
 import { connect } from "react-redux";
 
 // recompose:
 import { compose } from "recompose";
-
-let classNames = require("classnames");
 
 // jss:
 const styles = (theme) => ({
@@ -54,25 +49,9 @@ class StreamInfo extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
-		let pictureClasses = classNames(classes.root, {
-			[classes.hideChat]: this.props.hideChat,
-		});
-
 		return (
 			<Paper elevation={3} className={classes.root}>
 				<PlayerInfo />
-
-				{/* <Paper className={classes.settings} elevation={0}>
-					<CheckboxSettings toggleAudioThree={() => {console.log("todo")}} />
-
-					<Paper className={classes.settingsPanel} elevation={5}>
-						<ListItemText>General Settings</ListItemText>
-						<hr />
-						<Button variant="contained" onClick={() => {console.log("todo")}}>
-							Reset All Settings
-						</Button>
-					</Paper>
-				</Paper> */}
 			</Paper>
 		);
 	}

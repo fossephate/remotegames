@@ -58,6 +58,7 @@ class HostServer {
 		this.lastFewMessages = [];
 		this.locked = false;
 		this.plusLock = false;
+		this.IPToGuestNumberMap = {};
 
 		// host set settings:
 		this.streamSettings = options.settings;
@@ -87,12 +88,13 @@ class HostServer {
 			this.controlQueues.push([]);
 		}
 
-		// bind intervaled functions:
+		// bind functions:
 		this.everySecond = this.everySecond.bind(this);
 		this.every4Seconds = this.every4Seconds.bind(this);
 		this.every5Seconds = this.every5Seconds.bind(this);
 		this.every30Seconds = this.every30Seconds.bind(this);
 		this.addTimePlayed = this.addTimePlayed.bind(this);
+		this.filterGuests = this.filterGuests.bind(this);
 	}
 
 	init() {
@@ -101,7 +103,7 @@ class HostServer {
 		setInterval(this.every4Seconds, 4000);
 		setInterval(this.every5Seconds, 5000);
 		setInterval(this.every30Seconds, 30000);
-		let timer = customSetInterval(this.addTimePlayed, 5000);
+		customSetInterval(this.addTimePlayed, 5000);
 
 		// get host info:
 		this.getHostInfo();
@@ -114,6 +116,13 @@ class HostServer {
 		this.io.on("connection", (socket) => {
 			this.clients[socket.id] = new Client(socket);
 			console.log(`#clients: ${Object.keys(this.clients).length}`);
+
+			let client = this.clients[socket.id];
+
+			if (!this.IPToGuestNumberMap[client.ip]) {
+				this.IPToGuestNumberMap[client.ip] = `guest#${parseInt(Math.random() * 1000)}`;
+			}
+			this.clients[socket.id].username = this.IPToGuestNumberMap[client.ip];
 
 			socket.on("authenticate", (data, cb) => {
 				if (!cb) {
@@ -152,6 +161,10 @@ class HostServer {
 						if (data.success) {
 							// update local client to contain account server's info:
 							this.clients[data.socketid].update(data.clientInfo);
+
+							// remove from the local accountMap:
+							this.filterGuests();
+							this.io.emit("accountMap", this.accountMap);
 
 							// emit to the client their info:
 							let clientInfo = {
@@ -198,7 +211,14 @@ class HostServer {
 					});
 
 					// remove from account map:
-					// delete accountMap[client.userid];
+
+					if (client.userid) {
+						delete this.accountMap[client.userid];
+					}
+					if (this.accountMap[client.username]) {
+						delete this.accountMap[client.username];
+					}
+
 					// remove from socketid map (if there):
 					delete this.useridToSocketidMap[client.userid];
 					// delete:
@@ -210,7 +230,7 @@ class HostServer {
 			/* CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 			socket.on("chatMessage", (data) => {
 				let client = this.clients[socket.id];
-				if (client == null || client.userid == null) {
+				if (client === null) {
 					return;
 				}
 				if (data && typeof data.text != "string") {
@@ -237,7 +257,6 @@ class HostServer {
 				};
 
 				if (client.rooms.indexOf("hostController") > -1) {
-					msgObj.username = "HostBot";
 					msgObj.roles = ["mod"];
 				}
 
@@ -248,7 +267,7 @@ class HostServer {
 			/* INPUT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 			socket.on("sendControllerState", (data) => {
 				let client = this.clients[socket.id];
-				if (client == null || client.userid == null) {
+				if (client === null || client.userid === null) {
 					return;
 				}
 
@@ -465,9 +484,10 @@ class HostServer {
 					if (client.rooms.indexOf(data.room) == -1) {
 						client.rooms.push(data.room);
 					}
-					// if (data.room === "hostController") {
-					// 	client.userid = "hostController";
-					// }
+					if (data.room === "hostController") {
+						client.userid = "HostBot";
+						client.username = "HostBot";
+					}
 					socket.join(data.room);
 				}
 			});
@@ -497,6 +517,7 @@ class HostServer {
 			socket.emit("videoInfo", { ip: this.videoIP, port: this.videoPort });
 
 			// settings:
+			this.filterGuests();
 			socket.emit("accountMap", this.accountMap);
 			socket.emit("controlQueues", this.controlQueues);
 			socket.emit("turnLengths", {
@@ -516,8 +537,30 @@ class HostServer {
 
 		this.accountConnection.on("accountMap", (data) => {
 			this.accountMap = data;
+
+			this.filterGuests();
+
 			this.io.emit("accountMap", this.accountMap);
 		});
+	}
+
+	filterGuests() {
+		// fill in accountMap's for guest accounts:
+
+		for (let key in this.accountMap) {
+			if (/guest/.test(key)) {
+				delete this.accountMap[key];
+			}
+		}
+
+		for (let socketid in this.clients) {
+			let userid = this.clients[socketid].userid;
+			let username = this.clients[socketid].username;
+
+			if (!userid && username !== "HostBot") {
+				this.accountMap[username] = { userid: username, username: username };
+			}
+		}
 	}
 
 	sendMessage(msgObj) {
@@ -527,6 +570,14 @@ class HostServer {
 		if (this.lastFewMessages.length > this.numberOfLastFewMessages) {
 			this.lastFewMessages.shift();
 		}
+
+		// remove messages more than an hour old:
+		for (let i = 0; i < this.lastFewMessages.length; i++) {
+			if (Date.now() - this.lastFewMessages[i].time > 1000 * 60 * 60) {
+				this.lastFewMessages.splice(i, 1);
+			}
+		}
+
 		// send to everyone:
 		this.io.emit("chatMessage", msgObj);
 	}
@@ -721,7 +772,7 @@ class HostServer {
 		}
 		let index = -1;
 		for (let key in this.clients) {
-			if (this.clients[key].userid == userid) {
+			if (this.clients[key].userid === userid) {
 				index = this.clients[key].id;
 				this.useridToSocketidMap[userid] = index;
 				return index;

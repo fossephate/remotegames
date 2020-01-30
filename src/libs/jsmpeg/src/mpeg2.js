@@ -164,17 +164,9 @@ export class MPEG2 extends BaseDecoder {
      * @returns {boolean}
      */
     write = function (pts, buffers) {
-		// BaseDecoder.write.call(this, pts, buffers);
-		
-		if (this.collectTimestamps) {
-			if (this.timestamps.length === 0) {
-				this.startTime = pts;
-				this.decodedTime = pts;
-			}
-			this.timestamps.push({ index: this.bytesWritten << 3, time: pts });
-		}
-		this.bytesWritten += this.bufferWrite(buffers);
-		this.canPlay = true;
+        // BaseDecoder.write.call(this, pts, buffers);
+        
+        this.baseWrite(pts, buffers);
 
         //если еще не определен сиквенс?
         if (!this.hasSequenceHeader) {
@@ -191,7 +183,7 @@ export class MPEG2 extends BaseDecoder {
         }
     };
 
-    decode = function () {
+    decode = () => {
         const startTime = Now();
 
         if (!this.hasSequenceHeader) {

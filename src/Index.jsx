@@ -19,6 +19,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 
+// notistack:
+import { SnackbarProvider } from "notistack";
+
 // components:
 import Loading from "components/General/Loading.jsx";
 
@@ -292,38 +295,39 @@ class Index extends Component {
 		return (
 			<Provider store={store}>
 				<ThemeProvider theme={this.state.theme}>
-					<CssBaseline />
-					<BrowserRouter>
-						{/* selects the first matching path: */}
-						{/* <Switch> */}
-						<Suspense fallback={<Loading />}>
-							<Switch>
-								<Route
-									path="/about"
-									render={(props) => {
-										return <About {...props} />;
-									}}
-								/>
-								<Route
-									path="/FAQ"
-									render={(props) => {
-										return <FAQ {...props} />;
-									}}
-								/>
-								<Route
-									path="/privacy"
-									render={(props) => {
-										return <Privacy {...props} />;
-									}}
-								/>
-								<Route
-									path="/tos"
-									render={(props) => {
-										return <ToS {...props} />;
-									}}
-								/>
-								{/* </Suspense> */}
-								{/* <Route
+					<SnackbarProvider maxSnack={3}>
+						<CssBaseline />
+						<BrowserRouter>
+							{/* selects the first matching path: */}
+							{/* <Switch> */}
+							<Suspense fallback={<Loading />}>
+								<Switch>
+									<Route
+										path="/about"
+										render={(props) => {
+											return <About {...props} />;
+										}}
+									/>
+									<Route
+										path="/FAQ"
+										render={(props) => {
+											return <FAQ {...props} />;
+										}}
+									/>
+									<Route
+										path="/privacy"
+										render={(props) => {
+											return <Privacy {...props} />;
+										}}
+									/>
+									<Route
+										path="/tos"
+										render={(props) => {
+											return <ToS {...props} />;
+										}}
+									/>
+									{/* </Suspense> */}
+									{/* <Route
 								path="/u/:username"
 								render={(props) => {
 									return (
@@ -336,62 +340,65 @@ class Index extends Component {
 									);
 								}}
 							/> */}
-								{/* </Suspense> */}
+									{/* </Suspense> */}
 
-								<Route
-									path="/(login|register)"
-									render={(props) => {
-										return <LoginRegisterModal {...props} history={this.props.history} />;
-									}}
-								/>
-								<Route
-									path="/account"
-									render={(props) => {
-										return <AccountModal {...props} history={this.props.history} />;
-									}}
-								/>
+									<Route
+										path="/(login|register)"
+										render={(props) => {
+											return (
+												<LoginRegisterModal {...props} history={this.props.history} />
+											);
+										}}
+									/>
+									<Route
+										path="/account"
+										render={(props) => {
+											return <AccountModal {...props} history={this.props.history} />;
+										}}
+									/>
 
-								{/* <Route
+									{/* <Route
 								path="/controls"
 								render={(props) => {
 									return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
 								}}
 							/> */}
-								{/* <Suspense fallback={<Loading />}> */}
-								<Route
-									path="/(s|controls|settings)/:username?"
-									// path="/s/:username?"
-									render={(props) => {
-										return (
-											<Stream
-												{...props}
-												store={store}
-												sagaMiddleware={sagaMiddleware}
-												accountConnection={accountConnection}
-											/>
-										);
-									}}
-								/>
-								{/* </Suspense> */}
-								{/* order matters here, can't do exact path or /login and /register break: */}
-								{/* <Suspense fallback={<Loading />}> */}
-								<Route
-									path="/"
-									render={(props) => {
-										return (
-											<Streams
-												{...props}
-												store={store}
-												accountConnection={accountConnection}
-												sagaMiddleware={sagaMiddleware}
-											/>
-										);
-									}}
-								/>
-								{/* </Suspense> */}
-							</Switch>
-						</Suspense>
-					</BrowserRouter>
+									{/* <Suspense fallback={<Loading />}> */}
+									<Route
+										path="/(s|controls|settings)/:username?"
+										// path="/s/:username?"
+										render={(props) => {
+											return (
+												<Stream
+													{...props}
+													store={store}
+													sagaMiddleware={sagaMiddleware}
+													accountConnection={accountConnection}
+												/>
+											);
+										}}
+									/>
+									{/* </Suspense> */}
+									{/* order matters here, can't do exact path or /login and /register break: */}
+									{/* <Suspense fallback={<Loading />}> */}
+									<Route
+										path="/"
+										render={(props) => {
+											return (
+												<Streams
+													{...props}
+													store={store}
+													accountConnection={accountConnection}
+													sagaMiddleware={sagaMiddleware}
+												/>
+											);
+										}}
+									/>
+									{/* </Suspense> */}
+								</Switch>
+							</Suspense>
+						</BrowserRouter>
+					</SnackbarProvider>
 				</ThemeProvider>
 			</Provider>
 		);

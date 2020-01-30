@@ -72,7 +72,7 @@ export default class ViewerDropdown extends PureComponent {
 		const open = Boolean(this.state.anchorEl);
 
 		return (
-			<React.Fragment>
+			<>
 				<Button variant="contained" color="primary" onClick={this.handleClick}>
 					Viewers
 					<DropDownIcon />
@@ -92,7 +92,7 @@ export default class ViewerDropdown extends PureComponent {
 				>
 					{this.getViewerList()}
 				</Menu>
-			</React.Fragment>
+			</>
 		);
 	}
 }

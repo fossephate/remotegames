@@ -1024,20 +1024,8 @@ io.on("connection", (socket) => {
 						data.usernameIndex,
 						data.hostUserid,
 						(clientInfo) => {
-							// fill masterAccountMap:
-							masterAccountMap[clientInfo.userid] = {
-								...clientInfo,
-								hostSocketid: socket.id,
-							};
+							updateAccountMaps(clientInfo, socket.id);
 
-							// create the localized account map if it doesn't exist:
-							if (!localizedAccountMaps.hasOwnProperty(socket.id)) {
-								localizedAccountMaps[socket.id] = {};
-							}
-							// fill it with this account:
-							localizedAccountMaps[socket.id][clientInfo.userid] = {
-								...clientInfo,
-							};
 							// update the host server with the new info:
 							updateSpecificLocalAccountMap(socket.id);
 
@@ -1054,26 +1042,33 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("clientDisconnected", (data) => {
+		if (!data.userid) {
+			return;
+		}
+
 		// update timePlayed stat:
 		// try and get account:
-		Account.findOne({ _id: data.userid }, (error, account) => {
-			// error check:
-			if (error) {
-				throw error;
-			}
-			// if the account exists:
-			if (account) {
-				// update account info:
-				account.timePlayed = data.timePlayed;
-				// update the account details:
-				account.save((error) => {
-					// error check:
-					if (error) {
-						throw error;
-					}
-				});
-			}
-		});
+		if (data.userid.length === 24) {
+			Account.findOne({ _id: data.userid }, (error, account) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+				// if the account exists:
+				if (account) {
+					// update account info:
+					account.timePlayed = data.timePlayed;
+					// update the account details:
+					account.save((error) => {
+						// error check:
+						if (error) {
+							throw error;
+						}
+					});
+				}
+			});
+		}
+
 		if (data.userid !== null) {
 			redisClient.delAsync(`users:${data.userid}`);
 		}
@@ -1304,12 +1299,16 @@ io.on("connection", (socket) => {
 			console.log("no callback (getStreamInfo)");
 			return;
 		}
-		if (typeof data.username !== "string") {
-			cb({ success: false, reason: "INVALID_USERNAME" });
-			return;
+
+		let queryObj;
+		if (data.userid) {
+			queryObj = { _id: data.userid };
+		} else if (data.username) {
+			queryObj = { usernameLower: data.username.toLowerCase() };
+		} else if (data.streamKey) {
+			queryObj = { streamKey: data.streamKey };
 		}
 
-		let queryObj = { usernameLower: data.username.toLowerCase() };
 		Account.findOne(queryObj)
 			.exec()
 			.then((account) => {
@@ -1473,6 +1472,8 @@ io.on("connection", (socket) => {
 			return;
 		}
 
+		console.log("STOPPING_STREAM");
+
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
 			// error check:
@@ -1536,6 +1537,8 @@ io.on("connection", (socket) => {
 		if (!videoServers.hasOwnProperty(socket.id)) {
 			return;
 		}
+
+		console.log("DEACTIVATING STREAM");
 
 		// try and get account by streamKey:
 		Account.findOne({ streamKey: data.streamKey }).exec((error, account) => {
@@ -1619,6 +1622,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 		videoServers[socket.id] = new VideoServerClient(socket, data.ip, data.ports);
+		synchronizeServers();
 	});
 
 	socket.on("registerHostServer", (data) => {
@@ -1626,6 +1630,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 		hostServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
+		synchronizeServers();
 	});
 
 	// host server commands:
@@ -1707,6 +1712,23 @@ io.on("connection", (socket) => {
 	// on connect:
 	// socket.emit("streams", streams);
 });
+
+function updateAccountMaps(clientInfo, sid) {
+	// fill masterAccountMap:
+	masterAccountMap[clientInfo.userid] = {
+		...clientInfo,
+		hostSocketid: sid,
+	};
+
+	// create the localized account map if it doesn't exist:
+	if (!localizedAccountMaps.hasOwnProperty(sid)) {
+		localizedAccountMaps[sid] = {};
+	}
+	// fill it with this account:
+	localizedAccountMaps[sid][clientInfo.userid] = {
+		...clientInfo,
+	};
+}
 
 function sendLocalizedAccountMaps() {
 	// create and send an accountMap (from the master map) to each connected host server:
@@ -1847,6 +1869,8 @@ function findAvailableServers(hostServers, videoServers) {
 // start and stop servers based on who is streaming
 function synchronizeServers() {
 	// go through the stream list:
+	// console.log("SYNCHRONIZING");
+	console.log(Object.keys(hostServers), Object.keys(videoServers));
 
 	// go through all of the accounts that should have a host/video server running:
 	Account.find({ isStreaming: true })
@@ -1866,29 +1890,46 @@ function synchronizeServers() {
 					continue;
 				}
 
+				let account = accounts[i];
+
 				// check to make sure both the host and video servers assigned are alive:
+				// todo: make sure they are actually alive,
+				// currently just tests to see if the port is marked as in use
 				let hostServerAlive = false;
 				let videoServerAlive = false;
 				if (hostServers[account.hostServerSocketid]) {
-					let p = accounts[i].hostServerPort;
-					if (hostServers[account.hostServerSocketid].serversAlive[p]) {
+					let p = account.hostServerPort;
+					// if (hostServers[account.hostServerSocketid].serversAlive[p]) {
+					// 	hostServerAlive = true;
+					// }
+					if (!hostServers[account.hostServerSocketid].ports[p]) {
 						hostServerAlive = true;
 					}
 				}
 				if (videoServers[account.videoServerSocketid]) {
-					let p = accounts[i].videoServerPort;
-					if (videoServers[account.videoServerSocketid].serversAlive[p]) {
+					let p = account.videoServerPort;
+					// if (videoServers[account.videoServerSocketid].serversAlive[p]) {
+					// 	videoServerAlive = true;
+					// }
+					if (!videoServers[account.videoServerSocketid].ports[p]) {
 						videoServerAlive = true;
 					}
 				}
 
+				let server = findAvailableServers(hostServers, videoServers);
+
+				// make sure we can fix the problem before continuing:
+				if ((!hostServerAlive && !server.host) || (!videoServerAlive && !server.video)) {
+					console.log("no host / video server available to start this stream!");
+					return;
+				}
+
 				// start a new server up if either is down:
 				if (!hostServerAlive) {
-					let server = findAvailableServers(hostServers, null);
 					// update account:
-					accounts[i].hostServerSocketid = server.host.sid;
-					accounts[i].hostServerIP = server.host.ip;
-					accounts[i].hostServerPort = server.host.port;
+					account.hostServerSocketid = server.host.sid;
+					account.hostServerIP = server.host.ip;
+					account.hostServerPort = server.host.port;
 					// send to hostServer:
 					io.to(server.host.sid).emit("startHost", {
 						hostUserid: ("" + account._id).trim(),
@@ -1896,15 +1937,15 @@ function synchronizeServers() {
 						streamKey: account.streamKey,
 						videoIP: server.video.ip,
 						videoPort: server.video.port,
+						settings: account.streamSettings,
 					});
 				}
 
 				if (!videoServerAlive) {
-					let server = findAvailableServers(null, videoServers);
 					// update account:
-					accounts[i].videoServerSocketid = server.video.sid;
-					accounts[i].videoServerIP = server.video.ip;
-					accounts[i].videoServerPort = server.video.port;
+					account.videoServerSocketid = server.video.sid;
+					account.videoServerIP = server.video.ip;
+					account.videoServerPort = server.video.port;
 					// send to videoServer:
 					io.to(server.video.sid).emit("startVideo", {
 						port: server.video.port,
@@ -1915,7 +1956,7 @@ function synchronizeServers() {
 				// if either server was down, update the account:
 				if (!hostServerAlive || !videoServerAlive) {
 					// save:
-					accounts[i].save((error) => {
+					account.save((error) => {
 						if (error) {
 							throw error;
 						}
@@ -1926,7 +1967,7 @@ function synchronizeServers() {
 
 			// update the stream list in case there were any changes:
 			// todo: only do this if there were changes:
-			this.generateStreamList();
+			generateStreamList();
 		});
 }
 
@@ -1934,29 +1975,32 @@ function synchronizeServers() {
 setInterval(sendLocalizedAccountMaps, 30000);
 setInterval(sendServerTime, 30000);
 setInterval(generateStreamList, 120000);
+// maybe do less often:
+setInterval(synchronizeServers, 120000);
+// setInterval(synchronizeServers, 2000);
 
 // for testing:
 
 // set all streams as stopped:
-Account.find({ isStreaming: true })
-	.exec()
-	.then((accounts) => {
-		if (!accounts) {
-			return;
-		}
+// Account.find({ isStreaming: true })
+// 	.exec()
+// 	.then((accounts) => {
+// 		if (!accounts) {
+// 			return;
+// 		}
 
-		for (let i = 0; i < accounts.length; i++) {
-			accounts[i].isStreaming = false;
+// 		for (let i = 0; i < accounts.length; i++) {
+// 			accounts[i].isStreaming = false;
 
-			// update the account details:
-			accounts[i].save((error) => {
-				// error check:
-				if (error) {
-					throw error;
-				}
-			});
-		}
-	});
+// 			// update the account details:
+// 			accounts[i].save((error) => {
+// 				// error check:
+// 				if (error) {
+// 					throw error;
+// 				}
+// 			});
+// 		}
+// 	});
 
 // try and get account by authToken:
 Account.findOne({ username: "fosse" }).exec((error, account) => {
@@ -1972,10 +2016,10 @@ Account.findOne({ username: "fosse" }).exec((error, account) => {
 	// update account info:
 	account.isStreaming = true;
 	account.streamKey = "a";
-	account.videoServerIP = "remotegames.io";
-	account.videoServerPort = 8000;
-	account.hostServerIP = "remotegames.io";
-	account.hostServerPort = 8050;
+	// account.videoServerIP = "remotegames.io";
+	// account.videoServerPort = 8000;
+	// account.hostServerIP = "remotegames.io";
+	// account.hostServerPort = 8050;
 	account.streamSettings.streamTitle = "Nintendo Switch";
 	account.streamSettings.description = "";
 	account.streamSettings.thumbnailURL = "https://i.imgur.com/Negv09l.jpg";
@@ -1987,8 +2031,12 @@ Account.findOne({ username: "fosse" }).exec((error, account) => {
 			throw error;
 		}
 		generateStreamList();
+
+		synchronizeServers();
 	});
 });
+
+setTimeout(synchronizeServers, 30000);
 
 // try and get account by authToken:
 // Account.findOne({ username: "fosse2" }).exec((error, account) => {

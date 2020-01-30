@@ -7,7 +7,7 @@ export class WebGLRenderer {
 
 		this.hasTextureData = {};
 
-		var contextCreateOptions = {
+		this.contextCreateOptions = {
 			preserveDrawingBuffer: !!options.preserveDrawingBuffer,
 			alpha: false,
 			depth: false,
@@ -17,11 +17,15 @@ export class WebGLRenderer {
 		};
 
 		this.gl =
-			this.canvas.getContext("webgl", contextCreateOptions) ||
-			this.canvas.getContext("experimental-webgl", contextCreateOptions);
+			this.canvas.getContext("webgl", this.contextCreateOptions) ||
+			this.canvas.getContext("experimental-webgl", this.contextCreateOptions);
 
 		if (!this.gl) {
 			throw new Error("Failed to get WebGL Context");
+		}
+
+		if (this.gl.isContextLost()) {
+			throw new Error("WebGL Context is lost!");
 		}
 
 		this.SHADER = {
@@ -70,14 +74,14 @@ export class WebGLRenderer {
 			].join("\n"),
 		};
 
-		var gl = this.gl;
-		var vertexAttr = null;
+		let gl = this.gl;
+		let vertexAttr = null;
 
 		gl.pixelStorei(gl.UNPACK_PREMULTIPLY_ALPHA_WEBGL, false);
 
 		// Init buffers
 		this.vertexBuffer = gl.createBuffer();
-		var vertexCoords = new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]);
+		let vertexCoords = new Float32Array([0, 0, 0, 1, 1, 0, 1, 1]);
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.vertexBuffer);
 		gl.bufferData(gl.ARRAY_BUFFER, vertexCoords, gl.STATIC_DRAW);
 
@@ -106,8 +110,8 @@ export class WebGLRenderer {
 		this.shouldCreateUnclampedViews = !this.allowsClampedTextureData();
 	}
 
-	destroy = function() {
-		var gl = this.gl;
+	destroy = () => {
+		let gl = this.gl;
 
 		this.deleteTexture(gl.TEXTURE0, this.textureY);
 		this.deleteTexture(gl.TEXTURE1, this.textureCb);
@@ -120,11 +124,29 @@ export class WebGLRenderer {
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		gl.deleteBuffer(this.vertexBuffer);
 
-		gl.getExtension("WEBGL_lose_context").loseContext();
-		// this.canvas.remove();// don't do this because I need it // fosse
+		// breaks:
+		// gl.getExtension("WEBGL_lose_context").loseContext();
+		// window.lose_context = gl.getExtension("WEBGL_lose_context");
+		// window.lose_context.loseContext();
+
+		// console.log(lose_context.restoreContext);
+
+		// lose_context.restoreContext();
+
+		// this.canvas.remove(); // don't do this because I need it // fosse
+
+		// let newEl = document.createElement("canvas");
+		// newEl.id = this.canvas.id;
+		// newEl.classList = this.canvas.classList;
+		// newEl.width = this.canvas.width;
+		// newEl.height = this.canvas.height;
+		// newEl.style = this.canvas.style;
+		// this.canvas.parentNode.replaceChild(newEl, this.canvas);
+		// // window.newEl = newEl;
+		// this.canvas.remove();
 	};
 
-	resize = function(width, height) {
+	resize = (width, height) => {
 		this.width = width | 0;
 		this.height = height | 0;
 
@@ -132,13 +154,13 @@ export class WebGLRenderer {
 		this.canvas.height = this.height;
 
 		this.gl.useProgram(this.program);
-		var codedWidth = ((this.width + 15) >> 4) << 4;
+		let codedWidth = ((this.width + 15) >> 4) << 4;
 		this.gl.viewport(0, 0, codedWidth, this.height);
 	};
 
-	createTexture = function(index, name) {
-		var gl = this.gl;
-		var texture = gl.createTexture();
+	createTexture = (index, name) => {
+		let gl = this.gl;
+		let texture = gl.createTexture();
 
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
@@ -150,9 +172,9 @@ export class WebGLRenderer {
 		return texture;
 	};
 
-	createProgram = function(vsh, fsh) {
-		var gl = this.gl;
-		var program = gl.createProgram();
+	createProgram = (vsh, fsh) => {
+		let gl = this.gl;
+		let program = gl.createProgram();
 
 		gl.attachShader(program, this.compileShader(gl.VERTEX_SHADER, vsh));
 		gl.attachShader(program, this.compileShader(gl.FRAGMENT_SHADER, fsh));
@@ -162,9 +184,10 @@ export class WebGLRenderer {
 		return program;
 	};
 
-	compileShader = function(type, source) {
-		var gl = this.gl;
-		var shader = gl.createShader(type);
+	compileShader = (type, source) => {
+		let gl = this.gl;
+		let shader = gl.createShader(type);
+
 		gl.shaderSource(shader, source);
 		gl.compileShader(shader);
 
@@ -175,9 +198,9 @@ export class WebGLRenderer {
 		return shader;
 	};
 
-	allowsClampedTextureData = function() {
-		var gl = this.gl;
-		var texture = gl.createTexture();
+	allowsClampedTextureData = () => {
+		let gl = this.gl;
+		let texture = gl.createTexture();
 
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 		gl.texImage2D(
@@ -194,24 +217,24 @@ export class WebGLRenderer {
 		return gl.getError() === 0;
 	};
 
-	renderProgress = function(progress) {
-		var gl = this.gl;
+	renderProgress = (progress) => {
+		let gl = this.gl;
 
 		gl.useProgram(this.loadingProgram);
 
-		var loc = gl.getUniformLocation(this.loadingProgram, "progress");
+		let loc = gl.getUniformLocation(this.loadingProgram, "progress");
 		gl.uniform1f(loc, progress);
 
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 	};
 
-	render = function(y, cb, cr, isClampedArray) {
+	render = (y, cb, cr, isClampedArray) => {
 		if (!this.enabled) {
 			return;
 		}
 
-		var gl = this.gl;
-		var w = ((this.width + 15) >> 4) << 4,
+		let gl = this.gl;
+		let w = ((this.width + 15) >> 4) << 4,
 			h = this.height,
 			w2 = w >> 1,
 			h2 = h >> 1;
@@ -234,8 +257,8 @@ export class WebGLRenderer {
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 	};
 
-	updateTexture = function(unit, texture, w, h, data) {
-		var gl = this.gl;
+	updateTexture = (unit, texture, w, h, data) => {
+		let gl = this.gl;
 		gl.activeTexture(unit);
 		gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -267,20 +290,20 @@ export class WebGLRenderer {
 		}
 	};
 
-	deleteTexture = function(unit, texture) {
-		var gl = this.gl;
+	deleteTexture = (unit, texture) => {
+		let gl = this.gl;
 		gl.activeTexture(unit);
 		gl.bindTexture(gl.TEXTURE_2D, null);
 		gl.deleteTexture(texture);
 	};
 
-	static IsSupported = function() {
+	static IsSupported = () => {
 		try {
 			if (!window.WebGLRenderingContext) {
 				return false;
 			}
 
-			var canvas = document.createElement("canvas");
+			let canvas = document.createElement("canvas");
 			return !!(canvas.getContext("webgl") || canvas.getContext("experimental-webgl"));
 		} catch (err) {
 			return false;

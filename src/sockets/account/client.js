@@ -28,7 +28,7 @@ function getAccountInfo(socket, dispatch) {
 					// remove the authToken if it doesn't work:
 					if (data.reason === "ACCOUNT_NOT_FOUND") {
 						Cookie.remove("RemoteGames");
-						dispatch(updateClientInfo({ authToken: null }));
+						dispatch(updateClient({ authToken: null }));
 					}
 				}
 			},

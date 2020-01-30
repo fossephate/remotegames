@@ -6,8 +6,6 @@ export class MPEG1WASM extends BaseDecoder {
 	constructor(options) {
 		super(options);
 
-		// JSMpeg.Decoder.Base.call(this, options);
-
 		this.onDecodeCallback = options.onVideoDecode;
 		this.module = options.wasmModule;
 
@@ -21,49 +19,51 @@ export class MPEG1WASM extends BaseDecoder {
 	// MPEG1WASM.prototype = Object.create(JSMpeg.Decoder.Base.prototype);
 	// MPEG1WASM.prototype.constructor = MPEG1WASM;
 
-	initializeWasmDecoder = function() {
-		if (!this.module.instance) {
-			console.warn("JSMpeg: WASM module not compiled yet");
-			return;
-		}
+	initializeWasmDecoder = () => {
 		this.instance = this.module.instance;
 		this.functions = this.module.instance.exports;
 		this.decoder = this.functions.mpeg1_decoder_create(this.bufferSize, this.bufferMode);
 	};
 
-	destroy = function() {
+	destroy = () => {
 		if (!this.decoder) {
 			return;
 		}
-		/*this.functions && */ this.functions.mpeg1_decoder_destroy(this.decoder);
+		this.functions.mpeg1_decoder_destroy(this.decoder);
 	};
 
-	bufferGetIndex = function() {
+	bufferGetIndex = () => {
 		if (!this.decoder) {
 			return;
 		}
 		return this.functions.mpeg1_decoder_get_index(this.decoder);
 	};
 
-	bufferSetIndex = function(index) {
+	bufferSetIndex = (index) => {
 		if (!this.decoder) {
 			return;
 		}
 		this.functions.mpeg1_decoder_set_index(this.decoder, index);
 	};
 
-	bufferWrite = function(buffers) {
+	bufferWrite = (buffers) => {
+		// 1/28/20
+		// https://github.com/SuperAwesomeLTD/jsmpeg/pull/1/commits/e2728ba23086fec6aea62f4f2810c5c755199a40
+		if (!this.module.instance) {
+			console.warn("JSMpeg: WASM module not compiled yet");
+			return;
+		}
 		if (!this.decoder) {
 			this.initializeWasmDecoder();
 		}
 
-		var totalLength = 0;
-		for (var i = 0; i < buffers.length; i++) {
+		let totalLength = 0;
+		for (let i = 0; i < buffers.length; i++) {
 			totalLength += buffers[i].length;
 		}
 
-		var ptr = this.functions.mpeg1_decoder_get_write_ptr(this.decoder, totalLength);
-		for (var i = 0; i < buffers.length; i++) {
+		let ptr = this.functions.mpeg1_decoder_get_write_ptr(this.decoder, totalLength);
+		for (let i = 0; i < buffers.length; i++) {
 			this.instance.heapU8.set(buffers[i], ptr);
 			ptr += buffers[i].length;
 		}
@@ -72,28 +72,20 @@ export class MPEG1WASM extends BaseDecoder {
 		return totalLength;
 	};
 
-	write = function(pts, buffers) {
-		// JSMpeg.Decoder.Base.prototype.write.call(this, pts, buffers);
+	write = (pts, buffers) => {
+		this.baseWrite(pts, buffers);
 
-		if (this.collectTimestamps) {
-			if (this.timestamps.length === 0) {
-				this.startTime = pts;
-				this.decodedTime = pts;
-			}
-			this.timestamps.push({ index: this.bytesWritten << 3, time: pts });
-		}
-		this.bytesWritten += this.bufferWrite(buffers);
-		this.canPlay = true;
-
+		// 1/28/20
 		if (
 			!this.hasSequenceHeader &&
+			this.functions &&
 			this.functions.mpeg1_decoder_has_sequence_header(this.decoder)
 		) {
 			this.loadSequnceHeader();
 		}
 	};
 
-	loadSequnceHeader = function() {
+	loadSequnceHeader = () => {
 		this.hasSequenceHeader = true;
 		this.frameRate = this.functions.mpeg1_decoder_get_frame_rate(this.decoder);
 		this.codedSize = this.functions.mpeg1_decoder_get_coded_size(this.decoder);
@@ -109,34 +101,34 @@ export class MPEG1WASM extends BaseDecoder {
 		}
 	};
 
-	decode = function() {
-		var startTime = Now();
+	decode = () => {
+		let startTime = Now();
 
 		if (!this.decoder) {
 			return false;
 		}
 
-		var didDecode = this.functions.mpeg1_decoder_decode(this.decoder);
+		let didDecode = this.functions.mpeg1_decoder_decode(this.decoder);
 		if (!didDecode) {
 			return false;
 		}
 
 		// Invoke decode callbacks
 		if (this.destination) {
-			var ptrY = this.functions.mpeg1_decoder_get_y_ptr(this.decoder),
+			let ptrY = this.functions.mpeg1_decoder_get_y_ptr(this.decoder),
 				ptrCr = this.functions.mpeg1_decoder_get_cr_ptr(this.decoder),
 				ptrCb = this.functions.mpeg1_decoder_get_cb_ptr(this.decoder);
 
-			var dy = this.instance.heapU8.subarray(ptrY, ptrY + this.codedSize);
-			var dcr = this.instance.heapU8.subarray(ptrCr, ptrCr + (this.codedSize >> 2));
-			var dcb = this.instance.heapU8.subarray(ptrCb, ptrCb + (this.codedSize >> 2));
+			let dy = this.instance.heapU8.subarray(ptrY, ptrY + this.codedSize);
+			let dcr = this.instance.heapU8.subarray(ptrCr, ptrCr + (this.codedSize >> 2));
+			let dcb = this.instance.heapU8.subarray(ptrCb, ptrCb + (this.codedSize >> 2));
 
 			this.destination.render(dy, dcr, dcb, false);
 		}
 
 		this.advanceDecodedTime(1 / this.frameRate);
 
-		var elapsedTime = Now() - startTime;
+		let elapsedTime = Now() - startTime;
 		if (this.onDecodeCallback) {
 			this.onDecodeCallback(this, elapsedTime);
 		}

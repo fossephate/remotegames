@@ -335,6 +335,22 @@ class ControllerView extends PureComponent {
 		return `${x2}px, ${y2}px`;
 	}
 
+	componentDidMount() {
+		window.inputHandler.touchpad.touchWrapper.init(
+			document.querySelector("#leftStick"),
+			document.querySelector("#rightStick"),
+		);
+	}
+
+	componentWillUnmount() {
+		if (window.inputHandler.touchpad.touchWrapper.leftStick) {
+			window.inputHandler.touchpad.touchWrapper.leftStick.destroy();
+		}
+		if (window.inputHandler.touchpad.touchWrapper.rightStick) {
+			window.inputHandler.touchpad.touchWrapper.rightStick.destroy();
+		}
+	}
+
 	render() {
 		const { classes } = this.props;
 

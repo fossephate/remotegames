@@ -50,6 +50,7 @@ accountConnection.on("startVideo", (data) => {
 
 	// set port as unavailable:
 	ports[data.port] = false;
+	register();
 
 	videoServers[data.port] = new VideoServer({
 		socket: accountConnection,
@@ -67,18 +68,19 @@ accountConnection.on("stopVideo", (data) => {
 	videoServers[data.port].stop();
 	// set port as available:
 	ports[data.port] = true;
+	register();
 });
 
 // for testing:
-let port;
-port = 8000;
-ports[port] = false;
-videoServers[port] = new VideoServer({
-	socket: accountConnection,
-	port: port,
-	streamKey: "a",
-});
-videoServers[port].init();
+// let port;
+// port = 8000;
+// ports[port] = false;
+// videoServers[port] = new VideoServer({
+// 	socket: accountConnection,
+// 	port: port,
+// 	streamKey: "a",
+// });
+// videoServers[port].init();
 
 // fosse2:
 // port = 8001;

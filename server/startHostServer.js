@@ -51,6 +51,8 @@ accountConnection.on("startHost", (data) => {
 
 	// set port as unavailable:
 	ports[data.port] = false;
+	register();
+
 	// start:
 	hostServers[data.port] = new HostServer({
 		socket: accountConnection,
@@ -73,22 +75,23 @@ accountConnection.on("stopHost", (data) => {
 	hostServers[data.port].stop();
 	// set port as available:
 	ports[data.port] = true;
+	register();
 });
 
 // for testing:
-let port;
-port = 8050;
-ports[port] = false;
-hostServers[port] = new HostServer({
-	socket: accountConnection,
-	port: port,
-	ip: ip,
-	videoPort: 8000,
-	streamKey: "a",
-	hostUsername: "fosse",
-	settings: {},
-});
-hostServers[port].init();
+// let port;
+// port = 8050;
+// ports[port] = false;
+// hostServers[port] = new HostServer({
+// 	socket: accountConnection,
+// 	port: port,
+// 	ip: ip,
+// 	videoPort: 8000,
+// 	streamKey: "a",
+// 	hostUsername: "fosse",
+// 	settings: {},
+// });
+// hostServers[port].init();
 
 // port = 8051;
 // ports[port] = false;

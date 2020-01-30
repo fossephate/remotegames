@@ -1,3 +1,5 @@
+import { Fill } from "./utils.js";
+
 export class CanvasRenderer {
 	constructor(options) {
 		this.canvas = options.canvas || document.createElement("canvas");
@@ -20,7 +22,7 @@ export class CanvasRenderer {
 		this.canvas.height = this.height;
 
 		this.imageData = this.context.getImageData(0, 0, this.width, this.height);
-		JSMpeg.Fill(this.imageData.data, 255);
+		Fill(this.imageData.data, 255);
 	};
 
 	renderProgress = function(progress) {

@@ -24,11 +24,11 @@ export class WSSource {
 		this.onCompletedCallback = options.onSourceCompleted; // Never used
 	}
 
-	connect = function(destination) {
+	connect = (destination) => {
 		this.destination = destination;
 	};
 
-	destroy = function() {
+	destroy = () => {
 		clearTimeout(this.reconnectTimeoutId);
 		this.shouldAttemptReconnect = false;
 		if (this.socket) {
@@ -36,7 +36,7 @@ export class WSSource {
 		}
 	};
 
-	start = function() {
+	start = () => {
 		this.shouldAttemptReconnect = !!this.reconnectInterval;
 		this.progress = 0;
 		this.established = false;
@@ -54,28 +54,25 @@ export class WSSource {
 		this.socket.onclose = this.onClose.bind(this);
 	};
 
-	resume = function(secondsHeadroom) {
+	resume = (secondsHeadroom) => {
 		// Nothing to do here
 	};
 
-	onOpen = function() {
+	onOpen = () => {
 		this.progress = 1;
 	};
 
-	onClose = function() {
+	onClose = () => {
 		if (this.shouldAttemptReconnect) {
 			clearTimeout(this.reconnectTimeoutId);
-			this.reconnectTimeoutId = setTimeout(
-				function() {
-					this.start();
-				}.bind(this),
-				this.reconnectInterval * 1000,
-			);
+			this.reconnectTimeoutId = setTimeout(() => {
+				this.start();
+			}, this.reconnectInterval * 1000);
 		}
 	};
 
-	onMessage = function(ev) {
-		var isFirstChunk = !this.established;
+	onMessage = (ev) => {
+		let isFirstChunk = !this.established;
 		this.established = true;
 
 		if (isFirstChunk && this.onEstablishedCallback) {
@@ -87,8 +84,6 @@ export class WSSource {
 		}
 	};
 }
-
-
 
 export class SIOSource {
 	constructor(url, options) {
@@ -115,11 +110,11 @@ export class SIOSource {
 		this.onCompletedCallback = options.onSourceCompleted; // Never used
 	}
 
-	connect = function(destination) {
+	connect = (destination) => {
 		this.destination = destination;
 	};
 
-	destroy = function() {
+	destroy = () => {
 		clearTimeout(this.reconnectTimeoutId);
 		this.shouldAttemptReconnect = false;
 		if (this.socket) {
@@ -127,7 +122,7 @@ export class SIOSource {
 		}
 	};
 
-	start = function() {
+	start = () => {
 		this.shouldAttemptReconnect = !!this.reconnectInterval;
 		this.progress = 0;
 		this.established = false;
@@ -143,28 +138,25 @@ export class SIOSource {
 		}
 	};
 
-	resume = function(secondsHeadroom) {
+	resume = (secondsHeadroom) => {
 		// Nothing to do here
 	};
 
-	onOpen = function() {
+	onOpen = () => {
 		this.progress = 1;
 	};
 
-	onClose = function() {
+	onClose = () => {
 		if (this.shouldAttemptReconnect) {
 			clearTimeout(this.reconnectTimeoutId);
-			this.reconnectTimeoutId = setTimeout(
-				function() {
-					this.start();
-				}.bind(this),
-				this.reconnectInterval * 1000,
-			);
+			this.reconnectTimeoutId = setTimeout(() => {
+				this.start();
+			}, this.reconnectInterval * 1000);
 		}
 	};
 
-	onMessage = function(ev) {
-		var isFirstChunk = !this.established;
+	onMessage = (ev) => {
+		let isFirstChunk = !this.established;
 		this.established = true;
 
 		if (isFirstChunk && this.onEstablishedCallback) {
@@ -175,5 +167,4 @@ export class SIOSource {
 			this.destination.write(ev);
 		}
 	};
-
 }

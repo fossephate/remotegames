@@ -93,22 +93,6 @@ class Message extends PureComponent {
 			accountMap,
 		} = this.props;
 
-		let source = "";
-
-		let isRelay = false;
-		// if it's a relayed message:
-		if (userid === "TPNSbot" && text[0] == "[") {
-			isRelay = true;
-			let r = /\[(.+):(.+)\](.+)/;
-			let split = text.match(r);
-			source = split[1];
-			let user = split[2];
-			let msg = split[3];
-			// username = source.substr(0, 2) + ":" + user;
-			username = user;
-			text = msg;
-		}
-
 		if (!isReplay && isLastMessage) {
 			let mention = "@" + this.props.myUsername;
 			if (text.indexOf(mention) > -1) {

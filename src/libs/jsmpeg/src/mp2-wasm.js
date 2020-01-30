@@ -20,7 +20,7 @@ export class MP2WASM extends BaseDecoder {
 
 	static SAMPLES_PER_FRAME = 1152;
 
-	initializeWasmDecoder = function() {
+	initializeWasmDecoder = () => {
 		if (!this.module.instance) {
 			console.warn("JSMpeg: WASM module not compiled yet");
 			return;
@@ -30,39 +30,45 @@ export class MP2WASM extends BaseDecoder {
 		this.decoder = this.functions.mp2_decoder_create(this.bufferSize, this.bufferMode);
 	};
 
-	destroy = function() {
+	destroy = () => {
 		if (!this.decoder) {
 			return;
 		}
 		/*this.functions && */ this.functions.mp2_decoder_destroy(this.decoder);
 	};
 
-	bufferGetIndex = function() {
+	bufferGetIndex = () => {
 		if (!this.decoder) {
 			return;
 		}
 		return this.functions.mp2_decoder_get_index(this.decoder);
 	};
 
-	bufferSetIndex = function(index) {
+	bufferSetIndex = (index) => {
 		if (!this.decoder) {
 			return;
 		}
 		this.functions.mp2_decoder_set_index(this.decoder, index);
 	};
 
-	bufferWrite = function(buffers) {
+	bufferWrite = (buffers) => {
+		// 1/28/20
+		// https://github.com/SuperAwesomeLTD/jsmpeg/pull/1/commits/e2728ba23086fec6aea62f4f2810c5c755199a40
+		if (!this.module.instance) {
+			console.warn("JSMpeg: WASM module not compiled yet");
+			return;
+		}
 		if (!this.decoder) {
 			this.initializeWasmDecoder();
 		}
 
-		var totalLength = 0;
-		for (var i = 0; i < buffers.length; i++) {
+		let totalLength = 0;
+		for (let i = 0; i < buffers.length; i++) {
 			totalLength += buffers[i].length;
 		}
 
-		var ptr = this.functions.mp2_decoder_get_write_ptr(this.decoder, totalLength);
-		for (var i = 0; i < buffers.length; i++) {
+		let ptr = this.functions.mp2_decoder_get_write_ptr(this.decoder, totalLength);
+		for (let i = 0; i < buffers.length; i++) {
 			this.instance.heapU8.set(buffers[i], ptr);
 			ptr += buffers[i].length;
 		}
@@ -71,14 +77,18 @@ export class MP2WASM extends BaseDecoder {
 		return totalLength;
 	};
 
-	decode = function() {
-		var startTime = Now();
+	write = (pts, buffers) => {
+		this.baseWrite(pts, buffers);
+	};
+
+	decode = () => {
+		let startTime = Now();
 
 		if (!this.decoder) {
 			return false;
 		}
 
-		var decodedBytes = this.functions.mp2_decoder_decode(this.decoder);
+		let decodedBytes = this.functions.mp2_decoder_decode(this.decoder);
 		if (decodedBytes === 0) {
 			return false;
 		}
@@ -89,13 +99,13 @@ export class MP2WASM extends BaseDecoder {
 
 		if (this.destination) {
 			// Create a Float32 View into the modules output channel data
-			var leftPtr = this.functions.mp2_decoder_get_left_channel_ptr(this.decoder),
+			let leftPtr = this.functions.mp2_decoder_get_left_channel_ptr(this.decoder),
 				rightPtr = this.functions.mp2_decoder_get_right_channel_ptr(this.decoder);
 
-			var leftOffset = leftPtr / Float32Array.BYTES_PER_ELEMENT,
+			let leftOffset = leftPtr / Float32Array.BYTES_PER_ELEMENT,
 				rightOffset = rightPtr / Float32Array.BYTES_PER_ELEMENT;
 
-			var left = this.instance.heapF32.subarray(
+			let left = this.instance.heapF32.subarray(
 					leftOffset,
 					leftOffset + MP2WASM.SAMPLES_PER_FRAME,
 				),
@@ -109,15 +119,15 @@ export class MP2WASM extends BaseDecoder {
 
 		this.advanceDecodedTime(MP2WASM.SAMPLES_PER_FRAME / this.sampleRate);
 
-		var elapsedTime = Now() - startTime;
+		let elapsedTime = Now() - startTime;
 		if (this.onDecodeCallback) {
 			this.onDecodeCallback(this, elapsedTime);
 		}
 		return true;
 	};
 
-	getCurrentTime = function() {
-		var enqueuedTime = this.destination ? this.destination.enqueuedTime : 0;
+	getCurrentTime = () => {
+		let enqueuedTime = this.destination ? this.destination.enqueuedTime : 0;
 		return this.decodedTime - enqueuedTime;
 	};
 }

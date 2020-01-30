@@ -32,12 +32,14 @@ class VideoServer {
 				if (data.streamKey === this.streamKey) {
 					console.log("host authenticated.");
 					socket.join("host");
+				} else {
+					console.log(data.streamKey, this.streamKey);
 				}
 			});
 
 			socket.on("videoData", (data) => {
 				clearTimeout(this.keepAliveTimer);
-				this.keepAliveTimer = setTimeout(this.afk, 1000 * 120);
+				this.keepAliveTimer = setTimeout(this.afk, 1000 * 60 * 30);
 
 				data = data.data || data;
 

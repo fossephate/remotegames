@@ -160,20 +160,20 @@ export class TS {
 		return true;
 	};
 
-	resync = function() {
+	resync = () => {
 		// Check if we have enough data to attempt a resync. We need 5 full packets.
 		if (!this.bits.has((188 * 6) << 3)) {
 			return false;
 		}
 
-		var byteIndex = this.bits.index >> 3;
+		let byteIndex = this.bits.index >> 3;
 
 		// Look for the first sync token in the first 187 bytes
-		for (var i = 0; i < 187; i++) {
+		for (let i = 0; i < 187; i++) {
 			if (this.bits.bytes[byteIndex + i] === 0x47) {
 				// Look for 4 more sync tokens, each 188 bytes appart
-				var foundSync = true;
-				for (var j = 1; j < 5; j++) {
+				let foundSync = true;
+				for (let j = 1; j < 5; j++) {
 					if (this.bits.bytes[byteIndex + i + 188 * j] !== 0x47) {
 						foundSync = false;
 						break;
@@ -205,11 +205,11 @@ export class TS {
 		pi.buffers.push(this.bits.bytes.subarray(start, end));
 		pi.currentLength += end - start;
 
-		var complete = pi.totalLength !== 0 && pi.currentLength >= pi.totalLength;
+		let complete = pi.totalLength !== 0 && pi.currentLength >= pi.totalLength;
 		return complete;
 	};
 
-	packetComplete = function(pi) {
+	packetComplete = (pi) => {
 		pi.destination.write(pi.pts, pi.buffers);
 		pi.totalLength = 0;
 		pi.currentLength = 0;

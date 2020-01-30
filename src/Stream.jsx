@@ -19,6 +19,16 @@ import { updateStreamInfo } from "src/actions/info.js";
 import handleStreamActions from "src/sagas/stream";
 import handleStreamEvents from "src/sockets/stream";
 
+// material ui:
+import { withStyles } from "@material-ui/core/styles";
+// import { Snackbar } from "@material-ui/core";
+
+import SettingsModal from "src/components/Modals/SettingsModal.jsx";
+
+// notistack:
+
+import { withSnackbar } from "notistack";
+
 // main components:
 import Loading from "components/General/Loading.jsx";
 import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
@@ -27,20 +37,11 @@ import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
 // import StreamInfo from "src/components/Stream/StreamInfo.jsx";
 const Picture = lazy(() => import("src/components/Stream/Picture.jsx"));
 const Chat = lazy(() => import("src/components/Stream/Chat/Chat.jsx"));
-const StreamInfo = lazy(() => import("src/components/Stream/StreamInfo.jsx"));
+const StreamInfo = lazy(() => import("src/components/Stream/StreamInfo/StreamInfo.jsx"));
 
 // components:
 
 // secondary components:
-
-// material ui:
-import { withStyles } from "@material-ui/core/styles";
-// import { Snackbar } from "@material-ui/core";
-
-import SettingsModal from "src/components/Modals/SettingsModal.jsx";
-// import InputMapperModal from "src/components/Modals/InputMapperModal.jsx";
-
-// import { Client } from "./parsec/src/client.js";
 
 // recompose:
 import { compose } from "recompose";
@@ -53,7 +54,6 @@ import InputHandler from "libs/InputHandler/InputHandler.js";
 
 import { deleteAllCookies, getStickString } from "libs/tools.js";
 import localforage from "localforage";
-window.localforage = localforage;
 import socketio from "socket.io-client";
 
 // rr:
@@ -96,26 +96,16 @@ class Stream extends Component {
 		this.afkTime = 1000 * 60 * 60; // 1 hour
 		this.afkTimer = null;
 		this.stream = null;
-		// window.stream = this.stream;
 		this.hostConnection = null;
 
-		this.setStreamVolume = this.setStreamVolume.bind(this);
-		this.exitFullscreen = this.exitFullscreen.bind(this);
-		this.sendControllerState = this.sendControllerState.bind(this);
-		this.afk = this.afk.bind(this);
-		this.recieveStream = this.recieveStream.bind(this);
-
 		this.state = {};
-
-		// let isMobile = window.innerWidth < 400;
-		// let isMobile = window.innerWidth < 800;
 
 		this.inputHandler = new InputHandler();
 		// todo:
 		window.inputHandler = this.inputHandler; // for lagless canvas
 	}
 
-	recieveStream(data, tryCount) {
+	recieveStream = (data, tryCount) => {
 		this.props.updateStreamInfo({ ...data });
 
 		if (this.stream) {
@@ -126,16 +116,17 @@ class Stream extends Component {
 			this.hostConnection.destroy();
 		}
 
-		if (!this.props.client.loggedIn) {
-			if (tryCount < 3) {
-				setTimeout(() => {
-					this.recieveStream(data, tryCount + 1);
-				}, 1000);
-			} else {
-				alert("You need to login to see the stream!");
-				return;
-			}
-		}
+		// if (!this.props.client.loggedIn) {
+		// 	if (tryCount < 3) {
+		// 		setTimeout(() => {
+		// 			this.recieveStream(data, tryCount + 1);
+		// 		}, 1000);
+		// 		return;
+		// 	} else {
+		// 		alert("You need to login to see the stream!");
+		// 		return;
+		// 	}
+		// }
 
 		this.hostConnection = socketio(`https://${data.hostServerIP}`, {
 			path: `/${data.hostServerPort}/socket.io`,
@@ -178,21 +169,25 @@ class Stream extends Component {
 			alert("stream type error: " + this.props.streamType);
 		}
 
+		setTimeout(() => {
+			if (this.props.streamType === "mpeg2") {
+				this.stream.resume(
+					document.getElementById("videoCanvas"),
+					document.getElementById("graphicsCanvas"),
+				);
+			} else if (this.props.streamType === "webRTC") {
+				this.stream.resume(document.getElementById("videoCanvas"));
+			}
+		}, 500);
+
 		window.stream = this.stream;
-		this.setStreamVolume(this.props);
+		setTimeout(() => {
+			this.setStreamVolume(this.props);
+		}, 500);
 		setTimeout(() => {
 			this.setStreamVolume(this.props);
 		}, 5000);
-
-		if (this.props.streamType === "mpeg2") {
-			this.stream.resume(
-				document.getElementById("videoCanvas"),
-				document.getElementById("graphicsCanvas"),
-			);
-		} else if (this.props.streamType === "webRTC") {
-			this.stream.resume(document.getElementById("videoCanvas"));
-		}
-	}
+	};
 
 	componentDidMount() {
 		// todo: something like this for "getStreamInfo":
@@ -294,6 +289,10 @@ class Stream extends Component {
 		// 	}, 3000);
 		// }
 
+		for (let i = 0; i < this.props.playerCount; i++) {
+			this.props.leavePlayerControlQueue(i);
+		}
+
 		if (this.hostConnection) {
 			this.hostConnection.removeAllListeners();
 			this.hostConnection.destroy();
@@ -305,7 +304,7 @@ class Stream extends Component {
 		localforage.setItem("settings", JSON.stringify(this.props.settings));
 	}
 
-	afk() {
+	afk = () => {
 		if (window.disableAFK) {
 			return;
 		}
@@ -318,10 +317,10 @@ class Stream extends Component {
 		}
 		alert("Are you still there?");
 		window.location.reload();
-	}
+	};
 
 	// https://stackoverflow.com/questions/10706070/how-to-detect-when-a-page-exits-fullscreen
-	exitFullscreen() {
+	exitFullscreen = () => {
 		if (
 			!document.webkitIsFullScreen &&
 			!document.mozFullScreen &&
@@ -345,7 +344,7 @@ class Stream extends Component {
 			this.inputHandler.mouse.toggle(false);
 		}
 		window.dispatchEvent(new Event("resize"));
-	}
+	};
 
 	resetSettings() {
 		deleteAllCookies();
@@ -354,12 +353,7 @@ class Stream extends Component {
 		// });
 	}
 
-	sendControllerState() {
-		if (!this.init) {
-			this.init = true;
-			this.oldInputState = JSON.stringify(this.inputHandler.getState());
-		}
-
+	sendControllerState = () => {
 		if (!this.inputHandler.changed) {
 			return;
 		} else {
@@ -420,12 +414,33 @@ class Stream extends Component {
 			this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
 		}
 
+		// if (!this.props.loggedIn) {
+		// 	this.props.enqueueSnackbar("You need to login first!", {
+		// 		variant: "warning",
+		// 		preventDuplicate: true,
+		// 		anchorOrigin: {
+		// 			vertical: "top",
+		// 			horizontal: "left",
+		// 		},
+		// 		autoHideDuration: 1000,
+		// 	});
+		// }
+
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
 				this.props.client.userid,
 			) > 0 &&
 			this.props.controlQueues[this.props.settings.currentPlayer].length > 0
 		) {
+			this.props.enqueueSnackbar("It's not your turn yet!", {
+				variant: "warning",
+				preventDuplicate: true,
+				anchorOrigin: {
+					vertical: "top",
+					horizontal: "left",
+				},
+				autoHideDuration: 1000,
+			});
 			return;
 		}
 
@@ -481,16 +496,16 @@ class Stream extends Component {
 		} else {
 			console.log("the socket is null!");
 		}
-	}
+	};
 
-	setStreamVolume(props) {
+	setStreamVolume = (props) => {
 		if (this.stream) {
 			if (this.props.streamType === "mpeg2") {
 				this.stream.player.volume = props.settings.volume / 100;
 			} else if (this.props.streamType === "webRTC") {
 			}
 		}
-	}
+	};
 
 	shouldComponentUpdate(nextProps, nextState) {
 		// update stream volume:
@@ -552,7 +567,6 @@ class Stream extends Component {
 
 		return (
 			<div className={classes.root}>
-				{/* <NavTabs history={this.props.history} /> */}
 				<StreamsAppBar
 					history={this.props.history}
 					hide={this.props.settings.fullscreen || this.props.settings.hideNav}
@@ -625,5 +639,6 @@ const mapDispatchToProps = (dispatch) => {
 export default compose(
 	withRouter,
 	withStyles(styles),
+	withSnackbar,
 	connect(mapStateToProps, mapDispatchToProps),
 )(Stream);

@@ -14,25 +14,29 @@ export class BaseDecoder {
 		Object.defineProperty(this, "currentTime", { get: this.getCurrentTime });
 	}
 
-	destroy = function() {};
+	destroy = () => {};
 
-	connect = function(destination) {
+	connect = (destination) => {
 		this.destination = destination;
 	};
 
-	bufferGetIndex = function() {
+	bufferGetIndex = () => {
 		return this.bits.index;
 	};
 
-	bufferSetIndex = function(index) {
+	bufferSetIndex = (index) => {
 		this.bits.index = index;
 	};
 
-	bufferWrite = function(buffers) {
+	bufferWrite = (buffers) => {
 		return this.bits.write(buffers);
 	};
 
-	write = function(pts, buffers) {
+	write = (pts, buffers) => {
+		this.baseWrite(pts, buffers);
+	};
+
+	baseWrite = (pts, buffers) => {
 		if (this.collectTimestamps) {
 			if (this.timestamps.length === 0) {
 				this.startTime = pts;
@@ -58,7 +62,7 @@ export class BaseDecoder {
 			this.timestampIndex = i;
 		}
 
-		var ts = this.timestamps[this.timestampIndex];
+		let ts = this.timestamps[this.timestampIndex];
 		if (ts) {
 			this.bufferSetIndex(ts.index);
 			this.decodedTime = ts.time;
@@ -72,11 +76,11 @@ export class BaseDecoder {
 		this.advanceDecodedTime(0);
 	};
 
-	advanceDecodedTime = function(seconds) {
+	advanceDecodedTime = (seconds) => {
 		if (this.collectTimestamps) {
-			var newTimestampIndex = -1;
-			var currentIndex = this.bufferGetIndex();
-			for (var i = this.timestampIndex; i < this.timestamps.length; i++) {
+			let newTimestampIndex = -1;
+			let currentIndex = this.bufferGetIndex();
+			for (let i = this.timestampIndex; i < this.timestamps.length; i++) {
 				if (this.timestamps[i].index > currentIndex) {
 					break;
 				}
