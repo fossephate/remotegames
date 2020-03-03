@@ -271,8 +271,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 // import AccountModal from "components/modals/AccountModal.jsx";
 // import InputMapperModal from "components/modals/InputMapperModal.jsx";
 
-const LoginRegisterModal = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => Promise.all(/*! import() */[__webpack_require__.e(14), __webpack_require__.e(2), __webpack_require__.e(12), __webpack_require__.e(0), __webpack_require__.e(11)]).then(__webpack_require__.bind(null, /*! shared/components/modals/LoginRegisterModal.jsx */ "./src/shared/components/modals/LoginRegisterModal.jsx")));
-const AccountModal = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => Promise.all(/*! import() */[__webpack_require__.e(14), __webpack_require__.e(2), __webpack_require__.e(0), __webpack_require__.e(20)]).then(__webpack_require__.bind(null, /*! shared/components/modals/AccountModal.jsx */ "./src/shared/components/modals/AccountModal.jsx"))); // const InputMapperModal = lazy(() => import("components/modals/InputMapperModal.jsx"));
+const LoginRegisterModal = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __webpack_require__.e(/*! import() */ 13).then(__webpack_require__.bind(null, /*! shared/components/modals/LoginRegisterModal.jsx */ "./src/shared/components/modals/LoginRegisterModal.jsx")));
+const AccountModal = Object(react__WEBPACK_IMPORTED_MODULE_0__["lazy"])(() => __webpack_require__.e(/*! import() */ 7).then(__webpack_require__.bind(null, /*! shared/components/modals/AccountModal.jsx */ "./src/shared/components/modals/AccountModal.jsx"))); // const InputMapperModal = lazy(() => import("components/modals/InputMapperModal.jsx"));
 // material ui:
 
 
@@ -1304,49 +1304,9 @@ const handleActions = function* (params) {
   !*** ./src/shared/components/general/Loading.jsx ***!
   \***************************************************/
 /*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-// react:
- // material ui:
-
- // jss:
-
-const styles = theme => ({
-  root: {
-    // height: "100vh",
-    textAlign: "center",
-    lineHeight: "100vh",
-    fontSize: "32px",
-    width: "100%",
-    position: "absolute",
-    left: 0,
-    top: 0
-  }
-});
-
-class Loading extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    const {
-      classes
-    } = this.props;
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      className: classes.root
-    }, "Loading...");
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles)(Loading));
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/srv/www/remotegames.io/html/src/shared/components/general/Loading.jsx'");
 
 /***/ }),
 

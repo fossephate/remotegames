@@ -1,53 +1,5 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[9],{
 
-/***/ "./src/components/general/PopoverMenu.jsx":
-/*!************************************************!*\
-  !*** ./src/components/general/PopoverMenu.jsx ***!
-  \************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
-// react:
-
-
-
-const PopoverMenu = props => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Popover"], {
-  open: props.open,
-  anchorEl: props.anchorEl,
-  onClose: props.onClose,
-  anchorOrigin: {
-    vertical: "bottom",
-    horizontal: "center"
-  },
-  transformOrigin: {
-    vertical: "top",
-    horizontal: "center"
-  }
-}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Paper"], {
-  elevation: 4,
-  style: {
-    padding: "10px"
-  }
-}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-  variant: "contained",
-  color: "primary"
-}, "View Profile"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-  variant: "contained",
-  color: "secondary"
-}, "Ban"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Button"], {
-  variant: "contained",
-  color: "primary"
-}, "Kick from Queue")));
-
-/* harmony default export */ __webpack_exports__["default"] = (PopoverMenu);
-
-/***/ }),
-
 /***/ "./src/components/stream/streamInfo/StreamInfo.jsx":
 /*!*********************************************************!*\
   !*** ./src/components/stream/streamInfo/StreamInfo.jsx ***!
@@ -782,75 +734,9 @@ const mapDispatchToProps = dispatch => {
   !*** ./src/shared/components/account/Username.jsx ***!
   \****************************************************/
 /*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var src_components_general_PopoverMenu_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/components/general/PopoverMenu.jsx */ "./src/components/general/PopoverMenu.jsx");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
-// react:
- // components:
-
- // material ui:
-
- // redux:
-
- // recompose:
-
- // jss:
-
-const styles = theme => ({
-  root: {}
-});
-
-class Username extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
-  constructor(props) {
-    super(props);
-    this.state = {
-      popoverOpen: false
-    };
-    this.ref = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
-    this.handleOpenPopover = this.handleOpenPopover.bind(this);
-    this.handleClosePopover = this.handleClosePopover.bind(this);
-  }
-
-  handleOpenPopover() {
-    this.setState({
-      popoverOpen: true
-    });
-  }
-
-  handleClosePopover() {
-    this.setState({
-      popoverOpen: false
-    });
-  }
-
-  render() {
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-      style: this.props.style,
-      onClick: this.handleOpenPopover,
-      ref: ref => {
-        this.ref = ref;
-      }
-    }, this.props.children), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_general_PopoverMenu_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
-      open: this.state.popoverOpen,
-      onClose: this.handleClosePopover,
-      anchorEl: this.ref
-    }));
-  }
-
-}
-
-const mapStateToProps = state => {
-  return {};
-};
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_4__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps))(Username));
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/srv/www/remotegames.io/html/src/shared/components/account/Username.jsx'");
 
 /***/ })
 

@@ -76,64 +76,6 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ "./node_modules/@material-ui/icons/VolumeDown.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/@material-ui/icons/VolumeDown.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
-
-var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
-  d: "M18.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM5 9v6h4l5 5V4L9 9H5z"
-}), 'VolumeDown');
-
-exports.default = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@material-ui/icons/VolumeUp.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/@material-ui/icons/VolumeUp.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireDefault(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _createSvgIcon = _interopRequireDefault(__webpack_require__(/*! ./utils/createSvgIcon */ "./node_modules/@material-ui/icons/utils/createSvgIcon.js"));
-
-var _default = (0, _createSvgIcon.default)(_react.default.createElement("path", {
-  d: "M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"
-}), 'VolumeUp');
-
-exports.default = _default;
-
-/***/ }),
-
 /***/ "./node_modules/@material-ui/icons/utils/createSvgIcon.js":
 /*!****************************************************************!*\
   !*** ./node_modules/@material-ui/icons/utils/createSvgIcon.js ***!
@@ -1343,135 +1285,20 @@ const mapStateToProps = state => {
   !*** ./src/shared/components/general/VolumeSlider.jsx ***!
   \********************************************************/
 /*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
-/* harmony import */ var _material_ui_icons_VolumeDown__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/icons/VolumeDown */ "./node_modules/@material-ui/icons/VolumeDown.js");
-/* harmony import */ var _material_ui_icons_VolumeDown__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_VolumeDown__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _material_ui_icons_VolumeUp__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/icons/VolumeUp */ "./node_modules/@material-ui/icons/VolumeUp.js");
-/* harmony import */ var _material_ui_icons_VolumeUp__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_VolumeUp__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var shared_components_general_MySlider_jsx__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! shared/components/general/MySlider.jsx */ "./src/shared/components/general/MySlider.jsx");
-// react:
- // material ui:
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/srv/www/remotegames.io/html/src/shared/components/general/VolumeSlider.jsx'");
 
+/***/ }),
 
+/***/ "./src/shared/libs/inputHandler/DeviceStates.js":
+/*!******************************************************!*\
+  !*** ./src/shared/libs/inputHandler/DeviceStates.js ***!
+  \******************************************************/
+/*! exports provided: ControllerState, MouseState, KeyboardState, TouchState */
+/***/ (function(module, exports) {
 
-
- // components:
-
- // jss:
-
-const styles = theme => ({
-  root: {
-    display: "flex",
-    justifyContent: "space-evenly",
-    width: "30%",
-    minWidth: "125px",
-    // borderRadius: "10px",
-    alignItems: "center",
-    paddingLeft: "6px",
-    paddingRight: "6px",
-    backgroundColor: theme.palette.primary.main // backgroundColor: theme.palette.primary.dark,
-
-  },
-  svg: {
-    // color: "#333",
-    color: theme.palette.primary.contrastText,
-    alignSelf: "center",
-    // border: "1.2px solid #333",
-    // borderRadius: "4px",
-    // padding: "1px",
-    cursor: "pointer"
-  },
-  rootClass: {
-    width: "70%" // track:
-    // "& :nth-child(1)": {
-    // 	backgroundColor: "#FFF",
-    // },
-    // // first part of track:
-    // "& :nth-child(2)": {
-    // 	backgroundColor: "#FFF",
-    // },
-    // thumb icon:
-    // "& :nth-child(4)": {
-    // 	"& :first-child": {
-    // 	},
-    // 	backgroundColor: "#FFF",
-    // 	"&:hover": {
-    // 		boxShadow: "0px 0px 0px 9px rgba(255, 255, 255, 0.16)",
-    // 	},
-    // 	"&:active": {
-    // 		boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)",
-    // 	},
-    // },
-
-  },
-  rail: {
-    backgroundColor: "#FFF"
-  },
-  track: {
-    backgroundColor: "#FFF"
-  },
-  thumb: {
-    backgroundColor: "#FFF",
-    "&:hover": {
-      boxShadow: "0px 0px 0px 9px rgba(255, 255, 255, 0.16)"
-    },
-    "&:active": {
-      boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16)"
-    }
-  },
-  active: {
-    "span&": {
-      boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16) !important"
-    } // boxShadow: "0px 0px 0px 18px rgba(255, 255, 255, 0.16) !important",
-
-  }
-});
-
-class VolumeSlider extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  render() {
-    const {
-      classes
-    } = this.props;
-    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Paper"], {
-      className: classes.root,
-      elevation: 3
-    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_VolumeDown__WEBPACK_IMPORTED_MODULE_2___default.a, {
-      className: classes.svg,
-      onClick: this.props.onMute
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_general_MySlider_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
-      rootClass: classes.rootClass,
-      thumbClass: classes.thumb,
-      activeClass: classes.active,
-      railClass: classes.rail,
-      trackClass: classes.track,
-      min: 0,
-      max: 100,
-      step: 1,
-      handleChange: this.props.handleChange,
-      value: this.props.value,
-      bounceInterval: 100,
-      delay: 500
-    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_VolumeUp__WEBPACK_IMPORTED_MODULE_3___default.a, {
-      className: classes.svg,
-      onClick: this.props.onMax
-    }));
-  }
-
-}
-
-/* harmony default export */ __webpack_exports__["default"] = (Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__["withStyles"])(styles)(VolumeSlider));
+throw new Error("Module build failed (from ./node_modules/babel-loader/lib/index.js):\nError: ENOENT: no such file or directory, open '/srv/www/remotegames.io/html/src/shared/libs/inputHandler/DeviceStates.js'");
 
 /***/ })
 
