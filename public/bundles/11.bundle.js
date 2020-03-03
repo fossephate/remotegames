@@ -1,1 +1,688 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[11],{295:function(e,t,n){"use strict";n.d(t,"a",(function(){return o}));const o={mobile:`@media (min-width: ${"600px"})`,tablet:`@media (min-width: ${"768px"})`,laptop:`@media (min-width: ${"1024px"})`,desktop:`@media (min-width: ${"1440px"})`}},307:function(e,t,n){"use strict";function o(e,t,n){return Math.min(Math.max(e,t),n)}function a(e){void 0!==document.fullScreenElement&&null===document.fullScreenElement||void 0!==document.msFullscreenElement&&null===document.msFullscreenElement||void 0!==document.mozFullScreen&&!document.mozFullScreen||void 0!==document.webkitIsFullScreen&&!document.webkitIsFullScreen?e.requestFullScreen?e.requestFullScreen():e.mozRequestFullScreen?e.mozRequestFullScreen():e.webkitRequestFullScreen?e.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT):e.msRequestFullscreen&&e.msRequestFullscreen():document.cancelFullScreen?document.cancelFullScreen():document.mozCancelFullScreen?document.mozCancelFullScreen():document.webkitCancelFullScreen?document.webkitCancelFullScreen():document.msExitFullscreen&&document.msExitFullscreen()}function i(){let e=document.cookie.split(";");for(let t=0;t<e.length;t++){let n=e[t],o=n.indexOf("="),a=o>-1?n.substr(0,o):n;document.cookie=a+"=;expires=Thu, 01 Jan 1970 00:00:00 GMT"}}function c(e){let t=10*(e=(Math.round(10*(e+1))/10).toFixed(2));return 0==t?"900":10==t?"090":20==t?"009":(t<10?(t=10-t,t=90+90*t):t=9*(20-t),String(t).padStart(3,"0"))}function s(...e){return t=>e.reduce((e,n)=>({...e,[n]:t[n]}),{})}n.d(t,"a",(function(){return o})),n.d(t,"e",(function(){return a})),n.d(t,"b",(function(){return i})),n.d(t,"c",(function(){return c})),n.d(t,"d",(function(){return s}))},338:function(e,t,n){"use strict";var o=n(0),a=n.n(o),i=n(14),c=n(273),s=n(548),r=n(447),l=n(531),d=n(92),u=n(294);class m extends o.PureComponent{constructor(e){super(e),this.state={TOSAgreed:!1},this.agreeTOS=this.agreeTOS.bind(this)}agreeTOS(e){this.setState({TOSAgreed:e.target.checked})}connectAccountOrLogin(e){if(window.banned)return;let t=window.location.origin+"/8099/auth/"+e+"/";null!=this.props.authToken&&(t+="?authToken="+this.props.authToken),window.location.href=t}render(){const{classes:e,showTOS:t}=this.props;let n=this.props.connectedAccounts.length>1||this.props.validUsernames.length>1;return a.a.createElement(c.a,{className:e.root,elevation:0},t&&a.a.createElement("div",null,a.a.createElement(s.a,{onChange:this.agreeTOS}),a.a.createElement("span",null,"I have read and agree to the "),a.a.createElement(r.a,{href:"/tos"},"Terms and Conditions")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(l.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("twitch")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",null,"Connect with"),a.a.createElement("img",{className:e.twitchLogo,src:"/images/Twitch_Purple_RGB.png"})),this.props.connectedAccounts.includes("twitch")&&n&&a.a.createElement(l.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("twitch")}},"X")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(l.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("youtube")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",null,"Connect with"),a.a.createElement("img",{className:e.youtubeLogo,src:"/images/yt_logo_rgb_light.png"})),this.props.connectedAccounts.includes("youtube")&&n&&a.a.createElement(l.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("youtube")}},"X")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(l.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("google")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",{id:"connectWithGoogleText"},"Connect with Google")),this.props.connectedAccounts.includes("google")&&n&&a.a.createElement(l.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("google")}},"X")),a.a.createElement("div",{className:e.connectWithButton},a.a.createElement(l.a,{fullWidth:!0,variant:"contained",color:"default",className:null,onClick:()=>{this.connectAccountOrLogin("discord")},disabled:!this.state.TOSAgreed&&t},a.a.createElement("span",null,"Connect with"),a.a.createElement("img",{className:e.discordLogo,src:"/images/discord_logo.png"})),this.props.connectedAccounts.includes("discord")&&n&&a.a.createElement(l.a,{variant:"contained",color:"secondary",onClick:()=>{this.props.onRemoveAccount("discord")}},"X")))}}t.a=Object(u.a)(Object(i.a)(e=>({root:{width:"100%",minHeight:"220px",textAlign:"center",display:"flex",flexDirection:"column",justifyContent:"space-evenly",flexWrap:"wrap",paddingLeft:"25px",paddingRight:"25px"},connectWithButton:{display:"flex"},twitchLogo:{width:"60px",marginLeft:"10px",marginRight:"10px"},googleLogo:{width:"80px"},youtubeLogo:{width:"80px",marginLeft:"10px"},discordLogo:{width:"80px",marginLeft:"4px"}})),Object(d.b)(e=>({authToken:e.client.authToken,connectedAccounts:e.client.connectedAccounts,validUsernames:e.client.validUsernames})))(m)},339:function(e,t,n){"use strict";var o=n(1),a=n(5),i=n(0),c=n.n(i),s=(n(7),n(15)),r=n(14),l=n(545),d=n(309),u=n(28),m=n(302),p=n(22),h=n.n(p),g="undefined"==typeof window?c.a.useEffect:c.a.useLayoutEffect,b=c.a.forwardRef((function(e,t){var n=e.alignItems,i=void 0===n?"center":n,r=e.autoFocus,p=void 0!==r&&r,b=e.button,f=void 0!==b&&b,v=e.children,x=e.classes,C=e.className,O=e.component,w=e.ContainerComponent,E=void 0===w?"li":w,y=e.ContainerProps,k=(y=void 0===y?{}:y).className,S=Object(a.a)(y,["className"]),j=e.dense,A=void 0!==j&&j,T=e.disabled,F=void 0!==T&&T,N=e.disableGutters,L=void 0!==N&&N,R=e.divider,B=void 0!==R&&R,I=e.focusVisibleClassName,W=e.selected,V=void 0!==W&&W,D=Object(a.a)(e,["alignItems","autoFocus","button","children","classes","className","component","ContainerComponent","ContainerProps","dense","disabled","disableGutters","divider","focusVisibleClassName","selected"]),P=c.a.useContext(m.a),U={dense:A||P.dense||!1,alignItems:i},z=c.a.useRef(null);g((function(){p&&z.current&&z.current.focus()}),[p]);var G=c.a.Children.toArray(v),M=G.length&&Object(d.a)(G[G.length-1],["ListItemSecondaryAction"]),$=c.a.useCallback((function(e){z.current=h.a.findDOMNode(e)}),[]),q=Object(u.a)($,t),H=Object(o.a)({className:Object(s.a)(x.root,C,U.dense&&x.dense,!L&&x.gutters,B&&x.divider,F&&x.disabled,f&&x.button,"center"!==i&&x.alignItemsFlexStart,M&&x.secondaryAction,V&&x.selected),disabled:F},D),_=O||"li";return f&&(H.component=O||"div",H.focusVisibleClassName=Object(s.a)(x.focusVisible,I),_=l.a),M?(_=H.component||O?_:"div","li"===E&&("li"===_?_="div":"li"===H.component&&(H.component="div")),c.a.createElement(m.a.Provider,{value:U},c.a.createElement(E,Object(o.a)({className:Object(s.a)(x.container,k),ref:q},S),c.a.createElement(_,H,G),G.pop()))):c.a.createElement(m.a.Provider,{value:U},c.a.createElement(_,Object(o.a)({ref:q},H),G))}));t.a=Object(r.a)((function(e){return{root:{display:"flex",justifyContent:"flex-start",alignItems:"center",position:"relative",textDecoration:"none",width:"100%",boxSizing:"border-box",textAlign:"left",paddingTop:8,paddingBottom:8,"&$focusVisible":{backgroundColor:e.palette.action.selected},"&$selected, &$selected:hover":{backgroundColor:e.palette.action.selected},"&$disabled":{opacity:.5}},container:{position:"relative"},focusVisible:{},dense:{paddingTop:4,paddingBottom:4},alignItemsFlexStart:{alignItems:"flex-start"},disabled:{},divider:{borderBottom:"1px solid ".concat(e.palette.divider),backgroundClip:"padding-box"},gutters:{paddingLeft:16,paddingRight:16},button:{transition:e.transitions.create("background-color",{duration:e.transitions.duration.shortest}),"&:hover":{textDecoration:"none",backgroundColor:e.palette.action.hover,"@media (hover: none)":{backgroundColor:"transparent"}}},secondaryAction:{paddingRight:48},selected:{}}}),{name:"MuiListItem"})(b)},372:function(e,t,n){"use strict";var o=n(5),a=n(12),i=n(1),c=n(0),s=n.n(c),r=(n(7),n(15)),l=n(14),d=n(339),u=s.a.forwardRef((function(e,t){var n,a=e.classes,c=e.className,l=e.component,u=void 0===l?"li":l,m=e.disableGutters,p=void 0!==m&&m,h=e.role,g=void 0===h?"menuitem":h,b=e.selected,f=e.tabIndex,v=Object(o.a)(e,["classes","className","component","disableGutters","role","selected","tabIndex"]);return e.disabled||(n=void 0!==f?f:-1),s.a.createElement(d.a,Object(i.a)({button:!0,role:g,tabIndex:n,component:u,selected:b,disableGutters:p,classes:{dense:a.dense},className:Object(r.a)(a.root,c,b&&a.selected,!p&&a.gutters),ref:t},v))}));t.a=Object(l.a)((function(e){return{root:Object(i.a)({},e.typography.body1,Object(a.a)({minHeight:48,paddingTop:6,paddingBottom:6,boxSizing:"border-box",width:"auto",overflow:"hidden",whiteSpace:"nowrap"},e.breakpoints.up("sm"),{minHeight:"auto"})),gutters:{},selected:{},dense:Object(i.a)({},e.typography.body2,{minHeight:"auto"})}}),{name:"MuiMenuItem"})(u)},447:function(e,t,n){"use strict";var o=n(1),a=n(5),i=n(0),c=n.n(i),s=(n(7),n(15)),r=n(36),l=n(14),d=n(314),u=n(28),m=n(359),p=c.a.forwardRef((function(e,t){var n=e.classes,i=e.className,l=e.color,p=void 0===l?"primary":l,h=e.component,g=void 0===h?"a":h,b=e.onBlur,f=e.onFocus,v=e.TypographyClasses,x=e.underline,C=void 0===x?"hover":x,O=e.variant,w=void 0===O?"inherit":O,E=Object(a.a)(e,["classes","className","color","component","onBlur","onFocus","TypographyClasses","underline","variant"]),y=Object(d.a)(),k=y.isFocusVisible,S=y.onBlurVisible,j=y.ref,A=c.a.useState(!1),T=A[0],F=A[1],N=Object(u.a)(t,j);return c.a.createElement(m.a,Object(o.a)({className:Object(s.a)(n.root,n["underline".concat(Object(r.a)(C))],i,T&&n.focusVisible,{button:n.button}[g]),classes:v,color:p,component:g,onBlur:function(e){T&&(S(),F(!1)),b&&b(e)},onFocus:function(e){k(e)&&F(!0),f&&f(e)},ref:N,variant:w},E))}));t.a=Object(l.a)({root:{},underlineNone:{textDecoration:"none"},underlineHover:{textDecoration:"none","&:hover":{textDecoration:"underline"}},underlineAlways:{textDecoration:"underline"},button:{position:"relative",WebkitTapHighlightColor:"transparent",backgroundColor:"transparent",outline:0,border:0,margin:0,borderRadius:0,padding:0,cursor:"pointer",userSelect:"none",verticalAlign:"middle","-moz-appearance":"none","-webkit-appearance":"none","&::-moz-focus-inner":{borderStyle:"none"},"&$focusVisible":{outline:"auto"}},focusVisible:{}},{name:"MuiLink"})(p)},554:function(e,t,n){"use strict";n.r(t);var o=n(0),a=n.n(o),i=n(9),c=n(338),s=n(14),r=n(372),l=n(546),d=n(553),u=n(92),m=n(294);class p extends o.PureComponent{constructor(e){super(e),this.handleChange=this.handleChange.bind(this)}handleChange(e){}getUsernameList(){let e=[];for(let t=0;t<this.props.validUsernames.length;t++)e.push(a.a.createElement(r.a,{key:t,value:t},this.props.validUsernames[t],"  "));return 0==this.props.validUsernames.length?a.a.createElement(r.a,{key:0,value:0},"Not signed in."):e}render(){let e=this.props.validUsernames.indexOf(this.props.username);return-1==e&&(e=0),a.a.createElement(l.a,{value:e,onChange:this.props.handleChange,input:a.a.createElement(d.a,{labelWidth:0})},this.getUsernameList())}}var h=Object(m.a)(Object(s.a)(e=>({root:{alignSelf:"center",background:"transparent"}})),Object(u.b)(e=>({username:e.client.username,validUsernames:e.client.validUsernames}),e=>({})))(p),g=n(523),b=n(524),f=n(359),v=n(273),x=n(531),C=n(448),O=n(518),w=n(522),E=(n(72),n(307)),y=n(295);class k extends o.PureComponent{constructor(e){super(e),this.accountConnection=this.props.accountConnection,this.handleClose=this.handleClose.bind(this),this.handleRemoveAccount=this.handleRemoveAccount.bind(this)}handleClose(){this.props.history.goBack()}handleLogout(){Object(E.b)(),location.reload(!0)}handleRemoveAccount(e){this.accountConnection.emit("removeConnectedAccount",{authToken:this.props.authToken,type:e},e=>{e.success?(alert("success"),location.reload(!0)):alert(e.reason)})}getTime(e){return e<60?e.toFixed(1)+" seconds.":e<3600?(e/60).toFixed(1)+" minutes":(e/60/60).toFixed(1)+" hours"}render(){const{classes:e}=this.props;return a.a.createElement(O.a,{open:!0,scroll:"body",maxWidth:"sm",fullWidth:!0,onClose:this.handleClose},a.a.createElement(w.a,{className:e.root},a.a.createElement(g.a,{position:"static"},a.a.createElement(b.a,null,a.a.createElement(f.a,{variant:"h6",color:"inherit"},"Account"))),a.a.createElement(v.a,{className:e.topBar,elevation:2},a.a.createElement(h,null),a.a.createElement(x.a,{className:e.logout,variant:"contained",color:"secondary",onClick:this.handleLogout},"Logout")),a.a.createElement(c.a,{onRemoveAccount:this.handleRemoveAccount,showTOS:!1}),a.a.createElement(C.a,{style:{margin:"0 auto"}},"You've played for ",this.getTime(this.props.timePlayed))))}}t.default=Object(m.a)(i.f,Object(s.a)(e=>({root:{display:"flex",flexDirection:"column",justifyContent:"space-evenly",padding:"0px 0px 25px 0px !important"},[y.a.tablet]:{root:{flexDirection:"column"}},center:{position:"fixed",top:"50%",left:"50%",transform:"translate(-50%, -50%)"},list:{maxHeight:"400px",overflowY:"auto"},logout:{width:"30%"},main:{width:"80%",display:"flex",flexDirection:"column"},topBar:{display:"flex",justifyContent:"space-evenly",margin:"20px 25px 10px",padding:"5px",lineHeight:"60px"}})),Object(u.b)(e=>({timePlayed:e.client.timePlayed,emailVerified:e.client.emailVerified,authToken:e.client.authToken})))(k)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[11],{
+
+/***/ "./src/shared/components/forms/LoginForm.jsx":
+/*!***************************************************!*\
+  !*** ./src/shared/components/forms/LoginForm.jsx ***!
+  \***************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var redux_form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-form */ "./node_modules/redux-form/es/index.js");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js");
+/* harmony import */ var _material_ui_core_Checkbox__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/Checkbox */ "./node_modules/@material-ui/core/esm/Checkbox/index.js");
+/* harmony import */ var _material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/FormControlLabel */ "./node_modules/@material-ui/core/esm/FormControlLabel/index.js");
+/* harmony import */ var _material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core/FormControl */ "./node_modules/@material-ui/core/esm/FormControl/index.js");
+/* harmony import */ var _material_ui_core_Select__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @material-ui/core/Select */ "./node_modules/@material-ui/core/esm/Select/index.js");
+/* harmony import */ var _material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @material-ui/core/InputLabel */ "./node_modules/@material-ui/core/esm/InputLabel/index.js");
+/* harmony import */ var _material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @material-ui/core/FormHelperText */ "./node_modules/@material-ui/core/esm/FormHelperText/index.js");
+/* harmony import */ var _material_ui_core_Radio__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! @material-ui/core/Radio */ "./node_modules/@material-ui/core/esm/Radio/index.js");
+/* harmony import */ var _material_ui_core_RadioGroup__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @material-ui/core/RadioGroup */ "./node_modules/@material-ui/core/esm/RadioGroup/index.js");
+/* harmony import */ var _material_ui_core_Button__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+// react:
+
+ // material ui:
+
+
+
+
+
+
+
+
+
+
+
+ // recompose:
+
+
+
+const validate = values => {
+  const errors = {};
+  const requiredFields = ["username", "password1", "password2", "email"];
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = "Required";
+    }
+  });
+
+  if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
+
+  return errors;
+};
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+const renderTextField = ({
+  label,
+  input,
+  meta: {
+    touched,
+    invalid,
+    error
+  },
+  ...custom
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_TextField__WEBPACK_IMPORTED_MODULE_3__["default"], _extends({
+  label: label,
+  placeholder: label,
+  error: touched && invalid,
+  helperText: touched && error
+}, input, custom));
+
+const renderCheckbox = ({
+  input,
+  label
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControlLabel__WEBPACK_IMPORTED_MODULE_5__["default"], {
+  control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Checkbox__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    checked: input.value ? true : false,
+    onChange: input.onChange
+  }),
+  label: label
+}));
+
+const renderFromHelper = ({
+  touched,
+  error
+}) => {
+  if (!(touched && error)) {
+    return;
+  } else {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormHelperText__WEBPACK_IMPORTED_MODULE_9__["default"], null, touched && error);
+  }
+};
+
+const renderSelectField = ({
+  input,
+  label,
+  meta: {
+    touched,
+    error
+  },
+  children,
+  ...custom
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_FormControl__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  error: touched && error
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_InputLabel__WEBPACK_IMPORTED_MODULE_8__["default"], {
+  htmlFor: "age-native-simple"
+}, "Age"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Select__WEBPACK_IMPORTED_MODULE_7__["default"], _extends({
+  native: true
+}, input, custom, {
+  inputProps: {
+    name: "age",
+    id: "age-native-simple"
+  }
+}), children), renderFromHelper({
+  touched,
+  error
+})); // jss:
+
+
+const styles = theme => ({
+  buttons: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly" // position: "relative",
+    // marginLeft: "5px",
+    // marginRight: "5px",
+    // textAlign: "center",
+
+  },
+  field: {
+    margin: "20px 0px"
+  }
+});
+
+const LoginForm = props => {
+  const {
+    handleSubmit,
+    pristine,
+    reset,
+    submitting,
+    classes
+  } = props;
+  return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+    onSubmit: handleSubmit
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: classes.field
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+    name: "user",
+    component: renderTextField,
+    label: "Username or Email",
+    variant: "standard",
+    fullWidth: true
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: classes.field
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+    name: "password",
+    component: renderTextField,
+    label: "Password",
+    type: "password",
+    variant: "standard",
+    fullWidth: true
+  })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: classes.buttons
+  }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Button__WEBPACK_IMPORTED_MODULE_12__["default"], {
+    variant: "contained",
+    color: "primary",
+    type: "submit",
+    disabled: pristine || submitting,
+    fullWidth: true
+  }, "Login")));
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_13__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles), Object(redux_form__WEBPACK_IMPORTED_MODULE_1__["reduxForm"])({
+  form: "RegisterForm",
+  // a unique identifier for this form
+  validate
+}))(LoginForm));
+
+/***/ }),
+
+/***/ "./src/shared/components/forms/RegisterForm.jsx":
+/*!******************************************************!*\
+  !*** ./src/shared/components/forms/RegisterForm.jsx ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var redux_form__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! redux-form */ "./node_modules/redux-form/es/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var react_google_recaptcha__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-google-recaptcha */ "./node_modules/react-google-recaptcha/lib/esm/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+// react:
+
+ // material ui:
+
+ // captcha:
+
+ // recompose:
+
+
+
+const validate = values => {
+  const errors = {};
+  const requiredFields = ["username", "password1", "password2", "email"];
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = "Required";
+    }
+  });
+
+  if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
+
+  return errors;
+};
+
+const renderTextField = ({
+  label,
+  input,
+  meta: {
+    touched,
+    invalid,
+    error
+  },
+  ...custom
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TextField"], _extends({
+  label: label,
+  placeholder: label,
+  error: touched && invalid,
+  helperText: touched && error
+}, input, custom));
+
+const renderCheckbox = ({
+  input,
+  label
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["FormControlLabel"], {
+  control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+    checked: input.value ? true : false,
+    onChange: input.onChange
+  }),
+  label: label
+}));
+
+const renderTOS = ({
+  input
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Checkbox"], {
+  checked: input.value ? true : false,
+  onChange: input.onChange
+}), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, "I have read and agree to the "), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Link"], {
+  href: "/tos.html"
+}, "Terms and Conditions"));
+
+const radioButton = ({
+  input,
+  ...rest
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["FormControl"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["RadioGroup"], _extends({}, input, rest), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["FormControlLabel"], {
+  value: "female",
+  control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Radio"], null),
+  label: "Female"
+}), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["FormControlLabel"], {
+  value: "male",
+  control: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Radio"], null),
+  label: "Male"
+})));
+
+const renderFromHelper = ({
+  touched,
+  error
+}) => {
+  if (!(touched && error)) {
+    return;
+  } else {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["FormHelperText"], null, touched && error);
+  }
+};
+
+const renderSelectField = ({
+  input,
+  label,
+  meta: {
+    touched,
+    error
+  },
+  children,
+  ...custom
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["FormControl"], {
+  error: touched && error
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["InputLabel"], {
+  htmlFor: "age-native-simple"
+}, "Age"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Select"], _extends({
+  native: true
+}, input, custom, {
+  inputProps: {
+    name: "age",
+    id: "age-native-simple"
+  }
+}), children), renderFromHelper({
+  touched,
+  error
+})); // jss:
+
+
+const styles = theme => ({
+  buttons: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly" // position: "relative",
+    // marginLeft: "5px",
+    // marginRight: "5px",
+    // textAlign: "center",
+
+  },
+  field: {
+    margin: "20px 0px"
+  }
+});
+
+class RegisterForm extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.state = {
+      captchaCompleted: false,
+      TOSAgreed: false
+    };
+    this.completeCaptcha = this.completeCaptcha.bind(this);
+    this.agreeTOS = this.agreeTOS.bind(this);
+  }
+
+  completeCaptcha() {
+    this.setState({
+      captchaCompleted: true
+    });
+  }
+
+  agreeTOS(event) {
+    this.setState({
+      TOSAgreed: event.target.checked
+    });
+  }
+
+  render() {
+    const {
+      handleSubmit,
+      pristine,
+      reset,
+      submitting,
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("form", {
+      onSubmit: handleSubmit
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.field
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      name: "email",
+      component: renderTextField,
+      label: "Email",
+      variant: "standard",
+      fullWidth: true
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.field
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      name: "username",
+      component: renderTextField,
+      label: "Username",
+      variant: "standard",
+      fullWidth: true
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.field
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      name: "password1",
+      component: renderTextField,
+      label: "Password",
+      type: "password",
+      variant: "standard",
+      fullWidth: true
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.field
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      name: "password2",
+      component: renderTextField,
+      label: "Confirm Password",
+      type: "password",
+      variant: "standard",
+      fullWidth: true
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "flex-start"
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(redux_form__WEBPACK_IMPORTED_MODULE_1__["Field"], {
+      name: "agree",
+      component: renderTOS,
+      onChange: this.agreeTOS
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      style: {
+        display: "flex",
+        justifyContent: "center",
+        padding: "10px"
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_google_recaptcha__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      sitekey: "6LeOU6UUAAAAABSPwdKHf-3ttPz9Ql4AgVTWobXI",
+      theme: "dark",
+      size: "normal",
+      onChange: this.completeCaptcha
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.buttons
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+      variant: "contained",
+      color: "primary",
+      type: "submit",
+      disabled: pristine || submitting || !this.state.captchaCompleted || !this.state.TOSAgreed,
+      fullWidth: true
+    }, "Create Account")));
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_4__["compose"])(Object(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles), Object(redux_form__WEBPACK_IMPORTED_MODULE_1__["reduxForm"])({
+  form: "RegisterForm",
+  // a unique identifier for this form
+  validate
+}))(RegisterForm));
+
+/***/ }),
+
+/***/ "./src/shared/components/modals/LoginRegisterModal.jsx":
+/*!*************************************************************!*\
+  !*** ./src/shared/components/modals/LoginRegisterModal.jsx ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+/* harmony import */ var shared_components_account_ConnectAccounts_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! shared/components/account/ConnectAccounts.jsx */ "./src/shared/components/account/ConnectAccounts.jsx");
+/* harmony import */ var shared_components_forms_LoginForm_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! shared/components/forms/LoginForm.jsx */ "./src/shared/components/forms/LoginForm.jsx");
+/* harmony import */ var shared_components_forms_RegisterForm_jsx__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! shared/components/forms/RegisterForm.jsx */ "./src/shared/components/forms/RegisterForm.jsx");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var src_actions_clientInfo_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! src/actions/clientInfo.js */ "./src/actions/clientInfo.js");
+/* harmony import */ var shared_libs_utils_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! shared/libs/utils.js */ "./src/shared/libs/utils.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! js-cookie */ "./node_modules/js-cookie/src/js.cookie.js");
+/* harmony import */ var js_cookie__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(js_cookie__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! query-string */ "./node_modules/query-string/index.js");
+/* harmony import */ var query_string__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(query_string__WEBPACK_IMPORTED_MODULE_12__);
+// react:
+ // react-router:
+
+ // components:
+
+
+
+ // material ui:
+
+
+ // recompose:
+
+ // redux:
+
+
+ // libs:
+
+
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    padding: "0px 0px 25px 0px !important"
+  },
+  [shared_libs_utils_js__WEBPACK_IMPORTED_MODULE_10__["device"].tablet]: {
+    root: {
+      flexDirection: "column"
+    }
+  },
+  tabs: {
+    "& button:focus": {
+      outline: "none"
+    }
+  },
+  createAnAccount: {
+    display: "flex",
+    flexDirection: "column",
+    textAlign: "center",
+    padding: "0px 15px"
+  },
+  connectAnAccount: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "start",
+    minWidth: "25%",
+    textAlign: "center",
+    marginTop: "15px"
+  }
+});
+
+class LoginRegisterModal extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.handleClose = this.handleClose.bind(this);
+    this.handleLoginForm = this.handleLoginForm.bind(this);
+    this.handleRegisterForm = this.handleRegisterForm.bind(this);
+  }
+
+  handleClose() {
+    // this.props.history.push("/");
+    this.props.history.goBack();
+  }
+
+  handleLoginForm(values) {
+    this.props.login({ ...values,
+      cb: data => {
+        if (data.success) {
+          alert("success");
+          js_cookie__WEBPACK_IMPORTED_MODULE_11___default.a.set("RemoteGames", data.authToken, {
+            expires: 7
+          });
+          this.props.updateClientInfo({
+            authToken: data.authToken,
+            loggedIn: true,
+            ...data.clientInfo
+          }); // this.props.authenticate(data.authToken);
+
+          let values = query_string__WEBPACK_IMPORTED_MODULE_12___default.a.parse(this.props.location.search);
+
+          if (values.verified) {
+            this.props.history.replace("/");
+          } else {
+            this.props.history.goBack();
+          }
+
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          alert(data.reason);
+        }
+      }
+    });
+  }
+
+  handleRegisterForm(values) {
+    this.props.register({ ...values,
+      cb: data => {
+        if (data.success) {
+          alert("Account created! Please login!");
+          this.props.history.replace("/login");
+        } else {
+          alert(data.reason);
+        }
+      }
+    });
+  }
+
+  componentDidMount() {
+    const values = query_string__WEBPACK_IMPORTED_MODULE_12___default.a.parse(this.props.location.search);
+
+    if (values.verified) {
+      setTimeout(() => {
+        alert("Email verified.");
+      }, 2000);
+    }
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    let which = this.props.history.location.pathname.indexOf("/login") > -1 ? 0 : 1;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["Dialog"], {
+      open: true,
+      scroll: "body",
+      maxWidth: "sm",
+      fullWidth: true,
+      onClose: this.handleClose
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["DialogContent"], {
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["AppBar"], {
+      position: "static"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["Toolbar"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["Typography"], {
+      variant: "h6",
+      color: "inherit"
+    }, "Welcome"))), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["Tabs"], {
+      centered: true,
+      value: which,
+      classes: {
+        root: classes.tabs
+      },
+      variant: "fullWidth",
+      indicatorColor: "primary",
+      textColor: "primary" // scrollable
+      // scrollButtons="auto"
+      ,
+      onChange: (event, value) => {
+        if (value === 0) {
+          this.props.history.replace("/login");
+        }
+
+        if (value === 1) {
+          this.props.history.replace("/register");
+        }
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["Tab"], {
+      label: "Login"
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["Tab"], {
+      label: "Register"
+    })), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+      path: "/login",
+      render: props => {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: classes.createAnAccount
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_forms_LoginForm_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
+          onSubmit: this.handleLoginForm
+        }));
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router__WEBPACK_IMPORTED_MODULE_1__["Route"], {
+      path: "/register",
+      render: props => {
+        return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+          className: classes.createAnAccount
+        }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_forms_RegisterForm_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], {
+          onSubmit: this.handleRegisterForm
+        }));
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.connectAnAccount
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_6__["ListItemText"], null, "or")), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      style: {
+        marginTop: "15px"
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_account_ConnectAccounts_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      showTOS: true
+    })))));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {};
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateClientInfo: data => {
+      dispatch(Object(src_actions_clientInfo_js__WEBPACK_IMPORTED_MODULE_9__["updateClientInfo"])(data));
+    },
+    authenticate: data => {
+      dispatch(Object(src_actions_clientInfo_js__WEBPACK_IMPORTED_MODULE_9__["authenticate"])(data));
+    },
+    login: data => {
+      dispatch(Object(src_actions_clientInfo_js__WEBPACK_IMPORTED_MODULE_9__["login"])(data));
+    },
+    register: data => {
+      dispatch(Object(src_actions_clientInfo_js__WEBPACK_IMPORTED_MODULE_9__["register"])(data));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_7__["compose"])(react_router__WEBPACK_IMPORTED_MODULE_1__["withRouter"], Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_5__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_8__["connect"])(mapStateToProps, mapDispatchToProps))(LoginRegisterModal));
+
+/***/ })
+
+}]);
+//# sourceMappingURL=11.bundle.js.map

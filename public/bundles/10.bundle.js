@@ -1,1 +1,1076 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[10],{295:function(e,a,t){"use strict";t.d(a,"a",(function(){return n}));const n={mobile:`@media (min-width: ${"600px"})`,tablet:`@media (min-width: ${"768px"})`,laptop:`@media (min-width: ${"1024px"})`,desktop:`@media (min-width: ${"1440px"})`}},302:function(e,a,t){"use strict";var n=t(0),l=t.n(n).a.createContext({});a.a=l},309:function(e,a,t){"use strict";t.d(a,"a",(function(){return r}));var n=t(0),l=t.n(n);function r(e,a){return l.a.isValidElement(e)&&-1!==a.indexOf(e.type.muiName)}},339:function(e,a,t){"use strict";var n=t(1),l=t(5),r=t(0),o=t.n(r),i=(t(7),t(15)),c=t(14),s=t(545),m=t(309),u=t(28),d=t(302),p=t(22),h=t.n(p),E="undefined"==typeof window?o.a.useEffect:o.a.useLayoutEffect,g=o.a.forwardRef((function(e,a){var t=e.alignItems,r=void 0===t?"center":t,c=e.autoFocus,p=void 0!==c&&c,g=e.button,b=void 0!==g&&g,y=e.children,f=e.classes,v=e.className,w=e.component,x=e.ContainerComponent,k=void 0===x?"li":x,C=e.ContainerProps,j=(C=void 0===C?{}:C).className,N=Object(l.a)(C,["className"]),O=e.dense,T=void 0!==O&&O,I=e.disabled,A=void 0!==I&&I,B=e.disableGutters,S=void 0!==B&&B,P=e.divider,L=void 0!==P&&P,D=e.focusVisibleClassName,R=e.selected,Q=void 0!==R&&R,M=Object(l.a)(e,["alignItems","autoFocus","button","children","classes","className","component","ContainerComponent","ContainerProps","dense","disabled","disableGutters","divider","focusVisibleClassName","selected"]),W=o.a.useContext(d.a),$={dense:T||W.dense||!1,alignItems:r},F=o.a.useRef(null);E((function(){p&&F.current&&F.current.focus()}),[p]);var V=o.a.Children.toArray(y),G=V.length&&Object(m.a)(V[V.length-1],["ListItemSecondaryAction"]),H=o.a.useCallback((function(e){F.current=h.a.findDOMNode(e)}),[]),J=Object(u.a)(H,a),q=Object(n.a)({className:Object(i.a)(f.root,v,$.dense&&f.dense,!S&&f.gutters,L&&f.divider,A&&f.disabled,b&&f.button,"center"!==r&&f.alignItemsFlexStart,G&&f.secondaryAction,Q&&f.selected),disabled:A},M),z=w||"li";return b&&(q.component=w||"div",q.focusVisibleClassName=Object(i.a)(f.focusVisible,D),z=s.a),G?(z=q.component||w?z:"div","li"===k&&("li"===z?z="div":"li"===q.component&&(q.component="div")),o.a.createElement(d.a.Provider,{value:$},o.a.createElement(k,Object(n.a)({className:Object(i.a)(f.container,j),ref:J},N),o.a.createElement(z,q,V),V.pop()))):o.a.createElement(d.a.Provider,{value:$},o.a.createElement(z,Object(n.a)({ref:J},q),V))}));a.a=Object(c.a)((function(e){return{root:{display:"flex",justifyContent:"flex-start",alignItems:"center",position:"relative",textDecoration:"none",width:"100%",boxSizing:"border-box",textAlign:"left",paddingTop:8,paddingBottom:8,"&$focusVisible":{backgroundColor:e.palette.action.selected},"&$selected, &$selected:hover":{backgroundColor:e.palette.action.selected},"&$disabled":{opacity:.5}},container:{position:"relative"},focusVisible:{},dense:{paddingTop:4,paddingBottom:4},alignItemsFlexStart:{alignItems:"flex-start"},disabled:{},divider:{borderBottom:"1px solid ".concat(e.palette.divider),backgroundClip:"padding-box"},gutters:{paddingLeft:16,paddingRight:16},button:{transition:e.transitions.create("background-color",{duration:e.transitions.duration.shortest}),"&:hover":{textDecoration:"none",backgroundColor:e.palette.action.hover,"@media (hover: none)":{backgroundColor:"transparent"}}},secondaryAction:{paddingRight:48},selected:{}}}),{name:"MuiListItem"})(g)},359:function(e,a,t){"use strict";var n=t(1),l=t(5),r=t(0),o=t.n(r),i=(t(7),t(15)),c=t(14),s=t(36),m={h1:"h1",h2:"h2",h3:"h3",h4:"h4",h5:"h5",h6:"h6",subtitle1:"h6",subtitle2:"h6",body1:"p",body2:"p"},u=o.a.forwardRef((function(e,a){var t=e.align,r=void 0===t?"inherit":t,c=e.classes,u=e.className,d=e.color,p=void 0===d?"initial":d,h=e.component,E=e.display,g=void 0===E?"initial":E,b=e.gutterBottom,y=void 0!==b&&b,f=e.noWrap,v=void 0!==f&&f,w=e.paragraph,x=void 0!==w&&w,k=e.variant,C=void 0===k?"body1":k,j=e.variantMapping,N=void 0===j?m:j,O=Object(l.a)(e,["align","classes","className","color","component","display","gutterBottom","noWrap","paragraph","variant","variantMapping"]),T=h||(x?"p":N[C]||m[C])||"span";return o.a.createElement(T,Object(n.a)({className:Object(i.a)(c.root,u,"inherit"!==C&&c[C],"initial"!==p&&c["color".concat(Object(s.a)(p))],v&&c.noWrap,y&&c.gutterBottom,x&&c.paragraph,"inherit"!==r&&c["align".concat(Object(s.a)(r))],"initial"!==g&&c["display".concat(Object(s.a)(g))]),ref:a},O))}));a.a=Object(c.a)((function(e){return{root:{margin:0},body2:e.typography.body2,body1:e.typography.body1,caption:e.typography.caption,button:e.typography.button,h1:e.typography.h1,h2:e.typography.h2,h3:e.typography.h3,h4:e.typography.h4,h5:e.typography.h5,h6:e.typography.h6,subtitle1:e.typography.subtitle1,subtitle2:e.typography.subtitle2,overline:e.typography.overline,srOnly:{position:"absolute",height:1,width:1,overflow:"hidden"},alignLeft:{textAlign:"left"},alignCenter:{textAlign:"center"},alignRight:{textAlign:"right"},alignJustify:{textAlign:"justify"},noWrap:{overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"},gutterBottom:{marginBottom:"0.35em"},paragraph:{marginBottom:16},colorInherit:{color:"inherit"},colorPrimary:{color:e.palette.primary.main},colorSecondary:{color:e.palette.secondary.main},colorTextPrimary:{color:e.palette.text.primary},colorTextSecondary:{color:e.palette.text.secondary},colorError:{color:e.palette.error.main},displayInline:{display:"inline"},displayBlock:{display:"block"}}}),{name:"MuiTypography"})(u)},404:function(e,a,t){"use strict";var n=t(1),l=t(5),r=t(0),o=t.n(r),i=(t(7),t(15)),c=t(14),s=t(302),m=o.a.forwardRef((function(e,a){var t=e.children,r=e.classes,c=e.className,m=e.component,u=void 0===m?"ul":m,d=e.dense,p=void 0!==d&&d,h=e.disablePadding,E=void 0!==h&&h,g=e.subheader,b=Object(l.a)(e,["children","classes","className","component","dense","disablePadding","subheader"]),y=o.a.useMemo((function(){return{dense:p}}),[p]);return o.a.createElement(s.a.Provider,{value:y},o.a.createElement(u,Object(n.a)({className:Object(i.a)(r.root,c,p&&r.dense,!E&&r.padding,g&&r.subheader),ref:a},b),g,t))}));a.a=Object(c.a)({root:{listStyle:"none",margin:0,padding:0,position:"relative"},padding:{paddingTop:8,paddingBottom:8},dense:{},subheader:{paddingTop:0}},{name:"MuiList"})(m)},448:function(e,a,t){"use strict";var n=t(1),l=t(5),r=t(0),o=t.n(r),i=(t(7),t(15)),c=t(14),s=t(359),m=t(302),u=o.a.forwardRef((function(e,a){var t=e.children,r=e.classes,c=e.className,u=e.disableTypography,d=void 0!==u&&u,p=e.inset,h=void 0!==p&&p,E=e.primary,g=e.primaryTypographyProps,b=e.secondary,y=e.secondaryTypographyProps,f=Object(l.a)(e,["children","classes","className","disableTypography","inset","primary","primaryTypographyProps","secondary","secondaryTypographyProps"]),v=o.a.useContext(m.a).dense,w=null!=E?E:t;null==w||w.type===s.a||d||(w=o.a.createElement(s.a,Object(n.a)({variant:v?"body2":"body1",className:r.primary,component:"span"},g),w));var x=b;return null==x||x.type===s.a||d||(x=o.a.createElement(s.a,Object(n.a)({variant:"body2",className:r.secondary,color:"textSecondary"},y),x)),o.a.createElement("div",Object(n.a)({className:Object(i.a)(r.root,c,v&&r.dense,h&&r.inset,w&&x&&r.multiline),ref:a},f),w,x)}));a.a=Object(c.a)({root:{flex:"1 1 auto",minWidth:0,marginTop:4,marginBottom:4},multiline:{marginTop:6,marginBottom:6},dense:{},inset:{paddingLeft:56},primary:{},secondary:{}},{name:"MuiListItemText"})(u)},533:function(e,a,t){"use strict";t.r(a);var n=t(0),l=t.n(n),r=t(14),o=t(273),i=t(531),c=t(404),s=t(339),m=t(448),u=t(92),d=t(294),p=t(295);t(72);class h extends n.PureComponent{constructor(e){super(e)}render(){const{classes:e}=this.props;return l.a.createElement(o.a,{elevation:0,className:e.root},l.a.createElement(o.a,{elevation:3,className:e.main},l.a.createElement(i.a,{variant:"contained",className:e.back,onClick:()=>{this.props.history.push("/")}},"Back"),l.a.createElement("h2",null,"Frequently Asked Questions and Commands"),l.a.createElement(o.a,{elevation:0,className:e.container},l.a.createElement(o.a,{elevation:3,className:e.QA},l.a.createElement("h2",null,"FAQ"),l.a.createElement(c.a,null,l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"Q: How does this work?"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    A: If you're looking for looking for the source code, use the \"!source\" command, if you just want the TLDR: I use a capture card to get the Nintendo Switch's screen, I use a micro controller (Arduino) that acts like a Pro Controller, and use a Python script to send it input. If you have any other questions, just ask @fosse on the discord server.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"Q: Why can't I use the Plus/Home/Capture button?"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    A: It's reserved for special roles, it's setup like this to prevent abuse.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"Q: What's the friend code for the Twitch account?"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    A: SW-4621-9617-9306.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"Q: How do I change the game?"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,'    A: Use "!goto [game]" to switch between games, for a list of games, use "!games".')),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"Q: Something is wrong / broken, what do I do?"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    A: If someone isn't there to help on stream, contact a mod or @fosse on the discord server.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"Q: I want a longer turn! xxx is too short."))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    A: If you subscribe on twitch and use it to login, your turn length is doubled.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"Q: Do the same commands used on the stream/site work on this server as well?"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    A: No, they don't, they're only meant for the stream/site.")))),l.a.createElement(o.a,{elevation:3,className:e.commands},l.a.createElement("h2",null,"Stream Commands"),l.a.createElement(o.a,{elevation:2,className:e.subCommands},l.a.createElement("h4",null,"Commands for Everyone"),l.a.createElement(c.a,null,l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!commands"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Gives you a list of commands.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!goto [game]"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    use without brackets to switch games, use !games for a list of games.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!games or !gamelist or !goto or !xboxgames or !xboxgamelist"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Shows the list of games currently available (switch or xbox).")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!playing"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Shows who is currently playing.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!source"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Links you to the source code for the project.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!site"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Links you to https://remotegames.io.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!discord"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Links you to the discord invite.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!fc"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Gives you the friend code to the Twitch account.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!restart1 or !restart2 or !restart3"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    refreshes the corresponding stream.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"![mod | plus | sub | ban]list"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    (no brackets) lists people in the corresponding group.")))),l.a.createElement(o.a,{elevation:2,className:e.subCommands},l.a.createElement("h4",null,"Commands for Plus level users"),l.a.createElement(c.a,null,l.a.createElement(s.a,null,l.a.createElement(m.a,null,"Plus level users can use the Plus / Start button in games.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!lock"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Is there a disaster? Maybe someone is being bad and is about to nuke the Switch? Type !lock to lock the controls until a mod can fix it.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!fixcontrollers"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    If the controller order gets messed up, use this command to fix it.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!rr [user - optional]"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Try it and see what happens!")))),l.a.createElement(o.a,{elevation:2,className:e.subCommands},l.a.createElement("h4",null,"Commands for Mods"),l.a.createElement(c.a,null,l.a.createElement(s.a,null,l.a.createElement(m.a,null,"Mods can do basically everything, including Home / Capture")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!restartscript"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Restarts the python script.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!restartserver"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Restarts the server, you shouldn't have to use this.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"![give | remove]plus [user]"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Gives or removes plus permission from [user].")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"![temp | perma]ban [user]"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Temporarily or permanently bans [user].")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"![disable | enable]chat"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Disables or enables Chat commands.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"![disable | enable]goto"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Disables or enables !goto.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"![setturnlength | setforfeitlength] [time in seconds]"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Change the amount of time for turns and forfeits.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!lock or !unlock"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    Lock or unlock the Switch if it is locked.")),l.a.createElement(s.a,null,l.a.createElement(m.a,null,l.a.createElement("b",null,"!forcegoto or !xboxforcegoto"))),l.a.createElement(s.a,null,l.a.createElement(m.a,null,"    !goto but without the democracy.")))))),l.a.createElement("p",null,"The games, consoles, and server costs to run this project are primarily funded through"," ",l.a.createElement("a",{href:"https://twitch.tv/remotegames/subscribe/"},"Twitch subscriptions")," ","and donations. If you like the project consider supporting it with the links below."),l.a.createElement("div",{className:e.donationButtons},l.a.createElement("img",{border:"0",alt:"Donate with Twitch",src:"/images/about/twdonatebutton.png",className:e.image,onClick:()=>{window.location="https://streamlabs.com/remotegames/"}}),l.a.createElement("img",{border:"0",alt:"Join the Discord Server",src:"/images/about/discordbutton.png",className:e.image,onClick:()=>{window.location="https://discord.io/tpns/"}}),l.a.createElement("img",{border:"0",alt:"Donate with Paypal",src:"/images/about/ppdonatebutton.png",className:e.image,onClick:()=>{window.location="https://paypal.me/fossephate/"}})),l.a.createElement("iframe",{className:e.twitch,src:"https://player.twitch.tv/?channel=remotegames&muted=false&autoplay=true",height:"360",width:"640",frameBorder:"0",scrolling:"no",allowFullScreen:!0})))}}a.default=Object(d.a)(Object(r.a)(e=>({root:{display:"flex",justifyContent:"center",padding:"3%",color:e.palette.primary.contrastText,backgroundColor:e.palette.background.default},main:{display:"flex",flexDirection:"column",justifyContent:"center",width:"98%",height:"100%",padding:"2%"},image:{cursor:"pointer",marginLeft:"auto",marginRight:"auto"},back:{marginBottom:"10px",width:"30%",marginLeft:"auto"},card:{width:345},media:{height:300},imagesContainer:{display:"flex",justifyContent:"space-evenly",padding:"10px",flexWrap:"wrap",marginBottom:"10px"},donationButtons:{display:"flex",flexWrap:"wrap"},twitch:{marginLeft:"auto",marginRight:"auto"},container:{display:"flex",flexDirection:"column",justifyContent:"space-evenly",padding:"10px"},QA:{width:"99%",padding:"2%",marginBottom:"40px"},commands:{width:"99%",padding:"2%"},subCommands:{padding:"10px",marginTop:"20px",marginBottom:"20px"},[p.a.laptop]:{container:{flexDirection:"row"},QA:{width:"49%",marginBottom:"0"},commands:{width:"49%"}}})),Object(u.b)(e=>({}),e=>({updateSettings:a=>{e(updateSettings(a))}})))(h)}}]);
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[10],{
+
+/***/ "./src/components/general/PopoverMenu.jsx":
+/*!************************************************!*\
+  !*** ./src/components/general/PopoverMenu.jsx ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+// react:
+
+
+
+const PopoverMenu = props => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Popover"], {
+  open: props.open,
+  anchorEl: props.anchorEl,
+  onClose: props.onClose,
+  anchorOrigin: {
+    vertical: "bottom",
+    horizontal: "center"
+  },
+  transformOrigin: {
+    vertical: "top",
+    horizontal: "center"
+  }
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Paper"], {
+  elevation: 4,
+  style: {
+    padding: "10px"
+  }
+}, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+  variant: "contained",
+  color: "primary"
+}, "View Profile"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+  variant: "contained",
+  color: "secondary"
+}, "Ban"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Button"], {
+  variant: "contained",
+  color: "primary"
+}, "Kick from Queue")));
+
+/* harmony default export */ __webpack_exports__["default"] = (PopoverMenu);
+
+/***/ }),
+
+/***/ "./src/shared/components/account/Username.jsx":
+/*!****************************************************!*\
+  !*** ./src/shared/components/account/Username.jsx ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var src_components_general_PopoverMenu_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! src/components/general/PopoverMenu.jsx */ "./src/components/general/PopoverMenu.jsx");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+// react:
+ // components:
+
+ // material ui:
+
+ // redux:
+
+ // recompose:
+
+ // jss:
+
+const styles = theme => ({
+  root: {}
+});
+
+class Username extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.state = {
+      popoverOpen: false
+    };
+    this.ref = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    this.handleOpenPopover = this.handleOpenPopover.bind(this);
+    this.handleClosePopover = this.handleClosePopover.bind(this);
+  }
+
+  handleOpenPopover() {
+    this.setState({
+      popoverOpen: true
+    });
+  }
+
+  handleClosePopover() {
+    this.setState({
+      popoverOpen: false
+    });
+  }
+
+  render() {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      style: this.props.style,
+      onClick: this.handleOpenPopover,
+      ref: ref => {
+        this.ref = ref;
+      }
+    }, this.props.children), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(src_components_general_PopoverMenu_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], {
+      open: this.state.popoverOpen,
+      onClose: this.handleClosePopover,
+      anchorEl: this.ref
+    }));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {};
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_4__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_3__["connect"])(mapStateToProps))(Username));
+
+/***/ }),
+
+/***/ "./src/shared/components/chat/Chat.jsx":
+/*!*********************************************!*\
+  !*** ./src/shared/components/chat/Chat.jsx ***!
+  \*********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _MessageList_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./MessageList.jsx */ "./src/shared/components/chat/MessageList.jsx");
+/* harmony import */ var _SendMessageForm_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./SendMessageForm.jsx */ "./src/shared/components/chat/SendMessageForm.jsx");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var shared_libs_utils_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! shared/libs/utils.js */ "./src/shared/libs/utils.js");
+// react:
+
+
+ // material ui:
+
+
+ // libs:
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    gridArea: "chat",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    // flex: "1",
+    padding: "5px",
+    height: "300px",
+    // new:
+    position: "relative"
+  },
+  [shared_libs_utils_js__WEBPACK_IMPORTED_MODULE_5__["device"].tablet]: {
+    root: {
+      height: "unset"
+    }
+  },
+  [shared_libs_utils_js__WEBPACK_IMPORTED_MODULE_5__["device"].laptop]: {
+    root: {// position: "",
+      // width: "100%",
+      // padding: "5px",
+    }
+  }
+}); // @withStyles(styles)
+
+
+class Chat extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+
+    if (this.props.hide) {
+      return null;
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_4__["Paper"], {
+      id: "chat",
+      className: classes.root
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MessageList_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], null), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_SendMessageForm_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], null));
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_3__["withStyles"])(styles)(Chat));
+
+/***/ }),
+
+/***/ "./src/shared/components/chat/Message.jsx":
+/*!************************************************!*\
+  !*** ./src/shared/components/chat/Message.jsx ***!
+  \************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_linkify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-linkify */ "./node_modules/react-linkify/dist/index.js");
+/* harmony import */ var react_linkify__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_linkify__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var shared_components_icons_Badge_jsx__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! shared/components/icons/Badge.jsx */ "./src/shared/components/icons/Badge.jsx");
+/* harmony import */ var shared_components_account_Username_jsx__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! shared/components/account/Username.jsx */ "./src/shared/components/account/Username.jsx");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+// react:
+
+ // components:
+
+
+ // material ui:
+
+
+ // redux:
+
+ // recompose:
+
+ // libs:
+
+const styles = props => ({
+  root: {
+    // display: "flex",
+    flexWrap: "wrap",
+    backgroundColor: props.isBanned ? "#d34c4ca4" : null,
+    wordBreak: "break-word",
+    margin: "5px 5px",
+    padding: "5px 10px",
+    fontSize: "14px !important",
+    // color: theme.palette.primary.contrastText,
+    borderRadius: "5px"
+  },
+  links: {
+    // todo: use primary / secondary based on which it should be:
+    // color: theme.palette.primary.contrastText,
+    // color: "#1a0dab",
+    color: "#0000ee"
+  },
+  user: {
+    display: "inline-flex",
+    margin: "0px 2px",
+    padding: "2px 5px",
+    cursor: "pointer"
+  }
+});
+
+function pad(t) {
+  let s = "" + t;
+
+  while (s.length < 2) {
+    s = "0" + s;
+  }
+
+  return s;
+}
+
+function getTimeStamp(t) {
+  let time = new Date(t);
+  let hours = time.getHours();
+  hours = hours > 12 ? hours - 12 : hours;
+  let s = hours + ":" + pad(time.getMinutes()) + " ";
+  return s;
+}
+
+function ping(text, time) {} // new Noty({
+// 	theme: "mint",
+// 	type: "warning",
+// 	text: text,
+// 	timeout: time,
+// 	sounds: {
+// 		volume: 0.5,
+// 		sources: ["https://remotegames.io/sounds/ding.wav"],
+// 		conditions: ["docVisible"],
+// 	},
+// }).show();
+// class Message extends PureComponent {
+
+
+class Message extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let {
+      classes,
+      text,
+      username,
+      userid,
+      time,
+      isReplay,
+      isLastMessage,
+      accountMap
+    } = this.props;
+
+    if (!isReplay && isLastMessage) {
+      let mention = "@" + this.props.myUsername;
+
+      if (text.indexOf(mention) > -1) {
+        ping("You've been pinged!", 500);
+      }
+    }
+
+    let isDev = false;
+
+    if (username == "fosse" || username == "remotegames" || username == "fossephate" || username == "fosse#0430") {
+      isDev = true;
+    }
+
+    let icons = [];
+    let account = accountMap[userid];
+
+    if (account) {
+      if (isDev) {
+        icons.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_icons_Badge_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          type: "dev"
+        }));
+      } else if (account.roles.host) {
+        icons.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_icons_Badge_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          type: "host"
+        }));
+      } else if (account.roles.mod) {
+        icons.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_icons_Badge_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          type: "mod"
+        }));
+      } else if (account.roles.plus) {
+        icons.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_icons_Badge_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          type: "plus"
+        }));
+      }
+
+      if (account.roles.sub) {
+        icons.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_icons_Badge_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
+          type: "sub1"
+        }));
+      }
+
+      if (account.roles.mod && !isReplay && isLastMessage) {
+        if (text.indexOf("@everyone") > -1) {
+          ping("You've been pinged!", 500);
+        }
+      }
+    }
+
+    icons = react__WEBPACK_IMPORTED_MODULE_0___default.a.Children.toArray(icons);
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: classes.root,
+      userid: userid,
+      onClick: this.props.onClick
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_linkify__WEBPACK_IMPORTED_MODULE_1___default.a, {
+      properties: {
+        className: classes.links
+      }
+    }, getTimeStamp(time), icons, icons.length == 0 ? " " : null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(shared_components_account_Username_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      userid: userid,
+      style: {
+        display: "inline"
+      }
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_5__["Paper"], {
+      elevation: 4,
+      className: classes.user
+    }, username)), " ", react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", null, text)));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    accountMap: state.stream.accountMap,
+    myUsername: state.client.username
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_7__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_4__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps))(Message));
+
+/***/ }),
+
+/***/ "./src/shared/components/chat/MessageList.jsx":
+/*!****************************************************!*\
+  !*** ./src/shared/components/chat/MessageList.jsx ***!
+  \****************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _Message_jsx__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Message.jsx */ "./src/shared/components/chat/Message.jsx");
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var _material_ui_icons_Close__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @material-ui/icons/Close */ "./node_modules/@material-ui/icons/Close.js");
+/* harmony import */ var _material_ui_icons_Close__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Close__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var src_actions_chat_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! src/actions/chat.js */ "./src/actions/chat.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+// react:
+ // components:
+
+ // material ui:
+
+
+
+ // redux:
+
+
+ // recompose:
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    overflowY: "auto",
+    // marginBottom: "15px",
+    boxShadow: "none",
+    "& > div:nth-child(even)": {
+      // backgroundColor: "#FF3C28A4",
+      // backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light,
+      color: theme.palette.type === "dark" ? "#FFF" : "#000",
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.primary.dark : theme.palette.primary.light
+    },
+    "& > div:nth-child(odd)": {
+      // backgroundColor: "#0AB9E6A4",
+      // backgroundColor: "#2d2d2dA4",
+      // backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light,
+      color: theme.palette.type === "dark" ? "#FFF" : "#000",
+      backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light
+    },
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    height: "82%"
+  }
+});
+
+class MessageList extends react__WEBPACK_IMPORTED_MODULE_0__["Component"] {
+  constructor(props) {
+    super(props);
+    this.messagesEnd = null;
+    this.rootRef = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    this.shouldScroll = false; // this.scrollToBottom = this.scrollToBottom.bind(this);
+
+    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      voting: false
+    };
+  }
+
+  handleClick(event) {}
+
+  getSnapshotBeforeUpdate(prevProps, prevState) {
+    if (prevProps.messages.length < this.props.messages.length) {
+      let messageList = document.getElementById("messageList");
+
+      if (messageList && Math.abs(messageList.scrollHeight - messageList.scrollTop - messageList.offsetHeight) < 2) {
+        this.shouldScroll = true;
+      }
+    }
+
+    return null;
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.shouldScroll) {
+      let messageList = document.getElementById("messageList");
+      messageList.scrollTop = messageList.scrollHeight;
+    }
+
+    this.shouldScroll = false;
+  }
+
+  mapMessages() {
+    let messages = [];
+
+    for (let i = 0; i < this.props.messages.length; i++) {
+      let isLastMessage = i == this.props.messages.length - 1;
+
+      if (this.props.messages[i].isBanned) {
+        if (!this.props.isBanned && !this.props.isMod) {
+          continue;
+        }
+      }
+
+      messages.push(react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Message_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], _extends({
+        key: i
+      }, this.props.messages[i], {
+        isLastMessage: isLastMessage,
+        onContextMenu: this.handleClick
+      })));
+    }
+
+    return messages;
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!this.state.voting) {
+      let message = nextProps.messages[nextProps.messages.length - 1];
+
+      if (message && message.username == "HostBot" && /A vote has been started to/.test(message.text) && !message.isReplay) {
+        this.setState({
+          voting: true
+        });
+        setTimeout(() => {
+          this.setState({
+            voting: false
+          });
+        }, 18000);
+      }
+    }
+
+    return true; // }
+    // return false;
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Paper"], {
+      id: "messageList",
+      className: classes.root,
+      elevation: 4,
+      ref: el => {
+        this.rootRef = el;
+      }
+    }, this.mapMessages(), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      style: {
+        float: "left",
+        clear: "both"
+      },
+      ref: el => {
+        this.messagesEnd = el;
+      }
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Snackbar"], {
+      anchorOrigin: {
+        vertical: "top",
+        horizontal: "right"
+      },
+      open: this.state.voting,
+      autoHideDuration: 0,
+      onClose: () => {},
+      message: react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+        id: "message-id"
+      }, "A vote has started to switch games!"),
+      action: [react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        key: "leave",
+        color: "secondary",
+        size: "small",
+        variant: "contained",
+        onClick: () => {
+          this.props.sendMessage("yea");
+          this.setState({
+            voting: false
+          });
+        }
+      }, "LEAVE"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+        key: "spacer",
+        style: {
+          width: "15px"
+        }
+      }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+        key: "stay",
+        color: "primary",
+        size: "small",
+        variant: "contained",
+        onClick: () => {
+          this.props.sendMessage("nay");
+          this.setState({
+            voting: false
+          });
+        }
+      }, "STAY"), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_3__["IconButton"], {
+        key: "close",
+        color: "inherit",
+        className: classes.close,
+        onClick: () => {
+          this.setState({
+            voting: false
+          });
+        }
+      }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Close__WEBPACK_IMPORTED_MODULE_4___default.a, null))]
+    }));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    messages: state.stream.chat.messages,
+    accountMap: state.stream.accountMap,
+    isMod: state.client.roles.mod,
+    isBanned: state.client.isBanned // lastMessage: state.stream.chat.messages[state.stream.chat.messages.length - 1],
+
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    sendMessage: text => {
+      dispatch(Object(src_actions_chat_js__WEBPACK_IMPORTED_MODULE_6__["sendMessage"])(text));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_7__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_5__["connect"])(mapStateToProps, mapDispatchToProps))(MessageList));
+
+/***/ }),
+
+/***/ "./src/shared/components/chat/SendMessageForm.jsx":
+/*!********************************************************!*\
+  !*** ./src/shared/components/chat/SendMessageForm.jsx ***!
+  \********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
+/* harmony import */ var _material_ui_icons_Send__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @material-ui/icons/Send */ "./node_modules/@material-ui/icons/Send.js");
+/* harmony import */ var _material_ui_icons_Send__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_material_ui_icons_Send__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _webscopeio_react_textarea_autocomplete__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @webscopeio/react-textarea-autocomplete */ "./node_modules/@webscopeio/react-textarea-autocomplete/dist/react-textarea-autocomplete.es.js");
+/* harmony import */ var _jukben_emoji_search__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @jukben/emoji-search */ "./node_modules/@jukben/emoji-search/build/index.js");
+/* harmony import */ var _jukben_emoji_search__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_jukben_emoji_search__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var react_redux__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+/* harmony import */ var src_actions_chat_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! src/actions/chat.js */ "./src/actions/chat.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+/* harmony import */ var classnames__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(classnames__WEBPACK_IMPORTED_MODULE_9__);
+// react:
+ // material ui:
+
+
+ // icons:
+
+ // mentions / autocomplete:
+
+
+ // redux:
+
+
+ // recompose:
+
+ // libs:
+
+
+
+const Loading = ({
+  data
+}) => react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, "Loading"); // jss:
+
+
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    width: "100%",
+    minHeight: "60px",
+    height: "12%",
+    paddingLeft: "5px",
+    paddingRight: "5px"
+  },
+  messageBox: {
+    display: "flex",
+    resize: "none",
+    // width: "98%",
+    borderRadius: "6px",
+    "&:focus": {
+      outlineOffset: "0px !important",
+      outline: "none !important",
+      boxShadow: "0 0 3px blue !important"
+    }
+  },
+  messageBoxContainer: {
+    zIndex: 1,
+    width: "90%",
+    // height: "70%",
+    fontSize: "14px",
+    lineHeight: "20px",
+    // fontSize: "inherit !important",
+    marginRight: "10px",
+    position: "relative"
+  },
+  textField: {
+    flex: "1",
+    overflowY: "auto",
+    height: "32px",
+    // height: "56px",
+    "&::-webkit-scrollbar": {
+      width: "0 !important"
+    },
+    "& textarea": {
+      overflow: "hidden"
+    }
+  },
+  container: {
+    "& .rta": {// position: "relative",
+      // fontSize: "18px",
+      // width: "100%",
+      // height: "100%",
+    },
+    "& .rta__loader.rta__loader--empty-suggestion-data": {
+      borderRadius: "3px",
+      boxShadow: "0 0 5px rgba(27, 31, 35, 0.1)",
+      padding: "5px"
+    },
+    "& .rta--loading .rta__loader.rta__loader--suggestion-data": {
+      position: "absolute",
+      top: "0",
+      left: "0",
+      width: "100%",
+      background: "rgba(255, 255, 255, 0.8)"
+    },
+    "& .rta--loading .rta__loader.rta__loader--suggestion-data > *": {
+      position: "relative",
+      top: "50%"
+    },
+    // "& .rta__textarea": {
+    // width: "100%",
+    // height: "100%",
+    // fontSize: "1em",
+    // },
+    "& .rta__autocomplete": {
+      position: "absolute",
+      display: "block",
+      marginTop: "1em"
+    },
+    "& .rta__autocomplete--top": {// marginTop: "0",
+      // marginBottom: "1em",
+    },
+    "& .rta__list": {
+      listStyle: "none",
+      margin: "0px",
+      padding: "0px",
+      position: "relative",
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)"
+    },
+    "& .rta__entity": {// background: "white",
+      // width: "100%",
+      // textAlign: "left",
+      // outline: "none",
+    },
+    "& .rta__entity:hover": {
+      cursor: "pointer"
+    },
+    "& .rta__item:not(:last-child)": {// borderBottom: "1px solid #dfe2e5",
+    },
+    "& .rta__entity > *": {// paddingLeft: "4px",
+      // paddingRight: "4px",
+    },
+    "& .rta__entity--selected": {
+      backgroundColor: theme.palette.action.selected
+    }
+  },
+  suggestion: {}
+});
+
+class SendMessageForm extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.handleTextChange = this.handleTextChange.bind(this);
+    this.sendMessage = this.sendMessage.bind(this);
+    this.getEmojiSuggestions = this.getEmojiSuggestions.bind(this);
+    this.getUsernameSuggestions = this.getUsernameSuggestions.bind(this);
+    this.getCommandSuggestions = this.getCommandSuggestions.bind(this);
+    this.renderNameSuggestion = this.renderNameSuggestion.bind(this);
+    this.renderCharSuggestion = this.renderCharSuggestion.bind(this);
+    this.rta = react__WEBPACK_IMPORTED_MODULE_0___default.a.createRef();
+    this.state = {
+      text: "",
+      commands: ["help", "discord", "games", "goto", "source", "fc", "fixcontrollers", "lock", "unlock", "forcegoto", "setturnlength", "setforfeitlength", "sublist", "modlist", "pluslist", "banlist", "ban", "unban"]
+    };
+  }
+
+  handleKeyPress(event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      this.sendMessage();
+    }
+  }
+
+  handleTextChange(event) {
+    this.setState({
+      text: event.target.value
+    });
+  }
+
+  sendMessage() {
+    if (this.state.text !== "") {
+      this.props.sendMessage(this.state.text);
+      this.setState({
+        text: ""
+      });
+      this.rta.setState({
+        value: ""
+      });
+    }
+  }
+
+  getEmojiSuggestions(token) {
+    if (token.length < 1) {
+      return [];
+    } else {
+      return _jukben_emoji_search__WEBPACK_IMPORTED_MODULE_5___default()(token).slice(0, 5).map(({
+        name,
+        char
+      }) => ({
+        name,
+        char
+      }));
+    }
+  }
+
+  getUsernameSuggestions(token) {
+    let suggestions = [];
+
+    for (let userid in this.props.accountMap) {
+      let username = this.props.accountMap[userid].username;
+
+      if (username == null || username.toLowerCase().indexOf(token) == -1) {
+        continue;
+      }
+
+      if (token.indexOf(username) > -1) {
+        suggestions = [];
+        break;
+      }
+
+      suggestions.push({
+        name: username,
+        char: `@${username}`
+      });
+    }
+
+    return suggestions.slice(0, 5);
+  }
+
+  getCommandSuggestions(token) {
+    let suggestions = [];
+
+    if (token.length < 1) {
+      return [];
+    }
+
+    for (let i = 0; i < this.state.commands.length; i++) {
+      let command = this.state.commands[i];
+
+      if (command.indexOf(token) == -1) {
+        continue;
+      }
+
+      if (token.indexOf(command) > -1) {
+        suggestions = [];
+        break;
+      }
+
+      suggestions.push({
+        name: command,
+        char: "!" + command
+      });
+    }
+
+    return suggestions.slice(0, 5);
+  }
+
+  renderNameSuggestion(obj) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["ListItemText"], null, obj.entity.name));
+  }
+
+  renderCharSuggestion(obj) {
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["ListItem"], null, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["ListItemText"], null, obj.entity.char));
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Paper"], {
+      id: "SendMessageForm",
+      className: classnames__WEBPACK_IMPORTED_MODULE_9___default()(classes.root, classes.container),
+      elevation: 0
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_webscopeio_react_textarea_autocomplete__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      id: "messageBoxOld",
+      className: classes.messageBox,
+      containerClassName: classes.messageBoxContainer,
+      loadingComponent: Loading,
+      ref: rta => {
+        this.rta = rta;
+      },
+      textAreaComponent: {
+        component: _material_ui_core__WEBPACK_IMPORTED_MODULE_2__["TextField"],
+        ref: "inputRef"
+      },
+      minChar: 0,
+      trigger: {
+        ":": {
+          dataProvider: this.getEmojiSuggestions,
+          component: this.renderCharSuggestion,
+          output: item => ({
+            text: item.char,
+            caretPosition: "next"
+          })
+        },
+        "@": {
+          dataProvider: this.getUsernameSuggestions,
+          component: this.renderNameSuggestion,
+          output: item => ({
+            text: item.char,
+            caretPosition: "next"
+          })
+        },
+        "!": {
+          dataProvider: this.getCommandSuggestions,
+          component: this.renderNameSuggestion,
+          output: item => ({
+            text: item.char,
+            caretPosition: "end"
+          })
+        }
+      },
+      onChange: this.handleTextChange,
+      onKeyPress: this.handleKeyPress,
+      value: this.state.text,
+      placeholder: "Send a message",
+      variant: "standard"
+    }), react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_2__["Fab"], {
+      color: "primary",
+      size: "small",
+      onClick: this.sendMessage
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_icons_Send__WEBPACK_IMPORTED_MODULE_3___default.a, {
+      fontSize: "small"
+    })));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    accountMap: state.stream.accountMap
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    sendMessage: text => {
+      dispatch(Object(src_actions_chat_js__WEBPACK_IMPORTED_MODULE_7__["sendMessage"])(text));
+    }
+  };
+};
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_8__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles), Object(react_redux__WEBPACK_IMPORTED_MODULE_6__["connect"])(mapStateToProps, mapDispatchToProps))(SendMessageForm));
+
+/***/ }),
+
+/***/ "./src/shared/components/icons/Badge.jsx":
+/*!***********************************************!*\
+  !*** ./src/shared/components/icons/Badge.jsx ***!
+  \***********************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+/* harmony import */ var _material_ui_core_Tooltip__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/Tooltip */ "./node_modules/@material-ui/core/esm/Tooltip/index.js");
+/* harmony import */ var recompose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+// react:
+ // material ui:
+
+
+ // recompose:
+
+ // jss:
+
+const styles = theme => ({
+  root: {
+    width: "22px",
+    marginLeft: "2px",
+    marginRight: "2px",
+    backgroundColor: "#b7b7b7",
+    border: "1px solid #333",
+    borderRadius: "6px",
+    verticalAlign: "middle"
+  }
+});
+
+class Badge extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    let src = window.location.origin + "/images/badges/";
+    let text;
+
+    switch (this.props.type) {
+      case "dev":
+        src += "DevBadge.png";
+        text = "The Developer";
+        break;
+
+      case "host":
+        src += "AdminBadge.png";
+        text = "Host";
+        break;
+
+      case "mod":
+        src += "ModBadge.png";
+        text = "Moderator";
+        break;
+
+      case "plus":
+        src += "PlusBadge.png";
+        text = "This user can use Plus";
+        break;
+
+      case "sub1":
+        src += "SubBadge1.png";
+        text = "Subscriber for 1 month(+)";
+        break;
+    }
+
+    return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core_Tooltip__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      title: text,
+      placement: "top"
+    }, react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      className: classes.root,
+      src: src
+    }));
+  }
+
+}
+
+/* harmony default export */ __webpack_exports__["default"] = (Object(recompose__WEBPACK_IMPORTED_MODULE_3__["compose"])(Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_1__["withStyles"])(styles))(Badge));
+
+/***/ })
+
+}]);
+//# sourceMappingURL=10.bundle.js.map

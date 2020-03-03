@@ -3,11 +3,7 @@ import React, { PureComponent } from "react";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import { Paper, Button } from "@material-ui/core";
 
 // redux:
 import { connect } from "react-redux";
@@ -15,10 +11,8 @@ import { connect } from "react-redux";
 // recompose:
 import { compose } from "recompose";
 
-// device sizes:
-import { device } from "src/constants/DeviceSizes.js";
-
-let classNames = require("classnames");
+// libs:
+import { device } from "shared/libs/utils.js";
 
 // jss:
 const styles = (theme) => ({

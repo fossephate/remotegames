@@ -49,6 +49,7 @@ module.exports = {
 			reducers: path.resolve(__dirname, "src/reducers/"),
 			constants: path.resolve(__dirname, "src/constants/"),
 			features: path.resolve(__dirname, "src/features/"),
+			shared: path.resolve(__dirname, "src/shared/"),
 			src: path.resolve(__dirname, "src/"),
 		},
 	},

@@ -23,21 +23,18 @@ import handleStreamEvents from "src/sockets/stream";
 import { withStyles } from "@material-ui/core/styles";
 // import { Snackbar } from "@material-ui/core";
 
-import SettingsModal from "src/components/Modals/SettingsModal.jsx";
+import SettingsModal from "src/components/modals/SettingsModal.jsx";
 
 // notistack:
 
 import { withSnackbar } from "notistack";
 
 // main components:
-import Loading from "components/General/Loading.jsx";
-import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
-// import Picture from "src/components/Stream/Picture.jsx";
-// import Chat from "src/components/Stream/Chat/Chat.jsx";
-// import StreamInfo from "src/components/Stream/StreamInfo.jsx";
-const Picture = lazy(() => import("src/components/Stream/Picture.jsx"));
-const Chat = lazy(() => import("src/components/Stream/Chat/Chat.jsx"));
-const StreamInfo = lazy(() => import("src/components/Stream/StreamInfo/StreamInfo.jsx"));
+import Loading from "shared/components/general/Loading.jsx";
+const StreamsAppBar = lazy(() => import("src/components/streams/StreamsAppBar.jsx"));
+const Picture = lazy(() => import("src/components/stream/Picture.jsx"));
+const Chat = lazy(() => import("shared/components/chat/Chat.jsx"));
+const StreamInfo = lazy(() => import("src/components/stream/streamInfo/StreamInfo.jsx"));
 
 // components:
 
@@ -46,13 +43,9 @@ const StreamInfo = lazy(() => import("src/components/Stream/StreamInfo/StreamInf
 // recompose:
 import { compose } from "recompose";
 
-// device sizes:
-import { device } from "src/constants/DeviceSizes.js";
-
-// input handler:
-import InputHandler from "libs/InputHandler/InputHandler.js";
-
-import { deleteAllCookies, getStickString } from "libs/tools.js";
+// libs:
+import { device, deleteAllCookies, getStickString } from "shared/libs/utils.js";
+import InputHandler from "shared/libs/inputHandler/InputHandler.js";
 import localforage from "localforage";
 import socketio from "socket.io-client";
 
@@ -567,11 +560,11 @@ class Stream extends Component {
 
 		return (
 			<div className={classes.root}>
-				<StreamsAppBar
-					history={this.props.history}
-					hide={this.props.settings.fullscreen || this.props.settings.hideNav}
-				/>
 				<Suspense fallback={<Loading />}>
+					<StreamsAppBar
+						history={this.props.history}
+						hide={this.props.settings.fullscreen || this.props.settings.hideNav}
+					/>
 					<Picture />
 					<Chat hide={this.props.settings.hideChat} />
 					<StreamInfo />
@@ -579,18 +572,6 @@ class Stream extends Component {
 
 				{/* selects the first matching path: */}
 				<Switch>
-					{/* <Route
-						path="/(login|register)"
-						render={(props) => {
-							return <LoginRegisterModal {...props} history={this.props.history} />;
-						}}
-					/> */}
-					{/* <Route
-						path="/controls"
-						render={(props) => {
-							return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
-						}}
-					/> */}
 					<Route
 						path="/settings"
 						render={(props) => {

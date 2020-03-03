@@ -1,6 +1,4 @@
-import * as types from "src/actions/ActionTypes.js";
 import { updateServerTime, updatePing } from "src/actions/time.js";
-import { getAverage } from "src/libs/tools.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const timeEvents = (socket, dispatch) => {

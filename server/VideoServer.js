@@ -11,13 +11,9 @@ class VideoServer {
 		});
 
 		this.keepAliveTimer = null;
-
-		this.init = this.init.bind(this);
-		this.stop = this.stop.bind(this);
-		this.afk = this.afk.bind(this);
 	}
 
-	init() {
+	init = () => {
 		this.io.listen(this.port, () => {
 			console.log("Video server listening at port %d", port);
 		});
@@ -25,14 +21,13 @@ class VideoServer {
 		this.io.on("connection", (socket) => {
 			console.log("connected.");
 
-			socket.on("authenticate", (data) => {
-				// console.log(data);
-				// console.log(this.streamKey);
+			socket.on("hostAuthenticate", (data) => {
 				// join the host room if they have the streamKey
 				if (data.streamKey === this.streamKey) {
 					console.log("host authenticated.");
 					socket.join("host");
 				} else {
+					console.log("ERROR: wrong streamKey!");
 					console.log(data.streamKey, this.streamKey);
 				}
 			});
@@ -76,19 +71,19 @@ class VideoServer {
 				this.io.emit("clientPeerSignal", { id: socket.id, data: data });
 			});
 		});
-	}
+	};
 
-	stop() {
+	stop = () => {
 		console.log("closing connection");
 		this.io.close();
-	}
+	};
 
-	afk() {
+	afk = () => {
 		this.accountConnection.emit("streamInactive", {
 			port: this.port,
 			streamKey: this.streamKey,
 		});
-	}
+	};
 }
 
 module.exports.VideoServer = VideoServer;

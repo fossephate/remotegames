@@ -1,0 +1,11 @@
+sudo apt install mongodb
+sudo service mongodb start
+
+
+mongo ->:
+use <DBNAME-HERE>
+db.<DBNAME-HERE>.insert({})
+exit
+
+sudo apt install redis
+sudo service redis start

@@ -8,10 +8,10 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
 // main components:
-import StreamsAppBar from "src/components/Streams/StreamsAppBar.jsx";
-import StreamList from "src/components/Streams/StreamList.jsx";
-import StreamsDrawer from "src/components/Streams/StreamsDrawer.jsx";
-import StreamsFooter from "src/components/Streams/StreamsFooter.jsx";
+import StreamsAppBar from "src/components/streams/StreamsAppBar.jsx";
+import StreamList from "src/components/streams/StreamList.jsx";
+import StreamsDrawer from "src/components/streams/StreamsDrawer.jsx";
+import StreamsFooter from "src/components/streams/StreamsFooter.jsx";
 
 // secondary components:
 
@@ -23,10 +23,8 @@ import { withStyles } from "@material-ui/core/styles";
 // recompose:
 import { compose } from "recompose";
 
-// device sizes:
-import { device } from "src/constants/DeviceSizes.js";
-
 // libs:
+import { device } from "shared/libs/utils.js";
 
 // jss:
 const styles = (theme) => ({

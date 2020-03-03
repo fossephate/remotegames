@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
-const io = require("socket.io")(server);
+const socketio = require("socket.io");
 const port = 8099;
 const config = require("./config.js");
 
@@ -15,20 +15,6 @@ const googleStrategy = require("passport-google-oauth20").Strategy;
 const youtubeV3Strategy = require("passport-youtube-v3").Strategy;
 const discordStrategy = require("passport-discord").Strategy;
 
-const TWITCH_CLIENT_ID = config.TWITCH_CLIENT_ID;
-const TWITCH_CLIENT_SECRET = config.TWITCH_CLIENT_SECRET;
-const TWITCH_CALLBACK_URL = config.TWITCH_CALLBACK_URL;
-const GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = config.GOOGLE_CLIENT_SECRET;
-const GOOGLE_CALLBACK_URL = config.GOOGLE_CALLBACK_URL;
-const YOUTUBE_CLIENT_ID = config.YOUTUBE_CLIENT_ID;
-const YOUTUBE_CLIENT_SECRET = config.YOUTUBE_CLIENT_SECRET;
-const YOUTUBE_CALLBACK_URL = config.YOUTUBE_CALLBACK_URL;
-const DISCORD_CLIENT_ID = config.DISCORD_CLIENT_ID;
-const DISCORD_CLIENT_SECRET = config.DISCORD_CLIENT_SECRET;
-const DISCORD_CALLBACK_URL = config.DISCORD_CALLBACK_URL;
-const SESSION_SECRET = config.SESSION_SECRET;
-
 const yaml = require("js-yaml");
 const request = require("request");
 const crypto = require("crypto");
@@ -38,7 +24,7 @@ const nodemailer = require("nodemailer");
 
 app.use(
 	session({
-		secret: SESSION_SECRET,
+		secret: config.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: false,
 	}),
@@ -67,34 +53,27 @@ let redisClient = redis.createClient({ host: "localhost", port: 6379 });
 let useridToSocketidMap = {};
 let masterAccountMap = {};
 let localizedAccountMaps = {};
-let bannedIPs = [
-	"84.197.3.92",
-	"94.214.218.184",
-	"185.46.212.146",
-	"103.217.104.190",
-	"103.217.104.246",
-];
 
 let streams = [];
 
 // get banned IPs:
-redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
-	let databaseIPs;
-	if (databaseIPs == null) {
-		console.log("Creating IP DB.");
-		databaseIPs = bannedIPs;
-	} else {
-		databaseIPs = JSON.parse(dbBannedIPs);
-	}
-	bannedIPs = databaseIPs;
-	// re-stringify:
-	let databaseIPsString = JSON.stringify(databaseIPs);
-	// store back in database:
-	// store account at uniqueID location, at clients key:
-	redisClient.setAsync("bannedIPs", databaseIPsString).then((success) => {
-		console.log(`stored banned IPs: ${success}`);
-	});
-});
+// redisClient.getAsync("bannedIPs").then((dbBannedIPs) => {
+// 	let databaseIPs;
+// 	if (databaseIPs == null) {
+// 		console.log("Creating IP DB.");
+// 		databaseIPs = bannedIPs;
+// 	} else {
+// 		databaseIPs = JSON.parse(dbBannedIPs);
+// 	}
+// 	bannedIPs = databaseIPs;
+// 	// re-stringify:
+// 	let databaseIPsString = JSON.stringify(databaseIPs);
+// 	// store back in database:
+// 	// store account at uniqueID location, at clients key:
+// 	redisClient.setAsync("bannedIPs", databaseIPsString).then((success) => {
+// 		console.log(`stored banned IPs: ${success}`);
+// 	});
+// });
 
 // mail:
 let transporter = nodemailer.createTransport({
@@ -225,6 +204,7 @@ let accountSchema = Schema({
 		captureRate: Number,
 		resolution: Number,
 
+		dshowVideoDevice: String,
 		audioDevice: String,
 		windowTitle: String,
 		capture: String, // "window" or "desktop"
@@ -395,39 +375,40 @@ function clientInfoFromAccount(account, usernameIndex, hostUserid, cb) {
 	clientInfo.roles = {};
 
 	// todo: maybe ban the account if using a banned IP: (or keep as is)
-	for (let i = 0; i < account.IPs.length; i++) {
-		if (bannedIPs.indexOf(account.IPs[i]) > -1) {
-			clientInfo.isBanned = true;
-		}
-	}
+	// for (let i = 0; i < account.IPs.length; i++) {
+	// 	if (bannedIPs.indexOf(account.IPs[i]) > -1) {
+	// 		clientInfo.isBanned = true;
+	// 	}
+	// }
 
 	// get role data from host user:
 	if (hostUserid) {
 		// try and get account:
-		let queryObj;
-		if (hostUserid === "fosse" || hostUserid === "fosse2") {
-			queryObj = { usernameLower: hostUserid };
-		} else {
-			queryObj = { _id: hostUserid };
-		}
-		Account.findOne(queryObj).exec((error, account) => {
+		let queryObj = { _id: hostUserid };
+		Account.findOne(queryObj).exec((error, hostAccount) => {
 			// error check:
 			if (error) {
 				throw error;
 			}
 
 			// acount doesn't exist:
-			if (!account) {
+			if (!hostAccount) {
 				console.log("host userid didn't lead to an account!");
 			} else {
-				let keys = Object.keys(account.roleData);
+				let keys = Object.keys(hostAccount.roleData);
 				for (let i = 0; i < keys.length; i++) {
 					if (keys[i] === "$init") {
 						continue;
 					}
-					let roleList = account.roleData[keys[i]];
+					let roleList = hostAccount.roleData[keys[i]];
 					if (roleList.includes(clientInfo.userid)) {
 						clientInfo.roles[keys[i]] = true;
+					}
+				}
+
+				for (let i = 0; i < account.IPs.length; i++) {
+					if (hostAccount.bannedIPs.includes(account.IPs[i])) {
+						clientInfo.roles.banned = true;
 					}
 				}
 
@@ -449,9 +430,9 @@ function clientInfoFromAccount(account, usernameIndex, hostUserid, cb) {
 passport.use(
 	new twitchStrategy(
 		{
-			clientID: TWITCH_CLIENT_ID,
-			clientSecret: TWITCH_CLIENT_SECRET,
-			callbackURL: TWITCH_CALLBACK_URL,
+			clientID: config.TWITCH_CLIENT_ID,
+			clientSecret: config.TWITCH_CLIENT_SECRET,
+			callbackURL: config.TWITCH_CALLBACK_URL,
 			scope: "user:read:email analytics:read:games",
 			passReqToCallback: true,
 		},
@@ -467,9 +448,9 @@ passport.use(
 passport.use(
 	new googleStrategy(
 		{
-			clientID: GOOGLE_CLIENT_ID,
-			clientSecret: GOOGLE_CLIENT_SECRET,
-			callbackURL: GOOGLE_CALLBACK_URL,
+			clientID: config.GOOGLE_CLIENT_ID,
+			clientSecret: config.GOOGLE_CLIENT_SECRET,
+			callbackURL: config.GOOGLE_CALLBACK_URL,
 			scope: ["profile"],
 			passReqToCallback: true,
 		},
@@ -485,9 +466,9 @@ passport.use(
 passport.use(
 	new youtubeV3Strategy(
 		{
-			clientID: YOUTUBE_CLIENT_ID,
-			clientSecret: YOUTUBE_CLIENT_SECRET,
-			callbackURL: YOUTUBE_CALLBACK_URL,
+			clientID: config.YOUTUBE_CLIENT_ID,
+			clientSecret: config.YOUTUBE_CLIENT_SECRET,
+			callbackURL: config.YOUTUBE_CALLBACK_URL,
 			scope: ["https://www.googleapis.com/auth/youtube.readonly"],
 			// "https://www.googleapis.com/auth/youtube.force-ssl https://www.googleapis.com/auth/youtube.readonly https://www.googleapis.com/auth/youtube"
 			passReqToCallback: true,
@@ -504,9 +485,9 @@ passport.use(
 passport.use(
 	new discordStrategy(
 		{
-			clientID: DISCORD_CLIENT_ID,
-			clientSecret: DISCORD_CLIENT_SECRET,
-			callbackURL: DISCORD_CALLBACK_URL,
+			clientID: config.DISCORD_CLIENT_ID,
+			clientSecret: config.DISCORD_CLIENT_SECRET,
+			callbackURL: config.DISCORD_CALLBACK_URL,
 			scope: ["identify", "email"],
 			passReqToCallback: true,
 		},
@@ -698,11 +679,11 @@ app.get("/verify", (req, res) => {
 		});
 });
 
-app.get("/deleteDB", (req, res) => {
-	console.log("deleting DB");
-	Account.remove({}, () => {});
-	// 	res.send(`<script>window.location.href = "https://remotegames.io";</script>`);
-});
+// app.get("/deleteDB", (req, res) => {
+// 	console.log("deleting DB");
+// 	Account.remove({}, () => {});
+// 	// 	res.send(`<script>window.location.href = "https://remotegames.io";</script>`);
+// });
 
 app.get("/download", (req, res) => {
 	request(
@@ -715,12 +696,26 @@ app.get("/download", (req, res) => {
 	);
 });
 
+let io = socketio(server);
 server.listen(port, () => {
 	console.log("Account server listening at port %d", port);
 });
 
 let videoServers = {};
 let hostServers = {};
+
+function sendVerifyEmail(email, authToken) {
+	mailOptions.to = email;
+	mailOptions.subject = "Verify your email with remotegames.io";
+	mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${authToken}`;
+	transporter.sendMail(mailOptions, (error, info) => {
+		if (error) {
+			console.log(error);
+		} else {
+			console.log(`Email sent: ${info.response}`);
+		}
+	});
+}
 
 io.on("connection", (socket) => {
 	socket.on("register", (data, cb) => {
@@ -783,10 +778,11 @@ io.on("connection", (socket) => {
 			.then((account) => {
 				// account already exists:
 				if (account) {
-					if (!account.emailVerified) {
-						account.delete();
-						return;
-					}
+					// todo: password reset:
+					// if (!account.emailVerified) {
+					// 	account.delete();
+					// 	return;
+					// }
 					// console.log("Account already exists, EMAIL_ALREADY_TAKEN.");
 					// socket.emit("ACCOUNT_ERROR", "EMAIL_ALREADY_TAKEN");
 					cb({ success: false, reason: "EMAIL_ALREADY_TAKEN" });
@@ -797,10 +793,11 @@ io.on("connection", (socket) => {
 				return Account.findOne({ usernameLower: usernameLower }).then((account) => {
 					// account already exists:
 					if (account) {
-						if (!account.emailVerified) {
-							account.delete();
-							return;
-						}
+						// todo: password reset:
+						// if (!account.emailVerified) {
+						// 	account.delete();
+						// 	return;
+						// }
 						// console.log("Account already exists, USERNAME_ALREADY_TAKEN.");
 						// socket.emit("ACCOUNT_ERROR", "USERNAME_ALREADY_TAKEN");
 						cb({ success: false, reason: "USERNAME_ALREADY_TAKEN" });
@@ -835,16 +832,7 @@ io.on("connection", (socket) => {
 							// authToken: newAccount.authToken,
 							clientInfo: clientInfoFromAccount(newAccount),
 						});
-						mailOptions.to = email;
-						mailOptions.subject = "Verify your email with remotegames.io";
-						mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${newAccount.authToken}`;
-						transporter.sendMail(mailOptions, (error, info) => {
-							if (error) {
-								console.log(error);
-							} else {
-								console.log(`Email sent: ${info.response}`);
-							}
-						});
+						sendVerifyEmail(email, newAccount.authToken);
 					});
 				});
 			});
@@ -1002,7 +990,7 @@ io.on("connection", (socket) => {
 					}
 
 					// save IP if not known:
-					if (account.IPs.indexOf(data.ip) === -1) {
+					if (!account.IPs.includes(data.ip)) {
 						account.IPs.push(data.ip);
 					}
 					// todo: maybe ban the account if using a banned IP: (or keep as is)
@@ -1109,16 +1097,7 @@ io.on("connection", (socket) => {
 					clientInfo: clientInfoFromAccount(account),
 					message: account.email,
 				});
-				mailOptions.to = account.email;
-				mailOptions.subject = "Verify your email with remotegames.io";
-				mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${account.authToken}`;
-				transporter.sendMail(mailOptions, (error, info) => {
-					if (error) {
-						console.log(error);
-					} else {
-						console.log(`Email sent: ${info.response}`);
-					}
-				});
+				sendVerifyEmail(account.email, account.authToken);
 			});
 		});
 	});
@@ -1331,6 +1310,7 @@ io.on("connection", (socket) => {
 						});
 					} else {
 						cb({ success: false, reason: "ACCOUNT_NOT_STREAMING" });
+						return;
 					}
 				}
 			});
@@ -1445,6 +1425,7 @@ io.on("connection", (socket) => {
 			account.streamSettings.mouseEnabled = data.streamSettings.mouseEnabled;
 			account.streamSettings.windowTitle = data.streamSettings.windowTitle;
 			account.streamSettings.capture = data.streamSettings.capture;
+			account.streamSettings.dshowVideoDevice = data.streamSettings.dshowVideoDevice;
 			account.streamSettings.audioDevice = data.streamSettings.audioDevice;
 			account.streamSettings.width = data.streamSettings.width;
 			account.streamSettings.height = data.streamSettings.height;
@@ -1639,27 +1620,32 @@ io.on("connection", (socket) => {
 			return;
 		}
 		// try and get account:
-		Account.findOne({ _id: data.hostUserid }, (error, account) => {
+		Account.findOne({ _id: data.hostUserid }, (error, hostAccount) => {
 			// error check:
 			if (error) {
 				throw error;
 			}
 			// if the account exists:
-			if (account) {
+			if (hostAccount) {
 				// update account info:
 				// banning:
 				if (data.isBanned) {
-					if (!account.roleData.banned.includes(data.clientUserid)) {
-						account.roleData.banned.push(data.clientUserid);
+					if (!hostAccount.roleData.banned.includes(data.clientUserid)) {
+						hostAccount.roleData.banned.push(data.clientUserid);
 					}
+					// todo: ban by IP:
+					// for (let i = 0; i < )
+					// if (!account.bannedIPs.banned.includes(data.clientUserid)) {
+					// 	account.roleData.banned.push(data.clientUserid);
+					// }
 					// unbanning:
 				} else {
-					account.roleData.banned = account.roleData.banned.filter(
+					hostAccount.roleData.banned = account.roleData.banned.filter(
 						(i) => i !== data.clientUserid,
 					);
 				}
 				// update the account details:
-				account.save((error) => {
+				hostAccount.save((error) => {
 					// error check:
 					if (error) {
 						throw error;
@@ -2016,10 +2002,6 @@ Account.findOne({ username: "fosse" }).exec((error, account) => {
 	// update account info:
 	account.isStreaming = true;
 	account.streamKey = "a";
-	// account.videoServerIP = "remotegames.io";
-	// account.videoServerPort = 8000;
-	// account.hostServerIP = "remotegames.io";
-	// account.hostServerPort = 8050;
 	account.streamSettings.streamTitle = "Nintendo Switch";
 	account.streamSettings.description = "";
 	account.streamSettings.thumbnailURL = "https://i.imgur.com/Negv09l.jpg";

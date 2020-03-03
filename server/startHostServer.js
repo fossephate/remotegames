@@ -78,33 +78,4 @@ accountConnection.on("stopHost", (data) => {
 	register();
 });
 
-// for testing:
-// let port;
-// port = 8050;
-// ports[port] = false;
-// hostServers[port] = new HostServer({
-// 	socket: accountConnection,
-// 	port: port,
-// 	ip: ip,
-// 	videoPort: 8000,
-// 	streamKey: "a",
-// 	hostUsername: "fosse",
-// 	settings: {},
-// });
-// hostServers[port].init();
-
-// port = 8051;
-// ports[port] = false;
-// hostServers[port] = new HostServer({
-// 	socket: accountConnection,
-// 	port: port,
-// 	ip: ip,
-// 	videoPort: 8000,
-// 	streamKey: "b",
-// 	hostUsername: "fosse2",
-// 	settings: {},
-// });
-// hostServers[port].init();
-// hostServers[port].locked = true;
-
 register();

@@ -71,25 +71,4 @@ accountConnection.on("stopVideo", (data) => {
 	register();
 });
 
-// for testing:
-// let port;
-// port = 8000;
-// ports[port] = false;
-// videoServers[port] = new VideoServer({
-// 	socket: accountConnection,
-// 	port: port,
-// 	streamKey: "a",
-// });
-// videoServers[port].init();
-
-// fosse2:
-// port = 8001;
-// ports[port] = false;
-// videoServers[port] = new VideoServer({
-// 	socket: accountConnection,
-// 	port: port,
-// 	streamKey: "b",
-// });
-// videoServers[port].init();
-
 register();

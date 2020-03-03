@@ -83,7 +83,7 @@ export default class Lagless2 {
 			canvas: this.videoCanvas,
 			videoBufferSize: this.options.videoBufferSize,
 			audioBufferSize: this.options.audioBufferSize,
-			maxAudioLag: this.options.maxAudioLag || 0.25,
+			maxAudioLag: this.options.maxAudioLag || 0.4,// 0.25
 			onVideoDecode: onVideoDecode,
 			audio: !!this.options.audio,
 			video: !!this.options.video,

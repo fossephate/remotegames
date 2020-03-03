@@ -242,10 +242,10 @@ class HostServer {
 					return;
 				}
 				// return if banned:
-				if (client.roles.banned) {
-					socket.emit("banned");
-					return;
-				}
+				// if (client.roles.banned) {
+				// 	socket.emit("banned");
+				// 	return;
+				// }
 
 				let msgObj = {
 					userid: client.userid,
@@ -254,9 +254,10 @@ class HostServer {
 					text: data.text,
 					isReplay: false,
 					roles: client.roles,
+					banned: client.roles.banned,
 				};
 
-				if (client.rooms.indexOf("hostController") > -1) {
+				if (client.rooms.indexOf("host") > -1) {
 					msgObj.roles = ["mod"];
 				}
 
@@ -471,22 +472,39 @@ class HostServer {
 			});
 
 			socket.on("join", (room) => {
-				let secureList = ["hostController"];
+				let secureList = ["host"];
 				if (secureList.indexOf(room) > -1) {
 					return;
 				}
 				socket.join(room);
 			});
 
+			socket.on("hostAuthenticate", (data) => {
+				// join the host room if they have the streamKey
+				if (data.streamKey === this.streamKey) {
+					console.log("host authenticated.");
+					socket.join("host");
+					let client = this.clients[socket.id];
+					if (!client) {
+						console.log("no host client object!");
+						return;
+					}
+					if (client.rooms.indexOf("host") == -1) {
+						client.rooms.push(data.room);
+					}
+					client.userid = "HostBot";
+					client.username = "HostBot";
+				} else {
+					console.log("ERROR: wrong streamKey!");
+					console.log(data.streamKey, this.streamKey);
+				}
+			});
+
 			socket.on("joinSecure", (data) => {
-				if ((data.password = this.streamKey || data.password === this.secret)) {
+				if (data.password === this.streamKey || data.password === this.secret) {
 					let client = this.clients[socket.id];
 					if (client.rooms.indexOf(data.room) == -1) {
 						client.rooms.push(data.room);
-					}
-					if (data.room === "hostController") {
-						client.userid = "HostBot";
-						client.username = "HostBot";
 					}
 					socket.join(data.room);
 				}
@@ -499,7 +517,7 @@ class HostServer {
 					data = data.replace(/(\r\n\t|\n|\r\t)/gm, "");
 				}
 				// check if it's coming from the host controller:
-				if (this.clients[socket.id].rooms.includes("hostController")) {
+				if (this.clients[socket.id].rooms.includes("host")) {
 					let msgObj = {
 						userid: "HostBot",
 						username: "HostBot",
@@ -958,7 +976,7 @@ class HostServer {
 	}
 
 	every4Seconds() {
-		this.io.to("hostController").emit("stayConnected");
+		this.io.to("host").emit("stayConnected");
 	}
 
 	every5Seconds() {

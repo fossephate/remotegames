@@ -7,12 +7,14 @@ import { Route, Switch } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 
 // modals:
-// import LoginRegisterModal from "components/Modals/LoginRegisterModal.jsx";
-// import AccountModal from "components/Modals/AccountModal.jsx";
-// import InputMapperModal from "components/Modals/InputMapperModal.jsx";
-const LoginRegisterModal = lazy(() => import("components/Modals/LoginRegisterModal.jsx"));
-const AccountModal = lazy(() => import("components/Modals/AccountModal.jsx"));
-// const InputMapperModal = lazy(() => import("components/Modals/InputMapperModal.jsx"));
+// import LoginRegisterModal from "components/modals/LoginRegisterModal.jsx";
+// import AccountModal from "components/modals/AccountModal.jsx";
+// import InputMapperModal from "components/modals/InputMapperModal.jsx";
+const LoginRegisterModal = lazy(() =>
+	import("shared/components/modals/LoginRegisterModal.jsx"),
+);
+const AccountModal = lazy(() => import("shared/components/modals/AccountModal.jsx"));
+// const InputMapperModal = lazy(() => import("components/modals/InputMapperModal.jsx"));
 
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -23,7 +25,7 @@ import { createMuiTheme } from "@material-ui/core/styles";
 import { SnackbarProvider } from "notistack";
 
 // components:
-import Loading from "components/General/Loading.jsx";
+import Loading from "shared/components/general/Loading.jsx";
 
 const About = lazy(() => import("src/About.jsx"));
 const FAQ = lazy(() => import("src/FAQ.jsx"));
@@ -205,8 +207,6 @@ class Index extends Component {
 			theme: createMuiTheme({}),
 		};
 
-		this.switchTheme = this.switchTheme.bind(this);
-
 		let currentValue = null;
 		const unsubscribe = store.subscribe(() => {
 			let previousValue = currentValue;
@@ -223,7 +223,7 @@ class Index extends Component {
 		// store.dispatch(updateSettings({ theme: "spooky" }));
 	}
 
-	switchTheme(themeName) {
+	switchTheme = (themeName) => {
 		let theme = {};
 		switch (themeName) {
 			case "light":
@@ -242,18 +242,34 @@ class Index extends Component {
 					},
 				};
 				break;
-			case "dark":
+			case "ogdark":
 				theme = {
 					palette: {
 						type: "dark",
 						primary: {
-							main: "#2181ff", // #2181ff
+							main: "#2181ff",
 						},
 						secondary: {
 							main: "#ff3b3b",
 						},
 						background: {
 							paper: "#424242",
+						},
+					},
+				};
+				break;
+			case "dark":
+				theme = {
+					palette: {
+						type: "dark",
+						primary: {
+							main: "#0d52a9",
+						},
+						secondary: {
+							main: "#a90d0d",
+						},
+						background: {
+							paper: "#202020",
 						},
 					},
 				};
@@ -278,7 +294,7 @@ class Index extends Component {
 		}
 		// this.theme = createMuiTheme(this.theme);
 		this.setState({ theme: createMuiTheme(theme) });
-	}
+	};
 
 	shouldComponentUpdate(nextProps, nextState) {
 		return true;
@@ -356,14 +372,6 @@ class Index extends Component {
 											return <AccountModal {...props} history={this.props.history} />;
 										}}
 									/>
-
-									{/* <Route
-								path="/controls"
-								render={(props) => {
-									return <InputMapperModal {...props} inputHandler={this.inputHandler} />;
-								}}
-							/> */}
-									{/* <Suspense fallback={<Loading />}> */}
 									<Route
 										path="/(s|controls|settings)/:username?"
 										// path="/s/:username?"
@@ -378,9 +386,7 @@ class Index extends Component {
 											);
 										}}
 									/>
-									{/* </Suspense> */}
 									{/* order matters here, can't do exact path or /login and /register break: */}
-									{/* <Suspense fallback={<Loading />}> */}
 									<Route
 										path="/"
 										render={(props) => {
@@ -394,7 +400,6 @@ class Index extends Component {
 											);
 										}}
 									/>
-									{/* </Suspense> */}
 								</Switch>
 							</Suspense>
 						</BrowserRouter>
