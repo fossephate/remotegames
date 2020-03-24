@@ -1,5 +1,4 @@
-import * as types from "src/actions/ActionTypes.js";
-import { receiveMessage } from "src/actions/chat.js";
+import { receiveMessage } from "shared/features/chat.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const chatSocketEvents = (socket, dispatch) => {

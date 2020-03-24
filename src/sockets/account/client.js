@@ -1,4 +1,4 @@
-import { updateClient } from "src/features/client.js";
+import { updateClient } from "shared/features/client.js";
 
 // libs:
 import localforage from "localforage";
@@ -43,6 +43,16 @@ const clientEvents = (socket, dispatch) => {
 
 	socket.on("banned", (data) => {
 		localforage.setItem("banned", "banned");
+	});
+
+	socket.on("disconnect", (data) => {
+		console.log("lost connection (account)");
+		// dispatch(updateClient({ hostAuthed: false }));
+	});
+
+	socket.on("connect", (data) => {
+		console.log("connected (account)");
+		// authenticate(socket, dispatch);
 	});
 
 	// // reconnect:

@@ -1,5 +1,4 @@
 // react:
-// import React, { Component } from "react";
 import React, { Component, Suspense, lazy } from "react";
 
 // react-router:
@@ -8,16 +7,16 @@ import { Route, Switch, withRouter } from "react-router";
 // redux:
 import { connect } from "react-redux";
 
-import { updateClient } from "features/client.js";
-import { updateSettings } from "src/actions/settings.js";
-import { updateMessages } from "src/actions/chat.js";
-import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
+import { updateClient } from "shared/features/client.js";
+import { updateMessages } from "shared/features/chat.js";
+import { joinLeavePlayerControlQueue } from "src/features/players.js";
 import { updateStreamInfo } from "src/actions/info.js";
+import { updateSettings } from "src/actions/settings.js";
 
 // redux-saga:
 // import spawn from "redux-saga";
-import handleStreamActions from "src/sagas/stream";
-import handleStreamEvents from "src/sockets/stream";
+import handleStreamActions from "src/sagas/stream/index.js";
+import handleStreamEvents from "src/sockets/stream/index.js";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
@@ -99,10 +98,10 @@ class Stream extends Component {
 	}
 
 	recieveStream = (data, tryCount) => {
-		this.props.updateStreamInfo({ ...data });
+		this.props.updateStreamInfo({ ...data, online: true });
 
 		if (this.stream) {
-			this.stream.pause();
+			this.stream.destroy();
 		}
 		if (this.hostConnection) {
 			this.hostConnection.removeAllListeners();
@@ -182,30 +181,32 @@ class Stream extends Component {
 		}, 5000);
 	};
 
-	componentDidMount() {
-		// todo: something like this for "getStreamInfo":
-		// if (!this.props.client.loggedIn) {
-		// 	if (tryCount < 3) {
-		// 		setTimeout(() => {
-		// 			this.recieveStream(data, tryCount + 1);
-		// 		}, 1000);
-		// 	} else {
-		// 		alert("You need to login to see the stream!");
-		// 		return;
-		// 	}
-		// }
+	getStreamInfo = (bypass) => {
+		if (!this.props.accountConnection.connected && !bypass) {
+			this.props.updateStreamInfo({ online: false });
+			return;
+		}
 
 		this.props.accountConnection.emit(
 			"getStreamInfo",
 			{ username: this.props.match.params.username },
 			(data) => {
-				if (!data.success) {
-					alert(data.reason);
-					return;
+				if (data.success) {
+					this.recieveStream(data, 0);
+				} else {
+					this.props.updateStreamInfo({ online: false });
 				}
-				this.recieveStream(data, 0);
 			},
 		);
+	};
+
+	componentDidMount() {
+		setInterval(() => {
+			if (!this.props.streamOnline) {
+				this.getStreamInfo();
+			}
+		}, 5000);
+		this.getStreamInfo(true);
 
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
@@ -282,15 +283,15 @@ class Stream extends Component {
 		// 	}, 3000);
 		// }
 
-		for (let i = 0; i < this.props.playerCount; i++) {
-			this.props.leavePlayerControlQueue(i);
+		for (let i = 0; i < 9; i++) {
+			this.props.joinLeavePlayerControlQueue({ cNum: i, joinLeave: "leave" });
 		}
 
 		if (this.hostConnection) {
 			this.hostConnection.removeAllListeners();
 			this.hostConnection.destroy();
 		}
-		this.props.updateMessages([]);
+		// this.props.updateMessages([]);
 
 		// save settings on close:
 		console.log("saving settings");
@@ -404,7 +405,10 @@ class Stream extends Component {
 				this.props.client.userid,
 			) == -1
 		) {
-			this.props.joinPlayerControlQueue(this.props.settings.currentPlayer);
+			this.props.joinLeavePlayerControlQueue({
+				cNum: this.props.settings.currentPlayer,
+				joinLeave: "join",
+			});
 		}
 
 		// if (!this.props.loggedIn) {
@@ -484,8 +488,7 @@ class Stream extends Component {
 		// console.log(` 0 ${s1y[2]} 0\n ${s1x[0]} 0 ${s1x[2]}\n 0 ${s1y[0]} 0`);
 
 		if (this.hostConnection) {
-			// todo: rename to sendInputState
-			this.hostConnection.emit("sendControllerState", obj);
+			this.hostConnection.emit("inputState", obj);
 		} else {
 			console.log("the socket is null!");
 		}
@@ -522,6 +525,10 @@ class Stream extends Component {
 			return true;
 		}
 
+		if (this.props.streamOnline != nextProps.streamOnline) {
+			return true;
+		}
+
 		if (this.props.settings.theme != nextProps.settings.theme) {
 			return true;
 		}
@@ -534,13 +541,13 @@ class Stream extends Component {
 			return true;
 		}
 
+		if (this.state != nextState) {
+			return true;
+		}
+
 		// all settings:
 		if (JSON.stringify(this.props.settings) != JSON.stringify(nextProps.settings)) {
 			return false;
-		}
-
-		if (this.state != nextState) {
-			return true;
 		}
 
 		return false;
@@ -591,6 +598,7 @@ const mapStateToProps = (state) => {
 		settings: state.settings,
 		playerCount: state.stream.players.count,
 		streamType: state.stream.info.streamType,
+		streamOnline: state.stream.info.online,
 	};
 };
 
@@ -599,11 +607,8 @@ const mapDispatchToProps = (dispatch) => {
 		updateSettings: (settings) => {
 			dispatch(updateSettings(settings));
 		},
-		leavePlayerControlQueue: (controllerNumber) => {
-			dispatch(leavePlayerControlQueue(controllerNumber));
-		},
-		joinPlayerControlQueue: (controllerNumber) => {
-			dispatch(joinPlayerControlQueue(controllerNumber));
+		joinLeavePlayerControlQueue: (data) => {
+			dispatch(joinLeavePlayerControlQueue(data));
 		},
 		updateClient: (client) => {
 			dispatch(updateClient(client));

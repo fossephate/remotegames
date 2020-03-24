@@ -1,5 +1,7 @@
 const socketio = require("socket.io");
 
+const AFK_TIMEOUT = 1000 * 60 * 5;// 5 min
+
 class VideoServer {
 	constructor(options /*accountConnection, port, streamKey*/) {
 		this.accountConnection = options.socket;
@@ -24,7 +26,9 @@ class VideoServer {
 			socket.on("hostAuthenticate", (data) => {
 				// join the host room if they have the streamKey
 				if (data.streamKey === this.streamKey) {
-					console.log("host authenticated.");
+					console.log(`host authenticated: ${new Date()}`);
+					clearTimeout(this.keepAliveTimer);
+					this.keepAliveTimer = setTimeout(this.afk, AFK_TIMEOUT);
 					socket.join("host");
 				} else {
 					console.log("ERROR: wrong streamKey!");
@@ -33,8 +37,8 @@ class VideoServer {
 			});
 
 			socket.on("videoData", (data) => {
-				clearTimeout(this.keepAliveTimer);
-				this.keepAliveTimer = setTimeout(this.afk, 1000 * 60 * 30);
+				// clearTimeout(this.keepAliveTimer);
+				// this.keepAliveTimer = setTimeout(this.afk, AFK_TIMEOUT);
 
 				data = data.data || data;
 
@@ -74,15 +78,19 @@ class VideoServer {
 	};
 
 	stop = () => {
-		console.log("closing connection");
+		clearTimeout(this.keepAliveTimer);
+		console.log(`closing connection on port: ${this.port}`);
 		this.io.close();
 	};
 
 	afk = () => {
-		this.accountConnection.emit("streamInactive", {
-			port: this.port,
-			streamKey: this.streamKey,
-		});
+		clearTimeout(this.keepAliveTimer);
+		console.log(`AFK / DC'd stream!: ${new Date()}`);
+		console.log("afk disabled!");
+		// this.accountConnection.emit("streamInactive", {
+		// 	port: this.port,
+		// 	streamKey: this.streamKey,
+		// });
 	};
 }
 

@@ -21,9 +21,7 @@ function customSetInterval(func, time) {
 
 // export class Host {
 class HostServer {
-	constructor(
-		options /*accountConnection, port, videoIP, videoPort, streamKey, hostUserid, streamSettings*/,
-	) {
+	constructor(options) {
 		this.accountConnection = options.socket;
 		this.port = options.port;
 		this.io = new socketio({
@@ -266,9 +264,9 @@ class HostServer {
 			});
 
 			/* INPUT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
-			socket.on("sendControllerState", (data) => {
+			socket.on("inputState", (data) => {
 				let client = this.clients[socket.id];
-				if (client === null || client.userid === null) {
+				if (client == null || client.userid == null) {
 					return;
 				}
 
@@ -322,7 +320,6 @@ class HostServer {
 				this.forfeitStartTimes[cNum] = Date.now();
 
 				let valid = true;
-				// ((btns & (1 << n)) != 0);
 				if ((btns & (1 << 8)) != 0 && !client.roles.mod) {
 					valid = false;
 				}
@@ -404,7 +401,7 @@ class HostServer {
 				this.io.emit("controlQueues", this.controlQueues);
 
 				// reset timers when you join the queue & you're the only person in the queue:
-				if (this.controlQueues[cNum].length == 1) {
+				if (this.controlQueues[cNum].length === 1) {
 					this.resetTimers(client.userid, cNum);
 				}
 			});
@@ -416,7 +413,7 @@ class HostServer {
 				}
 
 				// make sure it's a valid cNum:
-				if (this.controllerList.indexOf(cNum) == -1) {
+				if (this.controllerList.indexOf(cNum) === -1) {
 					return;
 				}
 

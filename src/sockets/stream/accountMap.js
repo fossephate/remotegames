@@ -1,4 +1,3 @@
-import * as types from "src/actions/ActionTypes.js";
 import { receiveAccountMap } from "src/actions/accountMap.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:

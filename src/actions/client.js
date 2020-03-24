@@ -2,9 +2,9 @@ import * as types from "./ActionTypes.js";
 
 export const updateClientInfo = (data) => {
 	return {
-		type: types.UPDATE_CLIENT_INFO,
+		type: types.UPDATE_CLIENT,
 		payload: {
-			clientInfo: data,
+			client: data,
 		},
 	};
 };

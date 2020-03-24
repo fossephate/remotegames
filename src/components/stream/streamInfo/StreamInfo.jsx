@@ -35,6 +35,10 @@ class StreamInfo extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
+		if (!this.props.streamOnline) {
+			return null;
+		}
+
 		return (
 			<div className={classes.root}>
 				<PlayerInfo />
@@ -44,7 +48,9 @@ class StreamInfo extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		streamOnline: state.stream.info.online,
+	};
 };
 
 export default compose(withStyles(styles), connect(mapStateToProps))(StreamInfo);

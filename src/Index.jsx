@@ -42,188 +42,179 @@ import rootReducer from "./reducers";
 
 // actions:
 import { updateSettings } from "src/actions/settings.js";
-import { updateClientInfo } from "src/actions/clientInfo.js";
+import updateClient from "shared/features/client.js";
 
 // redux-saga:
 import createSagaMiddleware from "redux-saga";
-import handleAccountActions from "src/sagas/account/";
-import handleAccountEvents from "src/sockets/account/";
+import handleAccountActions from "src/sagas/account/index.js";
+import handleAccountEvents from "src/sockets/account/index.js";
 
 // libs:
 import socketio from "socket.io-client";
 import localforage from "localforage";
-
-const sagaMiddleware = createSagaMiddleware();
-
-let preloadedState = {
-	// account: {
-	//
-	// },
-
-	stream: {
-		info: {
-			streamType: "mpeg2",
-		},
-		chat: {
-			messages: [],
-			userids: [],
-		},
-		players: {
-			controlQueues: [],
-			turnTimers: [],
-			controllerStates: [],
-			count: 8,
-		},
-		time: {
-			server: 0, // server time (in ms)
-			lastServerUpdate: 0, // when it was last updated (in ms)
-			ping: 0,
-		},
-		accountMap: {},
-		waitlist: [],
-	},
-
-	streams: {
-		streamList: [],
-	},
-
-	client: {
-		authToken: null,
-		loggedIn: false,
-		hostAuthed: false,
-		userid: null,
-		username: "???",
-		connectedAccounts: [],
-		validUsernames: [],
-		usernameIndex: 0,
-		waitlisted: false,
-		timePlayed: 0,
-		emailVerified: false,
-		roles: {},
-	},
-
-	settings: {
-		keyboardControls: true,
-		controllerControls: true,
-		mouseControls: false,
-		touchControls: false,
-		mobileMode: false,
-		realKeyboardMouse: false,
-		controllerView: true,
-		fullscreen: false,
-		largescreen: false,
-		hideChat: false,
-		hideNav: false,
-		audioThree: false,
-		analogStickMode: false,
-		dpadSwap: false,
-		TDSConfig: false,
-
-		currentPlayer: 0,
-		volume: 0,
-		theme: "dark",
-	},
-
-	form: {},
-};
-
-for (let i = 0; i < preloadedState.stream.players.count; i++) {
-	preloadedState.stream.players.turnTimers.push({
-		turnStartTime: 0,
-		forfeitStartTime: 0,
-		turnLength: 0,
-		forfeitLength: 0,
-	});
-	preloadedState.stream.players.controlQueues.push([]);
-	preloadedState.stream.players.controllerStates.push({
-		btns: 0,
-		axes: [0, 0, 0, 0, 0, 0],
-	});
-}
-
-function loadState() {
-	// Get stored preferences
-	localforage.getItem("settings").then((value) => {
-		let settings = {};
-		// If they exist, write them
-		if (value) {
-			settings = Object.assign({}, JSON.parse(value));
-			settings.currentPlayer = 0; // same as above
-			settings.largescreen = false;
-			settings.fullscreen = false;
-			settings.mobileMode = false;
-			settings.hideChat = false;
-			settings.hideNav = false;
-		}
-
-		store.dispatch(updateSettings({ ...settings }));
-
-		// check if banned:
-		localforage.getItem("banned").then((value) => {
-			if (value) {
-				store.dispatch(updateClientInfo({ isBanned: true }));
-				window.banned = true;
-			} else {
-				window.banned = false;
-			}
-		});
-	});
-}
-
-loadState();
-
-const store = configureStore({
-	reducer: rootReducer,
-	preloadedState: preloadedState,
-	middleware: [sagaMiddleware],
-});
-
-window.onbeforeunload = () => {
-	console.log("saving settings");
-	localforage.setItem("settings", JSON.stringify(store.getState().settings));
-	return null;
-};
-
-let accountConnection = socketio("https://remotegames.io", {
-	path: "/8099/socket.io",
-	transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
-});
-
-// listen to events and dispatch actions:
-handleAccountEvents(accountConnection, store.dispatch);
-
-// handle outgoing events & listen to actions:
-// and maybe dispatch more actions:
-sagaMiddleware.run(handleAccountActions, {
-	socket: accountConnection,
-	dispatch: store.dispatch,
-});
 
 class Index extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			theme: createMuiTheme({}),
+			theme: this.getTheme("dark"),
 		};
 
+		let preloadedState = {
+			stream: {
+				info: {
+					online: false,
+					streamType: "mpeg2",
+				},
+				chat: {
+					messages: [],
+					userids: [],
+				},
+				players: {
+					controlQueues: [],
+					turnTimers: [],
+					controllerStates: [],
+					count: 8,
+				},
+				time: {
+					server: 0, // server time (in ms)
+					lastServerUpdate: 0, // when it was last updated (in ms)
+					ping: 0,
+				},
+				accountMap: {},
+				waitlist: [],
+			},
+
+			streams: {
+				streamList: [],
+			},
+
+			client: {
+				authToken: null,
+				loggedIn: false,
+				hostAuthed: false,
+				userid: null,
+				username: "???",
+				connectedAccounts: [],
+				validUsernames: [],
+				usernameIndex: 0,
+				waitlisted: false,
+				timePlayed: 0,
+				emailVerified: false,
+				roles: {},
+			},
+
+			settings: {
+				keyboardControls: true,
+				controllerControls: true,
+				mouseControls: false,
+				touchControls: false,
+				mobileMode: false,
+				realKeyboardMouse: false,
+				controllerView: true,
+				fullscreen: false,
+				largescreen: false,
+				hideChat: false,
+				hideNav: false,
+				audioThree: false,
+				analogStickMode: false,
+				dpadSwap: false,
+				TDSConfig: false,
+
+				currentPlayer: 0,
+				volume: 0,
+				theme: "dark",
+			},
+
+			form: {},
+		};
+
+		for (let i = 0; i < preloadedState.stream.players.count; i++) {
+			preloadedState.stream.players.turnTimers.push({
+				turnStartTime: 0,
+				forfeitStartTime: 0,
+				turnLength: 0,
+				forfeitLength: 0,
+			});
+			preloadedState.stream.players.controlQueues.push([]);
+			preloadedState.stream.players.controllerStates.push({
+				btns: 0,
+				axes: [0, 0, 0, 0, 0, 0],
+			});
+		}
+
+		this.sagaMiddleware = createSagaMiddleware();
+
+		this.store = configureStore({
+			reducer: rootReducer,
+			preloadedState: preloadedState,
+			middleware: [this.sagaMiddleware],
+		});
+
+		this.accountConnection = socketio("https://remotegames.io", {
+			path: "/8099/socket.io",
+			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+		});
+
+		// listen to events and dispatch actions:
+		handleAccountEvents(this.accountConnection, this.store.dispatch);
+
+		// handle outgoing events & listen to actions:
+		// and maybe dispatch more actions:
+		this.sagaMiddleware.run(handleAccountActions, {
+			socket: this.accountConnection,
+			dispatch: this.store.dispatch,
+		});
+
 		let currentValue = null;
-		const unsubscribe = store.subscribe(() => {
+		this.store.subscribe(() => {
 			let previousValue = currentValue;
-			currentValue = store.getState().settings.theme;
-			if (previousValue !== currentValue) {
-				console.log("theme changed");
-				this.switchTheme(currentValue);
-				this.setState({});
+			currentValue = this.store.getState().settings.theme;
+			if (previousValue !== currentValue && previousValue !== null) {
+				this.setState({ theme: this.getTheme(currentValue) });
 			}
 		});
+
+		window.onbeforeunload = () => {
+			console.log("saving settings");
+			localforage.setItem("settings", JSON.stringify(this.store.getState().settings));
+			return null;
+		};
 	}
 
 	componentDidMount() {
 		// store.dispatch(updateSettings({ theme: "spooky" }));
 	}
 
-	switchTheme = (themeName) => {
+	loadState = () => {
+		// Get stored preferences
+		localforage.getItem("settings").then((value) => {
+			let settings = {};
+			// if they exist, write them
+			if (value) {
+				settings = Object.assign({}, JSON.parse(value));
+				settings.currentPlayer = 0; // same as above
+				settings.largescreen = false;
+				settings.fullscreen = false;
+				settings.mobileMode = false;
+				settings.hideChat = false;
+				settings.hideNav = false;
+			}
+			store.dispatch(updateSettings({ ...settings }));
+			// check if banned:
+			localforage.getItem("banned").then((value) => {
+				if (value) {
+					this.store.dispatch(updateClient({ isBanned: true }));
+					window.banned = true;
+				} else {
+					window.banned = false;
+				}
+			});
+		});
+	};
+
+	getTheme = (themeName) => {
 		let theme = {};
 		switch (themeName) {
 			case "light":
@@ -292,8 +283,7 @@ class Index extends Component {
 				};
 				break;
 		}
-		// this.theme = createMuiTheme(this.theme);
-		this.setState({ theme: createMuiTheme(theme) });
+		return createMuiTheme(theme);
 	};
 
 	shouldComponentUpdate(nextProps, nextState) {
@@ -309,7 +299,7 @@ class Index extends Component {
 		}
 
 		return (
-			<Provider store={store}>
+			<Provider store={this.store}>
 				<ThemeProvider theme={this.state.theme}>
 					<SnackbarProvider maxSnack={3}>
 						<CssBaseline />
@@ -379,9 +369,9 @@ class Index extends Component {
 											return (
 												<Stream
 													{...props}
-													store={store}
-													sagaMiddleware={sagaMiddleware}
-													accountConnection={accountConnection}
+													store={this.store}
+													sagaMiddleware={this.sagaMiddleware}
+													accountConnection={this.accountConnection}
 												/>
 											);
 										}}
@@ -393,9 +383,9 @@ class Index extends Component {
 											return (
 												<Streams
 													{...props}
-													store={store}
-													accountConnection={accountConnection}
-													sagaMiddleware={sagaMiddleware}
+													store={this.store}
+													accountConnection={this.accountConnection}
+													sagaMiddleware={this.sagaMiddleware}
 												/>
 											);
 										}}

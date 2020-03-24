@@ -15,6 +15,7 @@ module.exports = {
 		// `publicPath` is where Webpack will load your bundles from (optional)
 		publicPath: "bundles/",
 	},
+	target: "web",
 	optimization: {
 		splitChunks: {
 			// chunks: "async", // all, async, and initial

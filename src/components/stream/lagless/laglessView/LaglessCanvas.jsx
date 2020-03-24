@@ -20,10 +20,6 @@ class LaglessCanvas extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.handleClick = this.handleClick.bind(this);
-		this.handleClose = this.handleClose.bind(this);
-		this.enableMouseControls = this.enableMouseControls.bind(this);
-
 		// this.videoRef = React.createRef();
 		this.graphicsCanvasRef = React.createRef();
 
@@ -32,18 +28,18 @@ class LaglessCanvas extends PureComponent {
 		};
 	}
 
-	handleClick() {
+	handleClick = () => {
 		if (!window.inputHandler.mouse.settings.enabled) {
 			this.setState({ alertOpen: true });
 		}
-	}
+	};
 
-	handleClose() {
+	handleClose = () => {
 		this.setState({ alertOpen: false });
 		window.inputHandler.mouse.toggle(false);
-	}
+	};
 
-	enableMouseControls() {
+	enableMouseControls = () => {
 		this.setState({ alertOpen: false });
 
 		// let id = null;
@@ -56,7 +52,7 @@ class LaglessCanvas extends PureComponent {
 
 		window.inputHandler.mouse.init(this.graphicsCanvasRef.current);
 		window.inputHandler.mouse.toggle(true);
-	}
+	};
 
 	render() {
 		const { classes } = this.props;

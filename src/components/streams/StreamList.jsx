@@ -1,9 +1,9 @@
 // react:
 import React, { PureComponent } from "react";
-import ReactDOM from "react-dom";
 
 // react-router:
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 
 // redux:
 import { connect } from "react-redux";
@@ -91,17 +91,10 @@ class StreamList extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.changeURL = this.changeURL.bind(this);
-		this.renderStreams = this.renderStreams.bind(this);
-
 		this.state = {};
 	}
 
-	changeURL() {
-		this.props.history.push("");
-	}
-
-	renderStreams() {
+	renderStreams = () => {
 		const { classes, streams } = this.props;
 
 		let cards = [];
@@ -118,24 +111,26 @@ class StreamList extends PureComponent {
 		for (let i = 0; i < streams.length; i++) {
 			let stream = streams[i];
 			let card = (
-				<Card key={i} className={classes.card} elevation={5}>
-					<CardActionArea
-						onClick={() => {
-							this.props.history.push(`/s/${stream.username}`);
-						}}
-					>
-						{/* todo: put a default thumbnail here: */}
-						<CardMedia
-							className={classes.media}
-							image={stream.thumbnailURL || DUMMY_URL}
-							title="Photo"
-						/>
-						<CardContent>
-							<Typography component="p">{stream.title || "Untitled Stream"}</Typography>
-							<Typography component="p">{stream.username}</Typography>
-						</CardContent>
-					</CardActionArea>
-				</Card>
+				<Link key={i} to={`/s/${stream.username}`}>
+					<Card className={classes.card} elevation={5}>
+						<CardActionArea
+							onClick={() => {
+								this.props.history.push(`/s/${stream.username}`);
+							}}
+						>
+							{/* todo: put a default thumbnail here: */}
+							<CardMedia
+								className={classes.media}
+								image={stream.thumbnailURL || DUMMY_URL}
+								title="Photo"
+							/>
+							<CardContent>
+								<Typography component="p">{stream.title || "Untitled Stream"}</Typography>
+								<Typography component="p">{stream.username}</Typography>
+							</CardContent>
+						</CardActionArea>
+					</Card>
+				</Link>
 			);
 			cards.push(card);
 		}
@@ -149,7 +144,7 @@ class StreamList extends PureComponent {
 		}
 
 		return cards;
-	}
+	};
 
 	componentDidMount() {}
 

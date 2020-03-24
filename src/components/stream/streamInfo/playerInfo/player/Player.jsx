@@ -16,7 +16,7 @@ import { connect } from "react-redux";
 
 // actions:
 import { updateSettings } from "src/actions/settings.js";
-import { leavePlayerControlQueue } from "src/actions/players.js";
+import { joinLeavePlayerControlQueue } from "src/features/players.js";
 
 // recompose:
 import { compose } from "recompose";
@@ -54,10 +54,9 @@ class Player extends PureComponent {
 	}
 
 	choosePlayer() {
-		let players = [0, 1, 2, 3, 4, 5, 6, 7];
-		players.forEach((cNum) => {
-			this.props.leavePlayerControlQueue(cNum);
-		});
+		for (let i = 0; i < 9; i++) {
+			this.props.joinLeavePlayerControlQueue({ cNum: i, joinLeave: "leave" });
+		}
 		this.props.choosePlayer(this.props.num);
 	}
 
@@ -87,10 +86,8 @@ class Player extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		// turnTimers: state.turnTimers,
 		controlQueues: state.stream.players.controlQueues,
 		userid: state.client.userid,
-		// time: state.time,
 		currentPlayer: state.settings.currentPlayer,
 	};
 };
@@ -100,8 +97,8 @@ const mapDispatchToProps = (dispatch) => {
 		choosePlayer: (index) => {
 			dispatch(updateSettings({ currentPlayer: index }));
 		},
-		leavePlayerControlQueue: (controllerNumber) => {
-			dispatch(leavePlayerControlQueue(controllerNumber));
+		joinLeavePlayerControlQueue: (data) => {
+			dispatch(joinLeavePlayerControlQueue(data));
 		},
 	};
 };

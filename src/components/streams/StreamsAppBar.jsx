@@ -8,60 +8,32 @@ import { withRouter } from "react-router";
 import { connect } from "react-redux";
 
 // main components:
+import MyAppBar from "shared/components/general/MyAppBar.jsx";
 
 // material ui:
 import { withStyles } from "@material-ui/core/styles";
 
 // components:
-import {
-	AppBar,
-	Button,
-	MenuItem,
-	Menu,
-	Toolbar,
-	IconButton,
-	InputBase,
-	Typography,
-} from "@material-ui/core";
+import { Button, MenuItem, IconButton, Typography, InputBase } from "@material-ui/core";
 import { fade } from "@material-ui/core/styles/colorManipulator";
 
 // icons:
-import MoreIcon from "@material-ui/icons/MoreVert";
-import MenuIcon from "@material-ui/icons/Menu";
-import SearchIcon from "@material-ui/icons/Search";
-import AccountCircle from "@material-ui/icons/AccountCircle";
+import {
+	Menu as MenuIcon,
+	Search as SearchIcon,
+	AccountCircle,
+} from "@material-ui/icons";
 
 // recompose:
 import { compose } from "recompose";
 
-// libs:
-import { device } from "shared/libs/utils.js";
-
 // jss:
 const styles = (theme) => ({
-	root: {
-		width: "100%",
-		height: "48px",
-		zIndex: 1300,
-	},
-	[device.mobile]: {
-		root: {
-			height: "64px",
-		},
-	},
-	[device.tablet]: {
-		root: {},
-	},
-	[device.laptop]: {
-		root: {},
-	},
+	root: {},
 	grow: {
 		flexGrow: 1,
 	},
-	menuButton: {
-		marginLeft: -12,
-		marginRight: 20,
-	},
+
 	title: {
 		display: "none",
 		[theme.breakpoints.up("sm")]: {
@@ -108,28 +80,11 @@ const styles = (theme) => ({
 			width: 200,
 		},
 	},
-	sectionDesktop: {
-		display: "none",
-		[theme.breakpoints.up("md")]: {
-			display: "flex",
-		},
-	},
-	sectionMobile: {
-		display: "flex",
-		[theme.breakpoints.up("md")]: {
-			display: "none",
-		},
-	},
 });
 
 class StreamsAppBar extends PureComponent {
 	constructor(props) {
 		super(props);
-
-		this.state = {
-			anchorEl: null,
-			mobileMoreAnchorEl: null,
-		};
 	}
 
 	componentDidMount() {}
@@ -138,21 +93,8 @@ class StreamsAppBar extends PureComponent {
 		this.props.history.push("/login");
 	};
 
-	handleProfileMenuOpen = (event) => {
-		this.setState({ anchorEl: event.currentTarget });
-	};
-
-	handleMenuClose = () => {
-		this.setState({ anchorEl: null });
-		this.handleMobileMenuClose();
-	};
-
-	handleMobileMenuOpen = (event) => {
-		this.setState({ mobileMoreAnchorEl: event.currentTarget });
-	};
-
-	handleMobileMenuClose = () => {
-		this.setState({ mobileMoreAnchorEl: null });
+	handleAccount = () => {
+		this.props.history.push("/account");
 	};
 
 	handleDownloadHostFiles = () => {
@@ -170,63 +112,20 @@ class StreamsAppBar extends PureComponent {
 	render() {
 		console.log("re-rendering streamsappbar.");
 
+		const { classes } = this.props;
+
 		if (this.props.hide) {
 			return null;
 		}
 
-		const { anchorEl, mobileMoreAnchorEl } = this.state;
-		const { classes } = this.props;
-		const isMenuOpen = Boolean(anchorEl);
-		const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-		const renderMenu = (
-			<Menu
-				anchorEl={anchorEl}
-				anchorOrigin={{ vertical: "top", horizontal: "right" }}
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
-				open={isMenuOpen}
-				onClose={this.handleMenuClose}
-			>
-				{/* <MenuItem
-					onClick={() => {
-						this.handleMenuClose();
-					}}
-				>
-					Profile
-				</MenuItem> */}
-				<MenuItem
-					onClick={() => {
-						this.handleMenuClose();
-						this.props.history.push("/account");
-					}}
-				>
-					My account
-				</MenuItem>
-			</Menu>
-		);
-
-		const renderMobileMenu = (
-			<Menu
-				anchorEl={mobileMoreAnchorEl}
-				anchorOrigin={{ vertical: "top", horizontal: "right" }}
-				transformOrigin={{ vertical: "top", horizontal: "right" }}
-				open={isMobileMenuOpen}
-				onClose={this.handleMenuClose}
-			>
-				<MenuItem onClick={this.handleProfileMenuOpen}>
+		const mobileMenu = (
+			<div>
+				<MenuItem onClick={this.handleAccount}>
 					<IconButton color="inherit">
 						<AccountCircle />
 					</IconButton>
 					<p>Profile</p>
 				</MenuItem>
-				{/* <MenuItem onClick={this.handleMobileMenuClose}>
-					<IconButton color="inherit">
-						<Badge badgeContent={0} color="secondary">
-							<MailIcon />
-						</Badge>
-					</IconButton>
-					<p>Messages</p>
-				</MenuItem> */}
 				<MenuItem onClick={this.handleDownloadHostFiles}>
 					<p>Download Host Files</p>
 				</MenuItem>
@@ -236,120 +135,105 @@ class StreamsAppBar extends PureComponent {
 				<MenuItem onClick={this.handleDevDiscord}>
 					<p>Dev's Discord Server</p>
 				</MenuItem>
-			</Menu>
+			</div>
 		);
 
-		return (
-			<div className={classes.root}>
-				<AppBar position="fixed">
-					<Toolbar>
-						<IconButton
-							className={classes.menuButton}
-							color="inherit"
-							aria-label="Open drawer"
-							onClick={this.props.handleToggleDrawer}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography
-							className={classes.title}
-							variant="h6"
-							color="inherit"
-							noWrap
-							onClick={() => {
-								this.props.history.push("/");
-							}}
-						>
-							{/* <Button color="inherit" > */}
-							Streams
-							{/* </Button> */}
-						</Typography>
-						<div className={classes.search}>
-							<div className={classes.searchIcon}>
-								<SearchIcon />
-							</div>
-							<InputBase
-								placeholder="Search…"
-								classes={{
-									root: classes.inputRoot,
-									input: classes.inputInput,
-								}}
-							/>
-						</div>
-						<div className={classes.grow} />
+		let main = (
+			<>
+				<IconButton
+					className={classes.menuButton}
+					color="inherit"
+					aria-label="Open drawer"
+					onClick={this.props.handleToggleDrawer}
+				>
+					<MenuIcon />
+				</IconButton>
+				<Typography
+					className={classes.title}
+					variant="h6"
+					color="inherit"
+					noWrap
+					onClick={() => {
+						this.props.history.push("/");
+					}}
+				>
+					Streams
+				</Typography>
+				<div className={classes.search}>
+					<div className={classes.searchIcon}>
+						<SearchIcon />
+					</div>
+					<InputBase
+						placeholder="Search…"
+						classes={{
+							root: classes.inputRoot,
+							input: classes.inputInput,
+						}}
+					/>
+				</div>
+			</>
+		);
 
-						{this.props.loggedIn ? (
-							<>
-								<div className={classes.sectionDesktop}>
-									<Button
-										color="default"
-										variant="contained"
-										onClick={this.handleDownloadHostFiles}
-									>
-										Download Host Files
-									</Button>
-									<div style={{ width: "10px" }} />
-									<Button
-										color="default"
-										variant="contained"
-										onClick={this.handleProjectDiscord}
-									>
-										Project Discord
-									</Button>
-									<div style={{ width: "10px" }} />
-									<Button
-										color="default"
-										variant="contained"
-										onClick={this.handleDevDiscord}
-									>
-										Dev's Discord
-									</Button>
-									{/* <IconButton color="inherit">
-										<Badge badgeContent={0} color="secondary">
-											<MailIcon />
-										</Badge>
-									</IconButton> */}
-									{/* <IconButton color="inherit">
-										<Badge badgeContent={0} color="secondary">
-											<NotificationsIcon />
-										</Badge>
-									</IconButton> */}
-									<IconButton
-										aria-owns={isMenuOpen ? "material-appbar" : undefined}
-										aria-haspopup="true"
-										onClick={this.handleProfileMenuOpen}
-										color="inherit"
-									>
-										<AccountCircle />
-									</IconButton>
-								</div>
-								<div className={classes.sectionMobile}>
-									<IconButton
-										aria-haspopup="true"
-										onClick={this.handleMobileMenuOpen}
-										color="inherit"
-									>
-										<MoreIcon />
-									</IconButton>
-								</div>
-							</>
-						) : (
-							<>
-								<div style={{ width: "10px" }} />
-								<Button
-									color="default"
-									variant="contained"
-									onClick={this.handleLoginRegister}
-								>
-									Login / Register
-								</Button>
-							</>
-						)}
-					</Toolbar>
-				</AppBar>
-				{renderMenu}
-				{renderMobileMenu}
-			</div>
+		let desktop = (
+			<>
+				<div className={classes.grow} />
+				<Button
+					size="small"
+					color="default"
+					variant="contained"
+					onClick={this.handleDownloadHostFiles}
+				>
+					Download Host Files
+				</Button>
+				<div style={{ width: "10px" }} />
+				<Button
+					size="small"
+					color="default"
+					variant="contained"
+					onClick={this.handleProjectDiscord}
+				>
+					Project Discord
+				</Button>
+				<div style={{ width: "10px" }} />
+				<Button
+					size="small"
+					color="default"
+					variant="contained"
+					onClick={this.handleDevDiscord}
+				>
+					Dev's Discord
+				</Button>
+				<IconButton onClick={this.handleAccount} color="inherit">
+					<AccountCircle />
+				</IconButton>
+			</>
+		);
+
+		let mobile = <div></div>;
+
+		if (!this.props.loggedIn) {
+			mobile = desktop = (
+				<>
+					<div style={{ width: "10px" }} />
+					<Button
+						size="small"
+						color="default"
+						variant="contained"
+						onClick={this.handleLoginRegister}
+					>
+						Login / Register
+					</Button>
+				</>
+			);
+		}
+
+		return (
+			<MyAppBar
+				main={main}
+				desktop={desktop}
+				mobile={mobile}
+				mobileMenu={mobileMenu}
+			></MyAppBar>
 		);
 	}
 }

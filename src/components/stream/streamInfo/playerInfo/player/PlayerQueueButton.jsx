@@ -9,12 +9,10 @@ import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
 
 // actions:
-import { leavePlayerControlQueue, joinPlayerControlQueue } from "src/actions/players.js";
+import { joinLeavePlayerControlQueue } from "src/features/players.js";
 
 // recompose:
 import { compose } from "recompose";
-
-let classNames = require("classnames");
 
 // jss:
 const styles = (theme) => ({
@@ -27,24 +25,25 @@ class QueueButton extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.joinLeaveQueue = this.joinLeaveQueue.bind(this);
-
 		this.state = {};
 	}
 
-	joinLeaveQueue() {
+	joinLeaveQueue = () => {
 		if (this.props.controlQueue.indexOf(this.props.userid) > -1) {
-			this.props.leavePlayerControlQueue(this.props.num);
+			this.props.joinLeavePlayerControlQueue({
+				cNum: this.props.num,
+				joinLeave: "leave",
+			});
 		} else {
 			for (let i = 0; i < this.props.playerCount; i++) {
 				if (i == this.props.num) {
 					continue;
 				}
-				this.props.leavePlayerControlQueue(i);
+				this.props.joinLeavePlayerControlQueue({ cNum: i, joinLeave: "leave" });
 			}
-			this.props.joinPlayerControlQueue(this.props.num);
+			this.props.joinLeavePlayerControlQueue({ cNum: this.props.num, joinLeave: "join" });
 		}
-	}
+	};
 
 	render() {
 		const { classes } = this.props;
@@ -73,11 +72,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		leavePlayerControlQueue: (controllerNumber) => {
-			dispatch(leavePlayerControlQueue(controllerNumber));
-		},
-		joinPlayerControlQueue: (controllerNumber) => {
-			dispatch(joinPlayerControlQueue(controllerNumber));
+		joinLeavePlayerControlQueue: (data) => {
+			dispatch(joinLeavePlayerControlQueue(data));
 		},
 	};
 };

@@ -832,7 +832,7 @@ io.on("connection", (socket) => {
 							// authToken: newAccount.authToken,
 							clientInfo: clientInfoFromAccount(newAccount),
 						});
-						sendVerifyEmail(email, newAccount.authToken);
+						// sendVerifyEmail(email, newAccount.authToken);
 					});
 				});
 			});
@@ -1097,7 +1097,7 @@ io.on("connection", (socket) => {
 					clientInfo: clientInfoFromAccount(account),
 					message: account.email,
 				});
-				sendVerifyEmail(account.email, account.authToken);
+				// sendVerifyEmail(account.email, account.authToken);
 			});
 		});
 	});

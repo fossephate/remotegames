@@ -1,15 +1,14 @@
-import * as types from "src/actions/ActionTypes.js";
 import {
 	updatePlayerControlQueues,
 	updatePlayerTurnStartTimes,
 	updatePlayerTurnLengths,
 	updatePlayerControllerState,
-} from "src/actions/players.js";
+} from "src/features/players.js";
 
 // listen to events w/ given socket and dispatch actions accordingly:
 const playersEvents = (socket, dispatch) => {
 	socket.on("controlQueues", (data) => {
-		dispatch(updatePlayerControlQueues(data));
+		dispatch(updatePlayerControlQueues({ queues: data }));
 	});
 
 	socket.on("turnStartTimes", (data) => {

@@ -1,4 +1,5 @@
-import { updateClient } from "features/client.js";
+import { updateClient } from "shared/features/client.js";
+import { updateStreamInfo } from "src/actions/info.js";
 
 // libs:
 import localforage from "localforage";
@@ -28,7 +29,7 @@ function authenticate(socket, dispatch) {
 					// remove the authToken if it doesn't work:
 					if (data.reason === "ACCOUNT_NOT_FOUND") {
 						Cookie.remove("RemoteGames");
-						dispatch(updateClientInfo({ authToken: null }));
+						dispatch(updateClient({ authToken: null }));
 					}
 				}
 			},
@@ -43,6 +44,17 @@ const clientEvents = (socket, dispatch) => {
 
 	socket.on("banned", (data) => {
 		localforage.setItem("banned", "banned");
+	});
+
+	socket.on("disconnect", (data) => {
+		console.log("lost connection (host)");
+		dispatch(updateClient({ hostAuthed: false }));
+		dispatch(updateStreamInfo({ online: false }));
+	});
+
+	socket.on("connect", (data) => {
+		console.log("connected (host)");
+		authenticate(socket, dispatch);
 	});
 
 	return socket;

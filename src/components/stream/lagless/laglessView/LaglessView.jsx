@@ -31,9 +31,10 @@ const styles = (theme) => ({
 		width: "73.2%",
 		alignSelf: "center",
 	},
-	twitch: {
+	offlineMessage: {
 		width: "73.2%",
-		height: "100%",
+		alignSelf: "center",
+		fontSize: "1.5em",
 	},
 	fullscreen: {
 		width: "100% !important",
@@ -57,9 +58,10 @@ class LaglessView extends PureComponent {
 
 		// let displayLagless = this.props.loggedIn && !this.props.waitlisted;
 		let displayLagless = true;
-		let twitchStyle = {
-			display: displayLagless ? "none" : null,
-		};
+
+		if (!this.props.streamOnline) {
+			displayLagless = false;
+		}
 
 		let videoClasses = classNames(classes.canvas, {
 			[classes.fullscreen]: this.props.largescreen || this.props.fullscreen,
@@ -70,7 +72,11 @@ class LaglessView extends PureComponent {
 		let isXbox = false;
 		let controllerType = isXbox ? "xbox" : "joycon";
 
-		displayLagless = displayLagless ? <LaglessCanvas classes={videoClasses} /> : null;
+		displayLagless = displayLagless ? (
+			<LaglessCanvas classes={videoClasses} />
+		) : (
+			<div className={classes.offlineMessage}>This stream is offline.</div>
+		);
 
 		return (
 			<div className={laglessClasses}>
@@ -96,10 +102,6 @@ class LaglessView extends PureComponent {
 				</ControllerView> */}
 
 				{/* {displayLagless} */}
-
-				<div id="twitchVideo" className={classes.twitch} style={twitchStyle}>
-					You need to login first or this stream is offline.
-				</div>
 			</div>
 		);
 	}
@@ -114,6 +116,7 @@ const mapStateToProps = (state) => {
 		fullscreen: state.settings.fullscreen,
 		largescreen: state.settings.largescreen,
 		mobileMode: state.settings.mobileMode,
+		streamOnline: state.stream.info.online,
 	};
 };
 
