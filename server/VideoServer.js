@@ -1,6 +1,25 @@
 const socketio = require("socket.io");
 
-const AFK_TIMEOUT = 1000 * 60 * 5;// 5 min
+const AFK_TIMEOUT = 1000 * 60 * 5; // 5 min
+
+function formatDate(dt) {
+	return `${(dt.getMonth() + 1).toString().padStart(2, "0")}/${dt
+		.getDate()
+		.toString()
+		.padStart(2, "0")}/${dt
+		.getFullYear()
+		.toString()
+		.padStart(4, "0")} ${dt
+		.getHours()
+		.toString()
+		.padStart(2, "0")}:${dt
+		.getMinutes()
+		.toString()
+		.padStart(2, "0")}:${dt
+		.getSeconds()
+		.toString()
+		.padStart(2, "0")}`;
+}
 
 class VideoServer {
 	constructor(options /*accountConnection, port, streamKey*/) {
@@ -11,6 +30,7 @@ class VideoServer {
 			perMessageDeflate: false,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 		});
+		this.startTime = new Date();
 
 		this.keepAliveTimer = null;
 	}
@@ -26,7 +46,7 @@ class VideoServer {
 			socket.on("hostAuthenticate", (data) => {
 				// join the host room if they have the streamKey
 				if (data.streamKey === this.streamKey) {
-					console.log(`host authenticated: ${new Date()}`);
+					console.log(`host authenticated: ${formatDate(new Date())}`);
 					clearTimeout(this.keepAliveTimer);
 					this.keepAliveTimer = setTimeout(this.afk, AFK_TIMEOUT);
 					socket.join("host");
@@ -79,18 +99,19 @@ class VideoServer {
 
 	stop = () => {
 		clearTimeout(this.keepAliveTimer);
-		console.log(`closing connection on port: ${this.port}`);
+		console.log(`stream stopped on port: ${this.port}`);
+		let uptime = (new Date() - this.startTime) / 1000 / 60 / 60;
+		console.log(`CT: ${formatDate(new Date())} Uptime: ${uptime} hours`);
 		this.io.close();
 	};
 
 	afk = () => {
 		clearTimeout(this.keepAliveTimer);
-		console.log(`AFK / DC'd stream!: ${new Date()}`);
-		console.log("afk disabled!");
-		// this.accountConnection.emit("streamInactive", {
-		// 	port: this.port,
-		// 	streamKey: this.streamKey,
-		// });
+		console.log("DC'd stream!");
+		this.accountConnection.emit("streamInactive", {
+			port: this.port,
+			streamKey: this.streamKey,
+		});
 	};
 }
 

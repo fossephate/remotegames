@@ -257,7 +257,8 @@ class Index extends Component {
 							main: "#0d52a9",
 						},
 						secondary: {
-							main: "#a90d0d",
+							// main: "#a90d0d",
+							main: "#404040",
 						},
 						background: {
 							paper: "#202020",

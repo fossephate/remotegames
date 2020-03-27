@@ -255,7 +255,7 @@ class HostServer {
 					banned: client.roles.banned,
 				};
 
-				if (client.rooms.indexOf("host") > -1) {
+				if (socket.rooms.host) {
 					msgObj.roles = ["mod"];
 				}
 
@@ -390,8 +390,6 @@ class HostServer {
 				}
 
 				if (typeof this.controlQueues[cNum] == "undefined") {
-					console.log("something weird happened.");
-					console.log(cNum);
 					return;
 				}
 
@@ -476,6 +474,12 @@ class HostServer {
 				socket.join(room);
 			});
 
+			socket.on("joinSecure", (data) => {
+				if (data.password === this.streamKey || data.password === this.secret) {
+					socket.join(data.room);
+				}
+			});
+
 			socket.on("hostAuthenticate", (data) => {
 				// join the host room if they have the streamKey
 				if (data.streamKey === this.streamKey) {
@@ -486,40 +490,29 @@ class HostServer {
 						console.log("no host client object!");
 						return;
 					}
-					if (client.rooms.indexOf("host") == -1) {
-						client.rooms.push(data.room);
-					}
-					client.userid = "HostBot";
-					client.username = "HostBot";
+					this.clients[socket.id].userid = "HostBot";
+					this.clients[socket.id].username = "HostBot";
 				} else {
 					console.log("ERROR: wrong streamKey!");
 					console.log(data.streamKey, this.streamKey);
 				}
 			});
 
-			socket.on("joinSecure", (data) => {
-				if (data.password === this.streamKey || data.password === this.secret) {
-					let client = this.clients[socket.id];
-					if (client.rooms.indexOf(data.room) == -1) {
-						client.rooms.push(data.room);
-					}
-					socket.join(data.room);
-				}
-			});
-
 			socket.on("botMessage", (data) => {
-				if (typeof data != "string") {
+				// console.log(data);
+				if (typeof data != "object") {
 					return;
-				} else {
-					data = data.replace(/(\r\n\t|\n|\r\t)/gm, "");
+				} else if (typeof data.text === "string") {
+					data.text = data.text.replace(/(\r\n\t|\n|\r\t)/gm, "");
 				}
+
 				// check if it's coming from the host controller:
-				if (this.clients[socket.id].rooms.includes("host")) {
+				if (socket.rooms.host) {
 					let msgObj = {
 						userid: "HostBot",
 						username: "HostBot",
 						time: Date.now(),
-						text: data,
+						text: data.text,
 						isReplay: false,
 					};
 					this.sendMessage(msgObj);
@@ -800,7 +793,6 @@ class HostServer {
 		// forfeit turn:
 		let index = this.controlQueues[cNum].indexOf(userid);
 		if (index == -1) {
-			// console.log(userid);
 			console.log("userid not found.");
 			return;
 		}

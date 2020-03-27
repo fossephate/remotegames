@@ -36,8 +36,6 @@ app.use(passport.session());
 // mongoose:
 const mongodb = require("mongodb");
 const mongoose = require("mongoose");
-// Define a schema
-let Schema = mongoose.Schema;
 
 let mongoURL = "mongodb://localhost:27017/db";
 mongoose.connect(mongoURL);
@@ -165,7 +163,7 @@ function updateOrCreateUser(profile, type, req) {
 	});
 }
 
-let accountSchema = Schema({
+let accountSchema = mongoose.Schema({
 	// 	_id: Schema.Types.ObjectId,// created & initialized automatically
 
 	// account:
@@ -201,10 +199,11 @@ let accountSchema = Schema({
 		thumbnailURL: String,
 
 		videoBitrate: Number,
+		audioBitrate: Number,
 		captureRate: Number,
 		resolution: Number,
 
-		dshowVideoDevice: String,
+		videoDevice: String,
 		audioDevice: String,
 		windowTitle: String,
 		capture: String, // "window" or "desktop"
@@ -212,6 +211,12 @@ let accountSchema = Schema({
 		offsetY: Number,
 		width: Number,
 		height: Number,
+
+		audioRate: Number,
+
+		videoBufferSize: Number,
+		audioBufferSize: Number,
+		groupOfPictures: Number,
 
 		controllerCount: Number,
 		keyboardEnabled: Boolean,
@@ -1411,27 +1416,30 @@ io.on("connection", (socket) => {
 			account.hostServerSocketid = servers.host.sid;
 			account.hostServerIP = servers.host.ip;
 			account.hostServerPort = servers.host.port;
-			// stream details:
+			// stream settings:
+			for (let key in account.streamSettings) {
+				account.streamSettings[key] = data.streamSettings[key];
+			}
 			// todo: type check this:
-			account.streamSettings.streamTitle = data.streamSettings.streamTitle;
-			account.streamSettings.thumbnailURL = data.streamSettings.thumbnailURL;
-			account.streamSettings.description = data.streamSettings.description;
-			account.streamSettings.captureRate = data.streamSettings.captureRate;
-			account.streamSettings.resolution = data.streamSettings.resolution;
-			account.streamSettings.videoBitrate = data.streamSettings.videoBitrate;
+			// account.streamSettings.streamTitle = data.streamSettings.streamTitle;
+			// account.streamSettings.thumbnailURL = data.streamSettings.thumbnailURL;
+			// account.streamSettings.description = data.streamSettings.description;
+			// account.streamSettings.captureRate = data.streamSettings.captureRate;
+			// account.streamSettings.resolution = data.streamSettings.resolution;
+			// account.streamSettings.videoBitrate = data.streamSettings.videoBitrate;
 
-			account.streamSettings.controllerCount = data.streamSettings.controllerCount;
-			account.streamSettings.keyboardEnabled = data.streamSettings.keyboardEnabled;
-			account.streamSettings.mouseEnabled = data.streamSettings.mouseEnabled;
-			account.streamSettings.windowTitle = data.streamSettings.windowTitle;
-			account.streamSettings.capture = data.streamSettings.capture;
-			account.streamSettings.dshowVideoDevice = data.streamSettings.dshowVideoDevice;
-			account.streamSettings.audioDevice = data.streamSettings.audioDevice;
-			account.streamSettings.width = data.streamSettings.width;
-			account.streamSettings.height = data.streamSettings.height;
-			account.streamSettings.offsetX = data.streamSettings.offsetX;
-			account.streamSettings.offsetY = data.streamSettings.offsetY;
-			account.streamSettings.streamType = data.streamSettings.streamType;
+			// account.streamSettings.controllerCount = data.streamSettings.controllerCount;
+			// account.streamSettings.keyboardEnabled = data.streamSettings.keyboardEnabled;
+			// account.streamSettings.mouseEnabled = data.streamSettings.mouseEnabled;
+			// account.streamSettings.windowTitle = data.streamSettings.windowTitle;
+			// account.streamSettings.capture = data.streamSettings.capture;
+			// account.streamSettings.dshowVideoDevice = data.streamSettings.dshowVideoDevice;
+			// account.streamSettings.audioDevice = data.streamSettings.audioDevice;
+			// account.streamSettings.width = data.streamSettings.width;
+			// account.streamSettings.height = data.streamSettings.height;
+			// account.streamSettings.offsetX = data.streamSettings.offsetX;
+			// account.streamSettings.offsetY = data.streamSettings.offsetY;
+			// account.streamSettings.streamType = data.streamSettings.streamType;
 			// account.streamSettings = { ...account.streamSettings, ...data.streamSettings };
 
 			// update the account details:
