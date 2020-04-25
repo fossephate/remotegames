@@ -92,3 +92,19 @@ class HostServerClient {
 }
 
 module.exports.HostServerClient = HostServerClient;
+
+
+class MachineServerClient {
+	constructor(socket, ip, ports) {
+		this.socket = socket;
+		this.socketid = socket.id;
+
+		this.ip = ip;
+		this.ports = ports;
+		this.aliveServers = {};
+
+		this.authenticated = false;
+	}
+}
+
+module.exports.MachineServerClient = MachineServerClient;

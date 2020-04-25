@@ -21,8 +21,8 @@ export class BitBuffer {
 		EXPAND: 2,
 	};
 
-	resize = function(size) {
-		var newBytes = new Uint8Array(size);
+	resize = (size) => {
+		let newBytes = new Uint8Array(size);
 		if (this.byteLength !== 0) {
 			this.byteLength = Math.min(this.byteLength, size);
 			newBytes.set(this.bytes, 0, this.byteLength);
@@ -31,8 +31,8 @@ export class BitBuffer {
 		this.index = Math.min(this.index, this.byteLength << 3);
 	};
 
-	evict = function(sizeNeeded) {
-		var bytePos = this.index >> 3,
+	evict = (sizeNeeded) => {
+		let bytePos = this.index >> 3,
 			available = this.bytes.length - this.byteLength;
 
 		// If the current index is the write position, we can simply reset both
@@ -63,15 +63,15 @@ export class BitBuffer {
 		return;
 	};
 
-	write = function(buffers) {
-		var isArrayOfBuffers = typeof buffers[0] === "object",
+	write = (buffers) => {
+		let isArrayOfBuffers = typeof buffers[0] === "object",
 			totalLength = 0,
 			available = this.bytes.length - this.byteLength;
 
 		// Calculate total byte length
 		if (isArrayOfBuffers) {
-			var totalLength = 0;
-			for (var i = 0; i < buffers.length; i++) {
+			let totalLength = 0;
+			for (let i = 0; i < buffers.length; i++) {
 				totalLength += buffers[i].byteLength;
 			}
 		} else {
@@ -81,7 +81,7 @@ export class BitBuffer {
 		// Do we need to resize or evict?
 		if (totalLength > available) {
 			if (this.mode === BitBuffer.MODE.EXPAND) {
-				var newSize = Math.max(this.bytes.length * 2, totalLength - available);
+				let newSize = Math.max(this.bytes.length * 2, totalLength - available);
 				this.resize(newSize);
 			} else {
 				this.evict(totalLength);
@@ -89,7 +89,7 @@ export class BitBuffer {
 		}
 
 		if (isArrayOfBuffers) {
-			for (var i = 0; i < buffers.length; i++) {
+			for (let i = 0; i < buffers.length; i++) {
 				this.appendSingleBuffer(buffers[i]);
 			}
 		} else {
@@ -99,15 +99,15 @@ export class BitBuffer {
 		return totalLength;
 	};
 
-	appendSingleBuffer = function(buffer) {
+	appendSingleBuffer = (buffer) => {
 		buffer = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer);
 
 		this.bytes.set(buffer, this.byteLength);
 		this.byteLength += buffer.length;
 	};
 
-	findNextStartCode = function() {
-		for (var i = (this.index + 7) >> 3; i < this.byteLength; i++) {
+	findNextStartCode = () => {
+		for (let i = (this.index + 7) >> 3; i < this.byteLength; i++) {
 			if (
 				this.bytes[i] == 0x00 &&
 				this.bytes[i + 1] == 0x00 &&
@@ -121,8 +121,8 @@ export class BitBuffer {
 		return -1;
 	};
 
-	findStartCode = function(code) {
-		var current = 0;
+	findStartCode = (code) => {
+		let current = 0;
 		while (true) {
 			current = this.findNextStartCode();
 			if (current === code || current === -1) {
@@ -132,19 +132,19 @@ export class BitBuffer {
 		return -1;
 	};
 
-	nextBytesAreStartCode = function() {
-		var i = (this.index + 7) >> 3;
+	nextBytesAreStartCode = () => {
+		let i = (this.index + 7) >> 3;
 		return (
 			i >= this.byteLength ||
 			(this.bytes[i] == 0x00 && this.bytes[i + 1] == 0x00 && this.bytes[i + 2] == 0x01)
 		);
 	};
 
-	peek = function(count) {
-		var offset = this.index;
-		var value = 0;
+	peek = (count) => {
+		let offset = this.index;
+		let value = 0;
 		while (count) {
-			var currentByte = this.bytes[offset >> 3],
+			let currentByte = this.bytes[offset >> 3],
 				remaining = 8 - (offset & 7), // remaining bits in byte
 				read = remaining < count ? remaining : count, // bits in this run
 				shift = remaining - read,
@@ -159,21 +159,21 @@ export class BitBuffer {
 		return value;
 	};
 
-	read = function(count) {
-		var value = this.peek(count);
+	read = (count) => {
+		let value = this.peek(count);
 		this.index += count;
 		return value;
 	};
 
-	skip = function(count) {
+	skip = (count) => {
 		return (this.index += count);
 	};
 
-	rewind = function(count) {
+	rewind = (count) => {
 		this.index = Math.max(this.index - count, 0);
 	};
 
-	has = function(count) {
+	has = (count) => {
 		return (this.byteLength << 3) - this.index >= count;
 	};
 }

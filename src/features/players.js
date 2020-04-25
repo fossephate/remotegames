@@ -24,7 +24,6 @@ const playersSlice = createSlice({
 		controlQueues: controlQueues,
 		turnTimers: turnTimers,
 		controllerStates: controllerStates,
-		count: 8,
 	},
 	reducers: {
 		updatePlayerControlQueues(state, action) {

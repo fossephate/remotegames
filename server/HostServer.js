@@ -51,9 +51,8 @@ class HostServer {
 		this.subTime = this.normalTime * 2.5;
 		this.forfeitTime = 1000 * 15; // 15 seconds
 		this.tempBanTime = 5 * 1000 * 60; // 5 minutes
-		this.numPlayers = 8;
-		this.numberOfLastFewMessages = 5;
-		this.lastFewMessages = [];
+		this.messageLogLength = 5;
+		this.messageLog = [];
 		this.locked = false;
 		this.plusLock = false;
 		this.IPToGuestNumberMap = {};
@@ -63,6 +62,8 @@ class HostServer {
 		this.keyboardEnabled = options.settings.keyboardEnabled;
 		this.mouseEnabled = options.settings.mouseEnabled;
 		this.controllerCount = options.settings.controllerCount;
+		this.playerCount = options.settings.playerCount;
+		this.playerCount = this.playerCount === 0 ? 1 : this.playerCount;
 
 		this.turnLengths = [];
 		this.forfeitLengths = [];
@@ -71,10 +72,9 @@ class HostServer {
 		this.forfeitTimers = [];
 		this.turnExpirations = [];
 		this.forfeitExpirations = [];
-		this.controllerList = [];
 		this.controlQueues = [];
 
-		for (let i = 0; i < this.numPlayers; i++) {
+		for (let i = 0; i < this.playerCount; i++) {
 			this.turnLengths.push(this.normalTime);
 			this.forfeitLengths.push(this.forfeitTime);
 			this.turnStartTimes.push(Date.now());
@@ -82,7 +82,6 @@ class HostServer {
 			this.forfeitTimers.push(null);
 			this.turnExpirations.push(0);
 			this.forfeitExpirations.push(0);
-			this.controllerList.push(i);
 			this.controlQueues.push([]);
 		}
 
@@ -94,6 +93,78 @@ class HostServer {
 		this.addTimePlayed = this.addTimePlayed.bind(this);
 		this.filterGuests = this.filterGuests.bind(this);
 	}
+
+	joinQueue = (client, cNum) => {
+		// return if locked && not a mod:
+		if (this.locked && !client.roles.mod) {
+			return;
+		}
+		// return if pluslocked && not a plus:
+		if (this.plusLocked && !client.roles.plus) {
+			return;
+		}
+
+		// make sure it's a valid cNum:
+		if (typeof cNum !== "number" || cNum < 0 || cNum >= this.playerCount) {
+			return;
+		}
+
+		// check to make sure user isn't already in another queue
+		for (let i = 0; i < this.playerCount; i++) {
+			if (this.controlQueues[i].indexOf(client.userid) > -1) {
+				this.leaveQueue(client, i);
+			}
+		}
+
+		if (typeof this.controlQueues[cNum] == "undefined") {
+			return;
+		}
+
+		// check to make sure they aren't in this queue (so we don't push it more than once)
+		// done above^
+		this.controlQueues[cNum].push(client.userid);
+		this.io.emit("controlQueues", this.controlQueues);
+
+		// reset timers when you join the queue & you're the only person in the queue:
+		if (this.controlQueues[cNum].length === 1) {
+			this.resetTimers(client.userid, cNum);
+		}
+	};
+
+	leaveQueue = (client, cNum) => {
+		// make sure it's a valid cNum:
+		if (typeof cNum !== "number" || cNum < 0 || cNum >= this.playerCount) {
+			return;
+		}
+
+		// return if not in the queue:
+		console.log(cNum);
+		console.log(this.controlQueues);
+		let index = this.controlQueues[cNum].indexOf(client.userid);
+		if (index === -1) {
+			return;
+		}
+		this.controlQueues[cNum].splice(index, 1);
+		this.io.emit("controlQueues", this.controlQueues);
+
+		if (this.controlQueues[cNum].length >= 1) {
+			if (index === 0) {
+				this.resetTimers(client.userid, cNum);
+			}
+		}
+
+		if (index === 0) {
+			// reset the controller:
+			this.io.emit("controllerState", {
+				cNum: cNum,
+				btns: 0,
+				axes: [0, 0, 0, 0, 0, 0],
+			});
+		}
+
+		// emit turn times left:
+		this.calculateTurnExpirations();
+	};
 
 	init() {
 		// setup interval functions:
@@ -113,7 +184,7 @@ class HostServer {
 
 		this.io.on("connection", (socket) => {
 			this.clients[socket.id] = new Client(socket);
-			console.log(`#clients: ${Object.keys(this.clients).length}`);
+			console.log(`#clients: ${Object.keys(this.clients).length} connected`);
 
 			let client = this.clients[socket.id];
 
@@ -222,16 +293,16 @@ class HostServer {
 					// delete:
 					delete this.clients[socket.id];
 				}
-				console.log(`#clients: ${Object.keys(this.clients).length}`);
+				console.log(`#clients: ${Object.keys(this.clients).length} disconnected`);
 			});
 
 			/* CHAT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 			socket.on("chatMessage", (data) => {
 				let client = this.clients[socket.id];
-				if (client === null) {
+				if (!client) {
 					return;
 				}
-				if (data && typeof data.text != "string") {
+				if (typeof data === "object" && typeof data.text != "string") {
 					return;
 				} else {
 					data.text = data.text.replace(/(\r\n\t|\n|\r\t)/gm, "");
@@ -266,7 +337,7 @@ class HostServer {
 			/* INPUT @@@@@@@@@@@@@@@@@@@@@@@@@@@@@*/
 			socket.on("inputState", (data) => {
 				let client = this.clients[socket.id];
-				if (client == null || client.userid == null) {
+				if (!client || client.userid == null) {
 					return;
 				}
 
@@ -274,13 +345,8 @@ class HostServer {
 				let btns = data.btns;
 
 				// make sure it's a valid cNum:
-				if (this.controllerList.indexOf(cNum) == -1) {
-					console.log("weird cNum1: " + cNum);
-					return;
-				}
-
-				if (this.controlQueues[cNum] == null) {
-					console.log("weird cNum2: " + cNum);
+				if (typeof cNum !== "number" || cNum < 0 || cNum >= this.playerCount) {
+					console.log(`weird cNum: ${cNum}`);
 					return;
 				}
 
@@ -362,46 +428,14 @@ class HostServer {
 				if (client == null || client.userid == null) {
 					return;
 				}
+
 				// return if banned
 				if (client.roles.banned) {
 					socket.emit("banned");
 					return;
 				}
-				// return if locked && not a mod:
-				if (this.locked && !client.roles.mod) {
-					return;
-				}
-				// return if pluslocked && not a plus:
-				if (this.plusLocked && !client.roles.plus) {
-					return;
-				}
 
-				// make sure it's a valid cNum:
-				if (this.controllerList.indexOf(cNum) == -1) {
-					return;
-				}
-
-				// check to make sure user isn't already in another queue
-				for (let i = 0; i < this.controllerList.length; i++) {
-					let listNum = this.controllerList[i];
-					if (this.controlQueues[listNum].indexOf(client.userid) > -1) {
-						return;
-					}
-				}
-
-				if (typeof this.controlQueues[cNum] == "undefined") {
-					return;
-				}
-
-				// check to make sure they aren't in this queue (so we don't push it more than once)
-				// done above^
-				this.controlQueues[cNum].push(client.userid);
-				this.io.emit("controlQueues", this.controlQueues);
-
-				// reset timers when you join the queue & you're the only person in the queue:
-				if (this.controlQueues[cNum].length === 1) {
-					this.resetTimers(client.userid, cNum);
-				}
+				this.joinQueue(client, cNum);
 			});
 
 			socket.on("leaveQueue", (cNum) => {
@@ -410,36 +444,7 @@ class HostServer {
 					return;
 				}
 
-				// make sure it's a valid cNum:
-				if (this.controllerList.indexOf(cNum) === -1) {
-					return;
-				}
-
-				// return if not in the queue:
-				let index = this.controlQueues[cNum].indexOf(client.userid);
-				if (index == -1) {
-					return;
-				}
-				this.controlQueues[cNum].splice(index, 1);
-				this.io.emit("controlQueues", this.controlQueues);
-
-				if (this.controlQueues[cNum].length >= 1) {
-					if (index === 0) {
-						this.resetTimers(client.userid, cNum);
-					}
-				}
-
-				if (index === 0) {
-					// reset the controller:
-					this.io.emit("controllerState", {
-						cNum: cNum,
-						btns: 0,
-						axes: [0, 0, 0, 0, 0, 0],
-					});
-				}
-
-				// emit turn times left:
-				this.calculateTurnExpirations();
+				this.leaveQueue(client, cNum);
 			});
 
 			// lagless1 - 2.0:
@@ -499,7 +504,6 @@ class HostServer {
 			});
 
 			socket.on("botMessage", (data) => {
-				// console.log(data);
 				if (typeof data != "object") {
 					return;
 				} else if (typeof data.text === "string") {
@@ -536,8 +540,9 @@ class HostServer {
 				turnStartTimes: this.turnStartTimes,
 				forfeitStartTimes: this.forfeitStartTimes,
 			});
-			for (let i = 0; i < this.lastFewMessages.length; i++) {
-				socket.emit("chatMessage", { ...this.lastFewMessages[i], isReplay: true });
+			this.removeOldMessages();
+			for (let i = 0; i < this.messageLog.length; i++) {
+				socket.emit("chatMessage", { ...this.messageLog[i], isReplay: true });
 			}
 		});
 
@@ -571,20 +576,25 @@ class HostServer {
 		}
 	}
 
-	sendMessage(msgObj) {
-		// store for when people refresh:
-		this.lastFewMessages.push(msgObj);
-		// keep only #numberOfLastFewMessages
-		if (this.lastFewMessages.length > this.numberOfLastFewMessages) {
-			this.lastFewMessages.shift();
+	removeOldMessages = () => {
+		// keep only #messageLogLength
+		while (this.messageLog.length > this.messageLog) {
+			this.messageLog.shift();
 		}
 
 		// remove messages more than an hour old:
-		for (let i = 0; i < this.lastFewMessages.length; i++) {
-			if (Date.now() - this.lastFewMessages[i].time > 1000 * 60 * 60) {
-				this.lastFewMessages.splice(i, 1);
+		for (let i = 0; i < this.messageLog.length; i++) {
+			if (Date.now() - this.messageLog[i].time > 1000 * 60 * 60) {
+				this.messageLog.splice(i, 1);
 			}
 		}
+	};
+
+	sendMessage(msgObj) {
+		// store for when people refresh:
+		this.messageLog.push(msgObj);
+
+		this.removeOldMessages();
 
 		// send to everyone:
 		this.io.emit("chatMessage", msgObj);

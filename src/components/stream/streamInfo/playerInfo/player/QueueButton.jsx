@@ -38,12 +38,6 @@ class QueueButton extends PureComponent {
 				joinLeave: "leave",
 			});
 		} else {
-			for (let i = 0; i < this.props.playerCount; i++) {
-				if (i == this.props.num) {
-					continue;
-				}
-				this.props.joinLeavePlayerControlQueue({ cNum: i, joinLeave: "leave" });
-			}
 			this.props.joinLeavePlayerControlQueue({ cNum: this.props.num, joinLeave: "join" });
 		}
 	};
@@ -68,9 +62,7 @@ class QueueButton extends PureComponent {
 }
 
 const mapStateToProps = (state) => {
-	return {
-		playerCount: state.stream.players.count,
-	};
+	return {};
 };
 
 const mapDispatchToProps = (dispatch) => {

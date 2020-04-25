@@ -49,7 +49,7 @@ export class BaseDecoder {
 		this.canPlay = true;
 	};
 
-	seek = function(time) {
+	seek = (time) => {
 		if (!this.collectTimestamps) {
 			return;
 		}
@@ -72,7 +72,7 @@ export class BaseDecoder {
 		}
 	};
 
-	decode = function() {
+	decode = () => {
 		this.advanceDecodedTime(0);
 	};
 

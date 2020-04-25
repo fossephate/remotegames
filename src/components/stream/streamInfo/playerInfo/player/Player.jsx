@@ -63,8 +63,6 @@ class Player extends PureComponent {
 	render() {
 		const { classes } = this.props;
 
-		let n = this.props.num;
-
 		return (
 			<Paper elevation={4} className={classes.root}>
 				<MyCheckbox
@@ -75,7 +73,7 @@ class Player extends PureComponent {
 				<TurnTimers num={this.props.num} />
 				<QueueButton
 					num={this.props.num}
-					controlQueue={this.props.controlQueues[n]}
+					controlQueue={this.props.controlQueues[this.props.num]}
 					userid={this.props.userid}
 				/>
 				<ControlQueue num={this.props.num} />

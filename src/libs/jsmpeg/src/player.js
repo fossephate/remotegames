@@ -287,7 +287,7 @@ export class Player {
 			headroom = this.demuxer.currentTime - this.audio.currentTime;
 		} else if (this.video) {
 			// Video only - sync it to player's wallclock
-			var targetTime = Now() - this.startTime + this.video.startTime,
+			let targetTime = Now() - this.startTime + this.video.startTime,
 				lateTime = targetTime - this.video.currentTime,
 				frameTime = 1 / this.video.frameRate;
 

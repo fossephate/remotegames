@@ -22,24 +22,20 @@ export default class ViewerDropdown extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.handleClick = this.handleClick.bind(this);
-		this.handleClose = this.handleClose.bind(this);
-		this.getViewerList = this.getViewerList.bind(this);
-
 		this.state = {
 			anchorEl: null,
 		};
 	}
 
-	handleClick(event) {
+	handleClick = (event) => {
 		this.setState({ anchorEl: event.currentTarget });
-	}
+	};
 
-	handleClose() {
+	handleClose = () => {
 		this.setState({ anchorEl: null });
-	}
+	};
 
-	getViewerList() {
+	getViewerList = () => {
 		let viewers = [];
 		let count = 0;
 		for (let key in this.props.accountMap) {
@@ -66,7 +62,7 @@ export default class ViewerDropdown extends PureComponent {
 			);
 		}
 		return viewers;
-	}
+	};
 
 	render() {
 		const open = Boolean(this.state.anchorEl);

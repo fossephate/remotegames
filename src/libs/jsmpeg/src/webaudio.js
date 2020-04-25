@@ -25,11 +25,13 @@ export class WebAudioOut {
 		this.CachedContext = null;
 
 		this.unlocked = !WebAudioOut.NeedsUnlocking();
+		this.unlockTimer = null;
 
 		Object.defineProperty(this, "enqueuedTime", { get: this.getEnqueuedTime });
 	}
 
-	destroy = function() {
+	destroy = () => {
+		clearTimeout(this.unlockTimer);
 		this.gain.disconnect();
 		this.context._connections--;
 
@@ -39,7 +41,7 @@ export class WebAudioOut {
 		}
 	};
 
-	play = function(sampleRate, left, right) {
+	play = (sampleRate, left, right) => {
 		if (!this.enabled) {
 			return;
 		}
@@ -47,7 +49,7 @@ export class WebAudioOut {
 		// If the context is not unlocked yet, we simply advance the start time
 		// to "fake" actually playing audio. This will keep the video in sync.
 		if (!this.unlocked) {
-			var ts = Now();
+			let ts = Now();
 			if (this.wallclockStartTime < ts) {
 				this.wallclockStartTime = ts;
 			}
@@ -57,16 +59,16 @@ export class WebAudioOut {
 
 		this.gain.gain.value = this.volume;
 
-		var buffer = this.context.createBuffer(2, left.length, sampleRate);
+		let buffer = this.context.createBuffer(2, left.length, sampleRate);
 		buffer.getChannelData(0).set(left);
 		buffer.getChannelData(1).set(right);
 
-		var source = this.context.createBufferSource();
+		let source = this.context.createBufferSource();
 		source.buffer = buffer;
 		source.connect(this.destination);
 
-		var now = this.context.currentTime;
-		var duration = buffer.duration;
+		let now = this.context.currentTime;
+		let duration = buffer.duration;
 		if (this.startTime < now) {
 			this.startTime = now;
 			this.wallclockStartTime = Now();
@@ -77,7 +79,7 @@ export class WebAudioOut {
 		this.wallclockStartTime += duration;
 	};
 
-	stop = function() {
+	stop = () => {
 		// Meh; there seems to be no simple way to get a list of currently
 		// active source nodes from the Audio Context, and maintaining this
 		// list ourselfs would be a pain, so we just set the gain to 0
@@ -85,18 +87,18 @@ export class WebAudioOut {
 		this.gain.gain.value = 0;
 	};
 
-	getEnqueuedTime = function() {
+	getEnqueuedTime = () => {
 		// The AudioContext.currentTime is only updated every so often, so if we
 		// want to get exact timing, we need to rely on the system time.
 		return Math.max(this.wallclockStartTime - Now(), 0);
 	};
 
-	resetEnqueuedTime = function() {
+	resetEnqueuedTime = () => {
 		this.startTime = this.context.currentTime;
 		this.wallclockStartTime = Now();
 	};
 
-	unlock = function(callback) {
+	unlock = (callback) => {
 		if (this.unlocked) {
 			if (callback) {
 				callback();
@@ -113,10 +115,11 @@ export class WebAudioOut {
 		source.connect(this.destination);
 		source.start(0);
 
-		setTimeout(this.checkIfUnlocked.bind(this, source, 0), 0);
+		// setTimeout(this.checkIfUnlocked.bind(this, source, 0), 0);
+		this.unlockTimer = setTimeout(this.checkIfUnlocked, 0, source, 0);
 	};
 
-	checkIfUnlocked = function(source, attempt) {
+	checkIfUnlocked = (source, attempt) => {
 		if (
 			source.playbackState === source.PLAYING_STATE ||
 			source.playbackState === source.FINISHED_STATE
@@ -128,15 +131,16 @@ export class WebAudioOut {
 			}
 		} else if (attempt < 10) {
 			// Jeez, what a shit show. Thanks iOS!
-			setTimeout(this.checkIfUnlocked.bind(this, source, attempt + 1), 100);
+			// setTimeout(this.checkIfUnlocked.bind(this, source, attempt + 1), 100);
+			this.unlockTimer = setTimeout(this.checkIfUnlocked, 100, source, attempt + 1);
 		}
 	};
 
-	static NeedsUnlocking = function() {
+	static NeedsUnlocking = () => {
 		return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 	};
 
-	static IsSupported = function() {
+	static IsSupported = () => {
 		return window.AudioContext || window.webkitAudioContext;
 	};
 }

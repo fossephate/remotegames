@@ -25,7 +25,7 @@ export class TS {
 		DIRECTORY: 0xff,
 	};
 
-	connect = function(streamId, destination) {
+	connect = (streamId, destination) => {
 		this.pesPacketInfo[streamId] = {
 			destination: destination,
 			currentLength: 0,
@@ -35,9 +35,9 @@ export class TS {
 		};
 	};
 
-	write = function(buffer) {
+	write = (buffer) => {
 		if (this.leftoverBytes) {
-			var totalLength = buffer.byteLength + this.leftoverBytes.byteLength;
+			let totalLength = buffer.byteLength + this.leftoverBytes.byteLength;
 			this.bits = new BitBuffer(totalLength);
 			this.bits.write([this.leftoverBytes, buffer]);
 		} else {
@@ -46,12 +46,12 @@ export class TS {
 
 		while (this.bits.has(188 << 3) && this.parsePacket()) {}
 
-		var leftoverCount = this.bits.byteLength - (this.bits.index >> 3);
+		let leftoverCount = this.bits.byteLength - (this.bits.index >> 3);
 		this.leftoverBytes =
 			leftoverCount > 0 ? this.bits.bytes.subarray(this.bits.index >> 3) : null;
 	};
 
-	parsePacket = function() {
+	parsePacket = () => {
 		// Check if we're in sync with packet boundaries; attempt to resync if not.
 		if (this.bits.read(8) !== 0x47) {
 			if (!this.resync()) {
@@ -60,8 +60,8 @@ export class TS {
 			}
 		}
 
-		var end = (this.bits.index >> 3) + 187;
-		var transportError = this.bits.read(1),
+		let end = (this.bits.index >> 3) + 187;
+		let transportError = this.bits.read(1),
 			payloadStart = this.bits.read(1),
 			transportPriority = this.bits.read(1),
 			pid = this.bits.read(13),
@@ -71,9 +71,9 @@ export class TS {
 
 		// If this is the start of a new payload; signal the end of the previous
 		// frame, if we didn't do so already.
-		var streamId = this.pidsToStreamIds[pid];
+		let streamId = this.pidsToStreamIds[pid];
 		if (payloadStart && streamId) {
-			var pi = this.pesPacketInfo[streamId];
+			let pi = this.pesPacketInfo[streamId];
 			if (pi && pi.currentLength) {
 				this.packetComplete(pi);
 			}
@@ -82,7 +82,7 @@ export class TS {
 		// Extract current payload
 		if (adaptationField & 0x1) {
 			if (adaptationField & 0x2) {
-				var adaptationFieldLength = this.bits.read(8);
+				let adaptationFieldLength = this.bits.read(8);
 				this.bits.skip(adaptationFieldLength << 3);
 			}
 
@@ -91,27 +91,27 @@ export class TS {
 				streamId = this.bits.read(8);
 				this.pidsToStreamIds[pid] = streamId;
 
-				var packetLength = this.bits.read(16);
+				let packetLength = this.bits.read(16);
 				this.bits.skip(8);
-				var ptsDtsFlag = this.bits.read(2);
+				let ptsDtsFlag = this.bits.read(2);
 				this.bits.skip(6);
-				var headerLength = this.bits.read(8);
-				var payloadBeginIndex = this.bits.index + (headerLength << 3);
+				let headerLength = this.bits.read(8);
+				let payloadBeginIndex = this.bits.index + (headerLength << 3);
 
-				var pi = this.pesPacketInfo[streamId];
+				let pi = this.pesPacketInfo[streamId];
 				if (pi) {
-					var pts = 0;
+					let pts = 0;
 					if (ptsDtsFlag & 0x2) {
 						// The Presentation Timestamp is encoded as 33(!) bit
 						// integer, but has a "marker bit" inserted at weird places
 						// in between, making the whole thing 5 bytes in size.
 						// You can't make this shit up...
 						this.bits.skip(4);
-						var p32_30 = this.bits.read(3);
+						let p32_30 = this.bits.read(3);
 						this.bits.skip(1);
-						var p29_15 = this.bits.read(15);
+						let p29_15 = this.bits.read(15);
 						this.bits.skip(1);
-						var p14_0 = this.bits.read(15);
+						let p14_0 = this.bits.read(15);
 						this.bits.skip(1);
 
 						// Can't use bit shifts here; we need 33 bits of precision,
@@ -125,7 +125,7 @@ export class TS {
 						}
 					}
 
-					var payloadLength = packetLength ? packetLength - headerLength - 3 : 0;
+					let payloadLength = packetLength ? packetLength - headerLength - 3 : 0;
 					this.packetStart(pi, pts, payloadLength);
 				}
 
@@ -143,12 +143,12 @@ export class TS {
 				// in between, but it might just fit exactly. If this fails, we can
 				// only wait for the next PES header for that stream.
 
-				var pi = this.pesPacketInfo[streamId];
+				let pi = this.pesPacketInfo[streamId];
 				if (pi) {
-					var start = this.bits.index >> 3;
-					var complete = this.packetAddData(pi, start, end);
+					let start = this.bits.index >> 3;
+					let complete = this.packetAddData(pi, start, end);
 
-					var hasPadding = !payloadStart && adaptationField & 0x2;
+					let hasPadding = !payloadStart && adaptationField & 0x2;
 					if (complete || (this.guessVideoFrameEnd && hasPadding)) {
 						this.packetComplete(pi);
 					}
@@ -195,13 +195,13 @@ export class TS {
 		return false;
 	};
 
-	packetStart = function(pi, pts, payloadLength) {
+	packetStart = (pi, pts, payloadLength) => {
 		pi.totalLength = payloadLength;
 		pi.currentLength = 0;
 		pi.pts = pts;
 	};
 
-	packetAddData = function(pi, start, end) {
+	packetAddData = (pi, start, end) => {
 		pi.buffers.push(this.bits.bytes.subarray(start, end));
 		pi.currentLength += end - start;
 

@@ -47,26 +47,27 @@ class PlayerInfo extends PureComponent {
 		this.state = {};
 	}
 
+	mapPlayers = () => {
+		let players = [];
+
+		for (let i = 0; i < this.props.playerCount; i++) {
+			players.push(<Player key={i} num={i} />);
+		}
+
+		return players;
+	};
+
 	render() {
 		const { classes } = this.props;
 
-		return (
-			<div className={classes.root}>
-				<Player num={0} />
-				<Player num={1} />
-				<Player num={2} />
-				<Player num={3} />
-				{/* <Player num={4} />
-				<Player num={5} />
-				<Player num={6} />
-				<Player num={7} /> */}
-			</div>
-		);
+		return <div className={classes.root}>{this.mapPlayers()}</div>;
 	}
 }
 
 const mapStateToProps = (state) => {
-	return {};
+	return {
+		playerCount: state.stream.info.streamSettings.playerCount,
+	};
 };
 
 const mapDispatchToProps = (dispatch) => {

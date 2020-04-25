@@ -32,9 +32,12 @@ const styles = (theme) => ({
 		alignSelf: "center",
 	},
 	offlineMessage: {
-		width: "73.2%",
-		alignSelf: "center",
+		display: "flex",
+		flexGrow: 1,
 		fontSize: "1.5em",
+		alignItems: "center",
+		justifyContent: "center",
+		// minHeight: "550px",
 	},
 	fullscreen: {
 		width: "100% !important",
@@ -57,10 +60,10 @@ class LaglessView extends PureComponent {
 		});
 
 		// let displayLagless = this.props.loggedIn && !this.props.waitlisted;
-		let displayLagless = true;
+		// let displayLagless = true;
 
 		if (!this.props.streamOnline) {
-			displayLagless = false;
+			window.inputHandler.mouse.toggle(false);
 		}
 
 		let videoClasses = classNames(classes.canvas, {
@@ -72,7 +75,7 @@ class LaglessView extends PureComponent {
 		let isXbox = false;
 		let controllerType = isXbox ? "xbox" : "joycon";
 
-		displayLagless = displayLagless ? (
+		let displayLagless = this.props.streamOnline ? (
 			<LaglessCanvas classes={videoClasses} />
 		) : (
 			<div className={classes.offlineMessage}>This stream is offline.</div>
@@ -91,6 +94,15 @@ class LaglessView extends PureComponent {
 				) : (
 					displayLagless
 				)}
+
+				{/* <ControllerView
+						hide={!this.props.controllerView}
+						overlay={this.props.mobileMode}
+						controllerState={this.props.controllerStates[controllerNumber]}
+						type={controllerType}
+					>
+						{displayLagless}
+					</ControllerView> */}
 
 				{/* <ControllerView
 					displayControllers={this.props.controllerView}

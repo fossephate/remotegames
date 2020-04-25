@@ -13,8 +13,8 @@ export class MP2 extends BaseDecoder {
 
 		this.onDecodeCallback = options.onAudioDecode;
 
-		var bufferSize = options.audioBufferSize || 128 * 1024;
-		var bufferMode = options.streaming ? BitBuffer.MODE.EVICT : BitBuffer.MODE.EXPAND;
+		let bufferSize = options.audioBufferSize || 128 * 1024;
+		let bufferMode = options.streaming ? BitBuffer.MODE.EVICT : BitBuffer.MODE.EXPAND;
 
 		this.bits = new BitBuffer(bufferSize, bufferMode);
 
@@ -34,23 +34,23 @@ export class MP2 extends BaseDecoder {
 		this.scaleFactor = [new Array(32), new Array(32)];
 		this.sample = [new Array(32), new Array(32)];
 
-		for (var j = 0; j < 2; j++) {
-			for (var i = 0; i < 32; i++) {
+		for (let j = 0; j < 2; j++) {
+			for (let i = 0; i < 32; i++) {
 				this.scaleFactor[j][i] = [0, 0, 0];
 				this.sample[j][i] = [0, 0, 0];
 			}
 		}
 	}
 
-	decode = function() {
-		var startTime = Now();
+	decode = () => {
+		let startTime = Now();
 
-		var pos = this.bits.index >> 3;
+		let pos = this.bits.index >> 3;
 		if (pos >= this.bits.byteLength) {
 			return false;
 		}
 
-		var decoded = this.decodeFrame(this.left, this.right);
+		let decoded = this.decodeFrame(this.left, this.right);
 		this.bits.index = (pos + decoded) << 3;
 		if (!decoded) {
 			return false;
@@ -62,21 +62,21 @@ export class MP2 extends BaseDecoder {
 
 		this.advanceDecodedTime(this.left.length / this.sampleRate);
 
-		var elapsedTime = Now() - startTime;
+		let elapsedTime = Now() - startTime;
 		if (this.onDecodeCallback) {
 			this.onDecodeCallback(this, elapsedTime);
 		}
 		return true;
 	};
 
-	getCurrentTime = function() {
-		var enqueuedTime = this.destination ? this.destination.enqueuedTime : 0;
+	getCurrentTime = () => {
+		let enqueuedTime = this.destination ? this.destination.enqueuedTime : 0;
 		return this.decodedTime - enqueuedTime;
 	};
 
-	decodeFrame = function(left, right) {
+	decodeFrame = (left, right) => {
 		// Check for valid header: syncword OK, MPEG-Audio Layer 2
-		var sync = this.bits.read(11),
+		let sync = this.bits.read(11),
 			version = this.bits.read(2),
 			layer = this.bits.read(2),
 			hasCRC = !this.bits.read(1);
@@ -89,13 +89,13 @@ export class MP2 extends BaseDecoder {
 			return 0; // Invalid header or unsupported version
 		}
 
-		var bitrateIndex = this.bits.read(4) - 1;
+		let bitrateIndex = this.bits.read(4) - 1;
 		if (bitrateIndex > 13) {
 			return 0; // Invalid bit rate or 'free format'
 		}
 
-		var sampleRateIndex = this.bits.read(2);
-		var sampleRate = MP2.SAMPLE_RATE[sampleRateIndex];
+		let sampleRateIndex = this.bits.read(2);
+		let sampleRate = MP2.SAMPLE_RATE[sampleRateIndex];
 		if (sampleRateIndex === 3) {
 			return 0; // Invalid sample rate
 		}
@@ -103,12 +103,12 @@ export class MP2 extends BaseDecoder {
 			sampleRateIndex += 4;
 			bitrateIndex += 14;
 		}
-		var padding = this.bits.read(1),
+		let padding = this.bits.read(1),
 			privat = this.bits.read(1),
 			mode = this.bits.read(2);
 
 		// Parse the mode_extension, set up the stereo bound
-		var bound = 0;
+		let bound = 0;
 		if (mode === MP2.MODE.JOINT_STEREO) {
 			bound = (this.bits.read(2) + 1) << 2;
 		} else {
@@ -123,21 +123,21 @@ export class MP2 extends BaseDecoder {
 		}
 
 		// Compute the frame size
-		var bitrate = MP2.BIT_RATE[bitrateIndex],
-			sampleRate = MP2.SAMPLE_RATE[sampleRateIndex],
+		let bitrate = MP2.BIT_RATE[bitrateIndex],
+			// sampleRate = MP2.SAMPLE_RATE[sampleRateIndex],
 			frameSize = ((144000 * bitrate) / sampleRate + padding) | 0;
 
 		// Prepare the quantizer table lookups
-		var tab3 = 0;
-		var sblimit = 0;
+		let tab3 = 0;
+		let sblimit = 0;
 		if (version === MP2.VERSION.MPEG_2) {
 			// MPEG-2 (LSR)
 			tab3 = 2;
 			sblimit = 30;
 		} else {
 			// MPEG-1
-			var tab1 = mode === MP2.MODE.MONO ? 0 : 1;
-			var tab2 = MP2.QUANT_LUT_STEP_1[tab1][bitrateIndex];
+			let tab1 = mode === MP2.MODE.MONO ? 0 : 1;
+			let tab2 = MP2.QUANT_LUT_STEP_1[tab1][bitrateIndex];
 			tab3 = MP2.QUANT_LUT_STEP_2[tab2][sampleRateIndex];
 			sblimit = tab3 & 63;
 			tab3 >>= 6;
@@ -148,18 +148,18 @@ export class MP2 extends BaseDecoder {
 		}
 
 		// Read the allocation information
-		for (var sb = 0; sb < bound; sb++) {
+		for (let sb = 0; sb < bound; sb++) {
 			this.allocation[0][sb] = this.readAllocation(sb, tab3);
 			this.allocation[1][sb] = this.readAllocation(sb, tab3);
 		}
 
-		for (var sb = bound; sb < sblimit; sb++) {
+		for (let sb = bound; sb < sblimit; sb++) {
 			this.allocation[0][sb] = this.allocation[1][sb] = this.readAllocation(sb, tab3);
 		}
 
 		// Read scale factor selector information
-		var channels = mode === MP2.MODE.MONO ? 1 : 2;
-		for (var sb = 0; sb < sblimit; sb++) {
+		let channels = mode === MP2.MODE.MONO ? 1 : 2;
+		for (let sb = 0; sb < sblimit; sb++) {
 			for (ch = 0; ch < channels; ch++) {
 				if (this.allocation[ch][sb]) {
 					this.scaleFactorInfo[ch][sb] = this.bits.read(2);
@@ -171,10 +171,10 @@ export class MP2 extends BaseDecoder {
 		}
 
 		// Read scale factors
-		for (var sb = 0; sb < sblimit; sb++) {
-			for (var ch = 0; ch < channels; ch++) {
+		for (let sb = 0; sb < sblimit; sb++) {
+			for (let ch = 0; ch < channels; ch++) {
 				if (this.allocation[ch][sb]) {
-					var sf = this.scaleFactor[ch][sb];
+					let sf = this.scaleFactor[ch][sb];
 					switch (this.scaleFactorInfo[ch][sb]) {
 						case 0:
 							sf[0] = this.bits.read(6);
@@ -203,21 +203,21 @@ export class MP2 extends BaseDecoder {
 		}
 
 		// Coefficient input and reconstruction
-		var outPos = 0;
-		for (var part = 0; part < 3; part++) {
-			for (var granule = 0; granule < 4; granule++) {
+		let outPos = 0;
+		for (let part = 0; part < 3; part++) {
+			for (let granule = 0; granule < 4; granule++) {
 				// Read the samples
-				for (var sb = 0; sb < bound; sb++) {
+				for (let sb = 0; sb < bound; sb++) {
 					this.readSamples(0, sb, part);
 					this.readSamples(1, sb, part);
 				}
-				for (var sb = bound; sb < sblimit; sb++) {
+				for (let sb = bound; sb < sblimit; sb++) {
 					this.readSamples(0, sb, part);
 					this.sample[1][sb][0] = this.sample[0][sb][0];
 					this.sample[1][sb][1] = this.sample[0][sb][1];
 					this.sample[1][sb][2] = this.sample[0][sb][2];
 				}
-				for (var sb = sblimit; sb < 32; sb++) {
+				for (let sb = sblimit; sb < 32; sb++) {
 					this.sample[0][sb][0] = 0;
 					this.sample[0][sb][1] = 0;
 					this.sample[0][sb][2] = 0;
@@ -227,20 +227,20 @@ export class MP2 extends BaseDecoder {
 				}
 
 				// Synthesis loop
-				for (var p = 0; p < 3; p++) {
+				for (let p = 0; p < 3; p++) {
 					// Shifting step
 					this.VPos = (this.VPos - 64) & 1023;
 
-					for (var ch = 0; ch < 2; ch++) {
+					for (let ch = 0; ch < 2; ch++) {
 						this.MatrixTransform(this.sample[ch], p, this.V, this.VPos);
 
 						// Build U, windowing, calculate output
 						Fill(this.U, 0);
 
-						var dIndex = 512 - (this.VPos >> 1);
-						var vIndex = this.VPos % 128 >> 1;
+						let dIndex = 512 - (this.VPos >> 1);
+						let vIndex = this.VPos % 128 >> 1;
 						while (vIndex < 1024) {
-							for (var i = 0; i < 32; ++i) {
+							for (let i = 0; i < 32; ++i) {
 								this.U[i] += this.D[dIndex++] * this.V[vIndex++];
 							}
 
@@ -251,7 +251,7 @@ export class MP2 extends BaseDecoder {
 						vIndex = 128 - 32 + 1024 - vIndex;
 						dIndex -= 512 - 32;
 						while (vIndex < 1024) {
-							for (var i = 0; i < 32; ++i) {
+							for (let i = 0; i < 32; ++i) {
 								this.U[i] += this.D[dIndex++] * this.V[vIndex++];
 							}
 
@@ -260,8 +260,8 @@ export class MP2 extends BaseDecoder {
 						}
 
 						// Output samples
-						var outChannel = ch === 0 ? left : right;
-						for (var j = 0; j < 32; j++) {
+						let outChannel = ch === 0 ? left : right;
+						for (let j = 0; j < 32; j++) {
 							outChannel[outPos + j] = this.U[j] / 2147418112;
 						}
 					} // End of synthesis channel loop
@@ -274,14 +274,14 @@ export class MP2 extends BaseDecoder {
 		return frameSize;
 	};
 
-	readAllocation = function(sb, tab3) {
-		var tab4 = MP2.QUANT_LUT_STEP_3[tab3][sb];
-		var qtab = MP2.QUANT_LUT_STEP4[tab4 & 15][this.bits.read(tab4 >> 4)];
+	readAllocation = (sb, tab3) => {
+		let tab4 = MP2.QUANT_LUT_STEP_3[tab3][sb];
+		let qtab = MP2.QUANT_LUT_STEP4[tab4 & 15][this.bits.read(tab4 >> 4)];
 		return qtab ? MP2.QUANT_TAB[qtab - 1] : 0;
 	};
 
-	readSamples = function(ch, sb, part) {
-		var q = this.allocation[ch][sb],
+	readSamples = (ch, sb, part) => {
+		let q = this.allocation[ch][sb],
 			sf = this.scaleFactor[ch][sb][part],
 			sample = this.sample[ch][sb],
 			val = 0;
@@ -296,12 +296,12 @@ export class MP2 extends BaseDecoder {
 		if (sf === 63) {
 			sf = 0;
 		} else {
-			var shift = (sf / 3) | 0;
+			let shift = (sf / 3) | 0;
 			sf = (MP2.SCALEFACTOR_BASE[sf % 3] + ((1 << shift) >> 1)) >> shift;
 		}
 
 		// Decode samples
-		var adj = q.levels;
+		let adj = q.levels;
 		if (q.group) {
 			// Decode grouped samples
 			val = this.bits.read(q.bits);
@@ -317,7 +317,7 @@ export class MP2 extends BaseDecoder {
 		}
 
 		// Postmultiply samples
-		var scale = (65536 / (adj + 1)) | 0;
+		let scale = (65536 / (adj + 1)) | 0;
 		adj = ((adj + 1) >> 1) - 1;
 
 		val = (adj - sample[0]) * scale;
@@ -330,8 +330,8 @@ export class MP2 extends BaseDecoder {
 		sample[2] = (val * (sf >> 12) + ((val * (sf & 4095) + 2048) >> 12)) >> 12;
 	};
 
-	MatrixTransform = function(s, ss, d, dp) {
-		var t01,
+	MatrixTransform = (s, ss, d, dp) => {
+		let t01,
 			t02,
 			t03,
 			t04,

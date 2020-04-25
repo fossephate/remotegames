@@ -93,6 +93,7 @@ class Stream extends Component {
 		this.state = {};
 
 		this.inputHandler = new InputHandler();
+		this.inputHandler.init();
 		// todo:
 		window.inputHandler = this.inputHandler; // for lagless canvas
 	}
@@ -106,6 +107,34 @@ class Stream extends Component {
 		if (this.hostConnection) {
 			this.hostConnection.removeAllListeners();
 			this.hostConnection.destroy();
+		}
+
+		// if (this.props.controllerCount === 0 && this.props.settings.controllerView) {
+		// 	this.props.updateSettings({
+		// 		controllerView: false,
+		// 		largescreen: true,
+		// 		realKeyboardMouse: true,
+		// 	});
+		// } else if (this.props.controllerCount > 0 && !this.props.settings.controllerView) {
+		// 	this.props.updateSettings({
+		// 		controllerView: true,
+		// 		largescreen: false,
+		// 		realKeyboardMouse: false,
+		// 	});
+		// }
+
+		if (this.props.mouseEnabled && this.props.settings.controllerView) {
+			this.props.updateSettings({
+				controllerView: false,
+				largescreen: true,
+				realKeyboardMouse: true,
+			});
+		} else if (!this.props.mouseEnabled && !this.props.settings.controllerView) {
+			this.props.updateSettings({
+				controllerView: true,
+				largescreen: false,
+				realKeyboardMouse: false,
+			});
 		}
 
 		// if (!this.props.client.loggedIn) {
@@ -144,33 +173,27 @@ class Stream extends Component {
 
 		// lagless setup:
 
-		if (this.props.streamType === "mpeg2") {
+		if (this.props.videoType === "mpeg1") {
 			this.stream = new Lagless2({
 				url: `https://${data.videoServerIP}`,
 				path: `/${data.videoServerPort}/socket.io`,
 				audio: true,
 				video: true,
+				maxAudioLag: 0.5,
+				videoBufferSize: data.streamSettings.videoBufferSize * 1024,
+				audioBufferSize: data.streamSettings.audioBufferSize * 1024,
 			});
-		} else if (this.props.streamType === "webRTC") {
+		} else if (this.props.videoType === "webRTC") {
 			this.stream = new Lagless4({
 				url: `https://${data.videoServerIP}`,
 				path: `/${data.videoServerPort}/socket.io`,
 			});
 			this.stream.run();
 		} else {
-			alert("stream type error: " + this.props.streamType);
+			alert("video type error: " + this.props.videoType);
 		}
 
-		setTimeout(() => {
-			if (this.props.streamType === "mpeg2") {
-				this.stream.resume(
-					document.getElementById("videoCanvas"),
-					document.getElementById("graphicsCanvas"),
-				);
-			} else if (this.props.streamType === "webRTC") {
-				this.stream.resume(document.getElementById("videoCanvas"));
-			}
-		}, 500);
+		setTimeout(this.updateStreamCanvas, 1000);
 
 		window.stream = this.stream;
 		setTimeout(() => {
@@ -179,6 +202,25 @@ class Stream extends Component {
 		setTimeout(() => {
 			this.setStreamVolume(this.props);
 		}, 5000);
+	};
+
+	updateStreamCanvas = () => {
+		if (this.props.videoType === "mpeg1") {
+			this.stream.destroy();
+			// this.stream.player.stop();
+			// this.stream.pause();
+			// this.stream.restart(
+			// 	document.getElementById("videoCanvas"),
+			// 	document.getElementById("graphicsCanvas"),
+			// );
+			this.stream.resume(
+				document.getElementById("videoCanvas"),
+				document.getElementById("graphicsCanvas"),
+			);
+		} else if (this.props.videoType === "webRTC") {
+			this.stream.destroy();
+			this.stream.resume(document.getElementById("videoCanvas"));
+		}
 	};
 
 	getStreamInfo = (bypass) => {
@@ -328,11 +370,39 @@ class Stream extends Component {
 			// $("body").removeClass("hideScrollbar");
 			this.props.updateSettings({
 				fullscreen: false,
-				largescreen: false,
-				controllerView: true,
+				// largescreen: false,
+				// controllerView: true,
 				hideChat: false,
 				hideNav: false,
+				mobileMode: false,
+				touchControls: false,
 			});
+
+			// if (this.props.controllerCount === 0 && this.props.settings.controllerView) {
+			// 	this.props.updateSettings({
+			// 		controllerView: false,
+			// 		largescreen: true,
+			// 		realKeyboardMouse: true,
+			// 	});
+			// } else if (this.props.controllerCount > 0 && !this.props.settings.controllerView) {
+			// 	this.props.updateSettings({
+			// 		controllerView: true,
+			// 		largescreen: false,
+			// 		realKeyboardMouse: false,
+			// 	});
+			// }
+
+			if (this.props.settings.realKeyboardMouse && this.props.settings.controllerView) {
+				this.props.updateSettings({
+					controllerView: false,
+					largescreen: true,
+				});
+			} else if (!this.props.settings.realKeyboardMouse && !this.props.settings.controllerView) {
+				this.props.updateSettings({
+					controllerView: true,
+					largescreen: false,
+				});
+			}
 
 			// turn off mouse controls:
 			this.inputHandler.mouse.toggle(false);
@@ -448,13 +518,14 @@ class Stream extends Component {
 		obj.btns = obj.controller.btns;
 		obj.axes = obj.controller.axes;
 		obj.keys = obj.keyboard.keys;
+		// console.log(obj.keys);
 
 		// for (let i = 0; i < this.props.controlQueues.length; i++) {
 		// 	if (this.props.controlQueues[i][0] == this.props.client.userid) {
 		// 		obj.cNum = i;
 		// 	}
 		// }
-		if (obj.cNum == -1) {
+		if (obj.cNum === -1) {
 			obj.cNum = this.props.settings.currentPlayer;
 		}
 
@@ -481,6 +552,7 @@ class Stream extends Component {
 			);
 		} else {
 			// console.log(obj.keys, obj.mouse, Math.random().toFixed(3));
+			// console.log(obj.mouse);
 		}
 
 		// let s1x = getStickString(obj.axes[0]);
@@ -496,9 +568,9 @@ class Stream extends Component {
 
 	setStreamVolume = (props) => {
 		if (this.stream) {
-			if (this.props.streamType === "mpeg2") {
+			if (this.props.videoType === "mpeg1") {
 				this.stream.player.volume = props.settings.volume / 100;
-			} else if (this.props.streamType === "webRTC") {
+			} else if (this.props.videoType === "webRTC") {
 			}
 		}
 	};
@@ -518,6 +590,12 @@ class Stream extends Component {
 		}
 
 		if (this.props.settings.hideChat != nextProps.settings.hideChat) {
+			return true;
+		}
+
+		if (this.props.settings.controllerView != nextProps.settings.controllerView) {
+			// window.stream2 = this;
+			setTimeout(this.updateStreamCanvas, 500);
 			return true;
 		}
 
@@ -597,8 +675,11 @@ const mapStateToProps = (state) => {
 		client: state.client,
 		settings: state.settings,
 		playerCount: state.stream.players.count,
-		streamType: state.stream.info.streamType,
 		streamOnline: state.stream.info.online,
+		videoType: state.stream.info.streamSettings.videoType,
+		controllerCount: state.stream.info.streamSettings.controllerCount,
+		mouseEnabled: state.stream.info.streamSettings.mouseEnabled,
+		keyboardEnabled: state.stream.info.streamSettings.keyboardEnabled,
 	};
 };
 

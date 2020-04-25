@@ -14,7 +14,7 @@ import { withStyles } from "@material-ui/core/styles";
 // icons:
 // import KeyboardIcon from "@material-ui/icons/Keyboard";
 // import VideogameAssetIcon from "@material-ui/icons/VideogameAsset";
-import SettingsIcon from "@material-ui/icons/Settings";
+import { Settings as SettingsIcon, Sync as SyncIcon } from "@material-ui/icons";
 // import { KeyboardIcon, VideogameAssetIcon} from "@material-ui/icons";
 import { Paper, Button } from "@material-ui/core";
 
@@ -85,6 +85,18 @@ class LaglessBar extends PureComponent {
 					{"Controls "}
 					<KeyboardIcon />|<VideogameAssetIcon />
 				</Button> */}
+
+				{this.props.videoType === "mpeg1" && (
+					<Button
+						variant="contained"
+						color="primary"
+						onClick={() => {
+							window.stream.player.audio.destination.resetEnqueuedTime();
+						}}
+					>
+						Sync Audio <SyncIcon />
+					</Button>
+				)}
 				<Button
 					variant="contained"
 					color="primary"
@@ -106,6 +118,7 @@ const mapStateToProps = (state) => {
 	return {
 		volume: state.settings.volume,
 		accountMap: state.stream.accountMap,
+		videoType: state.stream.info.videoType,
 	};
 };
 

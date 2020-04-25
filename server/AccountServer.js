@@ -7,6 +7,7 @@ const config = require("./config.js");
 
 const VideoServerClient = require("./client.js").VideoServerClient;
 const HostServerClient = require("./client.js").HostServerClient;
+const MachineServerClient = require("./client.js").MachineServerClient;
 
 const session = require("express-session");
 const passport = require("passport");
@@ -34,7 +35,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // mongoose:
-const mongodb = require("mongodb");
 const mongoose = require("mongoose");
 
 let mongoURL = "mongodb://localhost:27017/db";
@@ -48,7 +48,6 @@ const redis = require("redis");
 bluebird.promisifyAll(redis);
 let redisClient = redis.createClient({ host: "localhost", port: 6379 });
 
-let useridToSocketidMap = {};
 let masterAccountMap = {};
 let localizedAccountMaps = {};
 
@@ -188,6 +187,8 @@ let accountSchema = mongoose.Schema({
 	hostServerSocketid: String,
 	hostServerIP: String,
 	hostServerPort: Number,
+	machineServerIP: String,
+	machineServerPort: Number,
 
 	directMessages: {
 		// sorted by userid, with lists of messages:
@@ -218,10 +219,14 @@ let accountSchema = mongoose.Schema({
 		audioBufferSize: Number,
 		groupOfPictures: Number,
 
+		playerCount: Number,
 		controllerCount: Number,
 		keyboardEnabled: Boolean,
 		mouseEnabled: Boolean,
-		streamType: String, // "webRTC" or "mpeg2"
+		videoType: String, // "webRTC" or "mpeg1"
+		allowGuests: Boolean,
+		friendsOnly: Boolean,
+
 	},
 
 	sublist: [],
@@ -232,6 +237,8 @@ let accountSchema = mongoose.Schema({
 		mod: [],
 		plus: [],
 		banned: [],
+		friends: [],
+		friendRequests: [],
 	},
 
 	bannedIPs: [],
@@ -708,6 +715,7 @@ server.listen(port, () => {
 
 let videoServers = {};
 let hostServers = {};
+let machineServers = {};
 
 function sendVerifyEmail(email, authToken) {
 	mailOptions.to = email;
@@ -1311,7 +1319,9 @@ io.on("connection", (socket) => {
 							hostServerPort: account.hostServerPort,
 							videoServerIP: account.videoServerIP,
 							videoServerPort: account.videoServerPort,
-							streamType: account.streamSettings.streamType || "mpeg2",
+							streamSettings: { ...account.streamSettings },
+							// videoType: account.streamSettings.videoType || "mpeg1",
+							// controllerCount: account.streamSettings.controllerCount,
 						});
 					} else {
 						cb({ success: false, reason: "ACCOUNT_NOT_STREAMING" });
@@ -1518,6 +1528,10 @@ io.on("connection", (socket) => {
 			io.to(account.hostServerSocketid).emit("stopHost", {
 				port: account.hostServerPort,
 			});
+
+			// remove the localized accountMap:
+			// 4/10/20
+			delete localizedAccountMaps[socket.id];
 		});
 	});
 
@@ -1619,6 +1633,14 @@ io.on("connection", (socket) => {
 			return;
 		}
 		hostServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
+		synchronizeServers();
+	});
+
+	socket.on("registerMachineServer", (data) => {
+		if (data.secret !== config.ROOM_SECRET) {
+			return;
+		}
+		machineServers[socket.id] = new MachineServerClient(socket, data.ip, data.ports);
 		synchronizeServers();
 	});
 
@@ -2008,11 +2030,13 @@ Account.findOne({ username: "fosse" }).exec((error, account) => {
 	}
 
 	// update account info:
-	account.isStreaming = true;
+	account.isStreaming = false;
 	account.streamKey = "a";
 	account.streamSettings.streamTitle = "Nintendo Switch";
 	account.streamSettings.description = "";
 	account.streamSettings.thumbnailURL = "https://i.imgur.com/Negv09l.jpg";
+	account.streamSettings.videoType = "mpeg1";
+	account.streamSettings.playerCount = 4;
 
 	// update the account details:
 	account.save((error) => {

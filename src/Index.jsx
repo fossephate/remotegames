@@ -21,11 +21,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
 
-// notistack:
-import { SnackbarProvider } from "notistack";
+
 
 // components:
 import Loading from "shared/components/general/Loading.jsx";
+import MyAlert from "shared/components/general/MyAlert.jsx";
 
 const About = lazy(() => import("src/About.jsx"));
 const FAQ = lazy(() => import("src/FAQ.jsx"));
@@ -33,6 +33,9 @@ const ToS = lazy(() => import("src/ToS.jsx"));
 const Privacy = lazy(() => import("src/Privacy.jsx"));
 const Streams = lazy(() => import("src/Streams.jsx"));
 const Stream = lazy(() => import("src/Stream.jsx"));
+
+// notistack:
+import { SnackbarProvider } from "notistack";
 
 // redux:
 import { Provider } from "react-redux";
@@ -65,7 +68,13 @@ class Index extends Component {
 			stream: {
 				info: {
 					online: false,
-					streamType: "mpeg2",
+					// videoType: "mpeg1",
+					// controllerCount: 1,
+					streamSettings: {
+						videoType: "mpeg1",
+						controllerCount: 1,
+						playerCount: 4,
+					},
 				},
 				chat: {
 					messages: [],
@@ -75,7 +84,6 @@ class Index extends Component {
 					controlQueues: [],
 					turnTimers: [],
 					controllerStates: [],
-					count: 8,
 				},
 				time: {
 					server: 0, // server time (in ms)
@@ -112,7 +120,7 @@ class Index extends Component {
 				touchControls: false,
 				mobileMode: false,
 				realKeyboardMouse: false,
-				controllerView: true,
+				controllerView: false,
 				fullscreen: false,
 				largescreen: false,
 				hideChat: false,
@@ -123,14 +131,14 @@ class Index extends Component {
 				TDSConfig: false,
 
 				currentPlayer: 0,
-				volume: 0,
+				volume: 50,
 				theme: "dark",
 			},
 
 			form: {},
 		};
 
-		for (let i = 0; i < preloadedState.stream.players.count; i++) {
+		for (let i = 0; i < /*preloadedState.stream.info.streamSettings.controllerCount*/20; i++) {
 			preloadedState.stream.players.turnTimers.push({
 				turnStartTime: 0,
 				forfeitStartTime: 0,
@@ -392,6 +400,7 @@ class Index extends Component {
 										}}
 									/>
 								</Switch>
+								<MyAlert />
 							</Suspense>
 						</BrowserRouter>
 					</SnackbarProvider>

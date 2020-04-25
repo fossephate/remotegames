@@ -66,19 +66,19 @@ class CheckboxSettings extends PureComponent {
 					</ListItem>
 					<ListItem>
 						<MyCheckbox
-							text={"Enable Largescreen Mode"}
+							text={"Show Controller View"}
 							handleChange={(state) => {
-								this.props.updateSettings({ largescreen: state });
-								if (state && this.props.settings.controllerView) {
-									this.props.updateSettings({ controllerView: false });
-								} else if (!state && !this.props.settings.controllerView) {
-									this.props.updateSettings({ controllerView: true });
+								this.props.updateSettings({ controllerView: state });
+								if (state && this.props.settings.largescreen) {
+									this.props.updateSettings({ largescreen: false });
+								} else if (!state && !this.props.settings.largescreen) {
+									this.props.updateSettings({ largescreen: true });
 								}
 								setTimeout(() => {
 									window.dispatchEvent(new Event("resize"));
 								}, 200);
 							}}
-							checked={this.props.settings.largescreen}
+							checked={this.props.settings.controllerView}
 						/>
 					</ListItem>
 					<ListItem>

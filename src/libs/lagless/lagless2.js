@@ -10,6 +10,7 @@ export default class Lagless2 {
 		this.options = {
 			videoBufferSize: 512 * 1024, // 256kb (256 * 1024)
 			audioBufferSize: 128 * 1024, // 128kb (128 * 1024)
+			maxAudioLag: 0.25,
 			...options,
 		};
 
@@ -78,11 +79,21 @@ export default class Lagless2 {
 			canvas: this.videoCanvas,
 			videoBufferSize: this.options.videoBufferSize,
 			audioBufferSize: this.options.audioBufferSize,
-			maxAudioLag: this.options.maxAudioLag || 0.25, // 0.25
+			maxAudioLag: this.options.maxAudioLag,
 			onVideoDecode: onVideoDecode,
 			audio: !!this.options.audio,
 			video: !!this.options.video,
 			path: this.options.path,
 		});
+	};
+
+	restart = (videoCanvas, graphicsCanvas) => {
+		if (!this.videoCanvas) {
+			this.resume(videoCanvas, graphicsCanvas);
+			return;
+		}
+		this.player.video.destination.canvas = videoCanvas;
+		this.graphicsCanvas = graphicsCanvas;
+		this.context = this.graphicsCanvas.getContext("2d");
 	};
 }

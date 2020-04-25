@@ -29,7 +29,7 @@ class LaglessCanvas extends PureComponent {
 	}
 
 	handleClick = () => {
-		if (!window.inputHandler.mouse.settings.enabled) {
+		if (this.props.loggedIn && !window.inputHandler.mouse.settings.enabled) {
 			this.setState({ alertOpen: true });
 		}
 	};
@@ -43,22 +43,24 @@ class LaglessCanvas extends PureComponent {
 		this.setState({ alertOpen: false });
 
 		// let id = null;
-		// if (this.props.streamType === "mpeg2") {
+		// if (this.props.videoType === "mpeg1") {
 		// 	id = "canvas";
-		// } else if (this.props.streamType === "webRTC") {
+		// } else if (this.props.videoType === "webRTC") {
 		// 	id = "video";
 		// }
 		// window.inputHandler.mouse.init(document.getElementById(id));
 
 		window.inputHandler.mouse.init(this.graphicsCanvasRef.current);
 		window.inputHandler.mouse.toggle(true);
+		window.inputHandler.keyboard.init();
+		window.inputHandler.keyboard.toggle(true);
 	};
 
 	render() {
 		const { classes } = this.props;
 
 		let videoCanvas = null;
-		if (this.props.streamType === "mpeg2") {
+		if (this.props.videoType === "mpeg1") {
 			videoCanvas = (
 				<canvas
 					id="videoCanvas"
@@ -67,7 +69,7 @@ class LaglessCanvas extends PureComponent {
 					// ref={this.videoRef}
 				/>
 			);
-		} else if (this.props.streamType === "webRTC") {
+		} else if (this.props.videoType === "webRTC") {
 			videoCanvas = (
 				<video
 					id="videoCanvas"
@@ -99,8 +101,7 @@ class LaglessCanvas extends PureComponent {
 					<DialogTitle id="alert-dialog-title">{"Activate Mouse Controls?"}</DialogTitle>
 					<DialogContent>
 						<DialogContentText id="alert-dialog-description">
-							By default, the mouse will move the right stick, you can remap and change
-							settings for it in the remap menu.
+							Enabling this will let you control the stream with your mouse.
 						</DialogContentText>
 					</DialogContent>
 					<DialogActions>
@@ -124,7 +125,8 @@ class LaglessCanvas extends PureComponent {
 
 const mapStateToProps = (state) => {
 	return {
-		streamType: state.stream.info.streamType,
+		videoType: state.stream.info.streamSettings.videoType,
+		loggedIn: state.client.loggedIn,
 	};
 };
 
