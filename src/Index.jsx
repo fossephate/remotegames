@@ -120,7 +120,7 @@ class Index extends Component {
 				touchControls: false,
 				mobileMode: false,
 				realKeyboardMouse: false,
-				controllerView: false,
+				controllerView: true,
 				fullscreen: false,
 				largescreen: false,
 				hideChat: false,

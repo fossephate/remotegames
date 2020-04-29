@@ -1,6 +1,7 @@
 const MachineServer = require("./MachineServer.js").MachineServer;
 const socketioClient = require("socket.io-client");
 const config = require("./config.js");
+const MAX_MACHINES = 10;
 
 // some global variables:
 // all host servers:
@@ -10,23 +11,11 @@ let hostServers = {};
 // let ip = "34.203.73.220";
 let ip = "remotegames.io";
 // available ports on this server, true means it's available
-let ports = {
-	8050: true,
-	8051: true,
-	8052: true,
-	8053: true,
-	8054: true,
-	8055: true,
-	8056: true,
-	8057: true,
-	8058: true,
-	8059: true,
-	8060: true,
-	8061: true,
-	8062: true,
-	8063: true,
-	8064: true,
-};
+let ports = {};
+
+for (let i = 0; i < MAX_MACHINES; i++) {
+	ports[i] = true;
+}
 
 // start connection with the account server (same server in this case):
 let accountConnection = socketioClient("https://remotegames.io", {
@@ -35,7 +24,7 @@ let accountConnection = socketioClient("https://remotegames.io", {
 });
 
 function register() {
-	accountConnection.emit("registerHostServer", {
+	accountConnection.emit("registerMachineServer", {
 		secret: config.ROOM_SECRET,
 		ip: ip,
 		ports: ports,
@@ -43,7 +32,7 @@ function register() {
 }
 setInterval(register, 1000 * 60);
 
-accountConnection.on("startHost", (data) => {
+accountConnection.on("startMachine", (data) => {
 	if (!ports[data.port]) {
 		console.log("something went wrong, this port is not available!");
 		return;
@@ -54,7 +43,7 @@ accountConnection.on("startHost", (data) => {
 	register();
 
 	// start:
-	hostServers[data.port] = new HostServer({
+	hostServers[data.port] = new MachineServer({
 		socket: accountConnection,
 		port: data.port,
 		videoIP: data.videoIP,
@@ -67,7 +56,7 @@ accountConnection.on("startHost", (data) => {
 	hostServers[data.port].init();
 });
 
-accountConnection.on("stopHost", (data) => {
+accountConnection.on("stopMachine", (data) => {
 	if (ports[data.port]) {
 		console.log("something went wrong, this port wasn't set as unavailable!");
 		return;

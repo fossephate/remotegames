@@ -138,8 +138,6 @@ class HostServer {
 		}
 
 		// return if not in the queue:
-		console.log(cNum);
-		console.log(this.controlQueues);
 		let index = this.controlQueues[cNum].indexOf(client.userid);
 		if (index === -1) {
 			return;

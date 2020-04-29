@@ -847,7 +847,7 @@ class Index extends _react.Component {
         touchControls: false,
         mobileMode: false,
         realKeyboardMouse: false,
-        controllerView: false,
+        controllerView: true,
         fullscreen: false,
         largescreen: false,
         hideChat: false,
@@ -1699,7 +1699,7 @@ class Stream extends _react.Component {
     }
 
     if (this.props.settings.controllerView != nextProps.settings.controllerView) {
-      // window.stream2 = this;
+      this.inputHandler.mouse.toggle(false);
       setTimeout(this.updateStreamCanvas, 500);
       return true;
     }
@@ -3577,7 +3577,7 @@ const mapStateToProps = state => {
   return {
     volume: state.settings.volume,
     accountMap: state.stream.accountMap,
-    videoType: state.stream.info.videoType
+    videoType: state.stream.info.streamSettings.videoType
   };
 };
 
@@ -5135,6 +5135,7 @@ class QueueButton extends _react.PureComponent {
       }
 
       if (this.props.controlQueue.indexOf(this.props.userid) > -1) {
+        window.inputHandler.mouse.toggle(false);
         this.props.joinLeavePlayerControlQueue({
           cNum: this.props.num,
           joinLeave: "leave"
@@ -16891,7 +16892,7 @@ class VirtualMouse {
 
     _defineProperty(this, "getMouseInput3", event => {
       this.changed = true;
-      this.mstate.scroll -= event.deltaY / 10;
+      this.mstate.scroll -= event.deltaY * this.settings.axes[2].sensitivity;
       event.preventDefault();
     });
 
@@ -17011,7 +17012,7 @@ class VirtualMouse {
       relativeMode: false,
       axes: [// new AxisSettings(0.08, 0, 0), // 15
       // new AxisSettings(0.08, 0, 0),
-      new _VirtualController.AxisSettings(0.0006, 0, 0), new _VirtualController.AxisSettings(0.0006, 0, 0)],
+      new _VirtualController.AxisSettings(0.0006, 0, 0), new _VirtualController.AxisSettings(0.0006, 0, 0), new _VirtualController.AxisSettings(0.05, 0, 0)],
       map: {
         buttons: ["zr", "x", "zl"]
       }

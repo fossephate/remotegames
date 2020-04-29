@@ -33,6 +33,7 @@ class QueueButton extends PureComponent {
 			return;
 		}
 		if (this.props.controlQueue.indexOf(this.props.userid) > -1) {
+			window.inputHandler.mouse.toggle(false);
 			this.props.joinLeavePlayerControlQueue({
 				cNum: this.props.num,
 				joinLeave: "leave",

@@ -594,7 +594,7 @@ class Stream extends Component {
 		}
 
 		if (this.props.settings.controllerView != nextProps.settings.controllerView) {
-			// window.stream2 = this;
+			this.inputHandler.mouse.toggle(false);
 			setTimeout(this.updateStreamCanvas, 500);
 			return true;
 		}

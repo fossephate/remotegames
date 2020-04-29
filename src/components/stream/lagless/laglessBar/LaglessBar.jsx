@@ -118,7 +118,7 @@ const mapStateToProps = (state) => {
 	return {
 		volume: state.settings.volume,
 		accountMap: state.stream.accountMap,
-		videoType: state.stream.info.videoType,
+		videoType: state.stream.info.streamSettings.videoType,
 	};
 };
 
