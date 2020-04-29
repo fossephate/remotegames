@@ -9,7 +9,7 @@ const MAX_MACHINES = 10;
 let machineServers = {};
 // this server's IP address:
 // let ip = "34.203.73.220";
-let ip = "remotegames.io";
+let ip = "no-public-ip";
 // available ports on this server, true means it's available
 let ports = {};
 
@@ -46,12 +46,15 @@ accountConnection.on("start", (data) => {
 	machineServers[data.port] = new MachineServer({
 		socket: accountConnection,
 		port: data.port,
-		videoIP: data.videoIP,
-		videoPort: data.videoPort,
-		streamKey: data.streamKey,
-		hostUserid: data.hostUserid,
+		// videoIP: data.videoIP,
+		// videoPort: data.videoPort,
+		// streamKey: data.streamKey,
+		// hostUserid: data.hostUserid,
+		// todo: replace with streamKey
+		authToken: data.authToken,
 		secret: config.ROOM_SECRET,
 		settings: data.settings,
+		streamSettings: data.streamSettings,
 	});
 	machineServers[data.port].init();
 });

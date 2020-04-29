@@ -37,7 +37,7 @@ class MachineServer {
 
 	init = () => {
 		this.io.listen(this.port, () => {
-			console.log("Video server listening at port %d", port);
+			console.log("Machine server listening at port %d", port);
 		});
 
 		this.io.on("connection", (socket) => {
@@ -54,4 +54,4 @@ class MachineServer {
 	};
 }
 
-module.exports.VideoServer = VideoServer;
+module.exports.MachineServer = MachineServer;

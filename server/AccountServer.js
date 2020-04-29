@@ -1634,6 +1634,7 @@ io.on("connection", (socket) => {
 
 			// if server candidates weren't found
 			if (!servers.host || !servers.video || !servers.machine) {
+				console.log(servers);
 				cb({
 					success: false,
 					reason: "NO_AVAILABLE_PORTS",
@@ -1660,8 +1661,8 @@ io.on("connection", (socket) => {
 			});
 
 			// update account info:
-			account.isStreaming = true;
-			account.streamKey = videoStreamKey;
+			// account.isStreaming = true;
+			// account.streamKey = videoStreamKey;
 			account.machineServerSocketid = servers.machine.sid;
 			account.machineServerIP = servers.machine.ip;
 			account.machineServerPort = servers.machine.port;
@@ -1898,6 +1899,9 @@ io.on("connection", (socket) => {
 		if (hostServers.hasOwnProperty(socket.id)) {
 			delete hostServers[socket.id];
 		}
+		if (machineServers.hasOwnProperty(socket.id)) {
+			delete machineServers[socket.id];
+		}
 	});
 
 	// on connect:
@@ -2093,7 +2097,7 @@ function findAvailableServers(hostServers, videoServers, machineServers) {
 function synchronizeServers() {
 	// go through the stream list:
 	// console.log("SYNCHRONIZING");
-	console.log(Object.keys(hostServers), Object.keys(videoServers));
+	console.log(Object.keys(hostServers), Object.keys(videoServers), Object.keys(machineServers));
 
 	// go through all of the accounts that should have a host/video server running:
 	Account.find({ isStreaming: true })
