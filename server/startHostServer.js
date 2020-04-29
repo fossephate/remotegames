@@ -43,7 +43,7 @@ function register() {
 }
 setInterval(register, 1000 * 60);
 
-accountConnection.on("startHost", (data) => {
+accountConnection.on("start", (data) => {
 	if (!ports[data.port]) {
 		console.log("something went wrong, this port is not available!");
 		return;
@@ -67,7 +67,7 @@ accountConnection.on("startHost", (data) => {
 	hostServers[data.port].init();
 });
 
-accountConnection.on("stopHost", (data) => {
+accountConnection.on("stop", (data) => {
 	if (ports[data.port]) {
 		console.log("something went wrong, this port wasn't set as unavailable!");
 		return;

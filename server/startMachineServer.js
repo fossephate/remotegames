@@ -6,7 +6,7 @@ const MAX_MACHINES = 10;
 // some global variables:
 // all host servers:
 // keyed by port:
-let hostServers = {};
+let machineServers = {};
 // this server's IP address:
 // let ip = "34.203.73.220";
 let ip = "remotegames.io";
@@ -32,7 +32,7 @@ function register() {
 }
 setInterval(register, 1000 * 60);
 
-accountConnection.on("startMachine", (data) => {
+accountConnection.on("start", (data) => {
 	if (!ports[data.port]) {
 		console.log("something went wrong, this port is not available!");
 		return;
@@ -43,7 +43,7 @@ accountConnection.on("startMachine", (data) => {
 	register();
 
 	// start:
-	hostServers[data.port] = new MachineServer({
+	machineServers[data.port] = new MachineServer({
 		socket: accountConnection,
 		port: data.port,
 		videoIP: data.videoIP,
@@ -53,10 +53,10 @@ accountConnection.on("startMachine", (data) => {
 		secret: config.ROOM_SECRET,
 		settings: data.settings,
 	});
-	hostServers[data.port].init();
+	machineServers[data.port].init();
 });
 
-accountConnection.on("stopMachine", (data) => {
+accountConnection.on("stop", (data) => {
 	if (ports[data.port]) {
 		console.log("something went wrong, this port wasn't set as unavailable!");
 		return;

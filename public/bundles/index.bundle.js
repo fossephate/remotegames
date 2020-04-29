@@ -888,7 +888,8 @@ class Index extends _react.Component {
     this.accountConnection = (0, _socket.default)("https://remotegames.io", {
       path: "/8099/socket.io",
       transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"]
-    }); // listen to events and dispatch actions:
+    });
+    window.accountConnection = this.accountConnection; // listen to events and dispatch actions:
 
     (0, _index2.default)(this.accountConnection, this.store.dispatch); // handle outgoing events & listen to actions:
     // and maybe dispatch more actions:

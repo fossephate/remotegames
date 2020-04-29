@@ -165,6 +165,8 @@ class Index extends Component {
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 		});
 
+		window.accountConnection = this.accountConnection;
+
 		// listen to events and dispatch actions:
 		handleAccountEvents(this.accountConnection, this.store.dispatch);
 

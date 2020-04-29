@@ -226,7 +226,6 @@ let accountSchema = mongoose.Schema({
 		videoType: String, // "webRTC" or "mpeg1"
 		allowGuests: Boolean,
 		friendsOnly: Boolean,
-
 	},
 
 	sublist: [],
@@ -1371,7 +1370,7 @@ io.on("connection", (socket) => {
 			}
 
 			// find available host and video servers / ports:
-			let servers = findAvailableServers(hostServers, videoServers);
+			let servers = findAvailableServers(hostServers, videoServers, machineServers);
 
 			// if server candidates weren't found
 			if (!servers.host || !servers.video) {
@@ -1402,12 +1401,12 @@ io.on("connection", (socket) => {
 				streamKey: videoStreamKey,
 			});
 			// send to videoServer:
-			io.to(servers.video.sid).emit("startVideo", {
+			io.to(servers.video.sid).emit("start", {
 				port: servers.video.port,
 				streamKey: videoStreamKey,
 			});
 			// send to hostServer:
-			io.to(servers.host.sid).emit("startHost", {
+			io.to(servers.host.sid).emit("start", {
 				hostUserid: ("" + account._id).trim(),
 				port: servers.host.port,
 				streamKey: videoStreamKey,
@@ -1522,10 +1521,10 @@ io.on("connection", (socket) => {
 			}
 
 			// send stop requests:
-			io.to(account.videoServerSocketid).emit("stopVideo", {
+			io.to(account.videoServerSocketid).emit("stop", {
 				port: account.videoServerPort,
 			});
-			io.to(account.hostServerSocketid).emit("stopHost", {
+			io.to(account.hostServerSocketid).emit("stop", {
 				port: account.hostServerPort,
 			});
 
@@ -1578,12 +1577,187 @@ io.on("connection", (socket) => {
 			}
 
 			// send stop requests:
-			io.to(account.videoServerSocketid).emit("stopVideo", {
+			io.to(account.videoServerSocketid).emit("stop", {
 				port: account.videoServerPort,
 			});
-			io.to(account.hostServerSocketid).emit("stopHost", {
+			io.to(account.hostServerSocketid).emit("stop", {
 				port: account.hostServerPort,
 			});
+		});
+	});
+
+	socket.on("startMachine", (data, cb) => {
+		// let reply = { socketid: data.socketid };
+		if (!cb) {
+			console.log("no callback (startMachine)");
+			return;
+		}
+
+		if (typeof data !== "object") {
+			return;
+		}
+
+		if (!data.authToken) {
+			cb({
+				success: false,
+				reason: "NOT_LOGGED_IN",
+			});
+			return;
+		}
+
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				cb({
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			if (account.isStreaming) {
+				console.log("already streaming!");
+				cb({
+					success: false,
+					reason: "ALREADY_STREAMING",
+				});
+				return;
+			}
+
+			// find available host and video servers / ports:
+			let servers = findAvailableServers(hostServers, videoServers, machineServers);
+
+			// if server candidates weren't found
+			if (!servers.host || !servers.video || !servers.machine) {
+				cb({
+					success: false,
+					reason: "NO_AVAILABLE_PORTS",
+				});
+				return;
+			}
+
+			// set ports as in use:
+			machineServers[servers.machine.sid].ports[servers.machine.port] = true;
+
+			videoServers[servers.video.sid].ports[servers.video.port] = true;
+			hostServers[servers.host.sid].ports[servers.host.port] = true;
+
+			// send to client:
+			cb({
+				success: true,
+			});
+			// send to machineServer:
+			io.to(servers.video.sid).emit("start", {
+				port: servers.machine.port,
+				// todo: replace with streamKey for better security:
+				authToken: account.authToken,// needs authToken to re-authenticate with the server,
+				streamSettings: account.streamSettings,
+			});
+
+			// update account info:
+			account.isStreaming = true;
+			account.streamKey = videoStreamKey;
+			account.machineServerSocketid = servers.machine.sid;
+			account.machineServerIP = servers.machine.ip;
+			account.machineServerPort = servers.machine.port;
+			// stream settings:
+			// for (let key in account.streamSettings) {
+			// 	account.streamSettings[key] = data.streamSettings[key];
+			// }
+
+			// update the account details:
+			account.save((error) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+				// re-generate stream list:
+				generateStreamList();
+			});
+		});
+	});
+
+	socket.on("stopMachine", (data, cb) => {
+		// let reply = { socketid: data.socketid };
+		if (!cb) {
+			console.log("no callback (stopMachine)");
+			return;
+		}
+
+		console.log("STOPPING_MACHINE");
+
+		// try and get account by authToken:
+		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				cb({
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			if (!account.isStreaming) {
+				cb({
+					success: false,
+					reason: "WAS_NOT_STREAMING",
+				});
+				return;
+			}
+
+			// update account info:
+			account.isStreaming = false;
+			// update the account details:
+			account.save((error) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+				cb({
+					success: true,
+				});
+				// re-generate stream list:
+				generateStreamList();
+			});
+
+			// stop the host and video servers:
+
+			// set ports as available:
+			if (videoServers[account.videoServerSocketid]) {
+				videoServers[account.videoServerSocketid].ports[account.videoServerPort] = true;
+			}
+			if (hostServers[account.hostServerSocketid]) {
+				hostServers[account.hostServerSocketid].ports[account.hostServerPort] = true;
+			}
+			if (machineServers[account.machineServerSocketid]) {
+				machineServers[account.machineServerSocketid].ports[
+					account.machineServerPort
+				] = true;
+			}
+
+			// send stop requests:
+			io.to(account.videoServerSocketid).emit("stop", {
+				port: account.videoServerPort,
+			});
+			io.to(account.hostServerSocketid).emit("stop", {
+				port: account.hostServerPort,
+			});
+			io.to(account.machineServerSocketid).emit("stop", {
+				port: account.hostServerPort,
+			});
+
+			// remove the localized accountMap:
+			// 4/10/20
+			delete localizedAccountMaps[socket.id];
 		});
 	});
 
@@ -1637,9 +1811,10 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("registerMachineServer", (data) => {
-		if (data.secret !== config.ROOM_SECRET) {
-			return;
-		}
+		// if (data.secret !== config.ROOM_SECRET) {
+		// 	return;
+		// }
+		console.log("ROOM_SECRET auth is turned off!");
 		machineServers[socket.id] = new MachineServerClient(socket, data.ip, data.ports);
 		synchronizeServers();
 	});
@@ -1805,7 +1980,7 @@ function generateStreamList() {
 }
 
 // find available videoServer / port combo:
-function findAvailableServers(hostServers, videoServers) {
+function findAvailableServers(hostServers, videoServers, machineServers) {
 	let videoIP = null;
 	let videoPort = null;
 	let videoSID = null;
@@ -1856,6 +2031,31 @@ function findAvailableServers(hostServers, videoServers) {
 		}
 	}
 
+	// look for available host server port:
+	let machineIP = null;
+	let machinePort = null;
+	let machineSID = null;
+
+	if (machineServers) {
+		// look for available host server port:
+		for (let sid in machineServers) {
+			let server = machineServers[sid];
+
+			for (let port in server.ports) {
+				// check if the port is available:
+				if (server.ports[port]) {
+					machineIP = machineServers[sid].ip;
+					machinePort = port;
+					machineSID = sid;
+					break;
+				}
+			}
+			if (machinePort != null) {
+				break;
+			}
+		}
+	}
+
 	// if (!videoPort) {
 	// 	console.log("open video server wasn't found!");
 	// }
@@ -1877,6 +2077,13 @@ function findAvailableServers(hostServers, videoServers) {
 			ip: videoIP,
 			port: videoPort,
 			sid: videoSID,
+		};
+	}
+	if (machinePort) {
+		info.machine = {
+			ip: machineIP,
+			port: machinePort,
+			sid: machineSID,
 		};
 	}
 	return info;
@@ -1947,7 +2154,7 @@ function synchronizeServers() {
 					account.hostServerIP = server.host.ip;
 					account.hostServerPort = server.host.port;
 					// send to hostServer:
-					io.to(server.host.sid).emit("startHost", {
+					io.to(server.host.sid).emit("start", {
 						hostUserid: ("" + account._id).trim(),
 						port: server.host.port,
 						streamKey: account.streamKey,
@@ -1963,7 +2170,7 @@ function synchronizeServers() {
 					account.videoServerIP = server.video.ip;
 					account.videoServerPort = server.video.port;
 					// send to videoServer:
-					io.to(server.video.sid).emit("startVideo", {
+					io.to(server.video.sid).emit("start", {
 						port: server.video.port,
 						streamKey: account.streamKey,
 					});

@@ -40,7 +40,7 @@ function register() {
 }
 setInterval(register, 1000 * 60);
 
-accountConnection.on("startVideo", (data) => {
+accountConnection.on("start", (data) => {
 	// make sure the port is available:
 
 	if (!ports[data.port]) {
@@ -60,7 +60,7 @@ accountConnection.on("startVideo", (data) => {
 	videoServers[data.port].init();
 });
 
-accountConnection.on("stopVideo", (data) => {
+accountConnection.on("stop", (data) => {
 	if (ports[data.port]) {
 		console.log("something went wrong, this port wasn't set as unavailable!");
 		// return;
