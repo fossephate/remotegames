@@ -199,8 +199,8 @@ let accountSchema = mongoose.Schema({
 		description: String,
 		thumbnailURL: String,
 
-		videoBitrate: Number,
-		audioBitrate: Number,
+		videoBitrate: String,
+		audioBitrate: String,
 		captureRate: Number,
 		resolution: Number,
 
@@ -213,19 +213,21 @@ let accountSchema = mongoose.Schema({
 		width: Number,
 		height: Number,
 
-		audioRate: Number,
+		audioRate: String,
 
-		videoBufferSize: Number,
-		audioBufferSize: Number,
-		groupOfPictures: Number,
+		videoBufferSize: String,
+		audioBufferSize: String,
+		groupOfPictures: String,
 
 		playerCount: Number,
 		controllerCount: Number,
 		keyboardEnabled: Boolean,
 		mouseEnabled: Boolean,
+		controllerType: String,// virtualXbox / switch
 		videoType: String, // "webRTC" or "mpeg1"
 		allowGuests: Boolean,
 		friendsOnly: Boolean,
+		forfeitTime: Number,
 	},
 
 	sublist: [],
@@ -700,7 +702,7 @@ app.get("/download", (req, res) => {
 	request(
 		"https://s3.amazonaws.com/rgio-host/latest.yml",
 		{ json: true },
-		(err, res2, body) => {
+		(err2, res2, body) => {
 			let path = yaml.load(body).path;
 			res.redirect(302, `https://s3.amazonaws.com/rgio-host/${path}`);
 		},
@@ -830,8 +832,9 @@ io.on("connection", (socket) => {
 					newAccount.email = email;
 					newAccount.username = username;
 					newAccount.usernameLower = usernameLower;
-					// create an authToken that lets us access the account:
+					// create an authToken & streamKey that lets us access the account:
 					newAccount.authToken = crypto.randomBytes(64).toString("hex");
+					newAccount.streamKey = crypto.randomBytes(64).toString("hex");
 					newAccount.emailVerified = false;
 					// save the new Account:
 					newAccount.save((error) => {
@@ -841,7 +844,6 @@ io.on("connection", (socket) => {
 						console.log("Account created.");
 						cb({
 							success: true,
-							// authToken: newAccount.authToken,
 							clientInfo: clientInfoFromAccount(newAccount),
 						});
 						// sendVerifyEmail(email, newAccount.authToken);
@@ -854,6 +856,9 @@ io.on("connection", (socket) => {
 	// https://stackoverflow.com/questions/35780524/how-to-do-simple-mongoose-findone-with-multiple-conditions?rq=1
 
 	socket.on("login", (data, cb) => {
+
+		console.log(data);
+
 		if (!cb) {
 			console.log("no callback (login)");
 			return;
@@ -903,9 +908,11 @@ io.on("connection", (socket) => {
 									}
 								});
 							}
+							console.log(account.streamKey);
 							cb({
 								success: true,
 								authToken: account.authToken,
+								streamKey: account.streamKey,
 								clientInfo: clientInfoFromAccount(account),
 								...reply,
 							});
@@ -1331,13 +1338,14 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("startStreaming", (data, cb) => {
+		
 		// let reply = { socketid: data.socketid };
 		if (!cb) {
 			console.log("no callback (startStreaming)");
 			return;
 		}
 
-		if (!data.authToken) {
+		if (!data.authToken && !data.streamKey) {
 			cb({
 				success: false,
 				reason: "NOT_LOGGED_IN",
@@ -1345,8 +1353,12 @@ io.on("connection", (socket) => {
 			return;
 		}
 
+		console.log("STARTING_STREAM");
+
 		// try and get account by authToken:
-		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+		Account.findOne({
+			$or: [{ authToken: data.authToken }, { streamKey: data.streamKey }],
+		}).exec((error, account) => {
 			// error check:
 			if (error) {
 				throw error;
@@ -1388,7 +1400,7 @@ io.on("connection", (socket) => {
 
 			// start streaming:
 
-			let videoStreamKey = account.streamKey || crypto.randomBytes(64).toString("hex");
+			let videoStreamKey = account.streamKey;
 
 			// send to client:
 			cb({
@@ -1412,7 +1424,7 @@ io.on("connection", (socket) => {
 				streamKey: videoStreamKey,
 				videoIP: servers.video.ip,
 				videoPort: servers.video.port,
-				settings: data.streamSettings,
+				streamSettings: data.streamSettings,
 				// servers: {...servers},
 			});
 
@@ -1473,7 +1485,9 @@ io.on("connection", (socket) => {
 		console.log("STOPPING_STREAM");
 
 		// try and get account by authToken:
-		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+		Account.findOne({
+			$or: [{ authToken: data.authToken }, { streamKey: data.streamKey }],
+		}).exec((error, account) => {
 			// error check:
 			if (error) {
 				throw error;
@@ -1605,8 +1619,9 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		// try and get account by authToken:
-		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+		Account.findOne({
+			$or: [{ authToken: data.authToken }, { streamKey: data.streamKey }],
+		}).exec((error, account) => {
 			// error check:
 			if (error) {
 				throw error;
@@ -1634,7 +1649,6 @@ io.on("connection", (socket) => {
 
 			// if server candidates weren't found
 			if (!servers.host || !servers.video || !servers.machine) {
-				console.log(servers);
 				cb({
 					success: false,
 					reason: "NO_AVAILABLE_PORTS",
@@ -1645,31 +1659,31 @@ io.on("connection", (socket) => {
 			// set ports as in use:
 			machineServers[servers.machine.sid].ports[servers.machine.port] = true;
 
-			videoServers[servers.video.sid].ports[servers.video.port] = true;
-			hostServers[servers.host.sid].ports[servers.host.port] = true;
+			// generate streamKey
+			let videoStreamKey = account.streamKey;
 
 			// send to client:
 			cb({
+				streamKey: videoStreamKey,
 				success: true,
 			});
 			// send to machineServer:
-			io.to(servers.video.sid).emit("start", {
+			io.to(servers.machine.sid).emit("start", {
 				port: servers.machine.port,
-				// todo: replace with streamKey for better security:
-				authToken: account.authToken,// needs authToken to re-authenticate with the server,
+				streamKey: videoStreamKey, // needs authToken to re-authenticate with the server,
 				streamSettings: account.streamSettings,
 			});
 
 			// update account info:
 			// account.isStreaming = true;
-			// account.streamKey = videoStreamKey;
+			account.streamKey = videoStreamKey;
 			account.machineServerSocketid = servers.machine.sid;
 			account.machineServerIP = servers.machine.ip;
 			account.machineServerPort = servers.machine.port;
 			// stream settings:
-			// for (let key in account.streamSettings) {
-			// 	account.streamSettings[key] = data.streamSettings[key];
-			// }
+			for (let key in account.streamSettings) {
+				account.streamSettings[key] = data.streamSettings[key];
+			}
 
 			// update the account details:
 			account.save((error) => {
@@ -1692,8 +1706,9 @@ io.on("connection", (socket) => {
 
 		console.log("STOPPING_MACHINE");
 
-		// try and get account by authToken:
-		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+		Account.findOne({
+			$or: [{ authToken: data.authToken }, { streamKey: data.streamKey }],
+		}).exec((error, account) => {
 			// error check:
 			if (error) {
 				throw error;
@@ -1769,8 +1784,9 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		// try and get account by authToken:
-		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
+		Account.findOne({
+			$or: [{ authToken: data.authToken }, { streamKey: data.streamKey }],
+		}).exec((error, account) => {
 			// error check:
 			if (error) {
 				throw error;
@@ -1790,6 +1806,43 @@ io.on("connection", (socket) => {
 				streamSettings: {
 					...account.streamSettings,
 				},
+			});
+		});
+	});
+
+	// get previously used stream settings:
+	socket.on("resetStreamKey", (data, cb) => {
+		if (!cb) {
+			console.log("no callback (resetStreamKey)");
+			return;
+		}
+
+		Account.findOne({
+			$or: [{ authToken: data.authToken }, { streamKey: data.streamKey }],
+		}).exec((error, account) => {
+			// error check:
+			if (error) {
+				throw error;
+			}
+			// acount doesn't exist:
+			if (!account) {
+				cb({
+					success: false,
+					reason: "ACCOUNT_NOT_FOUND",
+				});
+				return;
+			}
+
+			let videoStreamKey = crypto.randomBytes(64).toString("hex");
+
+			account.streamKey = videoStreamKey;
+			// update the account details:
+			account.save((error) => {
+				// error check:
+				if (error) {
+					throw error;
+				}
+				cb({ success: true, streamKey: videoStreamKey });
 			});
 		});
 	});
@@ -2097,7 +2150,11 @@ function findAvailableServers(hostServers, videoServers, machineServers) {
 function synchronizeServers() {
 	// go through the stream list:
 	// console.log("SYNCHRONIZING");
-	console.log(Object.keys(hostServers), Object.keys(videoServers), Object.keys(machineServers));
+	console.log(
+		Object.keys(hostServers),
+		Object.keys(videoServers),
+		Object.keys(machineServers),
+	);
 
 	// go through all of the accounts that should have a host/video server running:
 	Account.find({ isStreaming: true })

@@ -180,8 +180,8 @@ class Stream extends Component {
 				audio: true,
 				video: true,
 				maxAudioLag: 0.5,
-				videoBufferSize: data.streamSettings.videoBufferSize * 1024,
-				audioBufferSize: data.streamSettings.audioBufferSize * 1024,
+				// videoBufferSize: data.streamSettings.videoBufferSize * 1024,
+				// audioBufferSize: data.streamSettings.audioBufferSize * 1024,
 			});
 		} else if (this.props.videoType === "webRTC") {
 			this.stream = new Lagless4({
@@ -236,7 +236,14 @@ class Stream extends Component {
 				if (data.success) {
 					this.recieveStream(data, 0);
 				} else {
-					this.props.updateStreamInfo({ online: false });
+					// todo: 404 page
+					if (data.reason === "ACCOUNT_NOT_FOUND") {
+						// todo:
+					}
+					this.props.updateStreamInfo({
+						online: false,
+						exists: data.reason !== "ACCOUNT_NOT_FOUND",
+					});
 				}
 			},
 		);
@@ -397,7 +404,10 @@ class Stream extends Component {
 					controllerView: false,
 					largescreen: true,
 				});
-			} else if (!this.props.settings.realKeyboardMouse && !this.props.settings.controllerView) {
+			} else if (
+				!this.props.settings.realKeyboardMouse &&
+				!this.props.settings.controllerView
+			) {
 				this.props.updateSettings({
 					controllerView: true,
 					largescreen: false,

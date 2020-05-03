@@ -49,7 +49,7 @@ class HostServer {
 		// settings / state:
 		this.normalTime = 1000 * 60 * 2; // 2 minutes
 		this.subTime = this.normalTime * 2.5;
-		this.forfeitTime = 1000 * 15; // 15 seconds
+		this.forfeitTime = options.streamSettings.forfeitTime || 1000 * 15; // 15 seconds
 		this.tempBanTime = 5 * 1000 * 60; // 5 minutes
 		this.messageLogLength = 5;
 		this.messageLog = [];
@@ -58,11 +58,11 @@ class HostServer {
 		this.IPToGuestNumberMap = {};
 
 		// host set settings:
-		this.streamSettings = options.settings;
-		this.keyboardEnabled = options.settings.keyboardEnabled;
-		this.mouseEnabled = options.settings.mouseEnabled;
-		this.controllerCount = options.settings.controllerCount;
-		this.playerCount = options.settings.playerCount;
+		this.streamSettings = options.streamSettings;
+		this.keyboardEnabled = options.streamSettings.keyboardEnabled;
+		this.mouseEnabled = options.streamSettings.mouseEnabled;
+		this.controllerCount = options.streamSettings.controllerCount;
+		this.playerCount = options.streamSettings.playerCount;
 		this.playerCount = this.playerCount === 0 ? 1 : this.playerCount;
 
 		this.turnLengths = [];

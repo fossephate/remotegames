@@ -14,14 +14,13 @@ const LoginRegisterModal = lazy(() =>
 	import("shared/components/modals/LoginRegisterModal.jsx"),
 );
 const AccountModal = lazy(() => import("shared/components/modals/AccountModal.jsx"));
+const CreateVMModal = lazy(() => import("src/components/modals/CreateVMModal.jsx"));
 // const InputMapperModal = lazy(() => import("components/modals/InputMapperModal.jsx"));
 
 // material ui:
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/styles";
 import { createMuiTheme } from "@material-ui/core/styles";
-
-
 
 // components:
 import Loading from "shared/components/general/Loading.jsx";
@@ -68,6 +67,7 @@ class Index extends Component {
 			stream: {
 				info: {
 					online: false,
+					exists: false,
 					// videoType: "mpeg1",
 					// controllerCount: 1,
 					streamSettings: {
@@ -98,31 +98,16 @@ class Index extends Component {
 				streamList: [],
 			},
 
-			client: {
-				authToken: null,
-				loggedIn: false,
-				hostAuthed: false,
-				userid: null,
-				username: "???",
-				connectedAccounts: [],
-				validUsernames: [],
-				usernameIndex: 0,
-				waitlisted: false,
-				timePlayed: 0,
-				emailVerified: false,
-				roles: {},
-			},
-
 			settings: {
 				keyboardControls: true,
 				controllerControls: true,
 				mouseControls: false,
 				touchControls: false,
 				mobileMode: false,
-				realKeyboardMouse: false,
-				controllerView: true,
+				realKeyboardMouse: true,
+				controllerView: false,
 				fullscreen: false,
-				largescreen: false,
+				largescreen: true,
 				hideChat: false,
 				hideNav: false,
 				audioThree: false,
@@ -138,7 +123,11 @@ class Index extends Component {
 			form: {},
 		};
 
-		for (let i = 0; i < /*preloadedState.stream.info.streamSettings.controllerCount*/20; i++) {
+		for (
+			let i = 0;
+			i < /*preloadedState.stream.info.streamSettings.controllerCount*/ 20;
+			i++
+		) {
 			preloadedState.stream.players.turnTimers.push({
 				turnStartTime: 0,
 				forfeitStartTime: 0,
@@ -364,6 +353,14 @@ class Index extends Component {
 										render={(props) => {
 											return (
 												<LoginRegisterModal {...props} history={this.props.history} />
+											);
+										}}
+									/>
+									<Route
+										path="/create"
+										render={(props) => {
+											return (
+												<CreateVMModal {...props} accountConnection={this.accountConnection} history={this.props.history} />
 											);
 										}}
 									/>

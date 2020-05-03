@@ -6,7 +6,7 @@ import { withRouter } from "react-router";
 
 // components:
 import VolumeSlider from "shared/components/general/VolumeSlider.jsx";
-import ViewerDropdown from "./ViewerDropdown.jsx";
+// import ViewerDropdown from "./ViewerDropdown.jsx";
 import Ping from "./Ping.jsx";
 
 // material ui:
@@ -64,7 +64,7 @@ class LaglessBar extends PureComponent {
 		const { classes } = this.props;
 		return (
 			<Paper id="laglessBar" className={classes.root} elevation={3}>
-				<ViewerDropdown accountMap={this.props.accountMap} />
+				{/* <ViewerDropdown accountMap={this.props.accountMap} /> */}
 				<VolumeSlider
 					value={this.props.volume}
 					handleChange={this.handleChange}

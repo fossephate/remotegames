@@ -37,6 +37,7 @@ const styles = (theme) => ({
 		fontSize: "1.5em",
 		alignItems: "center",
 		justifyContent: "center",
+		height: "30vw",
 		// minHeight: "550px",
 	},
 	fullscreen: {

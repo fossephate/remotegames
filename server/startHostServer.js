@@ -62,7 +62,7 @@ accountConnection.on("start", (data) => {
 		streamKey: data.streamKey,
 		hostUserid: data.hostUserid,
 		secret: config.ROOM_SECRET,
-		settings: data.settings,
+		streamSettings: data.streamSettings,
 	});
 	hostServers[data.port].init();
 });

@@ -664,7 +664,8 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 // import AccountModal from "components/modals/AccountModal.jsx";
 // import InputMapperModal from "components/modals/InputMapperModal.jsx";
 const LoginRegisterModal = (0, _react.lazy)(() => Promise.resolve().then(() => _interopRequireWildcard(__webpack_require__(/*! shared/components/modals/LoginRegisterModal.jsx */ "./src/shared/components/modals/LoginRegisterModal.jsx"))));
-const AccountModal = (0, _react.lazy)(() => Promise.resolve().then(() => _interopRequireWildcard(__webpack_require__(/*! shared/components/modals/AccountModal.jsx */ "./src/shared/components/modals/AccountModal.jsx")))); // const InputMapperModal = lazy(() => import("components/modals/InputMapperModal.jsx"));
+const AccountModal = (0, _react.lazy)(() => Promise.resolve().then(() => _interopRequireWildcard(__webpack_require__(/*! shared/components/modals/AccountModal.jsx */ "./src/shared/components/modals/AccountModal.jsx"))));
+const CreateVMModal = (0, _react.lazy)(() => Promise.resolve().then(() => _interopRequireWildcard(__webpack_require__(/*! src/components/modals/CreateVMModal.jsx */ "./src/components/modals/CreateVMModal.jsx")))); // const InputMapperModal = lazy(() => import("components/modals/InputMapperModal.jsx"));
 // material ui:
 
 const About = (0, _react.lazy)(() => Promise.resolve().then(() => _interopRequireWildcard(__webpack_require__(/*! src/About.jsx */ "./src/About.jsx"))));
@@ -796,6 +797,7 @@ class Index extends _react.Component {
       stream: {
         info: {
           online: false,
+          exists: false,
           // videoType: "mpeg1",
           // controllerCount: 1,
           streamSettings: {
@@ -826,30 +828,16 @@ class Index extends _react.Component {
       streams: {
         streamList: []
       },
-      client: {
-        authToken: null,
-        loggedIn: false,
-        hostAuthed: false,
-        userid: null,
-        username: "???",
-        connectedAccounts: [],
-        validUsernames: [],
-        usernameIndex: 0,
-        waitlisted: false,
-        timePlayed: 0,
-        emailVerified: false,
-        roles: {}
-      },
       settings: {
         keyboardControls: true,
         controllerControls: true,
         mouseControls: false,
         touchControls: false,
         mobileMode: false,
-        realKeyboardMouse: false,
-        controllerView: true,
+        realKeyboardMouse: true,
+        controllerView: false,
         fullscreen: false,
-        largescreen: false,
+        largescreen: true,
         hideChat: false,
         hideNav: false,
         audioThree: false,
@@ -966,6 +954,14 @@ class Index extends _react.Component {
       path: "/(login|register)",
       render: props => {
         return _react.default.createElement(LoginRegisterModal, _extends({}, props, {
+          history: this.props.history
+        }));
+      }
+    }), _react.default.createElement(_reactRouter.Route, {
+      path: "/create",
+      render: props => {
+        return _react.default.createElement(CreateVMModal, _extends({}, props, {
+          accountConnection: this.accountConnection,
           history: this.props.history
         }));
       }
@@ -1323,9 +1319,9 @@ class Stream extends _react.Component {
           path: `/${data.videoServerPort}/socket.io`,
           audio: true,
           video: true,
-          maxAudioLag: 0.5,
-          videoBufferSize: data.streamSettings.videoBufferSize * 1024,
-          audioBufferSize: data.streamSettings.audioBufferSize * 1024
+          maxAudioLag: 0.5 // videoBufferSize: data.streamSettings.videoBufferSize * 1024,
+          // audioBufferSize: data.streamSettings.audioBufferSize * 1024,
+
         });
       } else if (this.props.videoType === "webRTC") {
         this.stream = new _lagless2.default({
@@ -1377,8 +1373,13 @@ class Stream extends _react.Component {
         if (data.success) {
           this.recieveStream(data, 0);
         } else {
+          // todo: 404 page
+          if (data.reason === "ACCOUNT_NOT_FOUND") {// todo:
+          }
+
           this.props.updateStreamInfo({
-            online: false
+            online: false,
+            exists: data.reason !== "ACCOUNT_NOT_FOUND"
           });
         }
       });
@@ -2276,6 +2277,766 @@ const updateSettings = settings => {
 };
 
 exports.updateSettings = updateSettings;
+
+/***/ }),
+
+/***/ "./src/components/forms/VirtualMachineForm.jsx":
+/*!*****************************************************!*\
+  !*** ./src/components/forms/VirtualMachineForm.jsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _reduxForm = __webpack_require__(/*! redux-form */ "./node_modules/redux-form/es/index.js");
+
+var _TextField = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/TextField */ "./node_modules/@material-ui/core/esm/TextField/index.js"));
+
+var _Checkbox = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Checkbox */ "./node_modules/@material-ui/core/esm/Checkbox/index.js"));
+
+var _InputLabel = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/InputLabel */ "./node_modules/@material-ui/core/esm/InputLabel/index.js"));
+
+var _FormControlLabel = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/FormControlLabel */ "./node_modules/@material-ui/core/esm/FormControlLabel/index.js"));
+
+var _FormControl = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/FormControl */ "./node_modules/@material-ui/core/esm/FormControl/index.js"));
+
+var _FormHelperText = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/FormHelperText */ "./node_modules/@material-ui/core/esm/FormHelperText/index.js"));
+
+var _Link = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Link */ "./node_modules/@material-ui/core/esm/Link/index.js"));
+
+var _Select = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Select */ "./node_modules/@material-ui/core/esm/Select/index.js"));
+
+var _Radio = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Radio */ "./node_modules/@material-ui/core/esm/Radio/index.js"));
+
+var _RadioGroup = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/RadioGroup */ "./node_modules/@material-ui/core/esm/RadioGroup/index.js"));
+
+var _Button = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Button */ "./node_modules/@material-ui/core/esm/Button/index.js"));
+
+var _MenuItem = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/MenuItem */ "./node_modules/@material-ui/core/esm/MenuItem/index.js"));
+
+var _OutlinedInput = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/OutlinedInput */ "./node_modules/@material-ui/core/esm/OutlinedInput/index.js"));
+
+var _styles = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+
+var _recompose = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
+
+// const { desktopCapturer } = require("electron");
+// imports:
+// const { execFile } = require("child_process");
+// const app = require("electron").remote.app;
+// const { spawn } = require("child_process");
+const validate = values => {
+  const errors = {};
+  const requiredFields = ["username", "password1", "password2", "email"];
+  requiredFields.forEach(field => {
+    if (!values[field]) {
+      errors[field] = "Required";
+    }
+  });
+
+  if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    errors.email = "Invalid email address";
+  }
+
+  return errors;
+};
+
+const renderTextField = ({
+  label,
+  input,
+  meta: {
+    touched,
+    invalid,
+    error
+  },
+  ...custom
+}) => _react.default.createElement(_TextField.default, _extends({
+  label: label,
+  placeholder: label,
+  error: touched && invalid,
+  helperText: touched && error
+}, input, custom));
+
+const renderCheckbox = ({
+  input,
+  label
+}) => _react.default.createElement("div", null, _react.default.createElement(_FormControlLabel.default, {
+  control: _react.default.createElement(_Checkbox.default, {
+    checked: input.value ? true : false,
+    onChange: input.onChange
+  }),
+  label: label
+}));
+
+const renderTOS = ({
+  input
+}) => _react.default.createElement("div", null, _react.default.createElement(_Checkbox.default, {
+  checked: input.value ? true : false,
+  onChange: input.onChange
+}), _react.default.createElement("span", null, "I have read and agree to the "), _react.default.createElement(_Link.default, {
+  href: "https://remotegames.io/tos.html"
+}, "Terms and Conditions")); // const radioButton = ({ input, ...rest }) => (
+// 	<FormControl>
+// 		<RadioGroup {...input} {...rest}>
+// 			<FormControlLabel
+// 				value="window"
+// 				control={<Radio color="primary" />}
+// 				label="Capture Window"
+// 			/>
+// 			<FormControlLabel
+// 				value="desktop"
+// 				control={<Radio color="primary" />}
+// 				label="Capture Desktop"
+// 			/>
+// 		</RadioGroup>
+// 	</FormControl>
+// );
+
+
+const renderRadioGroup = ({
+  input,
+  ...rest
+}) => _react.default.createElement(_RadioGroup.default, _extends({}, input, rest, {
+  value: input.value,
+  onChange: (event, value) => input.onChange(value)
+}));
+
+const renderFromHelper = ({
+  touched,
+  error
+}) => {
+  if (!(touched && error)) {
+    return;
+  } else {
+    return _react.default.createElement(_FormHelperText.default, null, touched && error);
+  }
+};
+
+const renderSelectField = ({
+  input,
+  label,
+  meta: {
+    touched,
+    error
+  },
+  children,
+  variant,
+  labelWidth,
+  ...custom
+}) => _react.default.createElement(_FormControl.default, {
+  error: touched && error
+}, _react.default.createElement(_InputLabel.default, {
+  variant: variant,
+  htmlFor: label + "Select"
+}, label), _react.default.createElement(_Select.default, _extends({
+  autoWidth: true
+}, input, custom, {
+  inputProps: variant !== "outlined" && variant !== "filled" ? {
+    id: label + "Select",
+    labelWidth: labelWidth
+  } : undefined,
+  input: variant === "outlined" ? _react.default.createElement(_OutlinedInput.default, {
+    id: label + "Select",
+    labelWidth: labelWidth
+  }) : undefined
+}), children), renderFromHelper({
+  touched,
+  error
+})); // jss:
+
+
+const styles = theme => ({
+  root: {
+    display: "grid",
+    gridGap: "10px",
+    padding: "25px",
+    width: "100%",
+    userSelect: "none",
+    overflowY: "auto",
+    alignSelf: "center",
+    "&>div": {
+      display: "grid",
+      gridTemplateColumns: "1fr 1fr 1fr",
+      gridGap: "10px"
+    }
+  },
+  buttons: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-evenly" // position: "relative",
+    // marginLeft: "5px",
+    // marginRight: "5px",
+    // textAlign: "center",
+
+  },
+  dropdownContainer: {
+    display: "flex",
+    gridColumn: "1/3",
+    border: "2px solid #000",
+    borderRadius: "5px",
+    // backgroundColor: "#6a6a6a50",
+    "&>div": {
+      width: "50%" // backgroundColor: "#6a6a6a50",
+
+    },
+    "&>div:first-child": {
+      marginRight: "10px"
+    },
+    margin: "auto 0",
+    padding: "10px" // "&:before": {
+    // 	content: '""',
+    // 	border: "3px solid #000",
+    // 	borderRadius: "5px",
+    // },
+
+  }
+});
+
+class VirtualMachineForm extends _react.Component {
+  constructor(props) {
+    super(props);
+
+    _defineProperty(this, "agreeTOS", event => {
+      this.setState({
+        TOSAgreed: event.target.checked
+      });
+    });
+
+    _defineProperty(this, "getFPSMenuItems", () => {
+      return [_react.default.createElement(_MenuItem.default, {
+        key: 0,
+        value: 30
+      }, "30"), _react.default.createElement(_MenuItem.default, {
+        key: 1,
+        value: 20
+      }, "20")];
+    });
+
+    _defineProperty(this, "getResolutionMenuItems", () => {
+      return [_react.default.createElement(_MenuItem.default, {
+        key: 0,
+        value: 1080
+      }, "1080"), _react.default.createElement(_MenuItem.default, {
+        key: 1,
+        value: 720
+      }, "720"), _react.default.createElement(_MenuItem.default, {
+        key: 2,
+        value: 540
+      }, "540"), _react.default.createElement(_MenuItem.default, {
+        key: 3,
+        value: 480
+      }, "480"), _react.default.createElement(_MenuItem.default, {
+        key: 1,
+        value: 360
+      }, "360"), _react.default.createElement(_MenuItem.default, {
+        key: 1,
+        value: 240
+      }, "240")];
+    });
+
+    this.windowTitles = [];
+    this.dshowDevices = [];
+    this.audioDeviceNames = [];
+    this.state = {
+      TOSAgreed: false
+    };
+  }
+
+  componentDidMount() {}
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.qualityProfile !== nextProps.qualityProfile) {
+      this.props.onUpdateFormProfile(nextProps.qualityProfile);
+    }
+
+    return true;
+  }
+
+  render() {
+    const {
+      handleSubmit,
+      pristine,
+      reset,
+      submitting,
+      classes,
+      qualityProfile
+    } = this.props;
+    return _react.default.createElement("form", {
+      onSubmit: handleSubmit,
+      className: classes.root
+    }, _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+      name: "streamTitle",
+      component: renderTextField,
+      label: "Stream Title",
+      variant: "outlined"
+    }), _react.default.createElement(_reduxForm.Field, {
+      name: "thumbnailURL",
+      component: renderTextField,
+      label: "Thumbnail URL",
+      variant: "outlined"
+    })), _react.default.createElement("div", {
+      style: {
+        display: "block"
+      }
+    }, _react.default.createElement(_reduxForm.Field, {
+      name: "qualityProfile",
+      component: renderRadioGroup,
+      row: true
+    }, _react.default.createElement(_FormControlLabel.default, {
+      value: "ultraLow",
+      control: _react.default.createElement(_Radio.default, {
+        color: "primary"
+      }),
+      label: "Ultra Low"
+    }), _react.default.createElement(_FormControlLabel.default, {
+      value: "low",
+      control: _react.default.createElement(_Radio.default, {
+        color: "primary"
+      }),
+      label: "Low"
+    }), _react.default.createElement(_FormControlLabel.default, {
+      value: "medium",
+      control: _react.default.createElement(_Radio.default, {
+        color: "primary"
+      }),
+      label: "Medium"
+    }), _react.default.createElement(_FormControlLabel.default, {
+      value: "high",
+      control: _react.default.createElement(_Radio.default, {
+        color: "primary"
+      }),
+      label: "High"
+    }), _react.default.createElement(_FormControlLabel.default, {
+      value: "ultraHigh",
+      control: _react.default.createElement(_Radio.default, {
+        color: "primary"
+      }),
+      label: "Ultra High"
+    }), _react.default.createElement(_FormControlLabel.default, {
+      value: "custom",
+      control: _react.default.createElement(_Radio.default, {
+        color: "primary"
+      }),
+      label: "Custom"
+    }))), _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+      name: "resolution",
+      component: renderSelectField,
+      label: "Resolution",
+      variant: "outlined",
+      type: "number"
+    }, this.getResolutionMenuItems()), _react.default.createElement(_reduxForm.Field, {
+      name: "videoBitrate",
+      component: renderTextField,
+      label: "Video Bitrate (kb/s)",
+      variant: "outlined",
+      type: "number"
+    }), _react.default.createElement(_reduxForm.Field, {
+      name: "framerate",
+      component: renderSelectField,
+      label: "Output FPS",
+      variant: "outlined",
+      labelWidth: 100
+    }, this.getFPSMenuItems())), qualityProfile === "custom" && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+      name: "videoBufferSize",
+      component: renderTextField,
+      label: "Video Buffer Size",
+      variant: "outlined",
+      type: "number"
+    }), _react.default.createElement(_reduxForm.Field, {
+      name: "audioBufferSize",
+      component: renderTextField,
+      label: "Audio Buffer Size",
+      variant: "outlined",
+      type: "text"
+    }), _react.default.createElement(_reduxForm.Field, {
+      name: "groupOfPictures",
+      component: renderTextField,
+      label: "Group of Pictures",
+      variant: "outlined",
+      type: "text"
+    })), _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+      name: "qmin",
+      component: renderTextField,
+      label: "QMin",
+      variant: "outlined",
+      type: "number"
+    }), _react.default.createElement(_reduxForm.Field, {
+      name: "qmax",
+      component: renderTextField,
+      label: "QMax",
+      variant: "outlined",
+      type: "text"
+    }))), _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+      name: "agree",
+      component: renderTOS,
+      onChange: this.agreeTOS
+    })), _react.default.createElement("div", {
+      className: classes.buttons
+    }, _react.default.createElement(_Button.default, {
+      variant: "contained",
+      color: "primary",
+      type: "submit",
+      disabled: pristine || submitting || !this.state.TOSAgreed
+    }, "Start Virtual Machine"), _react.default.createElement(_Button.default, {
+      variant: "contained",
+      color: "secondary",
+      onClick: this.props.onStopMachine
+    }, "Stop Virtual Machine")));
+  }
+
+} // let initialValues = {
+// 	host1: "https://remotegames.io",
+// 	port1: 8099,
+// 	width: 1280,
+// 	height: 720,
+// 	// windowTitle: null,
+// 	resolution: 540,
+// 	videoBitrate: 1,
+// 	captureRate: 30,
+// 	capture: "window",
+// 	offsetX: 0,
+// 	offsetY: 0,
+// 	controllerCount: 1,
+// };
+// export default compose(
+// 	withStyles(styles),
+// 	reduxForm({
+// 		form: "VideoSettingsForm", // a unique identifier for this form
+// 		validate,
+// 		initialValues,
+// 	}),
+// )(VideoSettingsForm);
+
+
+const mapStateToProps = (state, ownProps) => {
+  return {
+    initialValues: {
+      videoBitrate: ownProps.videoBitrate
+    }
+  };
+}; // Decorate with redux-form
+
+
+let VirtualMachineForm2 = (0, _reduxForm.reduxForm)({
+  form: "VirtualMachineForm",
+  // a unique identifier for this form
+  enableReinitialize: true,
+  validate // initialValues,
+
+})(VirtualMachineForm); // Decorate with connect to read form values
+
+const selector = (0, _reduxForm.formValueSelector)("VirtualMachineForm"); // <-- same as form name
+
+VirtualMachineForm2 = (0, _reactRedux.connect)(state => {
+  const qualityProfile = selector(state, "qualityProfile");
+  return {
+    qualityProfile
+  };
+})(VirtualMachineForm2);
+
+var _default = (0, _recompose.compose)((0, _styles.withStyles)(styles))(VirtualMachineForm2);
+
+exports.default = _default;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/components/modals/CreateVMModal.jsx":
+/*!*************************************************!*\
+  !*** ./src/components/modals/CreateVMModal.jsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _reactRouter = __webpack_require__(/*! react-router */ "./node_modules/react-router/esm/react-router.js");
+
+var _styles = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+
+var _AppBar = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/AppBar */ "./node_modules/@material-ui/core/esm/AppBar/index.js"));
+
+var _Toolbar = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Toolbar */ "./node_modules/@material-ui/core/esm/Toolbar/index.js"));
+
+var _Typography = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js"));
+
+var _Tabs = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Tabs */ "./node_modules/@material-ui/core/esm/Tabs/index.js"));
+
+var _Tab = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Tab */ "./node_modules/@material-ui/core/esm/Tab/index.js"));
+
+var _Paper = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js"));
+
+var _Dialog = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Dialog */ "./node_modules/@material-ui/core/esm/Dialog/index.js"));
+
+var _DialogContent = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/DialogContent */ "./node_modules/@material-ui/core/esm/DialogContent/index.js"));
+
+var _VirtualMachineForm = _interopRequireDefault(__webpack_require__(/*! src/components/forms/VirtualMachineForm.jsx */ "./src/components/forms/VirtualMachineForm.jsx"));
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _alert = __webpack_require__(/*! shared/features/alert.js */ "./src/shared/features/alert.js");
+
+var _recompose = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// jss:
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    // padding: "0px 0px 25px 0px !important",
+    padding: "0 !important"
+  },
+  controls: {
+    display: "flex",
+    flexDirection: "column" // padding: "15px",
+
+  },
+  av: {
+    display: "flex",
+    flexDirection: "column" // padding: "15px",
+
+  },
+  site: {
+    display: "flex",
+    flexDirection: "column" // padding: "15px",
+
+  }
+});
+
+class CreateVMModal extends _react.PureComponent {
+  constructor(props) {
+    super(props);
+
+    _defineProperty(this, "handleClose", () => {
+      // this.props.history.push("/");
+      this.props.history.goBack();
+    });
+
+    _defineProperty(this, "handleUpdateFormProfile", profileName => {
+      this.setState({
+        formInitialValues: { ...this.state.formInitialValues,
+          ...this.profiles[profileName],
+          qualityProfile: profileName
+        }
+      });
+    });
+
+    _defineProperty(this, "handleStartMachine", args => {
+      this.accountConnection.emit("startMachine", {
+        authToken: this.props.authToken,
+        streamSettings: args
+      }, data => {
+        if (data.success) {
+          this.props.openAlert({
+            title: "VM Created!"
+          });
+          setTimeout(() => {
+            this.props.history.push(`/s/${this.props.username}`);
+          }, 2000);
+        } else {
+          this.props.openAlert({
+            title: data.reason
+          });
+        }
+      });
+    });
+
+    _defineProperty(this, "handleStopMachine", () => {
+      this.accountConnection.emit("stopMachine", {
+        authToken: this.props.authToken
+      }, data => {
+        if (data.success) {
+          this.props.openAlert({
+            title: "success"
+          });
+        } else {
+          this.props.openAlert({
+            title: data.reason
+          });
+        }
+      });
+    });
+
+    this.accountConnection = this.props.accountConnection;
+    this.state = {
+      formInitialValues: {
+        qualityProfile: "custom",
+        // host1: "https://remotegames.io",
+        // port1: 8099,
+        streamTitle: "My Stream",
+        description: "",
+        region: "US East",
+        width: 1280,
+        height: 720,
+        windowTitle: null,
+        windowTitleDropdown: 0,
+        audioDevice: null,
+        audioDeviceDropdown: 0,
+        videoDevice: null,
+        videoDeviceDropdown: 0,
+        resolution: 540,
+        videoBitrate: 1500,
+        videoBufferSize: 512,
+        audioBufferSize: 128,
+        groupOfPictures: 60,
+        captureRate: 60,
+        framerate: 30,
+        capture: "window",
+        videoType: "mpeg1",
+        offsetX: 0,
+        offsetY: 0,
+        controllerCount: 1,
+        controlSwitch: false,
+        virtualXboxControllers: true,
+        qmin: 4,
+        qmax: 20,
+        forfeitTime: 1000 * 5 // 5 seconds
+
+      }
+    };
+    this.profiles = {
+      perfect: {
+        videoBitrate: 14000,
+        resolution: 1080,
+        qmin: 2,
+        qmax: 8
+      },
+      ultraHigh: {
+        videoBitrate: 10000,
+        resolution: 1080,
+        qmin: 4,
+        qmax: 12
+      },
+      high: {
+        videoBitrate: 8000,
+        resolution: 720,
+        qmin: 2,
+        qmax: 10
+      },
+      medium: {
+        videoBitrate: 5000,
+        resolution: 540,
+        qmin: 4,
+        qmax: 10
+      },
+      low: {
+        videoBitrate: 2500,
+        resolution: 480,
+        qmin: 4,
+        qmax: 10
+      },
+      ultraLow: {
+        videoBitrate: 1000,
+        resolution: 360,
+        qmin: 6,
+        qmax: 20
+      }
+    };
+  }
+
+  componentDidMount() {
+    this.accountConnection.emit("getStreamSettings", {
+      authToken: this.props.authToken
+    }, data => {
+      if (data.success) {
+        this.setState({
+          formInitialValues: { ...this.state.formInitialValues,
+            ...data.streamSettings
+          }
+        });
+      } else {
+        this.props.openAlert({
+          title: data.reason
+        });
+      }
+    });
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    console.log("re-rendering CreateVMModal.");
+    return _react.default.createElement(_Dialog.default, {
+      open: true,
+      scroll: "body",
+      maxWidth: "lg",
+      fullWidth: true,
+      onClose: this.handleClose
+    }, _react.default.createElement(_DialogContent.default, {
+      className: classes.root
+    }, _react.default.createElement(_AppBar.default, {
+      position: "static"
+    }, _react.default.createElement(_Toolbar.default, null, _react.default.createElement(_Typography.default, {
+      variant: "h6",
+      color: "inherit"
+    }, "Create a Virtual Machine"))), _react.default.createElement(_VirtualMachineForm.default, {
+      initialValues: this.state.formInitialValues,
+      onSubmit: this.handleStartMachine,
+      onStopMachine: this.handleStopMachine,
+      onUpdateFormProfile: this.handleUpdateFormProfile
+    })));
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    username: state.client.username,
+    authToken: state.client.authToken
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    openAlert: data => {
+      dispatch((0, _alert.openAlert)(data));
+    }
+  };
+};
+
+var _default = (0, _recompose.compose)(_reactRouter.withRouter, (0, _styles.withStyles)(styles), (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps))(CreateVMModal);
+
+exports.default = _default;
+module.exports = exports.default;
 
 /***/ }),
 
@@ -3479,8 +4240,6 @@ var _reactRouter = __webpack_require__(/*! react-router */ "./node_modules/react
 
 var _VolumeSlider = _interopRequireDefault(__webpack_require__(/*! shared/components/general/VolumeSlider.jsx */ "./src/shared/components/general/VolumeSlider.jsx"));
 
-var _ViewerDropdown = _interopRequireDefault(__webpack_require__(/*! ./ViewerDropdown.jsx */ "./src/components/stream/lagless/laglessBar/ViewerDropdown.jsx"));
-
 var _Ping = _interopRequireDefault(__webpack_require__(/*! ./Ping.jsx */ "./src/components/stream/lagless/laglessBar/Ping.jsx"));
 
 var _styles = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
@@ -3546,9 +4305,7 @@ class LaglessBar extends _react.PureComponent {
       id: "laglessBar",
       className: classes.root,
       elevation: 3
-    }, _react.default.createElement(_ViewerDropdown.default, {
-      accountMap: this.props.accountMap
-    }), _react.default.createElement(_VolumeSlider.default, {
+    }, _react.default.createElement(_VolumeSlider.default, {
       value: this.props.volume,
       handleChange: this.handleChange,
       onMute: () => {
@@ -3673,133 +4430,6 @@ const mapStateToProps = state => {
 var _default = (0, _recompose.compose)((0, _styles.withStyles)(styles), (0, _reactRedux.connect)(mapStateToProps))(Ping);
 
 exports.default = _default;
-module.exports = exports.default;
-
-/***/ }),
-
-/***/ "./src/components/stream/lagless/laglessBar/ViewerDropdown.jsx":
-/*!*********************************************************************!*\
-  !*** ./src/components/stream/lagless/laglessBar/ViewerDropdown.jsx ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
-
-var _Menu = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/Menu */ "./node_modules/@material-ui/core/esm/Menu/index.js"));
-
-var _MenuItem = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/MenuItem */ "./node_modules/@material-ui/core/esm/MenuItem/index.js"));
-
-var _Button = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/Button */ "./node_modules/@material-ui/core/esm/Button/index.js"));
-
-var _Typography = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/Typography */ "./node_modules/@material-ui/core/esm/Typography/index.js"));
-
-var _ArrowDropDown = _interopRequireDefault(__webpack_require__(/*! @material-ui/icons/ArrowDropDown */ "./node_modules/@material-ui/icons/ArrowDropDown.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-// redux:
-// import { connect } from "react-redux";
-class ViewerDropdown extends _react.PureComponent {
-  constructor(props) {
-    super(props);
-
-    _defineProperty(this, "handleClick", event => {
-      this.setState({
-        anchorEl: event.currentTarget
-      });
-    });
-
-    _defineProperty(this, "handleClose", () => {
-      this.setState({
-        anchorEl: null
-      });
-    });
-
-    _defineProperty(this, "getViewerList", () => {
-      let viewers = [];
-      let count = 0;
-
-      for (let key in this.props.accountMap) {
-        if (!this.props.accountMap.hasOwnProperty(key)) {
-          continue;
-        }
-
-        let account = this.props.accountMap[key];
-        count++;
-        viewers.push(_react.default.createElement(_MenuItem.default, {
-          key: count,
-          uniqueid: account.userid
-        }, _react.default.createElement(_Typography.default, {
-          variant: "inherit",
-          noWrap: true
-        }, account.username)));
-      }
-
-      if (count === 0) {
-        viewers.push(_react.default.createElement(_MenuItem.default, {
-          key: 0,
-          uniqueid: null
-        }, _react.default.createElement(_Typography.default, {
-          variant: "inherit",
-          noWrap: true
-        }, "Loading...")));
-      }
-
-      return viewers;
-    });
-
-    this.state = {
-      anchorEl: null
-    };
-  }
-
-  render() {
-    const open = Boolean(this.state.anchorEl);
-    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_Button.default, {
-      variant: "contained",
-      color: "primary",
-      onClick: this.handleClick
-    }, "Viewers", _react.default.createElement(_ArrowDropDown.default, null)), _react.default.createElement(_Menu.default, {
-      id: "viewerDropdown",
-      anchorEl: this.state.anchorEl,
-      open: open,
-      onClose: this.handleClose // TransitionComponent={Fade}
-      ,
-      PaperProps: {
-        style: {
-          maxHeight: 48 * 4.5,
-          width: 250
-        }
-      }
-    }, this.getViewerList()));
-  }
-
-} // const mapStateToProps = (state) => {
-// 	return {
-// 		viewerList: state.viewerList,
-// 	};
-// };
-//
-// export default connect(mapStateToProps)(ViewerList);
-// export default ViewerDropdown;
-
-
-exports.default = ViewerDropdown;
 module.exports = exports.default;
 
 /***/ }),
@@ -4540,7 +5170,8 @@ const styles = theme => ({
     flexGrow: 1,
     fontSize: "1.5em",
     alignItems: "center",
-    justifyContent: "center" // minHeight: "550px",
+    justifyContent: "center",
+    height: "30vw" // minHeight: "550px",
 
   },
   fullscreen: {
@@ -12131,11 +12762,17 @@ var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_mo
 
 var _MessageList = _interopRequireDefault(__webpack_require__(/*! ./MessageList.jsx */ "./src/shared/components/chat/MessageList.jsx"));
 
+var _MemberList = _interopRequireDefault(__webpack_require__(/*! ./MemberList.jsx */ "./src/shared/components/chat/MemberList.jsx"));
+
 var _SendMessageForm = _interopRequireDefault(__webpack_require__(/*! ./SendMessageForm.jsx */ "./src/shared/components/chat/SendMessageForm.jsx"));
 
 var _styles = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
 
 var _Paper = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js"));
+
+var _Tabs = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Tabs */ "./node_modules/@material-ui/core/esm/Tabs/index.js"));
+
+var _Tab = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Tab */ "./node_modules/@material-ui/core/esm/Tab/index.js"));
 
 var _utils = __webpack_require__(/*! shared/libs/utils.js */ "./src/shared/libs/utils.js");
 
@@ -12145,9 +12782,8 @@ function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return 
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-// react:
-// material ui:
-// libs:
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 // jss:
 const styles = theme => ({
   root: {
@@ -12178,6 +12814,17 @@ const styles = theme => ({
 class Chat extends _react.PureComponent {
   constructor(props) {
     super(props);
+
+    _defineProperty(this, "handleChangeTab", (event, value) => {
+      console.log(value);
+      this.setState({
+        tab: value
+      });
+    });
+
+    this.state = {
+      tab: 0
+    };
   }
 
   render() {
@@ -12192,16 +12839,125 @@ class Chat extends _react.PureComponent {
     return _react.default.createElement(_Paper.default, {
       id: "chat",
       className: classes.root
-    }, _react.default.createElement(_MessageList.default, null), _react.default.createElement("div", {
-      style: {
-        flex: 1
-      }
-    }), _react.default.createElement(_SendMessageForm.default, null));
+    }, _react.default.createElement(_Tabs.default, {
+      value: this.state.tab,
+      onChange: this.handleChangeTab,
+      indicatorColor: "primary",
+      centered: true,
+      variant: "fullWidth"
+    }, _react.default.createElement(_Tab.default, {
+      label: "Chat"
+    }), _react.default.createElement(_Tab.default, {
+      label: "Members"
+    })), _react.default.createElement("div", {
+      hidden: this.state.tab !== 0
+    }, _react.default.createElement(_MessageList.default, null), _react.default.createElement(_SendMessageForm.default, null)), _react.default.createElement("div", {
+      hidden: this.state.tab !== 1
+    }, _react.default.createElement(_MemberList.default, null)));
   }
 
 }
 
 var _default = (0, _styles.withStyles)(styles)(Chat);
+
+exports.default = _default;
+module.exports = exports.default;
+
+/***/ }),
+
+/***/ "./src/shared/components/chat/MemberList.jsx":
+/*!***************************************************!*\
+  !*** ./src/shared/components/chat/MemberList.jsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "./node_modules/react/index.js"));
+
+var _styles = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
+
+var _Paper = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/esm/Paper */ "./node_modules/@material-ui/core/esm/Paper/index.js"));
+
+var _Close = _interopRequireDefault(__webpack_require__(/*! @material-ui/icons/Close */ "./node_modules/@material-ui/icons/Close.js"));
+
+var _reactRedux = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+
+var _chat = __webpack_require__(/*! shared/features/chat.js */ "./src/shared/features/chat.js");
+
+var _recompose = __webpack_require__(/*! recompose */ "./node_modules/recompose/dist/Recompose.esm.js");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// jss:
+const styles = theme => ({
+  root: {
+    overflowY: "auto",
+    // marginBottom: "15px",
+    boxShadow: "none",
+    position: "absolute",
+    top: 64,
+    left: 0,
+    bottom: 90,
+    right: 0
+  }
+});
+
+class MemberList extends _react.PureComponent {
+  constructor(props) {
+    super(props);
+
+    _defineProperty(this, "handleClick", event => {});
+
+    this.messagesEnd = null;
+    this.rootRef = _react.default.createRef();
+    this.shouldScroll = false;
+  }
+
+  render() {
+    const {
+      classes
+    } = this.props;
+    return _react.default.createElement(_Paper.default, {
+      className: classes.root,
+      elevation: 4
+    }, "aaaaaaaaaaaaaaa");
+  }
+
+}
+
+const mapStateToProps = state => {
+  return {
+    messages: state.stream.chat.messages,
+    accountMap: state.stream.accountMap,
+    isMod: state.client.roles.mod,
+    isBanned: state.client.isBanned // lastMessage: state.stream.chat.messages[state.stream.chat.messages.length - 1],
+
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    sendMessage: text => {
+      dispatch((0, _chat.sendMessage)(text));
+    }
+  };
+};
+
+var _default = (0, _recompose.compose)((0, _styles.withStyles)(styles), (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps))(MemberList);
 
 exports.default = _default;
 module.exports = exports.default;
@@ -12478,11 +13234,11 @@ const styles = theme => ({
       backgroundColor: theme.palette.type === "dark" ? theme.palette.secondary.dark : theme.palette.secondary.light
     },
     position: "absolute",
-    top: 0,
+    top: 64,
     left: 0,
-    bottom: 0,
-    right: 0,
-    height: "82%"
+    bottom: 90,
+    right: 0 // height: "82%",
+
   }
 });
 
@@ -14527,7 +15283,7 @@ class AccountModal extends _react.PureComponent {
         (0, _utils.deleteAllCookies)();
         setTimeout(() => {
           location.reload(true);
-        }, 200);
+        }, 500);
       }
     });
 
@@ -15086,10 +15842,13 @@ const clientSlice = (0, _toolkit.createSlice)({
   name: "client",
   initialState: {
     authToken: null,
+    streamKey: null,
     loggedIn: false,
+    accountAuthed: false,
     hostAuthed: false,
     userid: null,
-    username: "???",
+    username: null,
+    // "???"
     connectedAccounts: [],
     validUsernames: [],
     usernameIndex: 0,
@@ -15731,34 +16490,69 @@ const MODS = [16, 18, 17, 91];
 class KeyboardWrapper {
   constructor() {
     _defineProperty(this, "init", () => {
+      document.addEventListener("keypress", this.handleKeypress, false);
       document.addEventListener("keydown", this.handleKeydown, false);
       document.addEventListener("keyup", this.handleKeyup, false);
       window.addEventListener("focus", this.resetModifiers, false);
     });
 
     _defineProperty(this, "destroy", () => {
+      document.removeEventListener("keypress", this.handleKeypress);
       document.removeEventListener("keydown", this.handleKeydown);
       document.removeEventListener("keyup", this.handleKeyup);
       window.removeEventListener("focus", this.resetModifiers);
     });
 
     _defineProperty(this, "keyCode", k => {
-      return this.map[k] || k.toUpperCase().charCodeAt(0);
+      return this.map[k] || k.charCodeAt(0); // return this.map[k] || k.toUpperCase().charCodeAt(0);
+    });
+
+    _defineProperty(this, "handleKeypress", event => {
+      let keyCode = event.keyCode;
+      let shiftKey = event.shiftKey;
+
+      if (keyCode >= 97 && keyCode <= 122) {
+        this.modifiers.capslock = shiftKey;
+      } else if (keyCode >= 65 && keyCode <= 90 && !(shiftKey && this.IS_MAC)) {
+        this.modifiers.capslock = !shiftKey;
+      }
     });
 
     _defineProperty(this, "handleKeydown", event => {
-      let keycode = event.keyCode;
+      let keyCode = event.keyCode;
+      let modified = false;
 
-      if (this.pressedKeys.indexOf(keycode) === -1) {
-        this.pressedKeys.push(keycode);
+      if (!event.shiftKey && !this.modifiers.capslock) {
+        if (keyCode >= 65 && keyCode <= 90) {
+          keyCode += 32;
+          modified = true;
+        }
       }
 
-      if (keycode === 93 || keycode === 224) {
-        keycode = 91; // right command on webkit, command on Gecko
+      if (keyCode === 93 || keyCode === 224) {
+        keyCode = 91; // right command on webkit, command on Gecko
       }
 
-      if (keycode in MODS) {
-        this.modifiers[this.map[keycode]] = true;
+      if (keyCode === 20) {
+        return;
+      }
+
+      if (keyCode >= 112 && keyCode <= 130) {
+        if (!modified) {
+          event.preventDefault();
+        }
+      }
+
+      if (window.inputHandler.mouse.inCanvas) {
+        event.preventDefault();
+      }
+
+      if (this.pressedKeys.indexOf(keyCode) === -1) {
+        this.pressedKeys.push(keyCode);
+      }
+
+      if (keyCode in MODS) {
+        this.modifiers[this.map[keyCode]] = true;
         return;
       } // ignore key presses if a select, textarea, or input is focused
 
@@ -15771,7 +16565,26 @@ class KeyboardWrapper {
     });
 
     _defineProperty(this, "handleKeyup", event => {
-      let keyCode = event.keyCode; // remove key
+      let keyCode = event.keyCode;
+
+      if (!event.shiftKey && !this.modifiers.capslock) {
+        if (keyCode >= 65 && keyCode <= 90) {
+          keyCode += 32;
+        }
+      }
+
+      if (keyCode === 93 || keyCode === 224) {
+        keyCode = 91; // right command on webkit, command on Gecko
+      }
+
+      if (keyCode === 20) {
+        return;
+      }
+
+      if (window.inputHandler.mouse.inCanvas) {
+        event.preventDefault();
+      } // remove key
+
 
       let index = this.pressedKeys.indexOf(keyCode);
 
@@ -15779,8 +16592,7 @@ class KeyboardWrapper {
         this.pressedKeys.splice(index, 1);
       }
 
-      if (keyCode == 93 || keyCode == 224) {
-        keyCode = 91; // right command on webkit, command on Gecko
+      if (keyCode >= 112 && keyCode <= 130) {// event.preventDefault();
       }
 
       if (keyCode in MODS) {
@@ -15810,12 +16622,17 @@ class KeyboardWrapper {
 
     this.pressedKeys = [];
     this.werePressedKeys = [];
+    this.settings = {
+      disableKeys: false
+    };
+    this.IS_MAC = /Mac/.test(navigator.platform);
     this.modifiers = {
       shift: false,
       alt: false,
       option: false,
       ctrl: false,
-      command: false
+      command: false,
+      capslock: false
     }; // special keys
 
     this.map = {
@@ -16487,6 +17304,8 @@ const SPECIAL_KEYS = {
   16: "shift",
   17: "control",
   18: "alt",
+  20: "capslock",
+  // capslock
   27: "escape",
   32: "space",
   33: "pageup",
@@ -16939,6 +17758,11 @@ class VirtualMouse {
     _defineProperty(this, "enterCanvas", () => {
       this.inCanvas = true;
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+      if (this.settings.enabled) {
+        document.getElementById("picture").style = "background: #FF000060";
+      }
+
       document.addEventListener("mousemove", this.getMouseInput1, false);
       document.addEventListener("mousedown", this.getMouseInput2, false);
       document.addEventListener("mouseup", this.getMouseInput2, false);
@@ -16955,6 +17779,7 @@ class VirtualMouse {
       this.inCanvas = false;
       clearTimeout(this.mouseMoveTimer);
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      document.getElementById("picture").style = "";
       document.removeEventListener("mousemove", this.getMouseInput1);
       document.removeEventListener("mousedown", this.getMouseInput2);
       document.removeEventListener("mouseup", this.getMouseInput2);
