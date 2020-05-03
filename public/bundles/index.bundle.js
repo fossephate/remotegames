@@ -266,45 +266,45 @@ class About extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 0,
       className: classes.root
-    }, _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 3,
       className: classes.main
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       className: classes.back,
       onClick: () => {
         this.props.history.push("/");
       }
-    }, "Back"), _react.default.createElement("h2", null, "About the project"), _react.default.createElement("p", null, "This website is developed and maintained by", " ", _react.default.createElement("a", {
+    }, "Back"), /*#__PURE__*/_react.default.createElement("h2", null, "About the project"), /*#__PURE__*/_react.default.createElement("p", null, "This website is developed and maintained by", " ", /*#__PURE__*/_react.default.createElement("a", {
       href: "https://github.com/mfosse"
-    }, "Matthew Fosse"), "."), _react.default.createElement("p", null, "The whole idea behind the project is that you can use a keyboard or controller to try out games on these consoles from anywhere with just a web browser."), _react.default.createElement("div", {
+    }, "Matthew Fosse"), "."), /*#__PURE__*/_react.default.createElement("p", null, "The whole idea behind the project is that you can use a keyboard or controller to try out games on these consoles from anywhere with just a web browser."), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.imagesContainer
-    }, _react.default.createElement(_Card.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Card.default, {
       className: classes.card,
       elevation: 5
-    }, _react.default.createElement(_CardActionArea.default, null, _react.default.createElement(_CardMedia.default, {
+    }, /*#__PURE__*/_react.default.createElement(_CardActionArea.default, null, /*#__PURE__*/_react.default.createElement(_CardMedia.default, {
       className: classes.media,
       image: "/images/about/about5.jpg",
       title: "Photo 1"
-    }), _react.default.createElement(_CardContent.default, null, _react.default.createElement(_Typography.default, {
+    }), /*#__PURE__*/_react.default.createElement(_CardContent.default, null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
       component: "p"
-    }, "The consoles are hosted in Central Florida, and the server is currently located in Virginia.")))), _react.default.createElement(_Card.default, {
+    }, "The consoles are hosted in Central Florida, and the server is currently located in Virginia.")))), /*#__PURE__*/_react.default.createElement(_Card.default, {
       className: classes.card,
       elevation: 5
-    }, _react.default.createElement(_CardActionArea.default, null, _react.default.createElement(_CardMedia.default, {
+    }, /*#__PURE__*/_react.default.createElement(_CardActionArea.default, null, /*#__PURE__*/_react.default.createElement(_CardMedia.default, {
       className: classes.media,
       image: "/images/about/about2.jpg",
       title: "Photo 2"
-    }), _react.default.createElement(_CardContent.default, null, _react.default.createElement(_Typography.default, {
+    }), /*#__PURE__*/_react.default.createElement(_CardContent.default, null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
       component: "p"
-    }, "The whole setup"))))), _react.default.createElement("p", null, "The games, consoles, and server costs to run this project are primarily funded through", " ", _react.default.createElement("a", {
+    }, "The whole setup"))))), /*#__PURE__*/_react.default.createElement("p", null, "The games, consoles, and server costs to run this project are primarily funded through", " ", /*#__PURE__*/_react.default.createElement("a", {
       href: "https://twitch.tv/remotegames/subscribe/"
-    }, "Twitch subscriptions"), " ", "and donations. If you like the project consider supporting it with the links below."), _react.default.createElement("div", {
+    }, "Twitch subscriptions"), " ", "and donations. If you like the project consider supporting it with the links below."), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.donationButtons
-    }, _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("img", {
       border: "0" // width="130"
       ,
       alt: "Donate with Twitch",
@@ -313,7 +313,7 @@ class About extends _react.PureComponent {
       onClick: () => {
         window.location = "https://streamlabs.com/remotegames/";
       }
-    }), _react.default.createElement("img", {
+    }), /*#__PURE__*/_react.default.createElement("img", {
       border: "0" // width="130"
       ,
       alt: "Join the Discord Server",
@@ -322,7 +322,7 @@ class About extends _react.PureComponent {
       onClick: () => {
         window.location = "https://discord.io/tpns/";
       }
-    }), _react.default.createElement("img", {
+    }), /*#__PURE__*/_react.default.createElement("img", {
       border: "0" // width="130"
       ,
       alt: "Donate with Paypal",
@@ -331,7 +331,7 @@ class About extends _react.PureComponent {
       onClick: () => {
         window.location = "https://paypal.me/fossephate/";
       }
-    })), _react.default.createElement("iframe", {
+    })), /*#__PURE__*/_react.default.createElement("iframe", {
       className: classes.twitch,
       src: "https://player.twitch.tv/?channel=remotegames&muted=false&autoplay=true",
       height: "360",
@@ -501,41 +501,41 @@ class FAQ extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 0,
       className: classes.root
-    }, _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 3,
       className: classes.main
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       className: classes.back,
       onClick: () => {
         this.props.history.push("/");
       }
-    }, "Back"), _react.default.createElement("h2", null, "Frequently Asked Questions and Commands"), _react.default.createElement(_Paper.default, {
+    }, "Back"), /*#__PURE__*/_react.default.createElement("h2", null, "Frequently Asked Questions and Commands"), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 0,
       className: classes.container
-    }, _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 3,
       className: classes.QA
-    }, _react.default.createElement("h2", null, "FAQ"), _react.default.createElement(_List.default, null, _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "Q: How does this work?"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: If you're looking for looking for the source code, use the \"!source\" command, if you just want the TLDR: I use a capture card to get the Nintendo Switch's screen, I use a micro controller (Arduino) that acts like a Pro Controller, and use a Python script to send it input. If you have any other questions, just ask @fosse on the discord server.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "Q: Why can't I use the Plus/Home/Capture button?"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: It's reserved for special roles, it's setup like this to prevent abuse.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "Q: What's the friend code for the Twitch account?"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: SW-4621-9617-9306.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "Q: How do I change the game?"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: Use \"!goto [game]\" to switch between games, for a list of games, use \"!games\".")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "Q: Something is wrong / broken, what do I do?"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: If someone isn't there to help on stream, contact a mod or @fosse on the discord server.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "Q: I want a longer turn! xxx is too short."))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: If you subscribe on twitch and use it to login, your turn length is doubled.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "Q: Do the same commands used on the stream/site work on this server as well?"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: No, they don't, they're only meant for the stream/site.")))), _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement("h2", null, "FAQ"), /*#__PURE__*/_react.default.createElement(_List.default, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "Q: How does this work?"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: If you're looking for looking for the source code, use the \"!source\" command, if you just want the TLDR: I use a capture card to get the Nintendo Switch's screen, I use a micro controller (Arduino) that acts like a Pro Controller, and use a Python script to send it input. If you have any other questions, just ask @fosse on the discord server.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "Q: Why can't I use the Plus/Home/Capture button?"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: It's reserved for special roles, it's setup like this to prevent abuse.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "Q: What's the friend code for the Twitch account?"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: SW-4621-9617-9306.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "Q: How do I change the game?"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: Use \"!goto [game]\" to switch between games, for a list of games, use \"!games\".")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "Q: Something is wrong / broken, what do I do?"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: If someone isn't there to help on stream, contact a mod or @fosse on the discord server.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "Q: I want a longer turn! xxx is too short."))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: If you subscribe on twitch and use it to login, your turn length is doubled.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "Q: Do the same commands used on the stream/site work on this server as well?"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0A: No, they don't, they're only meant for the stream/site.")))), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 3,
       className: classes.commands
-    }, _react.default.createElement("h2", null, "Stream Commands"), _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement("h2", null, "Stream Commands"), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 2,
       className: classes.subCommands
-    }, _react.default.createElement("h4", null, "Commands for Everyone"), _react.default.createElement(_List.default, null, _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!commands"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Gives you a list of commands.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!goto [game]"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0use without brackets to switch games, use !games for a list of games.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!games or !gamelist or !goto or !xboxgames or !xboxgamelist"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Shows the list of games currently available (switch or xbox).")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!playing"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Shows who is currently playing.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!source"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Links you to the source code for the project.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!site"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Links you to https://remotegames.io.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!discord"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Links you to the discord invite.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!fc"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Gives you the friend code to the Twitch account.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!restart1 or !restart2 or !restart3"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0refreshes the corresponding stream.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "![mod | plus | sub | ban]list"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0(no brackets) lists people in the corresponding group.")))), _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement("h4", null, "Commands for Everyone"), /*#__PURE__*/_react.default.createElement(_List.default, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!commands"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Gives you a list of commands.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!goto [game]"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0use without brackets to switch games, use !games for a list of games.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!games or !gamelist or !goto or !xboxgames or !xboxgamelist"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Shows the list of games currently available (switch or xbox).")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!playing"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Shows who is currently playing.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!source"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Links you to the source code for the project.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!site"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Links you to https://remotegames.io.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!discord"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Links you to the discord invite.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!fc"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Gives you the friend code to the Twitch account.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!restart1 or !restart2 or !restart3"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0refreshes the corresponding stream.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "![mod | plus | sub | ban]list"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0(no brackets) lists people in the corresponding group.")))), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 2,
       className: classes.subCommands
-    }, _react.default.createElement("h4", null, "Commands for Plus level users"), _react.default.createElement(_List.default, null, _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "Plus level users can use the Plus / Start button in games.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!lock"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Is there a disaster? Maybe someone is being bad and is about to nuke the Switch? Type !lock to lock the controls until a mod can fix it.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!fixcontrollers"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0If the controller order gets messed up, use this command to fix it.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!rr [user - optional]"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Try it and see what happens!")))), _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement("h4", null, "Commands for Plus level users"), /*#__PURE__*/_react.default.createElement(_List.default, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "Plus level users can use the Plus / Start button in games.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!lock"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Is there a disaster? Maybe someone is being bad and is about to nuke the Switch? Type !lock to lock the controls until a mod can fix it.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!fixcontrollers"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0If the controller order gets messed up, use this command to fix it.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!rr [user - optional]"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Try it and see what happens!")))), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 2,
       className: classes.subCommands
-    }, _react.default.createElement("h4", null, "Commands for Mods"), _react.default.createElement(_List.default, null, _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "Mods can do basically everything, including Home / Capture")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!restartscript"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Restarts the python script.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!restartserver"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Restarts the server, you shouldn't have to use this.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "![give | remove]plus [user]"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Gives or removes plus permission from [user].")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "![temp | perma]ban [user]"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Temporarily or permanently bans [user].")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "![disable | enable]chat"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Disables or enables Chat commands.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "![disable | enable]goto"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Disables or enables !goto.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "![setturnlength | setforfeitlength] [time in seconds]"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Change the amount of time for turns and forfeits.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!lock or !unlock"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Lock or unlock the Switch if it is locked.")), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, _react.default.createElement("b", null, "!forcegoto or !xboxforcegoto"))), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0!goto but without the democracy.")))))), _react.default.createElement("p", null, "The games, consoles, and server costs to run this project are primarily funded through", " ", _react.default.createElement("a", {
+    }, /*#__PURE__*/_react.default.createElement("h4", null, "Commands for Mods"), /*#__PURE__*/_react.default.createElement(_List.default, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "Mods can do basically everything, including Home / Capture")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!restartscript"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Restarts the python script.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!restartserver"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Restarts the server, you shouldn't have to use this.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "![give | remove]plus [user]"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Gives or removes plus permission from [user].")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "![temp | perma]ban [user]"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Temporarily or permanently bans [user].")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "![disable | enable]chat"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Disables or enables Chat commands.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "![disable | enable]goto"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Disables or enables !goto.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "![setturnlength | setforfeitlength] [time in seconds]"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Change the amount of time for turns and forfeits.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!lock or !unlock"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0Lock or unlock the Switch if it is locked.")), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, /*#__PURE__*/_react.default.createElement("b", null, "!forcegoto or !xboxforcegoto"))), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "\xA0\xA0\xA0\xA0!goto but without the democracy.")))))), /*#__PURE__*/_react.default.createElement("p", null, "The games, consoles, and server costs to run this project are primarily funded through", " ", /*#__PURE__*/_react.default.createElement("a", {
       href: "https://twitch.tv/remotegames/subscribe/"
-    }, "Twitch subscriptions"), " ", "and donations. If you like the project consider supporting it with the links below."), _react.default.createElement("div", {
+    }, "Twitch subscriptions"), " ", "and donations. If you like the project consider supporting it with the links below."), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.donationButtons
-    }, _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("img", {
       border: "0" // width="130"
       ,
       alt: "Donate with Twitch",
@@ -544,7 +544,7 @@ class FAQ extends _react.PureComponent {
       onClick: () => {
         window.location = "https://streamlabs.com/remotegames/";
       }
-    }), _react.default.createElement("img", {
+    }), /*#__PURE__*/_react.default.createElement("img", {
       border: "0" // width="130"
       ,
       alt: "Join the Discord Server",
@@ -553,7 +553,7 @@ class FAQ extends _react.PureComponent {
       onClick: () => {
         window.location = "https://discord.io/tpns/";
       }
-    }), _react.default.createElement("img", {
+    }), /*#__PURE__*/_react.default.createElement("img", {
       border: "0" // width="130"
       ,
       alt: "Donate with Paypal",
@@ -562,7 +562,7 @@ class FAQ extends _react.PureComponent {
       onClick: () => {
         window.location = "https://paypal.me/fossephate/";
       }
-    })), _react.default.createElement("iframe", {
+    })), /*#__PURE__*/_react.default.createElement("iframe", {
       className: classes.twitch,
       src: "https://player.twitch.tv/?channel=remotegames&muted=false&autoplay=true",
       height: "360",
@@ -922,76 +922,76 @@ class Index extends _react.Component {
       window.history.replaceState("", "", "/");
     }
 
-    return _react.default.createElement(_reactRedux.Provider, {
+    return /*#__PURE__*/_react.default.createElement(_reactRedux.Provider, {
       store: this.store
-    }, _react.default.createElement(_styles.ThemeProvider, {
+    }, /*#__PURE__*/_react.default.createElement(_styles.ThemeProvider, {
       theme: this.state.theme
-    }, _react.default.createElement(_notistack.SnackbarProvider, {
+    }, /*#__PURE__*/_react.default.createElement(_notistack.SnackbarProvider, {
       maxSnack: 3
-    }, _react.default.createElement(_CssBaseline.default, null), _react.default.createElement(_reactRouterDom.BrowserRouter, null, _react.default.createElement(_react.Suspense, {
-      fallback: _react.default.createElement(_Loading.default, null)
-    }, _react.default.createElement(_reactRouter.Switch, null, _react.default.createElement(_reactRouter.Route, {
+    }, /*#__PURE__*/_react.default.createElement(_CssBaseline.default, null), /*#__PURE__*/_react.default.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react.default.createElement(_react.Suspense, {
+      fallback: /*#__PURE__*/_react.default.createElement(_Loading.default, null)
+    }, /*#__PURE__*/_react.default.createElement(_reactRouter.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/about",
       render: props => {
-        return _react.default.createElement(About, props);
+        return /*#__PURE__*/_react.default.createElement(About, props);
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/FAQ",
       render: props => {
-        return _react.default.createElement(FAQ, props);
+        return /*#__PURE__*/_react.default.createElement(FAQ, props);
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/privacy",
       render: props => {
-        return _react.default.createElement(Privacy, props);
+        return /*#__PURE__*/_react.default.createElement(Privacy, props);
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/tos",
       render: props => {
-        return _react.default.createElement(ToS, props);
+        return /*#__PURE__*/_react.default.createElement(ToS, props);
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/(login|register)",
       render: props => {
-        return _react.default.createElement(LoginRegisterModal, _extends({}, props, {
+        return /*#__PURE__*/_react.default.createElement(LoginRegisterModal, _extends({}, props, {
           history: this.props.history
         }));
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/create",
       render: props => {
-        return _react.default.createElement(CreateVMModal, _extends({}, props, {
+        return /*#__PURE__*/_react.default.createElement(CreateVMModal, _extends({}, props, {
           accountConnection: this.accountConnection,
           history: this.props.history
         }));
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/account",
       render: props => {
-        return _react.default.createElement(AccountModal, _extends({}, props, {
+        return /*#__PURE__*/_react.default.createElement(AccountModal, _extends({}, props, {
           history: this.props.history
         }));
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/(s|controls|settings)/:username?" // path="/s/:username?"
       ,
       render: props => {
-        return _react.default.createElement(Stream, _extends({}, props, {
+        return /*#__PURE__*/_react.default.createElement(Stream, _extends({}, props, {
           store: this.store,
           sagaMiddleware: this.sagaMiddleware,
           accountConnection: this.accountConnection
         }));
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/",
       render: props => {
-        return _react.default.createElement(Streams, _extends({}, props, {
+        return /*#__PURE__*/_react.default.createElement(Streams, _extends({}, props, {
           store: this.store,
           accountConnection: this.accountConnection,
           sagaMiddleware: this.sagaMiddleware
         }));
       }
-    })), _react.default.createElement(_MyAlert.default, null))))));
+    })), /*#__PURE__*/_react.default.createElement(_MyAlert.default, null))))));
   }
 
 }
@@ -999,7 +999,7 @@ class Index extends _react.Component {
 var _default = Index;
 exports.default = _default;
 
-_reactDom.default.render(_react.default.createElement(Index, null), document.getElementById("root"));
+_reactDom.default.render( /*#__PURE__*/_react.default.createElement(Index, null), document.getElementById("root"));
 
 module.exports = exports.default;
 
@@ -1093,19 +1093,19 @@ class Privacy extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 0,
       className: classes.root
-    }, _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 3,
       className: classes.main
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       className: classes.back,
       onClick: () => {
         this.props.history.push("/");
       }
-    }, "Back"), _react.default.createElement("iframe", {
+    }, "Back"), /*#__PURE__*/_react.default.createElement("iframe", {
       className: classes.iframe,
       src: "https://remotegames.io/privacy.html",
       frameBorder: "0"
@@ -1749,19 +1749,19 @@ class Stream extends _react.Component {
       alert("Try logging in again, if it doesn't work, try clicking the reset all settings button and try again.");
     }
 
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement(_react.Suspense, {
-      fallback: _react.default.createElement(_Loading.default, null)
-    }, _react.default.createElement(StreamsAppBar, {
+    }, /*#__PURE__*/_react.default.createElement(_react.Suspense, {
+      fallback: /*#__PURE__*/_react.default.createElement(_Loading.default, null)
+    }, /*#__PURE__*/_react.default.createElement(StreamsAppBar, {
       history: this.props.history,
       hide: this.props.settings.fullscreen || this.props.settings.hideNav
-    }), _react.default.createElement(Picture, null), _react.default.createElement(Chat, {
+    }), /*#__PURE__*/_react.default.createElement(Picture, null), /*#__PURE__*/_react.default.createElement(Chat, {
       hide: this.props.settings.hideChat
-    }), _react.default.createElement(StreamInfo, null)), _react.default.createElement(_reactRouter.Switch, null, _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(StreamInfo, null)), /*#__PURE__*/_react.default.createElement(_reactRouter.Switch, null, /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/settings",
       render: props => {
-        return _react.default.createElement(_SettingsModal.default, _extends({}, props, {
+        return /*#__PURE__*/_react.default.createElement(_SettingsModal.default, _extends({}, props, {
           inputHandler: this.inputHandler
         }));
       }
@@ -1936,18 +1936,18 @@ class Streams extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement(_StreamsAppBar.default, {
+    }, /*#__PURE__*/_react.default.createElement(_StreamsAppBar.default, {
       drawerOpen: this.state.drawerOpen,
       handleToggleDrawer: this.toggleDrawer
-    }), _react.default.createElement(_StreamsDrawer.default, {
+    }), /*#__PURE__*/_react.default.createElement(_StreamsDrawer.default, {
       drawerOpen: this.state.drawerOpen,
       handleToggleDrawer: this.toggleDrawer
-    }), _react.default.createElement(_StreamList.default, {
+    }), /*#__PURE__*/_react.default.createElement(_StreamList.default, {
       drawerOpen: this.state.drawerOpen,
       streams: this.state.streams
-    }), _react.default.createElement(_StreamsFooter.default, {
+    }), /*#__PURE__*/_react.default.createElement(_StreamsFooter.default, {
       drawerOpen: this.state.drawerOpen
     }));
   }
@@ -2059,19 +2059,19 @@ class ToS extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 0,
       className: classes.root
-    }, _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 3,
       className: classes.main
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       className: classes.back,
       onClick: () => {
         this.props.history.push("/");
       }
-    }, "Back"), _react.default.createElement("iframe", {
+    }, "Back"), /*#__PURE__*/_react.default.createElement("iframe", {
       className: classes.iframe,
       src: "https://remotegames.io/tos.html",
       frameBorder: "0"
@@ -2371,7 +2371,7 @@ const renderTextField = ({
     error
   },
   ...custom
-}) => _react.default.createElement(_TextField.default, _extends({
+}) => /*#__PURE__*/_react.default.createElement(_TextField.default, _extends({
   label: label,
   placeholder: label,
   error: touched && invalid,
@@ -2381,8 +2381,8 @@ const renderTextField = ({
 const renderCheckbox = ({
   input,
   label
-}) => _react.default.createElement("div", null, _react.default.createElement(_FormControlLabel.default, {
-  control: _react.default.createElement(_Checkbox.default, {
+}) => /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
+  control: /*#__PURE__*/_react.default.createElement(_Checkbox.default, {
     checked: input.value ? true : false,
     onChange: input.onChange
   }),
@@ -2391,10 +2391,10 @@ const renderCheckbox = ({
 
 const renderTOS = ({
   input
-}) => _react.default.createElement("div", null, _react.default.createElement(_Checkbox.default, {
+}) => /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Checkbox.default, {
   checked: input.value ? true : false,
   onChange: input.onChange
-}), _react.default.createElement("span", null, "I have read and agree to the "), _react.default.createElement(_Link.default, {
+}), /*#__PURE__*/_react.default.createElement("span", null, "I have read and agree to the "), /*#__PURE__*/_react.default.createElement(_Link.default, {
   href: "https://remotegames.io/tos.html"
 }, "Terms and Conditions")); // const radioButton = ({ input, ...rest }) => (
 // 	<FormControl>
@@ -2417,7 +2417,7 @@ const renderTOS = ({
 const renderRadioGroup = ({
   input,
   ...rest
-}) => _react.default.createElement(_RadioGroup.default, _extends({}, input, rest, {
+}) => /*#__PURE__*/_react.default.createElement(_RadioGroup.default, _extends({}, input, rest, {
   value: input.value,
   onChange: (event, value) => input.onChange(value)
 }));
@@ -2429,7 +2429,7 @@ const renderFromHelper = ({
   if (!(touched && error)) {
     return;
   } else {
-    return _react.default.createElement(_FormHelperText.default, null, touched && error);
+    return /*#__PURE__*/_react.default.createElement(_FormHelperText.default, null, touched && error);
   }
 };
 
@@ -2444,19 +2444,19 @@ const renderSelectField = ({
   variant,
   labelWidth,
   ...custom
-}) => _react.default.createElement(_FormControl.default, {
+}) => /*#__PURE__*/_react.default.createElement(_FormControl.default, {
   error: touched && error
-}, _react.default.createElement(_InputLabel.default, {
+}, /*#__PURE__*/_react.default.createElement(_InputLabel.default, {
   variant: variant,
   htmlFor: label + "Select"
-}, label), _react.default.createElement(_Select.default, _extends({
+}, label), /*#__PURE__*/_react.default.createElement(_Select.default, _extends({
   autoWidth: true
 }, input, custom, {
   inputProps: variant !== "outlined" && variant !== "filled" ? {
     id: label + "Select",
     labelWidth: labelWidth
   } : undefined,
-  input: variant === "outlined" ? _react.default.createElement(_OutlinedInput.default, {
+  input: variant === "outlined" ? /*#__PURE__*/_react.default.createElement(_OutlinedInput.default, {
     id: label + "Select",
     labelWidth: labelWidth
   }) : undefined
@@ -2524,32 +2524,32 @@ class VirtualMachineForm extends _react.Component {
     });
 
     _defineProperty(this, "getFPSMenuItems", () => {
-      return [_react.default.createElement(_MenuItem.default, {
+      return [/*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 0,
         value: 30
-      }, "30"), _react.default.createElement(_MenuItem.default, {
+      }, "30"), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 1,
         value: 20
       }, "20")];
     });
 
     _defineProperty(this, "getResolutionMenuItems", () => {
-      return [_react.default.createElement(_MenuItem.default, {
+      return [/*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 0,
         value: 1080
-      }, "1080"), _react.default.createElement(_MenuItem.default, {
+      }, "1080"), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 1,
         value: 720
-      }, "720"), _react.default.createElement(_MenuItem.default, {
+      }, "720"), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 2,
         value: 540
-      }, "540"), _react.default.createElement(_MenuItem.default, {
+      }, "540"), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 3,
         value: 480
-      }, "480"), _react.default.createElement(_MenuItem.default, {
+      }, "480"), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 1,
         value: 360
-      }, "360"), _react.default.createElement(_MenuItem.default, {
+      }, "360"), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 1,
         value: 240
       }, "240")];
@@ -2582,123 +2582,123 @@ class VirtualMachineForm extends _react.Component {
       classes,
       qualityProfile
     } = this.props;
-    return _react.default.createElement("form", {
+    return /*#__PURE__*/_react.default.createElement("form", {
       onSubmit: handleSubmit,
       className: classes.root
-    }, _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+    }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "streamTitle",
       component: renderTextField,
       label: "Stream Title",
       variant: "outlined"
-    }), _react.default.createElement(_reduxForm.Field, {
+    }), /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "thumbnailURL",
       component: renderTextField,
       label: "Thumbnail URL",
       variant: "outlined"
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       style: {
         display: "block"
       }
-    }, _react.default.createElement(_reduxForm.Field, {
+    }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "qualityProfile",
       component: renderRadioGroup,
       row: true
-    }, _react.default.createElement(_FormControlLabel.default, {
+    }, /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
       value: "ultraLow",
-      control: _react.default.createElement(_Radio.default, {
+      control: /*#__PURE__*/_react.default.createElement(_Radio.default, {
         color: "primary"
       }),
       label: "Ultra Low"
-    }), _react.default.createElement(_FormControlLabel.default, {
+    }), /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
       value: "low",
-      control: _react.default.createElement(_Radio.default, {
+      control: /*#__PURE__*/_react.default.createElement(_Radio.default, {
         color: "primary"
       }),
       label: "Low"
-    }), _react.default.createElement(_FormControlLabel.default, {
+    }), /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
       value: "medium",
-      control: _react.default.createElement(_Radio.default, {
+      control: /*#__PURE__*/_react.default.createElement(_Radio.default, {
         color: "primary"
       }),
       label: "Medium"
-    }), _react.default.createElement(_FormControlLabel.default, {
+    }), /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
       value: "high",
-      control: _react.default.createElement(_Radio.default, {
+      control: /*#__PURE__*/_react.default.createElement(_Radio.default, {
         color: "primary"
       }),
       label: "High"
-    }), _react.default.createElement(_FormControlLabel.default, {
+    }), /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
       value: "ultraHigh",
-      control: _react.default.createElement(_Radio.default, {
+      control: /*#__PURE__*/_react.default.createElement(_Radio.default, {
         color: "primary"
       }),
       label: "Ultra High"
-    }), _react.default.createElement(_FormControlLabel.default, {
+    }), /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
       value: "custom",
-      control: _react.default.createElement(_Radio.default, {
+      control: /*#__PURE__*/_react.default.createElement(_Radio.default, {
         color: "primary"
       }),
       label: "Custom"
-    }))), _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+    }))), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "resolution",
       component: renderSelectField,
       label: "Resolution",
       variant: "outlined",
       type: "number"
-    }, this.getResolutionMenuItems()), _react.default.createElement(_reduxForm.Field, {
+    }, this.getResolutionMenuItems()), /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "videoBitrate",
       component: renderTextField,
       label: "Video Bitrate (kb/s)",
       variant: "outlined",
       type: "number"
-    }), _react.default.createElement(_reduxForm.Field, {
+    }), /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "framerate",
       component: renderSelectField,
       label: "Output FPS",
       variant: "outlined",
       labelWidth: 100
-    }, this.getFPSMenuItems())), qualityProfile === "custom" && _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+    }, this.getFPSMenuItems())), qualityProfile === "custom" && /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "videoBufferSize",
       component: renderTextField,
       label: "Video Buffer Size",
       variant: "outlined",
       type: "number"
-    }), _react.default.createElement(_reduxForm.Field, {
+    }), /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "audioBufferSize",
       component: renderTextField,
       label: "Audio Buffer Size",
       variant: "outlined",
       type: "text"
-    }), _react.default.createElement(_reduxForm.Field, {
+    }), /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "groupOfPictures",
       component: renderTextField,
       label: "Group of Pictures",
       variant: "outlined",
       type: "text"
-    })), _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+    })), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "qmin",
       component: renderTextField,
       label: "QMin",
       variant: "outlined",
       type: "number"
-    }), _react.default.createElement(_reduxForm.Field, {
+    }), /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "qmax",
       component: renderTextField,
       label: "QMax",
       variant: "outlined",
       type: "text"
-    }))), _react.default.createElement("div", null, _react.default.createElement(_reduxForm.Field, {
+    }))), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "agree",
       component: renderTOS,
       onChange: this.agreeTOS
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.buttons
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "primary",
       type: "submit",
       disabled: pristine || submitting || !this.state.TOSAgreed
-    }, "Start Virtual Machine"), _react.default.createElement(_Button.default, {
+    }, "Start Virtual Machine"), /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "secondary",
       onClick: this.props.onStopMachine
@@ -2995,20 +2995,20 @@ class CreateVMModal extends _react.PureComponent {
       classes
     } = this.props;
     console.log("re-rendering CreateVMModal.");
-    return _react.default.createElement(_Dialog.default, {
+    return /*#__PURE__*/_react.default.createElement(_Dialog.default, {
       open: true,
       scroll: "body",
       maxWidth: "lg",
       fullWidth: true,
       onClose: this.handleClose
-    }, _react.default.createElement(_DialogContent.default, {
+    }, /*#__PURE__*/_react.default.createElement(_DialogContent.default, {
       className: classes.root
-    }, _react.default.createElement(_AppBar.default, {
+    }, /*#__PURE__*/_react.default.createElement(_AppBar.default, {
       position: "static"
-    }, _react.default.createElement(_Toolbar.default, null, _react.default.createElement(_Typography.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
       variant: "h6",
       color: "inherit"
-    }, "Create a Virtual Machine"))), _react.default.createElement(_VirtualMachineForm.default, {
+    }, "Create a Virtual Machine"))), /*#__PURE__*/_react.default.createElement(_VirtualMachineForm.default, {
       initialValues: this.state.formInitialValues,
       onSubmit: this.handleStartMachine,
       onStopMachine: this.handleStopMachine,
@@ -3170,20 +3170,20 @@ class SettingsModal extends _react.Component {
         break;
     }
 
-    return _react.default.createElement(_Dialog.default, {
+    return /*#__PURE__*/_react.default.createElement(_Dialog.default, {
       open: true,
       scroll: "body",
       maxWidth: "sm",
       fullWidth: true,
       onClose: this.handleClose
-    }, _react.default.createElement(_DialogContent.default, {
+    }, /*#__PURE__*/_react.default.createElement(_DialogContent.default, {
       className: classes.root
-    }, _react.default.createElement(_AppBar.default, {
+    }, /*#__PURE__*/_react.default.createElement(_AppBar.default, {
       position: "static"
-    }, _react.default.createElement(_Toolbar.default, null, _react.default.createElement(_Typography.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
       variant: "h6",
       color: "inherit"
-    }, "Settings"))), _react.default.createElement(_Tabs.default, {
+    }, "Settings"))), /*#__PURE__*/_react.default.createElement(_Tabs.default, {
       centered: true,
       value: which,
       classes: {
@@ -3203,35 +3203,35 @@ class SettingsModal extends _react.Component {
           this.props.history.replace("/settings/site");
         }
       }
-    }, _react.default.createElement(_Tab.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Audio Video"
-    }), _react.default.createElement(_Tab.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Controls"
-    }), _react.default.createElement(_Tab.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Site"
-    })), _react.default.createElement(_reactRouter.Route, {
+    })), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/settings/controls",
       render: props => {
-        return _react.default.createElement(_Paper.default, {
+        return /*#__PURE__*/_react.default.createElement(_Paper.default, {
           className: classes.controls,
           elevation: 4
-        }, _react.default.createElement(_InputMapper.default, null));
+        }, /*#__PURE__*/_react.default.createElement(_InputMapper.default, null));
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/settings/site",
       render: props => {
-        return _react.default.createElement(_Paper.default, {
+        return /*#__PURE__*/_react.default.createElement(_Paper.default, {
           className: classes.controls,
           elevation: 4
-        }, _react.default.createElement(_Site.default, null));
+        }, /*#__PURE__*/_react.default.createElement(_Site.default, null));
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/settings/av",
       render: props => {
-        return _react.default.createElement(_Paper.default, {
+        return /*#__PURE__*/_react.default.createElement(_Paper.default, {
           className: classes.controls,
           elevation: 4
-        }, _react.default.createElement(_AudioVideo.default, null));
+        }, /*#__PURE__*/_react.default.createElement(_AudioVideo.default, null));
       }
     })));
   }
@@ -3297,9 +3297,9 @@ class AudioVideo extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement("div", null, "test"));
+    }, /*#__PURE__*/_react.default.createElement("div", null, "test"));
   }
 
 }
@@ -3441,7 +3441,7 @@ class ControllerMapper extends _react.Component {
     let inputHandler = window.inputHandler;
 
     if (this.state.waiting) {
-      return _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, `${DISPLAY_NAMES[this.props.which]}`, " waiting for axis / button input..."));
+      return /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, `${DISPLAY_NAMES[this.props.which]}`, " waiting for axis / button input..."));
     }
 
     this.currentMapping = "unset";
@@ -3474,12 +3474,12 @@ class ControllerMapper extends _react.Component {
       currentMappingNamed = this.currentMapping;
     }
 
-    return _react.default.createElement(_ListItem.default, {
+    return /*#__PURE__*/_react.default.createElement(_ListItem.default, {
       className: classes.listItem
-    }, _react.default.createElement(_ListItemText.default, null, `${DISPLAY_NAMES[this.props.which]}`), _react.default.createElement(_ListItemText.default, null, currentMappingNamed), _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, `${DISPLAY_NAMES[this.props.which]}`), /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, currentMappingNamed), /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       onClick: this.mapButton
-    }, "Map To Button"), _react.default.createElement(_Button.default, {
+    }, "Map To Button"), /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       onClick: this.mapAxis
     }, "Map To Axis"));
@@ -3528,14 +3528,14 @@ class KeyboardMapper extends _react.Component {
     let inputHandler = window.inputHandler;
 
     if (this.state.waiting) {
-      return _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, `${DISPLAY_KEYBOARD_NAMES[this.props.which]}`, " waiting for keypress..."));
+      return /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, `${DISPLAY_KEYBOARD_NAMES[this.props.which]}`, " waiting for keypress..."));
     } // let currentMapping = inputHandler.keyboard.map2[parseInt(this.props.which)];
 
 
     let currentMapping = inputHandler.keyboard.map[MAP_KEYBOARD_NAMES[parseInt(this.props.which)]];
-    return _react.default.createElement(_ListItem.default, {
+    return /*#__PURE__*/_react.default.createElement(_ListItem.default, {
       className: classes.listItem
-    }, _react.default.createElement(_ListItemText.default, null, `${DISPLAY_KEYBOARD_NAMES[this.props.which]}`), _react.default.createElement(_ListItemText.default, null, currentMapping), _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, `${DISPLAY_KEYBOARD_NAMES[this.props.which]}`), /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, currentMapping), /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       onClick: this.mapKey
     }, "Map To Key"));
@@ -3653,7 +3653,7 @@ class InputMapperModal extends _react.Component {
     let gamepads = [];
 
     for (let gamepadIndex in gamepadWrapper.controllers) {
-      gamepads.push(_react.default.createElement(_MenuItem.default, {
+      gamepads.push( /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: gamepadIndex,
         value: gamepadIndex
       }, gamepadWrapper.controllers[gamepadIndex].id));
@@ -3664,7 +3664,7 @@ class InputMapperModal extends _react.Component {
       // set to 0 so we render this:
       activeGamepadIndex = 0; // prepend so it's first:
 
-      gamepads.unshift(_react.default.createElement(_MenuItem.default, {
+      gamepads.unshift( /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 0,
         value: 0
       }, "No gamepad selected"));
@@ -3672,15 +3672,15 @@ class InputMapperModal extends _react.Component {
 
     if (gamepads.length == 0 || activeGamepadIndex == null) {
       activeGamepadIndex = 0;
-      gamepads.push(_react.default.createElement(_MenuItem.default, {
+      gamepads.push( /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 0,
         value: 0
       }, "No gamepads detected"));
     }
 
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement(_Tabs.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Tabs.default, {
       centered: true,
       value: this.state.whichTab,
       classes: {
@@ -3696,34 +3696,34 @@ class InputMapperModal extends _react.Component {
           whichTab: value
         });
       }
-    }, _react.default.createElement(_Tab.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Controller"
-    }), _react.default.createElement(_Tab.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Keyboard"
-    })), this.state.whichTab === 0 && _react.default.createElement(_Paper.default, {
+    })), this.state.whichTab === 0 && /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: classes.controllerRemapper,
       elevation: 4
-    }, _react.default.createElement(_ListItemText.default, null, "Active Gamepad Type:", " " + (inputHandler.controller.settings.detectedType || "Unknown")), _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "Active Gamepad Type:", " " + (inputHandler.controller.settings.detectedType || "Unknown")), /*#__PURE__*/_react.default.createElement("div", {
       style: {
         display: "flex",
         justifyContent: "space-between"
       }
-    }, _react.default.createElement(_Select.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Select.default, {
       value: activeGamepadIndex,
       onChange: this.handleChange,
-      input: _react.default.createElement(_OutlinedInput.default, {
+      input: /*#__PURE__*/_react.default.createElement(_OutlinedInput.default, {
         labelWidth: 0
       }),
       style: {
         width: "80%"
       }
-    }, gamepads), _react.default.createElement(_Button.default, {
+    }, gamepads), /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       onClick: this.rescanGamepads
-    }, "Rescan")), _react.default.createElement(_Paper.default, {
+    }, "Rescan")), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 4,
       className: classes.sliderSettings
-    }, _react.default.createElement("div", null, "Stick Deadzone: ", inputHandler.controller.settings.axes[0].deadzone, _react.default.createElement(_MySlider.default, {
+    }, /*#__PURE__*/_react.default.createElement("div", null, "Stick Deadzone: ", inputHandler.controller.settings.axes[0].deadzone, /*#__PURE__*/_react.default.createElement(_MySlider.default, {
       rootClass: classes.rootClass,
       thumbClass: classes.thumb,
       activeClass: classes.active,
@@ -3742,7 +3742,7 @@ class InputMapperModal extends _react.Component {
       value: inputHandler.controller.settings.axes[0].deadzone,
       bounceInterval: 100,
       delay: 500
-    })), _react.default.createElement("div", null, "Stick Sensitivity: ", inputHandler.controller.settings.axes[0].sensitivity, _react.default.createElement(_MySlider.default, {
+    })), /*#__PURE__*/_react.default.createElement("div", null, "Stick Sensitivity: ", inputHandler.controller.settings.axes[0].sensitivity, /*#__PURE__*/_react.default.createElement(_MySlider.default, {
       rootClass: classes.rootClass,
       thumbClass: classes.thumb,
       activeClass: classes.active,
@@ -3761,33 +3761,33 @@ class InputMapperModal extends _react.Component {
       value: inputHandler.controller.settings.axes[0].sensitivity,
       bounceInterval: 100,
       delay: 500
-    }))), _react.default.createElement(_Paper.default, {
+    }))), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 2,
       style: {
         marginTop: 15
       }
-    }, _react.default.createElement(_List.default, {
+    }, /*#__PURE__*/_react.default.createElement(_List.default, {
       className: classes.list
-    }, [...Array(17)].map((e, i) => _react.default.createElement(ControllerMapper, {
+    }, [...Array(17)].map((e, i) => /*#__PURE__*/_react.default.createElement(ControllerMapper, {
       key: i,
       update: this.update,
       type: "button",
       which: i,
       classes: this.props.classes
-    })), [...Array(4)].map((e, i) => _react.default.createElement(ControllerMapper, {
+    })), [...Array(4)].map((e, i) => /*#__PURE__*/_react.default.createElement(ControllerMapper, {
       key: i,
       update: this.update,
       type: "axis",
       which: i,
       classes: this.props.classes
-    }))))), this.state.whichTab === 1 && _react.default.createElement(_Paper.default, {
+    }))))), this.state.whichTab === 1 && /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: classes.keyboardRemapper,
       elevation: 4
-    }, _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 2
-    }, _react.default.createElement(_List.default, {
+    }, /*#__PURE__*/_react.default.createElement(_List.default, {
       className: classes.list
-    }, [...Array(26)].map((e, i) => _react.default.createElement(KeyboardMapper, {
+    }, [...Array(26)].map((e, i) => /*#__PURE__*/_react.default.createElement(KeyboardMapper, {
       key: i,
       update: this.update,
       inputHandler: inputHandler,
@@ -3862,9 +3862,9 @@ class Site extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement(_CheckboxSettings.default, null));
+    }, /*#__PURE__*/_react.default.createElement(_CheckboxSettings.default, null));
   }
 
 }
@@ -3928,9 +3928,9 @@ class CheckboxSettings extends _react.PureComponent {
   }
 
   render() {
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 5
-    }, _react.default.createElement(_List.default, null, _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    }, /*#__PURE__*/_react.default.createElement(_List.default, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Enable Keyboard Controls",
       handleChange: state => {
         this.props.updateSettings({
@@ -3938,7 +3938,7 @@ class CheckboxSettings extends _react.PureComponent {
         });
       },
       checked: this.props.settings.keyboardControls
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Enable Controller Controls",
       handleChange: state => {
         this.props.updateSettings({
@@ -3946,7 +3946,7 @@ class CheckboxSettings extends _react.PureComponent {
         });
       },
       checked: this.props.settings.controllerControls
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Enable Touch Controls",
       handleChange: state => {
         this.props.updateSettings({
@@ -3954,7 +3954,7 @@ class CheckboxSettings extends _react.PureComponent {
         });
       },
       checked: this.props.settings.touchControls
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Real keyboard / mouse",
       handleChange: state => {
         this.props.updateSettings({
@@ -3962,7 +3962,7 @@ class CheckboxSettings extends _react.PureComponent {
         });
       },
       checked: this.props.settings.realKeyboardMouse
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Show Controller View",
       handleChange: state => {
         this.props.updateSettings({
@@ -3984,7 +3984,7 @@ class CheckboxSettings extends _react.PureComponent {
         }, 200);
       },
       checked: this.props.settings.controllerView
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Mobile Mode",
       handleChange: state => {
         this.props.updateSettings({
@@ -4028,11 +4028,11 @@ class CheckboxSettings extends _react.PureComponent {
         }, 200);
       },
       checked: this.props.settings.mobileMode
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Audio 3.0",
       handleChange: this.props.toggleAudioThree,
       checked: this.props.settings.audioThree
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ThemeSelector.default, null)), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ThemeSelector.default, null)), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Enable Fullscreen Mode",
       handleChange: state => {
         if (state) {
@@ -4061,7 +4061,7 @@ class CheckboxSettings extends _react.PureComponent {
         }
       },
       checked: this.props.settings.fullscreen
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Analog Stick Mode",
       handleChange: state => {
         this.props.updateSettings({
@@ -4069,7 +4069,7 @@ class CheckboxSettings extends _react.PureComponent {
         });
       },
       checked: this.props.settings.analogStickMode
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Hide Chat",
       handleChange: state => {
         this.props.updateSettings({
@@ -4077,7 +4077,7 @@ class CheckboxSettings extends _react.PureComponent {
         });
       },
       checked: this.props.settings.hideChat
-    })), _react.default.createElement(_ListItem.default, null, _react.default.createElement(_MyCheckbox.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: "Hide Nav Bar",
       handleChange: state => {
         this.props.updateSettings({
@@ -4196,11 +4196,11 @@ class Picture extends _react.PureComponent {
       [classes.hideChat]: this.props.hideChat || this.props.fullscreen,
       [classes.fullscreen]: this.props.fullscreen
     });
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       id: "picture",
       elevation: 3,
       className: pictureClasses
-    }, _react.default.createElement(_LaglessView.default, null), _react.default.createElement(_LaglessBar.default, null));
+    }, /*#__PURE__*/_react.default.createElement(_LaglessView.default, null), /*#__PURE__*/_react.default.createElement(_LaglessBar.default, null));
   }
 
 }
@@ -4301,11 +4301,11 @@ class LaglessBar extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       id: "laglessBar",
       className: classes.root,
       elevation: 3
-    }, _react.default.createElement(_VolumeSlider.default, {
+    }, /*#__PURE__*/_react.default.createElement(_VolumeSlider.default, {
       value: this.props.volume,
       handleChange: this.handleChange,
       onMute: () => {
@@ -4314,19 +4314,19 @@ class LaglessBar extends _react.PureComponent {
       onMax: () => {
         this.props.setVolume(100);
       }
-    }), this.props.videoType === "mpeg1" && _react.default.createElement(_Button.default, {
+    }), this.props.videoType === "mpeg1" && /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "primary",
       onClick: () => {
         window.stream.player.audio.destination.resetEnqueuedTime();
       }
-    }, "Sync Audio ", _react.default.createElement(_Sync.default, null)), _react.default.createElement(_Button.default, {
+    }, "Sync Audio ", /*#__PURE__*/_react.default.createElement(_Sync.default, null)), /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "primary",
       onClick: () => {
         this.props.history.push("/settings/site");
       }
-    }, "Settings ", _react.default.createElement(_Settings.default, null)), _react.default.createElement(_Ping.default, null));
+    }, "Settings ", /*#__PURE__*/_react.default.createElement(_Settings.default, null)), /*#__PURE__*/_react.default.createElement(_Ping.default, null));
   }
 
 }
@@ -4413,7 +4413,7 @@ class Ping extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: classes.root,
       elevation: 3
     }, this.props.ping, "ms");
@@ -4816,130 +4816,130 @@ class ControllerView extends _react.PureComponent {
       abxyClass = classes.xboxabxy;
     }
 
-    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.controllerRoot, {
         [classes.leftOverlay]: this.props.overlay
       })
-    }, _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("img", {
       className: (0, _classnames.default)(classes.image, {
         [classes.transparent]: this.props.overlay
       }),
       src: `${window.location.origin}/images/leftJoyCon2.png`
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       id: "leftStick",
       className: (0, _classnames.default)(classes.leftStick1, {
         [highlightedClass]: this.cstate.buttons.lstick
       })
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: classes.leftStick2,
       style: {
         transform: `translate(${this.getLeftStickTransform()})`
       }
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.dpad
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "up", {
         [highlightedClass]: this.cstate.buttons.up
       })
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "down", {
         [highlightedClass]: this.cstate.buttons.down
       })
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "left", {
         [highlightedClass]: this.cstate.buttons.left
       })
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "right", {
         [highlightedClass]: this.cstate.buttons.right
       })
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.otherButtons
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "minus", {
         [highlightedClass]: this.cstate.buttons.minus
       })
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "capture", {
         [highlightedClass]: this.cstate.buttons.capture
       })
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "l", {
         [highlightedClass]: this.cstate.buttons.l
       })
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: "click-passthrough"
-    }, this.props.type === "xbox" ? "LB" : "L")), _react.default.createElement("div", {
+    }, this.props.type === "xbox" ? "LB" : "L")), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "zl")
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.trigger1, {
         [highlightedClass]: this.cstate.buttons.zl
       })
-    }, this.props.type === "xbox" ? "LT" : "ZL"), _react.default.createElement("div", {
+    }, this.props.type === "xbox" ? "LT" : "ZL"), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.trigger2,
       style: {
         width: this.cstate.axes[4] * 100 + "%"
       }
-    })))), this.props.children, _react.default.createElement("div", {
+    })))), this.props.children, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.controllerRoot, {
         [classes.rightOverlay]: this.props.overlay
       })
-    }, _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("img", {
       className: (0, _classnames.default)(classes.image, {
         [classes.transparent]: this.props.overlay
       }),
       src: `${window.location.origin}/images/rightJoyCon2.png`
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       id: "rightStick",
       className: (0, _classnames.default)(classes.rightStick1, {
         [highlightedClass]: this.cstate.buttons.rstick
       })
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: classes.rightStick2,
       style: {
         transform: `translate(${this.getRightStickTransform()})`
       }
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: abxyClass
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "a", {
         [highlightedClass]: this.cstate.buttons.a
       })
-    }, this.props.type === "xbox" && "A"), _react.default.createElement("div", {
+    }, this.props.type === "xbox" && "A"), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "b", {
         [highlightedClass]: this.cstate.buttons.b
       })
-    }, this.props.type === "xbox" && "B"), _react.default.createElement("div", {
+    }, this.props.type === "xbox" && "B"), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "x", {
         [highlightedClass]: this.cstate.buttons.x
       })
-    }, this.props.type === "xbox" && "X"), _react.default.createElement("div", {
+    }, this.props.type === "xbox" && "X"), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, "y", {
         [highlightedClass]: this.cstate.buttons.y
       })
-    }, this.props.type === "xbox" && "Y")), _react.default.createElement("div", {
+    }, this.props.type === "xbox" && "Y")), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.otherButtons
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "plus", {
         [highlightedClass]: this.cstate.buttons.plus
       })
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "home", {
         [highlightedClass]: this.cstate.buttons.home
       })
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "r", {
         [highlightedClass]: this.cstate.buttons.r
       })
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: "click-passthrough"
-    }, this.props.type === "xbox" ? "RB" : "R")), _react.default.createElement("div", {
+    }, this.props.type === "xbox" ? "RB" : "R")), /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.button, classes.otherButtons, "zr")
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.trigger1, {
         [highlightedClass]: this.cstate.buttons.zr
       })
-    }, this.props.type === "xbox" ? "RT" : "ZR"), _react.default.createElement("div", {
+    }, this.props.type === "xbox" ? "RT" : "ZR"), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.trigger2,
       style: {
         width: this.cstate.axes[5] * 100 + "%"
@@ -5046,14 +5046,14 @@ class LaglessCanvas extends _react.PureComponent {
     let videoCanvas = null;
 
     if (this.props.videoType === "mpeg1") {
-      videoCanvas = _react.default.createElement("canvas", {
+      videoCanvas = /*#__PURE__*/_react.default.createElement("canvas", {
         id: "videoCanvas" // onClick={this.handleClick}
         ,
         className: this.props.classes // ref={this.videoRef}
 
       });
     } else if (this.props.videoType === "webRTC") {
-      videoCanvas = _react.default.createElement("video", {
+      videoCanvas = /*#__PURE__*/_react.default.createElement("video", {
         id: "videoCanvas" // onClick={this.handleClick}
         ,
         className: this.props.classes // ref={this.videoRef}
@@ -5061,7 +5061,7 @@ class LaglessCanvas extends _react.PureComponent {
       });
     }
 
-    return _react.default.createElement(_react.default.Fragment, null, videoCanvas, _react.default.createElement("canvas", {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, videoCanvas, /*#__PURE__*/_react.default.createElement("canvas", {
       id: "graphicsCanvas",
       className: this.props.classes,
       ref: this.graphicsCanvasRef,
@@ -5073,19 +5073,19 @@ class LaglessCanvas extends _react.PureComponent {
       },
       width: "1280",
       height: "720"
-    }), _react.default.createElement(_Dialog.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Dialog.default, {
       open: this.state.alertOpen,
       onClose: this.handleClose,
       "aria-labelledby": "alert-dialog-title",
       "aria-describedby": "alert-dialog-description"
-    }, _react.default.createElement(_DialogTitle.default, {
+    }, /*#__PURE__*/_react.default.createElement(_DialogTitle.default, {
       id: "alert-dialog-title"
-    }, "Activate Mouse Controls?"), _react.default.createElement(_DialogContent.default, null, _react.default.createElement(_DialogContentText.default, {
+    }, "Activate Mouse Controls?"), /*#__PURE__*/_react.default.createElement(_DialogContent.default, null, /*#__PURE__*/_react.default.createElement(_DialogContentText.default, {
       id: "alert-dialog-description"
-    }, "Enabling this will let you control the stream with your mouse.")), _react.default.createElement(_DialogActions.default, null, _react.default.createElement(_Button.default, {
+    }, "Enabling this will let you control the stream with your mouse.")), /*#__PURE__*/_react.default.createElement(_DialogActions.default, null, /*#__PURE__*/_react.default.createElement(_Button.default, {
       onClick: this.handleClose,
       color: "primary"
-    }, "No"), _react.default.createElement(_Button.default, {
+    }, "No"), /*#__PURE__*/_react.default.createElement(_Button.default, {
       onClick: this.enableMouseControls,
       variant: "contained",
       color: "primary",
@@ -5206,14 +5206,14 @@ class LaglessView extends _react.PureComponent {
     let controllerNumber = 0;
     let isXbox = false;
     let controllerType = isXbox ? "xbox" : "joycon";
-    let displayLagless = this.props.streamOnline ? _react.default.createElement(_LaglessCanvas.default, {
+    let displayLagless = this.props.streamOnline ? /*#__PURE__*/_react.default.createElement(_LaglessCanvas.default, {
       classes: videoClasses
-    }) : _react.default.createElement("div", {
+    }) : /*#__PURE__*/_react.default.createElement("div", {
       className: classes.offlineMessage
     }, "This stream is offline.");
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: laglessClasses
-    }, this.props.controllerView ? _react.default.createElement(_ControllerView.default, {
+    }, this.props.controllerView ? /*#__PURE__*/_react.default.createElement(_ControllerView.default, {
       overlay: this.props.mobileMode,
       controllerState: this.props.controllerStates[controllerNumber],
       type: controllerType
@@ -5307,9 +5307,9 @@ class StreamInfo extends _react.PureComponent {
       return null;
     }
 
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement(_PlayerInfo.default, null));
+    }, /*#__PURE__*/_react.default.createElement(_PlayerInfo.default, null));
   }
 
 }
@@ -5394,7 +5394,7 @@ class PlayerInfo extends _react.PureComponent {
       let players = [];
 
       for (let i = 0; i < this.props.playerCount; i++) {
-        players.push(_react.default.createElement(_Player.default, {
+        players.push( /*#__PURE__*/_react.default.createElement(_Player.default, {
           key: i,
           num: i
         }));
@@ -5410,7 +5410,7 @@ class PlayerInfo extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
     }, this.mapPlayers());
   }
@@ -5508,9 +5508,9 @@ class ControlQueue extends _react.PureComponent {
     let userids = this.props.controlQueues[this.props.num];
 
     if (userids.length == 0) {
-      return _react.default.createElement(_ListItem.default, {
+      return /*#__PURE__*/_react.default.createElement(_ListItem.default, {
         key: "0"
-      }, _react.default.createElement(_ListItemText.default, {
+      }, /*#__PURE__*/_react.default.createElement(_ListItemText.default, {
         primary: "The queue is empty."
       }));
     }
@@ -5521,18 +5521,18 @@ class ControlQueue extends _react.PureComponent {
       let listItemClasses = (0, _classnames.default)(classes.listItem, {
         [classes.highlighted]: this.props.userid == userids[i]
       });
-      queue.push(_react.default.createElement(_Username.default, {
+      queue.push( /*#__PURE__*/_react.default.createElement(_Username.default, {
         key: i,
         style: {
           width: "100%"
         },
         userid: userids[i]
-      }, _react.default.createElement(_ListItem.default, {
+      }, /*#__PURE__*/_react.default.createElement(_ListItem.default, {
         button: true,
         key: i,
         className: listItemClasses,
         userid: userids[i]
-      }, _react.default.createElement(_ListItemText.default, {
+      }, /*#__PURE__*/_react.default.createElement(_ListItemText.default, {
         primary: username
       }))));
     }
@@ -5544,7 +5544,7 @@ class ControlQueue extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_List.default, {
+    return /*#__PURE__*/_react.default.createElement(_List.default, {
       className: classes.root
     }, this.getQueue());
   }
@@ -5667,20 +5667,20 @@ class Player extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 4,
       className: classes.root
-    }, _react.default.createElement(_MyCheckbox.default, {
+    }, /*#__PURE__*/_react.default.createElement(_MyCheckbox.default, {
       text: `Player ${this.props.num + 1}`,
       handleChange: this.choosePlayer,
       checked: this.props.currentPlayer == this.props.num
-    }), _react.default.createElement(_TurnTimers.default, {
+    }), /*#__PURE__*/_react.default.createElement(_TurnTimers.default, {
       num: this.props.num
-    }), _react.default.createElement(_QueueButton.default, {
+    }), /*#__PURE__*/_react.default.createElement(_QueueButton.default, {
       num: this.props.num,
       controlQueue: this.props.controlQueues[this.props.num],
       userid: this.props.userid
-    }), _react.default.createElement(_ControlQueue.default, {
+    }), /*#__PURE__*/_react.default.createElement(_ControlQueue.default, {
       num: this.props.num
     }));
   }
@@ -5795,7 +5795,7 @@ class QueueButton extends _react.PureComponent {
       buttonText = "Join Queue";
     }
 
-    return _react.default.createElement(_Button.default, {
+    return /*#__PURE__*/_react.default.createElement(_Button.default, {
       className: classes.root,
       variant: "contained",
       onClick: this.joinLeaveQueue
@@ -5932,16 +5932,16 @@ class TurnTimer extends _react.PureComponent {
       [classes.turnText]: isTurn,
       [classes.forfeitText]: !isTurn
     });
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement(_LinearProgress.default, {
+    }, /*#__PURE__*/_react.default.createElement(_LinearProgress.default, {
       classes: {
         root: override
       },
       variant: "determinate",
       value: value,
       color: color
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: textClass
     }, this.getBarText()));
   }
@@ -6038,12 +6038,12 @@ class TurnTimers extends _react.PureComponent {
       username = null;
     }
 
-    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_TurnTimer.default, {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_TurnTimer.default, {
       type: "turn",
       name: username,
       timeLeft: parseInt(turnTimeLeft / 1000),
       percent: parseInt(turnTimeLeftPercent)
-    }), _react.default.createElement(_TurnTimer.default, {
+    }), /*#__PURE__*/_react.default.createElement(_TurnTimer.default, {
       type: "forfeit",
       name: username,
       timeLeft: parseInt(forfeitTimeLeft / 1000),
@@ -6199,23 +6199,23 @@ class StreamList extends _react.PureComponent {
       for (let i = 0; i < streams.length; i++) {
         let stream = streams[i];
 
-        let card = _react.default.createElement(_reactRouterDom.Link, {
+        let card = /*#__PURE__*/_react.default.createElement(_reactRouterDom.Link, {
           key: i,
           to: `/s/${stream.username}`
-        }, _react.default.createElement(_Card.default, {
+        }, /*#__PURE__*/_react.default.createElement(_Card.default, {
           className: classes.card,
           elevation: 5
-        }, _react.default.createElement(_CardActionArea.default, {
+        }, /*#__PURE__*/_react.default.createElement(_CardActionArea.default, {
           onClick: () => {
             this.props.history.push(`/s/${stream.username}`);
           }
-        }, _react.default.createElement(_CardMedia.default, {
+        }, /*#__PURE__*/_react.default.createElement(_CardMedia.default, {
           className: classes.media,
           image: stream.thumbnailURL || DUMMY_URL,
           title: "Photo"
-        }), _react.default.createElement(_CardContent.default, null, _react.default.createElement(_Typography.default, {
+        }), /*#__PURE__*/_react.default.createElement(_CardContent.default, null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
           component: "p"
-        }, stream.title || "Untitled Stream"), _react.default.createElement(_Typography.default, {
+        }, stream.title || "Untitled Stream"), /*#__PURE__*/_react.default.createElement(_Typography.default, {
           component: "p"
         }, stream.username)))));
 
@@ -6223,12 +6223,12 @@ class StreamList extends _react.PureComponent {
       }
 
       if (cards.length === 0) {
-        return _react.default.createElement(_Paper.default, {
+        return /*#__PURE__*/_react.default.createElement(_Paper.default, {
           elevation: 4,
           style: {
             width: 300
           }
-        }, _react.default.createElement(_Typography.default, {
+        }, /*#__PURE__*/_react.default.createElement(_Typography.default, {
           component: "p"
         }, "No streams online right now."));
       }
@@ -6246,7 +6246,7 @@ class StreamList extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: (0, _classnames.default)(classes.root, {
         [classes.drawerOpen]: this.props.drawerOpen,
         [classes.drawerClose]: !this.props.drawerOpen
@@ -6418,24 +6418,24 @@ class StreamsAppBar extends _react.PureComponent {
       return null;
     }
 
-    const mobileMenu = _react.default.createElement("div", null, _react.default.createElement(_MenuItem.default, {
+    const mobileMenu = /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
       onClick: this.handleAccount
-    }, _react.default.createElement(_IconButton.default, {
+    }, /*#__PURE__*/_react.default.createElement(_IconButton.default, {
       color: "inherit"
-    }, _react.default.createElement(_AccountCircle.default, null)), _react.default.createElement("p", null, "Profile")), _react.default.createElement(_MenuItem.default, {
+    }, /*#__PURE__*/_react.default.createElement(_AccountCircle.default, null)), /*#__PURE__*/_react.default.createElement("p", null, "Profile")), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
       onClick: this.handleDownloadHostFiles
-    }, _react.default.createElement("p", null, "Download Host Files")), _react.default.createElement(_MenuItem.default, {
+    }, /*#__PURE__*/_react.default.createElement("p", null, "Download Host Files")), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
       onClick: this.handleProjectDiscord
-    }, _react.default.createElement("p", null, "Project Discord Server")), _react.default.createElement(_MenuItem.default, {
+    }, /*#__PURE__*/_react.default.createElement("p", null, "Project Discord Server")), /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
       onClick: this.handleDevDiscord
-    }, _react.default.createElement("p", null, "Dev's Discord Server")));
+    }, /*#__PURE__*/_react.default.createElement("p", null, "Dev's Discord Server")));
 
-    let main = _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_IconButton.default, {
+    let main = /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_IconButton.default, {
       className: classes.menuButton,
       color: "inherit",
       "aria-label": "Open drawer",
       onClick: this.props.handleToggleDrawer
-    }, _react.default.createElement(_Menu.default, null)), _react.default.createElement(_Typography.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Menu.default, null)), /*#__PURE__*/_react.default.createElement(_Typography.default, {
       className: classes.title,
       variant: "h6",
       color: "inherit",
@@ -6443,11 +6443,11 @@ class StreamsAppBar extends _react.PureComponent {
       onClick: () => {
         this.props.history.push("/");
       }
-    }, "Streams"), _react.default.createElement("div", {
+    }, "Streams"), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.search
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: classes.searchIcon
-    }, _react.default.createElement(_Search.default, null)), _react.default.createElement(_InputBase.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Search.default, null)), /*#__PURE__*/_react.default.createElement(_InputBase.default, {
       placeholder: "Search\u2026",
       classes: {
         root: classes.inputRoot,
@@ -6455,44 +6455,44 @@ class StreamsAppBar extends _react.PureComponent {
       }
     })));
 
-    let desktop = _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+    let desktop = /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
       className: classes.grow
-    }), _react.default.createElement(_Button.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Button.default, {
       size: "small",
       color: "default",
       variant: "contained",
       onClick: this.handleDownloadHostFiles
-    }, "Download Host Files"), _react.default.createElement("div", {
+    }, "Download Host Files"), /*#__PURE__*/_react.default.createElement("div", {
       style: {
         width: "10px"
       }
-    }), _react.default.createElement(_Button.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Button.default, {
       size: "small",
       color: "default",
       variant: "contained",
       onClick: this.handleProjectDiscord
-    }, "Project Discord"), _react.default.createElement("div", {
+    }, "Project Discord"), /*#__PURE__*/_react.default.createElement("div", {
       style: {
         width: "10px"
       }
-    }), _react.default.createElement(_Button.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Button.default, {
       size: "small",
       color: "default",
       variant: "contained",
       onClick: this.handleDevDiscord
-    }, "Dev's Discord"), _react.default.createElement(_IconButton.default, {
+    }, "Dev's Discord"), /*#__PURE__*/_react.default.createElement(_IconButton.default, {
       onClick: this.handleAccount,
       color: "inherit"
-    }, _react.default.createElement(_AccountCircle.default, null)));
+    }, /*#__PURE__*/_react.default.createElement(_AccountCircle.default, null)));
 
-    let mobile = _react.default.createElement("div", null);
+    let mobile = /*#__PURE__*/_react.default.createElement("div", null);
 
     if (!this.props.loggedIn) {
-      mobile = desktop = _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+      mobile = desktop = /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
         style: {
           width: "10px"
         }
-      }), _react.default.createElement(_Button.default, {
+      }), /*#__PURE__*/_react.default.createElement(_Button.default, {
         size: "small",
         color: "default",
         variant: "contained",
@@ -6500,7 +6500,7 @@ class StreamsAppBar extends _react.PureComponent {
       }, "Login / Register"));
     }
 
-    return _react.default.createElement(_MyAppBar.default, {
+    return /*#__PURE__*/_react.default.createElement(_MyAppBar.default, {
       main: main,
       desktop: desktop,
       mobile: mobile,
@@ -6651,21 +6651,21 @@ class StreamsDrawer extends _react.PureComponent {
       classes
     } = this.props;
 
-    const drawer = _react.default.createElement("div", null, _react.default.createElement("div", {
+    const drawer = /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
       className: classes.toolbar
-    }), _react.default.createElement(_Divider.default, null), _react.default.createElement(_List.default, null, _react.default.createElement(_ListItem.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Divider.default, null), /*#__PURE__*/_react.default.createElement(_List.default, null, /*#__PURE__*/_react.default.createElement(_ListItem.default, {
       button: true
-    }, _react.default.createElement(_ListItemText.default, {
+    }, /*#__PURE__*/_react.default.createElement(_ListItemText.default, {
       primary: "Streams"
-    })), _react.default.createElement(_ListItem.default, {
+    })), /*#__PURE__*/_react.default.createElement(_ListItem.default, {
       button: true
-    }, _react.default.createElement(_ListItemIcon.default, null, _react.default.createElement(_MoveToInbox.default, null)), _react.default.createElement(_ListItemText.default, {
+    }, /*#__PURE__*/_react.default.createElement(_ListItemIcon.default, null, /*#__PURE__*/_react.default.createElement(_MoveToInbox.default, null)), /*#__PURE__*/_react.default.createElement(_ListItemText.default, {
       primary: "Subscriptions"
     }))));
 
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
-    }, _react.default.createElement(_Drawer.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Drawer.default, {
       container: this.props.container,
       variant: "persistent" // anchor="left"
       ,
@@ -6785,25 +6785,25 @@ class StreamsFooter extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: (0, _classnames.default)(classes.root, {
         [classes.drawerOpen]: this.props.drawerOpen,
         [classes.drawerClose]: !this.props.drawerOpen
       }),
       elevation: 4
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       color: "default" // variant="contained"
       ,
       onClick: () => {
         this.props.history.push("/about");
       }
-    }, "About"), _react.default.createElement(_Button.default, {
+    }, "About"), /*#__PURE__*/_react.default.createElement(_Button.default, {
       color: "default" // variant="contained"
       ,
       onClick: () => {
         this.props.history.push("/tos");
       }
-    }, "TOS"), _react.default.createElement(_Button.default, {
+    }, "TOS"), /*#__PURE__*/_react.default.createElement(_Button.default, {
       color: "default" // variant="contained"
       ,
       onClick: () => {
@@ -12369,16 +12369,16 @@ class ConnectAccounts extends _react.PureComponent {
       showTOS
     } = this.props;
     let canDelete = this.props.connectedAccounts.length > 1 || this.props.validUsernames.length > 1;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: classes.root,
       elevation: 0
-    }, showTOS && _react.default.createElement("div", null, _react.default.createElement(_Checkbox.default, {
+    }, showTOS && /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Checkbox.default, {
       onChange: this.agreeTOS
-    }), _react.default.createElement("span", null, "I have read and agree to the "), _react.default.createElement(_Link.default, {
+    }), /*#__PURE__*/_react.default.createElement("span", null, "I have read and agree to the "), /*#__PURE__*/_react.default.createElement(_Link.default, {
       href: "/tos"
-    }, "Terms and Conditions")), _react.default.createElement("div", {
+    }, "Terms and Conditions")), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.connectWithButton
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       fullWidth: true,
       variant: "contained",
       color: "default",
@@ -12387,18 +12387,18 @@ class ConnectAccounts extends _react.PureComponent {
         this.connectAccountOrLogin("twitch");
       },
       disabled: !this.state.TOSAgreed && showTOS
-    }, _react.default.createElement("span", null, "Connect with"), _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("span", null, "Connect with"), /*#__PURE__*/_react.default.createElement("img", {
       className: classes.twitchLogo,
       src: "/images/Twitch_Purple_RGB.png"
-    })), this.props.connectedAccounts.includes("twitch") && canDelete && _react.default.createElement(_Button.default, {
+    })), this.props.connectedAccounts.includes("twitch") && canDelete && /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "secondary",
       onClick: () => {
         this.props.onRemoveAccount("twitch");
       }
-    }, "X")), _react.default.createElement("div", {
+    }, "X")), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.connectWithButton
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       fullWidth: true,
       variant: "contained",
       color: "default",
@@ -12407,18 +12407,18 @@ class ConnectAccounts extends _react.PureComponent {
         this.connectAccountOrLogin("youtube");
       },
       disabled: !this.state.TOSAgreed && showTOS
-    }, _react.default.createElement("span", null, "Connect with"), _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("span", null, "Connect with"), /*#__PURE__*/_react.default.createElement("img", {
       className: classes.youtubeLogo,
       src: "/images/yt_logo_rgb_light.png"
-    })), this.props.connectedAccounts.includes("youtube") && canDelete && _react.default.createElement(_Button.default, {
+    })), this.props.connectedAccounts.includes("youtube") && canDelete && /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "secondary",
       onClick: () => {
         this.props.onRemoveAccount("youtube");
       }
-    }, "X")), _react.default.createElement("div", {
+    }, "X")), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.connectWithButton
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       fullWidth: true,
       variant: "contained",
       color: "default",
@@ -12427,17 +12427,17 @@ class ConnectAccounts extends _react.PureComponent {
         this.connectAccountOrLogin("google");
       },
       disabled: !this.state.TOSAgreed && showTOS
-    }, _react.default.createElement("span", {
+    }, /*#__PURE__*/_react.default.createElement("span", {
       id: "connectWithGoogleText"
-    }, "Connect with Google")), this.props.connectedAccounts.includes("google") && canDelete && _react.default.createElement(_Button.default, {
+    }, "Connect with Google")), this.props.connectedAccounts.includes("google") && canDelete && /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "secondary",
       onClick: () => {
         this.props.onRemoveAccount("google");
       }
-    }, "X")), _react.default.createElement("div", {
+    }, "X")), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.connectWithButton
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       fullWidth: true,
       variant: "contained",
       color: "default",
@@ -12446,10 +12446,10 @@ class ConnectAccounts extends _react.PureComponent {
         this.connectAccountOrLogin("discord");
       },
       disabled: !this.state.TOSAgreed && showTOS
-    }, _react.default.createElement("span", null, "Connect with"), _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("span", null, "Connect with"), /*#__PURE__*/_react.default.createElement("img", {
       className: classes.discordLogo,
       src: "/images/discord_logo.png"
-    })), this.props.connectedAccounts.includes("discord") && canDelete && _react.default.createElement(_Button.default, {
+    })), this.props.connectedAccounts.includes("discord") && canDelete && /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "secondary",
       onClick: () => {
@@ -12501,7 +12501,7 @@ var _Popover = _interopRequireDefault(__webpack_require__(/*! @material-ui/core/
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // react:
-const PopoverMenu = props => _react.default.createElement(_Popover.default, {
+const PopoverMenu = props => /*#__PURE__*/_react.default.createElement(_Popover.default, {
   open: props.open,
   anchorEl: props.anchorEl,
   onClose: props.onClose,
@@ -12513,18 +12513,18 @@ const PopoverMenu = props => _react.default.createElement(_Popover.default, {
     vertical: "top",
     horizontal: "center"
   }
-}, _react.default.createElement(_Paper.default, {
+}, /*#__PURE__*/_react.default.createElement(_Paper.default, {
   elevation: 4,
   style: {
     padding: "10px"
   }
-}, _react.default.createElement(_Button.default, {
+}, /*#__PURE__*/_react.default.createElement(_Button.default, {
   variant: "contained",
   color: "primary"
-}, "View Profile"), _react.default.createElement(_Button.default, {
+}, "View Profile"), /*#__PURE__*/_react.default.createElement(_Button.default, {
   variant: "contained",
   color: "secondary"
-}, "Ban"), _react.default.createElement(_Button.default, {
+}, "Ban"), /*#__PURE__*/_react.default.createElement(_Button.default, {
   variant: "contained",
   color: "primary"
 }, "Kick from Queue")));
@@ -12600,13 +12600,13 @@ class Username extends _react.PureComponent {
   }
 
   render() {
-    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", {
       style: this.props.style,
       onClick: this.handleOpenPopover,
       ref: ref => {
         this.ref = ref;
       }
-    }, this.props.children), _react.default.createElement(_PopoverMenu.default, {
+    }, this.props.children), /*#__PURE__*/_react.default.createElement(_PopoverMenu.default, {
       open: this.state.popoverOpen,
       onClose: this.handleClosePopover,
       anchorEl: this.ref
@@ -12688,14 +12688,14 @@ class UsernameDropdown extends _react.PureComponent {
     let usernames = [];
 
     for (let i = 0; i < this.props.validUsernames.length; i++) {
-      usernames.push(_react.default.createElement(_MenuItem.default, {
+      usernames.push( /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: i,
         value: i
       }, this.props.validUsernames[i], "\xA0\xA0"));
     }
 
     if (this.props.validUsernames.length == 0) {
-      return _react.default.createElement(_MenuItem.default, {
+      return /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
         key: 0,
         value: 0
       }, "Not signed in.");
@@ -12711,10 +12711,10 @@ class UsernameDropdown extends _react.PureComponent {
       usernameIndex = 0;
     }
 
-    return _react.default.createElement(_Select.default, {
+    return /*#__PURE__*/_react.default.createElement(_Select.default, {
       value: usernameIndex,
       onChange: this.props.handleChange,
-      input: _react.default.createElement(_OutlinedInput.default, {
+      input: /*#__PURE__*/_react.default.createElement(_OutlinedInput.default, {
         labelWidth: 0
       })
     }, this.getUsernameList());
@@ -12836,24 +12836,24 @@ class Chat extends _react.PureComponent {
       return null;
     }
 
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       id: "chat",
       className: classes.root
-    }, _react.default.createElement(_Tabs.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Tabs.default, {
       value: this.state.tab,
       onChange: this.handleChangeTab,
       indicatorColor: "primary",
       centered: true,
       variant: "fullWidth"
-    }, _react.default.createElement(_Tab.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Chat"
-    }), _react.default.createElement(_Tab.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Members"
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       hidden: this.state.tab !== 0
-    }, _react.default.createElement(_MessageList.default, null), _react.default.createElement(_SendMessageForm.default, null)), _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement(_MessageList.default, null), /*#__PURE__*/_react.default.createElement(_SendMessageForm.default, null)), /*#__PURE__*/_react.default.createElement("div", {
       hidden: this.state.tab !== 1
-    }, _react.default.createElement(_MemberList.default, null)));
+    }, /*#__PURE__*/_react.default.createElement(_MemberList.default, null)));
   }
 
 }
@@ -12931,7 +12931,7 @@ class MemberList extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: classes.root,
       elevation: 4
     }, "aaaaaaaaaaaaaaa");
@@ -13101,25 +13101,25 @@ class Message extends _react.PureComponent {
 
     if (account) {
       if (isDev) {
-        icons.push(_react.default.createElement(_Badge.default, {
+        icons.push( /*#__PURE__*/_react.default.createElement(_Badge.default, {
           type: "dev"
         }));
       } else if (account.roles.host) {
-        icons.push(_react.default.createElement(_Badge.default, {
+        icons.push( /*#__PURE__*/_react.default.createElement(_Badge.default, {
           type: "host"
         }));
       } else if (account.roles.mod) {
-        icons.push(_react.default.createElement(_Badge.default, {
+        icons.push( /*#__PURE__*/_react.default.createElement(_Badge.default, {
           type: "mod"
         }));
       } else if (account.roles.plus) {
-        icons.push(_react.default.createElement(_Badge.default, {
+        icons.push( /*#__PURE__*/_react.default.createElement(_Badge.default, {
           type: "plus"
         }));
       }
 
       if (account.roles.sub) {
-        icons.push(_react.default.createElement(_Badge.default, {
+        icons.push( /*#__PURE__*/_react.default.createElement(_Badge.default, {
           type: "sub1"
         }));
       }
@@ -13132,23 +13132,23 @@ class Message extends _react.PureComponent {
     }
 
     icons = _react.default.Children.toArray(icons);
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root,
       userid: userid,
       onClick: this.props.onClick
-    }, _react.default.createElement(_reactLinkify.default, {
+    }, /*#__PURE__*/_react.default.createElement(_reactLinkify.default, {
       properties: {
         className: classes.links
       }
-    }, getTimeStamp(time), icons, icons.length == 0 ? " " : null, _react.default.createElement(_Username.default, {
+    }, getTimeStamp(time), icons, icons.length == 0 ? " " : null, /*#__PURE__*/_react.default.createElement(_Username.default, {
       userid: userid,
       style: {
         display: "inline"
       }
-    }, _react.default.createElement(_Paper.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Paper.default, {
       elevation: 4,
       className: classes.user
-    }, username)), " ", _react.default.createElement("span", null, text)));
+    }, username)), " ", /*#__PURE__*/_react.default.createElement("span", null, text)));
   }
 
 }
@@ -13289,7 +13289,7 @@ class MessageList extends _react.Component {
         }
       }
 
-      messages.push(_react.default.createElement(_Message.default, _extends({
+      messages.push( /*#__PURE__*/_react.default.createElement(_Message.default, _extends({
         key: i
       }, this.props.messages[i], {
         isLastMessage: isLastMessage,
@@ -13324,14 +13324,14 @@ class MessageList extends _react.Component {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       id: "messageList",
       className: classes.root,
       elevation: 4,
       ref: el => {
         this.rootRef = el;
       }
-    }, this.mapMessages(), _react.default.createElement("div", {
+    }, this.mapMessages(), /*#__PURE__*/_react.default.createElement("div", {
       style: {
         float: "left",
         clear: "both"
@@ -13339,7 +13339,7 @@ class MessageList extends _react.Component {
       ref: el => {
         this.messagesEnd = el;
       }
-    }), _react.default.createElement(_Snackbar.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Snackbar.default, {
       anchorOrigin: {
         vertical: "top",
         horizontal: "right"
@@ -13347,10 +13347,10 @@ class MessageList extends _react.Component {
       open: this.state.voting,
       autoHideDuration: 0,
       onClose: () => {},
-      message: _react.default.createElement("span", {
+      message: /*#__PURE__*/_react.default.createElement("span", {
         id: "message-id"
       }, "A vote has started to switch games!"),
-      action: [_react.default.createElement(_Button.default, {
+      action: [/*#__PURE__*/_react.default.createElement(_Button.default, {
         key: "leave",
         color: "secondary",
         size: "small",
@@ -13361,12 +13361,12 @@ class MessageList extends _react.Component {
             voting: false
           });
         }
-      }, "LEAVE"), _react.default.createElement("div", {
+      }, "LEAVE"), /*#__PURE__*/_react.default.createElement("div", {
         key: "spacer",
         style: {
           width: "15px"
         }
-      }), _react.default.createElement(_Button.default, {
+      }), /*#__PURE__*/_react.default.createElement(_Button.default, {
         key: "stay",
         color: "primary",
         size: "small",
@@ -13377,7 +13377,7 @@ class MessageList extends _react.Component {
             voting: false
           });
         }
-      }, "STAY"), _react.default.createElement(_IconButton.default, {
+      }, "STAY"), /*#__PURE__*/_react.default.createElement(_IconButton.default, {
         key: "close",
         color: "inherit",
         className: classes.close,
@@ -13386,7 +13386,7 @@ class MessageList extends _react.Component {
             voting: false
           });
         }
-      }, _react.default.createElement(_Close.default, null))]
+      }, /*#__PURE__*/_react.default.createElement(_Close.default, null))]
     }));
   }
 
@@ -13470,7 +13470,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 const Loading = ({
   data
-}) => _react.default.createElement("div", null, "Loading"); // jss:
+}) => /*#__PURE__*/_react.default.createElement("div", null, "Loading"); // jss:
 
 
 const styles = theme => ({
@@ -13679,11 +13679,11 @@ class SendMessageForm extends _react.PureComponent {
     });
 
     _defineProperty(this, "renderNameSuggestion", obj => {
-      return _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, obj.entity.name));
+      return /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, obj.entity.name));
     });
 
     _defineProperty(this, "renderCharSuggestion", obj => {
-      return _react.default.createElement(_ListItem.default, null, _react.default.createElement(_ListItemText.default, null, obj.entity.char));
+      return /*#__PURE__*/_react.default.createElement(_ListItem.default, null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, obj.entity.char));
     });
 
     this.rta = _react.default.createRef();
@@ -13701,11 +13701,11 @@ class SendMessageForm extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       id: "SendMessageForm",
       className: (0, _classnames.default)(classes.root, classes.container),
       elevation: 0
-    }, _react.default.createElement(_reactTextareaAutocomplete.default, {
+    }, /*#__PURE__*/_react.default.createElement(_reactTextareaAutocomplete.default, {
       id: "messageBoxOld",
       className: classes.messageBox,
       containerClassName: classes.messageBoxContainer,
@@ -13749,11 +13749,11 @@ class SendMessageForm extends _react.PureComponent {
       value: this.state.text,
       placeholder: "Send a message",
       variant: "standard"
-    }), _react.default.createElement(_Fab.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Fab.default, {
       color: "primary",
       size: "small",
       onClick: this.sendMessage
-    }, _react.default.createElement(_Send.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Send.default, {
       fontSize: "small"
     })));
   }
@@ -13855,7 +13855,7 @@ const renderTextField = ({
     error
   },
   ...custom
-}) => _react.default.createElement(_TextField.default, _extends({
+}) => /*#__PURE__*/_react.default.createElement(_TextField.default, _extends({
   label: label,
   placeholder: label,
   error: touched && invalid,
@@ -13865,8 +13865,8 @@ const renderTextField = ({
 const renderCheckbox = ({
   input,
   label
-}) => _react.default.createElement("div", null, _react.default.createElement(_FormControlLabel.default, {
-  control: _react.default.createElement(_Checkbox.default, {
+}) => /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
+  control: /*#__PURE__*/_react.default.createElement(_Checkbox.default, {
     checked: input.value ? true : false,
     onChange: input.onChange
   }),
@@ -13880,7 +13880,7 @@ const renderFromHelper = ({
   if (!(touched && error)) {
     return;
   } else {
-    return _react.default.createElement(_FormHelperText.default, null, touched && error);
+    return /*#__PURE__*/_react.default.createElement(_FormHelperText.default, null, touched && error);
   }
 };
 
@@ -13893,11 +13893,11 @@ const renderSelectField = ({
   },
   children,
   ...custom
-}) => _react.default.createElement(_FormControl.default, {
+}) => /*#__PURE__*/_react.default.createElement(_FormControl.default, {
   error: touched && error
-}, _react.default.createElement(_InputLabel.default, {
+}, /*#__PURE__*/_react.default.createElement(_InputLabel.default, {
   htmlFor: "age-native-simple"
-}, "Age"), _react.default.createElement(_Select.default, _extends({
+}, "Age"), /*#__PURE__*/_react.default.createElement(_Select.default, _extends({
   native: true
 }, input, custom, {
   inputProps: {
@@ -13933,28 +13933,28 @@ const LoginForm = props => {
     submitting,
     classes
   } = props;
-  return _react.default.createElement("form", {
+  return /*#__PURE__*/_react.default.createElement("form", {
     onSubmit: handleSubmit
-  }, _react.default.createElement("div", {
+  }, /*#__PURE__*/_react.default.createElement("div", {
     className: classes.field
-  }, _react.default.createElement(_reduxForm.Field, {
+  }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
     name: "user",
     component: renderTextField,
     label: "Username or Email",
     variant: "standard",
     fullWidth: true
-  })), _react.default.createElement("div", {
+  })), /*#__PURE__*/_react.default.createElement("div", {
     className: classes.field
-  }, _react.default.createElement(_reduxForm.Field, {
+  }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
     name: "password",
     component: renderTextField,
     label: "Password",
     type: "password",
     variant: "standard",
     fullWidth: true
-  })), _react.default.createElement("div", {
+  })), /*#__PURE__*/_react.default.createElement("div", {
     className: classes.buttons
-  }, _react.default.createElement(_Button.default, {
+  }, /*#__PURE__*/_react.default.createElement(_Button.default, {
     variant: "contained",
     color: "primary",
     type: "submit",
@@ -14056,7 +14056,7 @@ const renderTextField = ({
     error
   },
   ...custom
-}) => _react.default.createElement(_TextField.default, _extends({
+}) => /*#__PURE__*/_react.default.createElement(_TextField.default, _extends({
   label: label,
   placeholder: label,
   error: touched && invalid,
@@ -14066,8 +14066,8 @@ const renderTextField = ({
 const renderCheckbox = ({
   input,
   label
-}) => _react.default.createElement("div", null, _react.default.createElement(_FormControlLabel.default, {
-  control: _react.default.createElement(_Checkbox.default, {
+}) => /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
+  control: /*#__PURE__*/_react.default.createElement(_Checkbox.default, {
     checked: input.value ? true : false,
     onChange: input.onChange
   }),
@@ -14076,23 +14076,23 @@ const renderCheckbox = ({
 
 const renderTOS = ({
   input
-}) => _react.default.createElement("div", null, _react.default.createElement(_Checkbox.default, {
+}) => /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Checkbox.default, {
   checked: input.value ? true : false,
   onChange: input.onChange
-}), _react.default.createElement("span", null, "I have read and agree to the "), _react.default.createElement(_Link.default, {
+}), /*#__PURE__*/_react.default.createElement("span", null, "I have read and agree to the "), /*#__PURE__*/_react.default.createElement(_Link.default, {
   href: "/tos.html"
 }, "Terms and Conditions"));
 
 const radioButton = ({
   input,
   ...rest
-}) => _react.default.createElement(_FormControl.default, null, _react.default.createElement(_RadioGroup.default, _extends({}, input, rest), _react.default.createElement(_FormControlLabel.default, {
+}) => /*#__PURE__*/_react.default.createElement(_FormControl.default, null, /*#__PURE__*/_react.default.createElement(_RadioGroup.default, _extends({}, input, rest), /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
   value: "female",
-  control: _react.default.createElement(_Radio.default, null),
+  control: /*#__PURE__*/_react.default.createElement(_Radio.default, null),
   label: "Female"
-}), _react.default.createElement(_FormControlLabel.default, {
+}), /*#__PURE__*/_react.default.createElement(_FormControlLabel.default, {
   value: "male",
-  control: _react.default.createElement(_Radio.default, null),
+  control: /*#__PURE__*/_react.default.createElement(_Radio.default, null),
   label: "Male"
 })));
 
@@ -14103,7 +14103,7 @@ const renderFromHelper = ({
   if (!(touched && error)) {
     return;
   } else {
-    return _react.default.createElement(_FormHelperText.default, null, touched && error);
+    return /*#__PURE__*/_react.default.createElement(_FormHelperText.default, null, touched && error);
   }
 };
 
@@ -14116,11 +14116,11 @@ const renderSelectField = ({
   },
   children,
   ...custom
-}) => _react.default.createElement(_FormControl.default, {
+}) => /*#__PURE__*/_react.default.createElement(_FormControl.default, {
   error: touched && error
-}, _react.default.createElement(_InputLabel.default, {
+}, /*#__PURE__*/_react.default.createElement(_InputLabel.default, {
   htmlFor: "age-native-simple"
-}, "Age"), _react.default.createElement(_Select.default, _extends({
+}, "Age"), /*#__PURE__*/_react.default.createElement(_Select.default, _extends({
   native: true
 }, input, custom, {
   inputProps: {
@@ -14178,65 +14178,65 @@ class RegisterForm extends _react.PureComponent {
       submitting,
       classes
     } = this.props;
-    return _react.default.createElement("form", {
+    return /*#__PURE__*/_react.default.createElement("form", {
       onSubmit: handleSubmit
-    }, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", {
       className: classes.field
-    }, _react.default.createElement(_reduxForm.Field, {
+    }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "email",
       component: renderTextField,
       label: "Email",
       variant: "standard",
       fullWidth: true
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.field
-    }, _react.default.createElement(_reduxForm.Field, {
+    }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "username",
       component: renderTextField,
       label: "Username",
       variant: "standard",
       fullWidth: true
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.field
-    }, _react.default.createElement(_reduxForm.Field, {
+    }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "password1",
       component: renderTextField,
       label: "Password",
       type: "password",
       variant: "standard",
       fullWidth: true
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.field
-    }, _react.default.createElement(_reduxForm.Field, {
+    }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "password2",
       component: renderTextField,
       label: "Confirm Password",
       type: "password",
       variant: "standard",
       fullWidth: true
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       style: {
         display: "flex",
         justifyContent: "flex-start"
       }
-    }, _react.default.createElement(_reduxForm.Field, {
+    }, /*#__PURE__*/_react.default.createElement(_reduxForm.Field, {
       name: "agree",
       component: renderTOS,
       onChange: this.agreeTOS
-    })), !this.props.local && _react.default.createElement("div", {
+    })), !this.props.local && /*#__PURE__*/_react.default.createElement("div", {
       style: {
         display: "flex",
         justifyContent: "center",
         padding: "10px"
       }
-    }, _react.default.createElement(_reactGoogleRecaptcha.default, {
+    }, /*#__PURE__*/_react.default.createElement(_reactGoogleRecaptcha.default, {
       sitekey: "6LeOU6UUAAAAABSPwdKHf-3ttPz9Ql4AgVTWobXI",
       theme: "dark",
       size: "normal",
       onChange: this.completeCaptcha
-    })), _react.default.createElement("div", {
+    })), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.buttons
-    }, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       color: "primary",
       type: "submit",
@@ -14307,7 +14307,7 @@ class Loading extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: classes.root
     }, "Loading...");
   }
@@ -14393,12 +14393,12 @@ class MyAlert extends _react.PureComponent {
       maxWidth,
       fullWidth
     } = this.props.alert;
-    return _react.default.createElement("div", null, _react.default.createElement(_Dialog.default, {
+    return /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_Dialog.default, {
       open: open,
       onClose: this.handleClose,
       fullWidth: fullWidth,
       maxWidth: maxWidth
-    }, _react.default.createElement(_DialogTitle.default, null, title), _react.default.createElement(_DialogContent.default, null, _react.default.createElement(_DialogContentText.default, null, content)), _react.default.createElement(_DialogActions.default, null, _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_DialogTitle.default, null, title), /*#__PURE__*/_react.default.createElement(_DialogContent.default, null, /*#__PURE__*/_react.default.createElement(_DialogContentText.default, null, content)), /*#__PURE__*/_react.default.createElement(_DialogActions.default, null, /*#__PURE__*/_react.default.createElement(_Button.default, {
       onClick: this.handleClose,
       color: "primary",
       autoFocus: true
@@ -14548,7 +14548,7 @@ class MyAppBar extends _react.PureComponent {
     } = this.props;
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-    const renderMobileMenu = _react.default.createElement(_Menu.default, {
+    const renderMobileMenu = /*#__PURE__*/_react.default.createElement(_Menu.default, {
       anchorEl: mobileMoreAnchorEl,
       anchorOrigin: {
         vertical: "top",
@@ -14562,21 +14562,21 @@ class MyAppBar extends _react.PureComponent {
       onClose: this.handleMenuClose
     }, this.props.mobileMenu);
 
-    return _react.default.createElement("div", {
+    return /*#__PURE__*/_react.default.createElement("div", {
       className: (0, _classnames.default)(classes.root, this.props.rootClasses)
-    }, _react.default.createElement(_AppBar.default, {
+    }, /*#__PURE__*/_react.default.createElement(_AppBar.default, {
       position: "fixed"
-    }, _react.default.createElement(_Toolbar.default, null, this.props.main, _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null, this.props.main, /*#__PURE__*/_react.default.createElement("div", {
       className: classes.grow
-    }), _react.default.createElement("div", {
+    }), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.sectionDesktop
-    }, this.props.desktop), _react.default.createElement("div", {
+    }, this.props.desktop), /*#__PURE__*/_react.default.createElement("div", {
       className: classes.sectionMobile
-    }, this.props.mobile, _react.default.createElement(_IconButton.default, {
+    }, this.props.mobile, /*#__PURE__*/_react.default.createElement(_IconButton.default, {
       "aria-haspopup": "true",
       onClick: this.handleMobileMenuOpen,
       color: "inherit"
-    }, _react.default.createElement(_MoreVert.default, null))))), renderMobileMenu);
+    }, /*#__PURE__*/_react.default.createElement(_MoreVert.default, null))))), renderMobileMenu);
   }
 
 }
@@ -14630,13 +14630,15 @@ class MyCheckbox extends _react.PureComponent {
   }
 
   render() {
-    return (// <label className="checkbox-inline checkbox-bootstrap checkbox-lg">
+    return (
+      /*#__PURE__*/
+      // <label className="checkbox-inline checkbox-bootstrap checkbox-lg">
       // 	<input onChange={(event) => {this.props.handleChange(event.target.checked)}} type="checkbox" checked={this.props.checked}/>
       // 	<span className="checkbox-placeholder"></span>
       // 	{this.props.text}
       // </label>
       _react.default.createElement(_FormControlLabel.default, {
-        control: _react.default.createElement(_Checkbox.default, {
+        control: /*#__PURE__*/_react.default.createElement(_Checkbox.default, {
           onChange: event => {
             this.props.handleChange(event.target.checked);
           },
@@ -14752,7 +14754,7 @@ class MySlider extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Slider.default, {
+    return /*#__PURE__*/_react.default.createElement(_Slider.default, {
       classes: {
         root: this.props.rootClass || classes.slider,
         thumb: this.props.thumbClass,
@@ -14865,10 +14867,10 @@ class ThemeSelector extends _react.PureComponent {
     } = this.props;
     const open = Boolean(this.state.anchorEl);
     let themeIndex = options2.indexOf(this.props.theme);
-    return _react.default.createElement(_react.default.Fragment, null, _react.default.createElement(_Button.default, {
+    return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_Button.default, {
       variant: "contained",
       onClick: this.handleClick
-    }, "Select Theme"), _react.default.createElement(_Menu.default, {
+    }, "Select Theme"), /*#__PURE__*/_react.default.createElement(_Menu.default, {
       id: "themeSelector",
       anchorEl: this.state.anchorEl,
       open: open,
@@ -14880,7 +14882,7 @@ class ThemeSelector extends _react.PureComponent {
           width: 200
         }
       }
-    }, options.map((option, index) => _react.default.createElement(_MenuItem.default, {
+    }, options.map((option, index) => /*#__PURE__*/_react.default.createElement(_MenuItem.default, {
       key: option,
       disabled: index === themeIndex,
       selected: index === themeIndex,
@@ -15028,13 +15030,13 @@ class VolumeSlider extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Paper.default, {
+    return /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: classes.root,
       elevation: 3
-    }, _react.default.createElement(_VolumeDown.default, {
+    }, /*#__PURE__*/_react.default.createElement(_VolumeDown.default, {
       className: classes.svg,
       onClick: this.props.onMute
-    }), _react.default.createElement(_MySlider.default, {
+    }), /*#__PURE__*/_react.default.createElement(_MySlider.default, {
       rootClass: classes.rootClass,
       thumbClass: classes.thumb,
       activeClass: classes.active,
@@ -15047,7 +15049,7 @@ class VolumeSlider extends _react.PureComponent {
       value: this.props.value,
       bounceInterval: 100,
       delay: 500
-    }), _react.default.createElement(_VolumeUp.default, {
+    }), /*#__PURE__*/_react.default.createElement(_VolumeUp.default, {
       className: classes.svg,
       onClick: this.props.onMax
     }));
@@ -15146,10 +15148,10 @@ class Badge extends _react.PureComponent {
         break;
     }
 
-    return _react.default.createElement(_Tooltip.default, {
+    return /*#__PURE__*/_react.default.createElement(_Tooltip.default, {
       title: text,
       placement: "top"
-    }, _react.default.createElement("img", {
+    }, /*#__PURE__*/_react.default.createElement("img", {
       className: classes.root,
       src: src
     }));
@@ -15324,31 +15326,31 @@ class AccountModal extends _react.PureComponent {
     const {
       classes
     } = this.props;
-    return _react.default.createElement(_Dialog.default, {
+    return /*#__PURE__*/_react.default.createElement(_Dialog.default, {
       open: true,
       scroll: "body",
       maxWidth: "sm",
       fullWidth: true,
       onClose: this.handleClose
-    }, _react.default.createElement(_DialogContent.default, {
+    }, /*#__PURE__*/_react.default.createElement(_DialogContent.default, {
       className: classes.root
-    }, _react.default.createElement(_AppBar.default, {
+    }, /*#__PURE__*/_react.default.createElement(_AppBar.default, {
       position: "static"
-    }, _react.default.createElement(_Toolbar.default, null, _react.default.createElement(_Typography.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
       variant: "h6",
       color: "inherit"
-    }, "Account"))), _react.default.createElement(_Paper.default, {
+    }, "Account"))), /*#__PURE__*/_react.default.createElement(_Paper.default, {
       className: classes.topBar,
       elevation: 2
-    }, _react.default.createElement(_UsernameDropdown.default, null), _react.default.createElement(_Button.default, {
+    }, /*#__PURE__*/_react.default.createElement(_UsernameDropdown.default, null), /*#__PURE__*/_react.default.createElement(_Button.default, {
       className: classes.logout,
       variant: "contained",
       color: "secondary",
       onClick: this.handleLogout
-    }, "Logout")), _react.default.createElement(_ConnectAccounts.default, {
+    }, "Logout")), /*#__PURE__*/_react.default.createElement(_ConnectAccounts.default, {
       onRemoveAccount: this.handleRemoveAccount,
       showTOS: false
-    }), _react.default.createElement(_ListItemText.default, {
+    }), /*#__PURE__*/_react.default.createElement(_ListItemText.default, {
       style: {
         margin: "0 auto"
       }
@@ -15581,20 +15583,20 @@ class LoginRegisterModal extends _react.PureComponent {
       classes
     } = this.props;
     let which = this.props.history.location.pathname.indexOf("/login") > -1 ? 0 : 1;
-    return _react.default.createElement(_Dialog.default, {
+    return /*#__PURE__*/_react.default.createElement(_Dialog.default, {
       open: true,
       scroll: "body",
       maxWidth: "sm",
       fullWidth: true,
       onClose: this.handleClose
-    }, _react.default.createElement(_DialogContent.default, {
+    }, /*#__PURE__*/_react.default.createElement(_DialogContent.default, {
       className: classes.root
-    }, _react.default.createElement(_AppBar.default, {
+    }, /*#__PURE__*/_react.default.createElement(_AppBar.default, {
       position: "static"
-    }, _react.default.createElement(_Toolbar.default, null, _react.default.createElement(_Typography.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Toolbar.default, null, /*#__PURE__*/_react.default.createElement(_Typography.default, {
       variant: "h6",
       color: "inherit"
-    }, "Welcome"))), _react.default.createElement(_Tabs.default, {
+    }, "Welcome"))), /*#__PURE__*/_react.default.createElement(_Tabs.default, {
       centered: true,
       value: which,
       classes: {
@@ -15614,37 +15616,37 @@ class LoginRegisterModal extends _react.PureComponent {
           this.props.history.replace("/register");
         }
       }
-    }, _react.default.createElement(_Tab.default, {
+    }, /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Login"
-    }), _react.default.createElement(_Tab.default, {
+    }), /*#__PURE__*/_react.default.createElement(_Tab.default, {
       label: "Register"
-    })), _react.default.createElement(_reactRouter.Route, {
+    })), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/login",
       render: props => {
-        return _react.default.createElement("div", {
+        return /*#__PURE__*/_react.default.createElement("div", {
           className: classes.createAnAccount
-        }, _react.default.createElement(_LoginForm.default, {
+        }, /*#__PURE__*/_react.default.createElement(_LoginForm.default, {
           onSubmit: this.handleLoginForm,
           local: this.props.local
         }));
       }
-    }), _react.default.createElement(_reactRouter.Route, {
+    }), /*#__PURE__*/_react.default.createElement(_reactRouter.Route, {
       path: "/register",
       render: props => {
-        return _react.default.createElement("div", {
+        return /*#__PURE__*/_react.default.createElement("div", {
           className: classes.createAnAccount
-        }, _react.default.createElement(_RegisterForm.default, {
+        }, /*#__PURE__*/_react.default.createElement(_RegisterForm.default, {
           onSubmit: this.handleRegisterForm,
           local: this.props.local
         }));
       }
-    }), !this.props.local && _react.default.createElement("div", {
+    }), !this.props.local && /*#__PURE__*/_react.default.createElement("div", {
       className: classes.connectAnAccount
-    }, _react.default.createElement("div", null, _react.default.createElement(_ListItemText.default, null, "or")), _react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_ListItemText.default, null, "or")), /*#__PURE__*/_react.default.createElement("div", {
       style: {
         marginTop: "15px"
       }
-    }, _react.default.createElement(_ConnectAccounts.default, {
+    }, /*#__PURE__*/_react.default.createElement(_ConnectAccounts.default, {
       showTOS: true
     })))));
   }

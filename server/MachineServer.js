@@ -40,7 +40,6 @@ class MachineServer {
 			echo: true, // echo command output to stdout/stderr
 		});
 
-
 		// NUM=$1
 		// pulseaudio -Dv
 		// pactl load-module module-native-protocol-unix socket=/tmp/pulseaudio.socket
@@ -57,28 +56,29 @@ class MachineServer {
 		// -t box:01 /bin/bash
 
 		let command = `
-			docker run -i --memory 2048m --rm --name host-${this.port} \
+			docker run --memory 2048m --rm --name host-${this.port} \
 			-e PULSE_SERVER=unix:/tmp/pulseaudio.socket \
 			-e PULSE_COOKIE=/tmp/pulseaudio.cookie \
-			-e PULSE_SINK=sink-$NUM
-			-e NUM=$NUM \
+			-e PULSE_SINK=sink-${this.port} \
+			-e NUM=${this.port} \
 			--volume /tmp/pulseaudio.socket:/tmp/pulseaudio.socket \
 			--volume $(pwd)/src/configs/pulseaudio.client.conf:/etc/pulse/client.conf \
 			--user $(id -u):$(id -g) \
-			--security-opt seccomp=$(pwd)/src/files/chrome.json \
+			--security-opt seccomp=$(pwd)/../server/vm/chrome.json \
 			-t rgio-host:01`;
 
-		docker.command(command).then((data) => {
+		this.docker.command(command).then((data) => {
 			console.log("data = ", data);
 		});
 	};
 
 	stop = () => {
-		clearTimeout(this.keepAliveTimer);
+		this.docker.command(`docker kill host-${this.port}`).then((data) => {
+			console.log("data = ", data);
+		});
 		console.log(`machine stopped on port: ${this.port}`);
 		let uptime = (new Date() - this.startTime) / 1000 / 60 / 60;
 		console.log(`CT: ${formatDate(new Date())} Uptime: ${uptime} hours`);
-		this.io.close();
 	};
 }
 

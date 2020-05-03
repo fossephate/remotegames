@@ -64,10 +64,18 @@ accountConnection.on("stop", (data) => {
 		console.log("something went wrong, this port wasn't set as unavailable!");
 		return;
 	}
-	hostServers[data.port].stop();
+	machineServers[data.port].stop();
 	// set port as available:
 	ports[data.port] = true;
 	register();
 });
 
 register();
+
+process.on("exit", (code) => {
+	for (let i = 0; i < MAX_MACHINES; i++) {
+		if (machineServers[port]) {
+			machineServers[port].stop();
+		}
+	}
+});
