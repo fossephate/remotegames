@@ -30,6 +30,7 @@ class MachineServer {
 		this.accountConnection = options.socket;
 		this.port = options.port;
 		this.streamKey = options.streamKey;
+		this.streamSettings = options.streamSettings;
 		this.docker = null;
 	}
 
@@ -55,14 +56,30 @@ class MachineServer {
 		// --security-opt seccomp=$(pwd)/src/files/chrome.json \
 		// -t box:01 /bin/bash
 
+		// # --user="$USERNAME" \
+		// # --password="$PASSWORD" \
+		// # --drawMouse="true" --usePulse="true" \
+		// # --useLocalFfmpegInstall="true" \
+		// # --videoBitrate=6000 --combineAV="false" \
+		// # --muxDelay="0.0001" \
+		// # --resolution=540 --debug="true" &
+
+		let streamArgs = `\
+		--streamKey="${this.streamKey}" --usePule="true" \
+		--useLocalFfmpegInstall="true" \
+		--audioDevice="sink-${this.port}.monitor" --useLocalFfmpegInstall="true" `;
+		for (let key in this.streamSettings) {
+			let arg = `--${key}="${this.streamSettings[key]}"`;
+		}
+
 		let command = `
 			docker run --memory 2048m --rm --name host-${this.port} \
 			-e PULSE_SERVER=unix:/tmp/pulseaudio.socket \
 			-e PULSE_COOKIE=/tmp/pulseaudio.cookie \
 			-e PULSE_SINK=sink-${this.port} \
-			-e NUM=${this.port} \
+			-e STREAM_ARGS=${streamArgs} \
 			--volume /tmp/pulseaudio.socket:/tmp/pulseaudio.socket \
-			--volume $(pwd)/src/configs/pulseaudio.client.conf:/etc/pulse/client.conf \
+			--volume $(pwd)/../server/vm/pulseaudio.client.conf:/etc/pulse/client.conf \
 			--user $(id -u):$(id -g) \
 			--security-opt seccomp=$(pwd)/../server/vm/chrome.json \
 			-t rgio-host:01`;

@@ -2221,7 +2221,7 @@ function synchronizeServers() {
 						streamKey: account.streamKey,
 						videoIP: server.video.ip,
 						videoPort: server.video.port,
-						settings: account.streamSettings,
+						streamSettings: account.streamSettings,
 					});
 				}
 
