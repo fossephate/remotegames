@@ -69,7 +69,8 @@ class MachineServer {
 		--useLocalFfmpegInstall="true" \
 		--audioDevice="sink-${this.port}.monitor" --useLocalFfmpegInstall="true" `;
 		for (let key in this.streamSettings) {
-			let arg = `--${key}="${this.streamSettings[key]}"`;
+			let arg = `--${key}="${this.streamSettings[key]}" `;
+			streamArgs += arg;
 		}
 
 		let command = `
