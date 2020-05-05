@@ -2,6 +2,7 @@ const MachineServer = require("./MachineServer.js").MachineServer;
 const socketioClient = require("socket.io-client");
 const config = require("./config.js");
 const MAX_MACHINES = 10;
+const nodeCleanup = require("node-cleanup");
 
 // some global variables:
 // all host servers:
@@ -50,8 +51,7 @@ accountConnection.on("start", (data) => {
 		// videoPort: data.videoPort,
 		// streamKey: data.streamKey,
 		// hostUserid: data.hostUserid,
-		// todo: replace with streamKey
-		authToken: data.authToken,
+		streamKey: data.streamKey,
 		secret: config.ROOM_SECRET,
 		settings: data.settings,
 		streamSettings: data.streamSettings,
@@ -72,10 +72,11 @@ accountConnection.on("stop", (data) => {
 
 register();
 
-process.on("exit", (code) => {
-	for (let i = 0; i < MAX_MACHINES; i++) {
-		if (machineServers[port]) {
-			machineServers[port].stop();
+nodeCleanup((exitCode, signal) => {
+	console.log ("\nexiting!\n");
+	for (let key in machineServers) {
+		if (machineServers[key]) {
+			machineServers[key].stop();
 		}
 	}
 });

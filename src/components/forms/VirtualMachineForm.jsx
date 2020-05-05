@@ -336,6 +336,7 @@ class VirtualMachineForm extends Component {
 						label="Resolution"
 						variant="outlined"
 						type="number"
+						labelWidth={80}
 					>
 						{this.getResolutionMenuItems()}
 					</Field>
@@ -351,7 +352,7 @@ class VirtualMachineForm extends Component {
 						component={renderSelectField}
 						label="Output FPS"
 						variant="outlined"
-						labelWidth={100}
+						labelWidth={85}
 					>
 						{this.getFPSMenuItems()}
 					</Field>

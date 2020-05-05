@@ -64,7 +64,7 @@ class CreateVMModal extends PureComponent {
 
 		this.state = {
 			formInitialValues: {
-				qualityProfile: "custom",
+				qualityProfile: "medium",
 				// host1: "https://remotegames.io",
 				// port1: 8099,
 				streamTitle: "My Stream",
@@ -89,9 +89,9 @@ class CreateVMModal extends PureComponent {
 				videoType: "mpeg1",
 				offsetX: 0,
 				offsetY: 0,
-				controllerCount: 1,
+				controllerCount: 0,
 				controlSwitch: false,
-				virtualXboxControllers: true,
+				virtualXboxControllers: false,
 				qmin: 4,
 				qmax: 20,
 				forfeitTime: 1000 * 5, // 5 seconds
@@ -99,6 +99,23 @@ class CreateVMModal extends PureComponent {
 		};
 
 		this.profiles = {
+			default: {
+				width: 1920,
+				height: 1080,
+				capture: "desktop",
+				audioDevice: null,
+				windowTitle: null,
+				controllerCount: null,
+				offsetX: null,
+				offsetY: null,
+				controlSwitch: null,
+				virtualXboxControllers: null,
+				videoBufferSize: null,
+				audioBufferSize: null,
+				captureRate: null,
+				groupOfPictures: null,
+			},
+
 			perfect: {
 				videoBitrate: 14000,
 				resolution: 1080,
@@ -116,8 +133,8 @@ class CreateVMModal extends PureComponent {
 			high: {
 				videoBitrate: 8000,
 				resolution: 720,
-				qmin: 2,
-				qmax: 10,
+				qmin: 4,
+				qmax: 16,
 			},
 
 			medium: {
@@ -159,9 +176,18 @@ class CreateVMModal extends PureComponent {
 	};
 
 	handleStartMachine = (args) => {
+
+		if (args.qualityProfile !== "custom") {
+			args = { ...args, ...this.profiles.default };
+		}
+
+		console.log(args);
 		this.accountConnection.emit(
 			"startMachine",
-			{ authToken: this.props.authToken, streamSettings: args },
+			{
+				authToken: this.props.authToken,
+				streamSettings: args,
+			},
 			(data) => {
 				if (data.success) {
 					this.props.openAlert({ title: "VM Created!" });
@@ -176,7 +202,6 @@ class CreateVMModal extends PureComponent {
 	};
 
 	handleStopMachine = () => {
-
 		this.accountConnection.emit(
 			"stopMachine",
 			{ authToken: this.props.authToken },
@@ -191,22 +216,22 @@ class CreateVMModal extends PureComponent {
 	};
 
 	componentDidMount() {
-		this.accountConnection.emit(
-			"getStreamSettings",
-			{ authToken: this.props.authToken },
-			(data) => {
-				if (data.success) {
-					this.setState({
-						formInitialValues: {
-							...this.state.formInitialValues,
-							...data.streamSettings,
-						},
-					});
-				} else {
-					this.props.openAlert({ title: data.reason });
-				}
-			},
-		);
+		// this.accountConnection.emit(
+		// 	"getStreamSettings",
+		// 	{ authToken: this.props.authToken },
+		// 	(data) => {
+		// 		if (data.success) {
+		// 			this.setState({
+		// 				formInitialValues: {
+		// 					...this.state.formInitialValues,
+		// 					...data.streamSettings,
+		// 				},
+		// 			});
+		// 		} else {
+		// 			this.props.openAlert({ title: data.reason });
+		// 		}
+		// 	},
+		// );
 	}
 
 	render() {

@@ -105,7 +105,7 @@ class VideoServer {
 		clearTimeout(this.keepAliveTimer);
 		console.log(`stream stopped on port: ${this.port}`);
 		let uptime = (new Date() - this.startTime) / 1000 / 60 / 60;
-		console.log(`CT: ${formatDate(new Date())} Uptime: ${uptime} hours`);
+		console.log(`CT: ${formatDate(new Date())} Uptime: ${uptime.toFixed(2)} hours`);
 		this.io.close();
 	};
 

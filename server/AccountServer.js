@@ -1671,7 +1671,7 @@ io.on("connection", (socket) => {
 			io.to(servers.machine.sid).emit("start", {
 				port: servers.machine.port,
 				streamKey: videoStreamKey, // needs authToken to re-authenticate with the server,
-				streamSettings: account.streamSettings,
+				streamSettings: data.streamSettings,
 			});
 
 			// update account info:
