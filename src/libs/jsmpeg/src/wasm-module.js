@@ -38,6 +38,7 @@ export class WASM {
 			abort: this.c_abort.bind(this),
 			// ___assert_fail: this.c_assertFail.bind(this),
 			// _sbrk: this.c_sbrk.bind(this),
+
 			__assert_fail: this.c_assertFail.bind(this),
 			sbrk: this.c_sbrk.bind(this),
 			stackSave: () => {},

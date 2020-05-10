@@ -22,6 +22,7 @@ export class MPEG1WASM extends BaseDecoder {
 	initializeWasmDecoder = () => {
 		this.instance = this.module.instance;
 		this.functions = this.module.instance.exports;
+		console.log(this.functions);
 		this.decoder = this.functions.mpeg1_decoder_create(this.bufferSize, this.bufferMode);
 	};
 

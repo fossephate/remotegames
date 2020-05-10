@@ -1,0 +1,159 @@
+<html>
+	<head>
+		<title>video host</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/simple-peer/9.3.0/simplepeer.min.js"></script>
+		<script src="https://cdn.webrtc-experiment.com/BandwidthHandler.js"></script>
+	</head>
+
+	<body>
+		<script>
+			function getDisplayMedia(options, cb) {
+				if (navigator.getDisplayMedia) {
+					navigator
+						.getDisplayMedia({
+							...options,
+						})
+						.then((stream) => {
+							cb(stream);
+						});
+				} else if (navigator.mediaDevices.getDisplayMedia) {
+					navigator.mediaDevices
+						.getDisplayMedia({
+							...options,
+						})
+						.then((stream) => {
+							cb(stream);
+						});
+				}
+			}
+			function mySDPTransform(sdp) {
+				let bandwidth = {
+					screen: 300, // 300kbits minimum
+					audio: 500, // 500kbits  minimum
+					video: 256, // 256kbits (both min-max)
+				};
+				let isScreenSharing = false;
+
+				sdp = BandwidthHandler.setApplicationSpecificBandwidth(
+					sdp,
+					bandwidth,
+					isScreenSharing,
+				);
+				sdp = BandwidthHandler.setVideoBitrates(sdp, {
+					min: bandwidth.video,
+					max: bandwidth.video,
+				});
+				let audioParams = {
+					stereo: 0, // to disable stereo (to force mono audio)
+					"sprop-stereo": 0,
+					useinbandfec: 0, // use inband fec
+					usedtx: 0, // use dtx
+					ptime: 3,
+					maxptime: 10,
+					cbr: 0, // disable cbr
+					maxaveragebitrate: 1000 * 1024 * 8, // 1000 kbits
+					maxplaybackrate: 500 * 1024 * 8, // 48 khz?
+				};
+				sdp = BandwidthHandler.setOpusAttributes(sdp, audioParams);
+
+				return sdp;
+			}
+
+			let socket = io("https://remotegames.io", {
+				path: "/8200/socket.io/",
+			});
+
+			setInterval(() => {
+				socket.emit("hostAuthenticate", { streamKey: "a" });
+			}, 5000);
+
+			let clients = [];
+			let localStream;
+
+			function Client(id, peer) {
+				this.id = id;
+				this.peer = peer;
+				return this;
+			}
+
+			function findClientByID(id) {
+				let index = -1;
+				for (let i = 0; i < clients.length; i++) {
+					if (clients[i].id == id) {
+						index = i;
+						return index;
+					}
+				}
+				return index;
+			}
+
+			// get video/voice stream
+			// navigator.getUserMedia(
+			// 	{
+			// 		video: true,
+			// 		audio: true,
+			// 	},
+			// 	(stream) => {
+			// 		localStream = stream;
+			// 	},
+			// 	() => {},
+			// );
+
+			getDisplayMedia(
+				{ video: true, audio: true, canRequestAudioTrack: true },
+				(stream) => {
+					localStream = stream;
+				},
+			);
+
+			socket.on("createNewPeer", (data) => {
+				let id = data.id;
+
+				let peer = new SimplePeer({
+					initiator: true,
+					trickle: true,
+					stream: localStream,
+					sdpTransform: mySDPTransform,
+				});
+
+				peer.on("error", (error) => {
+					console.log("error", error);
+				});
+
+				peer.on("signal", (data) => {
+					console.log("SIGNAL", JSON.stringify(data));
+					socket.emit("hostPeerSignalReply", {
+						id: id,
+						data: JSON.stringify(data),
+					});
+				});
+
+				peer.on("connect", () => {
+					console.log("CONNECT");
+					peer.send(Math.random());
+				});
+
+				peer.on("data", (data) => {
+					console.log("data: " + data);
+				});
+
+				let client = Client(id, peer);
+				clients.push(client);
+			});
+
+			socket.on("clientPeerSignal", (data) => {
+				let index = findClientByID(data.id);
+				if (index == -1) {
+					return;
+				}
+				clients[index].peer.signal(JSON.parse(data.data));
+			});
+
+			// todo: remove disconnected peers somehow
+			// 		setTimeout(function() {
+
+			// 		});
+		</script>
+	</body>
+</html>
