@@ -1848,29 +1848,35 @@ io.on("connection", (socket) => {
 	});
 
 	// register servers:
-	socket.on("registerVideoServer", (data) => {
-		if (data.secret !== config.ROOM_SECRET) {
+	socket.on("registerServer", (data) => {
+
+		if (data.serverType !== "machine") {
+			if (data.secret !== config.ROOM_SECRET) {
+				return;
+			}
+		} else {
+			console.log("ROOM_SECRET auth is turned off!");
+		}
+
+		if (["video", "host", "machine"].indexOf(data.serverType) === -1) {
 			return;
 		}
-		videoServers[socket.id] = new VideoServerClient(socket, data.ip, data.ports);
-		synchronizeServers();
-	});
 
-	socket.on("registerHostServer", (data) => {
-		if (data.secret !== config.ROOM_SECRET) {
-			return;
+		switch(data.serverType) {
+			case "video":
+				videoServers[socket.id] = new VideoServerClient(socket, data.ip, data.ports);
+				break;
+			case "host":
+				hostServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
+				break;
+			case "machine":
+				machineServers[socket.id] = new MachineServerClient(socket, data.ip, data.ports);
+				break;
 		}
-		hostServers[socket.id] = new HostServerClient(socket, data.ip, data.ports);
-		synchronizeServers();
-	});
 
-	socket.on("registerMachineServer", (data) => {
-		// if (data.secret !== config.ROOM_SECRET) {
-		// 	return;
-		// }
-		console.log("ROOM_SECRET auth is turned off!");
-		machineServers[socket.id] = new MachineServerClient(socket, data.ip, data.ports);
 		synchronizeServers();
+
+
 	});
 
 	// host server commands:

@@ -36,7 +36,7 @@ class MachineServer {
 		this.startTime = new Date();
 	}
 
-	init = () => {
+	start = () => {
 		this.docker = new Docker({
 			machineName: null, // uses local docker
 			currentWorkingDirectory: null, // uses current working directory

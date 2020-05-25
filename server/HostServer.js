@@ -164,7 +164,7 @@ class HostServer {
 		this.calculateTurnExpirations();
 	};
 
-	init() {
+	start = () => {
 		// setup interval functions:
 		setInterval(this.everySecond, 1000);
 		setInterval(this.every4Seconds, 4000);
@@ -555,7 +555,7 @@ class HostServer {
 		});
 	}
 
-	filterGuests() {
+	filterGuests = () => {
 		// fill in accountMap's for guest accounts:
 
 		for (let key in this.accountMap) {
@@ -588,7 +588,7 @@ class HostServer {
 		}
 	};
 
-	sendMessage(msgObj) {
+	sendMessage = (msgObj) => {
 		// store for when people refresh:
 		this.messageLog.push(msgObj);
 
@@ -598,7 +598,7 @@ class HostServer {
 		this.io.emit("chatMessage", msgObj);
 	}
 
-	parseMessage(client, message) {
+	parseMessage = (client, message) => {
 		// for replies:
 		let msgObj = {
 			userid: "HostBot",
@@ -773,7 +773,8 @@ class HostServer {
 		}
 	}
 
-	stop() {
+	stop = () => {
+		// todo: this function doesn't clear the setIntervals set in start()
 		console.log("closing connection");
 		this.io.emit("stop");
 		this.io.close();
@@ -781,7 +782,7 @@ class HostServer {
 
 	// finds a client in this.clients with a specific userid
 	// returns -1 if not found
-	findClientByUserid(userid) {
+	findClientByUserid = (userid) => {
 		let socketid = this.useridToSocketidMap[userid];
 		if (socketid != null && this.clients[socketid] != null) {
 			return socketid;
@@ -797,7 +798,7 @@ class HostServer {
 		return index;
 	}
 
-	forfeitTurn(userid, cNum) {
+	forfeitTurn = (userid, cNum) => {
 		// forfeit turn:
 		let index = this.controlQueues[cNum].indexOf(userid);
 		if (index == -1) {
@@ -863,30 +864,31 @@ class HostServer {
 	}
 
 	// todo: only send the diff of what changed / make it only reset the cNum
-	emitTurnStartTimes() {
+	emitTurnStartTimes = () => {
 		this.io.emit("turnStartTimes", {
 			turnStartTimes: this.turnStartTimes,
 			forfeitStartTimes: this.forfeitStartTimes,
 		});
 	}
 
-	emitForfeitStartTimes() {
+	emitForfeitStartTimes = () => {
 		this.io.emit("turnStartTimes", {
 			forfeitStartTimes: this.forfeitStartTimes,
 		});
 	}
 
-	resetTimers(userid, cNum) {
+	// todo: userid is unused here:
+	resetTimers = (userid, cNum) => {
 		// sub perk:
 		let index = this.findClientByUserid(this.controlQueues[cNum][0]);
 		let client = this.clients[index];
-		if (client != null && client.userid != null) {
-			if (client.isSub) {
-				this.turnLengths[cNum] = this.normalTime * 2;
-			} else {
-				this.turnLengths[cNum] = this.normalTime;
-			}
-		}
+		// if (client != null && client.userid != null) {
+		// 	if (client.isSub) {
+		// 		this.turnLengths[cNum] = this.normalTime * 2;
+		// 	} else {
+		// 		this.turnLengths[cNum] = this.normalTime;
+		// 	}
+		// }
 
 		// reset turn timer:
 		this.turnStartTimes[cNum] = Date.now();
@@ -898,7 +900,7 @@ class HostServer {
 		this.emitForfeitStartTimes();
 	}
 
-	moveLine(cNum) {
+	moveLine = (cNum) => {
 		// if the queue length is more than one person
 		// move the line:
 		if (this.controlQueues[cNum].length > 1) {
@@ -995,7 +997,7 @@ class HostServer {
 	}
 
 	// add to timePlayed:
-	addTimePlayed() {
+	addTimePlayed = () => {
 		for (let i = 0; i < this.controlQueues.length; i++) {
 			let userid = this.controlQueues[i][0];
 			if (userid == null) {

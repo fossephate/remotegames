@@ -3,7 +3,9 @@ const socketio = require("socket.io");
 const AFK_TIMEOUT = 1000 * 60 * 5; // 5 min
 
 function formatDate(dt) {
-	return `${(dt.getMonth() + 1).toString().padStart(2, "0")}/${dt
+	return `${(dt.getMonth() + 1)
+		.toString()
+		.padStart(2, "0")}/${dt
 		.getDate()
 		.toString()
 		.padStart(2, "0")}/${dt
@@ -15,10 +17,7 @@ function formatDate(dt) {
 		.padStart(2, "0")}:${dt
 		.getMinutes()
 		.toString()
-		.padStart(2, "0")}:${dt
-		.getSeconds()
-		.toString()
-		.padStart(2, "0")}`;
+		.padStart(2, "0")}:${dt.getSeconds().toString().padStart(2, "0")}`;
 }
 
 class VideoServer {
@@ -35,7 +34,7 @@ class VideoServer {
 		this.keepAliveTimer = null;
 	}
 
-	init = () => {
+	start = () => {
 		this.io.listen(this.port, () => {
 			console.log("Video server listening at port %d", port);
 		});
@@ -86,18 +85,22 @@ class VideoServer {
 			// 	this.io.emit("clientPeerSignal", { id: socket.id, data: data });
 			// });
 
-			socket.on("requestVideo", (data) => {
-				this.io.to("host").emit("createNewPeer", { id: socket.id });
+			socket.on("requestVideo", (data, cb) => {
+				cb({ success: true, videoType: "mpeg1" });
 			});
-			socket.on("hostPeerSignalReply", (data) => {
-				this.io.to(data.id).emit("hostPeerSignal", data.data);
-			});
-			socket.on("hostPeerSignal", (data) => {
-				this.io.emit("hostPeerSignal", data);
-			});
-			socket.on("clientPeerSignal", (data) => {
-				this.io.emit("clientPeerSignal", { id: socket.id, data: data });
-			});
+
+			// socket.on("requestVideo", (data) => {
+			// 	this.io.to("host").emit("createNewPeer", { id: socket.id });
+			// });
+			// socket.on("hostPeerSignalReply", (data) => {
+			// 	this.io.to(data.id).emit("hostPeerSignal", data.data);
+			// });
+			// socket.on("hostPeerSignal", (data) => {
+			// 	this.io.emit("hostPeerSignal", data);
+			// });
+			// socket.on("clientPeerSignal", (data) => {
+			// 	this.io.emit("clientPeerSignal", { id: socket.id, data: data });
+			// });
 		});
 	};
 

@@ -1,3 +1,6 @@
 [submodule "src/shared"]
 	path = src/shared
 	url = https://github.com/fossephate/shared.git
+[submodule "src/libs/jsmpeg"]
+	path = src/libs/jsmpeg
+	url = https://github.com/fossephate/jsmpeg

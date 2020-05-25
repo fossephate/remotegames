@@ -7,11 +7,13 @@ import { Route, Switch, withRouter } from "react-router";
 // redux:
 import { connect } from "react-redux";
 
+// actions:
 import { updateClient } from "shared/features/client.js";
 import { updateMessages } from "shared/features/chat.js";
 import { joinLeavePlayerControlQueue } from "src/features/players.js";
 import { updateStreamInfo } from "src/actions/info.js";
 import { updateSettings } from "src/actions/settings.js";
+import { openAlert } from "shared/features/alert.js";
 
 // redux-saga:
 // import spawn from "redux-saga";
@@ -89,6 +91,7 @@ class Stream extends Component {
 		this.afkTimer = null;
 		this.stream = null;
 		this.hostConnection = null;
+		this.videoConnection = null;
 
 		this.state = {};
 
@@ -151,7 +154,7 @@ class Stream extends Component {
 
 		this.hostConnection = socketio(`https://${data.hostServerIP}`, {
 			path: `/${data.hostServerPort}/socket.io`,
-			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
+			transports: ["websocket"],
 		});
 		window.hostConnection = this.hostConnection;
 
@@ -171,12 +174,41 @@ class Stream extends Component {
 			return;
 		}
 
+		this.videoConnection = socketio(`https://${data.videoServerIP}`, {
+			path: `/${data.videoServerPort}/socket.io`,
+			transports: ["websocket"],
+		});
+		window.videoConnection = this.videoConnection;
+
 		// lagless setup:
+
+		this.videoConnection.emit("requestVideo", null, (data) => {
+			if (!data.success) {
+				this.props.openAlert({ title: data.reason });
+			} else {
+
+				if (data.videoType === "mpeg1") {
+					this.stream = new Lagless2({
+						videoConnection: this.videoConnection,
+						audio: true,
+						video: true,
+						maxAudioLag: 0.5,
+						// videoBufferSize: data.streamSettings.videoBufferSize * 1024,
+						// audioBufferSize: data.streamSettings.audioBufferSize * 1024,
+					});
+				} else if (data.videoType === "webRTC") {
+					this.stream = new Lagless4({
+						videoConnection: this.videoConnection,
+					});
+					this.stream.start();
+				}
+
+			}
+		})
 
 		if (this.props.videoType === "mpeg1") {
 			this.stream = new Lagless2({
-				url: `https://${data.videoServerIP}`,
-				path: `/${data.videoServerPort}/socket.io`,
+				videoConnection: this.videoConnection,
 				audio: true,
 				video: true,
 				maxAudioLag: 0.5,
@@ -185,8 +217,7 @@ class Stream extends Component {
 			});
 		} else if (this.props.videoType === "webRTC") {
 			this.stream = new Lagless4({
-				url: `https://${data.videoServerIP}`,
-				path: `/${data.videoServerPort}/socket.io`,
+				videoConnection: this.videoConnection,
 			});
 			this.stream.run();
 		} else {
@@ -709,6 +740,9 @@ const mapDispatchToProps = (dispatch) => {
 		},
 		updateStreamInfo: (data) => {
 			dispatch(updateStreamInfo(data));
+		},
+		openAlert: (data) => {
+			dispatch(openAlert(data));
 		},
 	};
 };

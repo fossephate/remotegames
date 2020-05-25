@@ -67,20 +67,21 @@ export default class Lagless2 {
 		this.videoCanvas = videoCanvas || this.videoCanvas;
 		this.graphicsCanvas = graphicsCanvas || this.graphicsCanvas || null;
 
-		let onVideoDecode = null;
+		let onVideoDecodeRef = null;
 		if (this.graphicsCanvas) {
 			// if (!this.context) {
 			this.context = this.graphicsCanvas.getContext("2d");
 			// }
-			onVideoDecode = this.onVideoDecode;
+			onVideoDecodeRef = this.onVideoDecode;
 		}
 
-		this.player = new Player(this.options.url, {
+		this.player = new Player({
+			videoConnection: this.options.videoConnection,
 			canvas: this.videoCanvas,
 			videoBufferSize: this.options.videoBufferSize,
 			audioBufferSize: this.options.audioBufferSize,
 			maxAudioLag: this.options.maxAudioLag,
-			onVideoDecode: onVideoDecode,
+			onVideoDecode: onVideoDecodeRef,
 			audio: !!this.options.audio,
 			video: !!this.options.video,
 			path: this.options.path,
