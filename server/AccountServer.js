@@ -593,8 +593,6 @@ app.get("/redirect", (req, res) => {
 	if (req.session && req.session.passport && req.session.passport.user) {
 		console.log("setting cookie.");
 
-		console.log(req.user);
-
 		// create an authToken that lets us access the account:
 		let authToken = crypto.randomBytes(64).toString("hex");
 
@@ -856,8 +854,6 @@ io.on("connection", (socket) => {
 	// https://stackoverflow.com/questions/35780524/how-to-do-simple-mongoose-findone-with-multiple-conditions?rq=1
 
 	socket.on("login", (data, cb) => {
-
-		console.log(data);
 
 		if (!cb) {
 			console.log("no callback (login)");

@@ -176,6 +176,7 @@ class Stream extends Component {
 
 		this.videoConnection = socketio(`https://${data.videoServerIP}`, {
 			path: `/${data.videoServerPort}/socket.io`,
+			// transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
 			transports: ["websocket"],
 		});
 		window.videoConnection = this.videoConnection;

@@ -39,7 +39,7 @@ class ServerWrapper {
 
 	start = () => {
 		// start connection with the account server (same server in this case):
-		this.accountConnection = socketioClient(this.options.accountServerIP, {
+		this.accountConnection = socketioClient(`https://${this.options.accountServerIP}`, {
 			path: `/${this.options.accountServerPort}/socket.io`,
 			transports: ["websocket"],
 		});
@@ -48,7 +48,7 @@ class ServerWrapper {
 		this.registerInterval = setInterval(this.registerWithAccountServer, 1000 * 60);
 
 		this.accountConnection.on("start", (data) => {
-			if (!ports[data.port]) {
+			if (!this.ports[data.port]) {
 				console.log("something went wrong, this port is not available!");
 				return;
 			}
@@ -64,7 +64,7 @@ class ServerWrapper {
 				...data,
 			};
 
-			switch (data.serverType) {
+			switch (this.serverType) {
 				case "video":
 					this.servers[data.port] = new VideoServer(opts);
 					break;
@@ -79,7 +79,7 @@ class ServerWrapper {
 		});
 
 		this.accountConnection.on("stop", (data) => {
-			if (ports[data.port]) {
+			if (this.ports[data.port]) {
 				console.log("something went wrong, this port wasn't set as unavailable!");
 				return;
 			}
@@ -102,7 +102,7 @@ let reg = /(\d+)\-(\d+)/.exec(process.argv[3]);
 let portRange = [parseInt(reg[1]), parseInt(reg[2])];
 
 let accountServerOpts = {
-	accountServerIP: "https://remotegames.io",
+	accountServerIP: "remotegames.io",
 	accountServerPort: 8099,
 };
 
@@ -125,7 +125,7 @@ let accountServerOpts = {
 // videoServerWrapper.start();
 
 let serverWrapper = new ServerWrapper({
-	ip: "https://remotegames.io",
+	ip: "remotegames.io",
 	serverType: serverType,
 	portRange: portRange,
 	...accountServerOpts,
