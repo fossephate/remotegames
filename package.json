@@ -37,7 +37,7 @@
 		"@material-ui/styles": "^4.11.4",
 		"@reduxjs/toolkit": "^1.7.1",
 		"@webscopeio/react-textarea-autocomplete": "^4.9.0",
-		"bcrypt": "^4.0.1",
+		"bcrypt": "^5.0.0",
 		"bundle-loader": "^0.5.6",
 		"classnames": "^2.3.1",
 		"css-loader": "^3.6.0",
