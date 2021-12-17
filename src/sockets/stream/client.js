@@ -54,6 +54,7 @@ const clientEvents = (socket, dispatch) => {
 
 	socket.on("connect", (data) => {
 		console.log("connected (host)");
+		// dispatch(updateStreamInfo({ online: true }));
 		authenticate(socket, dispatch);
 	});
 

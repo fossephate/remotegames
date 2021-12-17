@@ -45,7 +45,7 @@ export default class ViewerDropdown extends PureComponent {
 			let account = this.props.accountMap[key];
 			count++;
 			viewers.push(
-				<MenuItem key={count} uniqueid={account.userid}>
+				<MenuItem key={count} userid={account.userid}>
 					<Typography variant="inherit" noWrap>
 						{account.username}
 					</Typography>
@@ -54,7 +54,7 @@ export default class ViewerDropdown extends PureComponent {
 		}
 		if (count === 0) {
 			viewers.push(
-				<MenuItem key={0} uniqueid={null}>
+				<MenuItem key={0} userid={null}>
 					<Typography variant="inherit" noWrap>
 						Loading...
 					</Typography>

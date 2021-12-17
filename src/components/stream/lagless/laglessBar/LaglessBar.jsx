@@ -65,7 +65,7 @@ class LaglessBar extends PureComponent {
 		return (
 			<Paper id="laglessBar" className={classes.root} elevation={3}>
 				{/* <ViewerDropdown accountMap={this.props.accountMap} /> */}
-				<VolumeSlider
+				{/* <VolumeSlider
 					value={this.props.volume}
 					handleChange={this.handleChange}
 					onMute={() => {
@@ -74,7 +74,7 @@ class LaglessBar extends PureComponent {
 					onMax={() => {
 						this.props.setVolume(100);
 					}}
-				/>
+				/> */}
 				{/* <Button
 					variant="contained"
 					color="primary"

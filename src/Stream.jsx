@@ -47,6 +47,7 @@ import { compose } from "recompose";
 // libs:
 import { device, deleteAllCookies, getStickString } from "shared/libs/utils.js";
 import InputHandler from "shared/libs/inputHandler/InputHandler.js";
+import LoadCircle from "shared/libs/LoadCircle.js";
 import localforage from "localforage";
 import socketio from "socket.io-client";
 
@@ -99,18 +100,16 @@ class Stream extends Component {
 		this.inputHandler.init();
 		// todo:
 		window.inputHandler = this.inputHandler; // for lagless canvas
+
+		this.loadingCheckTimer = null;
+		this.loadCircle = null;
 	}
 
-	recieveStream = (data, tryCount) => {
-		this.props.updateStreamInfo({ ...data, online: true });
+	getStream = (data) => {
 
-		if (this.stream) {
-			this.stream.destroy();
-		}
-		if (this.hostConnection) {
-			this.hostConnection.removeAllListeners();
-			this.hostConnection.destroy();
-		}
+		this.destroyStream();
+
+		console.log("@@@@ GET STREAM CALLED @@@");
 
 		// if (this.props.controllerCount === 0 && this.props.settings.controllerView) {
 		// 	this.props.updateSettings({
@@ -125,20 +124,6 @@ class Stream extends Component {
 		// 		realKeyboardMouse: false,
 		// 	});
 		// }
-
-		if (this.props.mouseEnabled && this.props.settings.controllerView) {
-			this.props.updateSettings({
-				controllerView: false,
-				largescreen: true,
-				realKeyboardMouse: true,
-			});
-		} else if (!this.props.mouseEnabled && !this.props.settings.controllerView) {
-			this.props.updateSettings({
-				controllerView: true,
-				largescreen: false,
-				realKeyboardMouse: false,
-			});
-		}
 
 		// if (!this.props.client.loggedIn) {
 		// 	if (tryCount < 3) {
@@ -183,6 +168,9 @@ class Stream extends Component {
 
 		// lagless setup:
 
+		this.loadCircle = new LoadCircle(document.getElementById("graphicsCanvas"));
+		this.loadCircle.start(640, 360);
+
 		this.videoConnection.emit("requestVideo", null, (data) => {
 			if (!data.success) {
 				this.props.openAlert({ title: data.reason });
@@ -194,6 +182,7 @@ class Stream extends Component {
 						audio: true,
 						video: true,
 						maxAudioLag: 0.5,
+						videoBufferSize: 1024 * 1024,
 						// videoBufferSize: data.streamSettings.videoBufferSize * 1024,
 						// audioBufferSize: data.streamSettings.audioBufferSize * 1024,
 					});
@@ -201,33 +190,35 @@ class Stream extends Component {
 					this.stream = new Lagless4({
 						videoConnection: this.videoConnection,
 					});
-					this.stream.start();
 				}
 
+				if (this.props.controllerCount > 0 && !this.props.settings.controllerView) {
+					this.props.updateSettings({
+						controllerView: true,
+						largescreen: false,
+						realKeyboardMouse: false,
+					});
+				} else if (this.props.mouseEnabled && this.props.settings.controllerView) {
+					this.props.updateSettings({
+						controllerView: false,
+						largescreen: true,
+						realKeyboardMouse: true,
+					});
+				}
+				
+				this.stream.start(
+					document.getElementById("videoCanvas"),
+					document.getElementById("graphicsCanvas"),
+				);
+				
+				this.checkLoading();
+
+				window.stream = this.stream;
 			}
-		})
+		});
 
-		if (this.props.videoType === "mpeg1") {
-			this.stream = new Lagless2({
-				videoConnection: this.videoConnection,
-				audio: true,
-				video: true,
-				maxAudioLag: 0.5,
-				// videoBufferSize: data.streamSettings.videoBufferSize * 1024,
-				// audioBufferSize: data.streamSettings.audioBufferSize * 1024,
-			});
-		} else if (this.props.videoType === "webRTC") {
-			this.stream = new Lagless4({
-				videoConnection: this.videoConnection,
-			});
-			this.stream.run();
-		} else {
-			alert("video type error: " + this.props.videoType);
-		}
+		// setTimeout(this.updateStreamCanvas, 1000);
 
-		setTimeout(this.updateStreamCanvas, 1000);
-
-		window.stream = this.stream;
 		setTimeout(() => {
 			this.setStreamVolume(this.props);
 		}, 500);
@@ -236,37 +227,37 @@ class Stream extends Component {
 		}, 5000);
 	};
 
-	updateStreamCanvas = () => {
+	checkLoading = () => {
 		if (this.props.videoType === "mpeg1") {
-			this.stream.destroy();
-			// this.stream.player.stop();
-			// this.stream.pause();
-			// this.stream.restart(
-			// 	document.getElementById("videoCanvas"),
-			// 	document.getElementById("graphicsCanvas"),
-			// );
-			this.stream.resume(
-				document.getElementById("videoCanvas"),
-				document.getElementById("graphicsCanvas"),
-			);
+			if (this.stream.player.currentTime > 0) {
+				this.loadCircle.stop();
+				return;
+			}
 		} else if (this.props.videoType === "webRTC") {
-			this.stream.destroy();
-			this.stream.resume(document.getElementById("videoCanvas"));
-		}
-	};
-
-	getStreamInfo = (bypass) => {
-		if (!this.props.accountConnection.connected && !bypass) {
-			this.props.updateStreamInfo({ online: false });
+			// this.stream.start(document.getElementById("videoCanvas"));
+			this.loadCircle.stop();
 			return;
 		}
 
+		setTimeout(this.checkLoading, 250);
+	};
+
+	updateStreamCanvas = () => {
+
+		this.stream.restart(
+			document.getElementById("videoCanvas"),
+			document.getElementById("graphicsCanvas"),
+		);
+	};
+
+	getStreamInfo = () => {
 		this.props.accountConnection.emit(
 			"getStreamInfo",
 			{ username: this.props.match.params.username },
 			(data) => {
 				if (data.success) {
-					this.recieveStream(data, 0);
+					this.props.updateStreamInfo({ ...data, online: true });
+					this.getStream(data);
 				} else {
 					// todo: 404 page
 					if (data.reason === "ACCOUNT_NOT_FOUND") {
@@ -282,12 +273,14 @@ class Stream extends Component {
 	};
 
 	componentDidMount() {
+		// check if really online:
+		this.props.updateStreamInfo({ online: true });
+
 		setInterval(() => {
-			if (!this.props.streamOnline) {
-				this.getStreamInfo();
+			if (!this.props.streamOnline && this.props.accountConnection.connected) {
+				this.props.updateStreamInfo({ online: true });
 			}
 		}, 5000);
-		this.getStreamInfo(true);
 
 		this.afkTimer = setTimeout(this.afk, this.afkTime);
 
@@ -345,33 +338,13 @@ class Stream extends Component {
 
 	componentWillUnmount() {
 		clearInterval(this.sendInputTimer);
-		if (this.stream) {
-			this.stream.destroy();
-			this.stream = null;
-		}
-		// else {
-		// 	setTimeout(() => {
-		// 		if (this.stream) {
-		// 			this.stream.pause();
-		// 			this.stream = null;
-		// 		}
-		// 	}, 1000);
-		// 	setTimeout(() => {
-		// 		if (this.stream) {
-		// 			this.stream.pause();
-		// 			this.stream = null;
-		// 		}
-		// 	}, 3000);
-		// }
 
 		for (let i = 0; i < 9; i++) {
 			this.props.joinLeavePlayerControlQueue({ cNum: i, joinLeave: "leave" });
 		}
 
-		if (this.hostConnection) {
-			this.hostConnection.removeAllListeners();
-			this.hostConnection.destroy();
-		}
+		this.destroyStream();
+
 		// this.props.updateMessages([]);
 
 		// save settings on close:
@@ -523,18 +496,6 @@ class Stream extends Component {
 			});
 		}
 
-		// if (!this.props.loggedIn) {
-		// 	this.props.enqueueSnackbar("You need to login first!", {
-		// 		variant: "warning",
-		// 		preventDuplicate: true,
-		// 		anchorOrigin: {
-		// 			vertical: "top",
-		// 			horizontal: "left",
-		// 		},
-		// 		autoHideDuration: 1000,
-		// 	});
-		// }
-
 		if (
 			this.props.controlQueues[this.props.settings.currentPlayer].indexOf(
 				this.props.client.userid,
@@ -560,13 +521,7 @@ class Stream extends Component {
 		obj.btns = obj.controller.btns;
 		obj.axes = obj.controller.axes;
 		obj.keys = obj.keyboard.keys;
-		// console.log(obj.keys);
-
-		// for (let i = 0; i < this.props.controlQueues.length; i++) {
-		// 	if (this.props.controlQueues[i][0] == this.props.client.userid) {
-		// 		obj.cNum = i;
-		// 	}
-		// }
+		
 		if (obj.cNum === -1) {
 			obj.cNum = this.props.settings.currentPlayer;
 		}
@@ -617,6 +572,29 @@ class Stream extends Component {
 		}
 	};
 
+	destroyStream = () => {
+		console.log("@@ DESTROYING STREAM @@");
+		if (this.stream && this.stream.player) {
+			this.stream.player.pause();
+			this.stream.player.destroy();
+			this.stream.player = null;
+		}
+		if (this.stream) {
+			this.stream.pause();
+			this.stream.destroy();
+			this.stream = null;
+			window.stream = null;
+		}
+		if (this.hostConnection) {
+			this.hostConnection.removeAllListeners();
+			this.hostConnection.destroy();
+		}
+		if (this.videoConnection) {
+			this.videoConnection.removeAllListeners();
+			this.videoConnection.destroy();
+		}
+	};
+
 	shouldComponentUpdate(nextProps, nextState) {
 		// update stream volume:
 		this.setStreamVolume(nextProps);
@@ -637,7 +615,6 @@ class Stream extends Component {
 
 		if (this.props.settings.controllerView != nextProps.settings.controllerView) {
 			this.inputHandler.mouse.toggle(false);
-			setTimeout(this.updateStreamCanvas, 500);
 			return true;
 		}
 
@@ -646,14 +623,15 @@ class Stream extends Component {
 		}
 
 		if (this.props.streamOnline != nextProps.streamOnline) {
+			if (nextProps.streamOnline) {
+				this.getStreamInfo();
+			} else {
+				this.destroyStream();
+			}
 			return true;
 		}
 
 		if (this.props.settings.theme != nextProps.settings.theme) {
-			return true;
-		}
-
-		if (this.props.settings.streamNumber != nextProps.settings.streamNumber) {
 			return true;
 		}
 
@@ -671,6 +649,14 @@ class Stream extends Component {
 		}
 
 		return false;
+	}
+
+	componentDidUpdate(prevProps, prevState) {
+		// if (this.props.settings.controllerView != prevProps.settings.controllerView) {
+		// 	// console.log("now");
+		// 	// setTimeout(this.updateStreamCanvas, 500);
+		// 	this.updateStreamCanvas();
+		// }
 	}
 
 	render() {
@@ -718,6 +704,7 @@ const mapStateToProps = (state) => {
 		settings: state.settings,
 		playerCount: state.stream.players.count,
 		streamOnline: state.stream.info.online,
+		streamInfo: state.stream.info,
 		videoType: state.stream.info.streamSettings.videoType,
 		controllerCount: state.stream.info.streamSettings.controllerCount,
 		mouseEnabled: state.stream.info.streamSettings.mouseEnabled,

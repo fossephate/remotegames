@@ -1,6 +1,8 @@
 // react:
 import React, { PureComponent } from "react";
 
+import HoverMenu from "./HoverMenu.jsx";
+
 // material ui:
 import {
 	Button,
@@ -10,11 +12,33 @@ import {
 	DialogContentText,
 	DialogTitle,
 } from "@material-ui/core";
+
+import { withStyles } from "@material-ui/core/styles";
+
 // redux:
 import { connect } from "react-redux";
 
 // recompose:
 import { compose } from "recompose";
+
+// libs:
+import classNames from "classnames";
+
+// jss:
+const styles = (theme) => ({
+	root: {
+		display: "flex",
+		flexDirection: "row",
+		justifyContent: "center",
+		position: "relative",
+		// marginLeft: "5px",
+		// marginRight: "5px",
+		textAlign: "center",
+	},
+	overlay: {
+		position: "absolute",
+	},
+});
 
 class LaglessCanvas extends PureComponent {
 	constructor(props) {
@@ -24,40 +48,24 @@ class LaglessCanvas extends PureComponent {
 		this.graphicsCanvasRef = React.createRef();
 
 		this.state = {
-			alertOpen: false,
+			hoverMenuOpen: false,
 		};
 	}
 
 	handleClick = () => {
-		if (this.props.loggedIn && !window.inputHandler.mouse.settings.enabled) {
-			this.setState({ alertOpen: true });
-		}
+		this.setState({ hoverMenuOpen: true });
 	};
 
-	handleClose = () => {
-		this.setState({ alertOpen: false });
-		window.inputHandler.mouse.toggle(false);
+	handleMouseEnter = () => {
+		this.setState({ hoverMenuOpen: true });
 	};
 
-	enableMouseControls = () => {
-		this.setState({ alertOpen: false });
-
-		// let id = null;
-		// if (this.props.videoType === "mpeg1") {
-		// 	id = "canvas";
-		// } else if (this.props.videoType === "webRTC") {
-		// 	id = "video";
-		// }
-		// window.inputHandler.mouse.init(document.getElementById(id));
-
-		window.inputHandler.mouse.init(this.graphicsCanvasRef.current);
-		window.inputHandler.mouse.toggle(true);
-		window.inputHandler.keyboard.init();
-		window.inputHandler.keyboard.toggle(true);
+	handleMouseLeave = (event) => {
+		this.setState({ hoverMenuOpen: false });
 	};
 
 	render() {
-		const { classes } = this.props;
+		const { classes, videoClasses } = this.props;
 
 		let videoCanvas = null;
 		if (this.props.videoType === "mpeg1") {
@@ -65,7 +73,7 @@ class LaglessCanvas extends PureComponent {
 				<canvas
 					id="videoCanvas"
 					// onClick={this.handleClick}
-					className={this.props.classes}
+					className={videoClasses}
 					// ref={this.videoRef}
 				/>
 			);
@@ -74,51 +82,35 @@ class LaglessCanvas extends PureComponent {
 				<video
 					id="videoCanvas"
 					// onClick={this.handleClick}
-					className={this.props.classes}
+					className={videoClasses}
 					// ref={this.videoRef}
 				/>
 			);
 		}
 
 		return (
-			<>
+			<div
+				style={{ display: "contents" }}
+				onClick={this.handleClick}
+				onMouseEnter={this.handleMouseEnter}
+				onMouseLeave={this.handleMouseLeave}
+			>
 				{videoCanvas}
 				<canvas
 					id="graphicsCanvas"
-					className={this.props.classes}
+					className={classNames(videoClasses, classes.overlay)}
 					ref={this.graphicsCanvasRef}
-					onClick={this.handleClick}
-					style={{ position: "absolute", width: "73.2%", height: "100%" }}
+					style={{ position: "absolute" }}
 					width="1280"
 					height="720"
 				/>
-				<Dialog
-					open={this.state.alertOpen}
-					onClose={this.handleClose}
-					aria-labelledby="alert-dialog-title"
-					aria-describedby="alert-dialog-description"
-				>
-					<DialogTitle id="alert-dialog-title">{"Activate Mouse Controls?"}</DialogTitle>
-					<DialogContent>
-						<DialogContentText id="alert-dialog-description">
-							Enabling this will let you control the stream with your mouse.
-						</DialogContentText>
-					</DialogContent>
-					<DialogActions>
-						<Button onClick={this.handleClose} color="primary">
-							No
-						</Button>
-						<Button
-							onClick={this.enableMouseControls}
-							variant="contained"
-							color="primary"
-							autoFocus
-						>
-							Yes
-						</Button>
-					</DialogActions>
-				</Dialog>
-			</>
+
+				<HoverMenu
+					open={this.state.hoverMenuOpen}
+					videoClasses={videoClasses}
+					graphicsCanvasRef={this.graphicsCanvasRef}
+				/>
+			</div>
 		);
 	}
 }
@@ -130,7 +122,4 @@ const mapStateToProps = (state) => {
 	};
 };
 
-export default compose(
-	// withStyles(styles),
-	connect(mapStateToProps),
-)(LaglessCanvas);
+export default compose(withStyles(styles), connect(mapStateToProps))(LaglessCanvas);

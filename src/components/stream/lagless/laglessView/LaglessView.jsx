@@ -27,9 +27,9 @@ const styles = (theme) => ({
 		// marginRight: "5px",
 		textAlign: "center",
 	},
-	canvas: {
+	notFullscreen: {
 		width: "73.2%",
-		alignSelf: "center",
+		// alignSelf: "center",
 	},
 	offlineMessage: {
 		display: "flex",
@@ -41,7 +41,7 @@ const styles = (theme) => ({
 		// minHeight: "550px",
 	},
 	fullscreen: {
-		width: "100% !important",
+		width: "100%",
 		margin: "0",
 		padding: "0",
 		border: "none",
@@ -67,8 +67,9 @@ class LaglessView extends PureComponent {
 			window.inputHandler.mouse.toggle(false);
 		}
 
-		let videoClasses = classNames(classes.canvas, {
+		let videoClasses = classNames({
 			[classes.fullscreen]: this.props.largescreen || this.props.fullscreen,
+			[classes.notFullscreen]: !(this.props.largescreen || this.props.fullscreen),
 		});
 
 		let controllerNumber = 0;
@@ -77,14 +78,14 @@ class LaglessView extends PureComponent {
 		let controllerType = isXbox ? "xbox" : "joycon";
 
 		let displayLagless = this.props.streamOnline ? (
-			<LaglessCanvas classes={videoClasses} />
+			<LaglessCanvas videoClasses={videoClasses} />
 		) : (
 			<div className={classes.offlineMessage}>This stream is offline.</div>
 		);
 
 		return (
 			<div className={laglessClasses}>
-				{this.props.controllerView ? (
+				{/* {this.props.controllerView ? (
 					<ControllerView
 						overlay={this.props.mobileMode}
 						controllerState={this.props.controllerStates[controllerNumber]}
@@ -94,7 +95,16 @@ class LaglessView extends PureComponent {
 					</ControllerView>
 				) : (
 					displayLagless
-				)}
+				)} */}
+
+				<ControllerView
+					overlay={this.props.mobileMode}
+					controllerState={this.props.controllerStates[controllerNumber]}
+					type={controllerType}
+					hideControllers={!this.props.controllerView}
+				>
+					{displayLagless}
+				</ControllerView>
 
 				{/* <ControllerView
 						hide={!this.props.controllerView}

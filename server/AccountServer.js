@@ -1,3 +1,5 @@
+const DOMAIN = "remotegames.io";
+const COMP_NAME = "Remote Games";
 const express = require("express");
 const app = express();
 const server = require("http").createServer(app);
@@ -74,15 +76,22 @@ let streams = [];
 
 // mail:
 let transporter = nodemailer.createTransport({
-	service: "gmail",
-	auth: {
-		user: config.EMAIL_USERNAME,
-		pass: config.EMAIL_PASSWORD,
+	// service: "gmail",
+	// auth: {
+	// 	user: config.EMAIL_USERNAME,
+	// 	pass: config.EMAIL_PASSWORD,
+	// },
+
+	host: "127.0.0.1",
+	port: 25,
+	secure: false,
+	tls: {
+		rejectUnauthorized: false,
 	},
 });
 
 let mailOptions = {
-	from: config.EMAIL_USERNAME,
+	from: `no-reply@${DOMAIN}`,
 	to: null,
 	subject: null,
 	text: null,
@@ -166,6 +175,7 @@ let accountSchema = mongoose.Schema({
 	// 	_id: Schema.Types.ObjectId,// created & initialized automatically
 
 	// account:
+	userid: String, // new - 6-6-2020// todo: self implement the userid
 	email: String,
 	username: String,
 	password: String,
@@ -223,11 +233,12 @@ let accountSchema = mongoose.Schema({
 		controllerCount: Number,
 		keyboardEnabled: Boolean,
 		mouseEnabled: Boolean,
-		controllerType: String,// virtualXbox / switch
+		controllerType: String, // virtualXbox / switch
 		videoType: String, // "webRTC" or "mpeg1"
 		allowGuests: Boolean,
 		friendsOnly: Boolean,
 		forfeitTime: Number,
+		streamPassword: String,
 	},
 
 	sublist: [],
@@ -622,10 +633,10 @@ app.get("/redirect", (req, res) => {
 			if (!account) {
 				console.log("account doesn't exist, something went wrong.");
 				res.send(
-					`<script>window.location.href = "https://remotegames.io/reset";</script>`,
+					`<script>window.location.href = "https://${DOMAIN}/reset";</script>`,
 				);
 			} else {
-				res.send(`<script>window.location.href = "https://remotegames.io";</script>`);
+				res.send(`<script>window.location.href = "https://${DOMAIN}";</script>`);
 			}
 		});
 
@@ -683,9 +694,9 @@ app.get("/verify", (req, res) => {
 						throw error;
 					}
 				});
-				res.redirect(302, "https://remotegames.io/login/?verified=true");
+				res.redirect(302, `https://${DOMAIN}/login/?verified=true`);
 			} else {
-				res.redirect(302, "https://remotegames.io");
+				res.redirect(302, `https://${DOMAIN}`);
 			}
 		});
 });
@@ -693,7 +704,7 @@ app.get("/verify", (req, res) => {
 // app.get("/deleteDB", (req, res) => {
 // 	console.log("deleting DB");
 // 	Account.remove({}, () => {});
-// 	// 	res.send(`<script>window.location.href = "https://remotegames.io";</script>`);
+// 	// 	res.send(`<script>window.location.href = `https://${DOMAIN}`;</script>`);
 // });
 
 app.get("/download", (req, res) => {
@@ -718,8 +729,8 @@ let machineServers = {};
 
 function sendVerifyEmail(email, authToken) {
 	mailOptions.to = email;
-	mailOptions.subject = "Verify your email with remotegames.io";
-	mailOptions.text = `Click here to verify your email: https://remotegames.io/8099/verify?authToken=${authToken}`;
+	mailOptions.subject = `Verify your email with ${COMP_NAME}`;
+	mailOptions.text = `Click here to verify your email: https://${DOMAIN}/8099/verify?authToken=${authToken}`;
 	transporter.sendMail(mailOptions, (error, info) => {
 		if (error) {
 			console.log(error);
@@ -783,7 +794,7 @@ io.on("connection", (socket) => {
 		// 	cb({ success: false, reason: "PASSWORD_NOT_STRONG_ENOUGH" });
 		// }
 
-		console.log("Attempting to create a new account.");
+		console.log("Creating a new account.");
 
 		// check if the acccount already exists:
 		Account.findOne({ email: email })
@@ -844,7 +855,7 @@ io.on("connection", (socket) => {
 							success: true,
 							clientInfo: clientInfoFromAccount(newAccount),
 						});
-						// sendVerifyEmail(email, newAccount.authToken);
+						sendVerifyEmail(email, newAccount.authToken);
 					});
 				});
 			});
@@ -854,7 +865,6 @@ io.on("connection", (socket) => {
 	// https://stackoverflow.com/questions/35780524/how-to-do-simple-mongoose-findone-with-multiple-conditions?rq=1
 
 	socket.on("login", (data, cb) => {
-
 		if (!cb) {
 			console.log("no callback (login)");
 			return;
@@ -995,14 +1005,14 @@ io.on("connection", (socket) => {
 				.setAsync(`users:${userid}`, data.socketid, "NX", "EX", 30)
 				.then((success) => {
 					// todo: enable / fix:
-					if (!success) {
-						cb({
-							success: false,
-							reason: "ALREADY_LOGGED_IN",
-							...reply,
-						});
-						return;
-					}
+					// if (!success) {
+					// 	cb({
+					// 		success: false,
+					// 		reason: "ALREADY_LOGGED_IN",
+					// 		...reply,
+					// 	});
+					// 	return;
+					// }
 
 					// save IP if not known:
 					if (!account.IPs.includes(data.ip)) {
@@ -1112,7 +1122,7 @@ io.on("connection", (socket) => {
 					clientInfo: clientInfoFromAccount(account),
 					message: account.email,
 				});
-				// sendVerifyEmail(account.email, account.authToken);
+				sendVerifyEmail(account.email, account.authToken);
 			});
 		});
 	});
@@ -1272,13 +1282,13 @@ io.on("connection", (socket) => {
 	// 	}
 	// });
 
-	socket.on("keepAlive", async (data) => {
-		// must come from a host server:
-		if (!hostServers.hasOwnProperty(socket.id)) {
-			return;
-		}
-		await redisClient.setAsync(`users:${data.userid}`, data.socketid, "XX", "EX", 30);
-	});
+	// socket.on("keepAlive", async (data) => {
+	// 	// must come from a host server:
+	// 	if (!hostServers.hasOwnProperty(socket.id)) {
+	// 		return;
+	// 	}
+	// 	await redisClient.setAsync(`users:${data.userid}`, data.socketid, "XX", "EX", 30);
+	// });
 
 	socket.on("getStreams", (data, cb) => {
 		if (!cb) {
@@ -1334,7 +1344,6 @@ io.on("connection", (socket) => {
 	});
 
 	socket.on("startStreaming", (data, cb) => {
-		
 		// let reply = { socketid: data.socketid };
 		if (!cb) {
 			console.log("no callback (startStreaming)");
@@ -1412,6 +1421,7 @@ io.on("connection", (socket) => {
 			io.to(servers.video.sid).emit("start", {
 				port: servers.video.port,
 				streamKey: videoStreamKey,
+				streamSettings: data.streamSettings,
 			});
 			// send to hostServer:
 			io.to(servers.host.sid).emit("start", {
@@ -1845,7 +1855,6 @@ io.on("connection", (socket) => {
 
 	// register servers:
 	socket.on("registerServer", (data) => {
-
 		if (data.serverType !== "machine") {
 			if (data.secret !== config.ROOM_SECRET) {
 				return;
@@ -1858,7 +1867,7 @@ io.on("connection", (socket) => {
 			return;
 		}
 
-		switch(data.serverType) {
+		switch (data.serverType) {
 			case "video":
 				videoServers[socket.id] = new VideoServerClient(socket, data.ip, data.ports);
 				break;
@@ -1871,8 +1880,6 @@ io.on("connection", (socket) => {
 		}
 
 		synchronizeServers();
-
-
 	});
 
 	// host server commands:
@@ -2236,11 +2243,13 @@ function synchronizeServers() {
 					io.to(server.video.sid).emit("start", {
 						port: server.video.port,
 						streamKey: account.streamKey,
+						streamSettings: account.streamSettings,
 					});
 				}
 
 				// if either server was down, update the account:
 				if (!hostServerAlive || !videoServerAlive) {
+					// todo: notify the host that they may need to re-connect from the outage
 					// save:
 					account.save((error) => {
 						if (error) {
@@ -2336,9 +2345,9 @@ setTimeout(synchronizeServers, 30000);
 // 	// update account info:
 // 	account.isStreaming = true;
 // 	account.streamKey = "b";
-// 	account.videoServerIP = "remotegames.io";
+// 	account.videoServerIP = `${DOMAIN}`;
 // 	account.videoServerPort = 8001;
-// 	account.hostServerIP = "remotegames.io";
+// 	account.hostServerIP = `${DOMAIN}`;
 // 	account.hostServerPort = 8051;
 // 	// account.streamSettings.title = "PS4 - Persona 5 - testing";
 // 	account.streamSettings.streamTitle = "Xbox - RDR2";

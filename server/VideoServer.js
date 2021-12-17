@@ -25,6 +25,7 @@ class VideoServer {
 		this.accountConnection = options.socket;
 		this.port = options.port;
 		this.streamKey = options.streamKey;
+		this.videoType = options.streamSettings.videoType;
 		this.io = new socketio({
 			perMessageDeflate: false,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],
@@ -86,7 +87,7 @@ class VideoServer {
 			// });
 
 			socket.on("requestVideo", (data, cb) => {
-				cb({ success: true, videoType: "mpeg1" });
+				cb({ success: true, videoType: this.videoType });
 			});
 
 			// socket.on("requestVideo", (data) => {

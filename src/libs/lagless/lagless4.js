@@ -11,7 +11,7 @@ export default class Lagless4 {
 		this.videoConnection = null;
 	}
 
-	run = () => {
+	start = () => {
 		this.videoConnection = socketio(this.options.url, {
 			path: this.options.path,
 			transports: ["polling", "websocket", "xhr-polling", "jsonp-polling"],

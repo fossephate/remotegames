@@ -252,18 +252,18 @@ class HostServer {
 			});
 
 			// todo: forward this to the account server:
-			socket.conn.on("packet", async (packet) => {
-				if (packet.type !== "ping") {
-					return;
-				}
-				let client = this.clients[socket.id];
-				if (client && client.userid) {
-					this.accountConnection.emit("keepAlive", {
-						userid: client.userid,
-						socketid: socket.id,
-					});
-				}
-			});
+			// socket.conn.on("packet", async (packet) => {
+			// 	if (packet.type !== "ping") {
+			// 		return;
+			// 	}
+			// 	let client = this.clients[socket.id];
+			// 	if (client && client.userid) {
+			// 		this.accountConnection.emit("keepAlive", {
+			// 			userid: client.userid,
+			// 			socketid: socket.id,
+			// 		});
+			// 	}
+			// });
 
 			socket.on("disconnect", () => {
 				// console.log("disconnected");
@@ -553,7 +553,7 @@ class HostServer {
 
 			this.io.emit("accountMap", this.accountMap);
 		});
-	}
+	};
 
 	filterGuests = () => {
 		// fill in accountMap's for guest accounts:
@@ -572,7 +572,7 @@ class HostServer {
 				this.accountMap[username] = { userid: username, username: username };
 			}
 		}
-	}
+	};
 
 	removeOldMessages = () => {
 		// keep only #messageLogLength
@@ -596,7 +596,7 @@ class HostServer {
 
 		// send to everyone:
 		this.io.emit("chatMessage", msgObj);
-	}
+	};
 
 	parseMessage = (client, message) => {
 		// for replies:
@@ -771,14 +771,14 @@ class HostServer {
 				},
 			);
 		}
-	}
+	};
 
 	stop = () => {
 		// todo: this function doesn't clear the setIntervals set in start()
 		console.log("closing connection");
 		this.io.emit("stop");
 		this.io.close();
-	}
+	};
 
 	// finds a client in this.clients with a specific userid
 	// returns -1 if not found
@@ -796,7 +796,7 @@ class HostServer {
 			}
 		}
 		return index;
-	}
+	};
 
 	forfeitTurn = (userid, cNum) => {
 		// forfeit turn:
@@ -833,9 +833,9 @@ class HostServer {
 
 		// emit turn times left:
 		this.calculateTurnExpirations();
-	}
+	};
 
-	calculateTurnExpirations() {
+	calculateTurnExpirations = () => {
 		// calculate the turn time left for each player
 		for (let i = 0; i < this.turnLengths.length; i++) {
 			if (this.controlQueues[i].length == 0) {
@@ -861,7 +861,7 @@ class HostServer {
 		// remove waitlisted people from viewer list:
 
 		this.io.emit("currentPlayers", currentPlayers);
-	}
+	};
 
 	// todo: only send the diff of what changed / make it only reset the cNum
 	emitTurnStartTimes = () => {
@@ -869,13 +869,13 @@ class HostServer {
 			turnStartTimes: this.turnStartTimes,
 			forfeitStartTimes: this.forfeitStartTimes,
 		});
-	}
+	};
 
 	emitForfeitStartTimes = () => {
 		this.io.emit("turnStartTimes", {
 			forfeitStartTimes: this.forfeitStartTimes,
 		});
-	}
+	};
 
 	// todo: userid is unused here:
 	resetTimers = (userid, cNum) => {
@@ -898,7 +898,7 @@ class HostServer {
 
 		this.emitTurnStartTimes();
 		this.emitForfeitStartTimes();
-	}
+	};
 
 	moveLine = (cNum) => {
 		// if the queue length is more than one person
@@ -935,9 +935,9 @@ class HostServer {
 			this.forfeitStartTimes[cNum] = Date.now();
 			this.emitForfeitStartTimes();
 		}
-	}
+	};
 
-	getHostInfo() {
+	getHostInfo = () => {
 		let obj;
 
 		if (this.hostUserid) {
@@ -1009,7 +1009,7 @@ class HostServer {
 			}
 			this.clients[index].timePlayed += 5;
 		}
-	}
+	};
 }
 
 module.exports.HostServer = HostServer;

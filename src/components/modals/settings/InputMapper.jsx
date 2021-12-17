@@ -322,6 +322,10 @@ class KeyboardMapper extends Component {
 			if (inputHandler.keyboard.lastPressedKey != null) {
 				clearInterval(this.mapKeyTimer);
 
+				if (/^[a-z]$/.test(inputHandler.keyboard.lastPressedKey)) {
+					inputHandler.keyboard.lastPressedKey = inputHandler.keyboard.lastPressedKey.toUpperCase();
+				}
+
 				inputHandler.keyboard.map[MAP_KEYBOARD_NAMES[parseInt(this.props.which)]] =
 					inputHandler.keyboard.lastPressedKey;
 				inputHandler.keyboard.lastPressedKey = null;

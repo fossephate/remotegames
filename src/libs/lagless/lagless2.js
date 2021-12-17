@@ -22,6 +22,10 @@ export default class Lagless2 {
 		try {
 			this.player.pause();
 		} catch (error) {}
+
+		// setInterval(() => {
+		// 	console.log(window.stream.player.getCurrentTime());
+		// }, 10);
 	};
 
 	play = () => {
@@ -63,7 +67,7 @@ export default class Lagless2 {
 		}
 	};
 
-	resume = (videoCanvas, graphicsCanvas) => {
+	start = (videoCanvas, graphicsCanvas) => {
 		this.videoCanvas = videoCanvas || this.videoCanvas;
 		this.graphicsCanvas = graphicsCanvas || this.graphicsCanvas || null;
 
@@ -88,9 +92,19 @@ export default class Lagless2 {
 		});
 	};
 
+	// restart = (videoCanvas, graphicsCanvas) => {
+	// 	if (!this.videoCanvas) {
+	// 		this.start(videoCanvas, graphicsCanvas);
+	// 		return;
+	// 	}
+	// 	this.player.video.destination.canvas = videoCanvas;
+	// 	this.graphicsCanvas = graphicsCanvas;
+	// 	this.context = this.graphicsCanvas.getContext("2d");
+	// };
+
 	restart = (videoCanvas, graphicsCanvas) => {
 		if (!this.videoCanvas) {
-			this.resume(videoCanvas, graphicsCanvas);
+			this.start(videoCanvas, graphicsCanvas);
 			return;
 		}
 		this.player.video.destination.canvas = videoCanvas;

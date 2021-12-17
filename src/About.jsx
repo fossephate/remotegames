@@ -97,7 +97,7 @@ class About extends PureComponent {
 
 					<p>
 						This website is developed and maintained by{" "}
-						<a href="https://github.com/mfosse">Matthew Fosse</a>.
+						<a href="https://github.com/fossephate">Matthew Fosse</a>.
 					</p>
 
 					<p>

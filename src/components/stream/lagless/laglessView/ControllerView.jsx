@@ -280,21 +280,24 @@ const styles = (theme) => ({
 			background: "rgba(68, 68, 68, 1) !important",
 		},
 	},
+	hide: {
+		display: "none",
+	},
 });
 
 class ControllerView extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.getLeftStickTransform = this.getLeftStickTransform.bind(this);
-		this.getRightStickTransform = this.getRightStickTransform.bind(this);
+		this.leftStickRef = React.createRef();
+		this.rightStickRef = React.createRef();
 
 		this.cstate = new ControllerState();
 
 		this.state = {};
 	}
 
-	getLeftStickTransform() {
+	getLeftStickTransform = () => {
 		let x = this.cstate.axes[0];
 		let y = this.cstate.axes[1];
 
@@ -305,7 +308,7 @@ class ControllerView extends PureComponent {
 		// let scale = window.outerWidth / 1920;
 
 		let scale = 1;
-		let stick = document.querySelector("#leftStick");
+		let stick = this.leftStickRef.current;
 		if (stick) {
 			scale = stick.clientWidth / 55;
 		}
@@ -313,9 +316,9 @@ class ControllerView extends PureComponent {
 		y2 *= scale;
 
 		return `${x2}px, ${y2}px`;
-	}
+	};
 
-	getRightStickTransform() {
+	getRightStickTransform = () => {
 		let x = this.cstate.axes[2];
 		let y = this.cstate.axes[3];
 
@@ -325,7 +328,7 @@ class ControllerView extends PureComponent {
 		let y2 = y * Math.sqrt(1 - (x * x) / 2) * 32;
 
 		let scale = 1;
-		let stick = document.querySelector("#rightStick");
+		let stick = this.rightStickRef.current;
 		if (stick) {
 			scale = stick.clientWidth / 55;
 		}
@@ -333,12 +336,12 @@ class ControllerView extends PureComponent {
 		y2 *= scale;
 
 		return `${x2}px, ${y2}px`;
-	}
+	};
 
 	componentDidMount() {
 		window.inputHandler.touchpad.touchWrapper.init(
-			document.querySelector("#leftStick"),
-			document.querySelector("#rightStick"),
+			this.leftStickRef.current,
+			this.rightStickRef.current,
 		);
 	}
 
@@ -375,6 +378,7 @@ class ControllerView extends PureComponent {
 				<div
 					className={classNames(classes.controllerRoot, {
 						[classes.leftOverlay]: this.props.overlay,
+						[classes.hide]: this.props.hideControllers,
 					})}
 				>
 					<img
@@ -384,7 +388,7 @@ class ControllerView extends PureComponent {
 						src={`${window.location.origin}/images/leftJoyCon2.png`}
 					/>
 					<div
-						id="leftStick"
+						ref={this.leftStickRef}
 						className={classNames(classes.leftStick1, {
 							[highlightedClass]: this.cstate.buttons.lstick,
 						})}
@@ -458,6 +462,7 @@ class ControllerView extends PureComponent {
 				<div
 					className={classNames(classes.controllerRoot, {
 						[classes.rightOverlay]: this.props.overlay,
+						[classes.hide]: this.props.hideControllers,
 					})}
 				>
 					<img
@@ -467,7 +472,7 @@ class ControllerView extends PureComponent {
 						src={`${window.location.origin}/images/rightJoyCon2.png`}
 					/>
 					<div
-						id="rightStick"
+						ref={this.rightStickRef}
 						className={classNames(classes.rightStick1, {
 							[highlightedClass]: this.cstate.buttons.rstick,
 						})}
