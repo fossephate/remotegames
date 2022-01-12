@@ -57,7 +57,7 @@ class ControlQueue extends PureComponent {
 
 		for (let i = 0; i < userids.length; i++) {
 			let username = this.props.accountMap[userids[i]];
-			username = username ? username.username : "loading";
+			username = username ? username.username : (userids[i].indexOf("guest") > -1) ? userids[i] : "loading";
 			let listItemClasses = classNames(classes.listItem, {
 				[classes.highlighted]: this.props.userid == userids[i],
 			});

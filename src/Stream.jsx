@@ -293,7 +293,7 @@ class Stream extends Component {
 		// lagless setup:
 
 		this.sendInputTimer = setInterval(() => {
-			if (!this.props.client.loggedIn) {
+			if (!this.props.client.loggedIn && !this.props.allowGuestPlayers) {
 				return;
 			}
 			this.inputHandler.pollDevices(this.props.settings.touchControls);
@@ -709,6 +709,7 @@ const mapStateToProps = (state) => {
 		controllerCount: state.stream.info.streamSettings.controllerCount,
 		mouseEnabled: state.stream.info.streamSettings.mouseEnabled,
 		keyboardEnabled: state.stream.info.streamSettings.keyboardEnabled,
+		allowGuestPlayers: state.stream.info.streamSettings.allowGuestPlayers,
 	};
 };
 

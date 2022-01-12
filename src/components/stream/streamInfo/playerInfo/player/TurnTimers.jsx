@@ -42,9 +42,10 @@ class TurnTimers extends PureComponent {
 		let forfeitTimeLeft = forfeitLength - (now - forfeitStartTime);
 		let forfeitTimeLeftPercent = (forfeitTimeLeft / forfeitLength) * 100;
 
-		let username = this.props.accountMap[this.props.controlQueues[n][0]];
-		username = username ? username.username : "loading";
-		if (!this.props.controlQueues[n][0]) {
+		let userid = this.props.controlQueues[n][0];
+		let username = this.props.accountMap[userid];
+		username = username ? username.username : (userid && userid.indexOf("guest") > -1) ? userid : "loading";
+		if (!userid) {
 			username = null;
 		}
 

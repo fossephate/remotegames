@@ -74,6 +74,7 @@ class Index extends Component {
 						videoType: "mpeg1",
 						controllerCount: 1,
 						playerCount: 4,
+						allowGuestPlayers: true,
 					},
 				},
 				chat: {

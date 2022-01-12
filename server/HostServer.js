@@ -56,6 +56,7 @@ class HostServer {
 		this.locked = false;
 		this.plusLock = false;
 		this.IPToGuestNumberMap = {};
+		this.allowGuestPlayers = true;
 
 		// host set settings:
 		this.streamSettings = options.streamSettings;
@@ -64,6 +65,8 @@ class HostServer {
 		this.controllerCount = options.streamSettings.controllerCount;
 		this.playerCount = options.streamSettings.playerCount;
 		this.playerCount = this.playerCount === 0 ? 1 : this.playerCount;
+		this.allowGuestPlayers = options.streamSettings.allowGuestPlayers;
+		console.log(options.streamSettings);
 
 		this.turnLengths = [];
 		this.forfeitLengths = [];
@@ -95,6 +98,7 @@ class HostServer {
 	}
 
 	joinQueue = (client, cNum) => {
+		console.log(client.userid);
 		// return if locked && not a mod:
 		if (this.locked && !client.roles.mod) {
 			return;
@@ -187,9 +191,13 @@ class HostServer {
 			let client = this.clients[socket.id];
 
 			if (!this.IPToGuestNumberMap[client.ip]) {
-				this.IPToGuestNumberMap[client.ip] = `guest#${parseInt(Math.random() * 1000)}`;
+				// technically not secure:
+				this.IPToGuestNumberMap[client.ip] = `guest#${parseInt(Math.random() * 10000)}`;
 			}
 			this.clients[socket.id].username = this.IPToGuestNumberMap[client.ip];
+			if (this.allowGuestPlayers) {
+				this.clients[socket.id].userid = this.IPToGuestNumberMap[client.ip];
+			}
 
 			socket.on("authenticate", (data, cb) => {
 				if (!cb) {
@@ -206,49 +214,72 @@ class HostServer {
 				// 	return;
 				// }
 
-				// send socket.id and auth token:
-				this.accountConnection.emit(
-					"authenticate",
-					{
-						socketid: socket.id,
-						authToken: data.authToken,
-						ip: client.ip,
-						hostUserid: this.hostUserid,
-						// todo:
-						// usernameIndex: data.usernameIndex,
-					},
-					(data) => {
-						// make sure they didn't disconnect:
-						if (!this.clients[data.socketid]) {
-							console.log("User disconnected before they could be authenticated.");
-							return;
-						}
+				if (data.authToken == null && this.allowGuestPlayers) {
+					// update local client to contain account server's info:
+					// this.clients[data.socketid].update(data.clientInfo);
 
-						// check if it was successful:
-						if (data.success) {
-							// update local client to contain account server's info:
-							this.clients[data.socketid].update(data.clientInfo);
+					// remove from the local accountMap:
+					this.filterGuests();
+					this.io.emit("accountMap", this.accountMap);
 
-							// remove from the local accountMap:
-							this.filterGuests();
-							this.io.emit("accountMap", this.accountMap);
+					// emit to the client their info:
+					let clientInfo = {
+						userid: client.username,
+						username: client.username,
+						validUsernames: [client.username],
+						connectedAccounts: [],
+						timePlayed: 0,
+						roles: ["guest"],
+					};
+					cb({ success: true, clientInfo: clientInfo });
+					return;
+					
+				} else {
 
-							// emit to the client their info:
-							let clientInfo = {
-								userid: data.clientInfo.userid,
-								username: data.clientInfo.username,
-								validUsernames: data.clientInfo.validUsernames,
-								connectedAccounts: data.clientInfo.connectedAccounts,
-								timePlayed: data.clientInfo.timePlayed,
-								roles: data.clientInfo.roles,
-							};
-							cb({ ...data, clientInfo: clientInfo });
-						} else {
-							// forward data to client:
-							cb(data);
-						}
-					},
-				);
+					// send socket.id and auth token:
+					this.accountConnection.emit(
+						"authenticate",
+						{
+							socketid: socket.id,
+							authToken: data.authToken,
+							ip: client.ip,
+							hostUserid: this.hostUserid,
+							// todo:
+							// usernameIndex: data.usernameIndex,
+						},
+						(data) => {
+							// make sure they didn't disconnect:
+							if (!this.clients[data.socketid]) {
+								console.log("User disconnected before they could be authenticated.");
+								return;
+							}
+
+							// check if it was successful:
+							if (data.success) {
+								// update local client to contain account server's info:
+								this.clients[data.socketid].update(data.clientInfo);
+
+								// remove from the local accountMap:
+								this.filterGuests();
+								this.io.emit("accountMap", this.accountMap);
+
+								// emit to the client their info:
+								let clientInfo = {
+									userid: data.clientInfo.userid,
+									username: data.clientInfo.username,
+									validUsernames: data.clientInfo.validUsernames,
+									connectedAccounts: data.clientInfo.connectedAccounts,
+									timePlayed: data.clientInfo.timePlayed,
+									roles: data.clientInfo.roles,
+								};
+								cb({ ...data, clientInfo: clientInfo });
+							} else {
+								// forward data to client:
+								cb(data);
+							}
+						},
+					);
+				}
 			});
 
 			// todo: forward this to the account server:

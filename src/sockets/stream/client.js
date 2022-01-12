@@ -34,6 +34,33 @@ function authenticate(socket, dispatch) {
 				}
 			},
 		);
+	} else {
+		socket.emit(
+			"authenticate",
+			{
+				authToken: null,
+				usernameIndex: 0,
+			},
+			(data) => {
+				if (data.success) {
+					dispatch(
+						updateClient({
+							...data.clientInfo,
+							authToken: authToken,
+							loggedIn: true,
+							hostAuthed: true,
+						}),
+					);
+				} else {
+					console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
+					// remove the authToken if it doesn't work:
+					if (data.reason === "ACCOUNT_NOT_FOUND") {
+						Cookie.remove("RemoteGames");
+						dispatch(updateClient({ authToken: null }));
+					}
+				}
+			},
+		);
 	}
 }
 
