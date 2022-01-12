@@ -939,6 +939,13 @@ io.on("connection", (socket) => {
 			console.log("no callback (getAccountInfo)");
 			return;
 		}
+		if (data.authToken == null) {
+			cb({
+				success: false,
+				reason: "ACCOUNT_NOT_FOUND",
+			});
+			return;
+		}
 		// try and get account by authToken:
 		Account.findOne({ authToken: data.authToken }).exec((error, account) => {
 			// error check:
@@ -989,7 +996,7 @@ io.on("connection", (socket) => {
 				throw error;
 			}
 			// acount doesn't exist:
-			if (!account) {
+			if (!account || data.authToken == null) {
 				cb({
 					success: false,
 					reason: "ACCOUNT_NOT_FOUND",
