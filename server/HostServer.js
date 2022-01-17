@@ -66,7 +66,6 @@ class HostServer {
 		this.playerCount = options.streamSettings.playerCount;
 		this.playerCount = this.playerCount === 0 ? 1 : this.playerCount;
 		this.allowGuestPlayers = options.streamSettings.allowGuestPlayers;
-		console.log(options.streamSettings);
 
 		this.turnLengths = [];
 		this.forfeitLengths = [];
@@ -98,7 +97,7 @@ class HostServer {
 	}
 
 	joinQueue = (client, cNum) => {
-		console.log(client.userid);
+		
 		// return if locked && not a mod:
 		if (this.locked && !client.roles.mod) {
 			return;
@@ -418,7 +417,7 @@ class HostServer {
 				if ((btns & (1 << 8)) != 0 && !client.roles.mod) {
 					valid = false;
 				}
-				if ((btns & (1 << 16)) != 0 && !client.roles.plus) {
+				if ((btns & (1 << 16)) != 0 && (!client.roles.plus && !client.roles.mod)) {
 					valid = false;
 				}
 				if ((btns & (1 << 17)) != 0 && !client.roles.mod) {
@@ -590,7 +589,7 @@ class HostServer {
 		// fill in accountMap's for guest accounts:
 
 		for (let key in this.accountMap) {
-			if (/guest/.test(key)) {
+			if (/guest/g.test(key)) {
 				delete this.accountMap[key];
 			}
 		}
@@ -599,7 +598,7 @@ class HostServer {
 			let userid = this.clients[socketid].userid;
 			let username = this.clients[socketid].username;
 
-			if (!userid && username !== "HostBot") {
+			if (username !== "HostBot" && /guest/g.test(userid)) {
 				this.accountMap[username] = { userid: username, username: username };
 			}
 		}

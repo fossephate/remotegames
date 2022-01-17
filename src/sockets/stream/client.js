@@ -47,17 +47,12 @@ function authenticate(socket, dispatch) {
 						updateClient({
 							...data.clientInfo,
 							authToken: authToken,
-							loggedIn: true,
+							loggedIn: false,
 							hostAuthed: true,
 						}),
 					);
 				} else {
-					console.log(`AUTHENTICATION_FAILURE: ${data.reason}`);
-					// remove the authToken if it doesn't work:
-					if (data.reason === "ACCOUNT_NOT_FOUND") {
-						Cookie.remove("RemoteGames");
-						dispatch(updateClient({ authToken: null }));
-					}
+					console.log(`AUTHENTICATION_FAILURE_IMPOSSIBLE?: ${data.reason}`);
 				}
 			},
 		);

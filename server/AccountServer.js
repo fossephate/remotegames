@@ -235,7 +235,7 @@ let accountSchema = mongoose.Schema({
 		mouseEnabled: Boolean,
 		controllerType: String, // virtualXbox / switch
 		videoType: String, // "webRTC" or "mpeg1"
-		allowGuests: Boolean,
+		allowGuestPlayers: Boolean,
 		friendsOnly: Boolean,
 		forfeitTime: Number,
 		streamPassword: String,

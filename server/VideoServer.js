@@ -1,6 +1,7 @@
 const socketio = require("socket.io");
 
 const AFK_TIMEOUT = 1000 * 60 * 5; // 5 min
+// const AFK_TIMEOUT = 1000 * 5; // 5 min
 
 function formatDate(dt) {
 	return `${(dt.getMonth() + 1)
@@ -52,7 +53,7 @@ class VideoServer {
 				if (data.streamKey === this.streamKey) {
 					console.log(`host authenticated: ${formatDate(new Date())}`);
 					clearTimeout(this.keepAliveTimer);
-					this.keepAliveTimer = setTimeout(this.afk, AFK_TIMEOUT);
+					this.keepAliveTimer = setTimeout(this.afk, AFK_TIMEOUT, socket);
 					socket.join("host");
 				} else {
 					console.log("ERROR: wrong streamKey!");
@@ -113,14 +114,19 @@ class VideoServer {
 		this.io.close();
 	};
 
-	afk = () => {
+	afk = (socket) => {
 		clearTimeout(this.keepAliveTimer);
 		console.log("DC'd stream!");
-		this.accountConnection.emit("streamInactive", {
-			port: this.port,
-			streamKey: this.streamKey,
-		});
+		console.log("attemting to reconnect...");
+		// socket.socket.reconnect();
+		this.keepAliveTimer = setTimeout(this.afk, AFK_TIMEOUT, socket);
+		// this.accountConnection.emit("streamInactive", {
+		// 	port: this.port,
+		// 	streamKey: this.streamKey,
+		// });
 	};
+
+	
 }
 
 module.exports.VideoServer = VideoServer;
