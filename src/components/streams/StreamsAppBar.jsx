@@ -126,15 +126,15 @@ class StreamsAppBar extends PureComponent {
 					</IconButton>
 					<p>Profile</p>
 				</MenuItem>
-				<MenuItem onClick={this.handleDownloadHostFiles}>
+				{/* <MenuItem onClick={this.handleDownloadHostFiles}>
 					<p>Download Host Files</p>
-				</MenuItem>
+				</MenuItem> */}
 				<MenuItem onClick={this.handleProjectDiscord}>
 					<p>Project Discord Server</p>
 				</MenuItem>
-				<MenuItem onClick={this.handleDevDiscord}>
+				{/* <MenuItem onClick={this.handleDevDiscord}>
 					<p>Dev's Discord Server</p>
-				</MenuItem>
+				</MenuItem> */}
 			</div>
 		);
 
@@ -159,7 +159,7 @@ class StreamsAppBar extends PureComponent {
 				>
 					Streams
 				</Typography>
-				<div className={classes.search}>
+				{/* <div className={classes.search}>
 					<div className={classes.searchIcon}>
 						<SearchIcon />
 					</div>
@@ -170,21 +170,21 @@ class StreamsAppBar extends PureComponent {
 							input: classes.inputInput,
 						}}
 					/>
-				</div>
+				</div> */}
 			</>
 		);
 
 		let desktop = (
 			<>
 				<div className={classes.grow} />
-				<Button
+				{/* <Button
 					size="small"
 					color="default"
 					variant="contained"
 					onClick={this.handleDownloadHostFiles}
 				>
 					Download Host Files
-				</Button>
+				</Button> */}
 				<div style={{ width: "10px" }} />
 				<Button
 					size="small"
@@ -195,14 +195,14 @@ class StreamsAppBar extends PureComponent {
 					Project Discord
 				</Button>
 				<div style={{ width: "10px" }} />
-				<Button
+				{/* <Button
 					size="small"
 					color="default"
 					variant="contained"
 					onClick={this.handleDevDiscord}
 				>
 					Dev's Discord
-				</Button>
+				</Button> */}
 				<IconButton onClick={this.handleAccount} color="inherit">
 					<AccountCircle />
 				</IconButton>

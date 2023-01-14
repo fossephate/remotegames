@@ -639,7 +639,7 @@ class HostServer {
 		let reg = null;
 		let results = null;
 
-		reg = /^!(un)?ban ([a-zA-Z0-9]+)$/;
+		reg = /^\/(un)?ban ([a-zA-Z0-9]+)$/;
 		results = reg.exec(message.text);
 		// ban / unban:
 		if (results) {
@@ -674,7 +674,7 @@ class HostServer {
 		}
 
 		// lock / unlock:
-		reg = /^!(un)?lock$/;
+		reg = /^\/(un)?lock$/;
 		results = reg.exec(message.text);
 		if (results) {
 			let un = !!results[1];
@@ -703,7 +703,7 @@ class HostServer {
 		}
 
 		// pluslock:
-		reg = /^!(un)?pluslock$/;
+		reg = /^\/(un)?pluslock$/;
 		results = reg.exec(message.text);
 		if (results) {
 			if (!client.roles.mod) {
@@ -728,7 +728,7 @@ class HostServer {
 		}
 
 		// change status:
-		reg = /^!(un)?(mod|plus|sub) ([a-zA-Z0-9]+)$/;
+		reg = /^\/(un)?(mod|plus|sub) ([a-zA-Z0-9]+)$/;
 		results = reg.exec(message.text);
 		if (results) {
 			if (!client.roles.mod) {
@@ -765,7 +765,7 @@ class HostServer {
 		}
 
 		// change status 2:
-		reg = /^!changestatus (add|remove) (plus|mod|sub|banned) ([a-zA-Z0-9]+)$/;
+		reg = /^\/changestatus (add|remove) (plus|mod|sub|banned) ([a-zA-Z0-9]+)$/;
 		results = reg.exec(message.text);
 		if (results) {
 			if (!client.roles.mod) {
