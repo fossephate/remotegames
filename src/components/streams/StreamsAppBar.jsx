@@ -140,14 +140,14 @@ class StreamsAppBar extends PureComponent {
 
 		let main = (
 			<>
-				<IconButton
+				{/* <IconButton
 					className={classes.menuButton}
 					color="inherit"
 					aria-label="Open drawer"
 					onClick={this.props.handleToggleDrawer}
 				>
 					<MenuIcon />
-				</IconButton>
+				</IconButton> */}
 				<Typography
 					className={classes.title}
 					variant="h6"

@@ -47,7 +47,7 @@ class Streams extends PureComponent {
 
 		this.state = {
 			streams: [],
-			drawerOpen: true,
+			drawerOpen: false,
 		};
 
 		this.triggered = false;
@@ -69,8 +69,8 @@ class Streams extends PureComponent {
 			this.setState({ streams: data.streams });
 		});
 
-		window.addEventListener("resize", this.updateDimensions.bind(this));
-		this.updateDimensions();
+		// window.addEventListener("resize", this.updateDimensions.bind(this));
+		// this.updateDimensions();
 	}
 
 	componentWillUnmount() {
@@ -97,10 +97,10 @@ class Streams extends PureComponent {
 					drawerOpen={this.state.drawerOpen}
 					handleToggleDrawer={this.toggleDrawer}
 				/>
-				<StreamsDrawer
+				{/* <StreamsDrawer
 					drawerOpen={this.state.drawerOpen}
 					handleToggleDrawer={this.toggleDrawer}
-				/>
+				/> */}
 				<StreamList drawerOpen={this.state.drawerOpen} streams={this.state.streams} />
 
 				<StreamsFooter drawerOpen={this.state.drawerOpen} />
