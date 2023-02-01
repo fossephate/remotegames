@@ -53,7 +53,7 @@
 		"localforage": "^1.10.0",
 		"lodash": "^4.17.21",
 		"mongodb": "^3.7.3",
-		"mongoose": "^5.13.13",
+		"mongoose": "^5.13.15",
 		"nipplejs": "^0.8.7",
 		"node-cleanup": "^2.1.2",
 		"nodemailer": "^6.7.2",
